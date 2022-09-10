@@ -34,7 +34,7 @@ class InitCommand extends Command
 
         var_dump($info);
 
-        file_put_contents("{$directory}/info.json", json_encode($info, JSON_PRETTY_PRINT));
+        file_put_contents("{$directory}/info.json", json_encode($info, JSON_PRETTY_PRINT) . PHP_EOL);
 
         return Command::SUCCESS;
     }

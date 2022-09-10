@@ -1,0 +1,11 @@
+{
+    "name": "glutenfree-se-addon-power-pole-subtile-snapper",
+    "title": "Glutenfree se addon power pole subtile snapper",
+    "description": "Nobody expects the spanish inquisition.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "? base"
+    ]
+}
