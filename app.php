@@ -9,5 +9,6 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 $application->add(new \App\Command\InitCommand());
+$application->add(new \App\Command\RsyncCommand());
 
 $application->run();
