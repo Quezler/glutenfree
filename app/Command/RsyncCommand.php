@@ -26,7 +26,7 @@ class RsyncCommand extends Command
         if (!is_dir($source)) throw new \Exception($source);
 
         passthru(sprintf("rsync -avr --delete %s/ %s", $source, $dest));
-        passthru(sprintf("zip -FSr %s %s", "{$dest}.zip", "{$dest}"));
+        passthru(sprintf("(cd %s && zip -FSr %s %s)", __GLUTENFREE__ . '/build/', "{$dest}.zip", $input->getArgument('name') .'_'. $this->current_version($input->getArgument('name'))));
 
         $live = '/Users/quezler/Library/Application\ Support/factorio/mods/' . $input->getArgument('name') .'_'. $this->current_version($input->getArgument('name'));
         passthru(sprintf("rsync -avr --delete %s/ %s", $dest, $live));
