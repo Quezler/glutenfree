@@ -26,6 +26,9 @@ local events = {
   [defines.events.script_raised_built] = silo.on_created_entity,
   [defines.events.script_raised_revive] = silo.on_created_entity,
   [defines.events.on_entity_cloned] = silo.on_created_entity,
+
+  [defines.events.on_rocket_launch_ordered] = silo.on_rocket_launch_ordered,
+  [defines.events.on_rocket_launched] = silo.on_rocket_launched,
 }
 
 for event, handler in pairs(events) do
