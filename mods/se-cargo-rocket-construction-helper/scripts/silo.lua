@@ -39,7 +39,7 @@ function silo.register(entity)
 end
 
 function silo.random_tick(entry)
-  
+
   if not entry.silo or not entry.silo.valid then
     entry.silo = entry.container.surface.find_entity("se-rocket-launch-pad-silo", entry.container.position)
   end
@@ -102,23 +102,6 @@ function silo.every_10_seconds()
 
   end
 end
-
-
--- local rocket_silo_status = {}
--- for string, i in pairs(defines.rocket_silo_status) do
---   rocket_silo_status[i] = string
--- end
-
--- function silo.on_rocket_silo_status_changed(event)
---   local text = rocket_silo_status[event.old_status] ..' -> '.. rocket_silo_status[event.rocket_silo.rocket_silo_status]
---   game.print(event.tick .. ': ' .. text)
-
---   event.rocket_silo.surface.create_entity({
---     name = "flying-text",
---     position = event.rocket_silo.position,
---     text = text,
---   })
--- end
 
 function silo.on_rocket_silo_status_changed(event)
   if event.rocket_silo.name ~= "se-rocket-launch-pad-silo" then return end

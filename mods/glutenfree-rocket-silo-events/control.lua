@@ -6,27 +6,29 @@ local function init()
   -- holds timings for each silo:rocket name combination
   global.timings = {}
 
-  -- base
-  global.timings['rocket-silo:rocket-silo-rocket'] = {
-    [1]    = 14, -- defines.rocket_silo_status.launch_started
-    [121]  =  9, -- defines.rocket_silo_status.engine_starting
-    [451]  = 10, -- defines.rocket_silo_status.arms_retract
-    [555]  = 11, -- defines.rocket_silo_status.rocket_flying
-    [1095] = 12, -- defines.rocket_silo_status.lights_blinking_close
-    [1276] = 13, -- defines.rocket_silo_status.doors_closing
-    [1532] =  0, -- defines.rocket_silo_status.building_rocket
-  }
+  if not 'debug' then
+    -- base
+    global.timings['rocket-silo:rocket-silo-rocket'] = {
+      [1]    = 14, -- defines.rocket_silo_status.launch_started
+      [121]  =  9, -- defines.rocket_silo_status.engine_starting
+      [451]  = 10, -- defines.rocket_silo_status.arms_retract
+      [555]  = 11, -- defines.rocket_silo_status.rocket_flying
+      [1095] = 12, -- defines.rocket_silo_status.lights_blinking_close
+      [1276] = 13, -- defines.rocket_silo_status.doors_closing
+      [1532] =  0, -- defines.rocket_silo_status.building_rocket
+    }
 
-  -- space exploration
-  global.timings['se-rocket-launch-pad-silo:se-cargo-rocket'] = {
-    [1]    = 14, -- defines.rocket_silo_status.launch_started
-    [121]  =  9, -- defines.rocket_silo_status.engine_starting
-    [451]  = 10, -- defines.rocket_silo_status.arms_retract
-    [555]  = 11, -- defines.rocket_silo_status.rocket_flying
-    [1095] = 12, -- defines.rocket_silo_status.lights_blinking_close
-    [1276] = 13, -- defines.rocket_silo_status.doors_closing
-    [1532] =  0, -- defines.rocket_silo_status.building_rocket
-  }
+    -- space exploration
+    global.timings['se-rocket-launch-pad-silo:se-cargo-rocket'] = {
+      [1]    = 14, -- defines.rocket_silo_status.launch_started
+      [121]  =  9, -- defines.rocket_silo_status.engine_starting
+      [451]  = 10, -- defines.rocket_silo_status.arms_retract
+      [555]  = 11, -- defines.rocket_silo_status.rocket_flying
+      [1095] = 12, -- defines.rocket_silo_status.lights_blinking_close
+      [1276] = 13, -- defines.rocket_silo_status.doors_closing
+      [1532] =  0, -- defines.rocket_silo_status.building_rocket
+    }
+  end
 
   -- when the silo:rocket timing is missing, measure and cache it, this holds all in-progress measurements
   global.active_measurements = {}
