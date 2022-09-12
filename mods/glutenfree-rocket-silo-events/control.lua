@@ -120,7 +120,7 @@ end
 function handler.on_tick(event)
   for unit_number, active_measurement in pairs(global.active_measurements) do
     active_measurement.tick = active_measurement.tick + 1
-    print('rocket silo #'unit_number .. ': '.. active_measurement.tick .. ' ' .. active_measurement.rocket_silo.rocket_silo_status .. ' = ' .. rocket_silo_status[active_measurement.rocket_silo.rocket_silo_status])
+    print('rocket silo #' .. unit_number .. ': '.. active_measurement.tick .. ' ' .. active_measurement.rocket_silo.rocket_silo_status .. ' = ' .. rocket_silo_status[active_measurement.rocket_silo.rocket_silo_status])
     
     -- if the status has changed since the last tick, raise an event & process the measurement
     if active_measurement.old_status ~= active_measurement.rocket_silo.rocket_silo_status then
