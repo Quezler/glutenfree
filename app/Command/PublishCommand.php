@@ -55,6 +55,10 @@ class PublishCommand extends Command
                     'name' => 'source_url',
                     'contents' => 'https://github.com/Quezler/glutenfree',
                 ],
+                [
+                    'name' => 'description',
+                    'contents' => file_get_contents(str_replace('.zip', '/README.md', $source)),
+                ]
             ]
         ]);
 
