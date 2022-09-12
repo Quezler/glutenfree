@@ -39,12 +39,7 @@ function silo.register(entity)
 end
 
 function silo.random_tick(entry)
-
-  -- todo: remove faulty entries from inside here v
-  if not entry.container or not entry.container.valid then
-    return
-  end
-
+  
   if not entry.silo or not entry.silo.valid then
     entry.silo = entry.container.surface.find_entity("se-rocket-launch-pad-silo", entry.container.position)
   end
@@ -96,42 +91,6 @@ function silo.random_tick(entry)
   end
 end
 
--- local tick = 0
--- local launchpad = nil
--- local lookup_table = {}
--- function stator(event)
---   print(tick .. ' ' .. launchpad.rocket_silo_status .. ' ' .. lookup_table[launchpad.rocket_silo_status])
---   tick = tick + 1
--- end
-
-function silo.on_rocket_launch_ordered(event)
-  -- game.print("on_rocket_launch_ordered")
-
-  if event.rocket_silo.name ~= "se-rocket-launch-pad-silo" then return end
-  -- game.print(event.rocket_silo.name)
-
-  -- for string, i in pairs(defines.rocket_silo_status) do
-  --   lookup_table[i] = string
-  -- end
-
-  -- launchpad = event.rocket_silo
-  -- script.on_event(defines.events.on_tick, stator)
-
-  local container = event.rocket_silo.surface.find_entity("se-rocket-launch-pad", event.rocket_silo.position)
-  local entry = global.cargo_silo_entries[container.unit_number]
-
-  local once_at = event.tick + 1530 + 1 + 1 -- last tick the rocket silo doors are still closing + next tick + start of next status
-  script.on_nth_tick(once_at, function()
-    print("a cargo rocket silo just closed.")
-    script.on_nth_tick(once_at, nil)
-    silo.random_tick(entry)
-  end)
-end
-
--- function silo.on_rocket_launched(event)
---   game.print("on_rocket_launched")
--- end
-
 function silo.every_10_seconds()
   for unit_number, entry in pairs(global.cargo_silo_entries) do
 
@@ -142,6 +101,33 @@ function silo.every_10_seconds()
     end
 
   end
+end
+
+
+-- local rocket_silo_status = {}
+-- for string, i in pairs(defines.rocket_silo_status) do
+--   rocket_silo_status[i] = string
+-- end
+
+-- function silo.on_rocket_silo_status_changed(event)
+--   local text = rocket_silo_status[event.old_status] ..' -> '.. rocket_silo_status[event.rocket_silo.rocket_silo_status]
+--   game.print(event.tick .. ': ' .. text)
+
+--   event.rocket_silo.surface.create_entity({
+--     name = "flying-text",
+--     position = event.rocket_silo.position,
+--     text = text,
+--   })
+-- end
+
+function silo.on_rocket_silo_status_changed(event)
+  if event.rocket_silo.name ~= "se-rocket-launch-pad-silo" then return end
+  if event.old_status ~= defines.rocket_silo_status.doors_closing then return end
+
+  local container = event.rocket_silo.surface.find_entity("se-rocket-launch-pad", event.rocket_silo.position)
+  local entry = global.cargo_silo_entries[container.unit_number]
+
+  silo.random_tick(entry)
 end
 
 return silo

@@ -10,8 +10,17 @@ local function init()
   silo.init()
 end
 
+local function load()
+  script.on_event(remote.call("glutenfree-rocket-silo-events", "on_rocket_silo_status_changed"), silo.on_rocket_silo_status_changed)
+end
+
+script.on_load(function()
+  load()
+end)
+
 script.on_init(function()
   init()
+  load()
 end)
 
 script.on_configuration_changed(function(event)
@@ -26,9 +35,6 @@ local events = {
   [defines.events.script_raised_built] = silo.on_created_entity,
   [defines.events.script_raised_revive] = silo.on_created_entity,
   [defines.events.on_entity_cloned] = silo.on_created_entity,
-
-  [defines.events.on_rocket_launch_ordered] = silo.on_rocket_launch_ordered,
-  [defines.events.on_rocket_launched] = silo.on_rocket_launched,
 }
 
 for event, handler in pairs(events) do
@@ -38,5 +44,3 @@ end
 script.on_nth_tick(60 * 10, function()
   silo.every_10_seconds()
 end)
-
---
