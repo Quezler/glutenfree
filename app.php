@@ -11,5 +11,6 @@ $application = new Application();
 $application->add(new \App\Command\InitCommand());
 $application->add(new \App\Command\RsyncCommand());
 $application->add(new \App\Command\PublishCommand());
+$application->add(new \App\Command\UpdateCommand());
 
 $application->run();
