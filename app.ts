@@ -9,7 +9,7 @@ const inotify = debounce(
 
         Deno.run({ cmd: ["php", "app.php", "rsync", name] });
     },
-    0,
+    10,
 );
 
 
