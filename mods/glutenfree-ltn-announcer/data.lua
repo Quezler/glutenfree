@@ -53,7 +53,7 @@ ltn_stop_announcer.connection_points = {{
 
 ltn_stop_announcer.selection_box = {{-0.5, -0.5}, {0.5, 0.5}}
 ltn_stop_announcer.selection_priority = (ltn_stop_announcer.selection_priority or 50) + 10
-ltn_stop_announcer.collision_mask = {{-0.15, -0.15}, {0.15, 0.15}}
+ltn_stop_announcer.collision_box = {{-0.5, -0.5}, {0.5, 0.5}}
 ltn_stop_announcer.collision_mask = {'rail-layer'}
 
 ltn_stop_announcer.maximum_wire_distance = speaker.circuit_wire_max_distance

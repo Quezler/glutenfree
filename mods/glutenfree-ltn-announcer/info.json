@@ -1,6 +1,6 @@
 {
     "name": "glutenfree-ltn-announcer",
-    "title": "Glutenfree ltn announcer",
+    "title": "Glutenfree LTN announcer",
     "description": "Gives a signal for all pending deliveries and/or pickups.",
     "version": "1.0.0",
     "author": "Quezler",
