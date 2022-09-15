@@ -150,6 +150,8 @@ function handler.on_tick(event)
 end
 
 function handler.on_nth_tick(event)
+  if not global.to_raise_at[event.tick] then return end -- hmm?
+
   -- raise an event for each rocket that changes status this tick
   for _, to_raise in ipairs(global.to_raise_at[event.tick]) do
     script.raise_event(on_rocket_silo_status_changed, to_raise)
