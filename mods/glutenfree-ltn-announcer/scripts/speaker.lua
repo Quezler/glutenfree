@@ -12,17 +12,13 @@ end
 
 function speaker.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
+  if entity.name ~= 'logistic-train-stop' then return end
 
-  if entity.name == 'logistic-train-stop' then
-    entity.surface.create_entity({
-      name = 'logistic-train-stop-announcer',
-      position = ltn.pos_for_speaker(entity),
-      force = entity.force,
-      raise_built = true,
-    })
-  end
-
-  if entity.name ~= 'logistic-train-stop-announcer' then return end
+  local entity = entity.surface.create_entity({
+    name = 'logistic-train-stop-announcer',
+    position = ltn.pos_for_speaker(entity),
+    force = entity.force,
+  })
 
   entity.operable = false
   entity.destructible = false
