@@ -8,6 +8,8 @@ end
 
 function speaker.on_dispatcher_updated(event)
   game.print('owo ' .. event.tick)
+
+  print(serpent.block( event.deliveries ))
 end
 
 function speaker.on_created_entity(event)
