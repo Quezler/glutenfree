@@ -16,24 +16,6 @@ local speaker = data.raw['programmable-speaker']['programmable-speaker']
 -- ltn_stop_announcer.item_slot_count = 100
 -- ltn_stop_announcer.sprites = speaker.sprite
 
-
--- local circuit_wire_connection_points = {
---   red = util.by_pixel(0, -15),
---   green = util.by_pixel(0, -15),
--- }
-
--- circuit_wire_connection_points = {
---   shadow = circuit_wire_connection_points,
---   wire = circuit_wire_connection_points,
--- }
-
--- ltn_stop_announcer.circuit_wire_connection_points = {
---   circuit_wire_connection_points,
---   circuit_wire_connection_points,
---   circuit_wire_connection_points,
---   circuit_wire_connection_points,
--- }
-
 local ltn_stop_announcer = {
   name = 'logistic-train-stop-announcer',
   type = 'electric-pole',
@@ -52,9 +34,9 @@ ltn_stop_announcer.pictures.layers[2].hr_version.direction_count = 1
 ltn_stop_announcer.supply_area_distance = 0
 
 local connection_points = {
+  copper = util.by_pixel(0, -15),
   red = util.by_pixel(0, -15),
   green = util.by_pixel(0, -15),
-  copper = util.by_pixel(0, -15),
 }
 
 ltn_stop_announcer.connection_points = {{
@@ -90,4 +72,14 @@ ltn_stop_announcer.draw_copper_wires = false
 -- ltn_stop_out.collision_mask = {"rail-layer"} -- collide only with rail entities
 -- ltn_stop_out.item_slot_count = 50
 
-data:extend({ltn_stop_announcer})
+
+-- local ltn_stop_announcer_red = table.deepcopy(data.raw['constant-combinator']['logistic-train-stop-lamp-control'], 'logistic-train-stop-announcer-red-signal')
+-- ltn_stop_announcer_red.name = 'logistic-train-stop-announcer-red-signal'
+
+local red_signal = flib.copy_prototype(data.raw['constant-combinator']['logistic-train-stop-lamp-control'], 'logistic-train-stop-announcer-red-signal')
+local green_signal = flib.copy_prototype(data.raw['constant-combinator']['logistic-train-stop-lamp-control'], 'logistic-train-stop-announcer-green-signal')
+
+red_signal.draw_circuit_wires = false
+green_signal.draw_circuit_wires = false
+
+data:extend({ltn_stop_announcer, red_signal, green_signal})

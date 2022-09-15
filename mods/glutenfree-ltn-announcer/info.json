@@ -1,11 +1,11 @@
 {
     "name": "glutenfree-ltn-announcer",
     "title": "Glutenfree ltn announcer",
-    "description": "Nobody expects the spanish inquisition.",
+    "description": "Gives a signal for all pending deliveries and/or pickups.",
     "version": "1.0.0",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
-        "? base"
+        "LogisticTrainNetwork"
     ]
 }
