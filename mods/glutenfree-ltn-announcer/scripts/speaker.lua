@@ -1,4 +1,5 @@
 local ltn = require('scripts.ltn')
+local trains = require('scripts.train')
 
 local speaker = {}
 
@@ -157,9 +158,17 @@ function speaker.announce(entity)
   for _, train in ipairs(entity.get_train_stop_trains()) do
 
     local delivery = global.deliveries[train.id]
-    if delivery then
+    if delivery and trains.is_inbound(train, entity) then
+
+      -- -- is this the botmall storage provider
+      -- if (entity.unit_number == 3365039 and train.id == 1236 ) then
+      --   game.print('is_inbound: ' .. serpent.block( trains.is_inbound(train, entity) ))
+      --   print(serpent.block( train.schedule ))
+      -- end
 
       if delivery.from_id == entity.unit_number then
+        -- game.print(delivery.pickupDone)
+
         for what, count in pairs(delivery.shipment) do
           red[what] = (red[what] or 0) + count
         end
@@ -171,7 +180,7 @@ function speaker.announce(entity)
         end
       end
 
-      print(serpent.block( delivery ))
+      -- print(serpent.block( delivery ))
     end
   end
 
