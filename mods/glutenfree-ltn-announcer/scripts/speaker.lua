@@ -4,6 +4,9 @@ local speaker = {}
 
 function speaker.init()
   global.entries = {}
+
+  global.deliveries = global.deliveries or {}
+  global.logistic_train_stops = global.logistic_train_stops or {}
 end
 
 function speaker.on_created_entity(event)
@@ -48,13 +51,29 @@ function speaker.on_created_entity(event)
     green_signal = green_signal, 
   }
 
-  red_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-white"}, count = 1 }}
-  green_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-black"}, count = 1 }}
+  red_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-red"}, count = 1 }}
+  green_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-green"}, count = 1 }}
   
 end
 
 function speaker.on_train_schedule_changed(event)
+
+  -- is an LTN train between dispatched and delivery state
+  if not global.deliveries[event.train.id] then return end
+
+  print('schedule + delivery:')
   print(serpent.block( event.train.schedule ))
+  print(serpent.block( global.deliveries[event.train.id] ))
+end
+
+function speaker.on_dispatcher_updated(event)
+  print('on_dispatcher_updated @ ' .. event.tick)
+  global.deliveries = event.deliveries
+end
+
+function speaker.on_stops_updated(event)
+  print('on_stops_updated_event @ ' .. event.tick)
+  global.logistic_train_stops = event.logistic_train_stops
 end
 
 return speaker
