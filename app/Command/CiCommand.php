@@ -27,6 +27,8 @@ class CiCommand extends Command
 
         $mods = Finder::create()->in(__GLUTENFREE__ . '/mods/')->directories()->depth(0);
 
+        dump($_ENV);
+
         foreach ($mods as $mod) {
             $mod = new Mod($mod->getRelativePathname());
             $mod->build();
