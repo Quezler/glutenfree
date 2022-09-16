@@ -1,16 +1,9 @@
 local ltn = require('scripts.ltn')
 local trains = require('scripts.train')
+local combinator = require('scripts.combinator')
 
 local speaker = {}
 
--- lua rabbithole:
-function split(csv)
-  local tmp = {}
-  for string in string.gmatch(csv, "[^,]+") do
-    table.insert(tmp, string)
-  end
-  return tmp[1], tmp[2]
-end
 
 function speaker.init()
   global.entries = {}
@@ -121,6 +114,9 @@ function speaker.add_speaker_to_ltn_stop(entity)
   
 end
 
+-- conveniently gets called when a temporary schedule gets removed,
+-- and since we want to remove the 'announcement' when the train arrives,
+-- we just have to check which station the train is at when it gets taken off.
 function speaker.on_train_schedule_changed(event)
   -- game.print("schedule changed @ " .. event.tick)
 
@@ -158,25 +154,29 @@ function speaker.announce(entity)
   for _, train in ipairs(entity.get_train_stop_trains()) do
 
     local delivery = global.deliveries[train.id]
-    if delivery and trains.is_inbound(train, entity) then
+    if delivery then
 
-      -- -- is this the botmall storage provider
-      -- if (entity.unit_number == 3365039 and train.id == 1236 ) then
-      --   game.print('is_inbound: ' .. serpent.block( trains.is_inbound(train, entity) ))
-      --   print(serpent.block( train.schedule ))
-      -- end
+      -- is the train still [underway] to here?
+      if trains.is_inbound(train, entity) then
 
-      if delivery.from_id == entity.unit_number then
-        -- game.print(delivery.pickupDone)
+        -- -- is this the botmall storage provider
+        -- if (entity.unit_number == 3365039 and train.id == 1236 ) then
+        --   game.print('is_inbound: ' .. serpent.block( trains.is_inbound(train, entity) ))
+        --   print(serpent.block( train.schedule ))
+        -- end
 
-        for what, count in pairs(delivery.shipment) do
-          red[what] = (red[what] or 0) + count
+        -- sum any/all the items due for pickup
+        if delivery.from_id == entity.unit_number then
+          for what, count in pairs(delivery.shipment) do
+            red[what] = (red[what] or 0) + count
+          end
         end
-      end
 
-      if delivery.to_id == entity.unit_number then
-        for what, count in pairs(delivery.shipment) do
-          green[what] = (green[what] or 0) + count
+        -- sum any/all the items due for dropoff
+        if delivery.to_id == entity.unit_number then
+          for what, count in pairs(delivery.shipment) do
+            green[what] = (green[what] or 0) + count
+          end
         end
       end
 
@@ -189,25 +189,8 @@ function speaker.announce(entity)
   --   green = green,
   -- }))
 
-  local red_parameters = {}
-  for what, c in pairs(red) do
-    local t, n = split(what)
-    table.insert(red_parameters, {
-      index = #red_parameters + 1,
-      signal = {type = t, name = n}, count = c
-    })
-  end
-  entry.red_signal.get_control_behavior().parameters = red_parameters
-
-  local green_parameters = {}
-  for what, c in pairs(green) do
-    local t, n = split(what)
-    table.insert(green_parameters, {
-      index = #green_parameters + 1,
-      signal = {type = t, name = n}, count = c
-    })
-  end
-  entry.green_signal.get_control_behavior().parameters = green_parameters
+  entry.red_signal.get_control_behavior().parameters = combinator.parameters_from_shipment(red)
+  entry.green_signal.get_control_behavior().parameters = combinator.parameters_from_shipment(green)
 end
 
 function speaker.on_dispatcher_updated(event)
