@@ -30,6 +30,24 @@ function speaker.on_created_entity(event)
 end
 
 function speaker.add_speaker_to_ltn_stop(entity)
+
+  local multiblock = entity.surface.find_entities(ltn.search_area(entity))
+  for _, e in ipairs(multiblock) do
+    if e.name == "entity-ghost" then
+      game.print(e.ghost_name)
+    else
+      game.print(e.name)
+    end
+  end
+
+  -- entity.surface.create_entity({
+  --   name = "highlight-box",
+  --   box_type = "train-visualization",
+  --   position = entity.position,
+  --   bounding_box = ltn.search_area(entity),
+  --   time_to_live = 60 * 2,
+  -- })
+
   local stop = entity
   local entity = entity.surface.create_entity({
     name = 'logistic-train-stop-announcer',
