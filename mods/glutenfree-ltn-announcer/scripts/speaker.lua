@@ -26,9 +26,13 @@ function speaker.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
   -- todo: figure out how to remove copper wires from ghosts
-  -- if entity.name == "entity-ghost" and entity.ghost_name == "logistic-train-stop-announcer" then
-  --   entity.disconnect_neighbour()
-  -- end
+  if entity.name == "entity-ghost" and entity.ghost_name == "logistic-train-stop-announcer" then
+    -- entity.disconnect_neighbour()
+
+    -- for _, neighbour in ipairs(entity.neighbours) do
+    --   game.print(neighbour.name)
+    -- end
+  end
 
   if entity.name ~= 'logistic-train-stop' then return end
 
@@ -57,46 +61,42 @@ function speaker.add_speaker_to_ltn_stop(entity)
     force = entity.force,
   })
 
-  -- disconnect any/only coppy wires
-  speakerpole.disconnect_neighbour()
-
   speakerpole.operable = false
   speakerpole.destructible = false
 
-  local stop = entity
-  local entity = speakerpole
+  -- disconnect any/only coppy wires
+  speakerpole.disconnect_neighbour()
 
   -- mark speaker pole for death if the station dissapears
-  global.deathrattles[script.register_on_entity_destroyed(stop)] = {entity}
+  global.deathrattles[script.register_on_entity_destroyed(entity)] = {speakerpole}
 
-  local red_signal = entity.surface.create_entity({
+  local red_signal = speakerpole.surface.create_entity({
     name = 'logistic-train-stop-announcer-red-signal',
-    position = entity.position,
-    force = entity.force,
+    position = speakerpole.position,
+    force = speakerpole.force,
   })
 
-  local green_signal = entity.surface.create_entity({
+  local green_signal = speakerpole.surface.create_entity({
     name = 'logistic-train-stop-announcer-green-signal',
-    position = entity.position,
-    force = entity.force,
+    position = speakerpole.position,
+    force = speakerpole.force,
   })
 
   -- mark both color combinators for death if the speaker pole dissapears
-  global.deathrattles[script.register_on_entity_destroyed(entity)] = {red_signal, green_signal}
+  global.deathrattles[script.register_on_entity_destroyed(speakerpole)] = {red_signal, green_signal}
 
-  entity.connect_neighbour({
+  speakerpole.connect_neighbour({
     target_entity = red_signal,
     wire = defines.wire_type.red,
   })
 
-  entity.connect_neighbour({
+  speakerpole.connect_neighbour({
     target_entity = green_signal,
     wire = defines.wire_type.green,
   })
 
-  -- here entity is the speaker pole
   global.entries[entity.unit_number] = {
-    entity = entity,
+    speakerpole = speakerpole,
     red_signal = red_signal,
     green_signal = green_signal, 
   }
