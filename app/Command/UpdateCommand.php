@@ -24,7 +24,7 @@ class UpdateCommand extends Command
         $source = __GLUTENFREE__ . '/build/' . $input->getArgument('name') .'_'. $this->current_version($input->getArgument('name')) .'.zip';
 
         $dotenv = new Dotenv();
-//        $dotenv->load(__GLUTENFREE__ . '/.env');
+        $dotenv->load(__GLUTENFREE__ . '/.env');
 
         $guzzle = new Client();
         $response = $guzzle->post('https://mods.factorio.com/api/v2/mods/releases/init_upload', [
