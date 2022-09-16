@@ -23,4 +23,4 @@ jobs:
 
       - run: git add -A
       - run: git commit -m "Increment minor version(s)" || true
-#      - run: git push
+      - run: git push

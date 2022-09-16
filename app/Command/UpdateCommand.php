@@ -37,21 +37,20 @@ class UpdateCommand extends Command
         ]);
 
         $upload_url = json_decode($response->getBody()->getContents(), true)['upload_url'];
-        dump($upload_url);
 
-//        $response = $guzzle->post($upload_url, [
-//            'headers' => [
-//                'Authorization' => 'Bearer ' . $_ENV['FACTORIO_API_KEY']
-//            ],
-//            'multipart' => [
-//                [
-//                    'name' => 'file',
-//                    'contents' => Utils::tryFopen($source, 'r'),
-//                ],
-//            ]
-//        ]);
-//
-//        dump($response->getBody()->getContents());
+        $response = $guzzle->post($upload_url, [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $_ENV['FACTORIO_API_KEY']
+            ],
+            'multipart' => [
+                [
+                    'name' => 'file',
+                    'contents' => Utils::tryFopen($source, 'r'),
+                ],
+            ]
+        ]);
+
+        dump($response->getBody()->getContents());
 
         return Command::SUCCESS;
     }

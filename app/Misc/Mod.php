@@ -27,7 +27,7 @@ class Mod
     {
         $json = json_decode(file_get_contents("{$this->source()}/info.json"), true);
         $json['version'] = $version;
-        file_put_contents("{$this->source()}/info.json", json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        file_put_contents("{$this->source()}/info.json", json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
     }
 
     public function zip_name_without_extension()
