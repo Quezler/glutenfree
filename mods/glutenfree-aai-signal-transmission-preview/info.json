@@ -1,0 +1,11 @@
+{
+    "name": "glutenfree-aai-signal-transmission-preview",
+    "title": "Glutenfree AAI signal transmission preview",
+    "description": "Adds a sussy laptop on which you can see the red & green signals.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "aai-signal-transmission"
+    ]
+}
