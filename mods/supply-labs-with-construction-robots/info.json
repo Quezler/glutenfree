@@ -1,0 +1,13 @@
+{
+    "name": "supply-labs-with-construction-robots",
+    "title": "Supply labs with construction robots",
+    "description": "Delivers science packs without the need for sushi belts and/or inserters.",
+    "version": "1.0.3",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "? base",
+        "? aai-industry",
+        "? space-exploration"
+    ]
+}
