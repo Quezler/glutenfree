@@ -4,10 +4,10 @@ local combinator = require('scripts.combinator')
 
 local speaker = {}
 
+--
 
 function speaker.init()
   global.entries = {}
-
   global.deathrattles = global.deathrattles or {}
 
   global.deliveries = global.deliveries or {}
@@ -181,6 +181,15 @@ function speaker.on_entity_destroyed(event)
   end
 
   global.deathrattles[event.registration_number] = nil
+end
+
+-- garbage collection
+function speaker.every_10_minutes()
+  for unit_number, entry in pairs(global.entries or {}) do
+    if not entry.speakerpole.valid then
+      global.entries[unit_number] = nil
+    end
+  end
 end
 
 return speaker

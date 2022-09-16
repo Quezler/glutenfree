@@ -42,6 +42,6 @@ for event, handler in pairs(events) do
   script.on_event(event, handler)
 end
 
--- script.on_nth_tick(60 * 10, function()
---   silo.every_10_seconds()
--- end)
+script.on_nth_tick(60 * 60 * 10, function()
+  speaker.every_10_minutes()
+end)
