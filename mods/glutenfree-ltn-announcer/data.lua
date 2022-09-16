@@ -59,6 +59,9 @@ ltn_stop_announcer.collision_mask = {'rail-layer'}
 ltn_stop_announcer.maximum_wire_distance = speaker.circuit_wire_max_distance
 ltn_stop_announcer.draw_copper_wires = false
 
+ltn_stop_announcer.flags = {'player-creation'}
+ltn_stop_announcer.placeable_by = {item = 'programmable-speaker', count = 1}
+
 -- local ltn_stop_announcer = flib.copy_prototype(data.raw["constant-combinator"]["constant-combinator"], "logistic-train-stop-announcer")
 -- ltn_stop_out.icon = "__LogisticTrainNetwork__/graphics/icons/output.png"
 -- ltn_stop_out.icon = data.raw["constant-combinator"]"__LogisticTrainNetwork__/graphics/icons/output.png"
