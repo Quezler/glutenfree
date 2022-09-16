@@ -84,6 +84,9 @@ function speaker.add_speaker_to_ltn_stop(entity)
     force = speakerpole.force,
   })
 
+  red_signal.operable = false
+  green_signal.operable = false
+
   -- mark both color combinators for death if the speaker pole dissapears
   global.deathrattles[script.register_on_entity_destroyed(speakerpole)] = {red_signal, green_signal}
 
@@ -109,16 +112,29 @@ function speaker.add_speaker_to_ltn_stop(entity)
 end
 
 function speaker.on_train_schedule_changed(event)
+  -- game.print("schedule changed @ " .. event.tick)
 
   -- is an LTN train between dispatched and delivery state
   if not global.deliveries[event.train.id] then return end
+  local delivery = global.deliveries[event.train.id]
 
   print('schedule + delivery:')
   print(serpent.block( event.train.schedule ))
-  print(serpent.block( global.deliveries[event.train.id] ))
+  print(serpent.block( delivery ))
+
+  local provider = global.logistic_train_stops[delivery.from_id]
+  if provider then
+    provider.entity.surface.create_entity{name = "flying-text", position = provider.entity.position, text = serpent.block( delivery.shipment )}
+  end
+
+  local requester = global.logistic_train_stops[delivery.to_id]
+  if requester then
+    requester.entity.surface.create_entity{name = "flying-text", position = requester.entity.position, text = serpent.block( delivery.shipment )}
+  end
 end
 
 function speaker.on_dispatcher_updated(event)
+  game.print('on_dispatcher_updated @ ' .. event.tick)
   print('on_dispatcher_updated @ ' .. event.tick)
   global.deliveries = event.deliveries
 end
