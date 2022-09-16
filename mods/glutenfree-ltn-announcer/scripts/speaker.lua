@@ -9,12 +9,27 @@ function speaker.init()
 
   global.deliveries = global.deliveries or {}
   global.logistic_train_stops = global.logistic_train_stops or {}
+
+  global.train_stops = {}
+  for _, surface in pairs(game.surfaces) do
+    for _, entity in pairs(surface.find_entities_filtered{type = "train-stop"}) do
+      global.train_stops[entity.unit_number] = entity
+
+      if entity.name == 'logistic-train-stop' then
+        speaker.add_speaker_to_ltn_stop(entity)
+      end
+    end
+  end
 end
 
 function speaker.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
   if entity.name ~= 'logistic-train-stop' then return end
 
+  speaker.add_speaker_to_ltn_stop(entity)
+end
+
+function speaker.add_speaker_to_ltn_stop(entity)
   local stop = entity
   local entity = entity.surface.create_entity({
     name = 'logistic-train-stop-announcer',
