@@ -2,6 +2,15 @@ local ltn = require('scripts.ltn')
 
 local speaker = {}
 
+-- lua rabbithole:
+function split(csv)
+  local tmp = {}
+  for string in string.gmatch(csv, "[^,]+") do
+    table.insert(tmp, string)
+  end
+  return tmp[1], tmp[2]
+end
+
 function speaker.init()
   global.entries = {}
 
@@ -118,19 +127,78 @@ function speaker.on_train_schedule_changed(event)
   if not global.deliveries[event.train.id] then return end
   local delivery = global.deliveries[event.train.id]
 
-  print('schedule + delivery:')
-  print(serpent.block( event.train.schedule ))
-  print(serpent.block( delivery ))
+  -- print('schedule + delivery:')
+  -- print(serpent.block( event.train.schedule ))
+  -- print(serpent.block( delivery ))
 
   local provider = global.logistic_train_stops[delivery.from_id]
   if provider then
     provider.entity.surface.create_entity{name = "flying-text", position = provider.entity.position, text = serpent.block( delivery.shipment )}
+    speaker.announce(provider.entity)
   end
 
   local requester = global.logistic_train_stops[delivery.to_id]
   if requester then
     requester.entity.surface.create_entity{name = "flying-text", position = requester.entity.position, text = serpent.block( delivery.shipment )}
+    speaker.announce(requester.entity)
   end
+end
+
+-- update the speakerpole signals
+function speaker.announce(entity)
+  local entry = global.entries[entity.unit_number]
+  if not entry then return end
+
+  -- string.gmatch("item,something", "[^,]+")
+
+  local red = {}
+  local green = {}
+
+  for _, train in ipairs(entity.get_train_stop_trains()) do
+
+    local delivery = global.deliveries[train.id]
+    if delivery then
+
+      if delivery.from_id == entity.unit_number then
+        for what, count in pairs(delivery.shipment) do
+          red[what] = (red[what] or 0) + count
+        end
+      end
+
+      if delivery.to_id == entity.unit_number then
+        for what, count in pairs(delivery.shipment) do
+          green[what] = (green[what] or 0) + count
+        end
+      end
+
+      print(serpent.block( delivery ))
+    end
+  end
+
+  -- print(serpent.block({
+  --   red = red,
+  --   green = green,
+  -- }))
+
+  local red_parameters = {}
+  for what, c in pairs(red) do
+    local t, n = split(what)
+    table.insert(red_parameters, {
+      index = #red_parameters + 1,
+      signal = {type = t, name = n}, count = c
+    })
+  end
+  entry.red_signal.get_control_behavior().parameters = red_parameters
+
+  local green_parameters = {}
+  for what, c in pairs(green) do
+    local t, n = split(what)
+    table.insert(green_parameters, {
+      index = #green_parameters + 1,
+      signal = {type = t, name = n}, count = c
+    })
+  end
+  entry.green_signal.get_control_behavior().parameters = green_parameters
 end
 
 function speaker.on_dispatcher_updated(event)
