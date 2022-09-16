@@ -58,7 +58,7 @@ function speaker.add_speaker_to_ltn_stop(entity)
   })
 
   -- disconnect any/only coppy wires
-  -- speakerpole.disconnect_neighbour()
+  speakerpole.disconnect_neighbour()
 
   speakerpole.operable = false
   speakerpole.destructible = false
