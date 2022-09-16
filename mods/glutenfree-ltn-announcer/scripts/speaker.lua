@@ -30,36 +30,35 @@ function speaker.on_created_entity(event)
 end
 
 function speaker.add_speaker_to_ltn_stop(entity)
+  local speakerpole = nil
 
   local multiblock = entity.surface.find_entities(ltn.search_area(entity))
-  for _, e in ipairs(multiblock) do
-    if e.name == "entity-ghost" then
-      game.print(e.ghost_name)
+  for _, mb_entity in ipairs(multiblock) do
+    if mb_entity.name == "entity-ghost" then
+      if mb_entity.ghost_name == 'logistic-train-stop-announcer' then
+        _, speakerpole = mb_entity.revive()
+      end
     else
-      game.print(e.name)
+      if mb_entity.name == 'logistic-train-stop-announcer' then
+        speakerpole = mb_entity
+      end
     end
   end
 
-  -- entity.surface.create_entity({
-  --   name = "highlight-box",
-  --   box_type = "train-visualization",
-  --   position = entity.position,
-  --   bounding_box = ltn.search_area(entity),
-  --   time_to_live = 60 * 2,
-  -- })
-
-  local stop = entity
-  local entity = entity.surface.create_entity({
+  speakerpole = speakerpole or entity.surface.create_entity({
     name = 'logistic-train-stop-announcer',
     position = ltn.pos_for_speaker(entity),
     force = entity.force,
   })
 
+  speakerpole.operable = false
+  speakerpole.destructible = false
+
+  local stop = entity
+  local entity = speakerpole
+
   -- mark speaker pole for death if the station dissapears
   global.deathrattles[script.register_on_entity_destroyed(stop)] = {entity}
-
-  entity.operable = false
-  entity.destructible = false
 
   local red_signal = entity.surface.create_entity({
     name = 'logistic-train-stop-announcer-red-signal',
