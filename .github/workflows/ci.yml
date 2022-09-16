@@ -12,8 +12,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: php-actions/composer@v6
 
-      - run: cp .env.example .env
-      - run: echo ${{ secrets.FACTORIO_API_KEY }} >> .env
+      - run: touch .env
+      - run: echo FACTORIO_API_KEY=${{ secrets.FACTORIO_API_KEY }} >> .env
       - run: php app.php ci
 
       - run: git config user.name "github-actions[bot]"
