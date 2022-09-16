@@ -6,12 +6,6 @@ function speaker.init()
   global.entries = {}
 end
 
-function speaker.on_dispatcher_updated(event)
-  game.print('owo ' .. event.tick)
-
-  print(serpent.block( event.deliveries ))
-end
-
 function speaker.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
   if entity.name ~= 'logistic-train-stop' then return end
@@ -57,6 +51,10 @@ function speaker.on_created_entity(event)
   red_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-white"}, count = 1 }}
   green_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-black"}, count = 1 }}
   
+end
+
+function speaker.on_train_schedule_changed(event)
+  print(serpent.block( event.train.schedule ))
 end
 
 return speaker

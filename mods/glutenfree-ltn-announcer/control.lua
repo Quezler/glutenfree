@@ -9,18 +9,15 @@ local function init()
 end
 
 local function load()
-  script.on_event(remote.call("logistic-train-network", "on_dispatcher_updated"), speaker.on_dispatcher_updated)
-  -- script.on_event(remote.call("logistic-train-network", "on_delivery_pickup_complete"), speaker.on_delivery_pickup_complete)
-  -- script.on_event(remote.call("logistic-train-network", "on_delivery_completed"), speaker.on_delivery_completed)
-  -- script.on_event(remote.call("logistic-train-network", "on_delivery_failed"), speaker.on_delivery_failed)
+  --
 end
-
-script.on_load(function()
-  load()
-end)
 
 script.on_init(function()
   init()
+  load()
+end)
+
+script.on_load(function()
   load()
 end)
 
@@ -36,6 +33,8 @@ local events = {
   [defines.events.script_raised_built] = speaker.on_created_entity,
   [defines.events.script_raised_revive] = speaker.on_created_entity,
   [defines.events.on_entity_cloned] = speaker.on_created_entity,
+  
+  [defines.events.on_train_schedule_changed] = speaker.on_train_schedule_changed,
 }
 
 for event, handler in pairs(events) do
