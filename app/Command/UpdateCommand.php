@@ -26,6 +26,8 @@ class UpdateCommand extends Command
         $dotenv = new Dotenv();
         $dotenv->load(__GLUTENFREE__ . '/.env');
 
+        dump(base64_encode($_ENV['FACTORIO_API_KEY']));
+
         $guzzle = new Client();
         $response = $guzzle->post('https://mods.factorio.com/api/v2/mods/releases/init_upload', [
             'headers' => [
