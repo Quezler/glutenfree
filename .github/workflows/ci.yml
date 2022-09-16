@@ -13,7 +13,7 @@ jobs:
       - uses: php-actions/composer@v6
 
       - run: cp .env.example .env
-      - run: echo "${{ secrets.FACTORIO_API_KEY }}" >> .env
+      - run: echo ${{ secrets.FACTORIO_API_KEY }} >> .env
       - run: php app.php ci
 
       - run: git config user.name "github-actions[bot]"
