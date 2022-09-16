@@ -35,6 +35,7 @@ class CiCommand extends Command
             $version = end($short['releases'])['version'];
 
             if ($mod->version() != $version) {
+                dd([$mod->version(), $version]); // wtf?
                 $command = $this->getApplication()->find('update');
                 $command->run(new ArrayInput(['name' => $mod->name]), $output);
             }
