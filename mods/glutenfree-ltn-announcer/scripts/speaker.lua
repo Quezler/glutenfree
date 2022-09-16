@@ -4,6 +4,7 @@ local combinator = require('scripts.combinator')
 
 local speaker = {}
 
+
 function speaker.init()
   global.entries = {}
 
@@ -11,8 +12,6 @@ function speaker.init()
 
   global.deliveries = global.deliveries or {}
   global.logistic_train_stops = global.logistic_train_stops or {}
-
-  global.trolleyproblem = {}
 
   global.train_stops = {}
   for _, surface in pairs(game.surfaces) do
@@ -121,17 +120,6 @@ end
 function speaker.on_train_schedule_changed(event)
   -- game.print("schedule changed @ " .. event.tick)
 
-  -- when the schedule changes, an LTN destination might have been manualy removed,
-  -- this bit forces all stations this train was still inbound to to update.
-  if global.trolleyproblem[event.train.id] then
-    for unit_number, entity in pairs(global.trolleyproblem[event.train.id]) do
-      global.trolleyproblem[event.train.id][unit_number] = nil
-      if entity.valid then
-        speaker.announce(entity)
-      end
-    end
-  end
-
   -- is an LTN train between dispatched and delivery state
   if not global.deliveries[event.train.id] then return end
   local delivery = global.deliveries[event.train.id]
@@ -171,9 +159,6 @@ function speaker.announce(entity)
       -- is the train still [underway] to here?
       if trains.is_inbound(train, entity) then
 
-        if not global.trolleyproblem[train.id] then global.trolleyproblem[train.id] = {} end
-        -- global.trolleyproblem[train.id][entity.unit_number] = nil
-
         -- -- is this the botmall storage provider
         -- if (entity.unit_number == 3365039 and train.id == 1236 ) then
         --   game.print('is_inbound: ' .. serpent.block( trains.is_inbound(train, entity) ))
@@ -184,8 +169,6 @@ function speaker.announce(entity)
         if delivery.from_id == entity.unit_number then
           for what, count in pairs(delivery.shipment) do
             red[what] = (red[what] or 0) + count
-
-            global.trolleyproblem[train.id][entity.unit_number] = entity
           end
         end
 
@@ -193,8 +176,6 @@ function speaker.announce(entity)
         if delivery.to_id == entity.unit_number then
           for what, count in pairs(delivery.shipment) do
             green[what] = (green[what] or 0) + count
-
-            global.trolleyproblem[train.id][entity.unit_number] = entity
           end
         end
       end
