@@ -30,7 +30,7 @@ function loaders.get_or_create_container(entity)
   local container = global.container_for_loader[entity.unit_number]
 
   if not container or not container.valid then
-    print("creating container for loader [".. entity.unit_number .."].")
+--     print("creating container for loader [".. entity.unit_number .."].")
     container = entity.surface.create_entity({
       name = 'alt-mode-indicator-for-1x1-loaders',
       position = entity.position,
