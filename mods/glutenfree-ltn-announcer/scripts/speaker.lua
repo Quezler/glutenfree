@@ -24,6 +24,12 @@ end
 
 function speaker.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
+
+  -- todo: figure out how to remove copper wires from ghosts
+  -- if entity.name == "entity-ghost" and entity.ghost_name == "logistic-train-stop-announcer" then
+  --   entity.disconnect_neighbour()
+  -- end
+
   if entity.name ~= 'logistic-train-stop' then return end
 
   speaker.add_speaker_to_ltn_stop(entity)
@@ -50,6 +56,9 @@ function speaker.add_speaker_to_ltn_stop(entity)
     position = ltn.pos_for_speaker(entity),
     force = entity.force,
   })
+
+  -- disconnect any/only coppy wires
+  -- speakerpole.disconnect_neighbour()
 
   speakerpole.operable = false
   speakerpole.destructible = false
