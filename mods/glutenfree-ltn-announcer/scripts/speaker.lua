@@ -70,13 +70,15 @@ function speaker.add_speaker_to_ltn_stop(entity)
   -- mark speaker pole for death if the station dissapears
   global.deathrattles[script.register_on_entity_destroyed(entity)] = {speakerpole}
 
-  local red_signal = speakerpole.surface.create_entity({
+  local red_signal = speakerpole.surface.find_entity('logistic-train-stop-announcer-red-signal', speakerpole.position) or
+  speakerpole.surface.create_entity({
     name = 'logistic-train-stop-announcer-red-signal',
     position = speakerpole.position,
     force = speakerpole.force,
   })
 
-  local green_signal = speakerpole.surface.create_entity({
+  local green_signal = speakerpole.surface.find_entity('logistic-train-stop-announcer-green-signal', speakerpole.position) or
+  speakerpole.surface.create_entity({
     name = 'logistic-train-stop-announcer-green-signal',
     position = speakerpole.position,
     force = speakerpole.force,
