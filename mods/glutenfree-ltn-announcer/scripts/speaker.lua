@@ -163,13 +163,13 @@ function speaker.announce(entity)
 end
 
 function speaker.on_dispatcher_updated(event)
-  game.print('on_dispatcher_updated @ ' .. event.tick)
-  print('on_dispatcher_updated @ ' .. event.tick)
+  -- game.print('on_dispatcher_updated @ ' .. event.tick)
+  -- print('on_dispatcher_updated @ ' .. event.tick)
   global.deliveries = event.deliveries
 end
 
 function speaker.on_stops_updated(event)
-  print('on_stops_updated_event @ ' .. event.tick)
+  -- print('on_stops_updated_event @ ' .. event.tick)
   global.logistic_train_stops = event.logistic_train_stops
 end
 
