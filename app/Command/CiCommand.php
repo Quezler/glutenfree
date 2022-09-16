@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Misc\Mod;
+use GuzzleHttp\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,7 +36,13 @@ class CiCommand extends Command
             $mod = new Mod($mod->getRelativePathname());
             $mod->build();
 
-            $short = json_decode(file_get_contents('https://mods.factorio.com/api/mods/' . $mod->name), true);
+            try {
+                $short = \GuzzleHttp\json_decode(file_get_contents('https://mods.factorio.com/api/mods/' . $mod->name), true);
+            } catch (InvalidArgumentException $exception) {
+                $io->warning('^');
+                continue;
+            }
+
             $version = end($short['releases'])['version'];
 
             if ($mod->version() != $version) {
