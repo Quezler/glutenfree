@@ -2,7 +2,7 @@
     "name": "alt-mode-for-1x1-loaders",
     "title": "Alt mode for 1x1 loaders",
     "description": "Shows the filters in alt mode as you would expect.",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
