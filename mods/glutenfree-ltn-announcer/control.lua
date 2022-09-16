@@ -35,6 +35,7 @@ local events = {
   [defines.events.on_entity_cloned] = speaker.on_created_entity,
   
   [defines.events.on_train_schedule_changed] = speaker.on_train_schedule_changed,
+  [defines.events.on_entity_destroyed] = speaker.on_entity_destroyed,
 }
 
 for event, handler in pairs(events) do

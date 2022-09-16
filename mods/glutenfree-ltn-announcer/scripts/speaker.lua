@@ -5,6 +5,8 @@ local speaker = {}
 function speaker.init()
   global.entries = {}
 
+  global.deathrattles = global.deathrattles or {}
+
   global.deliveries = global.deliveries or {}
   global.logistic_train_stops = global.logistic_train_stops or {}
 end
@@ -13,11 +15,15 @@ function speaker.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
   if entity.name ~= 'logistic-train-stop' then return end
 
+  local stop = entity
   local entity = entity.surface.create_entity({
     name = 'logistic-train-stop-announcer',
     position = ltn.pos_for_speaker(entity),
     force = entity.force,
   })
+
+  -- mark speaker pole for death if the station dissapears
+  global.deathrattles[script.register_on_entity_destroyed(stop)] = {entity}
 
   entity.operable = false
   entity.destructible = false
@@ -33,6 +39,9 @@ function speaker.on_created_entity(event)
     position = entity.position,
     force = entity.force,
   })
+
+  -- mark both color combinators for death if the speaker pole dissapears
+  global.deathrattles[script.register_on_entity_destroyed(entity)] = {red_signal, green_signal}
 
   entity.connect_neighbour({
     target_entity = red_signal,
@@ -74,6 +83,16 @@ end
 function speaker.on_stops_updated(event)
   print('on_stops_updated_event @ ' .. event.tick)
   global.logistic_train_stops = event.logistic_train_stops
+end
+
+function speaker.on_entity_destroyed(event)
+  if not global.deathrattles[event.registration_number] then return end
+
+  for _, entity in ipairs(global.deathrattles[event.registration_number]) do
+    entity.destroy()
+  end
+
+  global.deathrattles[event.registration_number] = nil
 end
 
 return speaker
