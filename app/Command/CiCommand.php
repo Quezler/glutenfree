@@ -32,18 +32,11 @@ class CiCommand extends Command
             $mod->build();
 
             $short = json_decode(file_get_contents('https://mods.factorio.com/api/mods/' . $mod->name), true);
-            $sha1 = end($short['releases'])['sha1'];
+            $version = end($short['releases'])['version'];
 
-            if ($mod->sha1() != $sha1) {
-                dump($mod->zip_name_without_extension() . ' does not match the sha1 on the mod portal.');
-                dump(end($short['releases']));
-                dump([$mod->sha1(), $sha1]);
-
-                $mod->setVersion((new version(end($short['releases'])['version']))->inc('patch')->getVersion());
-                $mod->build();
-
+            if ($mod->version() != $version) {
                 $command = $this->getApplication()->find('update');
-//                $command->run(new ArrayInput(['name' => $mod->name]), $output);
+                $command->run(new ArrayInput(['name' => $mod->name]), $output);
             }
         }
 

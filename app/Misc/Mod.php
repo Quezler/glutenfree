@@ -43,9 +43,4 @@ class Mod
         passthru(sprintf("rsync -avr --delete %s/ %s", $source, $dest));
         passthru(sprintf("(cd %s && zip -FSr %s %s)", __GLUTENFREE__ . '/build/', "{$dest}.zip", $this->zip_name_without_extension()));
     }
-
-    public function sha1()
-    {
-        return sha1_file(__GLUTENFREE__ . '/build/' . $this->zip_name_without_extension() . '.zip');
-    }
 }
