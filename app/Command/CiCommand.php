@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use vierbergenlars\SemVer\version;
 use function vierbergenlars\SemVer\Application\SemVer\increment;
@@ -23,11 +24,14 @@ class CiCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
+
         if (!is_dir(__GLUTENFREE__ . '/build/')) mkdir(__GLUTENFREE__ . '/build/');
 
         $mods = Finder::create()->in(__GLUTENFREE__ . '/mods/')->directories()->depth(0);
 
         foreach ($mods as $mod) {
+            $io->info($mod->getRelativePathname());
             $mod = new Mod($mod->getRelativePathname());
             $mod->build();
 
@@ -35,7 +39,7 @@ class CiCommand extends Command
             $version = end($short['releases'])['version'];
 
             if ($mod->version() != $version) {
-                dd([$mod->version(), $version]); // wtf?
+                $io->comment("{$mod->version()} != {$version}");
                 $command = $this->getApplication()->find('update');
                 $command->run(new ArrayInput(['name' => $mod->name]), $output);
             }
