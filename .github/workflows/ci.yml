@@ -10,7 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: php-actions/composer@v6
+
+      - run: sudo apt-get install composer
+      - run: composer install
 
       - run: touch .env
       - run: echo FACTORIO_API_KEY=${{ secrets.FACTORIO_API_KEY }} >> .env
