@@ -7,6 +7,8 @@ local speaker = {}
 --
 
 function speaker.init()
+  global.on_nth_ticks = {}
+
   global.entries = {}
   global.deathrattles = global.deathrattles or {}
 
@@ -93,18 +95,24 @@ function speaker.add_speaker_to_ltn_stop(entity)
     red_signal = red_signal,
     green_signal = green_signal, 
   }
-
-  red_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-red"}, count = 1 }}
-  green_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-green"}, count = 1 }}
   
+end
+
+function speaker.on_train_schedule_changed(event)
+  -- LTN's updateAllTrains can trigger this function before our global exists 
+  if not global.on_nth_ticks then return end
+
+  local tick = event.tick + 1
+
+  global.on_nth_ticks[tick] = global.on_nth_ticks[tick] or {}
+  table.insert(global.on_nth_ticks[tick], event)
+  script.on_nth_tick(tick, speaker.on_nth_tick)
 end
 
 -- conveniently gets called when a temporary schedule gets removed,
 -- and since we want to remove the 'announcement' when the train arrives,
 -- we just have to check which station the train is at when it gets taken off.
-function speaker.on_train_schedule_changed(event)
-  -- game.print("schedule changed @ " .. event.tick)
-
+function speaker.one_tick_after_on_train_schedule_changed(event)
   -- is an LTN train between dispatched and delivery state
   if not global.deliveries[event.train.id] then return end
   local delivery = global.deliveries[event.train.id]
@@ -198,6 +206,18 @@ function speaker.every_10_minutes()
     if not entry.speakerpole.valid then
       global.entries[unit_number] = nil
     end
+  end
+end
+
+function speaker.on_nth_tick(event)
+  if global.on_nth_ticks[event.tick] then
+    for _, e in ipairs(global.on_nth_ticks[event.tick]) do
+      if e.train.valid then -- since this is delayed by a tick
+        speaker.one_tick_after_on_train_schedule_changed(e)
+      end
+    end
+    global.on_nth_ticks[event.tick] = nil
+    script.on_nth_tick(event.tick, nil)
   end
 end
 
