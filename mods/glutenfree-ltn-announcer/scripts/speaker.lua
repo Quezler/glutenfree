@@ -158,8 +158,17 @@ function speaker.announce(entity)
   --   green = green,
   -- }))
 
-  entry.red_signal.get_control_behavior().parameters = combinator.parameters_from_shipment(red)
-  entry.green_signal.get_control_behavior().parameters = combinator.parameters_from_shipment(green)
+  if entry.red_signal.valid then
+    entry.red_signal.get_control_behavior().parameters = combinator.parameters_from_shipment(red)
+  else
+    game.print('red signal no longer valid: ' .. entity.unit_number)
+  end
+
+  if entry.green_signal.valid then
+    entry.green_signal.get_control_behavior().parameters = combinator.parameters_from_shipment(green)
+  else
+    game.print('green signal no longer valid: ' .. entity.unit_number)
+  end
 end
 
 function speaker.on_dispatcher_updated(event)
