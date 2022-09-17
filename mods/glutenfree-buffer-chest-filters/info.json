@@ -2,7 +2,7 @@
     "name": "glutenfree-buffer-chest-filters",
     "title": "Glutenfree buffer chest filters",
     "description": "Allows you to filter the slots in order to prevent over sending.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
