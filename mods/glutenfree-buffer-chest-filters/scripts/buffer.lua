@@ -8,8 +8,6 @@ function buffer.on_gui_closed(event)
   local entity = event.entity
   if entity.name ~= "logistic-chest-buffer" then return end
 
-  -- game.print(serpent.block( buffer.filters ))
-
   local inventory = entity.get_inventory(defines.inventory.chest)
   local size = #inventory
 
