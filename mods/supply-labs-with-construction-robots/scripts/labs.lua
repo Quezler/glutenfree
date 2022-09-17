@@ -56,7 +56,7 @@ function labs.random_tick(entry)
 
   local current_research_ingredients = global.current_research_ingredients[entry.entity.force.index]
   if not current_research_ingredients then
-    error('force index: ' .. entry.entity.force.index .. ', force name: ' .. entry.entity.force.name .. ', size: ' .. table_size(current_research_ingredients))
+    error('force index: ' .. entry.entity.force.index .. ', force name: ' .. entry.entity.force.name .. ', size: ' .. table_size(global.current_research_ingredients))
   end
 
   -- do not restock if the force is not researching anything
