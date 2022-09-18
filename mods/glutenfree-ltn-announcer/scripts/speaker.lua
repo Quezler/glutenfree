@@ -7,7 +7,7 @@ local speaker = {}
 --
 
 function speaker.init()
-  global.on_nth_ticks = {}
+  global.on_nth_ticks = global.on_nth_ticks or {}
 
   global.entries = {}
   global.deathrattles = global.deathrattles or {}
