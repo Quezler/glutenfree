@@ -34,7 +34,7 @@ local function init()
   global.active_measurements = {}
 
   -- events to be raised at certain ticks for rocket silos that are currently cycling through cached timings
-  global.to_raise_at = {}
+  global.to_raise_at = global.to_raise_at or {}
 end
 
 script.on_init(init)
