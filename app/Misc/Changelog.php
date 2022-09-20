@@ -28,15 +28,22 @@ class Changelog
         }
 
         array_shift($commits);
+        $commits = array_reverse($commits);
 //        dump($commits);
 
         //
 
         $versions = [];
+        $orphans = [];
 
         foreach ($commits as $commit) {
             unset($info_json); // why? 0,o
             $hash = explode(' ', explode(PHP_EOL, $commit)[0])[1];
+
+            if (!Git::commit_changed_the_version($hash)) {
+                $orphans[] = $commit;
+                continue;
+            }
 
             // get the version from the info.json's history by the hash
             exec($git_show = sprintf('git show %s:mods/%s/info.json', $hash, $this->mod->name), $info_json);
@@ -45,6 +52,11 @@ class Changelog
 //            dump([$git_show, $info_json]);
             if (!array_key_exists($info['version'], $versions)) {
                 $versions[$info['version']] = [];
+
+//                dump([$info['version'], $orphans]);
+
+                foreach ($orphans as $orphan) $versions[$info['version']][] = $orphan;
+                $orphans = [];
             }
 
             $versions[$info['version']][] = $commit;
@@ -53,6 +65,7 @@ class Changelog
         //
 
         $changelog_lines = [];
+        $versions = array_reverse($versions);
 
         foreach ($versions as $version => $commits) {
             $changelog_lines[] = str_repeat('-', 99);
