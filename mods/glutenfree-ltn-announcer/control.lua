@@ -10,10 +10,6 @@ end
 local function load()
   script.on_event(remote.call("logistic-train-network", "on_dispatcher_updated"), speaker.on_dispatcher_updated)
   script.on_event(remote.call("logistic-train-network", "on_stops_updated"), speaker.on_stops_updated)
-
-  for tick, _ in pairs(global.on_nth_ticks or {}) do
-    script.on_nth_tick(tick, speaker.on_nth_tick)
-  end
 end
 
 script.on_init(function()
