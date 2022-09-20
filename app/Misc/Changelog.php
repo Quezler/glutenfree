@@ -70,7 +70,7 @@ class Changelog
         foreach ($versions as $version => $commits) {
             $changelog_lines[] = str_repeat('-', 99);
             $changelog_lines[] = 'Version: ' . $version;
-            $changelog_lines[] = 'Date: ' . (new \DateTime("now"))->format("d. m. Y");
+//            $changelog_lines[] = 'Date: ' . (new \DateTime("now"))->format("d. m. Y");
 
             $changelog_lines[] = '  Commits:';
 
