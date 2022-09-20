@@ -20,7 +20,7 @@ function labs.init()
       global.lab_inputs[entity_prototype.name] = util.list_to_map(entity_prototype.lab_inputs)
 
       for _, lab_input in ipairs(entity_prototype.lab_inputs) do
-        global.stack_size[lab_input] = game.item_prototypes[lab_input].stack_size
+        global.stack_size[lab_input] = math.min(settings.startup["lab-resupply-amount"].value, game.item_prototypes[lab_input].stack_size)
       end
     end
   end
