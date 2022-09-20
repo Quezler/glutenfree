@@ -32,18 +32,42 @@ class Changelog
 
         //
 
-        $changelog_lines = [];
-        $changelog_lines[] = str_repeat('-', 99);
-        $changelog_lines[] = 'Version: ' . $this->mod->version();
-        $changelog_lines[] = 'Date: ' . (new \DateTime("now"))->format("d. m. Y");
-
-        $changelog_lines[] = '  Commits:';
+        $versions = [];
 
         foreach ($commits as $commit) {
-            $changelog_lines[] = '    - ' . trim(explode(PHP_EOL, $commit)[4]);
+            unset($info_json); // why? 0,o
+            $hash = explode(' ', explode(PHP_EOL, $commit)[0])[1];
+
+            // get the version from the info.json's history by the hash
+            exec($git_show = sprintf('git show %s:mods/%s/info.json', $hash, $this->mod->name), $info_json);
+            $info = json_decode(implode(PHP_EOL, $info_json), true);
+
+//            dump([$git_show, $info_json]);
+            if (!array_key_exists($info['version'], $versions)) {
+                $versions[$info['version']] = [];
+            }
+
+            $versions[$info['version']][] = $commit;
         }
 
-        $changelog_lines[] = '';
+        //
+
+        $changelog_lines = [];
+
+        foreach ($versions as $version => $commits) {
+            $changelog_lines[] = str_repeat('-', 99);
+            $changelog_lines[] = 'Version: ' . $version;
+            $changelog_lines[] = 'Date: ' . (new \DateTime("now"))->format("d. m. Y");
+
+            $changelog_lines[] = '  Commits:';
+
+            foreach ($commits as $commit) {
+                $changelog_lines[] = '    - ' . trim(explode(PHP_EOL, $commit)[4]);
+            }
+
+            $changelog_lines[] = '';
+        }
+
         $changelog_content = implode(PHP_EOL, $changelog_lines);
 
         dump($changelog_content);
