@@ -8,7 +8,6 @@ local function init()
 end
 
 local function load()
-  script.on_event(remote.call("logistic-train-network", "on_dispatcher_updated"), speaker.on_dispatcher_updated)
   script.on_event(remote.call("logistic-train-network", "on_stops_updated"), speaker.on_stops_updated)
 end
 

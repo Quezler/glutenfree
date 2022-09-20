@@ -12,7 +12,7 @@ function speaker.init()
   global.entries = {}
   global.deathrattles = global.deathrattles or {}
 
-  global.deliveries = global.deliveries or {}
+  global.deliveries = nil
   global.logistic_train_stops = global.logistic_train_stops or {}
 
   for _, surface in pairs(game.surfaces) do
@@ -168,12 +168,6 @@ function speaker.announce(entity)
   else
     game.print('green signal no longer valid: ' .. entity.unit_number)
   end
-end
-
-function speaker.on_dispatcher_updated(event)
-  -- game.print('on_dispatcher_updated @ ' .. event.tick)
-  -- print('on_dispatcher_updated @ ' .. event.tick)
-  global.deliveries = event.deliveries
 end
 
 function speaker.on_stops_updated(event)
