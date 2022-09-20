@@ -41,6 +41,8 @@ class Mod
         $dest = __GLUTENFREE__ . '/build/' . $this->zip_name_without_extension();
 
         passthru(sprintf("rsync -avr --delete %s/ %s", $source, $dest));
+        (new Changelog($this))->generate($dest);
+
         passthru(sprintf("(cd %s && zip -FSr %s %s)", __GLUTENFREE__ . '/build/', "{$dest}.zip", $this->zip_name_without_extension()));
     }
 }
