@@ -11,6 +11,7 @@ function on_train_schedule_changed(event)
     for wait_condition_i, wait_condition in pairs(record.wait_conditions or {}) do
 
       if wait_condition.type == "fluid_count"
+      and wait_condition.condition
       and wait_condition.condition.comparator == "="
       and wait_condition.condition.constant == 0
       then
