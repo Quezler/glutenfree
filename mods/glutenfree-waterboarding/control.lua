@@ -19,7 +19,6 @@ function on_train_schedule_changed(event)
       end
 
       if delivers_fluid
-      and wait_condition.condition
       and wait_condition.compare_type == "or"
       and wait_condition.ticks == settings.global['ltn-dispatcher-stop-timeout(s)'].value * 60
       and wait_condition.type == "time"
