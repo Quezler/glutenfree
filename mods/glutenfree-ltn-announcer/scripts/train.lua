@@ -42,7 +42,7 @@ function train.get_ltn_stops_for_train(train)
   if not train.schedule then return stops end
 
   for i, record in ipairs(train.schedule.records) do
-    if record.temporary then
+    if record.temporary and record.rail ~= nil then
 
       local position = util.positiontostr(record.rail.position)
       -- game.print("temporary @ " .. position)
