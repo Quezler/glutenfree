@@ -151,11 +151,11 @@ function speaker.announce(entity)
   local red = {}
   local green = {}
 
-  entity.surface.create_entity({
-    name = "flying-text",
-    position = entity.position,
-    text = "announcing:",
-  })
+  -- entity.surface.create_entity({
+  --   name = "flying-text",
+  --   position = entity.position,
+  --   text = "announcing:",
+  -- })
 
   for _, train in ipairs(entity.get_train_stop_trains()) do
 
@@ -252,7 +252,7 @@ function speaker.register_train_stop(entity)
   end
 
   local position = util.positiontostr(connected_rail_position)
-  game.print('register_train_stop @ ' .. position)
+  -- game.print('register_train_stop @ ' .. position)
   
   global.train_stop_at[position] = entity
 end
