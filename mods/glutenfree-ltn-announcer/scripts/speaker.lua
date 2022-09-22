@@ -227,11 +227,20 @@ end
 function speaker.register_train_stop(entity)
   global.train_stops[entity.unit_number] = entity
 
-  if not entity.connected_rail then
-    return -- todo: entity is built to a ghost rail or standalone
+  local connected_rail_position = entity.position
+
+  -- entity.connected_rail can be nil, hence we calc:
+  if entity.direction == defines.direction.north then
+    connected_rail_position.x = connected_rail_position.x - 2
+  elseif entity.direction == defines.direction.east then
+    connected_rail_position.y = connected_rail_position.y - 2
+  elseif entity.direction == defines.direction.south then
+    connected_rail_position.x = connected_rail_position.x + 2
+  elseif entity.direction == defines.direction.west then
+    connected_rail_position.y = connected_rail_position.y + 2
   end
 
-  local position = util.positiontostr(entity.connected_rail.position)
+  local position = util.positiontostr(connected_rail_position)
   game.print('register_train_stop @ ' .. position)
   
   global.train_stop_at[position] = entity
