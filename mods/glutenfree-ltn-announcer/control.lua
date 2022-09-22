@@ -17,14 +17,12 @@ local events = {
 
 local function init()
   speaker.init()
-
-  for event, handler in pairs(events) do
-    script.on_event(event, handler)
-  end
 end
 
 local function load()
-  --
+  for event, handler in pairs(events) do
+    script.on_event(event, handler)
+  end
 end
 
 script.on_init(function()
