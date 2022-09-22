@@ -15,7 +15,7 @@ function speaker.init()
   global.deathrattles = global.deathrattles or {}
 
   global.deliveries = nil
-  global.logistic_train_stops = global.logistic_train_stops or {}
+  global.logistic_train_stops = nil
 
   --
 
@@ -223,11 +223,6 @@ function speaker.announce(entity)
   else
     game.print('green signal no longer valid: ' .. entity.unit_number)
   end
-end
-
-function speaker.on_stops_updated(event)
-  -- print('on_stops_updated_event @ ' .. event.tick)
-  global.logistic_train_stops = event.logistic_train_stops
 end
 
 function speaker.on_entity_destroyed(event)
