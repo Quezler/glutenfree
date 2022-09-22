@@ -90,11 +90,9 @@ end
 function train.entangled_with_stations(train)
   local stations = {}
 
-  if global.entangled then
-    for unit_number, station in pairs(global.entangled[train.id] or {}) do
-      if station.valid then
-        table.insert(stations, station)
-      end
+  for unit_number, station in pairs(global.entangled[train.id] or {}) do
+    if station.valid then
+      table.insert(stations, station)
     end
   end
 
