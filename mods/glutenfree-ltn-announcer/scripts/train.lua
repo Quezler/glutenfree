@@ -79,4 +79,27 @@ function train.is_valid_ltn_wait_condition(wait_condition)
   return true
 end
 
+-- flag a train with one or more stations
+function train.entangle_with_station(train, station)
+  if not global.entangled[train.id] then global.entangled[train.id] = {} end
+
+  global.entangled[train.id][station.unit_number] = station
+end
+
+-- retrieve all the stations this train was flagged with
+function train.entangled_with_stations(train)
+  local stations = {}
+
+  for unit_number, station in pairs(global.entangled[train.id] or {}) do
+    if station.valid then
+      table.insert(stations, station)
+    end
+  end
+
+  -- we observed it, didn't we? :)
+  global.entangled[train.id] = nil
+
+  return stations
+end
+
 return train

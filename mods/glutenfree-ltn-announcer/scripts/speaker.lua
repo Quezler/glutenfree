@@ -29,6 +29,8 @@ function speaker.init()
 
   --
 
+  global.entangled = {}
+
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{type = 'train-stop', name = 'logistic-train-stop'}) do
       speaker.add_speaker_to_ltn_stop(entity)
@@ -126,8 +128,18 @@ function speaker.on_train_schedule_changed(event)
   -- filter out this train id during debugging
   -- if event.train.id ~= 1236 then return end
 
+  local already_updated = {}
+
+  -- update all the stations where this train caused red/green signals ^-^
+  for _, station in ipairs(trains.entangled_with_stations(event.train)) do
+    speaker.announce(station)
+    already_updated[station.unit_number] = true
+  end
+
   for _, ltn_stop in ipairs(trains.get_ltn_stops_for_train(event.train)) do
-    speaker.announce(ltn_stop.train_stop)
+    if not already_updated[ltn_stop.unit_number] then
+      speaker.announce(ltn_stop.train_stop)
+    end
   end
 end
 
@@ -159,11 +171,13 @@ function speaker.announce(entity)
                 local what = "item," .. wait_condition.condition.first_signal.name
                 local count = wait_condition.condition.constant
 
+                trains.entangle_with_station(train, entity)
                 red[what] = (red[what] or 0) + count
               elseif wait_condition.condition.comparator == "=" and wait_condition.condition.constant == 0 then -- this is a delivery
                 local what = "item," .. wait_condition.condition.first_signal.name
                 local count = train.get_item_count(wait_condition.condition.first_signal.name)
 
+                trains.entangle_with_station(train, entity)
                 green[what] = (green[what] or 0) + count
               end
             end
@@ -173,11 +187,13 @@ function speaker.announce(entity)
                 local what = "fluid," .. wait_condition.condition.first_signal.name
                 local count = wait_condition.condition.constant
 
+                trains.entangle_with_station(train, entity)
                 red[what] = (red[what] or 0) + count
               elseif wait_condition.condition.comparator == "=" and wait_condition.condition.constant == 0 then -- this is a delivery
                 local what = "fluid," .. wait_condition.condition.first_signal.name
                 local count = train.get_fluid_count(wait_condition.condition.first_signal.name)
 
+                trains.entangle_with_station(train, entity)
                 green[what] = (green[what] or 0) + count
               end
             end
