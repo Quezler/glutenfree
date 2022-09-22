@@ -1,3 +1,5 @@
+local util = require('util')
+
 local ltn = require('scripts.ltn')
 local trains = require('scripts.train')
 local combinator = require('scripts.combinator')
@@ -15,15 +17,31 @@ function speaker.init()
   global.deliveries = nil
   global.logistic_train_stops = global.logistic_train_stops or {}
 
+  --
+
+  global.train_stops = {}
+  global.train_stop_at = {}
+  for _, surface in pairs(game.surfaces) do
+    for _, entity in pairs(surface.find_entities_filtered{type = 'train-stop'}) do
+      speaker.register_train_stop(entity)
+    end
+  end
+
+  --
+
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{type = 'train-stop', name = 'logistic-train-stop'}) do
       speaker.add_speaker_to_ltn_stop(entity)
     end
   end
+
 end
 
 function speaker.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
+
+  if entity.type == 'train-stop' then speaker.register_train_stop(entity) end
+
   if entity.name ~= 'logistic-train-stop' then return end
 
   speaker.add_speaker_to_ltn_stop(entity)
@@ -96,6 +114,7 @@ function speaker.add_speaker_to_ltn_stop(entity)
     green_signal = green_signal, 
   }
   
+  speaker.announce(entity)
 end
 
 -- conveniently gets called when a temporary schedule gets removed,
@@ -104,18 +123,12 @@ end
 function speaker.on_train_schedule_changed(event)
   -- game.print("schedule changed @ " .. event.tick)
 
-  -- is an LTN train between dispatched and delivery state
-  if not global.deliveries[event.train.id] then return end
-  local delivery = global.deliveries[event.train.id]
+  -- filter out this train id during debugging
+  -- if event.train.id ~= 1236 then return end
 
-  -- get the provider & requester station id from LTN
-  -- so we can be sure for which stop the tmp one is.
-
-  local provider = global.logistic_train_stops[delivery.from_id]
-  if provider then speaker.announce(provider.entity) end
-
-  local requester = global.logistic_train_stops[delivery.to_id]
-  if requester then speaker.announce(requester.entity) end
+  for _, ltn_stop in ipairs(trains.get_ltn_stops_for_train(event.train)) do
+    speaker.announce(ltn_stop.train_stop)
+  end
 end
 
 -- update the speakerpole signals
@@ -126,25 +139,51 @@ function speaker.announce(entity)
   local red = {}
   local green = {}
 
+  entity.surface.create_entity({
+    name = "flying-text",
+    position = entity.position,
+    text = "announcing:",
+  })
+
   for _, train in ipairs(entity.get_train_stop_trains()) do
 
-    local delivery = global.deliveries[train.id]
-    if delivery then
+    for _, ltn_stop in ipairs(trains.get_ltn_stops_for_train(train)) do
+      if ltn_stop.train_stop.unit_number == entity.unit_number and trains.is_inbound(train, ltn_stop.train_stop) then
+        -- this train stops at this station for:
 
-      -- is the train still [underway] to here?
-      if trains.is_inbound(train, entity) then
+        for _, wait_condition in ipairs(ltn_stop.wait_conditions) do
+          if trains.is_valid_ltn_wait_condition(wait_condition) then
 
-        -- sum any/all the items due for pickup
-        if delivery.from_id == entity.unit_number then
-          for what, count in pairs(delivery.shipment) do
-            red[what] = (red[what] or 0) + count
-          end
-        end
+            if wait_condition.type == "item_count"then
+              if wait_condition.condition.comparator == "≥" then -- this is a pickup
+                local what = "item," .. wait_condition.condition.first_signal.name
+                local count = wait_condition.condition.constant
 
-        -- sum any/all the items due for dropoff
-        if delivery.to_id == entity.unit_number then
-          for what, count in pairs(delivery.shipment) do
-            green[what] = (green[what] or 0) + count
+                red[what] = (red[what] or 0) + count
+              elseif wait_condition.condition.comparator == "=" and wait_condition.condition.constant == 0 then -- this is a delivery
+                local what = "item," .. wait_condition.condition.first_signal.name
+                local count = train.get_item_count(wait_condition.condition.first_signal.name)
+
+                green[what] = (green[what] or 0) + count
+              end
+            end
+
+            if wait_condition.type == "fluid_count" then
+              if wait_condition.condition.comparator == "≥" then -- this is a pickup
+                local what = "fluid," .. wait_condition.condition.first_signal.name
+                local count = wait_condition.condition.constant
+
+                red[what] = (red[what] or 0) + count
+              elseif wait_condition.condition.comparator == "=" and wait_condition.condition.constant == 0 then -- this is a delivery
+                local what = "fluid," .. wait_condition.condition.first_signal.name
+                local count = train.get_fluid_count(wait_condition.condition.first_signal.name)
+
+                green[what] = (green[what] or 0) + count
+              end
+            end
+
+            -- todo: determine delivery/pickup based on circuit conditions
+
           end
         end
       end
@@ -183,6 +222,19 @@ function speaker.on_entity_destroyed(event)
   end
 
   global.deathrattles[event.registration_number] = nil
+end
+
+function speaker.register_train_stop(entity)
+  global.train_stops[entity.unit_number] = entity
+
+  if not entity.connected_rail then
+    return -- todo: entity is built to a ghost rail or standalone
+  end
+
+  local position = util.positiontostr(entity.connected_rail.position)
+  game.print('register_train_stop @ ' .. position)
+  
+  global.train_stop_at[position] = entity
 end
 
 -- garbage collection
