@@ -48,7 +48,7 @@ function train.get_ltn_stops_for_train(train)
       -- game.print("temporary @ " .. position)
 
       local station = global.train_stop_at[position]
-      if station then
+      if station and station.valid then
         -- is this temporary station at the same rail as the next stop?
         local next_stop = train.schedule.records[i + 1]
         if next_stop and next_stop.station == station.backer_name then
