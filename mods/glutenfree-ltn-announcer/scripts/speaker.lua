@@ -14,7 +14,9 @@ function speaker.init()
   global.entries = {}
   global.deathrattles = global.deathrattles or {}
 
-  global.deliveries = nil
+  global.deliveries = {}
+  global.deliveries_table_was_previously_empty = true
+
   global.logistic_train_stops = nil
 
   --
@@ -166,7 +168,7 @@ function speaker.announce(entity)
         for _, wait_condition in ipairs(ltn_stop.wait_conditions) do
           if trains.is_valid_ltn_wait_condition(wait_condition) then
 
-            if wait_condition.type == "item_count"then
+            if wait_condition.type == "item_count" then
               if wait_condition.condition.comparator == "≥" then -- this is a pickup
                 local what = "item," .. wait_condition.condition.first_signal.name
                 local count = wait_condition.condition.constant
@@ -255,6 +257,22 @@ function speaker.register_train_stop(entity)
   -- game.print('register_train_stop @ ' .. position)
   
   global.train_stop_at[position] = entity
+end
+
+function speaker.on_dispatcher_updated(event)
+  game.print('on_dispatcher_updated @ ' .. event.tick)
+  global.deliveries = event.deliveries
+
+  if global.deliveries_table_was_previously_empty then
+    global.deliveries_table_was_previously_empty = false
+    -- todo: update all speakerpoles
+  end
+end
+
+function speaker.on_delivery_created(event)
+  game.print('on_delivery_created @ ' .. event.tick)
+  global.deliveries[event.train.id] = event
+  -- todo: update said speakerpole
 end
 
 -- garbage collection
