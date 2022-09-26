@@ -1,5 +1,3 @@
-local util = require('util')
-
 local ltn = require('scripts.ltn')
 local trains = require('scripts.train')
 local combinator = require('scripts.combinator')
@@ -15,19 +13,13 @@ function speaker.init()
   global.deathrattles = global.deathrattles or {}
 
   global.deliveries = {}
+  global.logistic_train_stops = {}
   global.deliveries_table_was_previously_empty = true
-
-  global.logistic_train_stops = nil
 
   --
 
-  global.train_stops = {}
-  global.train_stop_at = {}
-  for _, surface in pairs(game.surfaces) do
-    for _, entity in pairs(surface.find_entities_filtered{type = 'train-stop'}) do
-      speaker.register_train_stop(entity)
-    end
-  end
+  global.train_stops = nil
+  global.train_stop_at = nil
 
   --
 
@@ -35,7 +27,7 @@ function speaker.init()
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{type = 'train-stop', name = 'logistic-train-stop'}) do
-      speaker.add_speaker_to_ltn_stop(entity)
+      speaker.add_speaker_to_ltn_stop(entity) -- resets any signals to their default until the the next dispatch
     end
   end
 
@@ -43,9 +35,6 @@ end
 
 function speaker.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
-
-  if entity.type == 'train-stop' then speaker.register_train_stop(entity) end
-
   if entity.name ~= 'logistic-train-stop' then return end
 
   speaker.add_speaker_to_ltn_stop(entity)
@@ -118,7 +107,8 @@ function speaker.add_speaker_to_ltn_stop(entity)
     green_signal = green_signal, 
   }
   
-  speaker.announce(entity)
+  red_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-red"}, count = 1 }}
+  green_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-green"}, count = 1 }}
 end
 
 -- conveniently gets called when a temporary schedule gets removed,
@@ -127,8 +117,11 @@ end
 function speaker.on_train_schedule_changed(event)
   -- game.print("schedule changed @ " .. event.tick)
 
+  if not global.deliveries then return end -- wtf?
+
   -- filter out this train id during debugging
-  -- if event.train.id ~= 1236 then return end
+  -- if event.train.id ~= 1236 then return end (nauvis stone)
+  -- if event.train.id ~= 4748 then return end (thermofluid)
 
   local already_updated = {}
 
@@ -138,11 +131,15 @@ function speaker.on_train_schedule_changed(event)
     already_updated[station.unit_number] = true
   end
 
-  for _, ltn_stop in ipairs(trains.get_ltn_stops_for_train(event.train)) do
-    if not already_updated[ltn_stop.unit_number] then
-      speaker.announce(ltn_stop.train_stop)
-    end
-  end
+  -- not an LTN train, or delivery not yet registered here
+  if not global.deliveries[event.train.id] then return end
+  local delivery = global.deliveries[event.train.id]
+
+  local provider = global.logistic_train_stops[delivery.from_id]
+  if provider and not already_updated[provider.entity.unit_number] then speaker.announce(provider.entity) end
+
+  local requester = global.logistic_train_stops[delivery.to_id]
+  if requester and not already_updated[requester.entity.unit_number] then speaker.announce(requester.entity) end
 end
 
 -- update the speakerpole signals
@@ -161,48 +158,26 @@ function speaker.announce(entity)
 
   for _, train in ipairs(entity.get_train_stop_trains()) do
 
-    for _, ltn_stop in ipairs(trains.get_ltn_stops_for_train(train)) do
-      if ltn_stop.train_stop.unit_number == entity.unit_number and trains.is_inbound(train, ltn_stop.train_stop) then
-        -- this train stops at this station for:
+    local delivery = global.deliveries[train.id]
+    if delivery then
 
-        for _, wait_condition in ipairs(ltn_stop.wait_conditions) do
-          if trains.is_valid_ltn_wait_condition(wait_condition) then
+      -- is the train still [underway] to here?
+      if trains.is_inbound(train, entity) then
 
-            if wait_condition.type == "item_count" then
-              if wait_condition.condition.comparator == "≥" then -- this is a pickup
-                local what = "item," .. wait_condition.condition.first_signal.name
-                local count = wait_condition.condition.constant
-
-                trains.entangle_with_station(train, entity)
-                red[what] = (red[what] or 0) + count
-              elseif wait_condition.condition.comparator == "=" and wait_condition.condition.constant == 0 then -- this is a delivery
-                local what = "item," .. wait_condition.condition.first_signal.name
-                local count = train.get_item_count(wait_condition.condition.first_signal.name)
-
-                trains.entangle_with_station(train, entity)
-                green[what] = (green[what] or 0) + count
-              end
-            end
-
-            if wait_condition.type == "fluid_count" then
-              if wait_condition.condition.comparator == "≥" then -- this is a pickup
-                local what = "fluid," .. wait_condition.condition.first_signal.name
-                local count = wait_condition.condition.constant
-
-                trains.entangle_with_station(train, entity)
-                red[what] = (red[what] or 0) + count
-              elseif wait_condition.condition.comparator == "=" and wait_condition.condition.constant == 0 then -- this is a delivery
-                local what = "fluid," .. wait_condition.condition.first_signal.name
-                local count = train.get_fluid_count(wait_condition.condition.first_signal.name)
-
-                trains.entangle_with_station(train, entity)
-                green[what] = (green[what] or 0) + count
-              end
-            end
-
-            -- todo: determine delivery/pickup based on circuit conditions
-
+        -- sum any/all the items due for pickup
+        if delivery.from_id == entity.unit_number then
+          for what, count in pairs(delivery.shipment) do
+            red[what] = (red[what] or 0) + count
           end
+          trains.entangle_with_station(train, entity)
+        end
+
+        -- sum any/all the items due for dropoff
+        if delivery.to_id == entity.unit_number then
+          for what, count in pairs(delivery.shipment) do
+            green[what] = (green[what] or 0) + count
+          end
+          trains.entangle_with_station(train, entity)
         end
       end
 
@@ -237,43 +212,34 @@ function speaker.on_entity_destroyed(event)
   global.deathrattles[event.registration_number] = nil
 end
 
-function speaker.register_train_stop(entity)
-  global.train_stops[entity.unit_number] = entity
-
-  local connected_rail_position = entity.position
-
-  -- entity.connected_rail can be nil, hence we calc:
-  if entity.direction == defines.direction.north then
-    connected_rail_position.x = connected_rail_position.x - 2
-  elseif entity.direction == defines.direction.east then
-    connected_rail_position.y = connected_rail_position.y - 2
-  elseif entity.direction == defines.direction.south then
-    connected_rail_position.x = connected_rail_position.x + 2
-  elseif entity.direction == defines.direction.west then
-    connected_rail_position.y = connected_rail_position.y + 2
-  end
-
-  local position = util.positiontostr(connected_rail_position)
-  -- game.print('register_train_stop @ ' .. position)
-  
-  global.train_stop_at[position] = entity
+-- <ltn events>
+function speaker.on_stops_updated(event)
+  -- print('on_stops_updated_event @ ' .. event.tick)
+  global.logistic_train_stops = event.logistic_train_stops
 end
 
 function speaker.on_dispatcher_updated(event)
-  game.print('on_dispatcher_updated @ ' .. event.tick)
+  -- game.print('on_dispatcher_updated @ ' .. event.tick)
   global.deliveries = event.deliveries
 
   if global.deliveries_table_was_previously_empty then
     global.deliveries_table_was_previously_empty = false
-    -- todo: update all speakerpoles
+
+    -- we now have all deliveries, update all trains:
+    for train_id, delivery in pairs(global.deliveries) do
+      speaker.on_train_schedule_changed({train = delivery.train})
+    end
   end
 end
 
 function speaker.on_delivery_created(event)
-  game.print('on_delivery_created @ ' .. event.tick)
+  -- game.print('on_delivery_created @ ' .. event.tick)
   global.deliveries[event.train.id] = event
-  -- todo: update said speakerpole
+
+  -- train fired the schedule change event one tick ago:
+  speaker.on_train_schedule_changed({train = event.train})
 end
+-- </ltn events>
 
 -- garbage collection
 function speaker.every_10_minutes()

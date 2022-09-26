@@ -1,5 +1,3 @@
-local util = require('util')
-
 local train = {}
 
 function train.is_waiting_at_depo(entity)
@@ -34,49 +32,6 @@ function train.is_inbound(train, station)
 
   -- current at this station, or already went past it
   return false
-end
-
-function train.get_ltn_stops_for_train(train)
-  local stops = {}
-
-  if not train.schedule then return stops end
-
-  for i, record in ipairs(train.schedule.records) do
-    if record.temporary and record.rail ~= nil then
-
-      local position = util.positiontostr(record.rail.position)
-      -- game.print("temporary @ " .. position)
-
-      local station = global.train_stop_at[position]
-      if station and station.valid then
-        -- is this temporary station at the same rail as the next stop?
-        local next_stop = train.schedule.records[i + 1]
-        if next_stop and next_stop.station == station.backer_name then
-          table.insert(stops, {
-            train_stop = station,
-            wait_conditions = next_stop.wait_conditions
-          })
-        end
-      end
-
-    end
-  end
-
-  return stops
-end
-
-function train.is_valid_ltn_wait_condition(wait_condition)
-
-  -- has no valid circuit condition
-  if not wait_condition.condition then return false end
-
-  -- the signal is improperly set
-  if not wait_condition.condition.first_signal or not wait_condition.condition.first_signal.name then return false end
-
-  -- is not being compared to a number
-  if wait_condition.condition.constant == nil then return false end
-
-  return true
 end
 
 -- flag a train with one or more stations
