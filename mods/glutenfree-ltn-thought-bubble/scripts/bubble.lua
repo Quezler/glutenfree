@@ -68,6 +68,7 @@ function bubble.update_train(train)
       target_offset = {0, -0.55}, -- data.raw['locomotive']['locomotive'].alert_icon_shift - 0.2
       x_scale = 1.25, -- looks good-ish
       y_scale = 1.25, -- looks good-ish
+      only_in_alt_mode = true,
     }
 
     entry.sprites[#entry.sprites+1] = rendering.draw_sprite{
@@ -77,6 +78,7 @@ function bubble.update_train(train)
       target_offset = {0, -0.55}, -- data.raw['locomotive']['locomotive'].alert_icon_shift - 0.2
       x_scale = 1.25, -- looks good-ish
       y_scale = 1.25, -- looks good-ish
+      only_in_alt_mode = true,
     }
   end
 
@@ -141,7 +143,7 @@ function bubble.gc()
       for _, sprite_id in ipairs(global.entries[train.id].sprites) do
         rendering.destroy(sprite_id)
       end
-      
+
       global.entries[train.id] = nil
 
     end
