@@ -52,19 +52,14 @@ function silo.random_tick(entry)
   if not entry.combinator or not entry.combinator.valid then
     entry.combinator = entry.container.surface.find_entity("se-rocket-launch-pad-combinator", entry.container.position)
 
-    local fueltank_signal = entry.combinator.get_or_create_control_behavior().get_signal(1)
     local sections_signal = entry.combinator.get_or_create_control_behavior().get_signal(2)
     local capsules_signal = entry.combinator.get_or_create_control_behavior().get_signal(3)
 
-    if (fueltank_signal.signal.name ~= "se-liquid-rocket-fuel"  ) then error("did not expect the ["..fueltank_signal.signal.name.."] signal at combinator position 1.") end
     if (sections_signal.signal.name ~= "se-cargo-rocket-section") then error("did not expect the ["..sections_signal.signal.name.."] signal at combinator position 2.") end
     if (capsules_signal.signal.name ~= "se-space-capsule")        then error("did not expect the ["..capsules_signal.signal.name.."] signal at combinator position 3.") end
   end
 
   --
-
-  local has_any_rocket_fuel = entry.combinator.get_or_create_control_behavior().get_signal(1).count > 0
-  if not has_any_rocket_fuel then return end
 
   local missing_sections = 100 - entry.combinator.get_or_create_control_behavior().get_signal(2).count -- todo: - any sections still in the container
   local missing_capsules = 1   - entry.combinator.get_or_create_control_behavior().get_signal(3).count -- todo: - any capsules still in the container
