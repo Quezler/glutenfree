@@ -117,7 +117,8 @@ end
 function speaker.on_train_schedule_changed(event)
   -- game.print("schedule changed @ " .. event.tick)
 
-  if not global.deliveries then return end -- wtf?
+  if not global.deliveries then return end -- ltn event race condition
+  if not global.entangled then return end -- ltn event race condition
 
   -- filter out this train id during debugging
   -- if event.train.id ~= 1236 then return end (nauvis stone)
