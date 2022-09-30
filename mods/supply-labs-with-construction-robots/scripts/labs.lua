@@ -6,6 +6,12 @@ local labs = {}
 function labs.init()
   global.proxy_to_entry_map = {}
 
+  for unit_number, entry in pairs(global.entries or {}) do
+    if entry.proxy then
+      entry.proxy.destroy()
+    end
+  end
+
   global.entries = {}
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered({ type = "lab" })) do
