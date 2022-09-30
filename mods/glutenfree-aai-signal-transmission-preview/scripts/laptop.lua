@@ -1,38 +1,28 @@
 local laptop = {}
 
+local desks = {}
+desks['aai-signal-receiver'] = {x = 3.19921875, y = 3.17187500}
+desks['aai-signal-sender'  ] = {x = 1.83984375, y = 1.12890625}
+
 function laptop.init()
   global.deathrattles = global.deathrattles or {}
 end
 
 function laptop.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
-  if entity.name == 'aai-signal-receiver' then laptop.register_receiver(entity) end
-  if entity.name == 'aai-signal-sender' then laptop.register_sender(entity) end
+
+  if desks[entity.name] then laptop.register_desk(entity) end
 end
 
-function laptop.register_receiver(entity)
-  local position = entity.position
-
-  position.x = position.x + 3.19921875
-  position.y = position.y + 3.17187500
-
-  local computer = laptop.create_laptop_on_at(entity, position)
+function laptop.register_desk(entity)
+  local computer = laptop.create_laptop_on(entity, desks[entity.name])
 end
 
-function laptop.register_sender(entity)
-  local position = entity.position
-
-  position.x = position.x + 1.83984375
-  position.y = position.y + 1.12890625
-
-  local computer = laptop.create_laptop_on_at(entity, position)
-end
-
-function laptop.create_laptop_on_at(entity, position)
+function laptop.create_laptop_on(entity, offset)
   local computer = entity.surface.create_entity({
     name = 'glutenfree-aai-signal-transmission-preview-laptop',
     force = entity.force,
-    position = position,
+    position = {entity.position.x + offset.x, entity.position.y + offset.y},
   })
 
   global.deathrattles[script.register_on_entity_destroyed(entity)] = {computer}
