@@ -30,6 +30,18 @@ function laptop.create_laptop_on(entity, offset)
   computer.operable = false
   computer.destructible = false
 
+  -- connect red wire
+  computer.connect_neighbour({
+    target_entity = entity,
+    wire = defines.wire_type.red,
+  })
+
+  -- connect green wire
+  computer.connect_neighbour({
+    target_entity = entity,
+    wire = defines.wire_type.green,
+  })
+
   return computer
 end
 
