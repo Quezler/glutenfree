@@ -6,6 +6,24 @@ desks['aai-signal-sender'  ] = {x = 1.83984375, y = 1.12890625}
 
 function laptop.init()
   global.deathrattles = global.deathrattles or {}
+
+  for registration_number, entities in pairs(global.deathrattles) do
+    for _, entity in pairs(entities) do
+      entity.destroy()
+    end
+  end
+
+  global.deathrattles = {}
+
+  --
+
+  for _, surface in pairs(game.surfaces) do
+    for name, offset in pairs(desks) do
+      for _, entity in pairs(surface.find_entities_filtered{name = name}) do
+        laptop.register_desk(entity)
+      end
+    end
+  end
 end
 
 function laptop.on_created_entity(event)
