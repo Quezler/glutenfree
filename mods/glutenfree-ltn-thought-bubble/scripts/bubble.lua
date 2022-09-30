@@ -65,9 +65,9 @@ function bubble.update_train(train)
       sprite = 'utility.entity_info_dark_background',
       target = locomotive,
       surface = locomotive.surface,
-      target_offset = {0, -0.55}, -- data.raw['locomotive']['locomotive'].alert_icon_shift - 0.2
-      x_scale = 1.25, -- looks good-ish
-      y_scale = 1.25, -- looks good-ish
+      target_offset = {0, -0.75}, -- data.raw['locomotive']['locomotive'].alert_icon_shift - 0.2
+      x_scale = 0.75, -- looks good-ish
+      y_scale = 0.75, -- looks good-ish
       only_in_alt_mode = true,
     }
 
@@ -75,9 +75,9 @@ function bubble.update_train(train)
       sprite = shipment_sprite,
       target = locomotive,
       surface = locomotive.surface,
-      target_offset = {0, -0.55}, -- data.raw['locomotive']['locomotive'].alert_icon_shift - 0.2
-      x_scale = 1.25, -- looks good-ish
-      y_scale = 1.25, -- looks good-ish
+      target_offset = {0, -0.75}, -- data.raw['locomotive']['locomotive'].alert_icon_shift - 0.2
+      x_scale = 0.80, -- looks good-ish
+      y_scale = 0.80, -- looks good-ish
       only_in_alt_mode = true,
     }
   end
