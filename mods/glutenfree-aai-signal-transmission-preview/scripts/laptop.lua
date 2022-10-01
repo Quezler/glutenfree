@@ -7,7 +7,6 @@ desks['aai-signal-sender'  ] = {x = 1.83984375, y = 1.12890625}
 local surface_name = 'glutenfree-aai-signal-transmission-preview-deepweb'
 
 function laptop.init()
-  -- print('init')
   global.deathrattles = global.deathrattles or {}
 
   for registration_number, entities in pairs(global.deathrattles) do
@@ -16,9 +15,13 @@ function laptop.init()
     end
   end
 
-  global.deathrattles = {}
-  -- if game.surfaces[surface_name] then game.delete_surface(surface_name) end
-  -- print('surface deleted')
+  global.deathrattles = {} -- effectively the same as setting each registration_number to nil, but this is just one call.
+
+  -- if game.surfaces[surface_name] then
+  --   for _, entity in ipairs(game.get_surface(surface_name).find_entities()) do
+  --     entity.destroy()
+  --   end
+  -- end
 
   --
 
@@ -68,17 +71,12 @@ function laptop.create_laptop_on(entity, offset)
   local anchors = {}
   local surface = laptop.deepweb()
 
-  -- surface.request_to_generate_chunks(computer.position, 1)
-  -- surface.generate_with_lab_tiles = true
-  -- surface.force_generate_chunk_requests()
-
   for i = 1, 5 do
     anchors[i] = surface.create_entity({
       name = 'glutenfree-aai-signal-transmission-preview-laptop-anchor-' .. i,
       force = entity.force,
       position = computer.position,
     })
-    -- print(i .. serpent.block(anchors[i]) .. serpent.line(anchors[i].position) .. serpent.line( anchors[i].valid ))
   end
 
   -- ensure all of the 5 copper connections are empty
@@ -97,9 +95,6 @@ function laptop.create_laptop_on(entity, offset)
   -- cascade anchor deletion if the laptop gets destroyed
   global.deathrattles[script.register_on_entity_destroyed(computer)] = anchors
 
-  -- game.print(surface.index)
-  -- game.print(surface.name)
-
   return computer
 end
 
@@ -115,19 +110,11 @@ end
 
 function laptop.deepweb()
   if game.surfaces[surface_name] then
-    -- print("returned surface")
     return game.surfaces[surface_name]
   end
 
   local surface = game.create_surface(surface_name)
   surface.generate_with_lab_tiles = true
-
-  -- surface.request_to_generate_chunks({0,0}, 1)
-  -- surface.force_generate_chunk_requests()
-  -- surface.clear() -- so the intial chunk is just lab tiles as well
-  -- surface.request_to_generate_chunks({0,0}, 1)
-  -- surface.force_generate_chunk_requests()
-  -- print("made surface")
 
   return surface
 end
