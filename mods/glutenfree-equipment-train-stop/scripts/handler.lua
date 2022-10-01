@@ -1,6 +1,8 @@
-local handler = {}
-
 local mod_prefix = 'glutenfree-equipment-train-stop-'
+
+--
+
+local handler = {}
 
 function handler.init()
   global.landmines = {}
@@ -18,11 +20,10 @@ function handler.on_created_entity(event)
 end
 
 function handler.register_train_stop(entity)
-  game.print(serpent.line(entity.position))
+  -- game.print(serpent.line(entity.position))
 
+  -- entity.connected_rail sometimes nil polyfill
   local connected_rail_position = entity.position
-
-  -- entity.connected_rail can be nil, hence we calc:
   if entity.direction == defines.direction.north then
     connected_rail_position.x = connected_rail_position.x - 2
   elseif entity.direction == defines.direction.east then
@@ -54,6 +55,7 @@ function handler.replace_tripwire(entity) -- station
   global.landmines[script.register_on_entity_destroyed(landmine)] = entity.unit_number
 end
 
+-- handle tripped tripwires
 function handler.on_entity_destroyed(event)
   local unit_number = global.landmines[event.registration_number]
   if not unit_number then return end
@@ -63,8 +65,7 @@ function handler.on_entity_destroyed(event)
   local entry = global.entries[unit_number]
   if not entry then return end
 
-  -- local connected_rail_position = global.landmines[event.registration_number]
-
+  -- search center of tripwire + bounding box (.4) + safety margin (.1) 
   local entities = game.get_surface('nauvis').find_entities_filtered({
     area = {
     {entry.connected_rail_position.x - 0.5, entry.connected_rail_position.y - 0.5},
@@ -73,14 +74,15 @@ function handler.on_entity_destroyed(event)
     type = {'locomotive', 'cargo-wagon', 'fluid-wagon', 'artillery-wagon'} -- all rolling stock
   })
 
+  -- try to update any cairage present
   for _, entity in ipairs(entities) do
     game.print(_ .. ' ' .. entity.name)
   end
 
   global.tripwires_to_replace[entry.unit_number] = true
-  -- handler.replace_tripwire(entry.train_stop)
 end
 
+-- try to replace the tripwire each tick until it is able (aka: the cairage having passed)
 function handler.on_tick()
   for unit_number, _ in pairs(global.tripwires_to_replace) do
     global.tripwires_to_replace[unit_number] = nil
@@ -97,7 +99,7 @@ function handler.on_tick()
       if can_place_entity then
         handler.replace_tripwire(entry.train_stop)
       else
-        global.tripwires_to_replace[unit_number] = true
+        global.tripwires_to_replace[unit_number] = true -- try again next tick
       end
 
     end
