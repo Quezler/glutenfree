@@ -31,3 +31,9 @@ laptop.maximum_wire_distance = 10
 laptop.selection_priority = 51
 
 data:extend({laptop})
+
+for i = 1, 5 do
+  local anchor = table.deepcopy(laptop)
+  anchor.name = laptop.name .. '-anchor-' .. i
+  data:extend({anchor})
+end
