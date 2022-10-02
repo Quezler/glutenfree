@@ -1,6 +1,7 @@
 local mod_prefix = 'glutenfree-equipment-train-stop-'
 
 local equipmentgrid = require('scripts.equipmentgrid')
+local LTN = require('scripts.ltn')
 
 --
 
@@ -36,10 +37,17 @@ function handler.register_train_stop(entity)
     connected_rail_position.y = connected_rail_position.y + 2
   end
 
+  local template_container = entity.surface.create_entity({
+    name = mod_prefix .. 'template-container',
+    position = LTN.multiblock_position_for(entity, 'combinator'),
+    force = entity.force,
+  })
+
   global.entries[entity.unit_number] = {
     train_stop = entity,
     unit_number = entity.unit_number,
     connected_rail_position = connected_rail_position,
+    template_container = template_container,
   }
 
   global.tripwires_to_replace[entity.unit_number] = true
@@ -79,7 +87,7 @@ function handler.on_entity_destroyed(event)
   -- try to update any cairage present
   for _, entity in ipairs(entities) do
     game.print(_ .. ' ' .. entity.name)
-    equipmentgrid.tick_rolling_stock(entity)
+    equipmentgrid.tick_rolling_stock(entry, entity)
   end
 
   global.tripwires_to_replace[entry.unit_number] = true
