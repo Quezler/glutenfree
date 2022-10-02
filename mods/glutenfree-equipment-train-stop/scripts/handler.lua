@@ -1,5 +1,7 @@
 local mod_prefix = 'glutenfree-equipment-train-stop-'
 
+local equipmentgrid = require('scripts.equipmentgrid')
+
 --
 
 local handler = {}
@@ -77,6 +79,7 @@ function handler.on_entity_destroyed(event)
   -- try to update any cairage present
   for _, entity in ipairs(entities) do
     game.print(_ .. ' ' .. entity.name)
+    equipmentgrid.tick_rolling_stock(entity)
   end
 
   global.tripwires_to_replace[entry.unit_number] = true
