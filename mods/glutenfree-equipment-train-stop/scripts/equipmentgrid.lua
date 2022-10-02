@@ -26,11 +26,13 @@ function equipmentgrid.tick_rolling_stock(entry, entity)
   --   ["personal-laser-defense-mk2-equipment"] = 1
   -- }
   local contents = grid.get_contents()
+  print(serpent.block( contents ))
 
-  print(serpent.block( grid.get_contents() ))
+  game.print(serpent.line( equipmentgrid.contents_are_equal(template.grid.get_contents(), contents) ))
   -- print(serpent.block( grid.equipment ))
 end
 
+-- this does not care about the position inside
 function equipmentgrid.contents_are_equal(a, b)
   if table_size(a) ~= table_size(b) then return false end
 
