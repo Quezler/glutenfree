@@ -13,4 +13,4 @@ Issues i could use help with will have the `Help wanted` label attached to them,
 
 I will not be marking any serious/reasonable attempts as spam, but sending pr's for minor and/or unsolicited stuff might, up to my discretion.
 
-<sub>(ps, there are things i can do myself but haven't gotten to it yet, but i wished to give any factorio hacktoberfest contributors a chance for a shirt)</sub>
+<sub>(ps, these are things i can do myself but haven't gotten to it yet, but i wished to give any factorio hacktoberfest contributors a chance for a shirt)</sub>
