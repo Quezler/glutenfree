@@ -13,6 +13,8 @@ function handler.init()
   global.entries = {}
 
   global.tripwires_to_replace = {}
+
+  global.deathrattles = {}
 end
 
 function handler.on_created_entity(event)
@@ -42,13 +44,18 @@ function handler.register_train_stop(entity)
     position = LTN.multiblock_position_for(entity, 'combinator'),
     force = entity.force,
   })
+  template_container.destructible = false
 
-  global.entries[entity.unit_number] = {
+  local entry = {
     train_stop = entity,
     unit_number = entity.unit_number,
     connected_rail_position = connected_rail_position,
     template_container = template_container,
+
+    station_registration_number = script.register_on_entity_destroyed(entity)
   }
+  global.entries[entry.unit_number] = entry
+  global.deathrattles[entry.station_registration_number] = {template_container} -- 1 = template container
 
   global.tripwires_to_replace[entity.unit_number] = true
 end
@@ -62,11 +69,24 @@ function handler.replace_tripwire(entity) -- station
     position = entry.connected_rail_position,
   })
 
+  -- listen to when a train collides with the tripwire
   global.landmines[script.register_on_entity_destroyed(landmine)] = entity.unit_number
+
+  -- remote the tripwire if the train stop ends up being removed
+  global.deathrattles[entry.station_registration_number][2] = landmine -- 2 = tripwire
 end
 
--- handle tripped tripwires
 function handler.on_entity_destroyed(event)
+  local deathrattle = global.deathrattles[event.registration_number]
+  if deathrattle then
+    for _, entity in ipairs(deathrattle) do
+      entity.destroy()
+    end
+  
+    global.deathrattles[event.registration_number] = nil
+    return
+  end
+
   local unit_number = global.landmines[event.registration_number]
   if not unit_number then return end
 
@@ -99,7 +119,7 @@ function handler.on_tick()
     global.tripwires_to_replace[unit_number] = nil
 
     local entry = global.entries[unit_number]
-    if entry then
+    if entry and entry.train_stop.valid then
 
       local can_place_entity = entry.train_stop.surface.can_place_entity({
         name = mod_prefix .. 'tripwire',
