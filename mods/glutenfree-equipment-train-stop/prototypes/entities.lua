@@ -3,6 +3,7 @@ landmine.name = mod_prefix .. 'tripwire'
 landmine.collision_mask = {'train-layer'}
 landmine.max_health = 1
 landmine.timeout = 4294967295 -- 2^32-1
+landmine.minable = nil
 
 data:extend({landmine})
 
