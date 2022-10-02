@@ -80,6 +80,17 @@ function handler.on_entity_destroyed(event)
   local deathrattle = global.deathrattles[event.registration_number]
   if deathrattle then
     for _, entity in ipairs(deathrattle) do
+
+      if entity.valid then
+        if entity.name == mod_prefix .. 'template-container' then
+          local inventory = entity.get_inventory(defines.inventory.chest)
+          for slot = 1, #inventory do
+            local stack = inventory[slot]
+            entity.surface.spill_item_stack(entity.position, stack, false, nil, false)
+          end
+        end
+      end
+
       entity.destroy()
     end
   
@@ -119,7 +130,7 @@ function handler.on_tick()
     global.tripwires_to_replace[unit_number] = nil
 
     local entry = global.entries[unit_number]
-    if entry and entry.train_stop.valid then
+    if entry and entry.train_stop.valid then -- todo: delete if not valid?
 
       local can_place_entity = entry.train_stop.surface.can_place_entity({
         name = mod_prefix .. 'tripwire',
