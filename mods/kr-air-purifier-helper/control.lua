@@ -1,11 +1,11 @@
-local kr_air_purifier = require("scripts.kr-air-purifier")
+local handler = require("scripts.kr-air-purifier")
 
 --
 
 local function init()
   global = {}
 
-  kr_air_purifier.init()
+  handler.init()
 end
 
 script.on_init(function()
@@ -18,29 +18,19 @@ end)
 
 --
 
-script.on_event(defines.events.on_built_entity, function(event)
-  kr_air_purifier.on_created_entity(event)
-end)
+local events = {
+  [defines.events.on_built_entity] = handler.on_created_entity,
+  [defines.events.on_robot_built_entity] = handler.on_created_entity,
+  [defines.events.script_raised_built] = handler.on_created_entity,
+  [defines.events.script_raised_revive] = handler.on_created_entity,
+  [defines.events.on_entity_cloned] = handler.on_created_entity,
 
-script.on_event(defines.events.on_robot_built_entity, function(event)
-  kr_air_purifier.on_created_entity(event)
-end)
+  [defines.events.on_entity_destroyed] = handler.on_entity_destroyed,
+}
 
-script.on_event(defines.events.script_raised_built, function(event)
-  kr_air_purifier.on_created_entity(event)
-end)
-
-script.on_event(defines.events.script_raised_revive, function(event)
-  kr_air_purifier.on_created_entity(event)
-end)
-
-script.on_event(defines.events.on_entity_cloned, function(event)
-  kr_air_purifier.on_created_entity(event)
-end)
-
-script.on_event(defines.events.on_entity_destroyed, function(event)
-  kr_air_purifier.on_entity_destroyed(event)
-end)
+for event, handler in pairs(events) do
+  script.on_event(event, handler)
+end
 
 --
 
