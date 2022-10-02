@@ -33,7 +33,7 @@ local events = {
   [defines.events.on_entity_cloned] = handler.on_created_entity,
 
   [defines.events.on_entity_destroyed] = handler.on_entity_destroyed,
-  [defines.events.on_tick] = handler.on_tick,
+  [defines.events.on_tick] = handler.on_tick, -- todo: only have this handler active while global.tripwires_to_replace is not empty
 }
 
 for event, handler in pairs(events) do
