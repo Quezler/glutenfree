@@ -2,7 +2,7 @@
     "name": "glutenfree-equipment-train-stop",
     "title": "Glutenfree equipment train stop",
     "description": "Update the equipment grid of your trains by driving under it.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
