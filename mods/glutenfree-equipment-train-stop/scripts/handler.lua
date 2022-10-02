@@ -15,6 +15,7 @@ function handler.init()
   global.tripwires_to_replace = {}
 
   global.deathrattles = {}
+  global.deathrattle_to_entry = {}
 end
 
 function handler.on_created_entity(event)
@@ -56,6 +57,7 @@ function handler.register_train_stop(entity)
   }
   global.entries[entry.unit_number] = entry
   global.deathrattles[entry.station_registration_number] = {template_container} -- 1 = template container
+  global.deathrattle_to_entry[entry.station_registration_number] = entry.unit_number
 
   global.tripwires_to_replace[entity.unit_number] = true
 end
@@ -93,6 +95,10 @@ function handler.on_entity_destroyed(event)
 
       entity.destroy()
     end
+
+    -- remove entry from the global table if this registration number refered to the station
+    local entry = global.entries[global.deathrattle_to_entry[event.registration_number]]
+    if entry then global.entries[entry.unit_number] = nil end
   
     global.deathrattles[event.registration_number] = nil
     return
