@@ -1,0 +1,8 @@
+{
+    "name": "kr-air-purifier-helper",
+    "title": "Krastorio 2 Air Purifier Helper",
+    "description": "Restocks air purifiers using *construction* robots.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1"
+}
