@@ -18,6 +18,10 @@ function handler.init()
   global.deathrattle_to_entry = {}
 end
 
+function handler.on_configuration_changed()
+  -- place for future global chances
+end
+
 function handler.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
   if entity.name ~= mod_prefix .. 'station' then return end
@@ -123,7 +127,7 @@ function handler.on_entity_destroyed(event)
 
   -- try to update any cairage present
   for _, entity in ipairs(entities) do
-    game.print(_ .. ' ' .. entity.name)
+    -- game.print(_ .. ' ' .. entity.name)
     equipmentgrid.tick_rolling_stock(entry, entity)
   end
 

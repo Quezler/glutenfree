@@ -25,7 +25,7 @@ function equipmentgrid.tick_rolling_stock(entry, entity)
   --   ["personal-laser-defense-mk2-equipment"] = 1
   -- }
   local contents = grid.get_contents()
-  print(serpent.block( contents ))
+  -- print(serpent.block( contents ))
 
   local template_contents = template.grid.get_contents()
   if equipmentgrid.contents_are_equal(template_contents, contents) then return end

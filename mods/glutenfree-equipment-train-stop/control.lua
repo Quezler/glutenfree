@@ -20,7 +20,7 @@ script.on_load(function()
 end)
 
 script.on_configuration_changed(function(event)
-  init()
+  handler.on_configuration_changed()
 end)
 
 --
