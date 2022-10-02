@@ -1,9 +1,11 @@
+flib = require('__flib__.data-util')
+mod_prefix = 'glutenfree-equipment-train-stop-'
+
 -- data.raw['land-mine']['land-mine'].collision_mask = {'train-layer'}
 
-local landmine = table.deepcopy(data.raw['land-mine']['land-mine'])
-landmine.name = 'glutenfree-equipment-train-stop-tripwire'
-landmine.collision_mask = {'train-layer'}
-landmine.max_health = 1
-landmine.timeout = 4294967295 -- 2^32-1
+require('prototypes.recipes')
+require('prototypes.items')
+require('prototypes.entities')
 
-data:extend({landmine})
+flib = nil
+mod_prefix = nil
