@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Misc\Mod;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\InvalidArgumentException;
+use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
@@ -59,19 +60,23 @@ class CiCommand extends Command
             $io->info($mod->getRelativePathname());
             $mod = new Mod($mod->getRelativePathname());
 
-            $response = (new Client)->post('https://mods.factorio.com/api/v2/mods/edit_details', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $_ENV['FACTORIO_API_KEY']
-                ],
-                'form_params' => [
-                    'mod' => $mod->name,
-                    'title' => $mod->info()['title'],
-                    'summary' => $mod->info()['description'],
-                    'description' => $mod->readme(),
-                ]
-            ]);
+            try {
+                $response = (new Client)->post('https://mods.factorio.com/api/v2/mods/edit_details', [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $_ENV['FACTORIO_API_KEY']
+                    ],
+                    'form_params' => [
+                        'mod' => $mod->name,
+                        'title' => $mod->info()['title'],
+                        'summary' => $mod->info()['description'],
+                        'description' => $mod->readme(),
+                    ]
+                ]);
 
-            dump($response->getBody()->getContents());
+                dump($response->getBody()->getContents());
+            } catch (RequestException $exception) {
+                dump($exception->getMessage());
+            }
         }
 
         return Command::SUCCESS;
