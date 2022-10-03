@@ -18,9 +18,19 @@ class Mod
         return __GLUTENFREE__ . '/mods/' . $this->name;
     }
 
+    public function info()
+    {
+        return json_decode(file_get_contents("{$this->source()}/info.json"), true);
+    }
+
+    public function readme()
+    {
+        return file_get_contents("{$this->source()}/README.md");
+    }
+
     public function version()
     {
-        return json_decode(file_get_contents("{$this->source()}/info.json"), true)['version'];
+        return $this->info()['version'];
     }
 
     public function setVersion(string $version)

@@ -8,7 +8,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Dotenv\Dotenv;
 
 class PublishCommand extends Command
 {
@@ -22,9 +21,6 @@ class PublishCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $source = __GLUTENFREE__ . '/build/' . $input->getArgument('name') .'_'. $this->current_version($input->getArgument('name')) .'.zip';
-
-        $dotenv = new Dotenv();
-        $dotenv->load(__GLUTENFREE__ . '/.env');
 
         $guzzle = new Client();
         $response = $guzzle->post('https://mods.factorio.com/api/v2/mods/init_publish', [

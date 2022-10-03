@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Misc\Mod;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -31,6 +32,7 @@ class CiCommand extends Command
 
         $mods = Finder::create()->in(__GLUTENFREE__ . '/mods/')->directories()->depth(0);
 
+        // try to update zip
         foreach ($mods as $mod) {
             $io->info($mod->getRelativePathname());
             $mod = new Mod($mod->getRelativePathname());
@@ -50,6 +52,26 @@ class CiCommand extends Command
                 $command = $this->getApplication()->find('update');
                 $command->run(new ArrayInput(['name' => $mod->name]), $output);
             }
+        }
+
+        // try to update text
+        foreach ($mods as $mod) {
+            $io->info($mod->getRelativePathname());
+            $mod = new Mod($mod->getRelativePathname());
+
+            $response = (new Client)->post('https://mods.factorio.com/api/v2/mods/edit_details', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $_ENV['FACTORIO_API_KEY']
+                ],
+                'form_params' => [
+                    'mod' => $mod->name,
+                    'title' => $mod->info()['title'],
+                    'summary' => $mod->info()['description'],
+                    'description' => $mod->readme(),
+                ]
+            ]);
+
+            dump($response->getBody()->getContents());
         }
 
         return Command::SUCCESS;

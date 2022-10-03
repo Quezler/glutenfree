@@ -5,8 +5,12 @@ define('__GLUTENFREE__', __DIR__);
 require __DIR__.'/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
+use Symfony\Component\Dotenv\Dotenv;
 
 $application = new Application();
+
+$dotenv = new Dotenv();
+$dotenv->load(__GLUTENFREE__ . '/.env');
 
 $application->add(new \App\Command\InitCommand());
 $application->add(new \App\Command\RsyncCommand());
