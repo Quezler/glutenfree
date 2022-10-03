@@ -140,11 +140,11 @@ function bubble.gc()
   for train_id, entry in pairs(global.entries) do
     if not valid_train_ids[train_id] or not entry.train.valid then
 
-      for _, sprite_id in ipairs(global.entries[train.id].sprites) do
+      for _, sprite_id in ipairs(global.entries[train_id].sprites) do
         rendering.destroy(sprite_id)
       end
 
-      global.entries[train.id] = nil
+      global.entries[train_id] = nil
 
     end
   end
