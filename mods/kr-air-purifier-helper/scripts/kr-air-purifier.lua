@@ -39,6 +39,8 @@ function kr_air_purifier.register_purifier(entity)
 end
 
 function kr_air_purifier.update_unit_number_at_tick(unit_number, tick)
+  -- if game.tick >= tick then error(game.tick .. ' >= ' .. tick) end
+
   global.on_nth_ticks[tick] = global.on_nth_ticks[tick] or {}
   global.on_nth_ticks[tick][unit_number] = true
   script.on_nth_tick(tick, kr_air_purifier.on_nth_tick)
@@ -63,14 +65,12 @@ function kr_air_purifier.update_by_unit_number(unit_number)
   -- since we update by unit_number, we can erase it from inside here just fine
   if not entry.purifier.valid then global.entries[unit_number] = nil return end
 
-  local clean_filters = entry.purifier.get_inventory(defines.inventory.furnace_source).get_item_count()
-  if entry.purifier.crafting_progress == 1 then clean_filters = clean_filters - 1 end -- used next tick
-
-  if clean_filters == 0 and (not entry.proxy or not entry.proxy.valid) then
+  -- ensure the next update either via proxy deathrattle, or on_nth_tick scheduling
+  if entry.purifier.get_inventory(defines.inventory.furnace_source).is_empty() then
 
     local count = 1
-    -- supply one, but if it is currently idle then send it two
-    if entry.purifier.crafting_progress == 0 then count = 2 end
+    -- try to keep the above amount in input, but if idle add one more:
+    if entry.purifier.crafting_progress == 0 then count = count + 1 end
 
     entry.proxy = entry.purifier.surface.create_entity({
       name = "item-request-proxy",
@@ -81,28 +81,24 @@ function kr_air_purifier.update_by_unit_number(unit_number)
     })
 
     global.proxy_deathrattles[script.register_on_entity_destroyed(entry.proxy)] = entry.unit_number
-  end
+  else
+    local done_in_ticks = global.standard_recipe_duration
 
-  --
+    if entry.purifier.get_recipe() then
+      done_in_ticks = math.ceil(entry.purifier.get_recipe().energy / entry.purifier.crafting_speed * 60 * (1 - entry.purifier.crafting_progress))
 
-  if entry.purifier.get_recipe() then
-    local done_in_ticks = math.ceil(entry.purifier.get_recipe().energy / entry.purifier.crafting_speed * 60 * (1 - entry.purifier.crafting_progress))
-
-    if done_in_ticks > 0 then -- if 0 then a proxy will have already been created for it above
-
-      -- not (yet) connected so progress doesn't increase, so wait for the default duration
+      -- not (yet) connected or completely out of power, if so fall back to default recipe energy
       if not entry.purifier.is_connected_to_electric_network() or entry.purifier.energy == 0 then
         done_in_ticks = global.standard_recipe_duration
       else
         local effectivity = entry.purifier.energy / entry.purifier.electric_buffer_size
         if effectivity < 1 then done_in_ticks = math.ceil(done_in_ticks / effectivity) end
       end
-
-      kr_air_purifier.update_unit_number_at_tick(entry.unit_number, game.tick + done_in_ticks)
     end
-  else
-    -- currently not nomming on a filter
+
+    kr_air_purifier.update_unit_number_at_tick(entry.unit_number, game.tick + done_in_ticks + 1)
   end
+
 end
 
 -- to be called the tick a construction bot delivered filters
