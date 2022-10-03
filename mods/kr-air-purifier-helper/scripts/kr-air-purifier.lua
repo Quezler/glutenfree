@@ -91,7 +91,7 @@ function kr_air_purifier.update_by_unit_number(unit_number)
     if done_in_ticks > 0 then -- if 0 then a proxy will have already been created for it above
 
       -- not (yet) connected so progress doesn't increase, so wait for the default duration
-      if not entry.purifier.is_connected_to_electric_network() then
+      if not entry.purifier.is_connected_to_electric_network() or entry.purifier.energy == 0 then
         done_in_ticks = global.standard_recipe_duration
       else
         local effectivity = entry.purifier.energy / entry.purifier.electric_buffer_size
