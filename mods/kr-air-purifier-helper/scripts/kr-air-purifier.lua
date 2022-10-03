@@ -114,11 +114,9 @@ function kr_air_purifier.try_to_take_out_used_filters(entity)
 
   -- either a standard or improved filter, but handles both
   for name, count in pairs(dirty_filters.get_contents()) do
-    cargo.insert({name = name, count = count})
+    local taken = cargo.insert({name = name, count = count})
+    dirty_filters.remove({name = name, count = taken})
   end
-
-  -- moved into the bot
-  dirty_filters.clear()
 end
 
 function kr_air_purifier.on_entity_destroyed(event)
