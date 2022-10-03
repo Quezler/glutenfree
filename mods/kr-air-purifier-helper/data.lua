@@ -1,0 +1,1 @@
+-- data.raw['furnace']['kr-air-purifier'].crafting_speed = 100

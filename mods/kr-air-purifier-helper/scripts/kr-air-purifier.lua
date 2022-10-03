@@ -1,107 +1,141 @@
-local construction_robot = require("construction-robot")
-
 local kr_air_purifier = {}
 
 function kr_air_purifier.init()
-  global["kr-air-purifier"] = {}
+  global = {}
+  global.entries = {}
+  global.on_nth_ticks = {}
 
-  global["kr-air-purifier"]["all"] = {}
-  global["kr-air-purifier"]["active"] = {}
-  global["kr-air-purifier"]["receiving"] = {}
+  global.proxy_deathrattles = {}
+
+  global.standard_recipe_duration = game.recipe_prototypes['kr-air-cleaning'  ].energy / game.entity_prototypes['kr-air-purifier'].crafting_speed * 60 -- 28800t = 480s =  8m
+  global.improved_recipe_duration = game.recipe_prototypes['kr-air-cleaning-2'].energy / game.entity_prototypes['kr-air-purifier'].crafting_speed * 60 -- 36000t = 600s = 10m
 
   for _, surface in pairs(game.surfaces) do
-    for _, entity in pairs(surface.find_entities_filtered{name = "kr-air-purifier"}) do
-      table.insert(global["kr-air-purifier"]["all"], entity)
+    for _, entity in pairs(surface.find_entities_filtered({name = 'kr-air-purifier'})) do
+      local leftover_proxy = entity.surface.find_entity("item-request-proxy", entity.position)
+      if leftover_proxy then leftover_proxy.destroy() end
+
+      kr_air_purifier.register_purifier(entity)
+      kr_air_purifier.update_unit_number_at_tick(entity.unit_number, game.tick + 1)
     end
   end
 end
 
 function kr_air_purifier.on_created_entity(event)
-  local purifier = event.created_entity or event.entity or event.destination
-  if not (purifier and purifier.valid) then return end
+  local entity = event.created_entity or event.entity or event.destination
+  if entity.name ~= 'kr-air-purifier' then return end
 
-  if purifier.name == "kr-air-purifier" then
-    table.insert(global["kr-air-purifier"]["all"], purifier)
-    local proxy = construction_robot.deliver(purifier, {["pollution-filter"] = 2})
-    global["kr-air-purifier"]["receiving"][script.register_on_entity_destroyed(proxy)] = purifier
+  kr_air_purifier.register_purifier(entity)
+  kr_air_purifier.update_unit_number_at_tick(entity.unit_number, game.tick + 60) -- deliver the initial filter after a second
+  -- game.print(game.tick .. ' -> ' .. game.tick + 60)
+end
+
+function kr_air_purifier.register_purifier(entity)
+  global.entries[entity.unit_number] = {
+    unit_number = entity.unit_number,
+    purifier = entity,
+    proxy = nil,
+  }
+end
+
+function kr_air_purifier.update_unit_number_at_tick(unit_number, tick)
+  global.on_nth_ticks[tick] = global.on_nth_ticks[tick] or {}
+  global.on_nth_ticks[tick][unit_number] = true
+  script.on_nth_tick(tick, kr_air_purifier.on_nth_tick)
+end
+
+function kr_air_purifier.on_nth_tick(event)
+  local unit_numbers = global.on_nth_ticks[event.tick]
+  if not unit_numbers then return end
+
+  for unit_number, _ in pairs(unit_numbers) do
+    kr_air_purifier.update_by_unit_number(unit_number)
   end
+
+  global.on_nth_ticks[event.tick] = nil
+  script.on_nth_tick(event.tick, nil)
+end
+
+function kr_air_purifier.update_by_unit_number(unit_number)
+  local entry = global.entries[unit_number]
+  if not entry then return end
+
+  -- since we update by unit_number, we can erase it from inside here just fine
+  if not entry.purifier.valid then global.entries[unit_number] = nil return end
+
+  local clean_filters = entry.purifier.get_inventory(defines.inventory.furnace_source).get_item_count()
+  if entry.purifier.crafting_progress == 1 then clean_filters = clean_filters - 1 end -- used next tick
+
+  if clean_filters == 0 and (not entry.proxy or not entry.proxy.valid) then
+
+    local count = 1
+    -- supply one, but if it is currently idle then send it two
+    if entry.purifier.crafting_progress == 0 then count = 2 end
+
+    entry.proxy = entry.purifier.surface.create_entity({
+      name = "item-request-proxy",
+      target = entry.purifier,
+      modules = {["pollution-filter"] = count},
+      position = entry.purifier.position,
+      force = entry.purifier.force,
+    })
+
+    global.proxy_deathrattles[script.register_on_entity_destroyed(entry.proxy)] = entry.unit_number
+  end
+
+  --
+
+  if entry.purifier.get_recipe() then
+    local done_in_ticks = math.ceil(entry.purifier.get_recipe().energy / entry.purifier.crafting_speed * 60 * (1 - entry.purifier.crafting_progress))
+
+    if done_in_ticks > 0 then -- if 0 then a proxy will have already been created for it above
+
+      -- not (yet) connected so progress doesn't increase, so wait for the default duration
+      if not entry.purifier.is_connected_to_electric_network() then
+        done_in_ticks = global.standard_recipe_duration
+      else
+        local effectivity = entry.purifier.energy / entry.purifier.electric_buffer_size
+        if effectivity < 1 then done_in_ticks = math.ceil(done_in_ticks / effectivity) end
+      end
+
+      kr_air_purifier.update_unit_number_at_tick(entry.unit_number, game.tick + done_in_ticks)
+    end
+  else
+    -- currently not nomming on a filter
+  end
+end
+
+-- to be called the tick a construction bot delivered filters
+function kr_air_purifier.try_to_take_out_used_filters(entity)
+  local dirty_filters = entity.get_inventory(defines.inventory.furnace_result)
+  if dirty_filters.is_empty() then return end
+
+  local nearby_construction_robot = entity.surface.find_entity('construction-robot', entity.position)
+  if not nearby_construction_robot then return end
+
+  local cargo = nearby_construction_robot.get_inventory(defines.inventory.robot_cargo)
+  if not cargo.is_empty() then return end
+
+  -- either a standard or improved filter, but handles both
+  for name, count in pairs(dirty_filters.get_contents()) do
+    cargo.insert({name = name, count = count})
+  end
+
+  -- moved into the bot
+  dirty_filters.clear()
 end
 
 function kr_air_purifier.on_entity_destroyed(event)
-  if global["kr-air-purifier"]["receiving"][event.registration_number] then
-    local purifier = global["kr-air-purifier"]["receiving"][event.registration_number]
-    global["kr-air-purifier"]["receiving"][event.registration_number] = nil
+  -- the item request proxy has disappeared, mined or received the package
+  local unit_number = global.proxy_deathrattles[event.registration_number]
+  if unit_number then global.proxy_deathrattles[event.registration_number] = nil
 
-    if purifier and purifier.valid then
+    -- try to take out any used ones now ...
+    local entry = global.entries[unit_number]
+    if entry and entry.purifier.valid then kr_air_purifier.try_to_take_out_used_filters(entry.purifier) end
 
-      if purifier.get_recipe() then
-      -- started using filter
-        local highlighter = purifier.surface.create_entity({name = "highlight-box", box_type = "train-visualization", position = purifier.position, source = purifier, time_to_live = purifier.get_recipe().energy / purifier.crafting_speed * 60 * (1 - purifier.crafting_progress), render_player_index = 65535})
-        global["kr-air-purifier"]["active"][script.register_on_entity_destroyed(highlighter)] = purifier
-      else
-      -- item request proxy got manually removed?
-        kr_air_purifier.refill_if_empty(purifier)
-      end
-
-      local used_filters = purifier.get_inventory(defines.inventory.furnace_result)
-      if not used_filters.is_empty() then
-      -- has empty filters to extract
-
-        local robot = purifier.surface.find_entity("construction-robot", purifier.position)
-        if robot then
-        -- construction bot still nearby
-
-          local cargo = robot.get_inventory(defines.inventory.robot_cargo)
-          if cargo.is_empty() then
-          -- bot on the return trip?
-
-            for name, count in pairs(used_filters.get_contents()) do
-              cargo.insert({name = name, count = count})
-            end
-
-            used_filters.clear()
-          end
-        end
-      end
-    end
-  elseif global["kr-air-purifier"]["active"][event.registration_number] then
-    local purifier = global["kr-air-purifier"]["active"][event.registration_number]
-    global["kr-air-purifier"]["active"][event.registration_number] = nil
-
-    if purifier and purifier.valid then
-      kr_air_purifier.refill_if_empty(purifier)
-      --  if purifier.crafting_progress is not 1 in here, it lacked power
-    end
-  end
-end
-
-function kr_air_purifier.refill_if_empty(purifier)
-  local filters = purifier.get_inventory(defines.inventory.furnace_source).get_item_count()
-  if purifier.crafting_progress == 1 then
-  -- assume the next tick uses one filter
-    filters = filters - 1
-  end
-
-  if 1 > filters then
-    if not construction_robot.pending_delivery(purifier) then
-      local proxy = construction_robot.deliver(purifier, {["pollution-filter"] = 1})
-      global["kr-air-purifier"]["receiving"][script.register_on_entity_destroyed(proxy)] = purifier
-    end
-  end
-end
-
-function kr_air_purifier.every_five_minutes()
-  for i = #global["kr-air-purifier"]["all"], 1, -1 do
-    local purifier = global["kr-air-purifier"]["all"][i]
-
-    if not purifier.valid then
-      table.remove(global["kr-air-purifier"]["all"], i)
-    else
-      -- when purifiers lacked 100% power during their recipe the event based servicing breaks,
-      -- also purifiers that have more filters than expected (e.g. inserters or manual) break the loop as well.
-      -- as a failsafe this is a slow loop that periodically checks if any of all the purifiers (re)qualifies for servicing.
-      kr_air_purifier.refill_if_empty(purifier)
-    end
+    -- ... and schedule the next update in a second
+    kr_air_purifier.update_unit_number_at_tick(unit_number, event.tick + 60)
   end
 end
 

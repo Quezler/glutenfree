@@ -3,13 +3,21 @@ local handler = require("scripts.kr-air-purifier")
 --
 
 local function init()
-  global = {}
-
   handler.init()
+end
+
+local function load()
+  for tick, _ in pairs(global.on_nth_ticks or {}) do
+    script.on_nth_tick(tick, handler.on_nth_tick)
+  end
 end
 
 script.on_init(function()
   init()
+end)
+
+script.on_load(function()
+  load()
 end)
 
 script.on_configuration_changed(function(event)
@@ -31,9 +39,3 @@ local events = {
 for event, handler in pairs(events) do
   script.on_event(event, handler)
 end
-
---
-
-script.on_nth_tick(60 * 60 * 5, function()
-  kr_air_purifier.every_five_minutes()
-end)
