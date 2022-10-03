@@ -1,9 +1,11 @@
 local kr_air_purifier = {}
 
 function kr_air_purifier.init()
+  local on_nth_ticks = global.on_nth_ticks or {}
+
   global = {}
   global.entries = {}
-  global.on_nth_ticks = {}
+  global.on_nth_ticks = on_nth_ticks
 
   global.proxy_deathrattles = {}
 
