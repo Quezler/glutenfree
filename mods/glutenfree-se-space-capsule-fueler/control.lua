@@ -50,6 +50,9 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
   local player = game.get_player(event.player_index)
 
+  -- if the player is in god mode the stacks in their inventory are not taken into account
+  if player.character == nil then return end
+
   local container = get_child(player.gui.relative, 'se-space-capsule-gui')
   local capsule_gui_frame = get_child(container, 'capsule_gui_inner')
   local subheader_frame = capsule_gui_frame.children[1]
