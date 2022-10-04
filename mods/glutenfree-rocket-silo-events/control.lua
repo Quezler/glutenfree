@@ -1,8 +1,6 @@
 local handler = {}
 
 local function init()
-  global = {}
-
   -- holds timings for each silo:rocket name combination
   global.timings = {}
 
@@ -31,7 +29,7 @@ local function init()
   end
 
   -- when the silo:rocket timing is missing, measure and cache it, this holds all in-progress measurements
-  global.active_measurements = {}
+  global.active_measurements = global.active_measurements or {}
 
   -- events to be raised at certain ticks for rocket silos that are currently cycling through cached timings
   global.to_raise_at = global.to_raise_at or {}
