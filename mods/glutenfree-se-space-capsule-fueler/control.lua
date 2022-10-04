@@ -16,32 +16,18 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
   local player = game.get_player(event.player_index)
 
-  -- game.print(event.entity.name)
-
-  -- local 
-
-  -- game.print(serpent.block( player.gui.relative.children_names[3] ))
-  -- game.print(serpent.block( player.gui.relative.children[3] ))
-
   local container = get_child(player.gui.relative, 'se-space-capsule-gui')
-  local inner = get_child(container, 'capsule_gui_inner')
-  -- inner = get_child(container, 'capsule_gui_inner')
-  -- inner = get_child(container, 'capsule_gui_inner')
-
-  -- game.print(serpent.block( container.children_names ))
-  -- game.print(serpent.block( inner.children_names ))
-  -- game.print(serpent.block( inner.children[1].style.name ))
-
+  local capsule_gui_frame = get_child(container, 'capsule_gui_inner')
   local subheader_frame = inner.children[1]
-  -- game.print(serpent.block( subheader_frame.children_names ))
 
-  local fuel_index = 2
-  local fuel_label = subheader_frame.children[fuel_index].children[3] -- [text, spacer, min/max]
-  -- local localized_string, current, required = fuel_label.caption
-  
-  -- game.print( serpent.block(fuel_label.caption) )
-  -- game.print(fuel_label.caption[2])
+  local subheader_child = {
+    capacity = 1,
+    sections = 2,
+    fuel     = 3,
+    status   = 4,
+  }
 
+  local fuel_label = subheader_frame.children[subheader_child.fuel].children[3] -- [text, spacer, min/max]
   local current_fuel = fuel_label.caption[2]
   local required_fuel = fuel_label.caption[3]
 
