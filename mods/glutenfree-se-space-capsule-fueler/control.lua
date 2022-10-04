@@ -10,6 +10,40 @@ function get_child(parent, name)
   error('could not find a child named ['.. name ..'].')
 end
 
+function deliver_by_proxy(entity, modules)
+  local proxy = entity.surface.find_entity("item-request-proxy", entity.position)
+
+  if proxy then
+    proxy.item_requests = modules
+  else
+    entity.surface.create_entity({
+      name = "item-request-proxy",
+      target = entity,
+      modules = modules,
+      position = entity.position,
+      force = entity.force,
+    })
+  end
+end
+
+function fuel_capsule(entity, current_fuel, required_fuel)
+
+  -- fuel levels have reached their equilibrium :)
+  if current_fuel == required_fuel then return end
+
+  -- deliver what is missing
+  if required_fuel > current_fuel then
+    deliver_by_proxy(entity, {["rocket-fuel"] = required_fuel - current_fuel})
+  end
+
+  -- spill what is excess
+  if required_fuel < current_fuel then
+    local inventory = entity.get_inventory(defines.inventory.chest)
+    inventory.remove({name = 'rocket-fuel', count = current_fuel - required_fuel})
+    entity.surface.spill_item_stack(entity.position, {name = 'rocket-fuel', count = current_fuel - required_fuel}, false, entity.force, false)
+  end
+end
+
 script.on_event(defines.events.on_gui_opened, function(event)
   if not event.entity then return end
   if event.entity.name ~= 'se-space-capsule' then return end
@@ -18,7 +52,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
   local container = get_child(player.gui.relative, 'se-space-capsule-gui')
   local capsule_gui_frame = get_child(container, 'capsule_gui_inner')
-  local subheader_frame = inner.children[1]
+  local subheader_frame = capsule_gui_frame.children[1]
 
   local subheader_child = {
     capacity = 1,
@@ -31,6 +65,8 @@ script.on_event(defines.events.on_gui_opened, function(event)
   local current_fuel = fuel_label.caption[2]
   local required_fuel = fuel_label.caption[3]
 
-  game.print(current_fuel)
-  game.print(required_fuel)
+  -- game.print(current_fuel)
+  -- game.print(required_fuel)
+
+  fuel_capsule(event.entity, current_fuel, required_fuel)
 end)
