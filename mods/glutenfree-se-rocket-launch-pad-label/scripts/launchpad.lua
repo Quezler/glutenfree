@@ -76,7 +76,7 @@ function launchpad.on_gui_opened(event)
     global.has_opened_every_silo = true
 
     local shifu = player.opened
-    player.opened = nil
+    player.opened = nil -- or else it fails to open this silo if its either the only or first entry
     for _, entry in pairs(global.entries) do
       if entry.container.valid then
         player.opened = entry.container
@@ -113,30 +113,24 @@ function launchpad.get_destination(zones_dropdown)
 
   -- "        [img=virtual-signal/se-planet-orbit] Nauvis Orbit"
   if selected ~= nil then selected = ltrim(selected) end
-
   if selected ~= nil then
     local zone = remote.call("space-exploration", "get_zone_from_name", {zone_name = remove_rich_text(selected)})
+    if zone then -- or else fallback to what is selected, like if you select a spaceship as destination (why tho)
 
-    -- game.print(serpent.block( zone ))
+      -- use universe exporer icon by default
+      local rich_text = '[img=' .. Zone.get_icon(zone) .. ']'
 
-    local icon = zone.primary_resource
+      -- assume that for these 3 types you care about the primary resource
+      if zone.type == "planet" or zone.type == "moon" or zone.type == "asteroid-belt" then
+        rich_text = '[item=' .. zone.primary_resource .. ']'
+      end
 
-    -- because these make sense to me personally
-    if zone.name == 'Nauvis' then icon = 'landfill' end
-    if zone.name == 'Nauvis Orbit' then icon = 'satellite' end
+      -- because these make sense to me personally
+      if zone.name == 'Nauvis'       then rich_text = '[item=landfill]' end
+      if zone.name == 'Nauvis Orbit' then rich_text = '[item=satellite]' end
 
-    -- if zone.type == 'orbit' then
-    -- end
-    -- print(serpent.block( zone ))
-    -- game.print(zone.parent.type)
-
-    local rich_text = '[item=' .. icon .. ']'
-
-    if zone.type == 'orbit' then
-      rich_text = '[img=' .. Zone.get_icon(zone) .. ']'
+      selected = rich_text .. ' ' .. zone.name
     end
-
-    selected = rich_text .. ' ' .. zone.name
   end
 
   return selected

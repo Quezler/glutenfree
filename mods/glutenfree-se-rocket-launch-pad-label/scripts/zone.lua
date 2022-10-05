@@ -1,3 +1,7 @@
+-- Whilst i could have saved the icon from the dropdown for later use,
+-- deriving it from the zone information was more practical at the time.
+--
+-- If you are a Space Exploration representative and wish this removed, contact me.
 
 local Zone = {}
 
