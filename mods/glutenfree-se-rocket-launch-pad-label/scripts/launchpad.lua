@@ -122,7 +122,7 @@ function launchpad.get_destination(zones_dropdown)
 
       -- assume that for these 3 types you care about the primary resource
       if zone.type == "planet" or zone.type == "moon" or zone.type == "asteroid-belt" then
-        rich_text = '[item=' .. zone.primary_resource .. ']'
+        rich_text = '[img=entity/' .. zone.primary_resource .. ']'
       end
 
       -- because these make sense to me personally
