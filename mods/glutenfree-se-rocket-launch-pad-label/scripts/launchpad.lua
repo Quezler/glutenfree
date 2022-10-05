@@ -91,7 +91,7 @@ function launchpad.update_by_unit_number(unit_number, destination)
 
   if entry.label then
     entry.label.destroy()
-    entry.label = 0
+    entry.label = nil
   end
 
   if destination == nil then return end
@@ -109,6 +109,17 @@ function launchpad.update_by_unit_number(unit_number, destination)
   position.y = position.y + 1.9
 
   entry.label = entry.container.surface.create_entity{name = 'hovering-text', position = position, text = destination}
+  global.deathrattles[script.register_on_entity_destroyed(entry.container)] = {entry.label}
+end
+
+function launchpad.on_entity_destroyed(event)
+  if not global.deathrattles[event.registration_number] then return end
+
+  for _, entity in ipairs(global.deathrattles[event.registration_number]) do
+    entity.destroy()
+  end
+
+  global.deathrattles[event.registration_number] = nil
 end
 
 return launchpad
