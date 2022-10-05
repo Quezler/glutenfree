@@ -1,3 +1,5 @@
+local Zone = require('scripts.zone')
+
 local launchpad = {}
 
 function launchpad.init()
@@ -92,16 +94,6 @@ function launchpad.on_gui_opened(event)
     local selected = launchpad.get_destination(zones_dropdown)
 
     launchpad.update_by_unit_number(event.entity.unit_number, selected)
-    -- print(serpent.block( selected ))
-
-    -- words = {}
-    -- for word in selected:gmatch("%S+") do table.insert(words, word) end
-    -- game.print(serpent.block( remove_rich_text(selected) ))
-    -- game.print(serpent.block(words))
-
-    -- local zones = remote.call("space-exploration", "get_zone_index", {force_name = player.force.name})
-    -- print(serpent.block(zones))
-
   end
 end
 
@@ -111,18 +103,11 @@ function launchpad.on_gui_selection_state_changed(event)
   local unit_number = event.element.parent.parent.parent.tags.unit_number
   if not unit_number then error('could not get this silo\'s unit number.') end
 
-  -- game.print(serpent.block( unit_number ))
-  -- game.print(serpent.block( launchpad.get_destination(event.element) ))
-
   launchpad.update_by_unit_number(unit_number, launchpad.get_destination(event.element))
 end
 
 function launchpad.get_destination(zones_dropdown)
   local selected = zones_dropdown.items[zones_dropdown.selected_index]
-
-  -- game.print('index: '.. serpent.block(zones_dropdown.selected_index))
-
-  -- local zones = remote.call("space-exploration", "get_known_zones", {force_name = game.player.force.name})
 
   if selected[1] == "space-exploration.any_landing_pad_with_name" then selected = nil end
 
@@ -148,10 +133,7 @@ function launchpad.get_destination(zones_dropdown)
     local rich_text = '[item=' .. icon .. ']'
 
     if zone.type == 'orbit' then
-      local parent = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = zone.parent_index})
-      if parent.type == "star" then
-        rich_text = '[virtual-signal=se-star]'
-      end
+      rich_text = '[img=' .. Zone.get_icon(zone) .. ']'
     end
 
     selected = rich_text .. ' ' .. zone.name
