@@ -10,10 +10,12 @@ function launchpad.init()
       launchpad.register_silo(entity)
     end
   end
+
+  global.has_opened_every_silo = false
 end
 
 function launchpad.on_configuration_changed()
-  --
+  global.has_opened_every_silo = false
 end
 
 function launchpad.on_created_entity(event)
@@ -52,15 +54,30 @@ function launchpad.on_gui_opened(event)
 
   local player = game.get_player(event.player_index)
 
-  local container = get_child(player.gui.relative, 'se-rocket-launch-pad-gui')
-  local launchpad_gui_frame = container.children[2] -- style = inside_shallow_frame
-  local launchpad_gui_inner = get_child(launchpad_gui_frame, 'launchpad_gui_inner')
+  -- after an update, have a player open every silo so we can get all fresh values
+  if not global.has_opened_every_silo then
+    global.has_opened_every_silo = true
 
-  local zones_dropdown = get_child(launchpad_gui_inner, 'launchpad-list-zones')
-  local selected = launchpad.get_destination(zones_dropdown)
+    local shifu = player.opened
+    for _, entry in pairs(global.entries) do
+      if entry.container.valid then
+        player.opened = entry.container
+      else
+        global.entries[_] = nil
+      end
+    end
+    player.opened = shifu
+  else
+    local container = get_child(player.gui.relative, 'se-rocket-launch-pad-gui')
+    local launchpad_gui_frame = container.children[2] -- style = inside_shallow_frame
+    local launchpad_gui_inner = get_child(launchpad_gui_frame, 'launchpad_gui_inner')
 
-  print(serpent.block( selected ))
-  game.print(serpent.block( selected ))
+    local zones_dropdown = get_child(launchpad_gui_inner, 'launchpad-list-zones')
+    local selected = launchpad.get_destination(zones_dropdown)
+
+    launchpad.update_by_unit_number(event.entity.unit_number, selected)
+    game.print(serpent.block( selected ))
+  end
 end
 
 function launchpad.on_gui_selection_state_changed(event)
