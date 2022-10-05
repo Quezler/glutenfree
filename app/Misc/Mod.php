@@ -25,7 +25,9 @@ class Mod
 
     public function readme()
     {
-        return file_get_contents("{$this->source()}/README.md");
+        $data = file_get_contents("{$this->source()}/README.md");
+        if ($data === false) throw new \Exception('readme === 0');
+        return $data;
     }
 
     public function version()
