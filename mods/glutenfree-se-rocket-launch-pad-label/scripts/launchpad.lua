@@ -90,22 +90,25 @@ function launchpad.update_by_unit_number(unit_number, destination)
   local entry = global.entries[unit_number]
 
   if entry.label then
-    rendering.destroy(entry.label)
-    entry.label = nil
+    entry.label.destroy()
+    entry.label = 0
   end
 
   if destination == nil then return end
 
-  entry.label = rendering.draw_text({
-    text = destination,
-    color = {1, 1, 1},
-    surface = entry.container.surface,
-    target = entry.container,
-    target_offset = {0, 1.6},
-    alignment = 'center',
-  })
+  -- entry.label = rendering.draw_text({
+  --   text = destination,
+  --   color = {1, 1, 1},
+  --   surface = entry.container.surface,
+  --   target = entry.container,
+  --   target_offset = {0, 1.6},
+  --   alignment = 'center',
+  -- })
 
-  -- local text = entry.container.surface.create_entity{name = 'hovering-text', position = entry.container.position, text = destination}
+  local position = entry.container.position
+  position.y = position.y + 1.9
+
+  entry.label = entry.container.surface.create_entity{name = 'hovering-text', position = position, text = destination}
 end
 
 return launchpad
