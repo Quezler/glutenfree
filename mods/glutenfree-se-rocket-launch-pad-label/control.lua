@@ -24,6 +24,7 @@ script.on_configuration_changed(handler.on_configuration_changed)
 
 local events = {
   [defines.events.on_gui_opened] = handler.on_gui_opened,
+  [defines.events.on_gui_selection_state_changed] = handler.on_gui_selection_state_changed,
 }
 
 for event, handler in pairs(events) do

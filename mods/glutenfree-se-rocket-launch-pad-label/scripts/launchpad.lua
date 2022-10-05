@@ -35,6 +35,23 @@ function launchpad.on_gui_opened(event)
   local launchpad_gui_inner = get_child(launchpad_gui_frame, 'launchpad_gui_inner')
 
   local zones_dropdown = get_child(launchpad_gui_inner, 'launchpad-list-zones')
+  local selected = launchpad.get_destination(zones_dropdown)
+
+  print(serpent.block( selected ))
+  game.print(serpent.block( selected ))
+end
+
+function launchpad.on_gui_selection_state_changed(event)
+  if event.element.name ~= 'launchpad-list-zones' then return end
+
+  local unit_number = event.element.parent.parent.parent.tags.unit_number
+  if not unit_number then error('could not get this silo\'s unit number.') end
+
+  game.print(serpent.block( unit_number ))
+  game.print(serpent.block( launchpad.get_destination(event.element) ))
+end
+
+function launchpad.get_destination(zones_dropdown)
   local selected = zones_dropdown.items[zones_dropdown.selected_index]
 
   if selected[1] == "space-exploration.any_landing_pad_with_name" then selected = nil end
@@ -42,8 +59,7 @@ function launchpad.on_gui_opened(event)
   -- "        [img=virtual-signal/se-planet-orbit] Nauvis Orbit"
   if selected ~= nil then selected = ltrim(selected) end
 
-  print(serpent.block( selected ))
-  game.print(serpent.block( selected ))
+  return selected
 end
 
 return launchpad
