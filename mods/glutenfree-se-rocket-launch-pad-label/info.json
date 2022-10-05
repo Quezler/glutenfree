@@ -1,0 +1,12 @@
+{
+    "name": "glutenfree-se-rocket-launch-pad-label",
+    "title": "Glutenfree se rocket launch pad label",
+    "description": "Shows the selected destination above the doorway.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "space-exploration",
+        "(?) Krastorio2"
+    ]
+}
