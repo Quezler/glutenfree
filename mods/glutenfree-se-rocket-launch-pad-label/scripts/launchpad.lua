@@ -48,6 +48,21 @@ function ltrim(s)
   return (s:gsub("^%s*", ""))
 end
 
+function remove_rich_text(s)
+  local words = {}
+
+  -- split at each space
+  for word in s:gmatch("%S+") do
+    if word:sub(1, 1) == '[' or word:sub(-1, -1) == ']' then
+      -- ignore
+    else
+      table.insert(words, word)
+    end
+  end
+
+  return table.concat(words, ' ')
+end
+
 function launchpad.on_gui_opened(event)
   if not event.entity then return end
   if event.entity.name ~= 'se-rocket-launch-pad' then return end
@@ -59,6 +74,7 @@ function launchpad.on_gui_opened(event)
     global.has_opened_every_silo = true
 
     local shifu = player.opened
+    player.opened = nil
     for _, entry in pairs(global.entries) do
       if entry.container.valid then
         player.opened = entry.container
@@ -76,7 +92,16 @@ function launchpad.on_gui_opened(event)
     local selected = launchpad.get_destination(zones_dropdown)
 
     launchpad.update_by_unit_number(event.entity.unit_number, selected)
-    game.print(serpent.block( selected ))
+    -- print(serpent.block( selected ))
+
+    -- words = {}
+    -- for word in selected:gmatch("%S+") do table.insert(words, word) end
+    -- game.print(serpent.block( remove_rich_text(selected) ))
+    -- game.print(serpent.block(words))
+
+    -- local zones = remote.call("space-exploration", "get_zone_index", {force_name = player.force.name})
+    -- print(serpent.block(zones))
+
   end
 end
 
@@ -86,8 +111,8 @@ function launchpad.on_gui_selection_state_changed(event)
   local unit_number = event.element.parent.parent.parent.tags.unit_number
   if not unit_number then error('could not get this silo\'s unit number.') end
 
-  game.print(serpent.block( unit_number ))
-  game.print(serpent.block( launchpad.get_destination(event.element) ))
+  -- game.print(serpent.block( unit_number ))
+  -- game.print(serpent.block( launchpad.get_destination(event.element) ))
 
   launchpad.update_by_unit_number(unit_number, launchpad.get_destination(event.element))
 end
@@ -95,10 +120,42 @@ end
 function launchpad.get_destination(zones_dropdown)
   local selected = zones_dropdown.items[zones_dropdown.selected_index]
 
+  -- game.print('index: '.. serpent.block(zones_dropdown.selected_index))
+
+  -- local zones = remote.call("space-exploration", "get_known_zones", {force_name = game.player.force.name})
+
   if selected[1] == "space-exploration.any_landing_pad_with_name" then selected = nil end
 
   -- "        [img=virtual-signal/se-planet-orbit] Nauvis Orbit"
   if selected ~= nil then selected = ltrim(selected) end
+
+  if selected ~= nil then
+    local zone = remote.call("space-exploration", "get_zone_from_name", {zone_name = remove_rich_text(selected)})
+
+    -- game.print(serpent.block( zone ))
+
+    local icon = zone.primary_resource
+
+    -- because these make sense to me personally
+    if zone.name == 'Nauvis' then icon = 'landfill' end
+    if zone.name == 'Nauvis Orbit' then icon = 'satellite' end
+
+    -- if zone.type == 'orbit' then
+    -- end
+    -- print(serpent.block( zone ))
+    -- game.print(zone.parent.type)
+
+    local rich_text = '[item=' .. icon .. ']'
+
+    if zone.type == 'orbit' then
+      local parent = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = zone.parent_index})
+      if parent.type == "star" then
+        rich_text = '[virtual-signal=se-star]'
+      end
+    end
+
+    selected = rich_text .. ' ' .. zone.name
+  end
 
   return selected
 end
