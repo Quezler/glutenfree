@@ -1,0 +1,11 @@
+{
+    "name": "glutenfree-circuit-network-events",
+    "title": "Circuit network events",
+    "description": "Provides circuit condition events to other mods even if the pulse was just one tick.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "base"
+    ]
+}
