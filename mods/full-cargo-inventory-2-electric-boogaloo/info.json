@@ -1,0 +1,11 @@
+{
+    "name": "full-cargo-inventory-2-electric-boogaloo",
+    "title": "Full cargo inventory 2: electric boogaloo",
+    "description": "Fixes a problem with the 'full cargo inventory' wait condition.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "? base"
+    ]
+}
