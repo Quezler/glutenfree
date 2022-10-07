@@ -2,11 +2,11 @@ import { debounce } from "https://deno.land/std@0.109.0/async/debounce.ts";
 
 const inotify = debounce(
     (event: Deno.FsEvent) => {
-        console.log(event);
+        console.log(event.paths[0]);
 
         if(event.paths[0].endsWith('.DS_Store')) return;
 
-        const [, name] = /\/mods\/([a-z-]+)\//.exec(event.paths[0]);
+        const [, name] = /\/mods\/([a-z0-9-]+)\//.exec(event.paths[0]);
 
         console.log(name);
 
