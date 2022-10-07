@@ -6,6 +6,9 @@ script.on_init(function()
   global.school = {} -- of fish
 
   global.deathrattles = {}
+
+  global.spiral_index = 0
+  global.spiral_empty = {}
 end)
 
 --
@@ -79,4 +82,17 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
     global.school[deathrattle.item_registration_number] = nil
     deathrattle.item.destroy()
   end
+end)
+
+local Miner = require('scripts.miner')
+script.on_event(defines.events.on_player_rotated_entity, function(event)
+
+  local position = Miner.next_empty_position()
+  game.print(serpent.line(position))
+
+  surface().create_entity({
+    name = 'wooden-chest',
+    position = position,
+    force = 'neutral',
+  })
 end)
