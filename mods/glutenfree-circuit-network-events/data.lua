@@ -12,3 +12,14 @@ inserter.energy_source = {type = 'void'}
 inserter.extension_speed = 0.25 
 
 data:extend({inserter})
+
+local drill = table.deepcopy(data.raw['mining-drill']['electric-mining-drill'])
+drill.name = mod_prefix .. 'drill'
+
+drill.collision_box = {{ -0.4, -0.4}, {0.4, 0.4}}
+drill.selection_box = {{ -0.5, -0.5}, {0.5, 0.5}}
+drill.input_fluid_box = nil
+
+drill.resource_searching_radius = 0.49
+
+data:extend({drill})

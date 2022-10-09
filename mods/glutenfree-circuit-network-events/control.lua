@@ -7,13 +7,17 @@ script.on_init(function()
 
   global.deathrattles = {}
 
+  if game.surfaces['glutenfree-circuit-network-events-v1'] then
+    game.delete_surface('glutenfree-circuit-network-events-v1')
+  end
+
   global.spiral_index = 0
   global.spiral_empty = {}
 end)
 
 --
 
-local surface_name = 'glutenfree-circuit-network-events-v1'
+local surface_name = 'glutenfree-circuit-network-events-v2'
 function surface()
   if game.surfaces[surface_name] then
     return game.surfaces[surface_name]
