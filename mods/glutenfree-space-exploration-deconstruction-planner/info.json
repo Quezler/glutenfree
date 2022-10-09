@@ -1,8 +1,8 @@
 {
     "name": "glutenfree-space-exploration-deconstruction-planner",
     "title": "Space Exploration deconstruction planner",
-    "description": "Marks the SE tiles under an entity for deconstruc",
-    "version": "1.0.0",
+    "description": "Removes the SE tiles from under entities deconstructed with this shortcut item.",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
