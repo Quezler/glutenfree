@@ -1,4 +1,4 @@
-local Planner = require('scripts.planner')
+local Planner = require('scripts.Planner')
 
 --
 
