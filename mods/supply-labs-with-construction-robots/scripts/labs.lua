@@ -35,6 +35,8 @@ function labs.init()
   for _, force in pairs(game.forces) do
     labs.on_research_changed({research = {force = force}})
   end
+
+  labs.every_minute()
 end
 
 function labs.on_created_entity(event)
@@ -126,8 +128,6 @@ function labs.on_research_changed(event)
     for _, research_unit_ingredient in ipairs(force.current_research.research_unit_ingredients) do
       table.insert(global.current_research_ingredients[force.index], research_unit_ingredient.name)
     end
-
-    labs.every_minute()
   end
 end
 
