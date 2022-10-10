@@ -57,6 +57,7 @@ function Planner.on_entity_destroyed(event)
 end
 
 function Planner.on_cancelled_deconstruction(event)
+  if not event.entity.unit_number then return end
   global.foundations_to_knock_down_for[event.entity.unit_number] = nil
 end
 

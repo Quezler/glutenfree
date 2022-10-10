@@ -2,7 +2,7 @@
     "name": "glutenfree-space-exploration-deconstruction-planr",
     "title": "Space Exploration deconstruction planner",
     "description": "Removes the SE tiles from under entities deconstructed with this shortcut item.",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
