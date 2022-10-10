@@ -58,6 +58,7 @@ function bubble.update_train(train)
     sprites = {},
   }
 
+  if not delivery.shipment then error(serpent.block(delivery)) end
   local shipment_sprite = bubble.pick_one_what_from_shipment(delivery.shipment):gsub(',','.')
 
   for _, locomotive in ipairs(bubble.get_locomotives(train)) do
