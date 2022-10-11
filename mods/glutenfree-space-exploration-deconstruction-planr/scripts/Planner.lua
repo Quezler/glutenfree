@@ -1,3 +1,5 @@
+local mod_prefix = 'glutenfree-space-exploration-deconstruction-planner-'
+
 local Planner = {}
 
 function Planner.init()
@@ -5,6 +7,7 @@ function Planner.init()
 end
 
 function Planner.on_player_selected_area(event)
+  if event.item ~= mod_prefix .. 'item' then return end
   local player = game.get_player(event.player_index)
 
   for _, entity in ipairs(event.entities) do
@@ -62,6 +65,7 @@ function Planner.on_cancelled_deconstruction(event)
 end
 
 function Planner.on_player_alt_selected_area(event)
+  if event.item ~= mod_prefix .. 'item' then return end
   local player = game.get_player(event.player_index)
 
   -- will propogate through `on_cancelled_deconstruction` above
