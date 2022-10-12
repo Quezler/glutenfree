@@ -1,0 +1,11 @@
+{
+    "name": "glutenfree-emergency-burn",
+    "title": "Space Exploration Emergency Burn 2: Electric Boogaloo",
+    "description": "No player inventory items are lost when using emergency burn.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "space-exploration"
+    ]
+}
