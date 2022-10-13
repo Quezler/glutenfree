@@ -45,6 +45,9 @@ local green_signal = flib.copy_prototype(data.raw['constant-combinator']['logist
 red_signal.draw_circuit_wires = false
 green_signal.draw_circuit_wires = false
 
+red_signal.item_slot_count = 100
+green_signal.item_slot_count = 100
+
 --
 
 data:extend({ltn_stop_announcer, red_signal, green_signal})
