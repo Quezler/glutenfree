@@ -43,3 +43,11 @@ for event, handler in pairs(events) do
 end
 
 --
+
+commands.add_command("reload-alt-mode-for-1x1-loaders", "- Deletes orphaned alt mode indicators.", function(event)
+  local player = game.get_player(event.player_index)
+  player.print(player.admin)
+  if player.admin then
+    init()
+  end
+end)
