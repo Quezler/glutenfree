@@ -51,6 +51,7 @@ function silo.random_tick(entry)
 
   if not entry.combinator or not entry.combinator.valid then
     entry.combinator = entry.container.surface.find_entity("se-rocket-launch-pad-combinator", entry.container.position)
+    if not entry.combinator then return end -- called in the same tick the silo was constructed, and SE needing one more?
 
     local sections_signal = entry.combinator.get_or_create_control_behavior().get_signal(2)
     local capsules_signal = entry.combinator.get_or_create_control_behavior().get_signal(3)
