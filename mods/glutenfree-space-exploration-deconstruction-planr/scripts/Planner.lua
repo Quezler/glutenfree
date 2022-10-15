@@ -39,11 +39,13 @@ function Planner.on_player_selected_area(event)
         foundations = {}
       }
 
-      table.insert(struct.foundations, foundation)
-      global.foundations_to_knock_down_for[entity.unit_number] = struct
+      if entity.unit_number then
+          table.insert(struct.foundations, foundation)
+          global.foundations_to_knock_down_for[entity.unit_number] = struct
 
-      -- could cause lingering uint64's though :o
-      script.register_on_entity_destroyed(entity)
+          -- could cause lingering uint64's though :o
+          script.register_on_entity_destroyed(entity)
+      end
     end
   end
 end
