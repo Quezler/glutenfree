@@ -42,7 +42,7 @@ function Juicebox.on_entity_destroyed(event)
     if deathrattle.juicebox.valid then
 
       local inventory = deathrattle.juicebox.get_inventory(defines.inventory.chest)
-      game.print('is_empty = ' .. serpent.line(inventory.is_empty()))
+--       game.print('is_empty = ' .. serpent.line(inventory.is_empty()))
       if not inventory.is_empty() then
         for slot = 1, #inventory do
           if inventory[slot].valid_for_read then
