@@ -58,8 +58,12 @@ function bubble.update_train(train)
     sprites = {},
   }
 
-  log(serpent.block(delivery))
-  local shipment_sprite = bubble.pick_one_what_from_shipment(delivery.shipment):gsub(',','.')
+  local what = bubble.pick_one_what_from_shipment(delivery.shipment)
+  if not what then
+    game.print(serpent.block(delivery))
+    return
+  end
+  local shipment_sprite = what:gsub(',','.')
 
   for _, locomotive in ipairs(bubble.get_locomotives(train)) do
     entry.sprites[#entry.sprites+1] = rendering.draw_sprite{
