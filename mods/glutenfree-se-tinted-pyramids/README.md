@@ -9,3 +9,7 @@ it could (read: is) considered cheaty to know which module will be in a temple b
 
 However, in multiplayer it might be valuable to know which pyramids have already been looted.
 (looted pyramids revert back to the default color, also: this mod can always be safely removed)
+
+===
+
+ps, this will generate each of the "basement" surfaces, thus adding a chunk of biters to each discovered temple regardless.
