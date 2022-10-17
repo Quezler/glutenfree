@@ -91,10 +91,9 @@ function Handler.on_tick(event)
         end
       end
     end
-
-    return -- don't unregister while we need a player
   end
 
+  if #global.pyramids_to_visit > 0 then return end
   script.on_event(defines.events.on_tick, nil)
 end
 
