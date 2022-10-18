@@ -28,6 +28,7 @@ end
 
 function Handler.on_load()
   if #global.next_tick_events > 0 or #global.pyramids_to_visit > 0 then
+    log('on_load: ' .. serpent.block({ global.next_tick_events, global.pyramids_to_visit }))
     script.on_event(defines.events.on_tick, Handler.on_tick)
   end
 end
@@ -63,10 +64,11 @@ function Handler.find_a_player_that_can_enter_pyramids()
 end
 
 function Handler.on_tick(event)
-  for _, e in ipairs(global.next_tick_events) do
+  local next_tick_events = global.next_tick_events
+  global.next_tick_events = {}
+  for _, e in ipairs(next_tick_events) do
     Handler.on_post_surface_created(e)
   end
-  global.next_tick_events = {}
 
   if #global.pyramids_to_visit > 0 then
     if #game.connected_players > 0 then
@@ -94,6 +96,7 @@ function Handler.on_tick(event)
   end
 
   if #global.next_tick_events > 0 or #global.pyramids_to_visit > 0 then return end
+  log('on_tick: ' .. serpent.block({ global.next_tick_events, global.pyramids_to_visit }))
   script.on_event(defines.events.on_tick, nil)
 end
 
