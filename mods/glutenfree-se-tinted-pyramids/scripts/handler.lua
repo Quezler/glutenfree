@@ -93,7 +93,7 @@ function Handler.on_tick(event)
     end
   end
 
-  if #global.pyramids_to_visit > 0 then return end
+  if #global.next_tick_events > 0 or #global.pyramids_to_visit > 0 then return end
   script.on_event(defines.events.on_tick, nil)
 end
 
