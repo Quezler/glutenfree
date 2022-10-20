@@ -18,6 +18,7 @@ for _, pyramid_type in ipairs(pyramid_types) do
 
   end
 
-  -- turn the real pyramid invisible while this mod is installed, so SE doesn't freak out
-  data.raw['simple-entity']['se-pyramid-' .. pyramid_type].pictures = util.empty_sprite()
+  -- turn the real pyramid (almost) invisible while this mod is installed so SE doesn't freak out, reversible :)
+  data.raw['simple-entity']['se-pyramid-' .. pyramid_type].picture.layers[1].tint = {r=0.1, g=0.1, b=0.1, a=0.2}
+  data.raw['simple-entity']['se-pyramid-' .. pyramid_type].picture.layers[2].tint = {r=0.1, g=0.1, b=0.1, a=0.2}
 end
