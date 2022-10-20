@@ -154,10 +154,13 @@ end
 --
 
 function Handler.script_on_tick(callback)
+  local tick = '?'
+  if game then tick = game.tick end
+
   if callback == nil then
-    log('on_tick == nil @ ' .. game.tick)
+    log('on_tick == nil @ ' .. tick)
   else
-    log('on_tick != nil @' .. game.tick)
+    log('on_tick != nil @' .. tick)
   end
   script.on_event(defines.events.on_tick, callback)
 end
