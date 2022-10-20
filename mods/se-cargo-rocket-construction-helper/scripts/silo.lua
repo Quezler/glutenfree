@@ -56,6 +56,9 @@ function silo.random_tick(entry)
     local sections_signal = entry.combinator.get_or_create_control_behavior().get_signal(2)
     local capsules_signal = entry.combinator.get_or_create_control_behavior().get_signal(3)
 
+    if not sections_signal.signal then game.print('hmm? 1') return end
+    if not capsules_signal.signal then game.print('hmm? 2') return end
+
     if (sections_signal.signal.name ~= "se-cargo-rocket-section") then error("did not expect the ["..sections_signal.signal.name.."] signal at combinator position 2.") end
     if (capsules_signal.signal.name ~= "se-space-capsule")        then error("did not expect the ["..capsules_signal.signal.name.."] signal at combinator position 3.") end
   end
