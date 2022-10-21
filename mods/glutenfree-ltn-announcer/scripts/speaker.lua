@@ -137,10 +137,10 @@ function speaker.on_train_schedule_changed(event)
   local delivery = global.deliveries[event.train.id]
 
   local provider = global.logistic_train_stops[delivery.from_id]
-  if provider and not already_updated[provider.entity.unit_number] then speaker.announce(provider.entity) end
+  if provider and provider.entity.valid and not already_updated[provider.entity.unit_number] then speaker.announce(provider.entity) end
 
   local requester = global.logistic_train_stops[delivery.to_id]
-  if requester and not already_updated[requester.entity.unit_number] then speaker.announce(requester.entity) end
+  if requester and requester.entity.valid and not already_updated[requester.entity.unit_number] then speaker.announce(requester.entity) end
 end
 
 -- update the speakerpole signals
