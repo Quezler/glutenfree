@@ -27,15 +27,18 @@ function Handler.on_init()
 end
 
 function Handler.on_load()
-  log('on_load: ' .. serpent.line({ global.next_tick_events, global.pyramids_to_visit }))
-  if #global.next_tick_events > 0 or #global.pyramids_to_visit > 0 then
-    Handler.script_on_tick(Handler.on_tick)
+  if Handler.should_on_tick() then
+    script.on_event(defines.events.on_tick, Handler.on_tick)
   end
+end
+
+function Handler.should_on_tick()
+  return #global.next_tick_events > 0 or #global.pyramids_to_visit > 0
 end
 
 function Handler.on_surface_created(event)
   table.insert(global.next_tick_events, event)
-  Handler.script_on_tick(Handler.on_tick)
+  script.on_event(defines.events.on_tick, Handler.on_tick)
 end
 
 function Handler.find_a_player_that_can_enter_pyramids()
@@ -76,9 +79,8 @@ function Handler.on_tick(event)
     end
   end
 
-  log('on_tick: ' .. serpent.line({ global.next_tick_events, global.pyramids_to_visit }))
-  if #global.next_tick_events > 0 or #global.pyramids_to_visit > 0 then return end
-  Handler.script_on_tick(nil)
+  if Handler.should_on_tick() then return end
+  script.on_event(defines.events.on_tick, nil)
 end
 
 function Ancient.zone_from_surface(surface)
@@ -109,7 +111,7 @@ function Handler.on_post_surface_created(event)
 
   if not inside_surface then
     table.insert(global.pyramids_to_visit, zone.vault_pyramid)
-    Handler.script_on_tick(Handler.on_tick)
+    script.on_event(defines.events.on_tick, Handler.on_tick)
     return
   end
 
@@ -152,17 +154,5 @@ function Handler.on_gui_closed(event)
 end
 
 --
-
-function Handler.script_on_tick(callback)
-  local tick = '?'
-  if game then tick = game.tick end
-
-  if callback == nil then
-    log('on_tick == nil @ ' .. tick)
-  else
-    log('on_tick != nil @' .. tick)
-  end
-  script.on_event(defines.events.on_tick, callback)
-end
 
 return Handler
