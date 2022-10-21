@@ -27,8 +27,8 @@ function Handler.on_init()
 end
 
 function Handler.on_load()
+  log('on_load: ' .. serpent.line({ global.next_tick_events, global.pyramids_to_visit }))
   if #global.next_tick_events > 0 or #global.pyramids_to_visit > 0 then
-    log('on_load: ' .. serpent.block({ global.next_tick_events, global.pyramids_to_visit }))
     Handler.script_on_tick(Handler.on_tick)
   end
 end
@@ -76,8 +76,8 @@ function Handler.on_tick(event)
     end
   end
 
+  log('on_tick: ' .. serpent.line({ global.next_tick_events, global.pyramids_to_visit }))
   if #global.next_tick_events > 0 or #global.pyramids_to_visit > 0 then return end
-  log('on_tick: ' .. serpent.block({ global.next_tick_events, global.pyramids_to_visit }))
   Handler.script_on_tick(nil)
 end
 
