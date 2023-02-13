@@ -52,6 +52,7 @@ function Capsule.on_gui_opened(event)
   
   local player = game.get_player(event.player_index)
   local root = player.gui.relative['se-space-capsule-gui']
+  if root == nil then return end -- player opened the target picker?
   local element = se_util.find_first_descendant_by_name(root, 'space-capsule-list-zones')
 
   local emergency_burn = element.items[element.selected_index][1] == 'space-exploration.space_jump_emergency_burn'
