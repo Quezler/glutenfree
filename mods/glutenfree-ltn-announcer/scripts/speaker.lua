@@ -107,8 +107,8 @@ function speaker.add_speaker_to_ltn_stop(entity)
     green_signal = green_signal, 
   }
   
-  red_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-red"}, count = 1 }}
-  green_signal.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="signal-green"}, count = 1 }}
+  red_signal.get_control_behavior().parameters = {}
+  green_signal.get_control_behavior().parameters = {}
 end
 
 -- conveniently gets called when a temporary schedule gets removed,
