@@ -33,6 +33,7 @@ class CiCommand extends Command
 
         $mods = Finder::create()
             ->in(__GLUTENFREE__ . '/mods/')
+            ->exclude('glutenfree-train-stop-events')
             ->exclude('glutenfree-se-pyramid-peeker')
             ->directories()
             ->depth(0)
@@ -81,6 +82,8 @@ class CiCommand extends Command
                 dump($response->getBody()->getContents());
             } catch (RequestException $exception) {
                 dump($exception->getMessage());
+
+                // todo: make github actions fail on `{"error":"UnknownMod","message":"Unknown Mod"}` (for unpublished mods)
             }
         }
 
