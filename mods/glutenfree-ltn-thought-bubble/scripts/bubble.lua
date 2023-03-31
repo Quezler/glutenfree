@@ -14,11 +14,17 @@ function bubble.on_dispatcher_updated(event)
 
   if global.deliveries_table_was_previously_empty then
     global.deliveries_table_was_previously_empty = false
-    game.print('Glutenfree LTN thought bubbles activated')
+    game.print('on_dispatcher_updated @ ' .. event.tick)
     
     for _, delivery in pairs(global.deliveries) do
       if delivery.train.valid then
         bubble.update_train(delivery.train)
+      end
+    end
+  else
+    for _, train_id in pairs(event.new_deliveries) do
+      if global.deliveries[train_id].train.valid then
+        bubble.update_train(global.deliveries[train_id].train)
       end
     end
   end
