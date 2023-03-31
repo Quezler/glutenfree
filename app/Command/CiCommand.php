@@ -31,7 +31,12 @@ class CiCommand extends Command
 
         if (!is_dir(__GLUTENFREE__ . '/build/')) mkdir(__GLUTENFREE__ . '/build/');
 
-        $mods = Finder::create()->in(__GLUTENFREE__ . '/mods/')->directories()->depth(0);
+        $mods = Finder::create()
+            ->in(__GLUTENFREE__ . '/mods/')
+            ->exclude('glutenfree-se-pyramid-peeker')
+            ->directories()
+            ->depth(0)
+        ;
 
         // try to update zip
         foreach ($mods as $mod) {
