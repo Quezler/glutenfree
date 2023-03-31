@@ -230,16 +230,15 @@ function speaker.on_dispatcher_updated(event)
     for train_id, delivery in pairs(global.deliveries) do
       speaker.on_train_schedule_changed({train = delivery.train})
     end
+  else
+    for _, train_id in pairs(event.new_deliveries) do
+      if global.deliveries[train_id].train.valid then
+        speaker.on_train_schedule_changed(global.deliveries[train_id])
+      end
+    end
   end
 end
 
-function speaker.on_delivery_created(event)
-  -- game.print('on_delivery_created @ ' .. event.tick)
-  global.deliveries[event.train.id] = event
-
-  -- train fired the schedule change event one tick ago:
-  speaker.on_train_schedule_changed({train = event.train})
-end
 -- </ltn events>
 
 -- garbage collection
