@@ -4,7 +4,10 @@ core_util = require('__core__/lualib/util.lua')
 Event = {}
 function Event.addListener() end
 Util = require('__space-exploration__.scripts.util')
+
 local Ancient = require('__space-exploration__.scripts.ancient')
+local Zonelist = require('__space-exploration__.scripts.zonelist')
+
 -- Util = nil
 Event = nil
 core_util = nil
@@ -21,6 +24,8 @@ function Handler.on_init()
 
   global.pyramids_to_visit = {}
 
+  global.zone_index_to_color = {}
+
   for _, surface in pairs(game.surfaces) do
     Handler.on_post_surface_created({surface_index = surface.index})
   end
@@ -29,6 +34,21 @@ end
 function Handler.on_load()
   if Handler.should_on_tick() then
     script.on_event(defines.events.on_tick, Handler.on_tick)
+  end
+
+  if global.zone_index_to_color == nil then
+    script.on_event(defines.events.on_tick, Handler.on_tick)
+    
+    -- global.zone_index_to_color = {}
+
+    -- for _, surface in pairs(game.surfaces) do
+    --   table.insert(global.next_tick_events, {
+    --     name = defines.events.on_surface_created,
+    --     surface_index = surface.index
+    --   })
+    -- end
+
+    -- script.on_event(defines.events.on_tick, Handler.on_tick)
   end
 end
 
@@ -50,10 +70,18 @@ function Handler.find_a_player_that_can_enter_pyramids()
 end
 
 function Handler.on_tick(event)
+  if global.zone_index_to_color == nil then -- migration
+    global.zone_index_to_color = {}
+    for _, surface in pairs(game.surfaces) do
+      Handler.on_post_surface_created({surface_index = surface.index})
+    end
+  end
+
   local next_tick_events = global.next_tick_events
   global.next_tick_events = {}
   for _, e in ipairs(next_tick_events) do
-    Handler.on_post_surface_created(e)
+    if e.name == defines.events.on_surface_created then Handler.on_post_surface_created(e) end
+    if e.name == defines.events.on_gui_opened then Handler.on_post_gui_opened(e) end
   end
 
   if #global.pyramids_to_visit > 0 then
@@ -138,6 +166,7 @@ function Handler.on_post_surface_created(event)
   })
 
   global.tinted_pyramid_at[positionstr] = entity
+  global.zone_index_to_color[zone.index] = color
   log('tinted the pyramid on '.. surface.name ..' '.. color ..'.')
 end
 
@@ -151,6 +180,58 @@ end
 function Handler.on_gui_closed(event)
   if not event.entity or event.entity.name ~= 'se-cartouche-chest' then return end
   Handler.on_post_surface_created({surface_index = Ancient.zone_from_surface(event.entity.surface).surface_index})
+end
+
+function Handler.on_gui_opened(event)
+  table.insert(global.next_tick_events, event)
+  script.on_event(defines.events.on_tick, Handler.on_tick)
+end
+
+function Handler.on_post_gui_opened(event)
+  -- game.print(game.get_player(event.player_index).gui.screen['se-zonelist'] == nil)
+
+  -- local zonelist = game.get_player(event.player_index).gui.screen['se-zonelist']
+  -- if zonelist == nil then return end
+
+  -- for _, child in pairs(zonelist.children) do
+  --   game.print(_ .. " " .. child.name)
+  -- end
+
+  -- game.print(serpent.block(zonelist.children))
+
+  local root = Zonelist.get(game.get_player(event.player_index))
+  if not root then return end
+
+  local scroll_pane = Util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
+  if not scroll_pane then return end
+
+  -- game.print(#scroll_pane.children)
+
+  for _, row in pairs(scroll_pane.children) do
+    -- game.print(_)
+    -- local flags = row.row_flow.flags
+    -- local zone = get_zone_from_tags(row.tags)
+
+    -- ---@cast zone -StarType
+    -- if zone and flags then
+    --   flags.caption = _make_zone_list_flags_caption(playerdata, forcedata, zone)
+    -- end
+
+
+    -- print(serpent.block(row.row_flow.flags.caption))
+    -- string.gsub(row.row_flow.flags.caption .. '', "[img=virtual%-signal/se%-ruin]", "[img=item/productivity-module-9]")
+    -- row.row_flow.flags.caption = string.gsub(row.row_flow.flags.caption .. '', "se%-pyramid%-a]", "se-pyramid-a-tinted-blue]")
+
+    -- print(row.row_flow.flags.caption)
+    -- print(serpent.block(row.tags))
+
+    if row.tags.zone_type == "planet" then
+      local color = global.zone_index_to_color[row.tags.zone_index]
+      if color then
+        row.row_flow.flags.caption = string.gsub(row.row_flow.flags.caption .. '', "se%-pyramid%-a]", "se-pyramid-a-tinted-" .. color .."]")
+      end
+    end
+  end
 end
 
 --

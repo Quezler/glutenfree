@@ -14,6 +14,14 @@ for _, pyramid_type in ipairs(pyramid_types) do
     pyramid.picture.layers[1].tint = tint
     pyramid.collision_mask = {}
     -- pyramid.allow_in_space = true
+
+    pyramid.icons = {{
+      icon = pyramid.icon,
+      tint = tint,
+    }}
+
+    -- print(serpent.block(pyramid))
+
     data:extend({pyramid})
 
   end
