@@ -38,17 +38,6 @@ function Handler.on_load()
 
   if global.zone_index_to_color == nil then
     script.on_event(defines.events.on_tick, Handler.on_tick)
-    
-    -- global.zone_index_to_color = {}
-
-    -- for _, surface in pairs(game.surfaces) do
-    --   table.insert(global.next_tick_events, {
-    --     name = defines.events.on_surface_created,
-    --     surface_index = surface.index
-    --   })
-    -- end
-
-    -- script.on_event(defines.events.on_tick, Handler.on_tick)
   end
 end
 
@@ -188,43 +177,13 @@ function Handler.on_gui_opened(event)
 end
 
 function Handler.on_post_gui_opened(event)
-  -- game.print(game.get_player(event.player_index).gui.screen['se-zonelist'] == nil)
-
-  -- local zonelist = game.get_player(event.player_index).gui.screen['se-zonelist']
-  -- if zonelist == nil then return end
-
-  -- for _, child in pairs(zonelist.children) do
-  --   game.print(_ .. " " .. child.name)
-  -- end
-
-  -- game.print(serpent.block(zonelist.children))
-
   local root = Zonelist.get(game.get_player(event.player_index))
   if not root then return end
 
   local scroll_pane = Util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
   if not scroll_pane then return end
 
-  -- game.print(#scroll_pane.children)
-
   for _, row in pairs(scroll_pane.children) do
-    -- game.print(_)
-    -- local flags = row.row_flow.flags
-    -- local zone = get_zone_from_tags(row.tags)
-
-    -- ---@cast zone -StarType
-    -- if zone and flags then
-    --   flags.caption = _make_zone_list_flags_caption(playerdata, forcedata, zone)
-    -- end
-
-
-    -- print(serpent.block(row.row_flow.flags.caption))
-    -- string.gsub(row.row_flow.flags.caption .. '', "[img=virtual%-signal/se%-ruin]", "[img=item/productivity-module-9]")
-    -- row.row_flow.flags.caption = string.gsub(row.row_flow.flags.caption .. '', "se%-pyramid%-a]", "se-pyramid-a-tinted-blue]")
-
-    -- print(row.row_flow.flags.caption)
-    -- print(serpent.block(row.tags))
-
     if row.tags.zone_type == "planet" then
       local color = global.zone_index_to_color[row.tags.zone_index]
       if color then

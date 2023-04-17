@@ -12,16 +12,9 @@ for _, pyramid_type in ipairs(pyramid_types) do
     local pyramid = table.deepcopy(data.raw['simple-entity']['se-pyramid-' .. pyramid_type])
     pyramid.name = pyramid.name .. '-tinted-' .. color
     pyramid.picture.layers[1].tint = tint
+    pyramid.icons = {{icon = pyramid.icon, tint = tint}}
     pyramid.collision_mask = {}
     -- pyramid.allow_in_space = true
-
-    pyramid.icons = {{
-      icon = pyramid.icon,
-      tint = tint,
-    }}
-
-    -- print(serpent.block(pyramid))
-
     data:extend({pyramid})
 
   end
