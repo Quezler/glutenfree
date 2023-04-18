@@ -221,6 +221,16 @@ function Handler.on_post_gui_opened(event)
   end
 end
 
+function Handler.on_gui_click(event)
+  if not event.element.valid then return end
+
+  -- player toggled any of the flags, not just the pyramid/vault one causes the caption to recompile
+  if event.element.tags.action and event.element.tags.action == Zonelist.Flags.action_flag_button then
+    -- game.print("Zonelist.update_zone_flags(player)")
+    Handler.on_post_gui_opened({player_index = event.player_index})
+  end
+end
+
 --
 
 return Handler
