@@ -177,7 +177,9 @@ function Handler.on_gui_opened(event)
 end
 
 function Handler.on_post_gui_opened(event)
-  local root = Zonelist.get(game.get_player(event.player_index))
+  local player = game.get_player(event.player_index)
+
+  local root = Zonelist.get(player)
   if not root then return end
 
   local scroll_pane = Util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
@@ -185,9 +187,35 @@ function Handler.on_post_gui_opened(event)
 
   for _, row in pairs(scroll_pane.children) do
     if row.tags.zone_type == "planet" then
-      local color = global.zone_index_to_color[row.tags.zone_index]
-      if color then
-        row.row_flow.flags.caption = string.gsub(row.row_flow.flags.caption .. '', "se%-pyramid%-a]", "se-pyramid-a-tinted-" .. color .."]")
+      local caption = row.row_flow.flags.caption
+
+      -- check for the precense of the pyramid first since otherwise it would call remote view and teleport to each zone :o
+      if string.find(caption, "se%-pyramid%-a") then
+        local color = global.zone_index_to_color[row.tags.zone_index]
+        if color then
+          row.row_flow.flags.caption = string.gsub(caption .. '', "se%-pyramid%-a]", "se-pyramid-a-tinted-" .. color .."]")
+        else
+
+          local old_zone = nil
+          local old_position = nil
+
+          -- return the player to the same remote view position afterwards
+          if remote.call("space-exploration", "remote_view_is_active", {player=player}) then
+            old_zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = player.surface_index})
+            old_position = player.position
+          end
+
+          -- remote view can force-generate a zone
+          local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = row.tags.zone_index})
+          remote.call("space-exploration", "remote_view_start", {player=player, zone_name = zone.name})
+          
+          -- get the player back where he started
+          if old_zone then
+            remote.call("space-exploration", "remote_view_start", {player=player, zone_name = old_zone.name, position = old_position})
+          else
+            remote.call("space-exploration", "remote_view_stop", {player=player})
+          end
+        end
       end
     end
   end
