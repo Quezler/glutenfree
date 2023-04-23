@@ -33,12 +33,12 @@ for _, logistic_mode in ipairs(logistic_modes) do
   -- Compatibility
   entity.se_allow_in_space = true
 
-  local item = {
-    type = 'item',
-    name = entity.name,
-    icons = data.raw['item']['se-spaceship-console'].icons, -- icon for the container integrity breakdown
-    stack_size = 1,
-  }
+  -- icon for the container integrity breakdown
+  entity.icons = data.raw['item']['se-spaceship-console'].icons
+  table.insert(entity.icons, {
+    icon = '__glutenfree-se-spaceship-juicebox__/graphics/entities/spaceship-console-juicebox.png',
+    icon_size = 64
+  })
 
-  data:extend({entity, item})
+  data:extend({entity})
 end
