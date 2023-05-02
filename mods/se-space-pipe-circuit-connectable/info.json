@@ -1,8 +1,8 @@
 {
     "name": "se-space-pipe-circuit-connectable",
-    "title": "Space Exploration Space Pipe Circuit Connectable",
+    "title": "Space Exploration - space pipe circuit connectable",
     "description": "Enables the usage of circuit wires on the long space pipes.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
