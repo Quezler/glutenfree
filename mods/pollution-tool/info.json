@@ -1,0 +1,11 @@
+{
+    "name": "pollution-tool",
+    "title": "Pollution Tool",
+    "description": "Adds a shortcut that can calculate the required amount of krastorio air purifiers for a selection.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "Krastorio2"
+    ]
+}
