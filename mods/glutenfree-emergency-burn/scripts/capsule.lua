@@ -39,8 +39,9 @@ function Capsule.on_gui_selection_state_changed(event)
     if root then      
       local emergency_burn = element.items[element.selected_index][1] == 'space-exploration.space_jump_emergency_burn'
 
-      -- assume the container was created right before the vehicle (unless there's clone crap going on)
-      container_unit_number = root.tags['unit_number'] - 1
+      event.entity = game.get_player(event.player_index).opened
+      container_unit_number = event.entity.surface.find_entity('se-space-capsule', event.entity.position).unit_number
+      
       global.emergency_burns[container_unit_number] = emergency_burn
     end
   end
@@ -56,7 +57,7 @@ function Capsule.on_gui_opened(event)
   local element = se_util.find_first_descendant_by_name(root, 'space-capsule-list-zones')
 
   local emergency_burn = element.items[element.selected_index][1] == 'space-exploration.space_jump_emergency_burn'
-  container_unit_number = root.tags['unit_number'] - 1
+  container_unit_number = event.entity.surface.find_entity('se-space-capsule', event.entity.position).unit_number
   global.emergency_burns[container_unit_number] = emergency_burn
 end
 
