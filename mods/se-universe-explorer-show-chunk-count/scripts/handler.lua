@@ -54,11 +54,6 @@ function Handler.on_gui_opened(event)
   script.on_event(defines.events.on_tick, Handler.on_tick)
 end
 
--- local child_caption = {
---   zone_name = 3,
---   robot_interference = 6, 
--- }
-
 function Handler.on_post_gui_opened(event)
   local player = game.get_player(event.player_index)
 
@@ -68,25 +63,16 @@ function Handler.on_post_gui_opened(event)
   local scroll_pane = Util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
   if not scroll_pane then return end
 
-  game.print('zonelist open :)')
+  -- game.print('zonelist open :)')
 
   local header_frame = Util.get_gui_element(root, Zonelist.path_list_header_frame)
   header_frame['attrition'].children[1].caption = '[img=se-landfill-scaffold]'
 
   for _, row in pairs(scroll_pane.children) do
-    -- if row.tags.zone_type == "planet" then
-    --   print(#row.row_flow.children)
-    --   -- for _, child in pairs(row.row_flow.children) do
-    --   --   print(_, serpent.block( child.caption ))
-    --   -- end
-    --   print(row.row_flow.children[child_caption.zone_name].caption, row.row_flow.children[child_caption.robot_interference].caption)
-    --   row.row_flow.children[child_caption.robot_interference].caption = 'uwu'
-    -- end
 
     -- 3 = surface name, 6 = robot inteference
     row.row_flow.children[6].caption = '-'
 
-    -- if row.tags.zone_type == "planet" or row.tags.zone_type == "moon" then
     if row.tags.zone_type ~= "spaceship" then
       local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = row.tags.zone_index}) -- todo: cache this lagspike
       if zone.surface_index then
@@ -95,10 +81,6 @@ function Handler.on_post_gui_opened(event)
     end
   end
 
-  -- local header_frame = Util.get_gui_element(root, Zonelist.path_list_header_frame)
-  -- game.print(serpent.block( header_frame.children_names ))
-  
-  -- header_frame['attrition'].children[1].caption = '[img=se-landfill-scaffold]'
 end
 
 --
