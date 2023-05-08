@@ -79,6 +79,8 @@ function Handler.handle_core_miner_drill(entity)
       show_alert = true,
       show_on_map = true
     }
+
+    speaker.parameters.playback_volume = 0
     
   end
 
@@ -93,6 +95,7 @@ function Handler.handle_core_miner_drill(entity)
     })
   end
 
+  -- just assume any container didn't blacklist circuits nor has a logistic requester there with circuit set to set instead of read
   if #entities == 0 then
     global.drop_positions[entity.unit_number] = {
       entity = entity,
