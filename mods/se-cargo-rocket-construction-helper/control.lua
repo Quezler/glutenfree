@@ -5,8 +5,6 @@ local silo = require('scripts.silo')
 local function init()
   global = {}
 
-  log("init()")
-
   silo.init()
 end
 
