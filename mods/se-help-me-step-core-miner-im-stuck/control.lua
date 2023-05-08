@@ -109,7 +109,7 @@ function Handler.on_nth_tick(event)
   local containerless = table_size(global.drop_positions)
   if containerless == 0 then return end
   
-  log(containerless .. ' core miners lacking an output container:')
+  log(containerless .. ' core miners are lacking an output container:')
   
   for unit_number, entry in pairs(global.drop_positions) do
     if not entry.entity.valid then global.drop_positions[unit_number] = nil else
