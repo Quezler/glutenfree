@@ -1,6 +1,8 @@
 local Handler = {}
 
 function Handler.on_init()
+  global.drop_positions = {}
+
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered({name = 'se-core-miner-drill'})) do
       Handler.handle_core_miner_drill(entity)
@@ -44,7 +46,6 @@ function Handler.handle_core_miner_drill(entity)
     type = {'container', 'logistic-container'}
   }
 
-  -- a freshly placed drill doesn't know it's mining_target yet in that tick
   local fragment_name = Handler.get_fragment(entity)
   local fragment_size = game.item_prototypes[fragment_name].stack_size
 
@@ -55,6 +56,8 @@ function Handler.handle_core_miner_drill(entity)
       force = entity.force,
       position = entity.position,
     }
+
+    speaker.destructible = false
 
     speaker.get_or_create_control_behavior().circuit_condition = {
       condition = {
@@ -89,6 +92,31 @@ function Handler.handle_core_miner_drill(entity)
       wire = defines.wire_type.red,
     })
   end
+
+  if #entities == 0 then
+    global.drop_positions[entity.unit_number] = {
+      entity = entity,
+      position = entity.drop_position,
+    }
+  else
+    global.drop_positions[entity.unit_number] = nil
+  end
+end
+
+-- periodically check core mining drills that are missing a container for the presence of one
+-- currently does not account for removing an already linked container, who would even do that?
+function Handler.on_nth_tick(event)
+  local containerless = table_size(global.drop_positions)
+  if containerless == 0 then return end
+  
+  log(containerless .. ' core miners lacking an output container:')
+  
+  for unit_number, entry in pairs(global.drop_positions) do
+    if not entry.entity.valid then global.drop_positions[unit_number] = nil else
+      Handler.handle_core_miner_drill(entry.entity)
+      print(entry.entity.surface.name, serpent.line(entry.entity.position))
+    end
+  end
 end
 
 --
@@ -101,3 +129,5 @@ script.on_event(defines.events.on_robot_built_entity, Handler.on_created_entity)
 script.on_event(defines.events.script_raised_built, Handler.on_created_entity)
 script.on_event(defines.events.script_raised_revive, Handler.on_created_entity)
 -- script.on_event(defines.events.on_entity_cloned, Handler.on_created_entity)
+
+script.on_nth_tick(60 * 60, Handler.on_nth_tick) -- every 60 seconds
