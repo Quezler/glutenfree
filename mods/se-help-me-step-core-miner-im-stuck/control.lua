@@ -19,6 +19,24 @@ function Handler.on_player_rotated_entity(event)
   Handler.handle_core_miner_drill(event.entity)
 end
 
+-- entity.mining_target can be nil during on_created_entity
+-- remote.call to SE assumes no other mod changed any seams
+function Handler.get_fragment(entity)
+  local resources = entity.surface.find_entities_filtered{
+    position = entity.position,
+    type = 'resource',
+  }
+
+  -- check if the prototype's .category equals `se-core-mining`
+  for _, resource in ipairs(resources) do
+    if resource.prototype.resource_category == 'se-core-mining' then
+      return resource.prototype.mineable_properties.products[1].name
+    end
+  end
+
+  error('could not locate a seam under a core mining drill.')
+end
+
 function Handler.handle_core_miner_drill(entity)
   local entities = entity.surface.find_entities_filtered{
     position = entity.drop_position,
@@ -27,10 +45,7 @@ function Handler.handle_core_miner_drill(entity)
   }
 
   -- a freshly placed drill doesn't know it's mining_target yet in that tick
-  local fragment_name = 'se-core-fragment-omni'
-  if entity.mining_target then
-    fragment_name = entity.mining_target.prototype.mineable_properties.products[1].name
-  end
+  local fragment_name = Handler.get_fragment(entity)
   local fragment_size = game.item_prototypes[fragment_name].stack_size
 
   local speaker = entity.surface.find_entity('se-core-miner-drill-speaker', entity.position)
