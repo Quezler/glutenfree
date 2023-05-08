@@ -117,7 +117,7 @@ function handler.on_entity_destroyed(event)
   if not entry then return end
 
   -- search center of tripwire + bounding box (.4) + safety margin (.1) 
-  local entities = game.get_surface('nauvis').find_entities_filtered({
+  local entities = entry.train_stop.surface.find_entities_filtered({
     area = {
     {entry.connected_rail_position.x - 0.5, entry.connected_rail_position.y - 0.5},
     {entry.connected_rail_position.x + 0.5, entry.connected_rail_position.y + 0.5},
