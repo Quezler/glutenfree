@@ -27,6 +27,8 @@ function Handler.on_init()
       global.chunks[surface.index] = global.chunks[surface.index] + 1
     end
   end
+
+  global.zone_index_to_surface_index = {}
 end
 
 function Handler.on_load()
@@ -74,9 +76,18 @@ function Handler.on_post_gui_opened(event)
     row.row_flow.children[6].caption = '-'
 
     if row.tags.zone_type ~= "spaceship" then
-      local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = row.tags.zone_index}) -- todo: cache this lagspike
-      if zone.surface_index then
-        row.row_flow.children[6].caption = global.chunks[zone.surface_index]
+
+      if not global.zone_index_to_surface_index[row.tags.zone_index] then
+        local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = row.tags.zone_index}) -- todo: cache this lagspike
+        if zone.surface_index then
+          global.zone_index_to_surface_index[row.tags.zone_index] = zone.surface_index
+        else
+          global.zone_index_to_surface_index[row.tags.zone_index] = 0
+        end
+      end
+
+      if global.zone_index_to_surface_index[row.tags.zone_index] > 0 then
+        row.row_flow.children[6].caption = global.chunks[global.zone_index_to_surface_index[row.tags.zone_index]]
       end
     end
   end
@@ -87,10 +98,16 @@ end
 
 function Handler.on_surface_created(event)
   global.chunks[event.surface_index] = 0 -- assume no starting chunks exist and every single one calls on_chunk_generated
+
+  -- since we flag non-existing surfaces as zero to prevent the remote.call spam we'd have to clear it on new surfaces too
+  global.zone_index_to_surface_index = {}
 end
 
 function Handler.on_surface_deleted(event)
   global.chunks[event.surface_index] = nil
+
+  -- surface indexes do not seem to shift to fill gaps, but this forgets the cached deleted surface too
+  global.zone_index_to_surface_index = {}
 end
 
 function Handler.on_chunk_generated(event)
