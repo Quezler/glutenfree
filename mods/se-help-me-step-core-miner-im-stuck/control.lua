@@ -80,7 +80,9 @@ function Handler.handle_core_miner_drill(entity)
       show_on_map = true
     }
 
-    speaker.parameters.playback_volume = 0
+    speaker.parameters = {
+      playback_volume = 0
+    }
     
   end
 
