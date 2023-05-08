@@ -68,6 +68,7 @@ function Handler.on_post_gui_opened(event)
   -- game.print('zonelist open :)')
 
   local header_frame = Util.get_gui_element(root, Zonelist.path_list_header_frame)
+  header_frame['attrition'].children[1].enabled = false -- disable sorting until we manually resort someday after a Zonelist._sorting_functions call
   header_frame['attrition'].children[1].caption = '[img=se-landfill-scaffold]'
 
   for _, row in pairs(scroll_pane.children) do
