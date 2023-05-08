@@ -108,10 +108,15 @@ function kr_air_purifier.try_to_take_out_used_filters(entity)
   local dirty_filters = entity.get_inventory(defines.inventory.furnace_result)
   if dirty_filters.is_empty() then return end
 
-  local nearby_construction_robot = entity.surface.find_entity('construction-robot', entity.position)
-  if not nearby_construction_robot then return end
+  local nearby_construction_robots = entity.surface.find_entities_filtered{
+    type = 'construction-robot',
+    position = entity.position,
+    force = entity.force,
+    limit = 1,
+  }
+  if #nearby_construction_robots == 0 then return end
 
-  local cargo = nearby_construction_robot.get_inventory(defines.inventory.robot_cargo)
+  local cargo = nearby_construction_robots[1].get_inventory(defines.inventory.robot_cargo)
   if not cargo.is_empty() then return end
 
   -- either a standard or improved filter, but handles both
