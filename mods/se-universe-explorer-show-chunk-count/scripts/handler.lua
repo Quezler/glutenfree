@@ -44,9 +44,13 @@ end
 function Handler.on_tick(event)
   local next_tick_events = global.next_tick_events
   global.next_tick_events = {}
+  
   for _, e in ipairs(next_tick_events) do
     if e.name == defines.events.on_gui_opened then Handler.on_post_gui_opened(e) end
   end
+
+  if Handler.should_on_tick() then return end
+  script.on_event(defines.events.on_tick, nil)
 end
 
 --
