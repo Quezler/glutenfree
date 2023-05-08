@@ -1,6 +1,6 @@
 flib = require('__flib__.data-util')
 
-local speaker = data.raw['programmable-speaker']['programmable-speaker']
+local speaker = table.deepcopy(data.raw['programmable-speaker']['programmable-speaker'])
 
 --
 
