@@ -62,7 +62,7 @@ function Handler.handle_core_miner_drill(entity)
     speaker.get_or_create_control_behavior().circuit_condition = {
       condition = {
         comparator = ">",
-        constant = 800, -- todo: dynamic container slot determining, for now assume 40 out of 48 chest rows
+        constant = fragment_size * 40, -- todo: dynamic container slot determining, for now assume 40 out of 48 chest rows
         first_signal = {
           name = fragment_name,
           type = "item"
