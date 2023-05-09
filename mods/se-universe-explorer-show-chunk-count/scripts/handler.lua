@@ -120,7 +120,7 @@ function Handler.on_chunk_generated(event)
 end
 
 function Handler.on_chunk_deleted(event)
-  global.chunks[event.surface.index] = global.chunks[event.surface.index] - #event.positions
+  global.chunks[event.surface_index] = global.chunks[event.surface_index] - #event.positions
 end
 
 --
