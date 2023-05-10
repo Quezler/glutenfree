@@ -1,5 +1,3 @@
-local flib_bounding_box = require("__flib__/bounding-box")
-
 local handbreak = {
   type = 'constant-combinator',
   name = 'se-spaceship-handbreak',
@@ -8,27 +6,31 @@ local handbreak = {
   sprites = {
     north = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/green.png',
-      size = 256,
+      size = 12,
       scale = 0.5,
-      shift = util.by_pixel(0, -16+3-1),
+      shift = util.by_pixel(0, -1),
+      draw_as_glow = true,
     },
     east = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/red.png',
-      size = 256,
+      size = 12,
       scale = 0.5,
-      shift = util.by_pixel(0, -16+3-1),
+      shift = util.by_pixel(0, -1),
+      draw_as_glow = true,
     },
     south = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/green.png',
-      size = 256,
+      size = 12,
       scale = 0.5,
-      shift = util.by_pixel(0, -16+3-1),
+      shift = util.by_pixel(0, -1),
+      draw_as_glow = true,
     },
     west = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/red.png',
-      size = 256,
+      size = 12,
       scale = 0.5,
-      shift = util.by_pixel(0, -16+3-1),
+      shift = util.by_pixel(0, -1),
+      draw_as_glow = true,
     }
   },
 
@@ -48,8 +50,8 @@ local handbreak = {
   activity_led_light_offsets = table.deepcopy(data.raw['constant-combinator']['constant-combinator'].activity_led_light_offsets),
   circuit_wire_connection_points = table.deepcopy(data.raw['constant-combinator']['constant-combinator'].circuit_wire_connection_points),
 
-  selection_box = flib_bounding_box.move({{-0.24, -0.24}, {0.24, 0.24}}, {0.475, -0.455}),
-  drawing_box = {{-2, -2}, {2, 2}},
+  selection_box = {{-0.24, -0.24}, {0.24, 0.24}},
+  drawing_box = {{-0.24, -0.24}, {0.24, 0.24}},
 
   selection_priority = 51,
   collision_mask = {},
@@ -57,5 +59,8 @@ local handbreak = {
   flags = {'placeable-neutral', 'placeable-off-grid'},
   icons = data.raw['accumulator']['se-spaceship-console'].icons,
 }
+
+handbreak.integration_patch = handbreak.sprites
+handbreak.integration_patch_render_layer = 'higher-object-under'
 
 data:extend({handbreak})

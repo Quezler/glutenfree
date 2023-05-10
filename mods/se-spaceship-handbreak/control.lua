@@ -13,7 +13,7 @@ end
 function Handler.on_created_entity(event)
   local entity = event.created_entity or event.entity
 
-  local position = {entity.position.x, entity.position.y + (1/32)}
+  local position = {entity.position.x + (15 / 32), entity.position.y - (11 / 32)}
 
   local handbreak = entity.surface.find_entity('se-spaceship-handbreak', position)
   if not handbreak then
