@@ -1,0 +1,11 @@
+{
+    "name": "informatron-didu-pt-yer-name-in-da-goblet-of-fiya",
+    "title": "InformaTron - did you put your name in the goblet of fire? the gui asks calmly after 20 seconds",
+    "description": "Tells informatron to shut it 20 seconds into each new world without requiring per player opt-out.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "informatron"
+    ]
+}
