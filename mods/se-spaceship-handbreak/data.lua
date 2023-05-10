@@ -48,7 +48,7 @@ local handbreak = {
   activity_led_light_offsets = table.deepcopy(data.raw['constant-combinator']['constant-combinator'].activity_led_light_offsets),
   circuit_wire_connection_points = table.deepcopy(data.raw['constant-combinator']['constant-combinator'].circuit_wire_connection_points),
 
-  selection_box = flib_bounding_box.move({{-0.24, -0.24}, {0.24, 0.24}}, {0.45, 0.475}), -- flib not broken, test save was already rotated once
+  selection_box = flib_bounding_box.move({{-0.24, -0.24}, {0.24, 0.24}}, {0.475, -0.455}),
   drawing_box = {{-2, -2}, {2, 2}},
 
   selection_priority = 51,
