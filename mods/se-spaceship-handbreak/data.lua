@@ -8,29 +8,21 @@ local handbreak = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/green.png',
       size = 12,
       scale = 0.5,
-      -- shift = util.by_pixel(0, -1),
-      -- draw_as_glow = true,
     },
     east = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/red.png',
       size = 12,
       scale = 0.5,
-      -- shift = util.by_pixel(0, -1),
-      -- draw_as_glow = true,
     },
     south = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/green.png',
       size = 12,
       scale = 0.5,
-      -- shift = util.by_pixel(0, -1),
-      -- draw_as_glow = true,
     },
     west = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/red.png',
       size = 12,
       scale = 0.5,
-      -- shift = util.by_pixel(0, -1),
-      -- draw_as_glow = true,
     }
   },
 

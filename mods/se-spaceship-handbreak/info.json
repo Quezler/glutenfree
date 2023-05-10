@@ -2,7 +2,7 @@
     "name": "se-spaceship-handbreak",
     "title": "Space Exploration - spaceship handbreak",
     "description": "Rotate the green fuse thingie to prevent an automated launch.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
