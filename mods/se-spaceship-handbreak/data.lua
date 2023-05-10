@@ -8,29 +8,29 @@ local handbreak = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/green.png',
       size = 12,
       scale = 0.5,
-      shift = util.by_pixel(0, -1),
-      draw_as_glow = true,
+      -- shift = util.by_pixel(0, -1),
+      -- draw_as_glow = true,
     },
     east = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/red.png',
       size = 12,
       scale = 0.5,
-      shift = util.by_pixel(0, -1),
-      draw_as_glow = true,
+      -- shift = util.by_pixel(0, -1),
+      -- draw_as_glow = true,
     },
     south = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/green.png',
       size = 12,
       scale = 0.5,
-      shift = util.by_pixel(0, -1),
-      draw_as_glow = true,
+      -- shift = util.by_pixel(0, -1),
+      -- draw_as_glow = true,
     },
     west = {
       filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-handbreak/red.png',
       size = 12,
       scale = 0.5,
-      shift = util.by_pixel(0, -1),
-      draw_as_glow = true,
+      -- shift = util.by_pixel(0, -1),
+      -- draw_as_glow = true,
     }
   },
 
@@ -49,6 +49,8 @@ local handbreak = {
 
   activity_led_light_offsets = table.deepcopy(data.raw['constant-combinator']['constant-combinator'].activity_led_light_offsets),
   circuit_wire_connection_points = table.deepcopy(data.raw['constant-combinator']['constant-combinator'].circuit_wire_connection_points),
+  circuit_wire_max_distance = data.raw['constant-combinator']['constant-combinator'].circuit_wire_max_distance,
+  draw_circuit_wires = false,
 
   selection_box = {{-0.24, -0.24}, {0.24, 0.24}},
   drawing_box = {{-0.24, -0.24}, {0.24, 0.24}},
@@ -64,3 +66,7 @@ handbreak.integration_patch = handbreak.sprites
 handbreak.integration_patch_render_layer = 'higher-object-under'
 
 data:extend({handbreak})
+
+local fuse = table.deepcopy(data.raw['accumulator']['se-spaceship-console'].picture.layers[1])
+fuse.filename = '__se-spaceship-handbreak__/graphics/entity/se-spaceship-console/grey.png'
+table.insert(data.raw['accumulator']['se-spaceship-console'].picture.layers, 3, fuse) -- after base & mask
