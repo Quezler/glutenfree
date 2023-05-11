@@ -3,19 +3,28 @@ util = require("util")
 local Handler = {}
 
 function Handler.on_init()
+  global.next_tick_events = {}
   global.surfaces = {}
 
   -- nauvis & adding it halfway through run
   for _, surface in pairs(game.surfaces) do
-    Handler.on_surface_created({surface_index = surface.index})
-
-    for chunk in surface.get_chunks() do
-      local position = {x = chunk.x, y = chunk.y}
-      if Handler.is_chunk_charted(surface, position) then
-        Handler.on_chunk_charted({position = position, surface_index = surface.index})
-      end
-    end
+    Handler.on_surface_created({surface_index = surface.index, name = defines.events.on_surface_created})
   end
+end
+
+function Handler.on_load()
+  if #global.next_tick_events > 0 then
+    script.on_event(defines.events.on_tick, Handler.on_tick)
+  end
+end
+
+function Handler.on_tick(event)
+  for _, e in ipairs(global.next_tick_events) do
+    if e.name == defines.events.on_surface_created then Handler.on_post_surface_created(e) end
+  end
+
+  global.next_tick_events = {}
+  script.on_event(defines.events.on_tick, nil)
 end
 
 local force_charting_ignored = util.list_to_map({'neutral', 'enemy'})
@@ -35,23 +44,30 @@ end
 local pollutable = util.list_to_map({'planet', 'moon'})
 
 function Handler.on_surface_created(event)
-  local struct = {
+  global.surfaces[event.surface_index] = {
     enabled = false,
     chunks = {},
   }
 
-  -- unreliable, fires before space exploration has a chance to save the index for use in its remote call
-  -- local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = event.surface_index})
-  -- if zone and pollutable[zone.type] then
-  --   game.print(zone.name)
-  --   struct.enabled = true
-  -- end
+  table.insert(global.next_tick_events, event)
+  script.on_event(defines.events.on_tick, Handler.on_tick)
+end
 
-  -- local surface = game.get_surface(event.surface_index)
-  -- game.print(game.get_surface(event.surface_index).map_gen_settings.autoplace_controls["enemy-base"])
+function Handler.on_post_surface_created(event)
+  game.print('post')
+  local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = event.surface_index})
+  if zone and pollutable[zone.type] then
+    game.print(zone.name)
 
-
-  global.surfaces[event.surface_index] = struct
+    global.surfaces[event.surface_index].enabled = true
+    local surface = game.get_surface(event.surface_index)
+    for chunk in surface.get_chunks() do
+      local position = {x = chunk.x, y = chunk.y}
+      if Handler.is_chunk_charted(surface, position) then
+        Handler.on_chunk_charted({position = position, surface_index = surface.index})
+      end
+    end
+  end
 end
 
 function Handler.on_surface_deleted(event)
