@@ -36,26 +36,20 @@ local pollutable = util.list_to_map({'planet', 'moon'})
 
 function Handler.on_surface_created(event)
   local struct = {
+    enabled = false,
     chunks = {},
-    pollution = true,
   }
-  
-  -- local surface = game.get_surface(event.surface_index)
-  -- print(surface.name)
 
-  local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = event.surface_index})
-  if zone and pollutable[zone.type] then
-    print(zone.name)
-    struct.pollution = false
-  end
-
-  -- if pollutable[zone.type] then
-  -- else
-  --   print('not pollutable!')
-  --   print(zone.type)
+  -- unreliable, fires before space exploration has a chance to save the index for use in its remote call
+  -- local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = event.surface_index})
+  -- if zone and pollutable[zone.type] then
+  --   game.print(zone.name)
+  --   struct.enabled = true
   -- end
 
-  -- print(serpent.block( zone ))
+  -- local surface = game.get_surface(event.surface_index)
+  -- game.print(game.get_surface(event.surface_index).map_gen_settings.autoplace_controls["enemy-base"])
+
 
   global.surfaces[event.surface_index] = struct
 end
@@ -65,6 +59,7 @@ function Handler.on_surface_deleted(event)
 end
 
 function Handler.on_chunk_charted(event)
+  if not global.surfaces[event.surface_index].enabled then return end
 
   local chunk_key = util.positiontostr(event.position)
   if global.surfaces[event.surface_index].chunks[chunk_key] == nil then
@@ -79,13 +74,15 @@ function Handler.on_chunk_charted(event)
   
     -- todo: do we even need this check if we track it with global.surfaces anyways?
     -- if surface.can_place_entity(entity_to_create) then
-    if not surface.find_entity(entity_to_create.name, entity_to_create.position) then
-      surface.create_entity(entity_to_create)
+
+    local entity = surface.find_entity(entity_to_create.name, entity_to_create.position)
+    if not entity then
+      entity = surface.create_entity(entity_to_create)
     else
       game.print('you should not see this message, contact Quezler.')
     end
 
-    global.surfaces[event.surface_index].chunks[chunk_key] = true
+    global.surfaces[event.surface_index].chunks[chunk_key] = entity
   end
 
 
@@ -97,6 +94,38 @@ function Handler.on_chunk_deleted(event)
   for _, position in ipairs(event.positions) do
     local chunk_key = util.positiontostr(position)
     global.surfaces[event.surface_index].chunks[chunk_key] = nil
+  end
+end
+
+--
+
+-- function Handler.get_or_create_surface_struct(surface_index)
+-- end
+
+function Handler.get_enabled_for_surface_index(data)
+  return global.surfaces[data.surface_index].enabled
+end
+
+function Handler.set_enabled_for_surface_index(data)
+  if global.surfaces[data.surface_index].enabled == data.enabled then return end 
+
+  if data.enabled == true then
+    global.surfaces[data.surface_index].enabled = true
+    local surface = game.surfaces[data.surface_index]
+    for chunk in surface.get_chunks() do
+      local position = {x = chunk.x, y = chunk.y}
+      if Handler.is_chunk_charted(surface, position) then
+        Handler.on_chunk_charted({position = position, surface_index = surface.index})
+      end
+    end
+  elseif data.enabled == false then
+    for _, entity in pairs(global.surfaces[data.surface_index].chunks) do
+      entity.destroy() -- entity.valid not needed for .destroy()
+    end
+    global.surfaces[data.surface_index].chunks = {}
+    global.surfaces[data.surface_index].enabled = false
+  else
+    error('')
   end
 end
 

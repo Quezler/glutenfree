@@ -19,7 +19,7 @@ data:extend({
       width = 64,
       height = 64,
     },
-    emissions_per_second = - 1000 * 1000,
+    emissions_per_second = -1000 * 1000,
     collision_mask = {},
   }
 })
