@@ -73,7 +73,7 @@ function Handler.on_chunk_charted(event)
     -- print(serpent.block(surface.name), chunk_key)
 
     local entity_to_create = {
-      name = "mr-blue-sky",
+      name = "se-little-inferno",
       position = {event.position.x * 32 + 16, event.position.y * 32 + 16} -- the center of each chunk
     }
   
