@@ -108,6 +108,42 @@ end
 
 --
 
+function Handler.on_entity_cloned(event)
+  event.destination.destroy() -- gotta pay the cheese tax
+  -- local chunk_key = util.positiontostr({math.floor(event.destination.position.x / 32), math.floor(event.destination.position.y / 32)})
+  -- game.print('cloned ' .. chunk_key)
+  -- game.print('cloned ' .. event.destination.name)
+
+  
+end
+
+function Handler.script_raised_destroy(event)
+  local position = {x = math.floor(event.entity.position.x / 32), y = math.floor(event.entity.position.y / 32)}
+  local chunk_key = util.positiontostr(position)
+  -- game.print('destroyed ' .. chunk_key)
+  -- game.print('destroyed ' .. event.entity.name)
+
+  -- if event.entity == global.surfaces[event.entity.surface.index].chunks[chunk_key] then
+    -- already being destroyed, but the surface.find_entity above can still see it
+    -- global.surfaces[event.entity.surface.index].chunks[chunk_key].destroy()
+    -- global.surfaces[event.entity.surface.index].chunks[chunk_key] = nil
+  -- else
+    -- game.print('you should not see this message, contact Quezler.')
+  -- end
+
+  -- Handler.on_chunk_charted({
+  --   position = position,
+  --   surface_index = event.entity.surface.index,
+  -- })
+
+  global.surfaces[event.entity.surface.index].chunks[chunk_key] = event.entity.surface.create_entity{
+    name = "se-little-inferno",
+    position = {position.x * 32 + 16, position.y * 32 + 16} -- the center of each chunk
+  }
+end
+
+--
+
 -- function Handler.get_or_create_surface_struct(surface_index)
 -- end
 

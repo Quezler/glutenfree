@@ -9,6 +9,13 @@ script.on_event(defines.events.on_surface_deleted, handler.on_surface_deleted)
 script.on_event(defines.events.on_chunk_charted, handler.on_chunk_charted)
 script.on_event(defines.events.on_chunk_deleted, handler.on_chunk_deleted)
 
+script.on_event(defines.events.on_entity_cloned, handler.on_entity_cloned, {
+  {filter = 'name', name = 'se-little-inferno'},
+})
+script.on_event(defines.events.script_raised_destroy, handler.script_raised_destroy, {
+  {filter = 'name', name = 'se-little-inferno'},
+})
+
 
 -- /c game.print(remote.call("se-little-inferno", "get_enabled_for_surface_index", {surface_index = game.player.surface.index}))
 -- /c remote.call("se-little-inferno", "set_enabled_for_surface_index", {surface_index = game.player.surface.index, enabled = true})
