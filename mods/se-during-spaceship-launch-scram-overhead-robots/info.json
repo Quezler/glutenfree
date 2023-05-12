@@ -1,0 +1,11 @@
+{
+    "name": "se-during-spaceship-launch-scram-overhead-robots",
+    "title": "Space Exploration - during spaceship launch scram overhead robots",
+    "description": "Empties out their battery so they seek shelter at the nearest roboport with available charging spots.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "space-exploration"
+    ]
+}
