@@ -41,8 +41,6 @@ function Handler.is_chunk_charted(surface, position) -- by any player force, onl
   return false
 end
 
-local pollutable = util.list_to_map({'planet', 'moon'})
-
 function Handler.on_surface_created(event)
   global.surfaces[event.surface_index] = {
     enabled = false,
@@ -71,15 +69,18 @@ function Handler.get_threat(zone)
   end
 end
 
+-- zone.hostiles_extinct does gets set after confirming extinction, but do all natively peaceful zones have it set to true by default?
 function Handler.hostiles_extinct(zone)
   return Handler.get_threat(zone) == 0 -- or 0.01 if we cared enough about biter meteors
 end
+
+local pollutable = util.list_to_map({'planet', 'moon'})
 
 function Handler.on_post_surface_created(event)
   local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = event.surface_index})
   if zone and pollutable[zone.type] then
 
-    game.print(zone.name .. ' ' .. Handler.get_threat(zone) .. ' ' .. tostring(Handler.hostiles_extinct(zone)))
+    -- game.print(zone.name .. ' ' .. Handler.get_threat(zone) .. ' ' .. tostring(Handler.hostiles_extinct(zone)))
     if Handler.hostiles_extinct(zone) then
       Handler.set_enabled_for_surface_index({surface_index = event.surface_index, enabled = true})
     end
@@ -172,6 +173,17 @@ function Handler.set_enabled_for_surface_index(data)
   else
     error('enabled must be a boolean.')
   end
+end
+
+function Handler.on_gui_click(event)
+  if not event.element.valid then return end
+  if event.element.tags.action ~= 'confirm-extinction' then return end
+
+  local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = event.element.tags.zone_index})
+  -- game.print(serpent.block(event.element.tags))
+
+  table.insert(global.next_tick_events, {surface_index = zone.surface_index, name = defines.events.on_surface_created})
+  script.on_event(defines.events.on_tick, Handler.on_tick)
 end
 
 return Handler

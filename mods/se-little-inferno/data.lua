@@ -1,7 +1,3 @@
-data.raw['character']['character'].emissions_per_second = 1000 * 1000
-
--- local 
-
 data:extend({
   {
     type = "simple-entity",
@@ -23,3 +19,8 @@ data:extend({
     collision_mask = {},
   }
 })
+
+-- invisible
+if true then
+  data.raw['simple-entity']['se-little-inferno'].animations = util.empty_sprite()
+end
