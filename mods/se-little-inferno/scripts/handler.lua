@@ -53,12 +53,37 @@ function Handler.on_surface_created(event)
   script.on_event(defines.events.on_tick, Handler.on_tick)
 end
 
+-- Zone.export_zone does not expose the threat, nor is there a remote call at the time of writing for it :(
+function Handler.get_threat(zone)
+  if zone.is_homeworld and zone.surface_index then
+    local surface = game.get_surface(zone.surface_index)
+    local mapgen = surface.map_gen_settings
+    if mapgen.autoplace_controls["enemy-base"] and mapgen.autoplace_controls["enemy-base"].size then
+      return math.max(0, math.min(1, mapgen.autoplace_controls["enemy-base"].size / 3)) -- 0-1
+    end
+  end
+  if zone.controls and zone.controls["enemy-base"] and zone.controls["enemy-base"].size then
+    local threat = math.max(0, math.min(1, zone.controls["enemy-base"].size / 3)) -- 0-1
+    -- if Zone.is_biter_meteors_hazard(zone) then
+    --   return math.max(threat, 0.01)
+    -- end
+    return threat
+  end
+end
+
+function Handler.hostiles_extinct(zone)
+  return Handler.get_threat(zone) == 0 -- or 0.01 if we cared enough about biter meteors
+end
+
 function Handler.on_post_surface_created(event)
   local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = event.surface_index})
   if zone and pollutable[zone.type] then
-    game.print(zone.name)
 
-    Handler.set_enabled_for_surface_index({surface_index = event.surface_index, enabled = true})
+    game.print(zone.name .. ' ' .. Handler.get_threat(zone) .. ' ' .. tostring(Handler.hostiles_extinct(zone)))
+    if Handler.hostiles_extinct(zone) then
+      Handler.set_enabled_for_surface_index({surface_index = event.surface_index, enabled = true})
+    end
+    
   end
 end
 
