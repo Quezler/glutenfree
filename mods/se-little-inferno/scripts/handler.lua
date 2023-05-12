@@ -59,14 +59,7 @@ function Handler.on_post_surface_created(event)
   if zone and pollutable[zone.type] then
     game.print(zone.name)
 
-    global.surfaces[event.surface_index].enabled = true
-    local surface = game.get_surface(event.surface_index)
-    for chunk in surface.get_chunks() do
-      local position = {x = chunk.x, y = chunk.y}
-      if Handler.is_chunk_charted(surface, position) then
-        Handler.on_chunk_charted({position = position, surface_index = surface.index})
-      end
-    end
+    Handler.set_enabled_for_surface_index({surface_index = event.surface_index, enabled = true})
   end
 end
 
@@ -141,7 +134,7 @@ function Handler.set_enabled_for_surface_index(data)
     global.surfaces[data.surface_index].chunks = {}
     global.surfaces[data.surface_index].enabled = false
   else
-    error('')
+    error('enabled must be a boolean.')
   end
 end
 
