@@ -109,12 +109,15 @@ function Handler.script_raised_destroy(event)
   local position = {x = math.floor(event.entity.position.x / 32), y = math.floor(event.entity.position.y / 32)}
   local chunk_key = util.positiontostr(position)
 
-  if event.entity ~= global.surfaces[event.entity.surface.index].chunks[chunk_key] then error('this chunk has more than one?') end
-
-  global.surfaces[event.entity.surface.index].chunks[chunk_key] = event.entity.surface.create_entity{
-    name = "se-little-inferno",
-    position = {position.x * 32 + 16, position.y * 32 + 16} -- the center of each chunk
-  }
+  -- there's more than one pollution clearing entity in this chunk? only replace the main one :)
+  if event.entity == global.surfaces[event.entity.surface.index].chunks[chunk_key] then 
+    global.surfaces[event.entity.surface.index].chunks[chunk_key] = event.entity.surface.create_entity{
+      name = "se-little-inferno",
+      position = {position.x * 32 + 16, position.y * 32 + 16} -- the center of each chunk
+    }
+  else
+    game.print('more than one "se-little-inferno" in a chunk?')
+  end
 end
 
 --
