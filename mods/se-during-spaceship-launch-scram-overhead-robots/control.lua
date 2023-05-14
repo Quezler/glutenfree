@@ -33,6 +33,7 @@ function Handler.on_surface_created(event)
   -- game.print('a spaceship surface got created at tick ' .. event.tick)
 
   local entity = global.spaceship_console_outputs[spaceship_id]
+  if not entity then return end -- fresh spaceship console, not launched/cloned before
   local tiles = entity.surface.get_connected_tiles(entity.position, {'se-spaceship-floor'})
 
   local min_x = nil
