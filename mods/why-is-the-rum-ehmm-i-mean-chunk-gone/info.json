@@ -1,0 +1,11 @@
+{
+    "name": "why-is-the-rum-ehmm-i-mean-chunk-gone",
+    "title": "Why is the rum ehmm i mean chunk gone",
+    "description": "Showcases an issue with the on_chunk_deleted event.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "? base"
+    ]
+}

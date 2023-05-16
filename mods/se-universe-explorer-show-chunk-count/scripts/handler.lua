@@ -19,14 +19,7 @@ local Handler = {}
 function Handler.on_init()
   global.next_tick_events = {}
   
-  global.chunks = {}
-
-  for _, surface in pairs(game.surfaces) do
-    global.chunks[surface.index] = 0
-    for chunk in surface.get_chunks() do
-      global.chunks[surface.index] = global.chunks[surface.index] + 1
-    end
-  end
+  -- global.chunks = {} -- todo: delete in an on_configuration_changed
 
   global.zone_index_to_surface_index = {}
 end
@@ -71,6 +64,8 @@ function Handler.on_post_gui_opened(event)
 
   -- game.print('zonelist open :)')
 
+  local chunks = remote.call("chunk-count", "get")
+
   local header_frame = Util.get_gui_element(root, Zonelist.path_list_header_frame)
   header_frame['attrition'].children[1].enabled = false -- disable sorting until we manually resort someday after a Zonelist._sorting_functions call
   header_frame['attrition'].children[1].caption = '[img=se-landfill-scaffold]'
@@ -92,7 +87,7 @@ function Handler.on_post_gui_opened(event)
       end
 
       if global.zone_index_to_surface_index[row.tags.zone_index] > 0 then
-        row.row_flow.children[6].caption = global.chunks[global.zone_index_to_surface_index[row.tags.zone_index]]
+        row.row_flow.children[6].caption = chunks[global.zone_index_to_surface_index[row.tags.zone_index]]
       end
     end
   end
@@ -102,25 +97,13 @@ end
 --
 
 function Handler.on_surface_created(event)
-  global.chunks[event.surface_index] = 0 -- assume no starting chunks exist and every single one calls on_chunk_generated
-
   -- since we flag non-existing surfaces as zero to prevent the remote.call spam we'd have to clear it on new surfaces too
   global.zone_index_to_surface_index = {}
 end
 
 function Handler.on_surface_deleted(event)
-  global.chunks[event.surface_index] = nil
-
   -- surface indexes do not seem to shift to fill gaps, but this forgets the cached deleted surface too
   global.zone_index_to_surface_index = {}
-end
-
-function Handler.on_chunk_generated(event)
-  global.chunks[event.surface.index] = global.chunks[event.surface.index] + 1
-end
-
-function Handler.on_chunk_deleted(event)
-  global.chunks[event.surface_index] = global.chunks[event.surface_index] - #event.positions
 end
 
 --
