@@ -3,10 +3,11 @@
     "title": "Space Exploration - tinted pyramids",
     "description": "Tints unlooted pyramids in the color of the module.",
     "category": "cheats",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
-        "space-exploration"
+        "space-exploration",
+        "space-exploration-scripts"
     ]
 }

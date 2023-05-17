@@ -1,16 +1,5 @@
--- fake some of the globals so zonelist can load without errors
-mod_prefix = 'se-'
-core_util = require('__core__/lualib/util.lua')
-Event = {}
-function Event.addListener() end
-Util = require('__space-exploration__.scripts.util')
-
-local Zonelist = require('__space-exploration__.scripts.zonelist')
-
--- Util = nil
-Event = nil
-core_util = nil
-mod_prefix = nil
+local util = require('__space-exploration-scripts__.util')
+local Zonelist = require('__space-exploration-scripts__.zonelist')
 
 --
 
@@ -59,14 +48,14 @@ function Handler.on_post_gui_opened(event)
   local root = Zonelist.get(player)
   if not root then return end
 
-  local scroll_pane = Util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
+  local scroll_pane = util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
   if not scroll_pane then return end
 
   -- game.print('zonelist open :)')
 
   local chunks = remote.call("chunk-count", "get")
 
-  local header_frame = Util.get_gui_element(root, Zonelist.path_list_header_frame)
+  local header_frame = util.get_gui_element(root, Zonelist.path_list_header_frame)
   header_frame['attrition'].children[1].enabled = false -- disable sorting until we manually resort someday after a Zonelist._sorting_functions call
   header_frame['attrition'].children[1].caption = '[img=se-landfill-scaffold]'
 

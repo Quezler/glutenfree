@@ -2,11 +2,12 @@
     "name": "se-universe-explorer-show-chunk-count",
     "title": "Space Exploration - universe explorer show chunk count",
     "description": "Replaces the robot interference column. (heck i use bots regardless of it's value)",
-    "version": "1.1.3",
+    "version": "1.1.4",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
         "chunk-count",
-        "space-exploration"
+        "space-exploration",
+        "space-exploration-scripts"
     ]
 }
