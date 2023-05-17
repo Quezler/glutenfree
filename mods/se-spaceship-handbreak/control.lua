@@ -34,10 +34,13 @@ function Handler.on_player_rotated_entity(event)
   if event.entity.name ~= 'se-spaceship-handbreak' then return end
   -- game.print('handbreak rotated')
 
+  local combinator = event.entity.get_control_behavior()
+  combinator.enabled = true -- in case someone managed to turn it off via the slider or copy paste
+
   if event.entity.direction == defines.direction.north or event.entity.direction == defines.direction.south then
-    event.entity.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="se-spaceship-launch"}, count = 0}}
+    combinator.parameters = {{index = 1, signal = {type="virtual", name="se-spaceship-launch"}, count = 0}}
   elseif event.entity.direction == defines.direction.east or event.entity.direction == defines.direction.west then
-    event.entity.get_control_behavior().parameters = {{index = 1, signal = {type="virtual", name="se-spaceship-launch"}, count = -1}}
+    combinator.parameters = {{index = 1, signal = {type="virtual", name="se-spaceship-launch"}, count = -1}}
   else
     error('unexpected direction: ' .. event.entity.direction)
   end
