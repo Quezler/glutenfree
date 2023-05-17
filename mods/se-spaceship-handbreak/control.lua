@@ -53,6 +53,15 @@ function Handler.on_removed_entity(event)
   end
 end
 
+function Handler.on_gui_opened(event)
+  if event.entity and event.entity.name == 'se-spaceship-handbreak' then
+    local console = event.entity.surface.find_entity('se-spaceship-console', event.entity.position)
+    if console then -- should only be false if a handbreak is placed in editor mode or something :)
+      game.get_player(event.player_index).opened = console
+    end
+  end
+end
+
 --
 
 script.on_init(Handler.on_init)
@@ -79,3 +88,5 @@ script.on_event(defines.events.on_entity_died, Handler.on_removed_entity)
 script.on_event(defines.events.on_robot_mined_entity, Handler.on_removed_entity)
 script.on_event(defines.events.on_player_mined_entity, Handler.on_removed_entity)
 script.on_event(defines.events.script_raised_destroy, Handler.on_removed_entity)
+
+script.on_event(defines.events.on_gui_opened, Handler.on_gui_opened)
