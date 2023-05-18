@@ -93,7 +93,11 @@ handler.gui_update = function(player, tick)
           end
         end
 
-        panel['fuel_usage_label'].caption = table.concat(caption, " ")
+        if #caption > 0 then
+          panel['fuel_usage_label'].caption = table.concat(caption, " ")
+        else
+          panel['fuel_usage_label'].caption = '-'
+        end
       end
 
     end
