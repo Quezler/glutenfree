@@ -23,6 +23,11 @@ handler.on_entity_cloned = function(event)
   if event.destination.name == "se-spaceship-console-output" then
     local spaceship_id = event.destination.get_or_create_control_behavior().get_signal(1).count
     global.spaceship_console_outputs[spaceship_id] = event.destination
+
+    -- sum the used fuel right when the ship is landing
+    if handler.surface_is_spaceship(event.source.surface) then
+      handler.sum_fuel_usage_for_spaceship_surface(spaceship_id, event.source.surface)
+    end
     return
   end -- elseif is_engine(event.destination.name)
 
@@ -55,12 +60,7 @@ handler.gui_update = function(player, tick)
 
       local surface = entity.surface
       if handler.surface_is_spaceship(surface) then
-
-        local engines = surface.find_entities_filtered{ -- todo: cache
-          name = {'se-spaceship-rocket-engine', 'se-spaceship-ion-engine', 'se-spaceship-antimatter-engine'}
-        }
-
-        global.spaceship_sum[spaceship_id] = handler.sum_fuel_usage_for_engines(engines)
+        handler.sum_fuel_usage_for_spaceship_surface(spaceship_id, surface)
       end
 
       if root["flow_speed"] and root["flow_speed"]["panel_speed"] then
@@ -104,6 +104,14 @@ handler.liquid_used_per_fuel_craft = {
   ['se-ion-stream']         = 1, -- every 0.5s =  2/s
   ['se-antimatter-stream']  = 1, -- every 0.5s =  2/s
 }
+
+handler.sum_fuel_usage_for_spaceship_surface = function(spaceship_id, surface)
+  local engines = surface.find_entities_filtered{ -- todo: cache
+    name = {'se-spaceship-rocket-engine', 'se-spaceship-ion-engine', 'se-spaceship-antimatter-engine'}
+  }
+
+  global.spaceship_sum[spaceship_id] = handler.sum_fuel_usage_for_engines(engines)
+end
 
 handler.sum_fuel_usage_for_engines = function(engines)
   -- -1 means the engine type is missing, if the engine is present but unused math.max below will set it to 0
