@@ -3,10 +3,22 @@ local SpaceshipGUI = require('__space-exploration-scripts__.spaceship-gui')
 
 --
 
+local find_entities_filtered_engine_names = {'se-spaceship-rocket-engine', 'se-spaceship-ion-engine', 'se-spaceship-antimatter-engine'}
+
 local handler = {}
 
 handler.on_init = function(event)
   global.engines = {}
+  for _, surface in pairs(game.surfaces) do
+    if handler.surface_is_spaceship(surface) then
+      for _, entity in pairs(surface.find_entities_filtered({name = find_entities_filtered_engine_names})) do
+        global.engines[entity.unit_number] = {
+          entity = entity,
+          products_finished = entity.products_finished, -- at the time of ~~launch~~ adding the mod
+        }
+      end
+    end
+  end
 
   global.spaceship_console_outputs = {}
   for _, surface in pairs(game.surfaces) do
@@ -107,7 +119,7 @@ handler.liquid_used_per_fuel_craft = {
 
 handler.sum_fuel_usage_for_spaceship_surface = function(spaceship_id, surface)
   local engines = surface.find_entities_filtered{ -- todo: cache
-    name = {'se-spaceship-rocket-engine', 'se-spaceship-ion-engine', 'se-spaceship-antimatter-engine'}
+    name = find_entities_filtered_engine_names,
   }
 
   global.spaceship_sum[spaceship_id] = handler.sum_fuel_usage_for_engines(engines)
@@ -142,8 +154,8 @@ handler.gc = function()
   end
 
   -- garbage generally left behind a spaceship launching
-  for unit_number, entity in pairs(global.engines) do
-    if not entity.valid then global.engines[unit_number] = nil end
+  for unit_number, entry in pairs(global.engines) do
+    if not entry.entity.valid then global.engines[unit_number] = nil end
   end
 end
 

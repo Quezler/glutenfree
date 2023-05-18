@@ -2,7 +2,7 @@
     "name": "se-spaceship-trip-fuel-consumption",
     "title": "Space Exploration - spaceship trip fuel consumption",
     "description": "How much fuel was burned by the engines since it last anchored?",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
