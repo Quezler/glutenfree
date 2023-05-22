@@ -1,8 +1,5 @@
 local Lifesupport = require('__space-exploration-scripts__.lifesupport')
-
-Event = {addListener = function() end}
-local Jetpack = require('__jetpack__.scripts.jetpack')
-event = nil
+local Jetpack = require('__space-exploration-scripts__.jetpack')
 
 local JetpackGUI = {}
 
