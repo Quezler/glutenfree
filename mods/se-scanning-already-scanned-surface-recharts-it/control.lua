@@ -18,14 +18,14 @@ script.on_event(defines.events.on_gui_click, function(event)
       -- player.force.chart_all(player.surface.index)
 
       -- recharting only already charted chunks
-      for chunk in player.surface.get_chunks() do
-        if player.force.is_chunk_charted(player.surface, chunk) then
-          player.force.chart(player.surface, chunk.area)
-        end
-      end
+      -- for chunk in player.surface.get_chunks() do
+      --   if player.force.is_chunk_charted(player.surface, chunk) then
+      --     player.force.chart(player.surface, chunk.area)
+      --   end
+      -- end
 
       -- the above but done on the c++ side instead
-      -- player.force.rechart(player.surface.index)
+      player.force.rechart(player.surface.index)
     end
   end
 end)
