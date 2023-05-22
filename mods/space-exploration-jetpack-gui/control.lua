@@ -8,9 +8,6 @@ function JetpackGUI.on_configuration_changed(event)
   global.base_color = fluid.base_color
   global.flow_color = fluid.flow_color
 
-  -- actually, the base color looks like shit, and its confusing while spacewalking, lets just use flow for both
-  global.base_color = fluid.flow_color
-
   global.compatible_fuels = remote.call("jetpack", "get_fuels")
   -- {
   --   ["advanced-fuel"] = {
@@ -55,8 +52,6 @@ function JetpackGUI.on_nth_tick(event)
     -- every 240 ticks (every 4 seconds) per player (jetpack native)
     -- but since it looks better to update every second: added `% 1`
     if (event.tick/60 + player.index) % tick_interval % 1 == 0 then
-      -- print(event.tick)
-      -- game.print('hello dawling')
       JetpackGUI.on_lifesupport_gui_refreshed({player = player})
     end
   end
@@ -72,59 +67,54 @@ function JetpackGUI.gui_update(player)
   local root = Lifesupport.get_gui(player)
   if not root then return end -- also if already destroyed by the data not nil check within life support itself
 
-  local is_jetpacking = remote.call("jetpack", "is_jetpacking", {character = player.character})
-
-  
-  -- root.panel.lifesupport_bar.caption = "senpai"
-
-  root.panel.lifesupport_bar.style.color = is_jetpacking and global.flow_color or global.base_color
-
   if not player.character then return end
-  local current_fuel = remote.call("jetpack", "get_current_fuels")[player.character.unit_number]
+  local current_fuel = remote.call("jetpack", "get_current_fuels")[player.character.unit_number] -- replace with `get_current_fuel_for_character` once fixed
   -- {
   --   energy = <MJ left as a number>,
   --   name = "rocket-fuel",
   --   thrust = 1.2
   -- }
   if current_fuel then
-    root.panel.lifesupport_bar.value = math.max(0, current_fuel.energy / global.compatible_fuels[current_fuel.name].energy)
-    -- root.panel.lifesupport_bar.caption = {"[item=".. current_fuel.name .."]", {"item-name." .. current_fuel.name}}
-    -- root.panel.lifesupport_bar.caption = "[item=".. current_fuel.name .."]"
+
+    -- change the life support blue to a fuel-ish color
+    root.panel.lifesupport_bar.style.color = global.flow_color
+
+    -- the bar showing how much of the current fuel is still left
+    root.panel["lifesupport_bar"].value = math.max(0, current_fuel.energy / global.compatible_fuels[current_fuel.name].energy)
 
     local fuel_consumption_rate = settings.global["jetpack-fuel-consumption"].value / 100
     local fuel_consumption_per_tick = Jetpack.fuel_use_base * fuel_consumption_rate
-    local ing = "Hovering"
 
-    if player.character.walking_state.walking then -- todo: check if `is_jetpacking` is true while spacewalking or not
+    local is_jetpacking = remote.call("jetpack", "is_jetpacking", {character = player.character})
+    if is_jetpacking and player.character.walking_state.walking then -- we "should" check for spacewalking, but heck who walks while having a jetpack equiped?
       fuel_consumption_per_tick = fuel_consumption_per_tick + Jetpack.fuel_use_thrust * fuel_consumption_rate
-      ing = "Thrusting"
     end
 
-    root.panel["lifesupport_bar"].caption = Lifesupport.seconds_to_clock(current_fuel.energy / fuel_consumption_per_tick / 60)
-    -- print('a ' .. current_fuel.energy)
-    -- print('b ' .. JetpackGUI.sum_fuel_energy_from_inventory(player.character))
-    root.panel["time_reserves_flow"]["lifesupport_reserves"].caption = Lifesupport.seconds_to_clock((current_fuel.energy + JetpackGUI.sum_fuel_energy_from_inventory(player.character)) / fuel_consumption_per_tick / 60)
-    -- root.panel.lifesupport_bar.caption = fuel_consumption_per_tick
+    -- i wonder if we'll ever run into integer overflow issues if there's an absurd amount of fuel stored in the inventory
+    root.panel["lifesupport_bar"].caption = Lifesupport.seconds_to_clock(math.max(0, current_fuel.energy / fuel_consumption_per_tick / 60))
+    root.panel["lifesupport_bar"].tooltip = {"space-exploration.jetpack_suit_tooltip"}
+    root.panel["time_reserves_flow"]["lifesupport_reserves"].caption = Lifesupport.seconds_to_clock(math.max(0, (current_fuel.energy + JetpackGUI.sum_fuel_energy_from_inventory(player.character)) / fuel_consumption_per_tick / 60))
+    root.panel["time_reserves_flow"]["lifesupport_reserves"].tooltip = {"space-exploration.jetpack_reserves_duration_tooltip"}
 
-    -- replace character item with jetpack icon
+    -- replace character icon with jetpack icon
     root.panel["time_reserves_flow"].children[1].sprite = "item/" .. "jetpack-1"
+    root.panel["time_reserves_flow"].children[1].tooltip = {"space-exploration.jetpack_reserves_duration_tooltip"}
 
     -- replace life support canister with current fuel item
     root.panel["canister_reserves_flow"].children[1].sprite = "item/" .. current_fuel.name
+    root.panel["canister_reserves_flow"].children[1].tooltip = {"space-exploration.jetpack_reserves_canisters_tooltip"}
 
-    -- local inventory = player.character.get_inventory(defines.inventory.character_main).get_contents()
+    -- current fuel item left in inventory
+    root.panel["canister_reserves_flow"]["lifesupport_canisters"].caption = player.character.get_main_inventory().get_item_count(current_fuel.name)
+    root.panel["canister_reserves_flow"]["lifesupport_canisters"].tooltip = {"space-exploration.jetpack_reserves_canisters_tooltip"}
 
-    root.panel.canister_reserves_flow.lifesupport_canisters.caption = player.character.get_main_inventory().get_item_count(current_fuel.name)
-    root.panel.canister_reserves_flow.lifesupport_efficiency.caption = string.format("×%.f%%", current_fuel.thrust * 100)
-    -- root.panel.canister_reserves_flow.lifesupport_efficiency.tooltip = nil
+    -- thrust percentage of the current fuel item
+    root.panel["canister_reserves_flow"]["lifesupport_efficiency"].caption = string.format("×%.f%%", current_fuel.thrust * 100)
+    root.panel["canister_reserves_flow"]["lifesupport_efficiency"].tooltip = {"space-exploration.jetpack_efficiency_tooltip"}
 
-    print(serpent.block(root.panel.time_reserves_flow.info.tooltip))
+    -- just put some vaguely interesting information in the info dot
     local x = (Jetpack.fuel_use_base + Jetpack.fuel_use_thrust) / Jetpack.fuel_use_base
     root.panel.time_reserves_flow.info.tooltip = "Flying takes "..x.."x more fuel than hovering"
-
-    print('current: ' .. current_fuel.energy)
-    print('prototy: ' .. global.compatible_fuels[current_fuel.name].energy)
-    print('valuezy: ' .. math.max(0, current_fuel.energy / global.compatible_fuels[current_fuel.name].energy))
   end
 end
 
