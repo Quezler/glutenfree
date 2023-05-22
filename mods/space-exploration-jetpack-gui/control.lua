@@ -3,13 +3,14 @@ local Jetpack = require('__space-exploration-scripts__.jetpack')
 
 local JetpackGUI = {}
 
+function JetpackGUI.on_init(event)
+  JetpackGUI.on_configuration_changed({})
+end
+
 function JetpackGUI.on_configuration_changed(event)
   local fluid = game.fluid_prototypes['se-liquid-rocket-fuel']
   global.flow_color = fluid.flow_color
-  JetpackGUI.refresh_fuels()
-end
 
-function JetpackGUI.refresh_fuels()
   global.compatible_fuels = remote.call("jetpack", "get_fuels")
   -- {
   --   ["advanced-fuel"] = {
@@ -82,7 +83,7 @@ function JetpackGUI.gui_update(player)
     root.panel.lifesupport_bar.style.color = global.flow_color
 
     -- the bar showing how much of the current fuel is still left
-    if not global.compatible_fuels then JetpackGUI.refresh_fuels() game.print("global.compatible_fuels was nil.") end
+    if not global.compatible_fuels then error("global.compatible_fuels is nil.") end
     root.panel["lifesupport_bar"].value = math.max(0, current_fuel.energy / global.compatible_fuels[current_fuel.name].energy)
 
     local fuel_consumption_rate = settings.global["jetpack-fuel-consumption"].value / 100
@@ -141,6 +142,7 @@ function JetpackGUI.sum_fuel_energy_from_inventory(character)
   return energy
 end
 
+script.on_init(JetpackGUI.on_init)
 script.on_configuration_changed(JetpackGUI.on_configuration_changed)
 script.on_nth_tick(Lifesupport.nth_tick_interval, JetpackGUI.on_nth_tick)
 
