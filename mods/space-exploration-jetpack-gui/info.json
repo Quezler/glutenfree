@@ -1,0 +1,13 @@
+{
+    "name": "space-exploration-jetpack-gui",
+    "title": "Space Exploration - jetpack gui",
+    "description": "Whilst flying overides the life support gui with jetpacky fuel statsy stuff.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "jetpack",
+        "space-exploration",
+        "space-exploration-scripts"
+    ]
+}
