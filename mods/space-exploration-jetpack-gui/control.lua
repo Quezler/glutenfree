@@ -5,7 +5,6 @@ local JetpackGUI = {}
 
 function JetpackGUI.on_configuration_changed(event)
   local fluid = game.fluid_prototypes['se-liquid-rocket-fuel']
-  global.base_color = fluid.base_color
   global.flow_color = fluid.flow_color
 
   global.compatible_fuels = remote.call("jetpack", "get_fuels")
@@ -86,7 +85,9 @@ function JetpackGUI.gui_update(player)
     local fuel_consumption_per_tick = Jetpack.fuel_use_base * fuel_consumption_rate
 
     local is_jetpacking = remote.call("jetpack", "is_jetpacking", {character = player.character})
-    if is_jetpacking and player.character.walking_state.walking then -- we "should" check for spacewalking, but heck who walks while having a jetpack equiped?
+    local is_spacewalking = player.character.name == "character" -- usage: `is_jetpacking and is_spacewalking`, actual jetpack mode is `character-jetpack`
+    -- if is_jetpacking and player.character.walking_state.walking and not is_spacewalking then
+    if true then -- until the jetpack fuel consumption is fixed the thrust pretty much always gets used
       fuel_consumption_per_tick = fuel_consumption_per_tick + Jetpack.fuel_use_thrust * fuel_consumption_rate
     end
 
