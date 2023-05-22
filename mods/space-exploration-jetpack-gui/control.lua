@@ -82,7 +82,7 @@ function JetpackGUI.gui_update(player)
     root.panel.lifesupport_bar.style.color = global.flow_color
 
     -- the bar showing how much of the current fuel is still left
-    if not global.compatible_fuels then JetpackGUI.JetpackGUI.refresh_fuels() game.print("global.compatible_fuels was nil.") end
+    if not global.compatible_fuels then JetpackGUI.refresh_fuels() game.print("global.compatible_fuels was nil.") end
     root.panel["lifesupport_bar"].value = math.max(0, current_fuel.energy / global.compatible_fuels[current_fuel.name].energy)
 
     local fuel_consumption_rate = settings.global["jetpack-fuel-consumption"].value / 100
