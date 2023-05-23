@@ -44,7 +44,7 @@ function ConcreteRoboport.on_created_entity(event)
   -- should we care about all 3 tiles, or just the center one?
   local tile = entity.surface.get_tile(entity.position)
   -- todo: restrict to manually placed tiles with `tile.prototype.mineable_properties.minable` to avoid scanning the world?
-  local tiles = entity.surface.get_connected_tiles(entity.position, {tile.name})
+  local tiles = entity.surface.get_connected_tiles(entity.position, {tile.name}, true)
   game.print('#tiles ' .. #tiles)
 
   game.print('minable? '.. tostring(tile.prototype.mineable_properties.minable))
