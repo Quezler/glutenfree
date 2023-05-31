@@ -14,12 +14,12 @@ function JetpackGUI.on_configuration_changed(event)
   local compatible_fuels = remote.call("jetpack", "get_fuels")
   global.compatible_fuels = {}
 
-  if not compatible_fuels["solid-fuel"] then
+  if compatible_fuels and compatible_fuels["solid-fuel"] then
+    global.compatible_fuels = compatible_fuels
+  else
     for _, compatible_fuel in pairs(compatible_fuels) do
       global.compatible_fuels[compatible_fuel.fuel_name] = {thrust = compatible_fuel.thrust}
     end
-  else
-    global.compatible_fuels = compatible_fuels
   end
 
   -- {
