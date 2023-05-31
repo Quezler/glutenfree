@@ -11,7 +11,17 @@ function JetpackGUI.on_configuration_changed(event)
   local fluid = game.fluid_prototypes['se-liquid-rocket-fuel']
   global.flow_color = fluid.flow_color
 
-  global.compatible_fuels = remote.call("jetpack", "get_fuels")
+  local compatible_fuels = remote.call("jetpack", "get_fuels")
+  global.compatible_fuels = {}
+
+  if not compatible_fuels["solid-fuel"] then
+    for _, compatible_fuel in pairs(compatible_fuels) do
+      global.compatible_fuels[compatible_fuel.fuel_name] = {thrust = compatible_fuel.thrust}
+    end
+  else
+    global.compatible_fuels = compatible_fuels
+  end
+
   -- {
   --   ["advanced-fuel"] = {
   --     thrust = 1.1000000000000001
@@ -71,7 +81,7 @@ function JetpackGUI.gui_update(player)
   if not root then return end -- also if already destroyed by the data not nil check within life support itself
 
   if not player.character then return end
-  local current_fuel = remote.call("jetpack", "get_current_fuels")[player.character.unit_number] -- replace with `get_current_fuel_for_character` once fixed
+  local current_fuel = remote.call("jetpack", "get_current_fuel_for_character", {character=player.character})
   -- {
   --   energy = <MJ left as a number>,
   --   name = "rocket-fuel",
@@ -91,8 +101,7 @@ function JetpackGUI.gui_update(player)
 
     local is_jetpacking = remote.call("jetpack", "is_jetpacking", {character = player.character})
     local is_spacewalking = player.character.name == "character" -- usage: `is_jetpacking and is_spacewalking`, actual jetpack mode is `character-jetpack`
-    -- if is_jetpacking and player.character.walking_state.walking and not is_spacewalking then
-    if true then -- until the jetpack fuel consumption is fixed the thrust pretty much always gets used
+    if is_jetpacking and player.character.walking_state.walking and not is_spacewalking then
       fuel_consumption_per_tick = fuel_consumption_per_tick + Jetpack.fuel_use_thrust * fuel_consumption_rate
     end
 
