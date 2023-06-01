@@ -2,7 +2,7 @@
     "name": "robot_attrition-return-to-sender",
     "title": "Robot Attrition - return to sender",
     "description": "Dropped cargo picked up by personal roboports no longer ends up in the player's inventory.",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
