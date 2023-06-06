@@ -19,6 +19,8 @@ local events = {
   [defines.events.on_player_built_tile]    = ConcreteRoboport.on_built_tile,
   [defines.events.on_robot_built_tile]     = ConcreteRoboport.on_built_tile,
   -- [defines.events.script_raised_set_tiles] = ConcreteRoboport.on_built_tile,
+
+  [defines.events.on_entity_destroyed] = ConcreteRoboport.on_entity_destroyed,
 }
 
 for event, handler in pairs(events) do

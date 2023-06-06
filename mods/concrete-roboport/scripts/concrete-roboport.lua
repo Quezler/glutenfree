@@ -20,6 +20,8 @@ function ConcreteRoboport.on_init(event)
   global.unit_number_to_network_index = {}
 
   global.player_index_to_highlight_box = {}
+
+  global.deathrattles = {} -- [{surface_index, network_index}]
 end
 
 function ConcreteRoboport.on_surface_created(event)
@@ -94,8 +96,11 @@ function ConcreteRoboport.mycelium(surface, position, force)
   -- store struct
   global.surfaces[surface.index].networks[network_index] = network
 
-  for unit_number, _ in pairs(network.roboports) do
-    global.unit_number_to_network_index[unit_number] = network_index
+  -- highlight the network boundary on hovering any of its roboports
+  for unit_number, roboport in pairs(network.roboports) do
+    global.unit_number_to_network_index[unit_number] = network_indexs
+
+    global.deathrattles[script.register_on_entity_destroyed(roboport)] = {surface.index, network_index}
   end
 
 end
@@ -166,6 +171,14 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
     --   local other_tile = surface.get_tile({tile.position.x + vector[1], tile.position.y + vector[2]})
     --   print(serpent.line(other_tile))
     -- end
+  end
+end
+
+function ConcreteRoboport.on_entity_destroyed(event)
+  local tuple = global.deathrattles[event.registration_number]
+  if tuple then global.deathrattles[event.registration_number] = nil
+    local network = global.surfaces[tuple[1]].networks[tuple[2]]
+    game.print(string.format('network %d destroyed', tuple[2]))
   end
 end
 
