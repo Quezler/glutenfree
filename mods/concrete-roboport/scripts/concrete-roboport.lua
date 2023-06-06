@@ -38,59 +38,68 @@ function ConcreteRoboport.on_created_entity(event)
   if entity.name ~= "concrete-roboport" then return end
   game.print('concrete roboport created')
 
-  local network_index = global.next_network_index or 1
-  global.next_network_index = network_index + 1
+  ConcreteRoboport.mycelium(entity.surface, entity.position, entity.force)
+end
 
-  -- all the tiles under the roboport
-  local min_x = entity.position.x - 2
-  local max_x = entity.position.x + 1
-  local min_y = entity.position.y - 2
-  local max_y = entity.position.y + 1
+---@param surface LuaSurface
+---@param position TilePosition
+---@param force LuaForce
+function ConcreteRoboport.mycelium(surface, position, force)
 
-  -- should we care about all 3 tiles, or just the center one?
-  local tile = entity.surface.get_tile(entity.position)
-  -- todo: restrict to manually placed tiles with `tile.prototype.mineable_properties.minable` to avoid scanning the world?
-  local tiles = entity.surface.get_connected_tiles(entity.position, {tile.name}, true)
+  ---@type LuaTile
+  local tile = surface.get_tile(position)
+
+  ---@type LuaTile[]
+  local tiles = surface.get_connected_tiles(position, {tile.name}, true)
+
   game.print('#tiles ' .. #tiles)
-
   game.print('minable? '.. tostring(tile.prototype.mineable_properties.minable))
+
+  local min_x = position.x - 2
+  local max_x = position.x + 1
+  local min_y = position.y - 2
+  local max_y = position.y + 1
 
   for _, tile in ipairs(tiles) do
     if tile.x < min_x then min_x = tile.x end
     if tile.x > max_x then max_x = tile.x end
     if tile.y < min_y then min_y = tile.y end
     if tile.y > max_y then max_y = tile.y end
-    ConcreteRoboport.get_or_create_roboport_tile(entity, tile)
+    ConcreteRoboport.get_or_create_roboport_tile(surface, tile, force)
   end
 
+  -- setup struct
   local network = {
-    -- todo: store the tile(s) and only check for overlap if it matches by name
-    index = network_index,
-
-    -- area = {left_top = {x = min_x, y = min_y}, right_bottom = {x = max_x, y = max_y}},
-
-    -- the tile positions, needs to +/-'d before use in drawing highlight boxes or doing bounding box checks
     min_x = min_x,
     max_x = max_x,
     min_y = min_y,
     max_y = max_y,
+
+    roboports = {}, -- todo: global.unit_number_to_network_index[entity.unit_number] = network_index
+    tiles = {},
   }
+  
+  -- assign id
+  local network_index = global.next_network_index or 1
+  global.next_network_index = network_index + 1
 
-  global.surfaces[entity.surface.index].networks[network_index] = network
+  -- store struct
+  global.surfaces[surface.index].networks[network_index] = network
 
-  global.unit_number_to_network_index[entity.unit_number] = network_index -- todo: doesn't store a surface index yet
 end
 
-function ConcreteRoboport.get_or_create_roboport_tile(entity, position)
-  local surface_index = entity.surface.index
-  local tiles = global.surfaces[surface_index].tiles
+---@param surface LuaSurface
+---@param position TilePosition
+---@param force LuaForce
+function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
+  local tiles = global.surfaces[surface.index].tiles
 
   if not tiles[position.x] then tiles[position.x] = {} end
   local tile = tiles[position.x][position.y]
   if not tile or not tile.valid then
-    tile = entity.surface.create_entity({
+    tile = surface.create_entity({
       name = 'concrete-roboport-tile',
-      force = entity.force,
+      force = force,
       position = position,
     })
     tiles[position.x][position.y] = tile
