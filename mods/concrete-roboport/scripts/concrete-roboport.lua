@@ -8,11 +8,11 @@ function ConcreteRoboport.on_init(event)
   global.surfaces = {}
 
   for _, surface in pairs(game.surfaces) do
-    global.surfaces[surface.index] = {} -- todo: on_surface_created & on_surface__deleted
+    ConcreteRoboport.on_surface_created({surface_index = surface.index})
   end
 
   -- global.next_network_index = 1
-  global.networks = {}
+  -- global.networks = {}
 
   global.unit_number_to_network_index = {}
 
@@ -20,11 +20,14 @@ function ConcreteRoboport.on_init(event)
 end
 
 function ConcreteRoboport.on_surface_created(event)
-  error('created :o')
+  global.surfaces[event.surface_index] = {
+    networks = {},
+    tiles = {},
+  }
 end
 
 function ConcreteRoboport.on_surface_deleted(event)
-  error('deleted :o')
+  global.surfaces[event.surface_index] = nil
 end
 
 function ConcreteRoboport.on_created_entity(event)
@@ -70,22 +73,24 @@ function ConcreteRoboport.on_created_entity(event)
     max_y = max_y,
   }
 
-  global.networks[network_index] = network
+  global.surfaces[entity.surface.index].networks[network_index] = network
 
-  global.unit_number_to_network_index[entity.unit_number] = network_index
+  global.unit_number_to_network_index[entity.unit_number] = network_index -- todo: doesn't store a surface index yet
 end
 
 function ConcreteRoboport.get_or_create_roboport_tile(entity, position)
-  local surface = entity.surface
-  if not global.surfaces[surface.index][position.x] then global.surfaces[surface.index][position.x] = {} end
-  local tile = global.surfaces[surface.index][position.x][position.y]
+  local surface_index = entity.surface.index
+  local tiles = global.surfaces[surface_index].tiles
+
+  if not tiles[position.x] then tiles[position.x] = {} end
+  local tile = tiles[position.x][position.y]
   if not tile or not tile.valid then
-    tile = surface.create_entity({
+    tile = entity.surface.create_entity({
       name = 'concrete-roboport-tile',
       force = entity.force,
       position = position,
     })
-    global.surfaces[surface.index][position.x][position.y] = tile
+    tiles[position.x][position.y] = tile
   end
 
   return tile
@@ -102,7 +107,7 @@ function ConcreteRoboport.on_selected_entity_changed(event)
   if player.selected and player.selected.unit_number then
     local network_index = global.unit_number_to_network_index[player.selected.unit_number]
     if network_index then
-      local network = global.networks[network_index]
+      local network = global.surfaces[player.selected.surface.index].networks[network_index]
       local entity = player.surface.create_entity{
         name = 'highlight-box',
         position = {0, 0},
@@ -119,8 +124,10 @@ function ConcreteRoboport.on_selected_entity_changed(event)
 end
 
 function ConcreteRoboport.on_built_tile(event) -- player & robot
+  local networks = global.surfaces[event.surface_index].networks
+
   for _, tile in ipairs(event.tiles) do
-    for _, network in pairs(global.networks) do
+    for _, network in pairs(networks) do
       -- local area = {left_top = {x = network.min_x - 1, y = network.min_y - 1}, right_bottom = {x = network.max_x + 1, y = network.max_y + 1}}
       -- one of the new tiles is within the bounding box of the network
       if flib_bounding_box.contains_position({{network.min_x - 1, network.min_y - 1}, {network.max_x + 1, network.max_y + 1}}, tile.position) then
