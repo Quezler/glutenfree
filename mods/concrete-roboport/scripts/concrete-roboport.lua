@@ -1,5 +1,8 @@
 local flib_bounding_box = require("__flib__/bounding-box")
 
+-- local util = require("__core__.lualib.util")
+-- if table_size(util.direction_vectors) ~= 8 then error('util.direction_vectors ~= 8') end
+
 --
 
 local ConcreteRoboport = {}
@@ -125,15 +128,23 @@ end
 
 function ConcreteRoboport.on_built_tile(event) -- player & robot
   local networks = global.surfaces[event.surface_index].networks
+  -- local tiles = global.surfaces[event.surface_index].tiles
+
+  -- local surface = game.get_surface(event.surface_index)
 
   for _, tile in ipairs(event.tiles) do
     for _, network in pairs(networks) do
       -- local area = {left_top = {x = network.min_x - 1, y = network.min_y - 1}, right_bottom = {x = network.max_x + 1, y = network.max_y + 1}}
       -- one of the new tiles is within the bounding box of the network
       if flib_bounding_box.contains_position({{network.min_x - 1, network.min_y - 1}, {network.max_x + 1, network.max_y + 1}}, tile.position) then
-        game.print(event.tick .. ' encroaching on network ' .. network.index)
+        print(event.tick .. ' encroaching on network ' .. network.index)
       end
     end
+
+    -- for direction, vector in pairs(util.direction_vectors) do
+    --   local other_tile = surface.get_tile({tile.position.x + vector[1], tile.position.y + vector[2]})
+    --   print(serpent.line(other_tile))
+    -- end
   end
 end
 
