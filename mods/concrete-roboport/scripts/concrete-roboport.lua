@@ -60,13 +60,21 @@ function ConcreteRoboport.mycelium(surface, position, force)
   local min_y = position.y - 2
   local max_y = position.y + 1
 
+  local roboports = {}
+
   for _, tile in ipairs(tiles) do
     if tile.x < min_x then min_x = tile.x end
     if tile.x > max_x then max_x = tile.x end
     if tile.y < min_y then min_y = tile.y end
     if tile.y > max_y then max_y = tile.y end
     ConcreteRoboport.get_or_create_roboport_tile(surface, tile, force)
+
+    -- slughter performance to get all the roboports on these tiles
+    local roboport = surface.find_entity('concrete-roboport', tile)
+    if roboport then roboports[roboport.unit_number] = roboport end
   end
+
+  game.print('#roboports ' .. table_size(roboports))
 
   -- setup struct
   local network = {
@@ -75,7 +83,7 @@ function ConcreteRoboport.mycelium(surface, position, force)
     min_y = min_y,
     max_y = max_y,
 
-    roboports = {}, -- todo: global.unit_number_to_network_index[entity.unit_number] = network_index
+    roboports = roboports,
     tiles = {},
   }
   
@@ -85,6 +93,10 @@ function ConcreteRoboport.mycelium(surface, position, force)
 
   -- store struct
   global.surfaces[surface.index].networks[network_index] = network
+
+  for unit_number, _ in pairs(network.roboports) do
+    global.unit_number_to_network_index[unit_number] = network_index
+  end
 
 end
 
