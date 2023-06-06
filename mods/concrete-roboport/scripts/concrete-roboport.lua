@@ -40,9 +40,9 @@ function ConcreteRoboport.on_created_entity(event)
 
   -- all the tiles under the roboport
   local min_x = entity.position.x - 2
-  local max_x = entity.position.x + 2
+  local max_x = entity.position.x + 1
   local min_y = entity.position.y - 2
-  local max_y = entity.position.y + 2
+  local max_y = entity.position.y + 1
 
   -- should we care about all 3 tiles, or just the center one?
   local tile = entity.surface.get_tile(entity.position)
