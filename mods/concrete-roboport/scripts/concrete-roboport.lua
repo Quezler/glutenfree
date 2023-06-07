@@ -3,6 +3,8 @@ local flib_bounding_box = require("__flib__/bounding-box")
 -- local util = require("__core__.lualib.util")
 -- if table_size(util.direction_vectors) ~= 8 then error('util.direction_vectors ~= 8') end
 
+local ConcreteNetwork = require('scripts.concrete-network')
+
 --
 
 local ConcreteRoboport = {}
@@ -71,6 +73,7 @@ function ConcreteRoboport.mycelium(surface, position, force)
     if tile.y > max_y then max_y = tile.y end
     ConcreteRoboport.get_or_create_roboport_tile(surface, tile, force)
 
+    -- todo: remove the roboports from any previous networks
     -- slughter performance to get all the roboports on these tiles
     local roboport = surface.find_entity('concrete-roboport', tile)
     if roboport then roboports[roboport.unit_number] = roboport end
@@ -78,29 +81,31 @@ function ConcreteRoboport.mycelium(surface, position, force)
 
   game.print('#roboports ' .. table_size(roboports))
 
+  -- assign id
+  local network_index = global.next_network_index or 1
+  global.next_network_index = network_index + 1
+
   -- setup struct
   local network = {
+    index = network_index,
+
     min_x = min_x,
     max_x = max_x,
     min_y = min_y,
     max_y = max_y,
 
-    roboports = roboports,
+    roboports = 0,
+    roboport = {},
+
     tiles = {},
   }
   
-  -- assign id
-  local network_index = global.next_network_index or 1
-  global.next_network_index = network_index + 1
-
   -- store struct
   global.surfaces[surface.index].networks[network_index] = network
 
   -- highlight the network boundary on hovering any of its roboports
-  for unit_number, roboport in pairs(network.roboports) do
-    global.unit_number_to_network_index[unit_number] = network_indexs
-
-    global.deathrattles[script.register_on_entity_destroyed(roboport)] = {surface.index, network_index}
+  for _, roboport in pairs(roboports) do
+    ConcreteNetwork.add_roboport(network, roboport)
   end
 
 end
@@ -178,6 +183,7 @@ function ConcreteRoboport.on_entity_destroyed(event)
   local tuple = global.deathrattles[event.registration_number]
   if tuple then global.deathrattles[event.registration_number] = nil
     local network = global.surfaces[tuple[1]].networks[tuple[2]]
+    ConcreteNetwork.sub_roboport(network, {unit_number = event.unit_number})
     game.print(string.format('network %d destroyed', tuple[2]))
   end
 end
