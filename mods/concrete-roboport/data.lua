@@ -36,6 +36,17 @@ local concrete_roboport_tile = {
   collision_box = {{-0.5, -0.5}, {0.5, 0.5}}
 }
 
+-- debug mode
+if true then
+  concrete_roboport_tile.base = {
+    filename = "__core__/graphics/icons/unknown.png",
+    priority = "extra-high",
+    width = 64,
+    height = 64,
+    scale = 0.5,
+  }
+end
+
 data:extend({concrete_roboport_tile})
 
 -- data.raw['roboport']['roboport'].logistics_connection_distance = data.raw['roboport']['roboport'].logistics_radius
