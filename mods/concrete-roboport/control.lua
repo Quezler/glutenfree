@@ -1,3 +1,9 @@
+function table_first(table)
+  for key, value in pairs(table) do
+    return value
+  end
+end
+
 local ConcreteRoboport = require('scripts.concrete-roboport')
 
 --

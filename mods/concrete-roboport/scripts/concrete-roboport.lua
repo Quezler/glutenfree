@@ -59,6 +59,18 @@ function ConcreteRoboport.mycelium(surface, position, force)
   game.print('#tiles ' .. #tiles)
   game.print('minable? '.. tostring(tile.prototype.mineable_properties.minable))
 
+  local roboports = {}
+
+  for _, tile in ipairs(tiles) do
+    -- todo: remove the roboports from any previous networks
+    -- slughter performance to get all the roboports on these tiles
+    local roboport = surface.find_entity('concrete-roboport', tile)
+    if roboport then roboports[roboport.unit_number] = roboport end
+  end
+
+  game.print('#roboports ' .. table_size(roboports))
+  if table_size(roboports) == 0 then return end -- no roboports, cannot create a network here
+
   -- assign id
   local network_index = global.next_network_index or 1
   global.next_network_index = network_index + 1
@@ -86,8 +98,6 @@ function ConcreteRoboport.mycelium(surface, position, force)
   local min_y = position.y - 2
   local max_y = position.y + 1
 
-  local roboports = {}
-
   for _, tile in ipairs(tiles) do
     if tile.x < min_x then min_x = tile.x end
     if tile.x > max_x then max_x = tile.x end
@@ -95,11 +105,6 @@ function ConcreteRoboport.mycelium(surface, position, force)
     if tile.y > max_y then max_y = tile.y end
 
     local roboport_tile = ConcreteRoboport.get_or_create_roboport_tile(surface, tile, force)
-
-    -- todo: remove the roboports from any previous networks
-    -- slughter performance to get all the roboports on these tiles
-    local roboport = surface.find_entity('concrete-roboport', tile)
-    if roboport then roboports[roboport.unit_number] = roboport end
 
     network.tiles = network.tiles + 1
     network.tile[roboport_tile.unit_number] = roboport_tile
@@ -109,8 +114,6 @@ function ConcreteRoboport.mycelium(surface, position, force)
   network.max_x = max_x
   network.min_y = min_y
   network.max_y = max_y
-
-  game.print('#roboports ' .. table_size(roboports))
   
   -- store struct
   global.surfaces[surface.index].networks[network_index] = network
@@ -181,7 +184,8 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
       -- one of the new tiles is touching the selection box of the network
       if flib_bounding_box.contains_position({{network.min_x - 1, network.min_y - 1}, {network.max_x + 1, network.max_y + 1}}, tile.position) then
         print(event.tick .. ' encroaching on network ' .. network.index)
-        encroached[network.index] = {network, tile}
+        print('total networks: ' .. table_size(networks))
+        encroached[network.index] = network
         -- print('skipping network id ' .. network.index)
         goto next_network
       end
@@ -189,8 +193,9 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
     ::next_network::
   end
 
-  for _, tuple in pairs(encroached) do
-    ConcreteRoboport.mycelium(game.get_surface(event.surface_index), tuple[2].position, game.forces[tuple[1].force_index])
+  for _, network in pairs(encroached) do
+    local roboport = table_first(network.roboport)
+    ConcreteRoboport.mycelium(game.get_surface(event.surface_index), roboport.position, game.forces[network.force_index])
   end
 
 end
