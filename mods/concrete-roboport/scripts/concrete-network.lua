@@ -15,6 +15,9 @@ function ConcreteNetwork.sub_roboport(network, roboport)
 
   if network.roboports == 0 then
     game.print('destroy network')
+    for _, roboport_tile in pairs(network.tile) do
+      roboport_tile.destroy()
+    end
   end
 end
 

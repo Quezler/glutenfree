@@ -59,6 +59,26 @@ function ConcreteRoboport.mycelium(surface, position, force)
   game.print('#tiles ' .. #tiles)
   game.print('minable? '.. tostring(tile.prototype.mineable_properties.minable))
 
+  -- assign id
+  local network_index = global.next_network_index or 1
+  global.next_network_index = network_index + 1
+
+  -- setup struct
+  local network = {
+    index = network_index,
+
+    min_x = nil,
+    max_x = nil,
+    min_y = nil,
+    max_y = nil,
+
+    roboports = 0,
+    roboport = {},
+
+    tiles = 0,
+    tile = {},
+  }
+
   local min_x = position.x - 2
   local max_x = position.x + 1
   local min_y = position.y - 2
@@ -71,34 +91,24 @@ function ConcreteRoboport.mycelium(surface, position, force)
     if tile.x > max_x then max_x = tile.x end
     if tile.y < min_y then min_y = tile.y end
     if tile.y > max_y then max_y = tile.y end
-    ConcreteRoboport.get_or_create_roboport_tile(surface, tile, force)
+
+    local roboport_tile = ConcreteRoboport.get_or_create_roboport_tile(surface, tile, force)
 
     -- todo: remove the roboports from any previous networks
     -- slughter performance to get all the roboports on these tiles
     local roboport = surface.find_entity('concrete-roboport', tile)
     if roboport then roboports[roboport.unit_number] = roboport end
+
+    network.tiles = network.tiles + 1
+    network.tile[roboport_tile.unit_number] = roboport_tile
   end
 
+  network.min_x = min_x
+  network.max_x = max_x
+  network.min_y = min_y
+  network.max_y = max_y
+
   game.print('#roboports ' .. table_size(roboports))
-
-  -- assign id
-  local network_index = global.next_network_index or 1
-  global.next_network_index = network_index + 1
-
-  -- setup struct
-  local network = {
-    index = network_index,
-
-    min_x = min_x,
-    max_x = max_x,
-    min_y = min_y,
-    max_y = max_y,
-
-    roboports = 0,
-    roboport = {},
-
-    tiles = {},
-  }
   
   -- store struct
   global.surfaces[surface.index].networks[network_index] = network
@@ -113,6 +123,7 @@ end
 ---@param surface LuaSurface
 ---@param position TilePosition
 ---@param force LuaForce
+---@return LuaEntity (roboport)
 function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
   local tiles = global.surfaces[surface.index].tiles
 
