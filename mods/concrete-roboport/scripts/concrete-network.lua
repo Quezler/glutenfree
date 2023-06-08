@@ -6,6 +6,11 @@ function ConcreteNetwork.add_roboport(network, roboport)
   if previous_network_index then
     local previous_network = global.surfaces[network.surface_index].networks[previous_network_index]
     if previous_network then
+
+      -- todo: unbodge this hack
+      previous_network.tiles = 0
+      previous_network.tile = {}
+
       ConcreteNetwork.sub_roboport(previous_network, roboport)
     end
   end
