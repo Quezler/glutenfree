@@ -1,0 +1,11 @@
+{
+    "name": "se-space-elevator-beam-me-up-scotty",
+    "title": "Space Exploration - Space Elevator - beam me up scotty",
+    "description": "You must be within 15 distance? pfff what primitive technology, just beam me up instead.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "~ space-exploration"
+    ]
+}
