@@ -26,6 +26,7 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   })
 
   remote.call("space-exploration", "remote_view_stop", {player=player})
+  player.driving = false
   player.teleport({center.x, center.y + 1.5}, event.surface)
   -- player.driving = true -- having to exit the vehicle is not fast enough
   player.character.direction = defines.direction.south -- look down away from the capsule ladder
