@@ -12,6 +12,7 @@ script.on_event(defines.events.on_player_selected_area, function(event)
     create_at_cursor = true,
   }) end
   inventory.remove({name = price, count = 1})
+  local left = inventory.get_item_count(price)
 
   local center = {
     x = (event.area.left_top.x + event.area.right_bottom.x) / 2,
@@ -26,6 +27,7 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   })
 
   remote.call("space-exploration", "remote_view_stop", {player=player})
+  remote.call("jetpack", "stop_jetpack_immediate", {character=player.character})
   player.driving = false
   player.teleport({center.x, center.y + 1.5}, event.surface)
   -- player.driving = true -- having to exit the vehicle is not fast enough
@@ -34,7 +36,7 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   -- container.order_deconstruction(player.force, player) -- a bit too quick, and i don't feel like complicating the mod with a delay
 
   player.create_local_flying_text({
-    text = string.format("%d [item=%s]'s left", inventory.get_item_count(price), price),
+    text = string.format("%d [item=%s]'s left", left, price),
     create_at_cursor = true,
   })
 end)
