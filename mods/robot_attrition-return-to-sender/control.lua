@@ -52,6 +52,9 @@ function Handler.after_robot_visited_cargo(robot)
 
   -- if this crash occurs often we might have to temporarily increase `character_trash_slot_count_bonus` or something
   if count ~= inserted then error('trash slots full?') end
+
+  -- apparently .insert(LuaItemStack) can copy stuff with data like blueprints just fine, so no need to swap stacks.
+  cargo[1].clear()
 end
 
 --
