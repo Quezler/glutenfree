@@ -2,6 +2,20 @@ local function logistic_network_is_personal_roboport(logistic_network) -- in a p
   return #logistic_network.cells == 1 and logistic_network.cells[1].owner.type == "character"
 end
 
+local luasurface = {}
+function luasurface.find_closest_logistic_network_by_position(surface, position, force)
+  local robot = surface.create_entity{
+    name = "construction-robot",
+    force = force,
+    position = position,
+  }
+
+  local logistic_network = robot.logistic_network
+  robot.destroy()
+
+  return logistic_network
+end
+
 --
 
 local Handler = {}
@@ -49,12 +63,19 @@ function Handler.after_robot_visited_cargo(robot)
   -- just teleport the items to the player instantly so we don't have to check each tick if the bot has arrived home yet
   local count = cargo[1].count
   local inserted = trash.insert(cargo[1])
+  cargo[1].count = cargo[1].count - inserted
 
-  -- if this crash occurs often we might have to temporarily increase `character_trash_slot_count_bonus` or something
-  if count ~= inserted then error('trash slots full?') end
+  if count == inserted then return end -- all good
+
+  local logistic_network = luasurface.find_closest_logistic_network_by_position(robot.surface, robot.position, robot.force)
+  if logistic_network then
+    robot.logistic_network = logistic_network
+    return
+  end
 
   -- apparently .insert(LuaItemStack) can copy stuff with data like blueprints just fine, so no need to swap stacks.
   cargo[1].clear()
+  error('achievement get! how did we get here?')
 end
 
 --
