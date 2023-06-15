@@ -6,6 +6,8 @@ local function remove_invalid_entities_from(entities)
   end
 end
 
+local util = require("__core__.lualib.util")
+
 local Car = require('scripts.car')
 
 --
@@ -34,6 +36,15 @@ function Handler.on_configuration_changed()
       global.storage_chest_names[pair[1]] = pair[1]
       global.aimation_offset_for[pair[1]] = tonumber(pair[2])
     end
+  end
+
+  global.robot_prototype_for = {}
+  for _, robot in pairs(game.get_filtered_entity_prototypes{{filter="type", type = "construction-robot"}}) do
+    global.robot_prototype_for[robot.name] = {
+      max_speed = robot.max_speed,
+      speed = robot.speed,
+      speed_multiplier_when_out_of_energy = robot.speed_multiplier_when_out_of_energy,
+    }
   end
 end
 
@@ -98,7 +109,7 @@ function Handler.tick_storage_chest(entity)
     animation = entity.name,
     surface = entity.surface,
     target = entity,
-    render_layer = 130, -- 1 above "object"
+    render_layer = "130", -- 1 above "object"
     animation_speed = 0,
     animation_offset = global.aimation_offset_for[entity.name] - 1, -- offset ontop of 1
   }
@@ -118,6 +129,9 @@ function Handler.on_tick(event)
   end
 
   global.construction_robots = {}
+
+  global.travelers = {} -- construction bots far away from their storage chest
+  global.overheads = {} -- construction bots very close to their storage chest
 end
 
 function Handler.on_robot_post_mined(robot)
@@ -130,12 +144,29 @@ function Handler.on_robot_post_mined(robot)
   local storage_chest = robot.surface.get_closest(robot.position, surfacedata.storage_chests)
   if storage_chest then
     robot.logistic_network = surfacedata.car_for[storage_chest.unit_number].logistic_network
+    Handler.tick_construction_robot(robot)
     -- for _, player in ipairs(robot.force.connected_players) do
     --   player.add_alert(storage_chest, defines.alert_type.no_storage)
     -- end
   end
 
   game.print(robot.unit_number)
+end
+
+function Handler.tick_construction_robot(robot)
+  -- local storage_chest = robot.logistic_cell.owner
+  assert(#robot.logistic_network.cells == 1, "construction robot escaped into another network")
+  local storage_chest = robot.logistic_network.cells[1].owner
+  local distance = util.distance(robot.position, storage_chest.position)
+
+  -- shoutout to calciumwizard for pointing out it was off
+  local prototype = global.robot_prototype_for[robot.name]
+  local speed = math.min(prototype.max_speed, prototype.speed * (1 + robot.force.worker_robots_speed_modifier))
+  speed = math.min(prototype.max_speed, (robot.energy == 0 and prototype.speed_multiplier_when_out_of_energy or 1) * speed)
+
+  local ticks = math.ceil(distance / speed) -- ticks till overhead
+
+  -- game.print(string.format("at speed %f i'll travel %f tiles in %d ticks", speed, distance, ticks))
 end
 
 --
