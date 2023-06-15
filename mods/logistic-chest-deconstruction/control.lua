@@ -21,6 +21,7 @@ function Handler.on_init()
   end
 
   global.construction_robots = {}
+  global.robots_to_check_at_tick = {}
 
   Handler.on_configuration_changed()
 end
@@ -167,6 +168,16 @@ function Handler.tick_construction_robot(robot)
   local ticks = math.ceil(distance / speed) -- ticks till overhead
 
   -- game.print(string.format("at speed %f i'll travel %f tiles in %d ticks", speed, distance, ticks))
+
+  local at_tick = game.tick + ticks
+
+  local t = {
+    robot = robot,
+    storage_chest = storage_chest,
+  }
+
+  if not global.robots_to_check_at_tick[at_tick] then global.robots_to_check_at_tick[at_tick] = {} end
+         global.robots_to_check_at_tick[at_tick][    #global.robots_to_check_at_tick[at_tick] + 1] = t
 end
 
 --
