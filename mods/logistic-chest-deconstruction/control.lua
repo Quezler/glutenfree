@@ -76,6 +76,15 @@ function Handler.tick_storage_chest(entity)
   surfacedata.storage_chests[entity.unit_number] = entity
 
   surfacedata.car_for[entity.unit_number] = Car.create_for(entity)
+
+  rendering.draw_animation{
+    animation = "logistic-chest-storage",
+    surface = entity.surface,
+    target = entity,
+    render_layer = "higher-object-under",
+    animation_speed = 0,
+    animation_offset = 7,
+  }
 end
 
 --

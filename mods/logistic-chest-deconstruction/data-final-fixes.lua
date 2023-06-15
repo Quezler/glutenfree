@@ -74,3 +74,9 @@ local equipment = {
 }
 
 data:extend({car, equipment_grid, equipment, {type = "equipment-category", name = "logistic-chest-deconstruction-equipment-category"}})
+
+data:extend({{
+  type = "animation",
+  name = "logistic-chest-storage",
+  layers = data.raw["logistic-container"]["logistic-chest-storage"].animation.layers,
+}})
