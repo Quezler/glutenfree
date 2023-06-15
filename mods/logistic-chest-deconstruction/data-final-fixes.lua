@@ -11,11 +11,13 @@ local empty_animation = {
 
 local equipment_grid = {
   type = "equipment-grid",
-  name = "logistic-chest-deconstruction-equipment_grid",
+  name = "logistic-chest-deconstruction-equipment-grid",
   equipment_categories = {"logistic-chest-deconstruction-equipment-category"},
   width = 1,
   height = 1,
   locked = true,
+
+  localised_description = {""}
 }
 
 local car = table.deepcopy(data.raw['car']['car'])
@@ -75,8 +77,16 @@ local equipment = {
 
 data:extend({car, equipment_grid, equipment, {type = "equipment-category", name = "logistic-chest-deconstruction-equipment-category"}})
 
-data:extend({{
-  type = "animation",
-  name = "logistic-chest-storage",
-  layers = data.raw["logistic-container"]["logistic-chest-storage"].animation.layers,
-}})
+for _, logistic_chest in pairs(data.raw["logistic-container"]) do
+  if logistic_chest.logistic_mode == "storage" and logistic_chest.max_logistic_slots == 1 then
+    local animation_layers = logistic_chest.animation.layers
+
+    data:extend({{
+      type = "animation",
+      name = logistic_chest.name,
+      layers = animation_layers,
+    }})
+
+    table.insert(equipment_grid.localised_description, {logistic_chest.name, animation_layers[1].frame_count or animation_layers[1].repeat_count})
+  end
+end

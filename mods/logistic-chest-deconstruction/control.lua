@@ -1,7 +1,3 @@
-local storage_chest_names = {
-  ["logistic-chest-storage"] = true,
-}
-
 local function remove_invalid_entities_from(entities)
   for unit_number, entity in pairs(entities) do
     if not entity.valid then
@@ -17,14 +13,28 @@ local Car = require('scripts.car')
 local Handler = {}
 
 function Handler.on_init()
-  -- global.storage_chest_names = {}
-
   global.surfaces = {}
   for _, surface in pairs(game.surfaces) do
     Handler.on_surface_created({surface_index = surface.index})
   end
 
   global.construction_robots = {}
+
+  Handler.on_configuration_changed()
+end
+
+function Handler.on_configuration_changed()
+  global.storage_chest_names = {}
+  global.aimation_offset_for = {}
+
+  -- {"", {"logistic-chest-storage", "7"}} -- vanilla
+  -- {"", {"logistic-chest-storage", "8"}, {"aai-strongbox-storage", "8"}, {"aai-storehouse-storage", "8"}, {"aai-warehouse-storage", "8"}} -- aai containers
+  for _, pair in pairs(game.equipment_grid_prototypes["logistic-chest-deconstruction-equipment-grid"].localised_description) do
+    if type(pair) == "table" then
+      global.storage_chest_names[pair[1]] = pair[1]
+      global.aimation_offset_for[pair[1]] = tonumber(pair[2])
+    end
+  end
 end
 
 -- creation
@@ -42,7 +52,7 @@ end
 
 function Handler.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
-  if storage_chest_names[entity.name] then 
+  if global.storage_chest_names[entity.name] then 
     Handler.tick_storage_chest(entity)
   end
 end
@@ -51,14 +61,14 @@ end
 
 function Handler.on_gui_closed(event)
   local entity = event.entity
-  if entity and storage_chest_names[entity.name] then
+  if entity and global.storage_chest_names[entity.name] then
     Handler.tick_storage_chest(entity)
   end
 end
 
 function Handler.on_entity_settings_pasted(event)
   local entity = event.destination
-  if storage_chest_names[entity.name] then
+  if global.storage_chest_names[entity.name] then
     Handler.tick_storage_chest(entity)
   end
 end
@@ -77,13 +87,13 @@ function Handler.tick_storage_chest(entity)
 
   surfacedata.car_for[entity.unit_number] = Car.create_for(entity)
 
-  rendering.draw_animation{
-    animation = "logistic-chest-storage",
+  local sunroof_id = rendering.draw_animation{
+    animation = entity.name,
     surface = entity.surface,
     target = entity,
-    render_layer = "higher-object-under",
+    render_layer = 130, -- 1 above "object"
     animation_speed = 0,
-    animation_offset = 7,
+    animation_offset = global.aimation_offset_for[entity.name] - 1, -- offset ontop of 1
   }
 end
 
@@ -122,6 +132,7 @@ end
 --
 
 script.on_init(Handler.on_init)
+script.on_configuration_changed(Handler.on_configuration_changed)
 
 script.on_event(defines.events.on_gui_closed, Handler.on_gui_closed)
 script.on_event(defines.events.on_entity_settings_pasted, Handler.on_entity_settings_pasted)
