@@ -46,6 +46,7 @@ car.guns = nil
 car.energy_source = {type = "void"}
 
 car.equipment_grid = equipment_grid.name
+car.inventory_size = 0
 
 local equipment = {
   -- roboport equipment
