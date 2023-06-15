@@ -8,7 +8,7 @@ function Car.create_for(storage_chest)
     position = storage_chest.position,
   }
 
-  car.grid.put{name = "vehicle-roboport"}
+  car.grid.put{name = "logistic-chest-deconstruction-equipment"}
 
   return car
 end
