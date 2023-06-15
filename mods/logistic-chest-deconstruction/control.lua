@@ -43,6 +43,7 @@ function Handler.on_surface_created(event)
   global.surfaces[event.surface_index] = {
     storage_chests = {}, -- entities keyed by unit number
     car_for = {},
+    sunroof_for = {},
   }
 end
 
@@ -79,6 +80,12 @@ function Handler.tick_storage_chest(entity)
   local surfacedata = global.surfaces[entity.surface.index]
   if not (entity.storage_filter and entity.storage_filter.name == "deconstruction-planner") then
     surfacedata.storage_chests[entity.unit_number] = nil
+    
+    local sunroof_id = surfacedata.sunroof_for[entity.unit_number]
+    if sunroof_id then surfacedata.sunroof_for[entity.unit_number] = nil
+      rendering.destroy(sunroof_id)
+    end
+
     return
   end
 
@@ -95,6 +102,8 @@ function Handler.tick_storage_chest(entity)
     animation_speed = 0,
     animation_offset = global.aimation_offset_for[entity.name] - 1, -- offset ontop of 1
   }
+
+  surfacedata.sunroof_for[entity.unit_number] = sunroof_id
 end
 
 --
