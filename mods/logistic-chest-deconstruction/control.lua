@@ -102,6 +102,9 @@ function Handler.on_robot_post_mined(robot)
   local storage_chest = robot.surface.get_closest(robot.position, surfacedata.storage_chests)
   if storage_chest then
     robot.logistic_network = surfacedata.car_for[storage_chest.unit_number].logistic_network
+    -- for _, player in ipairs(robot.force.connected_players) do
+    --   player.add_alert(storage_chest, defines.alert_type.no_storage)
+    -- end
   end
 
   game.print(robot.unit_number)
