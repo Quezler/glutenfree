@@ -152,6 +152,11 @@ function Handler.on_tick(event)
 
 end
 
+function Handler.check_robot_at_tick(robot_task, tick)
+  if not global.robots_to_check_at_tick[tick] then global.robots_to_check_at_tick[tick] = {} end
+  global.robots_to_check_at_tick[tick][#global.robots_to_check_at_tick[tick] + 1] = robot_task
+end
+
 function Handler.on_robot_post_mined(robot)
   local cargo = robot.get_inventory(defines.inventory.robot_cargo)
   if cargo.is_empty() then return end -- somehow picked up nothing
@@ -195,8 +200,7 @@ function Handler.tick_construction_robot(robot_task)
 
     game.print(string.format("at speed %f i'll travel %f tiles in %d ticks", speed, distance, ticks))
 
-    if not global.robots_to_check_at_tick[at_tick] then global.robots_to_check_at_tick[at_tick] = {} end
-    global.robots_to_check_at_tick[at_tick][#global.robots_to_check_at_tick[at_tick] + 1] = robot_task
+    Handler.check_robot_at_tick(robot_task, at_tick)
   else
     local surfacedata = global.surfaces[robot.surface_index]
     local storage_chest = surfacedata.storage_chest_for[car.unit_number]
@@ -215,8 +219,7 @@ function Handler.tick_construction_robot(robot_task)
       end
 
       local at_tick = game.tick + 60
-      if not global.robots_to_check_at_tick[at_tick] then global.robots_to_check_at_tick[at_tick] = {} end
-      global.robots_to_check_at_tick[at_tick][#global.robots_to_check_at_tick[at_tick] + 1] = robot_task
+      Handler.check_robot_at_tick(robot_task, at_tick)
     end
   end
 end
