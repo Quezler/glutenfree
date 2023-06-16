@@ -8,7 +8,7 @@ function equipmentgrid.tick_rolling_stock(entry, entity)
   local template_inventory = entry.template_container.get_inventory(defines.inventory.chest)
   if template_inventory.is_empty() then return equipmentgrid.flying_text(entry.train_stop, 'Template chest is empty.') end
 
-  local template = template_inventory.find_item_stack(entity.name) -- assume that the entity & item to place it are named identically
+  local template = template_inventory.find_item_stack(entity.items_to_place_this[1].name)
   if not template then return equipmentgrid.flying_text(entry.train_stop, 'Missing template for '.. string.gsub(entity.name, '%-', ' ') ..'.') end
   if not template.grid then return equipmentgrid.flying_text(entry.train_stop, 'Template equipment grid empty.') end
 
