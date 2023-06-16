@@ -131,8 +131,22 @@ function Handler.on_tick(event)
 
   global.construction_robots = {}
 
-  global.travelers = {} -- construction bots far away from their storage chest
-  global.overheads = {} -- construction bots very close to their storage chest
+  -- global.travelers = {} -- construction bots far away from their storage chest
+  -- global.overheads = {} -- construction bots very close to their storage chest
+
+  -- under normal circumstances bots should only be in here once
+  -- if a bot runs out of power (which they likely will) they'll be added back but based on their out of energy move speed
+  -- todo: likewise if there's no storage space to drop off
+  local robots_to_check = global.robots_to_check_at_tick[event.tick]
+  if robots_to_check then global.robots_to_check_at_tick[event.tick] = nil
+    for _, robot_to_check in ipairs(robots_to_check) do
+      if robot_to_check.valid then
+        game.print('checking robot ' .. robot_to_check.unit_number)
+        Handler.tick_construction_robot(robot_to_check)
+      end
+    end
+  end
+
 end
 
 function Handler.on_robot_post_mined(robot)
@@ -160,24 +174,27 @@ function Handler.tick_construction_robot(robot)
   local storage_chest = robot.logistic_network.cells[1].owner
   local distance = util.distance(robot.position, storage_chest.position)
 
-  -- shoutout to calciumwizard for pointing out it was off
-  local prototype = global.robot_prototype_for[robot.name]
-  local speed = math.min(prototype.max_speed, prototype.speed * (1 + robot.force.worker_robots_speed_modifier))
-  speed = math.min(prototype.max_speed, (robot.energy == 0 and prototype.speed_multiplier_when_out_of_energy or 1) * speed)
+  game.print(string.format("bot %d's distance is %f", robot.unit_number, distance))
 
-  local ticks = math.ceil(distance / speed) -- ticks till overhead
+  if distance > 0.1 then
+    -- shoutout to calciumwizard for pointing out it was off
+    local prototype = global.robot_prototype_for[robot.name]
+    local speed = math.min(prototype.max_speed, prototype.speed * (1 + robot.force.worker_robots_speed_modifier))
+    speed = math.min(prototype.max_speed, (robot.energy == 0 and prototype.speed_multiplier_when_out_of_energy or 1) * speed)
 
-  -- game.print(string.format("at speed %f i'll travel %f tiles in %d ticks", speed, distance, ticks))
+    local ticks = math.ceil(distance / speed) -- ticks till overhead
+    local at_tick = game.tick + ticks
+    assert(ticks > 0, "cannot schedule for the current tick")
 
-  local at_tick = game.tick + ticks
+    game.print(string.format("at speed %f i'll travel %f tiles in %d ticks", speed, distance, ticks))
 
-  local t = {
-    robot = robot,
-    storage_chest = storage_chest,
-  }
+    local t = robot
 
-  if not global.robots_to_check_at_tick[at_tick] then global.robots_to_check_at_tick[at_tick] = {} end
-         global.robots_to_check_at_tick[at_tick][    #global.robots_to_check_at_tick[at_tick] + 1] = t
+    if not global.robots_to_check_at_tick[at_tick] then global.robots_to_check_at_tick[at_tick] = {} end
+           global.robots_to_check_at_tick[at_tick][    #global.robots_to_check_at_tick[at_tick] + 1] = t
+  else
+    game.print("unload me daddy")
+  end
 end
 
 --
