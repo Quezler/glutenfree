@@ -56,6 +56,7 @@ function Handler.on_surface_created(event)
     storage_chests = {}, -- entities keyed by unit number
     car_for = {},
     sunroof_for = {},
+    storage_chest_for = {},
   }
 end
 
@@ -104,7 +105,9 @@ function Handler.tick_storage_chest(entity)
   game.print("recognized")
   surfacedata.storage_chests[entity.unit_number] = entity
 
-  surfacedata.car_for[entity.unit_number] = Car.create_for(entity)
+  local car = Car.create_for(entity)
+  surfacedata.car_for[entity.unit_number] = car
+  surfacedata.storage_chest_for[car.unit_number] = entity
 
   local sunroof_id = rendering.draw_animation{
     animation = entity.name,
@@ -160,9 +163,6 @@ function Handler.on_robot_post_mined(robot)
   if storage_chest then
     robot.logistic_network = surfacedata.car_for[storage_chest.unit_number].logistic_network
     Handler.tick_construction_robot(robot)
-    -- for _, player in ipairs(robot.force.connected_players) do
-    --   player.add_alert(storage_chest, defines.alert_type.no_storage)
-    -- end
   end
 
   game.print(robot.unit_number)
@@ -171,8 +171,8 @@ end
 function Handler.tick_construction_robot(robot)
   -- local storage_chest = robot.logistic_cell.owner
   assert(#robot.logistic_network.cells == 1, "construction robot escaped into another network")
-  local storage_chest = robot.logistic_network.cells[1].owner
-  local distance = util.distance(robot.position, storage_chest.position)
+  local car = robot.logistic_network.cells[1].owner
+  local distance = util.distance(robot.position, car.position)
 
   game.print(string.format("bot %d's distance is %f", robot.unit_number, distance))
 
@@ -188,12 +188,29 @@ function Handler.tick_construction_robot(robot)
 
     game.print(string.format("at speed %f i'll travel %f tiles in %d ticks", speed, distance, ticks))
 
-    local t = robot
-
     if not global.robots_to_check_at_tick[at_tick] then global.robots_to_check_at_tick[at_tick] = {} end
-           global.robots_to_check_at_tick[at_tick][    #global.robots_to_check_at_tick[at_tick] + 1] = t
+    global.robots_to_check_at_tick[at_tick][#global.robots_to_check_at_tick[at_tick] + 1] = robot
   else
-    game.print("unload me daddy")
+    local surfacedata = global.surfaces[robot.surface_index]
+    local storage_chest = surfacedata.storage_chest_for[car.unit_number]
+
+    local inventory = storage_chest.get_inventory(defines.inventory.chest)
+    local cargo_stack = robot.get_inventory(defines.inventory.robot_cargo)[1]
+
+    local inserted = inventory.insert(cargo_stack)
+    cargo_stack.count = cargo_stack.count - inserted
+
+    if cargo_stack.count == 0 then
+      robot.logistic_network = storage_chest.logistic_network -- todo: will crash in case of roboport coverage loss (power/removal)
+    else
+      for _, player in ipairs(robot.force.connected_players) do
+        player.add_alert(storage_chest, defines.alert_type.no_storage)
+      end
+
+      local at_tick = game.tick + 60
+      if not global.robots_to_check_at_tick[at_tick] then global.robots_to_check_at_tick[at_tick] = {} end
+      global.robots_to_check_at_tick[at_tick][#global.robots_to_check_at_tick[at_tick] + 1] = robot
+    end
   end
 end
 
