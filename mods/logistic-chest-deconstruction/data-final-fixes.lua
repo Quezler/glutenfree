@@ -49,6 +49,7 @@ car.energy_source = {type = "void"}
 
 car.equipment_grid = equipment_grid.name
 car.inventory_size = 0
+-- car.selectable_in_game = false
 
 local equipment = {
   -- roboport equipment

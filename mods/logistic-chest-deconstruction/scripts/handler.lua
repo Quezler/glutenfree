@@ -22,17 +22,23 @@ function Handler.tick_storage_chest(entity)
   local car = Car.create_for(entity)
   surfacedata.car_for[entity.unit_number] = car
   surfacedata.storage_chest_for[car.unit_number] = entity
+  car.destructible = false
 
-  local sunroof_id = rendering.draw_animation{
-    animation = entity.name,
-    surface = entity.surface,
-    target = entity,
-    render_layer = "130", -- 1 above "object"
-    animation_speed = 0,
-    animation_offset = global.aimation_offset_for[entity.name] - 1, -- offset ontop of 1
-  }
+  sunroof_id = surfacedata.sunroof_for[entity.unit_number]
+  if sunroof_id and rendering.is_valid(sunroof_id) then
+    -- do nothing
+  else
+    sunroof_id = rendering.draw_animation{
+      animation = entity.name,
+      surface = entity.surface,
+      target = entity,
+      render_layer = "130", -- 1 above "object"
+      animation_speed = 0,
+      animation_offset = global.aimation_offset_for[entity.name] - 1, -- offset ontop of 1
+    }
 
-  surfacedata.sunroof_for[entity.unit_number] = sunroof_id
+    surfacedata.sunroof_for[entity.unit_number] = sunroof_id
+  end
 end
 
 --
