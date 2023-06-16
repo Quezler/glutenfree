@@ -131,15 +131,8 @@ function Handler.on_tick(event)
   for _, construction_robot in ipairs(global.construction_robots) do
     Handler.on_robot_post_mined(construction_robot)
   end
-
   global.construction_robots = {}
 
-  -- global.travelers = {} -- construction bots far away from their storage chest
-  -- global.overheads = {} -- construction bots very close to their storage chest
-
-  -- under normal circumstances bots should only be in here once
-  -- if a bot runs out of power (which they likely will) they'll be added back but based on their out of energy move speed
-  -- todo: likewise if there's no storage space to drop off
   local robots_to_check = global.robots_to_check_at_tick[event.tick]
   if robots_to_check then global.robots_to_check_at_tick[event.tick] = nil
     for _, robot_task in ipairs(robots_to_check) do
@@ -149,7 +142,6 @@ function Handler.on_tick(event)
       end
     end
   end
-
 end
 
 function Handler.check_robot_at_tick(robot_task, tick)
