@@ -204,7 +204,17 @@ function Handler.tick_construction_robot(robot_task)
     cargo_stack.count = cargo_stack.count - inserted
 
     if cargo_stack.count == 0 then
-      robot.logistic_network = storage_chest.logistic_network -- todo: will crash in case of roboport coverage loss (power/removal)
+      if storage_chest.logistic_network then
+        robot.logistic_network = storage_chest.logistic_network
+      else -- cannot set logistic_network to nil directly
+        local null = robot.surface.create_entity{
+          name = "roboport",
+          force = robot.force,
+          position = robot.position,
+        }
+        robot.logistic_network = null.logistic_network
+        null.destroy()
+      end
     else
       for _, player in ipairs(robot.force.connected_players) do
         player.add_alert(storage_chest, defines.alert_type.no_storage)
