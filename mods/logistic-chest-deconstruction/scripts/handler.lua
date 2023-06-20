@@ -66,16 +66,24 @@ function Handler.on_robot_post_mined(robot)
         table.insert(candidates, struct.entity)
       end
     end
-    
+
   end
 
   local storage_chest = robot.surface.get_closest(robot.position, candidates)
   if storage_chest then
-    robot.logistic_network = surfacedata.car_for[storage_chest.unit_number].logistic_network
-    Handler.tick_construction_robot({
-      robot = robot,
-      attempts = 0,
-    })
+
+    -- guess where the construction robot is headed to drop off its cargo (not 100% accurate since space can be reserved and such)
+    local destination = robot.logistic_network.select_drop_point{stack = cargo[1]}
+    if destination and robot.surface.get_closest(robot.position, {storage_chest, destination.owner}) == destination.owner then
+      -- the expected dropoff position is closer than the nearest deconstruction storage chest
+    else
+      robot.logistic_network = surfacedata.car_for[storage_chest.unit_number].logistic_network
+      Handler.tick_construction_robot({
+        robot = robot,
+        attempts = 0,
+      })
+    end
+
   end
 end
 
