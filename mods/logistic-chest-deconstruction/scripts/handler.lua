@@ -125,8 +125,11 @@ function Handler.tick_construction_robot(robot_task)
     cargo_stack.count = cargo_stack.count - inserted
 
     if cargo_stack.count == 0 then
+      -- release back to the parent network (aka chest's network)
       set_logistic_network(robot, storage_chest.logistic_network)
     else
+      -- note that when a deconstruction chest is full we do not find an alternative deconstruction or normal chest,
+      -- by design there's only supposed to be one per area, which is also supposed to be emptied, this falls on the user.
       global.no_storage_alerts[storage_chest.unit_number] = storage_chest
 
       local at_tick = game.tick + (60 * robot_task.attempts) -- wait one second more for each failed offload attempt (starts at 2-3)
