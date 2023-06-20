@@ -61,8 +61,10 @@ function Handler.on_robot_post_mined(robot)
   local candidates = {}
   for unit_number, struct in pairs(surfacedata.storage_chests) do
     if struct.entity.valid then
-      if struct.force_index == robot.force.index then
-        table.insert(candidates, struct.entity)
+      if struct.force_index == robot.force.index then -- same force
+        if struct.entity.logistic_network == robot.logistic_network then -- same network
+          table.insert(candidates, struct.entity)
+        end
       end
     else
       game.print("[virtual-signal=signal-red] todo: remove invalid entity")
