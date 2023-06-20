@@ -24,6 +24,7 @@ local car = table.deepcopy(data.raw['car']['car'])
 
 car.name = "logistic-chest-deconstruction-car"
 car.allow_passengers = false
+car.working_sound = nil -- somehow it hums while no one is inside
 
 car.collision_mask = {}
 car.collision_box = {{0, 0}, {0, 0}} -- surface.find_entity
