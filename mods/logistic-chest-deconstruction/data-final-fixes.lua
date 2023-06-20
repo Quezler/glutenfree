@@ -61,9 +61,7 @@ local equipment = {
   spawn_and_station_height = 0,
   charge_approach_distance = 0,
   construction_radius = 0,
-  charging_energy = "1GW",
-
-  charging_station_count = 100,
+  charging_energy = "1KW",
 
   -- equipment
   sprite = util.empty_sprite(),
@@ -71,7 +69,7 @@ local equipment = {
   categories = {"logistic-chest-deconstruction-equipment-category"},
   energy_source = {
     type = "electric",
-    buffer_capacity = "1GJ",
+    buffer_capacity = "1KJ",
     usage_priority = "primary-input",
   },
   take_result = "raw-fish", -- why bother defining an item for it
