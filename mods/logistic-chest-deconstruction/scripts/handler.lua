@@ -13,9 +13,6 @@ function Handler.tick_storage_chest(entity)
 
   if struct then return end -- already setup
 
-  game.print("recognized")
-  global.deathrattles[script.register_on_entity_destroyed(entity)] = {surface_index = entity.surface.index}
-
   local car = Car.create_for(entity)
   car.destructible = false
 
@@ -29,9 +26,17 @@ function Handler.tick_storage_chest(entity)
   }
 
   Handler.create_storage_chest_index(surfacedata, {
-    entity = entity, entity_unit_number = entity.unit_number,
-    car = car, car_unit_number = car.unit_number,
+    force_index = entity.force.index,
+
+    entity = entity,
+    entity_unit_number = entity.unit_number,
+
+    car = car,
+    car_unit_number = car.unit_number,
   })
+
+  -- to cleanup the car & indexes, the rendering destroys itself once the target ceases to be valid already
+  global.deathrattles[script.register_on_entity_destroyed(entity)] = {surface_index = entity.surface.index}
 end
 
 function Handler.on_entity_destroyed(event)
@@ -52,12 +57,13 @@ function Handler.on_robot_post_mined(robot)
   if cargo.is_empty() then return end -- somehow picked up nothing
 
   local surfacedata = global.surfaces[robot.surface.index]
-  -- remove_invalid_entities_from(surfacedata.storage_chests)
 
   local candidates = {}
   for unit_number, struct in pairs(surfacedata.storage_chests) do
-    if struct.entity.valid then -- todo: check team
-      table.insert(candidates, struct.entity)
+    if struct.entity.valid then
+      if struct.force_index == robot.force.index then
+        table.insert(candidates, struct.entity)
+      end
     else
       game.print("[virtual-signal=signal-red] todo: remove invalid entity")
       -- Handler.delete_storage_chest_index(surfacedata, struct)

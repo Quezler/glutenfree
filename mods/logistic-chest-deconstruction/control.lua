@@ -1,11 +1,3 @@
-function remove_invalid_entities_from(entities)
-  for unit_number, entity in pairs(entities) do
-    if not entity.valid then
-      entities[unit_number] = nil
-    end
-  end
-end
-
 function set_logistic_network(entity, logistic_network)
   if logistic_network then
     entity.logistic_network = logistic_network
