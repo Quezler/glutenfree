@@ -4,8 +4,6 @@ function Handler.on_surface_created(event)
 
     car_for = {},
     storage_chest_for = {},
-
-    -- storage_chest_by_unit_number = {}
   }
 end
 
@@ -25,6 +23,6 @@ end
 function Handler.delete_storage_chest_index(surfacedata, struct)
   surfacedata.car_for[struct.entity_unit_number] = nil
   surfacedata.storage_chest_for[struct.car_unit_number] = nil
-  
+
   surfacedata.storage_chests[struct.entity_unit_number] = nil
 end

@@ -99,7 +99,7 @@ function Handler.tick_construction_robot(robot_task)
   local car = robot.logistic_network.cells[1].owner
   local distance = util.distance(robot.position, car.position)
 
-  game.print(string.format("bot %d's distance is %f", robot.unit_number, distance))
+  -- game.print(string.format("bot %d's distance is %f", robot.unit_number, distance))
 
   if distance > 0.1 then
     -- shoutout to calciumwizard for pointing out it was off
@@ -111,7 +111,7 @@ function Handler.tick_construction_robot(robot_task)
     local at_tick = game.tick + ticks
     assert(ticks > 0, "cannot schedule for the current tick")
 
-    game.print(string.format("at speed %f i'll travel %f tiles in %d ticks", speed, distance, ticks))
+    -- game.print(string.format("at speed %f i'll travel %f tiles in %d ticks", speed, distance, ticks))
 
     Handler.check_robot_at_tick(robot_task, at_tick)
   else
