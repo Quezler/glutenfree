@@ -28,7 +28,6 @@ require('scripts.0_init')
 require('scripts.1_surface')
 require('scripts.2_entity')
 require('scripts.3_tick')
-require('scripts.4_struct')
 
 --
 
