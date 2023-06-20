@@ -5,40 +5,33 @@ local Car = require('scripts.car')
 
 function Handler.tick_storage_chest(entity)
   local surfacedata = global.surfaces[entity.surface.index]
+  local struct = surfacedata.storage_chests[entity.unit_number]
   if not (entity.storage_filter and entity.storage_filter.name == "deconstruction-planner") then
-    surfacedata.storage_chests[entity.unit_number] = nil
-    
-    local sunroof_id = surfacedata.sunroof_for[entity.unit_number]
-    if sunroof_id then surfacedata.sunroof_for[entity.unit_number] = nil
-      rendering.destroy(sunroof_id)
-    end
-
+    if struct then Handler.delete_storage_chest_index(surfacedata, struct) end
     return
   end
 
+  if struct then return end -- already setup
+
   game.print("recognized")
-  surfacedata.storage_chests[entity.unit_number] = entity
 
   local car = Car.create_for(entity)
-  surfacedata.car_for[entity.unit_number] = car
-  surfacedata.storage_chest_for[car.unit_number] = entity
   car.destructible = false
 
-  sunroof_id = surfacedata.sunroof_for[entity.unit_number]
-  if sunroof_id and rendering.is_valid(sunroof_id) then
-    -- do nothing
-  else
-    sunroof_id = rendering.draw_animation{
-      animation = entity.name,
-      surface = entity.surface,
-      target = entity,
-      render_layer = "130", -- 1 above "object"
-      animation_speed = 0,
-      animation_offset = global.aimation_offset_for[entity.name] - 1, -- offset ontop of 1
-    }
+  local sunroof_id = rendering.draw_animation{
+    animation = entity.name,
+    surface = entity.surface,
+    target = entity,
+    render_layer = "130", -- 1 above "object"
+    animation_speed = 0,
+    animation_offset = global.aimation_offset_for[entity.name] - 1, -- offset ontop of 1
+  }
 
-    surfacedata.sunroof_for[entity.unit_number] = sunroof_id
-  end
+  Handler.create_storage_chest_index({
+    entity = entity,
+    car = car,
+    sunroof_id = sunroof_id,
+  })
 end
 
 --
@@ -48,9 +41,19 @@ function Handler.on_robot_post_mined(robot)
   if cargo.is_empty() then return end -- somehow picked up nothing
 
   local surfacedata = global.surfaces[robot.surface.index]
-  remove_invalid_entities_from(surfacedata.storage_chests)
+  -- remove_invalid_entities_from(surfacedata.storage_chests)
 
-  local storage_chest = robot.surface.get_closest(robot.position, surfacedata.storage_chests)
+  local candidates = {}
+  for unit_number, struct in pairs(surfacedata.storage_chests) do
+    if struct.entity.valid then -- todo: check team
+      table.insert(candidates, struct.entity)
+    else
+      game.print("todo: remove invalid entity")
+      -- Handler.delete_storage_chest_index(surfacedata, struct)
+    end
+  end
+
+  local storage_chest = robot.surface.get_closest(robot.position, candidates)
   if storage_chest then
     robot.logistic_network = surfacedata.car_for[storage_chest.unit_number].logistic_network
     Handler.tick_construction_robot({
