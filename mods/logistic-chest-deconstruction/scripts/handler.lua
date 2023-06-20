@@ -127,9 +127,7 @@ function Handler.tick_construction_robot(robot_task)
     if cargo_stack.count == 0 then
       set_logistic_network(robot, storage_chest.logistic_network)
     else
-      for _, player in ipairs(robot.force.connected_players) do
-        player.add_alert(storage_chest, defines.alert_type.no_storage)
-      end
+      global.no_storage_alerts[storage_chest.unit_number] = storage_chest
 
       local at_tick = game.tick + (60 * robot_task.attempts) -- wait one second more for each failed offload attempt (starts at 2-3)
       Handler.check_robot_at_tick(robot_task, at_tick)

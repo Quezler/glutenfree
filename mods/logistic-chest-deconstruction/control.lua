@@ -25,6 +25,7 @@ require('scripts.3_tick')
 
 script.on_init(Handler.on_init)
 script.on_configuration_changed(Handler.on_configuration_changed)
+script.on_nth_tick(300, Handler.on_nth_tick_300)
 
 local events = {
   [defines.events.on_surface_created] = Handler.on_surface_created,

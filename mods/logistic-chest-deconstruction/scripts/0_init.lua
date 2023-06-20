@@ -10,6 +10,8 @@ function Handler.on_init()
   Handler.on_configuration_changed()
 
   global.deathrattles = {}
+
+  global.no_storage_alerts = {}
 end
 
 function Handler.on_configuration_changed()
