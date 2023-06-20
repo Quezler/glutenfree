@@ -14,6 +14,7 @@ function Handler.tick_storage_chest(entity)
   if struct then return end -- already setup
 
   game.print("recognized")
+  global.deathrattles[script.register_on_entity_destroyed(entity)] = {surface_index = entity.surface.index}
 
   local car = Car.create_for(entity)
   car.destructible = false
@@ -28,9 +29,20 @@ function Handler.tick_storage_chest(entity)
   }
 
   Handler.create_storage_chest_index(surfacedata, {
-    entity = entity,
-    car = car,
+    entity = entity, entity_unit_number = entity.unit_number,
+    car = car, car_unit_number = car.unit_number,
   })
+end
+
+function Handler.on_entity_destroyed(event)
+  local deathrattle = global.deathrattles[event.registration_number]
+  if deathrattle then global.deathrattles[event.registration_number] = nil
+    local surfacedata = global.surfaces[deathrattle.surface_index] -- what happens to registered entities if the chunk/surface gets deleted?
+    local struct = surfacedata.storage_chests[event.unit_number]
+    struct.car.destroy()
+
+    Handler.delete_storage_chest_index(surfacedata, struct)
+  end
 end
 
 --

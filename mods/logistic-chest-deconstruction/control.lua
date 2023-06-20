@@ -49,6 +49,8 @@ local events = {
 
   [defines.events.on_robot_pre_mined] = Handler.on_robot_pre_mined,
   [defines.events.on_tick] = Handler.on_tick,
+
+  [defines.events.on_entity_destroyed] = Handler.on_entity_destroyed,
 }
 
 for event, handler in pairs(events) do

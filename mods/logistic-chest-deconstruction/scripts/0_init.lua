@@ -8,6 +8,8 @@ function Handler.on_init()
   global.robots_to_check_at_tick = {}
 
   Handler.on_configuration_changed()
+
+  global.deathrattles = {}
 end
 
 function Handler.on_configuration_changed()
