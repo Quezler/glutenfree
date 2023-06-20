@@ -7,8 +7,6 @@ function Handler.create_storage_chest_index(surfacedata, struct)
 end
 
 function Handler.delete_storage_chest_index(surfacedata, struct)
-  rendering.destroy(struct.sunroof_id)
-
   surfacedata.car_for[struct.entity.unit_number] = nil
   surfacedata.storage_chest_for[struct.car.unit_number] = nil
   surfacedata.sunroof_for[struct.entity.unit_number] = nil
