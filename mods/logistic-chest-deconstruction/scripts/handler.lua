@@ -27,7 +27,7 @@ function Handler.tick_storage_chest(entity)
     animation_offset = global.aimation_offset_for[entity.name] - 1, -- offset ontop of 1
   }
 
-  Handler.create_storage_chest_index({
+  Handler.create_storage_chest_index(surfacedata, {
     entity = entity,
     car = car,
     sunroof_id = sunroof_id,
