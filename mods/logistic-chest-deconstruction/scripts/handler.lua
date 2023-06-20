@@ -48,7 +48,7 @@ function Handler.on_robot_post_mined(robot)
     if struct.entity.valid then -- todo: check team
       table.insert(candidates, struct.entity)
     else
-      game.print("todo: remove invalid entity")
+      game.print("[virtual-signal=signal-red] todo: remove invalid entity")
       -- Handler.delete_storage_chest_index(surfacedata, struct)
     end
   end
@@ -107,7 +107,7 @@ function Handler.tick_construction_robot(robot_task)
         player.add_alert(storage_chest, defines.alert_type.no_storage)
       end
 
-      local at_tick = game.tick + 60
+      local at_tick = game.tick + (60 * robot_task.attempts) -- wait one second more for each failed offload attempt (starts at 2-3)
       Handler.check_robot_at_tick(robot_task, at_tick)
     end
   end
