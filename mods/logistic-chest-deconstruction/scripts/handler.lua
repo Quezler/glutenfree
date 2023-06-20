@@ -18,7 +18,7 @@ function Handler.tick_storage_chest(entity)
   local car = Car.create_for(entity)
   car.destructible = false
 
-  local sunroof_id = rendering.draw_animation{
+  rendering.draw_animation{
     animation = entity.name,
     surface = entity.surface,
     target = entity,
@@ -30,7 +30,6 @@ function Handler.tick_storage_chest(entity)
   Handler.create_storage_chest_index(surfacedata, {
     entity = entity,
     car = car,
-    sunroof_id = sunroof_id,
   })
 end
 
