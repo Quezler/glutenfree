@@ -94,7 +94,7 @@ function kr_air_purifier.update_by_unit_number(unit_number)
         done_in_ticks = global.standard_recipe_duration
       else
         local effectivity = entry.purifier.energy / entry.purifier.electric_buffer_size
-        if effectivity < 1 then done_in_ticks = math.ceil(done_in_ticks / effectivity) end
+        if effectivity < 1 then done_in_ticks = math.min(global.standard_recipe_duration, math.ceil(done_in_ticks / effectivity)) end
       end
     end
 
