@@ -2,7 +2,7 @@
     "name": "logistic-chest-deconstruction",
     "title": "Logistic chest - deconstruction",
     "description": "Filter a storage chest with a deconstruction planner to have deconstructed items go there instead of flying across the base.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
