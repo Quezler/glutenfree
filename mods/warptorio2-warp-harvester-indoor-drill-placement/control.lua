@@ -40,3 +40,8 @@ script.on_event(defines.events.on_research_finished, function(event)
   end
 end)
 
+-- harvesters can be deployed while the mod is installed or research is completed (why wouldn't they)
+script.on_load(function(event)
+  local eventdefs = remote.call("warptorio", "get_events")
+  script.on_event(eventdefs["on_post_warp"], where_does_the_circle_go)
+end)
