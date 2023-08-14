@@ -38,11 +38,11 @@ data:extend({{
   },
 
   minable = {
-    -- fluid_amount = 10,
+    fluid_amount = 10,
     mining_particle = "stone-particle",
     mining_time = 2,
     -- required_fluid = "sulfuric-acid",
-    -- required_fluid = "fluid-unknown",
+    required_fluid = "fluid-unknown",
   },
 
 }})
