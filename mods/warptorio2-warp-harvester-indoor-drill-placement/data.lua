@@ -1,4 +1,4 @@
-print(serpent.block( data.raw['resource']['uranium-ore'] ))
+-- print(serpent.block( data.raw['resource']['uranium-ore'] ))
 
 data:extend({{
   type = "resource",
