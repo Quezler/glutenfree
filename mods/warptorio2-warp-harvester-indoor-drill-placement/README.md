@@ -1,0 +1,3 @@
+- only supports electric mining drills. (surely you can find an ore plot large enough to fill a lv1 platform with burners)
+- technically you can place a drill without one of the 9 tiles under it being orange, but i'm too lazy to prevent it.
+- Why isn't https://forums.factorio.com/viewtopic.php?t=72203 a thing yet?

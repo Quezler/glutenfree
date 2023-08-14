@@ -1,0 +1,11 @@
+{
+    "name": "warptorio2-warp-harvester-indoor-drill-placement",
+    "title": "Warptorio2 - warp harvester indoor drill placement",
+    "description": "Allows you to redesign warp harvesters without the need for ores under them.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "warptorio2"
+    ]
+}
