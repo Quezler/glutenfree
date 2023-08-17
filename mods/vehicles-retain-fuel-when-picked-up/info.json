@@ -2,7 +2,7 @@
     "name": "vehicles-retain-fuel-when-picked-up",
     "title": "Vehicles retain fuel when picked up",
     "description": "Don't you just hate it when there's still a big red fuel bar left?",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [

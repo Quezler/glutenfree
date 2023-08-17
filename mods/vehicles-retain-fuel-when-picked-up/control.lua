@@ -1,6 +1,7 @@
 local is_supported_type = {
   ["car"] = true,
   ["locomotive"] = true,
+  ["spidertron"] = true,
 }
 
 script.on_init(function(event)
