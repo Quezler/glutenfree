@@ -1,0 +1,4 @@
+- i'm looking at you nuclear fuel 👀
+- could probably support trains with minimal modifications
+- only works when a vehicle is both picked up and placed down again by a player, but cars aint blueprintable or deconstrucable anyways
+- spidertrons are not supported currently either (not a car, again probably a quick modification, but only in e.g. k2 it uses fuel anyways)
