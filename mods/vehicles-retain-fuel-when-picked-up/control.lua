@@ -1,3 +1,8 @@
+local is_supported_type = {
+  ["car"] = true,
+  ["locomotive"] = true,
+}
+
 script.on_init(function(event)
   global.vehicles = {}
 end)
@@ -11,7 +16,7 @@ script.on_event(defines.events.on_player_mined_entity, function(event)
   -- game.print(serpent.block( event.entity.burner.remaining_burning_fuel ))
   -- game.print(serpent.block( event.buffer[1].name ))
 
-  if event.entity.type ~= "car" then return end
+  if not is_supported_type[event.entity.type] then return end
   if event.entity.burner.currently_burning == nil then return end
 
   local player = game.get_player(event.player_index)
@@ -41,7 +46,7 @@ script.on_event(defines.events.on_player_mined_entity, function(event)
 end)
 
 script.on_event(defines.events.on_built_entity, function(event)
-  if event.created_entity.type ~= "car" then return end
+  if not is_supported_type[event.created_entity.type] then return end
 
   local vehicle = global.vehicles[event.stack.item_number]
   if vehicle then global.vehicles[event.stack.item_number] = nil
