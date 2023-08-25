@@ -1,0 +1,11 @@
+{
+    "name": "warptorio2-warp-beacon-covers-giga-factory-floors",
+    "title": "Warptorio2 - warp beacon covers giga factory floors",
+    "description": "Expands the max beacon area beyond the corners of the turret platforms.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "warptorio2"
+    ]
+}
