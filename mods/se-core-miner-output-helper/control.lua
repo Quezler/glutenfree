@@ -12,7 +12,8 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
 
   if entity and entity.name == "se-core-miner-drill" and entity.mining_target then
 
-    local core_miners_on_this_surface = #entity.surface.find_entities_filtered({name = "se-core-miner-drill"})
+    local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = entity.surface.index})
+    local core_miners_on_this_surface = table_size(zone.core_mining)
     local fragment_name = entity.mining_target.prototype.mineable_properties.products[1].name
     local fragments_per_second = (entity.prototype.mining_speed / entity.mining_target.prototype.mineable_properties.mining_time) * entity.mining_target.amount / entity.mining_target.prototype.normal_resource_amount
 
