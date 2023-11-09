@@ -185,25 +185,9 @@ function Handler.on_post_gui_opened(event)
           row.row_flow.flags.caption = string.gsub(caption .. '', "se%-pyramid%-a]", "se-pyramid-a-tinted-" .. color .."]")
         else
 
-          local old_zone = nil
-          local old_position = nil
-
-          -- return the player to the same remote view position afterwards
-          if remote.call("space-exploration", "remote_view_is_active", {player=player}) then
-            old_zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = player.surface_index})
-            old_position = player.position
-          end
-
-          -- remote view can force-generate a zone
-          local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = row.tags.zone_index})
-          remote.call("space-exploration", "remote_view_start", {player=player, zone_name = zone.name})
-          
-          -- get the player back where he started
-          if old_zone then
-            remote.call("space-exploration", "remote_view_start", {player=player, zone_name = old_zone.name, position = old_position})
-          else
-            remote.call("space-exploration", "remote_view_stop", {player=player})
-          end
+          local surface = remote.call("space-exploration", "zone_get_make_surface", {zone_index = row.tags.zone_index})
+          local render_distance = 32 * 8 -- pre render the spawn chunks as though a player pressed "view surface" themselves
+          player.force.chart(surface, {{x = -render_distance, y = -render_distance}, {x = render_distance, y = render_distance}})
         end
       end
     end
