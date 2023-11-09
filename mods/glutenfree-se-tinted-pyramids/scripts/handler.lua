@@ -1,4 +1,4 @@
-local util = require('__space-exploration-scripts__.util')
+local Util = require('__space-exploration-scripts__.util')
 local Ancient = require('__space-exploration-scripts__.ancient')
 local Zonelist = require('__space-exploration-scripts__.zonelist')
 
@@ -171,7 +171,7 @@ function Handler.on_post_gui_opened(event)
   local root = Zonelist.get(player)
   if not root then return end
 
-  local scroll_pane = util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
+  local scroll_pane = Util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
   if not scroll_pane then return end
 
   for _, row in pairs(scroll_pane.children) do
