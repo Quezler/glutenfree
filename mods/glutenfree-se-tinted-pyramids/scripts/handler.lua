@@ -111,6 +111,10 @@ function Handler.on_post_surface_created(event)
   if zone.type ~= "planet" then return end
   if zone.is_homeworld then return end
 
+  -- https://mods.factorio.com/mod/glutenfree-se-tinted-pyramids/discussion/65555c2f0106094c6fc67b8f
+  -- TODO: why does this only crash on the "large" planetside ruin and not the "smaller" one?
+  if not zone.glyph then return game.print(zone.name .. ' has no glyph?') end
+
   -- if the module is taken, return the tint to the default :)
   local inside_surface_name = Ancient.vault_surface_name(zone)
   local inside_surface = game.get_surface(inside_surface_name)
