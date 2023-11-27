@@ -1,87 +1,87 @@
 return {
 --abstract                   , -- EntityWithOwnerPrototype                
-  'accumulator'              , --   AccumulatorPrototype                  
-  'artillery-turret'         , --   ArtilleryTurretPrototype              
-  'beacon'                   , --   BeaconPrototype                       
-  'boiler'                   , --   BoilerPrototype                       
-  'burner-generator'         , --   BurnerGeneratorPrototype              
-  'character'                , --   CharacterPrototype                    
+--'accumulator'              , --   AccumulatorPrototype                  (unconfigurable)
+--'artillery-turret'         , --   ArtilleryTurretPrototype              (unconfigurable)
+--'beacon'                   , --   BeaconPrototype                       (unconfigurable)
+--'boiler'                   , --   BoilerPrototype                       (unconfigurable)
+--'burner-generator'         , --   BurnerGeneratorPrototype              (unconfigurable)
+--'character'                , --   CharacterPrototype                    (not a building)
 --abstract                   , --   CombinatorPrototype                   
   'arithmetic-combinator'    , --     ArithmeticCombinatorPrototype       
   'decider-combinator'       , --     DeciderCombinatorPrototype          
   'constant-combinator'      , --   ConstantCombinatorPrototype           
-  'container'                , --   ContainerPrototype                    
-  'logistic-container'       , --     LogisticContainerPrototype          
-  'infinity-container'       , --       InfinityContainerPrototype        
+--'container'                , --   ContainerPrototype                    (can hold items)
+--'logistic-container'       , --     LogisticContainerPrototype          (can hold items)
+--'infinity-container'       , --       InfinityContainerPrototype        (can hold items)
 --abstract                   , --   CraftingMachinePrototype              
   'assembling-machine'       , --     AssemblingMachinePrototype          
   'rocket-silo'              , --       RocketSiloPrototype               
-  'furnace'                  , --     FurnacePrototype                    
+--'furnace'                  , --     FurnacePrototype                    (unconfigurable)
   'electric-energy-interface', --   ElectricEnergyInterfacePrototype      
-  'electric-pole'            , --   ElectricPolePrototype                 
-  'unit-spawner'             , --   EnemySpawnerPrototype                 
+--'electric-pole'            , --   ElectricPolePrototype                 (active ignored)
+--'unit-spawner'             , --   EnemySpawnerPrototype                 (unconfigurable)
 --abstract                   , --   FlyingRobotPrototype                  
-  'combat-robot'             , --     CombatRobotPrototype                
+--'combat-robot'             , --     CombatRobotPrototype                (not a building)
 --abstract                   , --     RobotWithLogisticInterfacePrototype 
-  'construction-robot'       , --       ConstructionRobotPrototype        
-  'logistic-robot'           , --       LogisticRobotPrototype            
-  'gate'                     , --   GatePrototype                         
-  'generator'                , --   GeneratorPrototype                    
+--'construction-robot'       , --       ConstructionRobotPrototype        (not a building)
+--'logistic-robot'           , --       LogisticRobotPrototype            (not a building)
+--'gate'                     , --   GatePrototype                         (hinders biters)
+--'generator'                , --   GeneratorPrototype                    (unconfigurable)
   'heat-interface'           , --   HeatInterfacePrototype                
-  'heat-pipe'                , --   HeatPipePrototype                     
+--'heat-pipe'                , --   HeatPipePrototype                     (unconfigurable)
   'inserter'                 , --   InserterPrototype                     
-  'lab'                      , --   LabPrototype                          
-  'lamp'                     , --   LampPrototype                         
-  'land-mine'                , --   LandMinePrototype                     
-  'linked-container'         , --   LinkedContainerPrototype              
-  'market'                   , --   MarketPrototype                       
-  'mining-drill'             , --   MiningDrillPrototype                  
-  'offshore-pump'            , --   OffshorePumpPrototype                 
-  'pipe'                     , --   PipePrototype                         
+--'lab'                      , --   LabPrototype                          (unconfigurable)
+--'lamp'                     , --   LampPrototype                         (active ignored)
+--'land-mine'                , --   LandMinePrototype                     (unconfigurable)
+--'linked-container'         , --   LinkedContainerPrototype              (can hold items)
+--'market'                   , --   MarketPrototype                       (active ignored)
+--'mining-drill'             , --   MiningDrillPrototype                  (unconfigurable)
+--'offshore-pump'            , --   OffshorePumpPrototype                 (unconfigurable)
+--'pipe'                     , --   PipePrototype                         (unconfigurable)
   'infinity-pipe'            , --     InfinityPipePrototype               
-  'pipe-to-ground'           , --   PipeToGroundPrototype                 
-  'player-port'              , --   PlayerPortPrototype                   
-  'power-switch'             , --   PowerSwitchPrototype                  
+--'pipe-to-ground'           , --   PipeToGroundPrototype                 (unconfigurable)
+--'player-port'              , --   PlayerPortPrototype                   (unconfigurable)
+--'power-switch'             , --   PowerSwitchPrototype                  (active ignored)
   'programmable-speaker'     , --   ProgrammableSpeakerPrototype          
-  'pump'                     , --   PumpPrototype                         
-  'radar'                    , --   RadarPrototype                        
+--'pump'                     , --   PumpPrototype                         (unconfigurable)
+--'radar'                    , --   RadarPrototype                        (unconfigurable)
 --abstract                   , --   RailPrototype                         
-  'curved-rail'              , --     CurvedRailPrototype                 
-  'straight-rail'            , --     StraightRailPrototype               
+--'curved-rail'              , --     CurvedRailPrototype                 (unconfigurable)
+--'straight-rail'            , --     StraightRailPrototype               (unconfigurable)
 --abstract                   , --   RailSignalBasePrototype               
-  'rail-chain-signal'        , --     RailChainSignalPrototype            
-  'rail-signal'              , --     RailSignalPrototype                 
-  'reactor'                  , --   ReactorPrototype                      
-  'roboport'                 , --   RoboportPrototype                     
-  'simple-entity-with-owner' , --   SimpleEntityWithOwnerPrototype        
-  'simple-entity-with-force' , --     SimpleEntityWithForcePrototype      
-  'solar-panel'              , --   SolarPanelPrototype                   
-  'storage-tank'             , --   StorageTankPrototype                  
+--'rail-chain-signal'        , --     RailChainSignalPrototype            (unconfigurable)
+--'rail-signal'              , --     RailSignalPrototype                 (unconfigurable)
+--'reactor'                  , --   ReactorPrototype                      (unconfigurable)
+--'roboport'                 , --   RoboportPrototype                     (unconfigurable)
+--'simple-entity-with-owner' , --   SimpleEntityWithOwnerPrototype        (unconfigurable)
+--'simple-entity-with-force' , --     SimpleEntityWithForcePrototype      (unconfigurable)
+--'solar-panel'              , --   SolarPanelPrototype                   (unconfigurable)
+--'storage-tank'             , --   StorageTankPrototype                  (unconfigurable)
   'train-stop'               , --   TrainStopPrototype                    
 --abstract                   , --   TransportBeltConnectablePrototype     
-  'linked-belt'              , --     LinkedBeltPrototype                 
+--'linked-belt'              , --     LinkedBeltPrototype                 (unconfigurable)
 --abstract                   , --     LoaderPrototype                     
   'loader-1x1'               , --       Loader1x1Prototype                
   'loader'                   , --       Loader1x2Prototype                
   'splitter'                 , --     SplitterPrototype                   
-  'transport-belt'           , --     TransportBeltPrototype              
-  'underground-belt'         , --     UndergroundBeltPrototype            
-  'turret'                   , --   TurretPrototype                       
-  'ammo-turret'              , --     AmmoTurretPrototype                 
-  'electric-turret'          , --     ElectricTurretPrototype             
-  'fluid-turret'             , --     FluidTurretPrototype                
-  'unit'                     , --   UnitPrototype                         
+--'transport-belt'           , --     TransportBeltPrototype              (unconfigurable)
+--'underground-belt'         , --     UndergroundBeltPrototype            (unconfigurable)
+--'turret'                   , --   TurretPrototype                       (hinders biters)
+--'ammo-turret'              , --     AmmoTurretPrototype                 (hinders biters)
+--'electric-turret'          , --     ElectricTurretPrototype             (hinders biters)
+--'fluid-turret'             , --     FluidTurretPrototype                (hinders biters)
+--'unit'                     , --   UnitPrototype                         (not a building)
 --abstract                   , --   VehiclePrototype                      
-  'car'                      , --     CarPrototype                        
---abstract                   , --     RollingStockPrototype               
-  'artillery-wagon'          , --       ArtilleryWagonPrototype           
-  'cargo-wagon'              , --       CargoWagonPrototype               
-  'fluid-wagon'              , --       FluidWagonPrototype               
-  'locomotive'               , --       LocomotivePrototype               
-  'spider-vehicle'           , --     SpiderVehiclePrototype              
-  'wall'                     , --   WallPrototype                         
-  'fish'                     , --   FishPrototype                         
-  'simple-entity'            , --   SimpleEntityPrototype                 
-  'spider-leg'               , --   SpiderLegPrototype                    
-  'tree'                     , --   TreePrototype                         
+--'car'                      , --     CarPrototype                        (not a building)
+--'abstract                   , --     RollingStockPrototype               
+--'artillery-wagon'          , --       ArtilleryWagonPrototype           (not a building)
+--'cargo-wagon'              , --       CargoWagonPrototype               (not a building)
+--'fluid-wagon'              , --       FluidWagonPrototype               (not a building)
+--'locomotive'               , --       LocomotivePrototype               (not a building)
+--'spider-vehicle'           , --     SpiderVehiclePrototype              (not a building)
+--'wall'                     , --   WallPrototype                         (hinders biters)
+--'fish'                     , --   FishPrototype                         (not a building)
+--'simple-entity'            , --   SimpleEntityPrototype                 (unconfigurable)
+--'spider-leg'               , --   SpiderLegPrototype                    (not a building)
+--'tree'                     , --   TreePrototype                         (unconfigurable)
 }
