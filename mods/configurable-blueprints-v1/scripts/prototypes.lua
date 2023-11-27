@@ -15,7 +15,7 @@ return {
 --'infinity-container'       , --       InfinityContainerPrototype        (can hold items)
 --abstract                   , --   CraftingMachinePrototype              
   'assembling-machine'       , --     AssemblingMachinePrototype          
-  'rocket-silo'              , --       RocketSiloPrototype               
+--'rocket-silo'              , --       RocketSiloPrototype               (unconfigurable)
 --'furnace'                  , --     FurnacePrototype                    (unconfigurable)
   'electric-energy-interface', --   ElectricEnergyInterfacePrototype      
 --'electric-pole'            , --   ElectricPolePrototype                 (active ignored)
