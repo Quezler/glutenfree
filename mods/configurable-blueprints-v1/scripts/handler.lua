@@ -12,11 +12,6 @@ function Handler.on_created_entity(event)
   entity.revive{raise_revive = true}
 end
 
-Handler.entity_type_is_excluded = util.list_to_map({
-  'transport-belt',
-  'underground-belt',
-  'pipe',
-  'pipe-to-ground',
-})
+Handler.entity_type_is_whitelisted = util.list_to_map(require('scripts.prototypes'))
 
 return Handler

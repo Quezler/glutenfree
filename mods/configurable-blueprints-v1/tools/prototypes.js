@@ -6,8 +6,10 @@ lines.pop();
 
 lines.forEach((line, i) => {
   const parts = line.split(' - ');
+  parts[0] = parts[0].padEnd(40, ' ');
   parts[1] = parts[1].padEnd(27, ' ');
   lines[i] = `  ` + parts.reverse().join(', -- ');
+  lines[i] = lines[i].replace('  abstract', '--abstract');
 });
 
 lines.unshift('return {');
