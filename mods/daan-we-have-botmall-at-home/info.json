@@ -1,0 +1,12 @@
+{
+    "name": "daan-we-have-botmall-at-home",
+    "title": "Daan we have botmall at home",
+    "description": "Botmall at home: several duplicate crafters.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "base",
+        "flib"
+    ]
+}
