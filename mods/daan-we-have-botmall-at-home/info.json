@@ -1,8 +1,8 @@
 {
     "name": "daan-we-have-botmall-at-home",
-    "title": "Daan we have botmall at home",
-    "description": "Botmall at home: several duplicate crafters.",
-    "version": "1.0.0",
+    "title": "We have botmall at home",
+    "description": "Visualizes it when you have duplicate crafters in the same botmall area.",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
