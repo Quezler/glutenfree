@@ -20,15 +20,19 @@ script.on_event("se--targeter", function(event)
     name = "se-space-capsule-scorched",
     position = event.cursor_position,
     force = player.force,
-    -- raise_built = true, -- uncomment to create a vehicle too
+    raise_built = true, -- uncomment to create a vehicle too (uncommented for the shadow, did it have any side-effects?)
   })
 
-  remote.call("space-exploration", "remote_view_stop", {player=player})
-  remote.call("jetpack", "stop_jetpack_immediate", {character=player.character})
+  remote.call("space-exploration", "remote_view_stop", {player = player})
+  remote.call("jetpack", "stop_jetpack_immediate", {character = player.character})
   player.driving = false
-  player.teleport({event.cursor_position.x, event.cursor_position.y + 1.5}, player.surface)
+  player.teleport({event.cursor_position.x - 2, event.cursor_position.y}, player.surface)
   -- player.driving = true -- having to exit the vehicle is not fast enough
-  player.character.direction = defines.direction.south -- look down away from the capsule ladder
+  -- player.character.direction = defines.direction.south -- look down away from the capsule ladder
+
+  -- if we force the player to enter and then exit, they're on the left side (same as all other vehicles)
+  -- player.driving = true
+  -- player.driving = false
 
   -- container.order_deconstruction(player.force, player) -- a bit too quick, and i don't feel like complicating the mod with a delay
 
