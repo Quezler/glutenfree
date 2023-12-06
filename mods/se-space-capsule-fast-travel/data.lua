@@ -1,5 +1,5 @@
 
-local targeter = table.deepcopy(data.raw["selection-tool"]["se-space-capsule-targeter"])
+local targeter = table.deepcopy(data.raw["item"]["se-space-capsule-targeter"])
 targeter.name = "se-space-capsule-fast-travel-targeter"
 targeter.icon = data.raw["item"]["se-space-capsule"].icon
 table.insert(targeter.flags, "spawnable")

@@ -1,9 +1,11 @@
 local price = "se-space-capsule"
 
-script.on_event(defines.events.on_player_selected_area, function(event)
-  if event.item ~= "se-space-capsule-fast-travel-targeter" then return end
-
+script.on_event("se--targeter", function(event)
   local player = game.get_player(event.player_index)
+  local cursor_item = player.cursor_stack
+
+  if not (cursor_item and cursor_item.valid_for_read) then return end
+  if cursor_item.name ~= "se-space-capsule-fast-travel-targeter" then return end
 
   -- local inventory = player.get_main_inventory()
   local inventory = remote.call("space-exploration", "get_player_character", {player = player}).get_main_inventory()
@@ -14,14 +16,9 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   inventory.remove({name = price, count = 1})
   local left = inventory.get_item_count(price)
 
-  local center = {
-    x = (event.area.left_top.x + event.area.right_bottom.x) / 2,
-    y = (event.area.left_top.y + event.area.right_bottom.y) / 2,
-  }
-
-  local container = event.surface.create_entity({
+  local container = player.surface.create_entity({
     name = "se-space-capsule-scorched",
-    position = center,
+    position = event.cursor_position,
     force = player.force,
     -- raise_built = true, -- uncomment to create a vehicle too
   })
@@ -29,7 +26,7 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   remote.call("space-exploration", "remote_view_stop", {player=player})
   remote.call("jetpack", "stop_jetpack_immediate", {character=player.character})
   player.driving = false
-  player.teleport({center.x, center.y + 1.5}, event.surface)
+  player.teleport({event.cursor_position.x, event.cursor_position.y + 1.5}, player.surface)
   -- player.driving = true -- having to exit the vehicle is not fast enough
   player.character.direction = defines.direction.south -- look down away from the capsule ladder
 
@@ -37,6 +34,6 @@ script.on_event(defines.events.on_player_selected_area, function(event)
 
   player.create_local_flying_text({
     text = string.format("%d [item=%s]'s left", left, price),
-    create_at_cursor = true,
+    position = event.cursor_position,
   })
 end)
