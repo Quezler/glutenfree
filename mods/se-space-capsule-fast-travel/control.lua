@@ -41,6 +41,6 @@ script.on_event(defines.events.on_player_selected_area, function(event)
 
   player.create_local_flying_text({
     text = string.format("%d [item=%s]'s left", left, price),
-    create_at_cursor = true,
+    position = center,
   })
 end)
