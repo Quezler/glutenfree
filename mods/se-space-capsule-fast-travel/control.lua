@@ -2,10 +2,10 @@ local price = "se-space-capsule"
 
 script.on_event("se--targeter", function(event)
   local player = game.get_player(event.player_index)
-  local cursor_item = player.cursor_stack
+  local hand_stack = player.cursor_stack or player.cursor_ghost
 
-  if not (cursor_item and cursor_item.valid_for_read) then return end
-  if cursor_item.name ~= "se-space-capsule-fast-travel-targeter" then return end
+  if not (hand_stack and hand_stack.valid_for_read) then return end
+  if hand_stack.name ~= "se-space-capsule-fast-travel-targeter" then return end
 
   -- local inventory = player.get_main_inventory()
   local inventory = remote.call("space-exploration", "get_player_character", {player = player}).get_main_inventory()
