@@ -2,7 +2,7 @@
     "name": "se-space-capsule-fast-travel",
     "title": "Space Exploration - space capsule fast travel",
     "description": "Allows you to emergency burn anywhere using the shortcut, pretty much a teleport that damages your capsule.",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
