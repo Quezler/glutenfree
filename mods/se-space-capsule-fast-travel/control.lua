@@ -1,11 +1,9 @@
 local price = "se-space-capsule"
 
-script.on_event("se--targeter", function(event)
-  local player = game.get_player(event.player_index)
-  local hand_stack = player.cursor_stack or player.cursor_ghost
+script.on_event(defines.events.on_player_selected_area, function(event)
+  if event.item ~= "se-space-capsule-fast-travel-targeter" then return end
 
-  if not (hand_stack and hand_stack.valid_for_read) then return end
-  if hand_stack.name ~= "se-space-capsule-fast-travel-targeter" then return end
+  local player = game.get_player(event.player_index)
 
   -- local inventory = player.get_main_inventory()
   local inventory = remote.call("space-exploration", "get_player_character", {player = player}).get_main_inventory()
@@ -16,9 +14,14 @@ script.on_event("se--targeter", function(event)
   inventory.remove({name = price, count = 1})
   local left = inventory.get_item_count(price)
 
-  local container = player.surface.create_entity({
+  local center = {
+    x = (event.area.left_top.x + event.area.right_bottom.x) / 2,
+    y = (event.area.left_top.y + event.area.right_bottom.y) / 2,
+  }
+
+  local container = event.surface.create_entity({
     name = "se-space-capsule-scorched",
-    position = event.cursor_position,
+    position = center,
     force = player.force,
     raise_built = true, -- uncomment to create a vehicle too (uncommented for the shadow, did it have any side-effects?)
   })
@@ -26,7 +29,7 @@ script.on_event("se--targeter", function(event)
   remote.call("space-exploration", "remote_view_stop", {player = player})
   remote.call("jetpack", "stop_jetpack_immediate", {character = player.character})
   player.driving = false
-  player.teleport({event.cursor_position.x - 2, event.cursor_position.y}, player.surface)
+  player.teleport({center.x - 2, center.y}, event.surface)
   -- player.driving = true -- having to exit the vehicle is not fast enough
   -- player.character.direction = defines.direction.south -- look down away from the capsule ladder
 
@@ -38,6 +41,6 @@ script.on_event("se--targeter", function(event)
 
   player.create_local_flying_text({
     text = string.format("%d [item=%s]'s left", left, price),
-    position = event.cursor_position,
+    create_at_cursor = true,
   })
 end)
