@@ -41,4 +41,37 @@ function Handler.tick(event)
   end
 end
 
+function Handler.handle_construction_alert(alert)
+  if alert.target.name ~= "entity-ghost" then return end -- can be "item-request-proxy"
+  log(alert.target.unit_number)
+
+  -- game.print(serpent.block(alert.target.ghost_prototype.items_to_place_this))
+  for _, item_to_place_this in ipairs(alert.target.ghost_prototype.items_to_place_this) do
+    if item_to_place_this.count == 1 then
+      game.print(item_to_place_this.name)
+
+      for unit_number, struct in pairs(global.structs) do
+        if not struct.entity.valid then
+          global.structs[unit_number] = nil
+        else
+          if alert.target.force == struct.entity.force then
+            -- we're gonna check for orange coverage for now, instead of green venn diagrams and filtering out personal roboports
+            local network = struct.entity.surface.find_logistic_network_by_position(struct.entity.position, struct.entity.force)
+            if network then
+              struct.entity.surface.create_entity{
+                name = 'item-request-proxy',
+                force = struct.entity.force,
+                target = struct.entity,
+                position = {0,0},
+                modules = {[item_to_place_this.name] = item_to_place_this.count}
+              }
+            end
+          end
+        end
+      end
+    end
+  end
+
+end
+
 return Handler

@@ -73,6 +73,7 @@ local item = {
   order = 'k-a', -- weapon delivery cannon is `j-`
   subgroup = 'surface-defense',
   stack_size = 50,
+  flags = {'draw-logistic-overlay'},
 }
 
 item.place_result = turret.name

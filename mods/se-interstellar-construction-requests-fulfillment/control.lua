@@ -37,6 +37,7 @@ script.on_nth_tick(600, function(event)
 
     for surface_index, surface_alerts in pairs(alerts) do
       for _, surface_alert in ipairs(surface_alerts[defines.alert_type.no_material_for_construction]) do
+        Handler.handle_construction_alert(surface_alert)
         -- {
         --   {
         --     count = 1,
@@ -50,7 +51,6 @@ script.on_nth_tick(600, function(event)
         --     name = "storage-tank"
         --   }
         -- }
-        log(serpent.block(surface_alert.target.ghost_prototype.items_to_place_this))
       end
     end
   end
