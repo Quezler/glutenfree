@@ -1,6 +1,6 @@
 local turret = table.deepcopy(data.raw['ammo-turret']['se-meteor-point-defence-container'])
 turret.type = 'electric-turret'
-turret.name = 'se-interstellar-construction-requests-fulfillment-turret'
+turret.name = 'se-interstellar-construction-requests-fulfillment--turret'
 
 local tint = {r=244, g=209, b=6}
 turret.base_picture.layers[2].tint = tint
@@ -61,4 +61,23 @@ log(serpent.block( turret.attack_parameters ))
 turret.localised_name = nil
 turret.localised_description = nil
 
-data:extend({turret})
+--
+
+local item = {
+  type = 'item',
+  name = 'se-interstellar-construction-requests-fulfillment--item',
+  icons = {
+    {icon = '__space-exploration-graphics__/graphics/icons/meteor-point-defence-base.png', icon_size = 64},
+    {icon = '__space-exploration-graphics__/graphics/icons/meteor-point-defence-mask.png', icon_size = 64, tint = tint}
+  },
+  order = 'k-a', -- weapon delivery cannon is `j-`
+  subgroup = 'surface-defense',
+  stack_size = 50,
+}
+
+item.place_result = turret.name
+turret.minable.result = item.name
+
+--
+
+data:extend({turret, item})
