@@ -2,6 +2,16 @@ local Handler = require('scripts.handler')
 
 script.on_init(function(event)
   global.structs = {}
+
+  -- log('items_to_place_this')
+  -- for _, entity_prototype in pairs(game.entity_prototypes) do
+  --   for _, item_to_place_this in pairs(entity_prototype.items_to_place_this or {}) do
+  --     if item_to_place_this.count > 1 then
+  --       log(entity_prototype.name .. serpent.block(item_to_place_this))
+  --     end
+  --   end
+  -- end
+  -- {curved-rail, se-space-curved-rail, concrete-wall-ruin, steel-wall-ruin, stone-wall-ruin}
 end)
 
 for _, event in ipairs({
