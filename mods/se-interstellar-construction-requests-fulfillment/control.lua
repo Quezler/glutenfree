@@ -1,7 +1,7 @@
 local Handler = require('scripts.handler')
 
 script.on_init(function(event)
-  global.entities = {}
+  global.structs = {}
 end)
 
 for _, event in ipairs({
