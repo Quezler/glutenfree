@@ -12,8 +12,8 @@ turret.icons = {
   {icon = '__space-exploration-graphics__/graphics/icons/meteor-point-defence-mask.png', icon_size = 64, tint = tint}
 }
 
-turret.energy_source = table.deepcopy(data.raw['electric-turret']['se-meteor-point-defence-charger']).energy_source
-turret.attack_parameters = table.deepcopy(data.raw['electric-turret']['se-meteor-point-defence-charger']).attack_parameters
+turret.energy_source = table.deepcopy(data.raw['electric-turret']['laser-turret']).energy_source
+turret.attack_parameters = table.deepcopy(data.raw['electric-turret']['laser-turret']).attack_parameters
 
 turret.localised_name = nil
 turret.localised_description = nil
