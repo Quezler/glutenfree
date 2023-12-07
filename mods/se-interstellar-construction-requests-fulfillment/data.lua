@@ -80,4 +80,49 @@ turret.minable.result = item.name
 
 --
 
-data:extend({turret, item})
+local recipe = {
+  type = 'recipe',
+  name = 'se-interstellar-construction-requests-fulfillment--recipe',
+  result = 'se-interstellar-construction-requests-fulfillment--item',
+  enabled = false,
+  energy_required = 5,
+  ingredients = {
+    { 'se-meteor-point-defence', 1 },
+    { 'sulfur', 12 },
+  },
+  requester_paste_multiplier = 1,
+  always_show_made_in = false,
+}
+
+--
+
+local research = {
+  type = "technology",
+  name = 'se-interstellar-construction-requests-fulfillment--technology',
+  effects = {
+    { type = "unlock-recipe", recipe = recipe.name }
+  },
+  icons = {
+    {icon = '__space-exploration-graphics__/graphics/technology/meteor-point-defence-base.png', icon_size = 128},
+    {icon = '__space-exploration-graphics__/graphics/technology/meteor-point-defence-mask.png', icon_size = 128, tint = tint}
+  },
+  order = "e-h",
+  prerequisites = {
+    "se-meteor-point-defence",
+    "construction-robotics",
+    "space-science-pack",
+  },
+  unit = {
+    count = 250,
+    ingredients = {
+      { "automation-science-pack", 1 },
+      { "logistic-science-pack"  , 1 },
+      { "chemical-science-pack"  , 1 },
+      { "se-rocket-science-pack" , 1 },
+      { "space-science-pack"     , 1 },
+    },
+    time = 30
+  }
+}
+
+data:extend({turret, item, recipe, research})
