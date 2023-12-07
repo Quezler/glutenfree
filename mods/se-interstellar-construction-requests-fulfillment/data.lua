@@ -12,7 +12,13 @@ turret.icons = {
   {icon = '__space-exploration-graphics__/graphics/icons/meteor-point-defence-mask.png', icon_size = 64, tint = tint}
 }
 
-turret.energy_source = table.deepcopy(data.raw['electric-turret']['laser-turret']).energy_source
+turret.energy_source = {
+  buffer_capacity = "1GJ",
+  input_flow_limit = "1GW",
+  type = "electric",
+  usage_priority = "primary-input"
+}
+
 turret.attack_parameters = table.deepcopy(data.raw['electric-turret']['laser-turret']).attack_parameters
 
 turret.attack_parameters.ammo_type.energy_consumption = "1GJ"
@@ -22,9 +28,8 @@ turret.energy_source.drain = nil
 
 log('search for this!')
 log(serpent.block( turret.attack_parameters ))
-log(serpent.block( turret.energy_source ))
 
--- 1.909 Script @__se-interstellar-construction-requests-fulfillment__/data.lua:24: {
+-- 1.909 Script @__se-interstellar-construction-requests-fulfillment__/data.lua:30: {
 --   ammo_type = {
 --     action = {
 --       action_delivery = {
@@ -51,12 +56,6 @@ log(serpent.block( turret.energy_source ))
 --     -0.85587225
 --   },
 --   type = "beam"
--- }
---    1.909 Script @__se-interstellar-construction-requests-fulfillment__/data.lua:25: {
---   buffer_capacity = "1GJ",
---   input_flow_limit = "1GW",
---   type = "electric",
---   usage_priority = "primary-input"
 -- }
 
 turret.localised_name = nil
