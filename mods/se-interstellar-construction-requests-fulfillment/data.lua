@@ -1,16 +1,14 @@
 local turret = table.deepcopy(data.raw['ammo-turret']['se-meteor-point-defence-container'])
-turret.name = 'se-interstellar-construction-requests-fulfillment-turret'
--- turret.flags = {"placeable-player", "player-creation"}
--- turret.selectable_in_game = true
+turret.name = 'se-interstellar-construction-requests-fulfillment-container'
 
-turret.base_picture.layers[2].tint = {r=244, g=209, b=6}
-turret.base_picture.layers[2].hr_version.tint = turret.base_picture.layers[2].tint
+local tint = {r=244, g=209, b=6}
+turret.base_picture.layers[2].tint = tint
+turret.base_picture.layers[2].hr_version.tint = tint
 
--- turret.collision_mask = {
---   "water-tile",
---   "item-layer",
---   "object-layer",
---   "player-layer",
--- },
+turret.icon = nil
+turret.icons = {
+  {icon = '__space-exploration-graphics__/graphics/icons/meteor-point-defence-base.png', icon_size = 64},
+  {icon = '__space-exploration-graphics__/graphics/icons/meteor-point-defence-mask.png', icon_size = 64, tint = tint}
+}
 
 data:extend({turret})
