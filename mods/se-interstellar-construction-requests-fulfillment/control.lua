@@ -1,12 +1,8 @@
+local Handler = require('scripts.handler')
+
 script.on_init(function(event)
   global.entities = {}
 end)
-
-function on_created_entity(event)
-  local entity = event.created_entity or event.entity or event.destination
-
-  global.entities[entity.unit_number] = entity
-end
 
 for _, event in ipairs({
   defines.events.on_built_entity,
@@ -15,17 +11,12 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, on_created_entity, {
+  script.on_event(event, Handler.on_created_entity, {
     {filter = 'name', name = 'se-interstellar-construction-requests-fulfillment--turret'},
   })
 end
 
-script.on_nth_tick(60, function(event)
-  for unit_number, entity in pairs(global.entities) do
-    game.print(entity.energy)
-    game.print(game.entity_prototypes[entity.name].electric_energy_source_prototype.buffer_capacity)
-  end
-end)
+script.on_nth_tick(60, Handler.tick)
 
 script.on_nth_tick(600, function(event)
 
