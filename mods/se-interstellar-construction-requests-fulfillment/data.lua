@@ -13,23 +13,19 @@ turret.icons = {
 }
 
 turret.energy_source = {
-  buffer_capacity = "1GJ",
-  input_flow_limit = "1GW",
+  buffer_capacity = "4GJ",
+  input_flow_limit = "0.1GW",
   type = "electric",
   usage_priority = "primary-input"
 }
 
 turret.attack_parameters = table.deepcopy(data.raw['electric-turret']['laser-turret']).attack_parameters
-
 turret.attack_parameters.ammo_type.energy_consumption = "1GJ"
-turret.energy_source.buffer_capacity = "1GJ"
-turret.energy_source.input_flow_limit = "0.1GW"
-turret.energy_source.drain = nil
 
 log('search for this!')
 log(serpent.block( turret.attack_parameters ))
 
--- 1.909 Script @__se-interstellar-construction-requests-fulfillment__/data.lua:30: {
+-- 1.909 Script @__se-interstellar-construction-requests-fulfillment__/data.lua:26: {
 --   ammo_type = {
 --     action = {
 --       action_delivery = {

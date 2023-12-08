@@ -68,7 +68,7 @@ function Handler.draw_random_card()
       else
         table.insert(global.pile, struct.unit_number)
 
-        if struct.entity.energy > Handler.get_max_energy() - 1 then
+        if struct.entity.energy >= Handler.get_energy_per_shot() then
           return struct
         end
 
@@ -77,15 +77,22 @@ function Handler.draw_random_card()
   end
 end
 
-function Handler.get_max_energy()
-  if not Handler.max_energy then
-    Handler.max_energy = game.entity_prototypes[Handler.entity_name].electric_energy_source_prototype.buffer_capacity
+-- function Handler.get_max_energy()
+--   if not Handler.max_energy then
+--     Handler.max_energy = game.entity_prototypes[Handler.entity_name].electric_energy_source_prototype.buffer_capacity
+--   end
+--   return Handler.max_energy
+-- end
+
+function Handler.get_energy_per_shot()
+  if not Handler.energy_per_shot then
+    Handler.energy_per_shot = game.entity_prototypes[Handler.entity_name].attack_parameters.ammo_type.energy_consumption
   end
-  return Handler.max_energy
+  return Handler.energy_per_shot
 end
 
 function Handler.shoot(struct)
-  struct.entity.energy = 0
+  struct.entity.energy = struct.entity.energy - Handler.get_energy_per_shot()
 
   struct.barrel = struct.barrel % 4 + 1
   struct.entity.surface.create_entity{
