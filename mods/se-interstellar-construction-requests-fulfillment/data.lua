@@ -7,10 +7,8 @@ turret.base_picture.layers[2].tint = tint
 turret.base_picture.layers[2].hr_version.tint = tint
 
 turret.icon = nil
-turret.icons = {
-  {icon = '__space-exploration-graphics__/graphics/icons/meteor-point-defence-base.png', icon_size = 64},
-  {icon = '__space-exploration-graphics__/graphics/icons/meteor-point-defence-mask.png', icon_size = 64, tint = tint}
-}
+turret.icons = data.raw['item']['se-meteor-point-defence'].icons
+turret.icons[2].tint = tint
 
 turret.energy_source = {
   buffer_capacity = "4GJ",
@@ -37,15 +35,14 @@ turret.localised_description = nil
 local item = {
   type = 'item',
   name = 'se-interstellar-construction-requests-fulfillment--item',
-  icons = {
-    {icon = '__space-exploration-graphics__/graphics/icons/meteor-point-defence-base.png', icon_size = 64},
-    {icon = '__space-exploration-graphics__/graphics/icons/meteor-point-defence-mask.png', icon_size = 64, tint = tint}
-  },
   order = 'k-a', -- weapon delivery cannon is `j-`
   subgroup = 'surface-defense',
   stack_size = 50,
   flags = {'draw-logistic-overlay'},
 }
+
+item.icons = data.raw['item']['se-meteor-point-defence'].icons
+item.icons[2].tint = tint
 
 item.place_result = turret.name
 turret.minable.result = item.name
@@ -68,15 +65,11 @@ local recipe = {
 
 --
 
-local research = {
+local technology = {
   type = "technology",
   name = 'se-interstellar-construction-requests-fulfillment--technology',
   effects = {
     { type = "unlock-recipe", recipe = recipe.name }
-  },
-  icons = {
-    {icon = '__space-exploration-graphics__/graphics/technology/meteor-point-defence-base.png', icon_size = 128},
-    {icon = '__space-exploration-graphics__/graphics/technology/meteor-point-defence-mask.png', icon_size = 128, tint = tint}
   },
   order = "e-h",
   prerequisites = {
@@ -97,4 +90,7 @@ local research = {
   }
 }
 
-data:extend({turret, item, recipe, research})
+technology.icons = data.raw['technology']['se-meteor-point-defence'].icons
+technology.icons[2].tint = tint
+
+data:extend({turret, item, recipe, technology})

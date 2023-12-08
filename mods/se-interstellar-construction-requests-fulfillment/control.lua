@@ -17,14 +17,18 @@ end
 script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
 
 script.on_nth_tick(600, function(event) -- no_material_for_construction expires after 10 seconds
+  local forces_checked = {}
   for _, player in ipairs(game.connected_players) do
-    local alerts = player.get_alerts{
-      type = defines.alert_type.no_material_for_construction,
-    }
+    if not forces_checked[player.force.index] then 
+      forces_checked[player.force.index] = true
+      local alerts = player.get_alerts{
+        type = defines.alert_type.no_material_for_construction,
+      }
 
-    for surface_index, surface_alerts in pairs(alerts) do
-      for _, surface_alert in ipairs(surface_alerts[defines.alert_type.no_material_for_construction]) do
-        Handler.handle_construction_alert(surface_alert)
+      for surface_index, surface_alerts in pairs(alerts) do
+        for _, surface_alert in ipairs(surface_alerts[defines.alert_type.no_material_for_construction]) do
+          Handler.handle_construction_alert(surface_alert)
+        end
       end
     end
   end

@@ -36,6 +36,7 @@ function Handler.on_created_entity(event)
     entity = entity,
     barrel = 0,
     proxy = nil, -- entity occupied if present and valid
+    updated_at = game.tick,
   }
   table.insert(global.pile, entity.unit_number)
 end
@@ -149,6 +150,7 @@ function Handler.handle_construction_alert(alert)
               }
 
               struct.proxy = proxy -- the struct doesn't need a reference to the handled alert right?
+              struct.updated_at = game.tick
 
               global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert.target.unit_number
               global.deathrattles[script.register_on_entity_destroyed(alert.target)] = alert.target.unit_number
@@ -217,6 +219,20 @@ function Handler.gc(event)
     if not handled_alert.entity.valid or not handled_alert.proxy.valid then
       log('garbage collected alert #' .. unit_number)
       global.handled_alert[unit_number] = nil
+    end
+  end
+
+  for _, player in ipairs(game.connected_players) do
+    if not player.is_alert_enabled(defines.alert_type.no_material_for_construction) then
+      player.enable_alert(defines.alert_type.no_material_for_construction)
+      log('player ' .. player.name .. ' had construction alerts disabled')
+    end
+  end
+
+  for unit_number, struct in pairs(global.structs) do
+    if struct.proxy and struct.proxy.valid and struct.updated_at > game.tick + 60 * 60 * 10 then
+      log('struct proxy expired #' .. unit_number)
+      struct.proxy.destroy()
     end
   end
 end
