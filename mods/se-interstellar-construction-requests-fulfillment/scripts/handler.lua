@@ -127,7 +127,7 @@ function Handler.handle_construction_alert(alert)
         if alert.target.force == struct.entity.force then
           -- we're gonna check for orange coverage for now, instead of green venn diagrams and filtering out personal roboports
           local network = struct.entity.surface.find_logistic_network_by_position(struct.entity.position, struct.entity.force)
-          if network then
+          if network and network.can_satisfy_request(item_to_place_this.name, item_to_place_this.count, true) then
             if not struct.proxy or not struct.proxy.valid then
               local proxy = struct.entity.surface.create_entity{
                 name = 'item-request-proxy',
@@ -221,7 +221,7 @@ function Handler.gc(event)
   end
 
   for unit_number, handled_alert in pairs(global.handled_alerts) do
-    if (not handled_alert.entity.valid) or (not handled_alert.proxy.valid) then
+    if not handled_alert.entity.valid or not handled_alert.proxy.valid then
       log('garbage collected alert #' .. unit_number)
       global.handled_alert[unit_number] = nil
     end
