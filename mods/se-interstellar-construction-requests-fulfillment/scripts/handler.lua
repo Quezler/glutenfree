@@ -116,11 +116,12 @@ function Handler.handle_construction_alert(alert)
     if item_to_place_this.count == 1 then -- no support for e.g. curved rails (which need 4) yet
 
       local anti_infinite_loop = 0
+      local anti_infinite_loop_max = #global.deck + #global.pile
       while true do
         local struct = Handler.draw_random_card()
         if not struct then return end
 
-        if anti_infinite_loop > 100 then return end
+        if anti_infinite_loop > anti_infinite_loop_max then return end
         anti_infinite_loop = anti_infinite_loop + 1
 
         if alert.target.force == struct.entity.force then
@@ -157,6 +158,7 @@ function Handler.handle_construction_alert(alert)
               struct.proxy = proxy -- the struct doesn't need a reference to the handled alert right?
 
               global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert.target.unit_number
+              global.deathrattles[script.register_on_entity_destroyed(alert.target)] = alert.target.unit_number
               return
             end
           end
@@ -189,6 +191,10 @@ function Handler.on_entity_destroyed(event)
     local handled_alert = global.handled_alerts[unit_number]
     if handled_alert then global.handled_alerts[unit_number] = nil
       
+      -- did the ghost die first? if so we remove the proxy and free up the struct
+      if handled_alert.proxy.valid then
+        handled_alert.proxy.destroy()
+      end
       if not handled_alert.entity.valid then return end
 
       local struct = global.structs[handled_alert.struct_unit_number]
