@@ -210,7 +210,7 @@ end
 
 function Handler.gc(event)
   for unit_number, struct in pairs(global.structs) do
-    if not struct.valid then
+    if not struct.entity.valid then
       log('garbage collected struct #' .. unit_number)
       global.structs[unit_number] = nil
     end
