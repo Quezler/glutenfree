@@ -14,7 +14,7 @@ function bubble.on_dispatcher_updated(event)
 
   if global.deliveries_table_was_previously_empty then
     global.deliveries_table_was_previously_empty = false
-    game.print('on_dispatcher_updated @ ' .. event.tick)
+    -- game.print('on_dispatcher_updated @ ' .. event.tick)
     
     for _, delivery in pairs(global.deliveries) do
       if delivery.train.valid then
