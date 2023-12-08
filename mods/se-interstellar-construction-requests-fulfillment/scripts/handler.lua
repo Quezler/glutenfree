@@ -65,7 +65,7 @@ function Handler.draw_random_card()
         if struct.entity.energy > Handler.get_max_energy() - 1 then
           return struct
         end
-        
+
       end
     end
   end
@@ -94,12 +94,12 @@ end
 
 function Handler.handle_construction_alert(alert)
   if alert.target.name ~= "entity-ghost" then return end -- can be "item-request-proxy" or "tile-ghost"
-  log(alert.target.unit_number)
+  -- log(alert.target.unit_number)
 
   -- game.print(serpent.block(alert.target.ghost_prototype.items_to_place_this))
   for _, item_to_place_this in ipairs(alert.target.ghost_prototype.items_to_place_this) do
     if item_to_place_this.count == 1 then
-      game.print(item_to_place_this.name)
+      log(item_to_place_this.name)
 
       for unit_number, struct in pairs(global.structs) do
         if not struct.entity.valid then
@@ -109,13 +109,26 @@ function Handler.handle_construction_alert(alert)
             -- we're gonna check for orange coverage for now, instead of green venn diagrams and filtering out personal roboports
             local network = struct.entity.surface.find_logistic_network_by_position(struct.entity.position, struct.entity.force)
             if network then
-              struct.entity.surface.create_entity{
-                name = 'item-request-proxy',
-                force = struct.entity.force,
-                target = struct.entity,
-                position = {0,0},
-                modules = {[item_to_place_this.name] = item_to_place_this.count}
-              }
+              local proxy = struct.entity.surface.find_entity('item-request-proxy', struct.entity.position)
+              if not proxy then
+                proxy = struct.entity.surface.create_entity{
+                  name = 'item-request-proxy',
+                  force = struct.entity.force,
+                  target = struct.entity,
+                  position = {0,0},
+                  modules = {[item_to_place_this.name] = item_to_place_this.count}
+                }
+  
+                rendering.draw_text{
+                  color = {1,1,1},
+                  alignment = 'center',
+                  text = proxy.surface.name,
+                  surface = proxy.surface,
+                  target = proxy,
+                  target_offset = {0, 0.5},
+                  use_rich_text = true,
+                }
+              end
             end
           end
         end

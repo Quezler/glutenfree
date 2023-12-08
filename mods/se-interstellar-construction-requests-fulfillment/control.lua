@@ -14,10 +14,9 @@ end
 
 script.on_init(Handler.on_init)
 
-script.on_nth_tick(20, Handler.tick)
+-- script.on_nth_tick(20, Handler.tick)
 
-script.on_nth_tick(600, function(event)
-
+script.on_nth_tick(600 / 10, function(event)
   for _, player in ipairs(game.connected_players) do
     local alerts = player.get_alerts{
       type = defines.alert_type.no_material_for_construction,
@@ -26,21 +25,7 @@ script.on_nth_tick(600, function(event)
     for surface_index, surface_alerts in pairs(alerts) do
       for _, surface_alert in ipairs(surface_alerts[defines.alert_type.no_material_for_construction]) do
         Handler.handle_construction_alert(surface_alert)
-        -- {
-        --   {
-        --     count = 1,
-        --     name = "industrial-furnace"
-        --   }
-        -- ...
-        -- }
-        -- {
-        --   {
-        --     count = 1,
-        --     name = "storage-tank"
-        --   }
-        -- }
       end
     end
   end
-
 end)
