@@ -77,13 +77,6 @@ function Handler.draw_random_card()
   end
 end
 
--- function Handler.get_max_energy()
---   if not Handler.max_energy then
---     Handler.max_energy = game.entity_prototypes[Handler.entity_name].electric_energy_source_prototype.buffer_capacity
---   end
---   return Handler.max_energy
--- end
-
 function Handler.get_energy_per_shot()
   if not Handler.energy_per_shot then
     Handler.energy_per_shot = game.entity_prototypes[Handler.entity_name].attack_parameters.ammo_type.energy_consumption

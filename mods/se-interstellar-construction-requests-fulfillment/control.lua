@@ -16,7 +16,7 @@ end
 
 script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
 
-script.on_nth_tick(600 / 10, function(event)
+script.on_nth_tick(600, function(event) -- no_material_for_construction expires after 10 seconds
   for _, player in ipairs(game.connected_players) do
     local alerts = player.get_alerts{
       type = defines.alert_type.no_material_for_construction,
