@@ -38,6 +38,7 @@ function Handler.on_created_entity(event)
     proxy = nil, -- entity occupied if present and valid
     updated_at = game.tick,
   }
+  
   table.insert(global.pile, entity.unit_number)
 end
 
