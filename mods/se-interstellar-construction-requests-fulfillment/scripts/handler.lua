@@ -35,6 +35,7 @@ function Handler.on_created_entity(event)
     unit_number = entity.unit_number,
     entity = entity,
     barrel = 0,
+    proxy = nil, -- entity occupied if present and valid
   }
   table.insert(global.pile, entity.unit_number)
 end
@@ -83,13 +84,6 @@ function Handler.get_max_energy()
   return Handler.max_energy
 end
 
-function Handler.tick(event)
-  local struct = Handler.draw_random_card()
-  if not struct then return end
-
-  Handler.shoot(struct)
-end
-
 function Handler.shoot(struct)
   struct.entity.energy = 0
 
@@ -102,7 +96,7 @@ function Handler.shoot(struct)
 end
 
 function Handler.handle_construction_alert(alert)
-  if alert.target.valid then return end -- ghost might have been removed or revived already
+  if not alert.target.valid then return end -- ghost might have been removed or revived already
   if alert.target.name ~= "entity-ghost" then return end -- can be "item-request-proxy" or "tile-ghost"
 
   local handled_alert = global.handled_alerts[alert.target.unit_number]
@@ -111,10 +105,8 @@ function Handler.handle_construction_alert(alert)
   local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = alert.target.surface.index})
   if not zone then return end
 
-  -- game.print(serpent.block(alert.target.ghost_prototype.items_to_place_this))
   for _, item_to_place_this in ipairs(alert.target.ghost_prototype.items_to_place_this) do
-    if item_to_place_this.count == 1 then
-      log(item_to_place_this.name)
+    if item_to_place_this.count == 1 then -- no support for e.g. curved rails (which need 4) yet
 
       local anti_infinite_loop = 0
       while true do
@@ -128,9 +120,8 @@ function Handler.handle_construction_alert(alert)
           -- we're gonna check for orange coverage for now, instead of green venn diagrams and filtering out personal roboports
           local network = struct.entity.surface.find_logistic_network_by_position(struct.entity.position, struct.entity.force)
           if network then
-            local proxy = struct.entity.surface.find_entity('item-request-proxy', struct.entity.position)
-            if not proxy then
-              proxy = struct.entity.surface.create_entity{
+            if not struct.proxy or not struct.proxy.valid then
+              local proxy = struct.entity.surface.create_entity{
                 name = 'item-request-proxy',
                 force = struct.entity.force,
                 target = struct.entity,
@@ -139,7 +130,7 @@ function Handler.handle_construction_alert(alert)
               }
 
               rendering.draw_text{
-                color = {1,1,1},
+                color = {1, 1, 1},
                 alignment = 'center',
                 text = Zone._get_rich_text_name(zone),
                 surface = proxy.surface,
@@ -156,11 +147,10 @@ function Handler.handle_construction_alert(alert)
                 itemstack = item_to_place_this,
               }
 
-              -- struct.handled_alert_id = alert.target.unit_number
+              struct.proxy = proxy -- the struct doesn't need a reference to the handled alert right?
 
               global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert.target.unit_number
-
-              return -- this alert has now been dealt with
+              return
             end
           end
         end
@@ -170,31 +160,57 @@ function Handler.handle_construction_alert(alert)
   end
 end
 
+function Handler.get_cargo_of_overhead_construction_bot_holding(entity, itemstack)
+  local nearby_construction_robots = entity.surface.find_entities_filtered{
+    type = 'construction-robot',
+    position = entity.position,
+    force = entity.force,
+  }
+
+  for _, nearby_construction_robot in ipairs(nearby_construction_robots) do
+    local cargo = nearby_construction_robot.get_inventory(defines.inventory.robot_cargo)
+    if cargo.get_item_count(itemstack.name) >= itemstack.count then
+      return cargo
+    end
+  end
+end
+
 function Handler.on_entity_destroyed(event)
   local unit_number = global.deathrattles[event.registration_number]
   if unit_number then global.deathrattles[event.registration_number] = nil
 
     local handled_alert = global.handled_alerts[unit_number]
-    if not handled_alert then return end
+    if handled_alert then global.handled_alerts[unit_number] = nil
+      
+      if not handled_alert.entity.valid then return end
 
-    local struct = global.structs[handled_alert.struct_unit_number]
-    if not struct then return end
-    if not struct.entity.valid then return end
-
-    local nearby_construction_robots = struct.entity.surface.find_entities_filtered{
-      type = 'construction-robot',
-      position = struct.entity.position,
-      force = struct.entity.force,
-    }
-
-    for _, nearby_construction_robot in ipairs(nearby_construction_robots) do
-      local cargo = nearby_construction_robot.get_inventory(defines.inventory.robot_cargo)
-      if cargo.remove(handled_alert.itemstack) then
+      local struct = global.structs[handled_alert.struct_unit_number]
+      if not struct then return end
+      if not struct.entity.valid then return end
+  
+      local cargo = Handler.get_cargo_of_overhead_construction_bot_holding(struct.entity, handled_alert.itemstack)
+      if cargo then
+        cargo.remove(handled_alert.itemstack)
         Handler.shoot(struct)
         handled_alert.entity.revive()
-        global.handled_alerts[handled_alert.unit_number] = nil
-        return
       end
+
+    end
+  end
+end
+
+function Handler.gc(event)
+  for unit_number, struct in pairs(global.structs) do
+    if not struct.valid then
+      log('garbage collected struct #' .. unit_number)
+      global.structs[unit_number] = nil
+    end
+  end
+
+  for unit_number, handled_alert in pairs(global.handled_alerts) do
+    if (not handled_alert.entity.valid) or (not handled_alert.proxy.valid) then
+      log('garbage collected alert #' .. unit_number)
+      global.handled_alert[unit_number] = nil
     end
   end
 end

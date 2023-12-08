@@ -1,5 +1,7 @@
 local Handler = require('scripts.handler')
 
+script.on_init(Handler.on_init)
+
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
@@ -12,9 +14,7 @@ for _, event in ipairs({
   })
 end
 
-script.on_init(Handler.on_init)
-
--- script.on_nth_tick(20, Handler.tick)
+script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
 
 script.on_nth_tick(600 / 10, function(event)
   for _, player in ipairs(game.connected_players) do
@@ -30,4 +30,4 @@ script.on_nth_tick(600 / 10, function(event)
   end
 end)
 
-script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
+script.on_nth_tick(60 * 60 * 10, Handler.gc) -- every 10 minutes

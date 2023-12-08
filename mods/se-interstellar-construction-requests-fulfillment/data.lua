@@ -23,7 +23,7 @@ turret.attack_parameters = table.deepcopy(data.raw['electric-turret']['laser-tur
 
 turret.attack_parameters.ammo_type.energy_consumption = "1GJ"
 turret.energy_source.buffer_capacity = "1GJ"
-turret.energy_source.input_flow_limit = "1GW"
+turret.energy_source.input_flow_limit = "0.1GW"
 turret.energy_source.drain = nil
 
 log('search for this!')
