@@ -35,3 +35,11 @@ script.on_nth_tick(600, function(event) -- no_material_for_construction expires 
 end)
 
 script.on_nth_tick(60 * 60 * 10, Handler.gc) -- every 10 minutes
+
+commands.add_command('se-interstellar-construction-requests-fulfillment', nil, function(command)
+  game.print(serpent.block({
+    table_size(global.structs),
+    #global.deck,
+    #global.pile,
+  }))
+end)

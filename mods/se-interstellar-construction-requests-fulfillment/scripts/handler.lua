@@ -38,7 +38,7 @@ function Handler.on_created_entity(event)
     proxy = nil, -- entity occupied if present and valid
     updated_at = game.tick,
   }
-  
+
   table.insert(global.pile, entity.unit_number)
 end
 
@@ -201,7 +201,7 @@ function Handler.on_entity_destroyed(event)
       if cargo then
         cargo.remove(handled_alert.itemstack)
         Handler.shoot(struct)
-        handled_alert.entity.revive()
+        handled_alert.entity.revive{raise_revive = true}
       end
 
     end
