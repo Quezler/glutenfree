@@ -1,4 +1,5 @@
 local Util = require('__space-exploration-scripts__.util')
+local Zone = require('__space-exploration-scripts__.zone')
 local Meteor = require('scripts.meteor')
 local Handler = {}
 
@@ -96,6 +97,9 @@ function Handler.handle_construction_alert(alert)
   if alert.target.name ~= "entity-ghost" then return end -- can be "item-request-proxy" or "tile-ghost"
   -- log(alert.target.unit_number)
 
+  local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = alert.target.surface.index})
+  if not zone then return end
+
   -- game.print(serpent.block(alert.target.ghost_prototype.items_to_place_this))
   for _, item_to_place_this in ipairs(alert.target.ghost_prototype.items_to_place_this) do
     if item_to_place_this.count == 1 then
@@ -115,14 +119,14 @@ function Handler.handle_construction_alert(alert)
                   name = 'item-request-proxy',
                   force = struct.entity.force,
                   target = struct.entity,
-                  position = {0,0},
+                  position = struct.entity.position,
                   modules = {[item_to_place_this.name] = item_to_place_this.count}
                 }
   
                 rendering.draw_text{
                   color = {1,1,1},
                   alignment = 'center',
-                  text = proxy.surface.name,
+                  text = Zone._get_rich_text_name(zone),
                   surface = proxy.surface,
                   target = proxy,
                   target_offset = {0, 0.5},

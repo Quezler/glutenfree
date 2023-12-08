@@ -1,4 +1,4 @@
-local Zone = require('scripts.zone')
+local Zone = require('__space-exploration-scripts__.zone')
 
 local launchpad = {}
 
@@ -116,20 +116,7 @@ function launchpad.get_destination(zones_dropdown)
   if selected ~= nil then
     local zone = remote.call("space-exploration", "get_zone_from_name", {zone_name = remove_rich_text(selected)})
     if zone then -- or else fallback to what is selected, like if you select a spaceship as destination (why tho)
-
-      -- use universe exporer icon by default
-      local rich_text = '[img=' .. Zone.get_icon(zone) .. ']'
-
-      -- assume that for these 3 types you care about the primary resource
-      if zone.type == "planet" or zone.type == "moon" or zone.type == "asteroid-belt" then
-        rich_text = '[img=entity/' .. zone.primary_resource .. ']'
-      end
-
-      -- because these make sense to me personally
-      if zone.name == 'Nauvis'       then rich_text = '[item=landfill]' end
-      if zone.name == 'Nauvis Orbit' then rich_text = '[item=satellite]' end
-
-      selected = rich_text .. ' ' .. zone.name
+      selected = Zone._get_rich_text_name(zone)
     end
   end
 
