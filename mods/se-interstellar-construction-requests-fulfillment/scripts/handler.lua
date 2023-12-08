@@ -13,6 +13,8 @@ function Handler.on_init(event)
 
   global.handled_alerts = {}
 
+  global.deathrattles = {}
+
   -- log('items_to_place_this')
   -- for _, entity_prototype in pairs(game.entity_prototypes) do
   --   for _, item_to_place_this in pairs(entity_prototype.items_to_place_this or {}) do
@@ -85,6 +87,10 @@ function Handler.tick(event)
   local struct = Handler.draw_random_card()
   if not struct then return end
 
+  Handler.shoot(struct)
+end
+
+function Handler.shoot(struct)
   struct.entity.energy = 0
 
   struct.barrel = struct.barrel % 4 + 1
@@ -96,6 +102,7 @@ function Handler.tick(event)
 end
 
 function Handler.handle_construction_alert(alert)
+  if alert.target.valid then return end -- ghost might have been removed or revived already
   if alert.target.name ~= "entity-ghost" then return end -- can be "item-request-proxy" or "tile-ghost"
 
   local handled_alert = global.handled_alerts[alert.target.unit_number]
@@ -142,10 +149,16 @@ function Handler.handle_construction_alert(alert)
               }
 
               global.handled_alerts[alert.target.unit_number] = {
+                struct_unit_number = struct.unit_number,
                 unit_number = alert.target.unit_number,
                 entity = alert.target,
                 proxy = proxy,
+                itemstack = item_to_place_this,
               }
+
+              -- struct.handled_alert_id = alert.target.unit_number
+
+              global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert.target.unit_number
 
               return -- this alert has now been dealt with
             end
@@ -155,7 +168,35 @@ function Handler.handle_construction_alert(alert)
       end
     end
   end
+end
 
+function Handler.on_entity_destroyed(event)
+  local unit_number = global.deathrattles[event.registration_number]
+  if unit_number then global.deathrattles[event.registration_number] = nil
+
+    local handled_alert = global.handled_alerts[unit_number]
+    if not handled_alert then return end
+
+    local struct = global.structs[handled_alert.struct_unit_number]
+    if not struct then return end
+    if not struct.entity.valid then return end
+
+    local nearby_construction_robots = struct.entity.surface.find_entities_filtered{
+      type = 'construction-robot',
+      position = struct.entity.position,
+      force = struct.entity.force,
+    }
+
+    for _, nearby_construction_robot in ipairs(nearby_construction_robots) do
+      local cargo = nearby_construction_robot.get_inventory(defines.inventory.robot_cargo)
+      if cargo.remove(handled_alert.itemstack) then
+        Handler.shoot(struct)
+        handled_alert.entity.revive()
+        global.handled_alerts[handled_alert.unit_number] = nil
+        return
+      end
+    end
+  end
 end
 
 return Handler

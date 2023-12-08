@@ -29,3 +29,5 @@ script.on_nth_tick(600 / 10, function(event)
     end
   end
 end)
+
+script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
