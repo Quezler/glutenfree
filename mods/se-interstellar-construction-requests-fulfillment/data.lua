@@ -7,7 +7,7 @@ turret.base_picture.layers[2].tint = tint
 turret.base_picture.layers[2].hr_version.tint = tint
 
 turret.icon = nil
-turret.icons = data.raw['item']['se-meteor-point-defence'].icons
+turret.icons = table.deepcopy(data.raw['item']['se-meteor-point-defence'].icons)
 turret.icons[2].tint = tint
 
 turret.energy_source = {
@@ -41,7 +41,7 @@ local item = {
   flags = {'draw-logistic-overlay'},
 }
 
-item.icons = data.raw['item']['se-meteor-point-defence'].icons
+item.icons = table.deepcopy(data.raw['item']['se-meteor-point-defence']).icons
 item.icons[2].tint = tint
 
 item.place_result = turret.name
@@ -90,7 +90,7 @@ local technology = {
   }
 }
 
-technology.icons = data.raw['technology']['se-meteor-point-defence'].icons
+technology.icons = table.deepcopy(data.raw['technology']['se-meteor-point-defence']).icons
 technology.icons[2].tint = tint
 
 data:extend({turret, item, recipe, technology})
