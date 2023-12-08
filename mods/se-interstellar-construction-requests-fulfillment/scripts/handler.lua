@@ -42,27 +42,30 @@ function Handler.shuffle_array_in_place(t)
 end
 
 function Handler.draw_random_card()
-  local shuffled_without_success = false
+  local already_shuffled = false
 
   while true do
     if #global.deck == 0 then
-      if shuffled_without_success or #global.pile == 0 then return nil end
+      if already_shuffled or #global.pile == 0 then return nil end
 
       Handler.shuffle_array_in_place(global.pile)
       global.deck = global.pile
       global.pile = {}
 
-      shuffled_without_success = true
+      already_shuffled = true
     end
 
-    local random_unit_number = global.deck[#global.deck]
-    table.remove(global.deck, #global.deck)
+    local struct = global.structs[table.remove(global.deck)]
+    if struct then
+      if not struct.entity.valid then
+        global.structs[unit_number] = nil
+      else
+        table.insert(global.pile, struct.unit_number)
 
-    local struct = global.structs[random_unit_number]
-    if struct and struct.entity.valid then
-      table.insert(global.pile, struct.unit_number)
-      if struct.entity.energy > Handler.get_max_energy() - 1 then
-        return struct
+        if struct.entity.energy > Handler.get_max_energy() - 1 then
+          return struct
+        end
+        
       end
     end
   end
