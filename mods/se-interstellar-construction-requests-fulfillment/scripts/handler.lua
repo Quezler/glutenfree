@@ -1,6 +1,6 @@
 local Util = require('__space-exploration-scripts__.util')
 local Zone = require('__space-exploration-scripts__.zone')
-local Meteor = require('scripts.meteor')
+local Meteor = require('__space-exploration-scripts__.meteor')
 local Handler = {}
 
 Handler.entity_name = 'se-interstellar-construction-requests-fulfillment--turret'
