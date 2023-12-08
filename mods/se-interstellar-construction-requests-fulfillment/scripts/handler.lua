@@ -11,6 +11,8 @@ function Handler.on_init(event)
   global.deck = {} -- array, holds randomized unit numbers to pick from
   global.pile = {} -- array, holds all new and already drawn unit numbers
 
+  global.handled_alerts = {}
+
   -- log('items_to_place_this')
   -- for _, entity_prototype in pairs(game.entity_prototypes) do
   --   for _, item_to_place_this in pairs(entity_prototype.items_to_place_this or {}) do
@@ -59,7 +61,7 @@ function Handler.draw_random_card()
     local struct = global.structs[table.remove(global.deck)]
     if struct then
       if not struct.entity.valid then
-        global.structs[unit_number] = nil
+        global.structs[struct.unit_number] = nil
       else
         table.insert(global.pile, struct.unit_number)
 
@@ -81,8 +83,8 @@ end
 
 function Handler.tick(event)
   local struct = Handler.draw_random_card()
-
   if not struct then return end
+
   struct.entity.energy = 0
 
   struct.barrel = struct.barrel % 4 + 1
@@ -95,7 +97,9 @@ end
 
 function Handler.handle_construction_alert(alert)
   if alert.target.name ~= "entity-ghost" then return end -- can be "item-request-proxy" or "tile-ghost"
-  -- log(alert.target.unit_number)
+
+  local handled_alert = global.handled_alerts[alert.target.unit_number]
+  if handled_alert and handled_alert.entity.valid and handled_alert.proxy.valid then return end
 
   local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = alert.target.surface.index})
   if not zone then return end
@@ -105,37 +109,49 @@ function Handler.handle_construction_alert(alert)
     if item_to_place_this.count == 1 then
       log(item_to_place_this.name)
 
-      for unit_number, struct in pairs(global.structs) do
-        if not struct.entity.valid then
-          global.structs[unit_number] = nil
-        else
-          if alert.target.force == struct.entity.force then
-            -- we're gonna check for orange coverage for now, instead of green venn diagrams and filtering out personal roboports
-            local network = struct.entity.surface.find_logistic_network_by_position(struct.entity.position, struct.entity.force)
-            if network then
-              local proxy = struct.entity.surface.find_entity('item-request-proxy', struct.entity.position)
-              if not proxy then
-                proxy = struct.entity.surface.create_entity{
-                  name = 'item-request-proxy',
-                  force = struct.entity.force,
-                  target = struct.entity,
-                  position = struct.entity.position,
-                  modules = {[item_to_place_this.name] = item_to_place_this.count}
-                }
-  
-                rendering.draw_text{
-                  color = {1,1,1},
-                  alignment = 'center',
-                  text = Zone._get_rich_text_name(zone),
-                  surface = proxy.surface,
-                  target = proxy,
-                  target_offset = {0, 0.5},
-                  use_rich_text = true,
-                }
-              end
+      local anti_infinite_loop = 0
+      while true do
+        local struct = Handler.draw_random_card()
+        if not struct then return end
+
+        if anti_infinite_loop > 100 then return end
+        anti_infinite_loop = anti_infinite_loop + 1
+
+        if alert.target.force == struct.entity.force then
+          -- we're gonna check for orange coverage for now, instead of green venn diagrams and filtering out personal roboports
+          local network = struct.entity.surface.find_logistic_network_by_position(struct.entity.position, struct.entity.force)
+          if network then
+            local proxy = struct.entity.surface.find_entity('item-request-proxy', struct.entity.position)
+            if not proxy then
+              proxy = struct.entity.surface.create_entity{
+                name = 'item-request-proxy',
+                force = struct.entity.force,
+                target = struct.entity,
+                position = struct.entity.position,
+                modules = {[item_to_place_this.name] = item_to_place_this.count}
+              }
+
+              rendering.draw_text{
+                color = {1,1,1},
+                alignment = 'center',
+                text = Zone._get_rich_text_name(zone),
+                surface = proxy.surface,
+                target = proxy,
+                target_offset = {0, 0.5},
+                use_rich_text = true,
+              }
+
+              global.handled_alerts[alert.target.unit_number] = {
+                unit_number = alert.target.unit_number,
+                entity = alert.target,
+                proxy = proxy,
+              }
+
+              return -- this alert has now been dealt with
             end
           end
         end
+
       end
     end
   end
