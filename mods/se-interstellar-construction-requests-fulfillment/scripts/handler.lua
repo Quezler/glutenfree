@@ -98,6 +98,7 @@ function Handler.shoot(struct)
 end
 
 function Handler.handle_construction_alert(alert)
+  if not alert.target then return end -- attempt to index field 'target' (a nil value)
   if not alert.target.valid then return end -- ghost might have been removed or revived already
   if alert.target.name ~= "entity-ghost" then return end -- can be "item-request-proxy" or "tile-ghost"
 
