@@ -15,6 +15,9 @@ function Handler.on_init(event)
 
   global.deathrattles = {}
 
+  global.alert_targets = {}
+  global.alert_targets_per_tick = 1
+
   -- log('items_to_place_this')
   -- for _, entity_prototype in pairs(game.entity_prototypes) do
   --   for _, item_to_place_this in pairs(entity_prototype.items_to_place_this or {}) do
@@ -24,6 +27,11 @@ function Handler.on_init(event)
   --   end
   -- end
   -- {curved-rail, se-space-curved-rail, concrete-wall-ruin, steel-wall-ruin, stone-wall-ruin}
+end
+
+function Handler.on_configuration_changed(event)
+  global.alert_targets = global.alert_targets or {}
+  global.alert_targets_per_tick = global.alert_targets_per_tick or 1
 end
 
 function Handler.on_created_entity(event)
@@ -97,18 +105,16 @@ function Handler.shoot(struct)
   }
 end
 
-function Handler.handle_construction_alert(alert)
-  if not alert.target then return end -- attempt to index field 'target' (a nil value)
-  if not alert.target.valid then return end -- ghost might have been removed or revived already
-  if alert.target.name ~= "entity-ghost" then return end -- can be "item-request-proxy" or "tile-ghost"
+function Handler.handle_construction_alert(alert_target)
+  if alert_target.name ~= "entity-ghost" then return end -- can be "item-request-proxy" or "tile-ghost"
 
-  local handled_alert = global.handled_alerts[alert.target.unit_number]
+  local handled_alert = global.handled_alerts[alert_target.unit_number]
   if handled_alert and handled_alert.entity.valid and handled_alert.proxy.valid then return end
 
-  local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = alert.target.surface.index})
+  local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = alert_target.surface.index})
   if not zone then return end
 
-  for _, item_to_place_this in ipairs(alert.target.ghost_prototype.items_to_place_this) do
+  for _, item_to_place_this in ipairs(alert_target.ghost_prototype.items_to_place_this) do
     if item_to_place_this.count == 1 then -- no support for e.g. curved rails (which need 4) yet
 
       local anti_infinite_loop = 0
@@ -120,7 +126,7 @@ function Handler.handle_construction_alert(alert)
         if anti_infinite_loop > anti_infinite_loop_max then return end
         anti_infinite_loop = anti_infinite_loop + 1
 
-        if alert.target.force == struct.entity.force then
+        if alert_target.force == struct.entity.force then
           -- we're gonna check for orange coverage for now, instead of green venn diagrams and filtering out personal roboports
           local network = struct.entity.surface.find_logistic_network_by_position(struct.entity.position, struct.entity.force)
           if network and network.can_satisfy_request(item_to_place_this.name, item_to_place_this.count, true) then
@@ -143,10 +149,10 @@ function Handler.handle_construction_alert(alert)
                 use_rich_text = true,
               }
 
-              global.handled_alerts[alert.target.unit_number] = {
+              global.handled_alerts[alert_target.unit_number] = {
                 struct_unit_number = struct.unit_number,
-                unit_number = alert.target.unit_number,
-                entity = alert.target,
+                unit_number = alert_target.unit_number,
+                entity = alert_target,
                 proxy = proxy,
                 itemstack = item_to_place_this,
               }
@@ -154,8 +160,8 @@ function Handler.handle_construction_alert(alert)
               struct.proxy = proxy -- the struct doesn't need a reference to the handled alert right?
               struct.updated_at = game.tick
 
-              global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert.target.unit_number
-              global.deathrattles[script.register_on_entity_destroyed(alert.target)] = alert.target.unit_number
+              global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert_target.unit_number
+              global.deathrattles[script.register_on_entity_destroyed(alert_target)] = alert_target.unit_number
               return
             end
           end
@@ -205,6 +211,19 @@ function Handler.on_entity_destroyed(event)
         handled_alert.entity.revive{raise_revive = true}
       end
 
+    end
+  end
+end
+
+function Handler.on_tick(event)
+  -- log('#alert_targets = ' .. table_size(global.alert_targets))
+  local i = 1
+  for unit_number, alert_target in pairs(global.alert_targets) do
+    global.alert_targets[unit_number] = nil
+    if alert_target.valid then
+      Handler.handle_construction_alert(alert_target)
+      i = i + 1
+      if i > global.alert_targets_per_tick then return end
     end
   end
 end
