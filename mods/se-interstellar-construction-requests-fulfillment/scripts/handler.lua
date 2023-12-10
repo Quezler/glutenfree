@@ -123,7 +123,7 @@ function Handler.handle_construction_alert(alert_target)
         local struct = Handler.draw_random_card()
         if not struct then return end
 
-        if anti_infinite_loop > anti_infinite_loop_max then return end
+        if anti_infinite_loop > anti_infinite_loop_max then log('anti_infinite_loop_max ('..anti_infinite_loop_max..') touched :o') return end
         anti_infinite_loop = anti_infinite_loop + 1
 
         if alert_target.force == struct.entity.force then
