@@ -86,6 +86,7 @@ function Handler.draw_random_card()
   local already_shuffled = false
 
   while true do
+    log('infinite loop 1?')
     if #global.deck == 0 then
       if already_shuffled or #global.pile == 0 then return nil end
 
@@ -147,6 +148,7 @@ function Handler.handle_construction_alert(alert_target)
     if item_to_place_this.count == 1 then -- no support for e.g. curved rails (which need 4) yet
 
       while true do
+        log('infinite loop 2?')
         local struct = Handler.draw_random_card()
         if not struct then break end
 
