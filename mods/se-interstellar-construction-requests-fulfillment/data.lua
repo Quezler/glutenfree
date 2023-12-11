@@ -90,7 +90,16 @@ local technology = {
   }
 }
 
+local uplink = table.deepcopy(data.raw['logistic-container']['logistic-chest-buffer'])
+uplink.name = 'se-interstellar-construction-requests-fulfillment--buffer-chest'
+uplink.flags = {'not-on-map', 'no-automated-item-removal', 'no-automated-item-insertion'}
+uplink.selectable_in_game = false
+uplink.animation = util.empty_sprite()
+uplink.collision_mask = {}
+uplink.selection_box = {{-1.5, -1.5}, {1.5, 1.5}}
+-- log(serpent.block(uplink))
+
 technology.icons = table.deepcopy(data.raw['technology']['se-meteor-point-defence']).icons
 technology.icons[2].tint = tint
 
-data:extend({turret, item, recipe, technology})
+data:extend({turret, item, recipe, technology, uplink})

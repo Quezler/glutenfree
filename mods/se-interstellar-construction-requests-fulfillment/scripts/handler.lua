@@ -18,6 +18,8 @@ function Handler.on_init(event)
   global.alert_targets = {}
   global.alert_targets_per_tick = 1
 
+  global.children_to_kill = {}
+
   -- log('items_to_place_this')
   -- for _, entity_prototype in pairs(game.entity_prototypes) do
   --   for _, item_to_place_this in pairs(entity_prototype.items_to_place_this or {}) do
@@ -32,6 +34,14 @@ end
 function Handler.on_configuration_changed(event)
   global.alert_targets = global.alert_targets or {}
   global.alert_targets_per_tick = global.alert_targets_per_tick or 1
+
+  global.children_to_kill = global.children_to_kill or {}
+
+  for unit_number, struct in pairs(global.structs) do
+    if struct.entity.valid and not struct.buffer_chest then
+      Handler.create_buffer_chest_for(struct)
+    end
+  end
 end
 
 function Handler.on_created_entity(event)
@@ -39,7 +49,7 @@ function Handler.on_created_entity(event)
 
   entity.active = false
 
-  global.structs[entity.unit_number] = {
+  local struct = {
     unit_number = entity.unit_number,
     entity = entity,
     barrel = 0,
@@ -47,7 +57,22 @@ function Handler.on_created_entity(event)
     updated_at = game.tick,
   }
 
+  Handler.create_buffer_chest_for(struct)
+  global.structs[entity.unit_number] = struct
   table.insert(global.pile, entity.unit_number)
+end
+
+function Handler.create_buffer_chest_for(struct)
+  local chest = struct.entity.surface.create_entity{
+    name = 'se-interstellar-construction-requests-fulfillment--buffer-chest',
+    force = struct.entity.force,
+    position = struct.entity.position,
+  }
+
+  chest.destructible = false
+  struct.buffer_chest = chest
+
+  global.children_to_kill[script.register_on_entity_destroyed(struct.entity)] = chest
 end
 
 function Handler.shuffle_array_in_place(t)
@@ -80,7 +105,9 @@ function Handler.draw_random_card()
 
         if struct.entity.energy >= Handler.get_energy_per_shot() then
           if not struct.proxy or not struct.proxy.valid then
-            return struct
+            if struct.buffer_chest.logistic_network then
+              return struct
+            end
           end
         end
 
@@ -124,9 +151,7 @@ function Handler.handle_construction_alert(alert_target)
         if not struct then break end
 
         if alert_target.force == struct.entity.force then
-          -- we're gonna check for orange coverage for now, instead of green venn diagrams and filtering out personal roboports
-          local network = struct.entity.surface.find_logistic_network_by_position(struct.entity.position, struct.entity.force)
-          if network and network.can_satisfy_request(item_to_place_this.name, item_to_place_this.count, true) then
+          if struct.buffer_chest.logistic_network.can_satisfy_request(item_to_place_this.name, item_to_place_this.count, true) then
             local proxy = struct.entity.surface.create_entity{
               name = 'item-request-proxy',
               force = struct.entity.force,
@@ -206,6 +231,13 @@ function Handler.on_entity_destroyed(event)
         handled_alert.entity.revive{raise_revive = true}
       end
 
+    end
+  end
+
+  local child = global.children_to_kill[event.registration_number]
+  if child then global.children_to_kill[event.registration_number] = nil
+    if child.valid then
+      child.destroy()
     end
   end
 end
