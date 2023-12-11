@@ -82,19 +82,16 @@ function Handler.shuffle_array_in_place(t)
   end
 end
 
-function Handler.draw_random_card()
-  local already_shuffled = false
-
+function Handler.draw_random_card(already)
   while true do
-    log('infinite loop 1?')
     if #global.deck == 0 then
-      if already_shuffled or #global.pile == 0 then return nil end
+      if already.shuffled or #global.pile == 0 then return nil end
 
       Handler.shuffle_array_in_place(global.pile)
       global.deck = global.pile
       global.pile = {}
 
-      already_shuffled = true
+      already.shuffled = true
     end
 
     local struct = global.structs[table.remove(global.deck)]
@@ -103,15 +100,7 @@ function Handler.draw_random_card()
         global.structs[struct.unit_number] = nil
       else
         table.insert(global.pile, struct.unit_number)
-
-        if struct.entity.energy >= Handler.get_energy_per_shot() then
-          if not struct.proxy or not struct.proxy.valid then
-            if struct.buffer_chest.logistic_network then
-              return struct
-            end
-          end
-        end
-
+        return struct
       end
     end
   end
@@ -147,47 +136,55 @@ function Handler.handle_construction_alert(alert_target)
   for _, item_to_place_this in ipairs(alert_target.ghost_prototype.items_to_place_this) do
     if item_to_place_this.count == 1 then -- no support for e.g. curved rails (which need 4) yet
 
+      local already = {shuffled = false}
       while true do
-        log('infinite loop 2?')
-        local struct = Handler.draw_random_card()
+        local struct = Handler.draw_random_card(already)
         if not struct then break end
 
         if alert_target.force == struct.entity.force then
-          if struct.buffer_chest.logistic_network.can_satisfy_request(item_to_place_this.name, item_to_place_this.count, true) then
-            local proxy = struct.entity.surface.create_entity{
-              name = 'item-request-proxy',
-              force = struct.entity.force,
-              target = struct.entity,
-              position = struct.entity.position,
-              modules = {[item_to_place_this.name] = item_to_place_this.count}
-            }
+          if struct.entity.energy >= Handler.get_energy_per_shot() then
+            if not struct.proxy or not struct.proxy.valid then
+              if struct.buffer_chest.logistic_network then
 
-            rendering.draw_text{
-              color = {1, 1, 1},
-              alignment = 'center',
-              text = Zone._get_rich_text_name(zone),
-              surface = proxy.surface,
-              target = proxy,
-              target_offset = {0, 0.5},
-              use_rich_text = true,
-            }
+                if struct.buffer_chest.logistic_network.can_satisfy_request(item_to_place_this.name, item_to_place_this.count, true) then
+                  local proxy = struct.entity.surface.create_entity{
+                    name = 'item-request-proxy',
+                    force = struct.entity.force,
+                    target = struct.entity,
+                    position = struct.entity.position,
+                    modules = {[item_to_place_this.name] = item_to_place_this.count}
+                  }
 
-            global.handled_alerts[alert_target.unit_number] = {
-              struct_unit_number = struct.unit_number,
-              unit_number = alert_target.unit_number,
-              entity = alert_target,
-              proxy = proxy,
-              itemstack = item_to_place_this,
-            }
+                  rendering.draw_text{
+                    color = {1, 1, 1},
+                    alignment = 'center',
+                    text = Zone._get_rich_text_name(zone),
+                    surface = proxy.surface,
+                    target = proxy,
+                    target_offset = {0, 0.5},
+                    use_rich_text = true,
+                  }
 
-            struct.proxy = proxy -- the struct doesn't need a reference to the handled alert right?
-            struct.updated_at = game.tick
+                  global.handled_alerts[alert_target.unit_number] = {
+                    struct_unit_number = struct.unit_number,
+                    unit_number = alert_target.unit_number,
+                    entity = alert_target,
+                    proxy = proxy,
+                    itemstack = item_to_place_this,
+                  }
 
-            global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert_target.unit_number
-            global.deathrattles[script.register_on_entity_destroyed(alert_target)] = alert_target.unit_number
-            return
+                  struct.proxy = proxy -- the struct doesn't need a reference to the handled alert right?
+                  struct.updated_at = game.tick
+
+                  global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert_target.unit_number
+                  global.deathrattles[script.register_on_entity_destroyed(alert_target)] = alert_target.unit_number
+                  return
+                end
+              end -- network
+
+            end
           end
-        end
+        end -- force
 
       end
     end
