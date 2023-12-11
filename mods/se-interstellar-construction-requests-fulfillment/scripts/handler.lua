@@ -226,9 +226,12 @@ function Handler.on_entity_destroyed(event)
   
       local cargo = Handler.get_cargo_of_overhead_construction_bot_holding(struct.entity, handled_alert.itemstack)
       if cargo then
-        cargo.remove(handled_alert.itemstack)
-        Handler.shoot(struct)
-        handled_alert.entity.revive{raise_revive = true}
+        
+        local colliding_items, revived_entity = handled_alert.entity.revive{raise_revive = true}
+        if revived_entity then
+          cargo.remove(handled_alert.itemstack)
+          Handler.shoot(struct)
+        end
       end
 
     end
