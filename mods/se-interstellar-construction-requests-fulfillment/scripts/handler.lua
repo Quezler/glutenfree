@@ -79,7 +79,9 @@ function Handler.draw_random_card()
         table.insert(global.pile, struct.unit_number)
 
         if struct.entity.energy >= Handler.get_energy_per_shot() then
-          return struct
+          if not struct.proxy or not struct.proxy.valid then
+            return struct
+          end
         end
 
       end
@@ -117,53 +119,46 @@ function Handler.handle_construction_alert(alert_target)
   for _, item_to_place_this in ipairs(alert_target.ghost_prototype.items_to_place_this) do
     if item_to_place_this.count == 1 then -- no support for e.g. curved rails (which need 4) yet
 
-      local anti_infinite_loop = 0
-      local anti_infinite_loop_max = #global.deck + #global.pile
       while true do
         local struct = Handler.draw_random_card()
-        if not struct then return end
-
-        if anti_infinite_loop > anti_infinite_loop_max then log('anti_infinite_loop_max ('..anti_infinite_loop_max..') touched :o') return end
-        anti_infinite_loop = anti_infinite_loop + 1
+        if not struct then break end
 
         if alert_target.force == struct.entity.force then
           -- we're gonna check for orange coverage for now, instead of green venn diagrams and filtering out personal roboports
           local network = struct.entity.surface.find_logistic_network_by_position(struct.entity.position, struct.entity.force)
           if network and network.can_satisfy_request(item_to_place_this.name, item_to_place_this.count, true) then
-            if not struct.proxy or not struct.proxy.valid then
-              local proxy = struct.entity.surface.create_entity{
-                name = 'item-request-proxy',
-                force = struct.entity.force,
-                target = struct.entity,
-                position = struct.entity.position,
-                modules = {[item_to_place_this.name] = item_to_place_this.count}
-              }
+            local proxy = struct.entity.surface.create_entity{
+              name = 'item-request-proxy',
+              force = struct.entity.force,
+              target = struct.entity,
+              position = struct.entity.position,
+              modules = {[item_to_place_this.name] = item_to_place_this.count}
+            }
 
-              rendering.draw_text{
-                color = {1, 1, 1},
-                alignment = 'center',
-                text = Zone._get_rich_text_name(zone),
-                surface = proxy.surface,
-                target = proxy,
-                target_offset = {0, 0.5},
-                use_rich_text = true,
-              }
+            rendering.draw_text{
+              color = {1, 1, 1},
+              alignment = 'center',
+              text = Zone._get_rich_text_name(zone),
+              surface = proxy.surface,
+              target = proxy,
+              target_offset = {0, 0.5},
+              use_rich_text = true,
+            }
 
-              global.handled_alerts[alert_target.unit_number] = {
-                struct_unit_number = struct.unit_number,
-                unit_number = alert_target.unit_number,
-                entity = alert_target,
-                proxy = proxy,
-                itemstack = item_to_place_this,
-              }
+            global.handled_alerts[alert_target.unit_number] = {
+              struct_unit_number = struct.unit_number,
+              unit_number = alert_target.unit_number,
+              entity = alert_target,
+              proxy = proxy,
+              itemstack = item_to_place_this,
+            }
 
-              struct.proxy = proxy -- the struct doesn't need a reference to the handled alert right?
-              struct.updated_at = game.tick
+            struct.proxy = proxy -- the struct doesn't need a reference to the handled alert right?
+            struct.updated_at = game.tick
 
-              global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert_target.unit_number
-              global.deathrattles[script.register_on_entity_destroyed(alert_target)] = alert_target.unit_number
-              return
-            end
+            global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert_target.unit_number
+            global.deathrattles[script.register_on_entity_destroyed(alert_target)] = alert_target.unit_number
+            return
           end
         end
 
