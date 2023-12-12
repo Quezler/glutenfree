@@ -14,7 +14,7 @@ turret.energy_source = {
   buffer_capacity = "4GJ",
   input_flow_limit = "0.1GW",
   type = "electric",
-  usage_priority = "primary-input"
+  usage_priority = "secondary-input"
 }
 
 turret.attack_parameters = {
