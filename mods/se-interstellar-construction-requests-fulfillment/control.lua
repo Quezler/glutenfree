@@ -44,11 +44,18 @@ script.on_event(defines.events.on_tick, Handler.on_tick)
 script.on_nth_tick(60 * 60 * 10, Handler.gc) -- every 10 minutes
 
 commands.add_command('se-interstellar-construction-requests-fulfillment', nil, function(command)
-  game.print(serpent.block({
+  local item_request_proxy_whitelist = {}
+  for item_name, bool in pairs(global.item_request_proxy_whitelist) do
+    table.insert(item_request_proxy_whitelist, item_name)
+  end
+
+  local player = game.get_player(command.player_index)
+  player.print(serpent.block({
     table_size(global.structs),
     #global.deck,
     #global.pile,
     'global.alert_targets = ' .. table_size(global.alert_targets),
     'global.alert_targets_per_tick = ' .. global.alert_targets_per_tick,
+    'global.item_request_proxy_whitelist = ' .. table.concat(item_request_proxy_whitelist, ', '),
   }))
 end)

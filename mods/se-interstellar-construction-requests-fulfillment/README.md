@@ -7,7 +7,7 @@ This mod was developed/tested in a controlled environment on a pre-multi-planet 
 
 (currently) not supported:
 - curved rails
-- modules & fuel requests
+- deliveries other than modules
 - tile ghosts
 - no players online
 - a "travel delay"

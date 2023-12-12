@@ -19,6 +19,8 @@ function Handler.on_init(event)
   global.alert_targets_per_tick = 1
 
   global.children_to_kill = {}
+  
+  Handler.regenerate_item_request_proxy_whitelist()
 
   -- log('items_to_place_this')
   -- for _, entity_prototype in pairs(game.entity_prototypes) do
@@ -41,6 +43,16 @@ function Handler.on_configuration_changed(event)
     if struct.entity.valid and not struct.buffer_chest then
       Handler.create_buffer_chest_for(struct)
     end
+  end
+
+  Handler.regenerate_item_request_proxy_whitelist()
+end
+
+function Handler.regenerate_item_request_proxy_whitelist()
+  global.item_request_proxy_whitelist = {}
+  local module_prototypes = game.get_filtered_item_prototypes({{filter = "type", type = "module"}})
+  for module_name, module_prototype in pairs(module_prototypes) do
+    global.item_request_proxy_whitelist[module_name] = true
   end
 end
 
@@ -124,8 +136,9 @@ function Handler.shoot(struct)
   }
 end
 
+local supported_names = {["entity-ghost"] = true, ["item-request-proxy"] = true}
 function Handler.handle_construction_alert(alert_target)
-  if alert_target.name ~= "entity-ghost" then return end -- can be "item-request-proxy" or "tile-ghost"
+  if not supported_names[alert_target.name] then return end -- can be "item-request-proxy" or "tile-ghost"
 
   local handled_alert = global.handled_alerts[alert_target.unit_number]
   if handled_alert and handled_alert.entity.valid and handled_alert.proxy.valid then return end
@@ -133,7 +146,18 @@ function Handler.handle_construction_alert(alert_target)
   local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = alert_target.surface.index})
   if not zone then return end
 
-  for _, item_to_place_this in ipairs(alert_target.ghost_prototype.items_to_place_this) do
+  local items_to_place_this = {}
+  if alert_target.name == "entity-ghost" then items_to_place_this = alert_target.ghost_prototype.items_to_place_this end
+  if alert_target.name == "item-request-proxy" then
+    if alert_target.proxy_target.name == Handler.entity_name then return end -- avoid recursion by trying to satisfy proxies from this mod
+    for name, count in pairs(alert_target.item_requests) do
+      if global.item_request_proxy_whitelist[name] then
+        table.insert(items_to_place_this, {name = name, count = 1})
+      end
+    end
+  end
+
+  for _, item_to_place_this in ipairs(items_to_place_this) do
     if item_to_place_this.count == 1 then -- no support for e.g. curved rails (which need 4) yet
 
       local already = {shuffled = false}
@@ -226,11 +250,22 @@ function Handler.on_entity_destroyed(event)
       local cargo = Handler.get_cargo_of_overhead_construction_bot_holding(struct.entity, handled_alert.itemstack)
       if cargo then
         
-        local colliding_items, revived_entity = handled_alert.entity.revive{raise_revive = true}
-        if revived_entity then
-          cargo.remove(handled_alert.itemstack)
-          Handler.shoot(struct)
+        if handled_alert.entity.name == "entity-ghost" then
+          local colliding_items, revived_entity = handled_alert.entity.revive{raise_revive = true}
+          if revived_entity then
+            cargo.remove(handled_alert.itemstack)
+            Handler.shoot(struct)
+          end
+        elseif handled_alert.entity.name == "item-request-proxy" then
+          if Handler.item_request_proxy_still_wants(handled_alert.entity, handled_alert.itemstack) then
+            if handled_alert.entity.proxy_target.insert(handled_alert.itemstack) then
+              Handler.item_request_proxy_subtract(handled_alert.entity, handled_alert.itemstack)
+              cargo.remove(handled_alert.itemstack)
+              Handler.shoot(struct)
+            end
+          end
         end
+
       end
 
     end
@@ -242,6 +277,33 @@ function Handler.on_entity_destroyed(event)
       child.destroy()
     end
   end
+end
+
+function Handler.item_request_proxy_still_wants(item_request_proxy, itemstack)
+  for name, count in pairs(item_request_proxy.item_requests) do
+    if name == itemstack.name then return true end
+  end
+
+  return false
+end
+
+function Handler.item_request_proxy_subtract(item_request_proxy, itemstack)
+  local item_requests = item_request_proxy.item_requests
+  for name, count in pairs(item_requests) do
+    if name == itemstack.name then
+      count = count - itemstack.count
+      if 0 >= count then
+        error('could not remove enough of this item from the proxy.')
+        -- item_requests[name] = nil
+      else
+        item_requests[name] = count
+      end
+      item_request_proxy.item_requests = item_requests
+      return
+    end
+  end
+
+  error('proxy did not request that item anymore already.')
 end
 
 function Handler.on_tick(event)
