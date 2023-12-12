@@ -293,8 +293,10 @@ function Handler.item_request_proxy_subtract(item_request_proxy, itemstack)
     if name == itemstack.name then
       count = count - itemstack.count
       if 0 >= count then
-        error('could not remove enough of this item from the proxy.')
-        -- item_requests[name] = nil
+        if 0 > count then
+          error('could not remove enough of this item from the proxy.')
+        end
+        item_requests[name] = nil
       else
         item_requests[name] = count
       end
