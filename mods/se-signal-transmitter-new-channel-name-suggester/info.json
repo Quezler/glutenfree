@@ -1,0 +1,12 @@
+{
+    "name": "se-signal-transmitter-new-channel-name-suggester",
+    "title": "Space Exploration - signal transmitter new channel name suggester",
+    "description": "When you place down a new signal transmitter and rename `Default` to something else, it suggests the current surface's name + primary resource.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "~ space-exploration",
+        "~ space-exploration-scripts >= 1.0.8"
+    ]
+}
