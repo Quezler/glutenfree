@@ -264,6 +264,9 @@ function Handler.on_entity_destroyed(event)
         
         if handled_alert.entity.name == "entity-ghost" then
           local colliding_items, revived_entity = handled_alert.entity.revive{raise_revive = true}
+          if table_size(colliding_items) > 0 then
+            game.print(serpent.line(colliding_items))
+          end
           if revived_entity then
             cargo.remove(handled_alert.itemstack)
             Handler.shoot(struct)
