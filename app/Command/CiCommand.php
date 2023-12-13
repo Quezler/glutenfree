@@ -76,6 +76,7 @@ class CiCommand extends Command
                         'title' => $mod->info()['title'],
                         'summary' => $mod->info()['description'],
                         'description' => $mod->readme(),
+                        'homepage' => 'https://discord.gg/ktZNgJcaVA',
                     ]
                 ]);
 
