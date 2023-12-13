@@ -153,7 +153,8 @@ function Handler.handle_construction_alert(alert_target)
       global.rich_text_name_for_destination_surface[alert_target.surface.index] = false
       return
     end
-    global.rich_text_name_for_destination_surface[alert_target.surface.index] = Zone._get_rich_text_name(zone)
+    rich_text_name_for_destination_surface = Zone._get_rich_text_name(zone)
+    global.rich_text_name_for_destination_surface[alert_target.surface.index] = rich_text_name_for_destination_surface
   elseif global.rich_text_name_for_destination_surface[alert_target.surface.index] == false then
     return
   end
