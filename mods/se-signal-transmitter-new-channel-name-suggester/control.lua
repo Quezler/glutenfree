@@ -20,6 +20,7 @@ script.on_event(defines.events.on_player_main_inventory_changed, function(event)
 
   if player.opened and player.opened.type == "frame" and player.opened.name == "aai-signal-sender" then
     local write_channel = player.opened.children[2].children[2].children[1].children[1]
+    if write_channel.type ~= "textfield" then return end -- for freshly constructed ones
     if write_channel.text ~= default_channel then return end
 
     local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = player.surface.index})
