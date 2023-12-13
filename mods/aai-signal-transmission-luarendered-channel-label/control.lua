@@ -80,15 +80,9 @@ remote.add_interface('aai-signal-transmission-luarendered-channel-label', {updat
 commands.add_command('aai-signal-transmission-luarendered-channel-label', nil, function(command)
   local player = game.get_player(command.player_index)
   for unit_number, struct in pairs(global.structs) do
-    player.opened = struct.entity
+    if struct.entity.valid then
+      player.opened = struct.entity
+    end
   end
   player.opened = nil
 end)
-
--- script.on_event(defines.events.on_gui_confirmed, function(event)
---   game.print('s' .. event.element.name)
--- end)
-
--- script.on_event(defines.events.on_gui_click, function(event)
---   game.print('s' .. event.element.name)
--- end)
