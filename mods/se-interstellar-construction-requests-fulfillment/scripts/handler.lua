@@ -21,6 +21,7 @@ function Handler.on_init(event)
   global.children_to_kill = {}
   
   Handler.regenerate_item_request_proxy_whitelist()
+  global.rich_text_name_for_destination_surface = {}
 
   -- log('items_to_place_this')
   -- for _, entity_prototype in pairs(game.entity_prototypes) do
@@ -46,6 +47,7 @@ function Handler.on_configuration_changed(event)
   end
 
   Handler.regenerate_item_request_proxy_whitelist()
+  global.rich_text_name_for_destination_surface = {}
 end
 
 function Handler.regenerate_item_request_proxy_whitelist()
@@ -143,8 +145,18 @@ function Handler.handle_construction_alert(alert_target)
   local handled_alert = global.handled_alerts[alert_target.unit_number]
   if handled_alert and handled_alert.entity.valid and handled_alert.proxy.valid then return end
 
-  local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = alert_target.surface.index})
-  if not zone then return end
+  -- determine & cache the name and icon for the destination zone
+  local rich_text_name_for_destination_surface = global.rich_text_name_for_destination_surface[alert_target.surface.index]
+  if rich_text_name_for_destination_surface == nil then
+    local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = alert_target.surface.index})
+    if not zone then
+      global.rich_text_name_for_destination_surface[alert_target.surface.index] = false
+      return
+    end
+    global.rich_text_name_for_destination_surface[alert_target.surface.index] = Zone._get_rich_text_name(zone)
+  elseif global.rich_text_name_for_destination_surface[alert_target.surface.index] == false then
+    return
+  end
 
   local items_to_place_this = {}
   if alert_target.name == "entity-ghost" then items_to_place_this = alert_target.ghost_prototype.items_to_place_this end
@@ -182,7 +194,7 @@ function Handler.handle_construction_alert(alert_target)
                   rendering.draw_text{
                     color = {1, 1, 1},
                     alignment = 'center',
-                    text = Zone._get_rich_text_name(zone),
+                    text = rich_text_name_for_destination_surface,
                     surface = proxy.surface,
                     target = proxy,
                     target_offset = {0, 0.5},
