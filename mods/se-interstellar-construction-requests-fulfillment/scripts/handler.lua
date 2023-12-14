@@ -140,7 +140,7 @@ end
 
 local supported_names = {["entity-ghost"] = true, ["item-request-proxy"] = true}
 function Handler.handle_construction_alert(alert_target)
-  if not supported_names[alert_target.name] then return end -- can be "item-request-proxy" or "tile-ghost"
+  if not supported_names[alert_target.name] and not alert_target.get_upgrade_target() then return end -- can be "item-request-proxy" or "tile-ghost"
 
   local handled_alert = global.handled_alerts[alert_target.unit_number]
   if handled_alert and handled_alert.entity.valid and handled_alert.proxy.valid then return end
@@ -160,15 +160,15 @@ function Handler.handle_construction_alert(alert_target)
   end
 
   local items_to_place_this = {}
-  if alert_target.name == "entity-ghost" then items_to_place_this = alert_target.ghost_prototype.items_to_place_this end
-  if alert_target.name == "item-request-proxy" then
+  if alert_target.name == "entity-ghost" then items_to_place_this = alert_target.ghost_prototype.items_to_place_this
+  elseif alert_target.name == "item-request-proxy" then
     if alert_target.proxy_target.name == Handler.entity_name then return end -- avoid recursion by trying to satisfy proxies from this mod
     for name, count in pairs(alert_target.item_requests) do
       if global.item_request_proxy_whitelist[name] then
         table.insert(items_to_place_this, {name = name, count = 1})
       end
     end
-  end
+  elseif alert_target.get_upgrade_target() then items_to_place_this = alert_target.get_upgrade_target().items_to_place_this end
 
   for _, item_to_place_this in ipairs(items_to_place_this) do
     if item_to_place_this.count == 1 then -- no support for e.g. curved rails (which need 4) yet
@@ -271,6 +271,7 @@ function Handler.on_entity_destroyed(event)
           if revived_entity then
             cargo.remove(handled_alert.itemstack)
             Handler.shoot(struct)
+            return
           end
         elseif handled_alert.entity.name == "item-request-proxy" then
           if Handler.item_request_proxy_still_wants(handled_alert.entity, handled_alert.itemstack) then
@@ -278,6 +279,15 @@ function Handler.on_entity_destroyed(event)
               Handler.item_request_proxy_subtract(handled_alert.entity, handled_alert.itemstack)
               cargo.remove(handled_alert.itemstack)
               Handler.shoot(struct)
+              return
+            end
+          end
+        elseif handled_alert.entity.get_upgrade_target() then
+          for _, network in ipairs(handled_alert.entity.surface.find_logistic_networks_by_construction_area(handled_alert.entity.position, handled_alert.entity.force)) do
+            if network.insert(cargo[1]) > 0 then -- technically should check if all of it got inserter or otherwise abort, but it shoudln't be more than 1 right?
+              cargo.remove(handled_alert.itemstack)
+              Handler.shoot(struct)
+              return
             end
           end
         end
