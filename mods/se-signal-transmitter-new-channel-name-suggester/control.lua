@@ -18,7 +18,7 @@ end)
 script.on_event(defines.events.on_player_main_inventory_changed, function(event)
   local player = game.get_player(event.player_index)
 
-  if player.opened and player.opened.type == "frame" and player.opened.name == "aai-signal-sender" then
+  if player.opened and opened.object_name == "LuaGuiElement" and player.opened.name == "aai-signal-sender" then
     local write_channel = player.opened.children[2].children[2].children[1].children[1]
     if write_channel.type ~= "textfield" then return end -- for freshly constructed ones
     if write_channel.text ~= default_channel then return end
