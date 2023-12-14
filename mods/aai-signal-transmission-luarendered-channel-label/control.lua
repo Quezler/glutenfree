@@ -66,6 +66,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
   local opened = player.opened
 
   if not opened then return end
+  if opened.object_name ~= "LuaGuiElement" then return end -- "LuaEquipmentGrid doesn't contain key name."
   if opened.name ~= "aai-signal-sender" then return end
 
   if not opened.children[2] then return end -- first time this element shows up its empty, so wait for the 2nd time.
