@@ -138,7 +138,7 @@ function Handler.shoot(struct)
   }
 end
 
-local supported_names = {["entity-ghost"] = true, ["item-request-proxy"] = true}
+local supported_names = {["entity-ghost"] = true, ["item-request-proxy"] = true, ["tile-ghost"] = true}
 function Handler.handle_construction_alert(alert_target)
   if not supported_names[alert_target.name] and not alert_target.get_upgrade_target() then return end -- can be "item-request-proxy" or "tile-ghost"
 
@@ -160,7 +160,7 @@ function Handler.handle_construction_alert(alert_target)
   end
 
   local items_to_place_this = {}
-  if alert_target.name == "entity-ghost" then items_to_place_this = alert_target.ghost_prototype.items_to_place_this
+  if alert_target.name == "entity-ghost" or alert_target.name == "tile-ghost" then items_to_place_this = alert_target.ghost_prototype.items_to_place_this
   elseif alert_target.name == "item-request-proxy" then
     if alert_target.proxy_target.name == Handler.entity_name then return end -- avoid recursion by trying to satisfy proxies from this mod
     for name, count in pairs(alert_target.item_requests) do
@@ -262,18 +262,19 @@ function Handler.on_entity_destroyed(event)
   
       local cargo = Handler.get_cargo_of_overhead_construction_bot_holding(struct.entity, handled_alert.itemstack)
       if cargo then
+        local handled_alert_entity_name = handled_alert.entity.name
         
-        if handled_alert.entity.name == "entity-ghost" then
+        if handled_alert_entity_name == "entity-ghost" or handled_alert_entity_name == "tile-ghost" then
           local colliding_items, revived_entity = handled_alert.entity.revive{raise_revive = true}
           if colliding_items and table_size(colliding_items) > 0 then
             game.print(serpent.line(colliding_items))
           end
-          if revived_entity then
+          if revived_entity or handled_alert_entity_name == "tile-ghost" then
             cargo.remove(handled_alert.itemstack)
             Handler.shoot(struct)
             return
           end
-        elseif handled_alert.entity.name == "item-request-proxy" then
+        elseif handled_alert_entity_name == "item-request-proxy" then
           if Handler.item_request_proxy_still_wants(handled_alert.entity, handled_alert.itemstack) then
             if handled_alert.entity.proxy_target.insert(handled_alert.itemstack) then
               Handler.item_request_proxy_subtract(handled_alert.entity, handled_alert.itemstack)
