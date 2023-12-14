@@ -370,7 +370,7 @@ function Handler.gc(event)
   end
 
   for unit_number, struct in pairs(global.structs) do
-    if struct.proxy and struct.proxy.valid and struct.updated_at > game.tick + 60 * 60 * 10 then
+    if struct.proxy and struct.proxy.valid and (game.tick + 60 * 60 * 10) > struct.updated_at then -- 10 minutes
       log('struct proxy expired #' .. unit_number)
       struct.proxy.destroy()
     end
