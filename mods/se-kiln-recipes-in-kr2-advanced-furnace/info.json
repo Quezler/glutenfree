@@ -1,0 +1,12 @@
+{
+    "name": "se-kiln-recipes-in-kr2-advanced-furnace",
+    "title": "Space Exploration - kiln recipes in advanced furnace",
+    "description": "Allows kiln recipes in the advanced furnace, the industrial furnace remains unaffected.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "space-exploration",
+        "Krastorio2"
+    ]
+}
