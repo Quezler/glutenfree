@@ -178,50 +178,52 @@ function Handler.handle_construction_alert(alert_target)
         local struct = Handler.draw_random_card(already)
         if not struct then break end
 
-        if alert_target.force == struct.entity.force then
-          if struct.entity.energy >= Handler.get_energy_per_shot() then
-            if not struct.proxy or not struct.proxy.valid then
-              if struct.buffer_chest.logistic_network then
+        if alert_target.surface ~= struct.entity.surface then
+          if alert_target.force == struct.entity.force then
+            if struct.entity.energy >= Handler.get_energy_per_shot() then
+              if not struct.proxy or not struct.proxy.valid then
+                if struct.buffer_chest.logistic_network then
 
-                if struct.buffer_chest.logistic_network.can_satisfy_request(item_to_place_this.name, item_to_place_this.count, true) then
-                  local proxy = struct.entity.surface.create_entity{
-                    name = 'item-request-proxy',
-                    force = struct.entity.force,
-                    target = struct.entity,
-                    position = struct.entity.position,
-                    modules = {[item_to_place_this.name] = item_to_place_this.count}
-                  }
+                  if struct.buffer_chest.logistic_network.can_satisfy_request(item_to_place_this.name, item_to_place_this.count, true) then
+                    local proxy = struct.entity.surface.create_entity{
+                      name = 'item-request-proxy',
+                      force = struct.entity.force,
+                      target = struct.entity,
+                      position = struct.entity.position,
+                      modules = {[item_to_place_this.name] = item_to_place_this.count}
+                    }
 
-                  rendering.draw_text{
-                    color = {1, 1, 1},
-                    alignment = 'center',
-                    text = rich_text_name_for_destination_surface,
-                    surface = proxy.surface,
-                    target = proxy,
-                    target_offset = {0, 0.5},
-                    use_rich_text = true,
-                  }
+                    rendering.draw_text{
+                      color = {1, 1, 1},
+                      alignment = 'center',
+                      text = rich_text_name_for_destination_surface,
+                      surface = proxy.surface,
+                      target = proxy,
+                      target_offset = {0, 0.5},
+                      use_rich_text = true,
+                    }
 
-                  global.handled_alerts[alert_target.unit_number] = {
-                    struct_unit_number = struct.unit_number,
-                    unit_number = alert_target.unit_number,
-                    entity = alert_target,
-                    proxy = proxy,
-                    itemstack = item_to_place_this,
-                  }
+                    global.handled_alerts[alert_target.unit_number] = {
+                      struct_unit_number = struct.unit_number,
+                      unit_number = alert_target.unit_number,
+                      entity = alert_target,
+                      proxy = proxy,
+                      itemstack = item_to_place_this,
+                    }
 
-                  struct.proxy = proxy -- the struct doesn't need a reference to the handled alert right?
-                  struct.updated_at = game.tick
+                    struct.proxy = proxy -- the struct doesn't need a reference to the handled alert right?
+                    struct.updated_at = game.tick
 
-                  global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert_target.unit_number
-                  global.deathrattles[script.register_on_entity_destroyed(alert_target)] = alert_target.unit_number
-                  return
-                end
-              end -- network
+                    global.deathrattles[script.register_on_entity_destroyed(proxy)] = alert_target.unit_number
+                    global.deathrattles[script.register_on_entity_destroyed(alert_target)] = alert_target.unit_number
+                    return
+                  end
+                end -- network
 
+              end
             end
           end
-        end -- force
+        end -- surface
 
       end
     end
