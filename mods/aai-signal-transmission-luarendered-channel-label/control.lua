@@ -1,3 +1,5 @@
+local Util = require('__aai-signal-transmission__.scripts.util')
+
 function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
   global.structs[entity.unit_number] = {
@@ -42,6 +44,9 @@ end
 function update_text(unit_number, channel)
   local struct = global.structs[unit_number]
   if not struct then return end
+
+  if Util.string_trim(channel) == "" then channel = "Default" end
+
   struct.opened = true
   -- if struct.id then rendering.destroy(id) end
   if struct.id == nil then
