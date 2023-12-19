@@ -18,4 +18,11 @@ class Git
 
         return false;
     }
+
+    public static function date_from_commit(string $commit): string
+    {
+        $pattern = '/Date:\s+([a-zA-Z]+ [a-zA-Z]+ \d+ \d+:\d+:\d+ \d+)/';
+        preg_match($pattern, $commit, $matches);
+        return date('Y. m. d', strtotime($matches[1]));
+    }
 }

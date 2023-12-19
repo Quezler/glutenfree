@@ -17,5 +17,6 @@ $application->add(new \App\Command\RsyncCommand());
 $application->add(new \App\Command\PublishCommand());
 $application->add(new \App\Command\UpdateCommand());
 $application->add(new \App\Command\CiCommand());
+$application->add(new \App\Command\ChangelogCommand());
 
 $application->run();

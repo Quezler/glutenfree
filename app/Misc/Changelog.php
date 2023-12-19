@@ -70,7 +70,7 @@ class Changelog
         foreach ($versions as $version => $commits) {
             $changelog_lines[] = str_repeat('-', 99);
             $changelog_lines[] = 'Version: ' . $version;
-//            $changelog_lines[] = 'Date: ' . (new \DateTime("now"))->format("d. m. Y");
+            $changelog_lines[] = 'Date: ' . Git::date_from_commit($commits[0]);
 
             $changelog_lines[] = '  Commits:';
 
@@ -84,6 +84,8 @@ class Changelog
         $changelog_content = implode(PHP_EOL, $changelog_lines);
 
         dump($changelog_content);
-        file_put_contents("{$in}/changelog.txt", $changelog_content);
+
+        if ($in != "")
+          file_put_contents("{$in}/changelog.txt", $changelog_content);
     }
 }
