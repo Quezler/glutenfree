@@ -1,11 +1,3 @@
-
-local function round(number, decimals)
-  local multiplier = 10 ^ (decimals or 0)
-  return math.floor(number * multiplier + 0.5) / multiplier
-end
-
---
-
 script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index)
   local entity = player.selected
@@ -26,9 +18,121 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     text[6] = core_miners_on_this_surface
     text[7] = "="
     text[8] = "[item="..fragment_name.."]"
-    text[9] = round(fragments_per_second * (1 + entity.force.mining_drill_productivity_bonus) * core_miners_on_this_surface, 2) .. "/s"
+    text[9] = string.format("%.2f/s", fragments_per_second * (1 + entity.force.mining_drill_productivity_bonus) * core_miners_on_this_surface)
 
     player.create_local_flying_text({text = table.concat(text, " "), position = entity.position})
   end
 
+end)
+
+--
+
+local Util = require('__space-exploration-scripts__.util')
+local Zonelist = require('__space-exploration-scripts__.zonelist')
+
+function Zone_get_fragment_name(zone)
+  if not (zone.type == "planet" or zone.type == "moon") then return end -- Zone.is_solid(zone)
+  if zone.fragment_name then return zone.fragment_name end
+  return "se-core-fragment-" .. zone.primary_resource
+end
+
+function Zone_get_core_seam_count(zone)
+  local target_seams = 5 + 95 * (zone.radius / 10000)
+  return target_seams -- effectively rounded down by the `for i = 1, target_seams do` loop
+end
+
+function get_mining_time(fragment_name)
+  return game.entity_prototypes[fragment_name].mineable_properties.mining_time
+end
+
+script.on_event(defines.events.on_gui_click, function(event)
+  if not event.element.valid then return end
+
+  local player = game.get_player(event.player_index)
+
+  local root = Zonelist.get(player)
+  if not root then return end
+
+  local parent = Util.get_gui_element(root, Zonelist.path_zone_data_flow)
+  if not parent then return end
+
+  local container = parent[Zonelist.name_zone_data_container_frame]
+  local content = container[Zonelist.name_zone_data_content_scroll_pane]
+
+  -- `Zonelist.make_zone_data_section` regenerates when the universe explorer initially opens,
+  -- so here we will inject our core miner flow for the liftime of the gui once and then update.
+  if event.element.name == Zonelist.name_button_overhead_explorer then
+    content.add{
+      type = "checkbox",
+      name = "coremining-header",
+      caption = {"space-exploration.zonelist-coremining-header"},
+      state = false,
+      tags = {action=Zonelist.action_zone_data_content_header, name="coremining"},
+      style = "se_zonelist_zone_data_header_checkbox"
+    }
+    content.add{
+      type = "flow",
+      name = "coremining",
+      direction = "vertical",
+      style = "se_zonelist_zone_data_content_sub_flow"
+    }
+  end
+
+  local coremining_header = content["coremining-header"]
+  local coremining = content.coremining
+
+  -- grab the zone_index from the "View Surface" button
+  local button_flow = parent[Zonelist.name_zone_data_bottom_button_flow]
+  local view_button = button_flow[Zonelist.name_zone_data_view_surface_button]
+  local zone_index = view_button.tags.zone_index
+
+  local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = zone_index})
+  if not zone then return end
+
+  local fragment_name = Zone_get_fragment_name(zone) -- nil if not a planet or moon
+  if not fragment_name then
+    coremining_header.visible = false
+    coremining.visible = false
+    return
+  else
+    coremining_header.visible = true
+    coremining.visible = not coremining_header.state and true or false
+  end
+
+  coremining.clear()
+
+  local actual_core_miners = zone.core_mining and table_size(zone.core_mining) or 0 -- probably not pvp safe
+  local mining_productivity = 1 + player.force.mining_drill_productivity_bonus
+  local last_per_second = 0
+
+  for i = 1, Zone_get_core_seam_count(zone) do
+    local per_second = ((100 / get_mining_time(fragment_name)) * ((zone.radius + 5000) / 5000) * mining_productivity * i) / math.sqrt(i)
+
+    local flow = coremining.add{
+      type = "flow",
+      direction = "horizontal"
+    }
+
+    flow.add{
+      type = "label",
+      caption = string.format("%03d", i),
+      style = (actual_core_miners ~= i) and "se_zonelist_zone_data_label" or "se_zonelist_zone_data_label_link"
+    }
+    flow.add{
+      type = "empty-widget",
+      style = "se_relative_properties_spacer"
+    }
+    flow.add{
+      type = "label",
+      caption = string.format("%.2f/s",  per_second),
+      tooltip = string.format("+%.2f/s", per_second - last_per_second),
+      style = (actual_core_miners ~= i) and "se_zonelist_zone_data_value" or "se_zonelist_zone_data_value_link",
+    }
+
+    last_per_second = per_second
+  end
+
+  if zone.core_seam_positions then
+    assert(table_size(zone.core_seam_positions) == math.floor(Zone_get_core_seam_count(zone)))
+  end
 end)
