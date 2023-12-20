@@ -151,6 +151,16 @@ end)
 script.on_event(defines.events.on_gui_click, function(event)
   if not event.element.valid then return end
 
+  if event.element.tags and event.element.tags.action and event.element.tags.action == "go-to-zone" then
+    -- todo: also check if the "se-map-view-zone-details" is open at all since "go-to-zone" sounds generic?
+    local player = game.get_player(event.player_index)
+    local container = event.element.parent.parent.parent['right-flow']['container-frame']
+    local content = container[Zonelist.name_zone_data_content_scroll_pane]
+    local zone_index = event.element.tags.zone_index
+    update_content_for_player(content, player, zone_type)
+    return
+  end
+
   local player = game.get_player(event.player_index)
 
   local root = Zonelist.get(player)
