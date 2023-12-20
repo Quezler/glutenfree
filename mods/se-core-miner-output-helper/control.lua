@@ -124,7 +124,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
     container = parent[Zonelist.name_zone_data_container_frame]
   else
-    error('container == nil')
+    return -- a gui other than zonelist or star map planet detail
   end
 
   local content = container[Zonelist.name_zone_data_content_scroll_pane]
