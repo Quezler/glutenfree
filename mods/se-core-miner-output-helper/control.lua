@@ -45,14 +45,16 @@ function get_mining_time(fragment_name)
   return game.entity_prototypes[fragment_name].mineable_properties.mining_time
 end
 
-function update_content_for_player(content, player)
+function update_content_for_player(content, player, zone_index)
   local coremining_header = content["coremining-header"]
   local coremining = content.coremining
 
   -- grab the zone_index from the "View Surface" button
-  local button_flow = content.parent.parent[Zonelist.name_zone_data_bottom_button_flow]
-  local view_button = button_flow[Zonelist.name_zone_data_view_surface_button]
-  local zone_index = view_button.tags.zone_index
+  if not zone_index then
+    local button_flow = content.parent.parent[Zonelist.name_zone_data_bottom_button_flow]
+    local view_button = button_flow[Zonelist.name_zone_data_view_surface_button]
+    zone_index = view_button.tags.zone_index
+  end
 
   local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = zone_index})
   if not zone then return end
@@ -107,14 +109,24 @@ end
 
 script.on_event(defines.events.on_gui_opened, function(event)
   if not event.element then return end
-  if event.element.name ~= Zonelist.name_root then return end
 
-  local root = event.element
+  local container = nil
+  local zone_index = nil
 
-  local parent = Util.get_gui_element(root, Zonelist.path_zone_data_flow)
-  if not parent then return end
+  if event.element.name == "se-map-view-zone-details" then
+    container = event.element['right-flow']['container-frame']
+    zone_index = event.element.tags.zone_index
+  elseif event.element.name == Zonelist.name_root then
+    local root = event.element
 
-  local container = parent[Zonelist.name_zone_data_container_frame]
+    local parent = Util.get_gui_element(root, Zonelist.path_zone_data_flow)
+    if not parent then return end
+
+    container = parent[Zonelist.name_zone_data_container_frame]
+  else
+    error('container == nil')
+  end
+
   local content = container[Zonelist.name_zone_data_content_scroll_pane]
 
   content.add{
@@ -133,7 +145,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
   }
 
   local player = game.get_player(event.player_index)
-  update_content_for_player(content, player)
+  update_content_for_player(content, player, zone_index)
 end)
 
 script.on_event(defines.events.on_gui_click, function(event)
@@ -150,5 +162,5 @@ script.on_event(defines.events.on_gui_click, function(event)
   local container = parent[Zonelist.name_zone_data_container_frame]
   local content = container[Zonelist.name_zone_data_content_scroll_pane]
 
-  update_content_for_player(content, player)
+  update_content_for_player(content, player, nil)
 end)
