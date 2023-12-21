@@ -2,7 +2,7 @@
     "name": "filter-helper-helper",
     "title": "Filter Helper - helper",
     "description": "A quality of life helper for the quality of life filter helper mod.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [

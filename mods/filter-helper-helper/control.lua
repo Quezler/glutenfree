@@ -66,6 +66,11 @@ script.on_event(defines.events.on_player_main_inventory_changed, function(event)
     create_build_effect_smoke = false,
   }
 
+  if not clone then
+    game.print('filter helper helper: cloning '.. opened.name ..' failed somehow.')
+    return
+  end
+
   clone.destructible = false
   clone.active = false
   player.opened = clone
