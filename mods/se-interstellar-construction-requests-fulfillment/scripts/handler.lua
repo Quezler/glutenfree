@@ -234,7 +234,7 @@ function Handler.trash_unrequested(v1_struct)
   for name, count in pairs(inventory.get_contents()) do
     if not global.missing_items[name] then
       local inserted = logistic_network.insert({name = name, count = count}, 'storage') -- we don't want stealth inserts to deliver to requesters
-      inventory.remove({name = name, count = inserted})
+      if inserted > 0 then inventory.remove({name = name, count = inserted}) end
     end
   end
 
