@@ -1,34 +1,39 @@
-local turret = table.deepcopy(data.raw['ammo-turret']['se-meteor-point-defence-container'])
-turret.type = 'electric-turret'
-turret.name = 'se-interstellar-construction-requests-fulfillment--turret'
-
 local tint = {r=244, g=209, b=6}
-turret.base_picture.layers[2].tint = tint
-turret.base_picture.layers[2].hr_version.tint = tint
 
-turret.icon = nil
-turret.icons = table.deepcopy(data.raw['item']['se-meteor-point-defence'].icons)
-turret.icons[2].tint = tint
+local buffer_chest = table.deepcopy(data.raw['logistic-container']['logistic-chest-buffer'])
+buffer_chest.name = 'interstellar-construction-turret--buffer-chest'
 
-turret.energy_source = {
-  buffer_capacity = "4GJ",
-  input_flow_limit = "0.1GW",
-  type = "electric",
-  usage_priority = "secondary-input"
+buffer_chest.selection_box = {{-1.50, -1.50}, { 1.50,  1.50}}
+buffer_chest.collision_box = {{-1.35, -1.35}, { 1.35,  1.35}}
+buffer_chest.drawing_box   = {{-1.35, -4.35}, { 1.35,  1.35}}
+
+buffer_chest.icon = nil
+buffer_chest.icons = table.deepcopy(data.raw['item']['se-meteor-point-defence'].icons)
+buffer_chest.icons[2].tint = tint
+
+buffer_chest.animation = table.deepcopy(data.raw['ammo-turret']['se-meteor-point-defence-container'].base_picture)
+buffer_chest.animation.layers[2].tint = tint
+buffer_chest.animation.layers[2].hr_version.tint = tint
+
+buffer_chest.inventory_size = 30
+buffer_chest.enable_inventory_bar = false
+
+buffer_chest.circuit_wire_connection_point = nil
+buffer_chest.circuit_wire_max_distance = nil
+buffer_chest.corpse = "medium-remnants"
+buffer_chest.dying_explosion = "medium-explosion"
+buffer_chest.fast_replaceable_group = nil
+buffer_chest.max_health = 2000
+buffer_chest.resistances = {
+  { type = "impact", percent = 100 },
+  { type = "fire"  , percent = 100 },
 }
 
-turret.attack_parameters = {
-  ammo_type = {
-    category = "se-meteor-defence",
-    energy_consumption = "1GJ",
-  },
-  range = 1,
-  cooldown = 1,
-  type = "beam",
-}
+table.insert(buffer_chest.flags, "hide-alt-info")
+table.insert(buffer_chest.flags, "no-automated-item-removal")
+table.insert(buffer_chest.flags, "no-automated-item-insertion")
 
-turret.localised_name = nil
-turret.localised_description = nil
+-- log(serpent.block(buffer_chest))
 
 --
 
@@ -44,15 +49,15 @@ local item = {
 item.icons = table.deepcopy(data.raw['item']['se-meteor-point-defence']).icons
 item.icons[2].tint = tint
 
-item.place_result = turret.name
-turret.minable.result = item.name
+item.place_result = buffer_chest.name
+buffer_chest.minable.result = item.name
 
 --
 
 local recipe = {
   type = 'recipe',
   name = 'se-interstellar-construction-requests-fulfillment--recipe',
-  result = 'se-interstellar-construction-requests-fulfillment--item',
+  result = item.name,
   enabled = false,
   energy_required = 5,
   ingredients = {
@@ -90,16 +95,9 @@ local technology = {
   }
 }
 
-local uplink = table.deepcopy(data.raw['logistic-container']['logistic-chest-buffer'])
-uplink.name = 'se-interstellar-construction-requests-fulfillment--buffer-chest'
-uplink.flags = {'not-on-map', 'no-automated-item-removal', 'no-automated-item-insertion'}
-uplink.selectable_in_game = false
-uplink.animation = util.empty_sprite()
-uplink.collision_mask = {}
-uplink.selection_box = {{-1.5, -1.5}, {1.5, 1.5}}
--- log(serpent.block(uplink))
-
 technology.icons = table.deepcopy(data.raw['technology']['se-meteor-point-defence']).icons
 technology.icons[2].tint = tint
 
-data:extend({turret, item, recipe, technology, uplink})
+--
+
+data:extend({buffer_chest, item, recipe, technology})
