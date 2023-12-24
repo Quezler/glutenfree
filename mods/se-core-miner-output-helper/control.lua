@@ -129,20 +129,24 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
   local content = container[Zonelist.name_zone_data_content_scroll_pane]
 
-  content.add{
-    type = "checkbox",
-    name = "coremining-header",
-    caption = {"space-exploration.zonelist-coremining-header"},
-    state = false,
-    tags = {action=Zonelist.action_zone_data_content_header, name="coremining"},
-    style = "se_zonelist_zone_data_header_checkbox"
-  }
-  content.add{
-    type = "flow",
-    name = "coremining",
-    direction = "vertical",
-    style = "se_zonelist_zone_data_content_sub_flow"
-  }
+  if not content.coremining then
+    content.add{
+      type = "checkbox",
+      name = "coremining-header",
+      caption = {"space-exploration.zonelist-coremining-header"},
+      state = false,
+      tags = {action=Zonelist.action_zone_data_content_header, name="coremining"},
+      style = "se_zonelist_zone_data_header_checkbox"
+    }
+    content.add{
+      type = "flow",
+      name = "coremining",
+      direction = "vertical",
+      style = "se_zonelist_zone_data_content_sub_flow"
+    }
+  else
+    game.print('Gui element with name coremining-header already present in the parent element.')
+  end
 
   local player = game.get_player(event.player_index)
   update_content_for_player(content, player, zone_index)
