@@ -71,10 +71,12 @@ function Handler.on_tick(event)
         local old_position = player.position
 
         for _, pyramid in ipairs(global.pyramids_to_visit) do
-          player.teleport(pyramid.position, pyramid.surface)
+          if pyramid.valid then
+            player.teleport(pyramid.position, pyramid.surface)
 
-          -- now try again to see if the pyramid on this surface has an underground
-          Handler.on_post_surface_created({surface_index = pyramid.surface.index})
+            -- now try again to see if the pyramid on this surface has an underground
+            Handler.on_post_surface_created({surface_index = pyramid.surface.index})
+          end
         end
 
         player.teleport(old_position, old_surface)
