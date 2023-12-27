@@ -1,0 +1,12 @@
+{
+    "name": "se-universe-explorer-highlight-zones-new-to-you",
+    "title": "Space Exploration - universe explorer highlight zones new to you",
+    "description": "Researching new zones is fun and all, but how do you know which ones are new in the list?",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "space-exploration",
+        "space-exploration-scripts"
+    ]
+}
