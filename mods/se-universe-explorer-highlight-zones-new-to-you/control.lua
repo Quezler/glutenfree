@@ -16,34 +16,16 @@ local function on_post_gui_opened(event)
   local scroll_pane = util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
   if not scroll_pane then return end
 
-  -- game.print(table_size( scroll_pane.children ))
-
-  -- [img=utility/notification]
-
   for _, row in pairs(scroll_pane.children) do
-
-    -- game.print(row.tags.zone_index)
-
-    -- row.row_flow.ignored_by_interaction = false
-    -- row.row_flow.children[2].caption = row.row_flow.children[2].caption .. '[img=utility/notification]'
-
-    -- row.row_flow.children[2].style.left_padding = -5
-    -- row.row_flow.children[2].style.horizontal_align = "right"
-
     if not global.player_index_to_selected_zones_map[event.player_index] or not global.player_index_to_selected_zones_map[event.player_index][row.tags.zone_index] then
       row.row_flow.children[2].add{ -- Zone icon
         type = "sprite",
         sprite = "utility/notification",
-        -- caption = "[img=utility/notification]",
         style = "se_zonelist_row_cell_type_notification"
       }
     end
-
-    -- row.row_flow.children[2].children[1].style.width = 54
-    -- row.row_flow.children[2].children[1].style.left_margin = 10
-    -- row.row_flow.children[2].children[1].style.left_padding = 28
-    -- row.row_flow.children[2].children[1].style.horizontal_align = "right"
   end
+
 end
 
 local function on_tick(event)
@@ -70,8 +52,6 @@ script.on_event(defines.events.on_gui_opened, function(event)
 end)
 
 script.on_event(defines.events.on_gui_click, function(event)
-  -- game.print(event.element.name)
-
   if event.element and event.element.tags and event.element.tags.action == Zonelist.action_zone_row_button then
   --game.print('selected zone ' .. event.element.tags.zone_index)
     global.player_index_to_selected_zones_map[event.player_index] = global.player_index_to_selected_zones_map[event.player_index] or {}
@@ -80,10 +60,4 @@ script.on_event(defines.events.on_gui_click, function(event)
     local notification = event.element.row_flow.children[2].children[1]
     if notification then notification.destroy() end
   end
-
-  -- tags = {
-  --   action = Zonelist.action_zone_row_button,
-  --   zone_type = zone.type,
-  --   zone_index = zone.index
-  -- },
 end)
