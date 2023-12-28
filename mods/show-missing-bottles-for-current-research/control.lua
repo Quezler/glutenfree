@@ -60,13 +60,10 @@ function Flasks.update_player(player, caption)
       direction = "horizontal",
       ignored_by_interaction = true,
     })
-  end
-
-  -- canceling a research causes the "press T to start a new research" to come ontop layer-wise,
-  -- so to bodge that we'll just remove the frame entirely when there's ever no pending research.
-  if not player.force.current_research then
-    frame.destroy()
-    return
+  else
+    -- canceling a research causes the "press T to start a new research" to come ontop layer-wise,
+    -- so to bodge that we'll just bring the frame to front when there's ever no pending research.
+    frame.bring_to_front()
   end
 
   local window = frame[Flasks.window_name]
