@@ -13,7 +13,7 @@ local function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
   global.structs[entity.unit_number] = {
-    unit_number = entity.unit_number,
+    -- unit_number = entity.unit_number,
     entity = entity,
   }
 end
@@ -44,9 +44,9 @@ end
 
 local Flasks = {}
 
-Flasks.frame_name = 'show_missing_bottles_for_current_research_frame'
+Flasks.frame_name  = 'show_missing_bottles_for_current_research_frame'
 Flasks.window_name = 'show_missing_bottles_for_current_research_window'
-Flasks.label_name = 'show_missing_bottles_for_current_research_label'
+Flasks.label_name  = 'show_missing_bottles_for_current_research_label'
 
 function Flasks.update_player(player, caption)
   if script.level.is_simulation then return end
@@ -76,10 +76,8 @@ function Flasks.update_player(player, caption)
       name = Flasks.window_name,
       style = Flasks.window_name,
       direction = "horizontal",
-      -- ignored_by_interaction = true,
     })
-    window.style.width = 256 -- 192 for 0.75 display scale
-    -- window.style.margin = 4
+    window.style.width = 256
     window.style.padding = 8
     window.style.left_padding = 8 + 1
     window.style.top_padding = 46
@@ -98,20 +96,80 @@ function Flasks.update_player(player, caption)
   Flasks.resize_player(player)
 end
 
-local function on_active_research_changed(event)
-  for _, player in ipairs(game.connected_players) do
-    local current_research = player.force.current_research
-    local list = {}
-    if current_research then
-      for _, research_unit_ingredient in ipairs(current_research.research_unit_ingredients) do
-        if #list >= 12 then break end
-        table.insert(list, string.format("[img=item/%s]", research_unit_ingredient.name))
-        -- table.insert(list, string.format("[img=item/%s]", research_unit_ingredient.name))
+local function get_missing_map(force, list)
+  local missing_map = {}
+
+  for unit_number, struct in pairs(global.structs) do
+    if not struct.entity.valid then
+      global.structs[unit_number] = nil
+    else
+
+      if struct.entity.force == force then
+        if struct.entity.status == defines.entity_status.missing_science_packs then
+          local inventory = struct.entity.get_inventory(defines.inventory.lab_input)
+          for _, item_name in ipairs(list) do
+            if global.lab_inputs[struct.entity.name][item_name] then -- ignore labs that cannot use this item
+              if missing_map[item_name] == nil and inventory.get_item_count(item_name) == 0 then
+                -- game.print(serpent.line({
+                --   item_name,
+                --   struct.entity.name,
+                --   struct.entity.surface.name,
+                --   struct.entity.position
+                -- }))
+                missing_map[item_name] = true
+              end
+            end
+          end
+        end
       end
-      -- game.print(table.concat(list, ' '))
+
     end
-    -- log('on_active_research_changed')
-    Flasks.update_player(player, table.concat(list, ''))
+  end
+
+  return missing_map
+end
+
+local function intersect_array_with_map(array, map)
+  local output = {}
+
+  for _, string in ipairs(array) do
+    if map[string] then
+      table.insert(output, string)
+    end
+  end
+
+  return output
+end
+
+local function string_item_name_array_to_rich_text_string(item_names)
+  local string = ""
+
+  for _, item_name in ipairs(item_names) do
+    string = string .. string.format("[img=item/%s]", item_name)
+  end
+
+  return string
+end
+
+local function on_active_research_changed(event)
+  local concat_for_force = {}
+
+  for _, player in ipairs(game.connected_players) do
+    if not concat_for_force[player.force.index] then
+      local current_research = player.force.current_research
+      local desired_list = {}
+      if current_research then
+        for _, research_unit_ingredient in ipairs(current_research.research_unit_ingredients) do
+          if #desired_list >= 12 then break end -- 12 rich texts can fit inside the active research bar
+          table.insert(desired_list, research_unit_ingredient.name)
+        end
+
+        local missing_map = get_missing_map(player.force, desired_list)
+        desired_list = intersect_array_with_map(desired_list, missing_map)
+      end
+      concat_for_force[player.force.index] = string_item_name_array_to_rich_text_string(desired_list)
+    end
+    Flasks.update_player(player, concat_for_force[player.force.index])
   end
 end
 
