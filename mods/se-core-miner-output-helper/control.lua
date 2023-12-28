@@ -54,6 +54,12 @@ function update_content_for_player(content, player, zone_index)
     local button_flow = content.parent.parent[Zonelist.name_zone_data_bottom_button_flow]
     local view_button = button_flow[Zonelist.name_zone_data_view_surface_button]
     zone_index = view_button.tags.zone_index
+
+    if view_button.tags.zone_type == "spaceship" then
+      coremining_header.visible = false
+      coremining.visible = false
+      return
+    end
   end
 
   local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = zone_index})
