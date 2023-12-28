@@ -93,8 +93,8 @@ function Flasks.update_player(player, caption)
   Flasks.resize_player(player)
 end
 
-local function get_missing_map(force, list)
-  local missing_map = {}
+local function get_missing_counts(force, list)
+  local missing_counts = {}
 
   for unit_number, struct in pairs(global.structs) do
     if not struct.entity.valid then
@@ -106,14 +106,14 @@ local function get_missing_map(force, list)
           local inventory = struct.entity.get_inventory(defines.inventory.lab_input)
           for _, item_name in ipairs(list) do
             if global.lab_inputs[struct.entity.name][item_name] then -- ignore labs that cannot use this item
-              if missing_map[item_name] == nil and inventory.get_item_count(item_name) == 0 then
+              if inventory.get_item_count(item_name) == 0 then
                 -- game.print(serpent.line({
                 --   item_name,
                 --   struct.entity.name,
                 --   struct.entity.surface.name,
                 --   struct.entity.position
                 -- }))
-                missing_map[item_name] = true
+                missing_counts[item_name] = (missing_counts[item_name] or 0) + 1
               end
             end
           end
@@ -123,14 +123,14 @@ local function get_missing_map(force, list)
     end
   end
 
-  return missing_map
+  return missing_counts
 end
 
-local function intersect_array_with_map(array, map)
+local function intersect_array_with_map(array, map, threshold)
   local output = {}
 
   for _, string in ipairs(array) do
-    if map[string] then
+    if map[string] and map[string] > threshold then
       table.insert(output, string)
     end
   end
@@ -161,8 +161,8 @@ local function on_active_research_changed(event)
           table.insert(desired_list, research_unit_ingredient.name)
         end
 
-        local missing_map = get_missing_map(player.force, desired_list)
-        desired_list = intersect_array_with_map(desired_list, missing_map)
+        local missing_counts = get_missing_counts(player.force, desired_list)
+        desired_list = intersect_array_with_map(desired_list, missing_counts, 1)
       end
       concat_for_force[player.force.index] = string_item_name_array_to_rich_text_string(desired_list)
     end

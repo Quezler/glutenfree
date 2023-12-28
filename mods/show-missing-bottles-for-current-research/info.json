@@ -2,7 +2,7 @@
     "name": "show-missing-bottles-for-current-research",
     "title": "Show missing bottles for current research",
     "description": "Research-kun why are you stuck?",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
