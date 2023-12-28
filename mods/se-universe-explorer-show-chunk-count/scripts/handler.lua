@@ -11,6 +11,12 @@ function Handler.on_init()
   -- global.chunks = {} -- todo: delete in an on_configuration_changed
 
   global.zone_index_to_surface_index = {}
+
+  global.surface_index_to_captions_array = {}
+end
+
+function Handler.on_configuration_changed()
+  global.surface_index_to_captions_array = {}
 end
 
 function Handler.on_load()
@@ -62,7 +68,8 @@ function Handler.on_post_gui_opened(event)
   for _, row in pairs(scroll_pane.children) do
 
     -- 3 = surface name, 6 = robot inteference
-    row.row_flow.children[6].caption = '-'
+    local chunk_cell = row.row_flow.children[6]
+    chunk_cell.caption = '-'
 
     if row.tags.zone_type ~= "spaceship" then
 
@@ -75,8 +82,14 @@ function Handler.on_post_gui_opened(event)
         end
       end
 
-      if global.zone_index_to_surface_index[row.tags.zone_index] > 0 then
-        row.row_flow.children[6].caption = chunks[global.zone_index_to_surface_index[row.tags.zone_index]]
+      local surface_index = global.zone_index_to_surface_index[row.tags.zone_index]
+      if surface_index > 0 then
+        chunk_cell.caption = chunks[surface_index]
+        if global.surface_index_to_captions_array[surface_index] == nil then
+          global.surface_index_to_captions_array[surface_index] = {chunk_cell}
+        else
+          table.insert(global.surface_index_to_captions_array, chunk_cell)
+        end
       end
     end
   end
@@ -93,6 +106,24 @@ end
 function Handler.on_surface_deleted(event)
   -- surface indexes do not seem to shift to fill gaps, but this forgets the cached deleted surface too
   global.zone_index_to_surface_index = {}
+end
+
+function Handler.on_chunk_generated(event)
+  local array = global.surface_index_to_captions_array[event.surface.index]
+  if not array then return end
+
+  for i = #array, 1, -1 do
+    local chunk_cell = array[i]
+    if chunk_cell.valid then
+      chunk_cell.caption = tonumber(chunk_cell.caption) + 1
+    else
+      array[i] = nil
+    end
+  end
+
+  if #array == 0 then
+    global.surface_index_to_captions_array[event.surface.index] = nil
+  end
 end
 
 --
