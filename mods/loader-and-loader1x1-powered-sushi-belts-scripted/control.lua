@@ -126,6 +126,8 @@ end
 
 function Sushi.refill_from_container(struct)
   local inventory = struct.container.get_inventory(defines.inventory.chest)
+  if inventory.is_empty() then return end
+  
   local times = Sushi.smallest_count(inventory)
   local the_unique_items = Sushi.get_unique_items(inventory)
 
