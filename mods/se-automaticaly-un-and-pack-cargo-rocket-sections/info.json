@@ -2,7 +2,7 @@
     "name": "se-automaticaly-un-and-pack-cargo-rocket-sections",
     "title": "Space Exploration - automatically un and pack cargo rocket sections",
     "description": "Having two machines on each surface just for that is tedious.",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [

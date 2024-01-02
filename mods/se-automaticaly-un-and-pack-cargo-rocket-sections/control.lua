@@ -48,8 +48,13 @@ local function tick_logistic_network(logistic_network, surface_name)
     -- since there might have not been enough storage for all of the to-be-packed items up front.
     -- (sure, i could re-write this since each 5 packed frees up 4 slots, but i'm about to upload)
     local inserted = logistic_network.insert({name = packed_name, count = packed_goal}, 'storage')
-    logistic_network.remove_item({name = unpacked_name, count = inserted * 5}, 'storage')
-    log(string.format('%03d unpacked cargo rocket sections, so re-packed %02d on %s', unpacked_count, inserted, surface_name))
+    if inserted > 0 then
+      logistic_network.remove_item({name = unpacked_name, count = inserted * 5}, 'storage')
+      log(string.format('%03d unpacked cargo rocket sections, so re-packed %02d on %s', unpacked_count, inserted, surface_name))
+    else
+      -- storage full
+      -- log('storage full')
+    end
   elseif keep > unpacked_count then
     local to_unpack = math.ceil((keep - unpacked_count) / 5)
     -- to_unpack = math.min(to_unpack, logistic_network.get_item_count(packed_name))
