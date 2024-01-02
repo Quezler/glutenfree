@@ -38,6 +38,7 @@ local keep = 100
 local function tick_logistic_network(logistic_network, surface_name)
   -- local unpacked_count = logistic_network.get_item_count(unpacked_name)
   local unpacked_count = logistic_network.get_supply_counts(unpacked_name).storage
+  -- log(string.format('%s %d', surface_name, unpacked_count))
 
   if unpacked_count >= keep + 5 then
     local packed_goal = math.floor((unpacked_count - keep) / 5)
@@ -52,7 +53,7 @@ local function tick_logistic_network(logistic_network, surface_name)
   elseif keep > unpacked_count then
     local to_unpack = math.ceil((keep - unpacked_count) / 5)
     -- to_unpack = math.min(to_unpack, logistic_network.get_item_count(packed_name))
-    to_unpack = math.min(to_unpack, logistic_network.get_supply_counts(unpacked_name).storage)
+    to_unpack = math.min(to_unpack, logistic_network.get_supply_counts(packed_name).storage)
     -- log('to_unpack ' .. to_unpack)
 
     local unpacked = 0
