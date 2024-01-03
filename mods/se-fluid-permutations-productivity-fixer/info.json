@@ -1,0 +1,12 @@
+{
+    "name": "se-fluid-permutations-productivity-fixer",
+    "title": "Space Exploration - fluid permutations productivity fixer",
+    "description": "Since SE sets productivity in data-final-fixes.lua *cough* Fluid Permutations doesn't know about them yet when cloning recipes.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "space-exploration",
+        "! fluid-permutations-crude-oil-processing"
+    ]
+}
