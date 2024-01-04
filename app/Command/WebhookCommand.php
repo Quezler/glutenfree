@@ -48,8 +48,13 @@ class WebhookCommand extends Command
         $posted_links = json_decode(file_get_contents('https://proxmox.nydus.app/glutenfree/webhook.php?password=' . $_ENV['LOCK_PASSWORD']), true);
 
         foreach ($links_to_post as $link_to_post) {
-            if (in_array($link_to_post, $posted_links)) continue;
-            dump($link_to_post);
+            if (in_array($link_to_post, $posted_links)) {
+                dump('0 ' . $link_to_post);
+                continue;
+            } else {
+                dump('1 ' . $link_to_post);
+            }
+            
 
             $guzzle->post($_ENV['DISCORD_WEBHOOK'], [
                 'form_params' => [
