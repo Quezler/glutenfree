@@ -10,10 +10,6 @@ local function on_selected_entity_changed_whilst_holding(player, prototype)
 
   if player.selected == nil then return end
   local entity = player.selected
-  -- if player.selected.type ~= "assembling-machine" then return end
-  
-  -- local recipe = player.selected.get_recipe()
-  -- if recipe == nil then return end
 
   if #entity.fluidbox == 0 then return end
 
@@ -58,14 +54,10 @@ local function on_selected_entity_changed_whilst_holding(player, prototype)
         drain = pipe_connection.flow_direction == "output" and true or false, -- expect "input" and "input-output" to want fluids
         direction = flib_direction.from_positions(pipe_connection.position, pipe_connection.target_position, true),
       }
-
-      -- game.print(fluid_name .. pipe_connection.flow_direction)
     end
 
     ::continue::
   end
-
-  -- game.print(prototype.name)
 end
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
@@ -100,8 +92,8 @@ local function fill_barrel_recipe_name(fluid_name)
 end
 
 local function on_configuration_changed()
-  global.pipe_connections = {} -- todo: remove before publishing
-  global.playerdata = {} -- todo: remove before publishing
+  -- global.pipe_connections = {}
+  -- global.playerdata = {}
   global.barrelable_fluids = {}
   
   for _, fluid_prototype in pairs(game.fluid_prototypes) do
@@ -126,7 +118,6 @@ end)
 
 script.on_event(defines.events.on_player_pipette, function(event)
   local player = game.get_player(event.player_index)
-  -- game.print(player.selected.name)
 
   if player.selected == nil then return error('how?') end
   if player.selected.name ~= "pipe-connection" then return end
@@ -137,12 +128,6 @@ script.on_event(defines.events.on_player_pipette, function(event)
 
   if player.clear_cursor() == false then return end
   local cursor_stack = player.cursor_stack
-
-  -- local recipe_name = pipe_connection.drain and in_barrel_name(pipe_connection.fluid_name) or un_barrel_name(pipe_connection.fluid_name)
-  -- if game.recipe_prototypes[recipe_name] == nil then return end -- cannot be barreled -- todo: check at pipe highlight stage
-
-  -- game.print(pipe_connection.drain)
-  -- game.print(pipe_connection.drain and global.barrelable_fluids[pipe_connection.fluid_name].fill_recipe_name or global.barrelable_fluids[pipe_connection.fluid_name].empty_recipe_name)
 
   -- code borrowed from raiguard's MIT licenced RecipeBook mod
   if cursor_stack and cursor_stack.valid then
@@ -175,6 +160,4 @@ script.on_event(defines.events.on_player_pipette, function(event)
   else
     error('guard clause goes brrr')
   end
-
-  -- game.print(serpent.line( pipe_connection ))
 end)
