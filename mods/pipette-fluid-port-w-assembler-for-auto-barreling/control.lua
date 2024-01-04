@@ -6,7 +6,7 @@ local function on_selected_entity_changed_whilst_holding(player, prototype)
 
   if prototype.place_result == nil then return end
   if prototype.place_result.type ~= "assembling-machine" then return end
-  -- todo: check if that prototype has barreling recipes
+  if prototype.place_result.crafting_categories['crafting-with-fluid'] == nil then return end -- assume all barrel recipes are in here
 
   if player.selected == nil then return end
   local entity = player.selected
