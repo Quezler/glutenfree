@@ -35,7 +35,6 @@ local function on_selected_entity_changed_whilst_holding(player, prototype)
         },
         box_type = "train-visualization",
         render_player_index = player.index,
-        -- time_to_live = 60 * 10,
       }
 
       local selectable = entity.surface.create_entity{
