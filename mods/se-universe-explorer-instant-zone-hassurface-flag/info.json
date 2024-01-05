@@ -1,0 +1,11 @@
+{
+    "name": "se-universe-explorer-instant-zone-hassurface-flag",
+    "title": "Se universe explorer instant zone hassurface flag",
+    "description": "Nobody expects the spanish inquisition.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "? base"
+    ]
+}
