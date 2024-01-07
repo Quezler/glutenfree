@@ -118,7 +118,7 @@ end)
 script.on_event(defines.events.on_player_pipette, function(event)
   local player = game.get_player(event.player_index)
 
-  if player.selected == nil then return error('how?') end
+  if player.selected == nil then return gameprint('pipetted player selected = nil, how?') end
   if player.selected.name ~= "pipe-connection" then return end
 
   local unit_number = script.register_on_entity_destroyed(player.selected)
