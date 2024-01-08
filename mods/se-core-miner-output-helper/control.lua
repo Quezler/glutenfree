@@ -61,7 +61,7 @@ function content_ensure_coremining_child(content, should_be_nil)
       direction = "vertical",
       style = "se_zonelist_zone_data_content_sub_flow"
     }
-  elseif should_be_nil
+  elseif should_be_nil then
     game.print('Gui element with name coremining-header already present in the parent element.')
   else
     -- the universe explorer was refreshed through a method/event we were not able to discover/handle
