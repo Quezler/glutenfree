@@ -45,7 +45,31 @@ function get_mining_time(fragment_name)
   return game.entity_prototypes[fragment_name].mineable_properties.mining_time
 end
 
+function content_ensure_coremining_child(content, should_be_nil)
+  if not content.coremining then
+    content.add{
+      type = "checkbox",
+      name = "coremining-header",
+      caption = {"space-exploration.zonelist-coremining-header"},
+      state = false,
+      tags = {action=Zonelist.action_zone_data_content_header, name="coremining"},
+      style = "se_zonelist_zone_data_header_checkbox"
+    }
+    content.add{
+      type = "flow",
+      name = "coremining",
+      direction = "vertical",
+      style = "se_zonelist_zone_data_content_sub_flow"
+    }
+  elseif should_be_nil
+    game.print('Gui element with name coremining-header already present in the parent element.')
+  else
+    -- the universe explorer was refreshed through a method/event we were not able to discover/handle
+  end
+end
+
 function update_content_for_player(content, player, zone_index)
+  content_ensure_coremining_child(content, false) -- anchoring whilst the universe explorer is open can refresh it too, so many ways.
   local coremining_header = content["coremining-header"]
   local coremining = content.coremining
 
@@ -134,25 +158,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
   end
 
   local content = container[Zonelist.name_zone_data_content_scroll_pane]
-
-  if not content.coremining then
-    content.add{
-      type = "checkbox",
-      name = "coremining-header",
-      caption = {"space-exploration.zonelist-coremining-header"},
-      state = false,
-      tags = {action=Zonelist.action_zone_data_content_header, name="coremining"},
-      style = "se_zonelist_zone_data_header_checkbox"
-    }
-    content.add{
-      type = "flow",
-      name = "coremining",
-      direction = "vertical",
-      style = "se_zonelist_zone_data_content_sub_flow"
-    }
-  else
-    game.print('Gui element with name coremining-header already present in the parent element.')
-  end
+  content_ensure_coremining_child(content, true)
 
   local player = game.get_player(event.player_index)
   update_content_for_player(content, player, zone_index)
