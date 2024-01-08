@@ -2,7 +2,7 @@
     "name": "pipette-fluid-port-w-assembler-for-auto-barreling",
     "title": "Pipette fluid port w assembler for auto barreling",
     "description": "If you hover a machine that uses fluids with an assembling machine and pipette a fluid port, you get a ghost to (un)barrel that.",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
