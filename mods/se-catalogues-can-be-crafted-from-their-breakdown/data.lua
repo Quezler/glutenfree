@@ -2,6 +2,7 @@ local function get_recipe_results(recipe)
   if recipe.results then return recipe.results end
 
   if recipe.normal then return get_recipe_results(recipe.normal) end
+  -- lets just say that expensive mode is currently not supported :)
 
   return {{type = "item", name = recipe.result, amount = recipe.result_count or 1}}
 end
@@ -23,33 +24,35 @@ end
 
 local recipes_for = {}
 for _, recipe in pairs(data.raw['recipe']) do
-  -- log(recipe.name)
   for _, result in pairs(get_full_recipe_results(recipe)) do
-    if result.type == "item" or result.type == nil then
-      -- log(recipe.name .. serpent.line(result))
-      -- log(serpent.block(recipe))
-      -- log(serpent.block(result))
+    if result.type == "item" then
       recipes_for[result.name] = recipes_for[result.name] or {}
-      recipes_for[result.name][recipe.name] = true
+      table.insert(recipes_for[result.name], recipe.name)
     end
   end
 end
 
-log(serpent.block(recipes_for))
-error()
+-- log(serpent.block(recipes_for))
+-- error()
 
 local function handle_catalogue(item_name)
-  log(serpent.block(data.raw['recipe']['item-name']))
-  error()
+  local recipe = data.raw['recipe'][item_name] -- assume the catalogue has the same recipe name as the item
+  assert(recipe)
+  assert(recipe.normal == nil)
+  assert(recipe.expensive == nil)
+
+  log(serpent.block( recipe ))
+  -- error()
 end
 
 for _, item in pairs(data.raw['item']) do
   if string.match(item.name, "-catalogue-") then
     log(item.name)
+    handle_catalogue(item.name)
   end
 end
 
-handle_catalogue('se-astronomic-catalogue-1')
+-- handle_catalogue('se-astronomic-catalogue-1')
 
 -- se-astronomic-catalogue-1
 -- se-astronomic-catalogue-2
@@ -74,4 +77,4 @@ handle_catalogue('se-astronomic-catalogue-1')
 -- se-kr-matter-catalogue-1
 -- se-kr-matter-catalogue-2
 
--- error()
+error()
