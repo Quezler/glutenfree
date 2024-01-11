@@ -3,8 +3,8 @@ local prototype_util = {}
 function prototype_util.get_recipe_results(recipe)
   if recipe.results then return recipe.results end
 
-  if recipe.normal then return prototype_util.get_recipe_results(recipe.normal) end
   -- lets just say that expensive mode is currently not supported :)
+  if recipe.normal then return prototype_util.get_recipe_results(recipe.normal) end
 
   return {{type = "item", name = recipe.result, amount = recipe.result_count or 1}}
 end
@@ -21,6 +21,33 @@ function prototype_util.get_full_recipe_results(recipe)
   return results
 end
 
+function prototype_util.get_recipe_ingredients(recipe)
+  if recipe.ingredients then return recipe.ingredients end
+
+  -- lets just say that expensive mode is currently not supported :)
+  if recipe.normal then return prototype_util.get_recipe_ingredients(recipe.normal) end
+
+  error('is this possible?')
+end
+
+function prototype_util.get_full_recipe_ingredients(recipe)
+  local ingredients = prototype_util.get_recipe_ingredients(recipe)
+  for i, ingredient in pairs(ingredients) do
+    if ingredient[1] and ingredient[2] then
+      ingredients[i] = {type = "item", name = ingredient[1], amount = ingredient[2]}
+    end
+    ingredient.type = ingredient.type or "item"
+  end
+
+  return ingredient
+end
+
+function prototype_util.normalize_recipe(recipe)
+  prototype_util.get_full_recipe_results(recipe)
+  prototype_util.get_full_recipe_ingredients(recipe)
+  return recipe
+end
+
 function prototype_util.unlock_recipe_alongside(new_recipe, old_recipe)
   for i, technology in pairs(data.raw['technology']) do
     for j, effect in ipairs(technology.effects or {}) do
@@ -33,6 +60,16 @@ function prototype_util.unlock_recipe_alongside(new_recipe, old_recipe)
     end
     ::next_technology::
   end
+end
+
+function prototype_util.add_ingredient_to_recipe(new_ingredient, recipe)
+  for _, ingredient in ipairs(recipe.ingredients) do
+    if ingredient.type == new_ingredient.type and ingredient.name == new_ingredient.name then
+      ingredient.amount = ingredient.amount + ingredient.amount
+      return
+    end
+  end
+  table.insert(recipe.ingredients, new_ingredient)
 end
 
 return prototype_util

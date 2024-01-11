@@ -60,12 +60,6 @@ local function handle_catalogue(item_name)
 
   clone.order = string.sub(data.raw['item'][item_name].order, 2):gsub("^", "b") -- a-1 -> b-1
 
-  -- for _, ingredient in pairs(clone.ingredients) do
-  --   if (ingredient.type or "item") == "item" then
-  --     clone.ing
-  --   end
-  -- end
-
   -- remove item ingredients from the clone
   for i = #clone.ingredients, 1, -1 do
     if clone.ingredients[i].type == nil or clone.ingredients[i].type == "item" then
@@ -87,9 +81,16 @@ local function handle_catalogue(item_name)
         error(string.format('\nmultiple recipes possible for "%s": %s', ingredient.name, serpent.block(recipes_for[ingredient.name])))
       end
 
-      local ingredient_recipe = data.raw['recipe'][ingredient.name]
-      
-      log(serpent.block( ingredient_recipe ))
+      -- if this fails its time to replace it with `data.raw['recipe'][recipes_for[ingredient.name][1]]`
+      assert(data.raw['recipe'][ingredient.name])
+
+      log(serpent.block( data.raw['recipe'][ingredient.name].ingredients ))
+      local ingredient_recipe = prototype_util.normalize_recipe(table.deepcopy( data.raw['recipe'][ingredient.name] ))
+      log(serpent.block( ingredient_recipe.ingredients ))
+
+      for _, ingredient_recipe_ingredient in ipairs(ingredient_recipe.ingredients) do
+        prototype_util.add_ingredient_to_recipe(ingredient_recipe_ingredient, clone)
+      end
     end
   end
 
