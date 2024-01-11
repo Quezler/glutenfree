@@ -1,3 +1,5 @@
+local prototype_util = require('prototype.util')
+
 local function get_recipe_results(recipe)
   if recipe.results then return recipe.results end
 
@@ -65,9 +67,11 @@ local function handle_catalogue(item_name)
     table.insert(clone.icons, 1, {icon = "__base__/graphics/achievement/lazy-bastard.png", icon_size = 128, scale = 0.25})
   end
 
-  clone.enabled = true
+  -- clone.enabled = true
   clone.order = string.sub(data.raw['item'][item_name].order, 2):gsub("^", "b") -- a-1 -> b-1
   data:extend{clone}
+
+  prototype_util.unlock_recipe_alongside(clone.name, recipe.name)
 
   if item_name ~= "se-astronomic-catalogue-1" then return end
 
