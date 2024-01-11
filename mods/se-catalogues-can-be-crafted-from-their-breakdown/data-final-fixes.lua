@@ -1,33 +1,22 @@
 local prototype_util = require('prototype.util')
 
-local function get_recipe_results(recipe)
-  if recipe.results then return recipe.results end
+--
 
-  if recipe.normal then return get_recipe_results(recipe.normal) end
-  -- lets just say that expensive mode is currently not supported :)
-
-  return {{type = "item", name = recipe.result, amount = recipe.result_count or 1}}
+local function ends_with(str, ending)
+  return str:sub(-#ending) == ending
 end
 
-local function get_full_recipe_results(recipe)
-  -- local results = table.deepcopy(get_recipe_results(recipe))
-  local results = get_recipe_results(recipe)
-  for i, result in pairs(results) do
-    if result[1] and result[2] then
-      results[i] = {type = "item", name = result[1], amount = result[2]}
-    end
-    result.type = result.type or "item"
-  end
+local function recipe_is_annoying(item_name)
+  if item_name == 'se-astrometric-data' then return false end
 
-  return results
+  if ends_with(item_name, '-data') then return true end
 end
 
--- log(serpent.block(data.raw['recipe']))
--- error()
+--
 
 local recipes_for = {}
 for _, recipe in pairs(data.raw['recipe']) do
-  for _, result in pairs(get_full_recipe_results(recipe)) do
+  for _, result in pairs(prototype_util.get_full_recipe_results(recipe)) do
     if result.type == "item" then
       recipes_for[result.name] = recipes_for[result.name] or {}
       table.insert(recipes_for[result.name], recipe.name)
@@ -40,6 +29,7 @@ end
 
 local function handle_catalogue(item_name)
   local recipe = data.raw['recipe'][item_name] -- assume the catalogue has the same recipe name as the item
+
   assert(recipe)
   assert(recipe.normal == nil)
   assert(recipe.expensive == nil)
@@ -61,25 +51,60 @@ local function handle_catalogue(item_name)
     clone.icon_size = nil
 
     for _, icondata in ipairs(clone.icons) do
+      assert(icondata.scale == nil) -- when this gets triggered, remove it and check the 0.3 scale code below works for it
       icondata.scale = (icondata.scale or 1) * 0.3
     end
 
     table.insert(clone.icons, 1, {icon = "__base__/graphics/achievement/lazy-bastard.png", icon_size = 128, scale = 0.25})
   end
 
-  -- clone.enabled = true
   clone.order = string.sub(data.raw['item'][item_name].order, 2):gsub("^", "b") -- a-1 -> b-1
+
+  -- for _, ingredient in pairs(clone.ingredients) do
+  --   if (ingredient.type or "item") == "item" then
+  --     clone.ing
+  --   end
+  -- end
+
+  -- remove item ingredients from the clone
+  for i = #clone.ingredients, 1, -1 do
+    if clone.ingredients[i].type == nil or clone.ingredients[i].type == "item" then
+      table.remove(clone.ingredients, i)
+    end
+  end
+
   data:extend{clone}
 
   prototype_util.unlock_recipe_alongside(clone.name, recipe.name)
 
   if item_name ~= "se-astronomic-catalogue-1" then return end
-
-  log(serpent.block( recipe ))
+  log(serpent.block(recipe))
 
   for _, ingredient in ipairs(recipe.ingredients) do
-    log(serpent.block( data.raw['recipe'][ingredient.name] ))
+    -- log(serpent.block(ingredient))
+    if recipe_is_annoying(ingredient.name) then
+      if #recipes_for[ingredient.name] ~= 1 then
+        error(string.format('\nmultiple recipes possible for "%s": %s', ingredient.name, serpent.block(recipes_for[ingredient.name])))
+      end
+
+      local ingredient_recipe = data.raw['recipe'][ingredient.name]
+      
+      log(serpent.block( ingredient_recipe ))
+    end
   end
+
+  -- table.insert(clone.results, {
+  --   amount = 20,
+  --   name = "water",
+  --   type = "fluid"
+  -- })
+
+  -- table.insert(clone.results, {
+  --   amount = 20,
+  --   name = "lubricant",
+  --   type = "fluid"
+  -- })
+
   -- error()
 end
 
@@ -89,8 +114,6 @@ for _, item in pairs(data.raw['item']) do
     handle_catalogue(item.name)
   end
 end
-
--- handle_catalogue('se-astronomic-catalogue-1')
 
 -- se-astronomic-catalogue-1
 -- se-astronomic-catalogue-2
