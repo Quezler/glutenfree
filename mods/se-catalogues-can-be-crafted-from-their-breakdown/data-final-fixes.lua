@@ -46,25 +46,25 @@ local function handle_catalogue(item_name)
   clone.localised_name = {"", {"item-name." .. clone.name}, " shortcut"}
   clone.name = clone.name .. '-shortcut'
 
-  -- todo: handle se-deep-catalogue-1 to 4 properly
-  -- log(serpent.block( data.raw['item'][item_name] ))
-  if clone.icon == nil then
-    clone.icons = data.raw['item'][item_name].icons
+  do -- lazy bastard-ify the icon
+    if clone.icon == nil and clone.icons == nil then
+      clone.icons = table.deepcopy(data.raw['item'][item_name].icons)
+    end
+
+    if clone.icons == nil then
+      clone.icons = {{icon = clone.icon, icon_size = clone.icon_size}}
+    end
+
+    clone.icon = nil
+    clone.icon_size = nil
+
+    for _, icondata in ipairs(clone.icons) do
+      icondata.scale = (icondata.scale or 1) * 0.3
+    end
+
+    table.insert(clone.icons, 1, {icon = "__base__/graphics/achievement/lazy-bastard.png", icon_size = 128, scale = 0.25})
   end
 
-  -- todo: handle se-kr-matter-catalogue-1 and se-kr-matter-catalogue-2 correctly
-  -- log(serpent.block(clone))
-  if clone.icons then
-    clone.icon = clone.icons[1].icon
-    clone.icon_size = clone.icons[1].icon_size
-  end
-
-  clone.icons = {
-    {icon = "__base__/graphics/achievement/lazy-bastard.png", icon_size = 128, scale = 0.25},
-    {icon = clone.icon, icon_size = clone.icon_size, scale = 0.3},
-  }
-  clone.icon = nil
-  clone.icon_size = nil
   clone.enabled = true
   clone.order = string.sub(data.raw['item'][item_name].order, 2):gsub("^", "b") -- a-1 -> b-1
   data:extend{clone}
