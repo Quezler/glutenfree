@@ -8,6 +8,7 @@ local function get_recipe_results(recipe)
 end
 
 local function get_full_recipe_results(recipe)
+  -- local results = table.deepcopy(get_recipe_results(recipe))
   local results = get_recipe_results(recipe)
   for i, result in pairs(results) do
     if result[1] and result[2] then
@@ -41,7 +42,40 @@ local function handle_catalogue(item_name)
   assert(recipe.normal == nil)
   assert(recipe.expensive == nil)
 
+  local clone = table.deepcopy(recipe)
+  clone.localised_name = {"", {"item-name." .. clone.name}, " shortcut"}
+  clone.name = clone.name .. '-shortcut'
+
+  -- todo: handle se-deep-catalogue-1 to 4 properly
+  -- log(serpent.block( data.raw['item'][item_name] ))
+  if clone.icon == nil then
+    clone.icons = data.raw['item'][item_name].icons
+  end
+
+  -- todo: handle se-kr-matter-catalogue-1 and se-kr-matter-catalogue-2 correctly
+  -- log(serpent.block(clone))
+  if clone.icons then
+    clone.icon = clone.icons[1].icon
+    clone.icon_size = clone.icons[1].icon_size
+  end
+
+  clone.icons = {
+    {icon = "__base__/graphics/achievement/lazy-bastard.png", icon_size = 128, scale = 0.25},
+    {icon = clone.icon, icon_size = clone.icon_size, scale = 0.3},
+  }
+  clone.icon = nil
+  clone.icon_size = nil
+  clone.enabled = true
+  clone.order = string.sub(data.raw['item'][item_name].order, 2):gsub("^", "b") -- a-1 -> b-1
+  data:extend{clone}
+
+  if item_name ~= "se-astronomic-catalogue-1" then return end
+
   log(serpent.block( recipe ))
+
+  for _, ingredient in ipairs(recipe.ingredients) do
+    log(serpent.block( data.raw['recipe'][ingredient.name] ))
+  end
   -- error()
 end
 
@@ -77,4 +111,4 @@ end
 -- se-kr-matter-catalogue-1
 -- se-kr-matter-catalogue-2
 
-error()
+-- error()
