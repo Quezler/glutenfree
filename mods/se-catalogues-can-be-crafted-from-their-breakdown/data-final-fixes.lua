@@ -84,11 +84,21 @@ local function handle_catalogue(item_name)
       -- if this fails its time to replace it with `data.raw['recipe'][recipes_for[ingredient.name][1]]`
       assert(data.raw['recipe'][ingredient.name])
 
-      log(serpent.block( data.raw['recipe'][ingredient.name].ingredients ))
       local ingredient_recipe = prototype_util.normalize_recipe(table.deepcopy( data.raw['recipe'][ingredient.name] ))
-      log(serpent.block( ingredient_recipe.ingredients ))
+      log(serpent.block( ingredient_recipe ))
+
+      local wanted_result = nil
+      for _, ingredient_recipe_result in ipairs(ingredient_recipe.results) do
+        if ingredient_recipe_result.name == ingredient.name then
+          wanted_result = ingredient_recipe_result
+        end
+      end
+      assert(wanted_result)
 
       for _, ingredient_recipe_ingredient in ipairs(ingredient_recipe.ingredients) do
+        local desired = ingredient_recipe_ingredient.amount / wanted_result.probability
+        local rounded = math.ceil(desired) - ingredient_recipe_ingredient.amount
+        ingredient_recipe_ingredient.amount = math.ceil(ingredient_recipe_ingredient.amount + rounded)
         prototype_util.add_ingredient_to_recipe(ingredient_recipe_ingredient, clone)
       end
     end

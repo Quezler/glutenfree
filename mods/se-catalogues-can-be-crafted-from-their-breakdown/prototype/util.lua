@@ -16,6 +16,7 @@ function prototype_util.get_full_recipe_results(recipe)
       results[i] = {type = "item", name = result[1], amount = result[2]}
     end
     result.type = result.type or "item"
+    result.probability = result.probability or 1
   end
 
   return results
