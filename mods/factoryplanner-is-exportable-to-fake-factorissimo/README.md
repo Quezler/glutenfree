@@ -28,6 +28,10 @@ mods that change recipes, or updates to mods that have tweaked some recipes in t
 It could be argued that this mod improves performance since it simulates the factories based on power, input & output alone.
 It falls to the player to use common sense, and to not simulate an entire SPM factory in here and just feed it what it wants.
 
+# why depend on factory planner?
+
+Well as you can see my data stage mod failed due to complexity reasons, easier to let another mod do the work, i just read the finished result from the gui.
+
 # licences
 
 - the files under `./graphics/` and their prototype defintions are MIT licenced to MagmaMcFry (original author) and notnotmelon (fork maintainer)
