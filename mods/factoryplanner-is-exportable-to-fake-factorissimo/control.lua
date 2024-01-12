@@ -1,5 +1,7 @@
 local print_gui = require('scripts.print_gui')
 
+local mod_prefix = 'fietff-'
+
 local item_box_products = 1
 local item_box_byproducts = 2
 local item_box_ingredients = 3
@@ -26,8 +28,14 @@ script.on_event(defines.events.on_gui_opened, function(event)
   -- log(print_gui.path_to_caption(root, 'fp.pu_byproduct' , 'root')) -- root.children[2].children[2].children[1].children[2].children[1].children[1]
   -- log(print_gui.path_to_caption(root, 'fp.pu_ingredient', 'root')) -- root.children[2].children[2].children[1].children[3].children[1].children[1]
 
-  -- log(print_gui.serpent( root ))
+  -- log(print_gui.serpent( root.children[2].children[2].children[2].children[1].children[9].children[1].caption[2][1] == "fp.pu_item" ))
+
+  -- log(print_gui.path_to_caption( root, 'fp.pu_item', 'root' ))
   -- log(print_gui.serpent( root.children[2].children[2].children[1] ))
+
+  -- log(print_gui.serpent( root ))
+  log(print_gui.serpent( root.children[2].children[2].children[2].children[3].children[1].children[1] ))
+  log(print_gui.path_to_tooltip( root, 'fp.column_done_tt', 'root' ))
 
   local ingredient_labels = root.children[2].children[2].children[1].children[item_box_products].children[1]
   if not ingredient_labels['ingredients_to_factorissimo'] then
@@ -51,19 +59,72 @@ end)
 script.on_event(defines.events.on_gui_click, function(event)
   if event.element.name ~= "ingredients_to_factorissimo" then return end
   local player = game.get_player(event.player_index)
+  local root = player.opened
+  assert(root.name == 'fp_frame_main_dialog')
 
-  player.create_local_flying_text{
-    text = "Beacons are not supported.",
-    create_at_cursor = true,
-  }
+  local items_per_timescale_button = root.children[2].children[2].children[2].children[1].children[9].children[1]
+  assert(items_per_timescale_button.caption[2][1] == "fp.pu_item")
+  if items_per_timescale_button.toggled == false then
+    return player.create_local_flying_text{
+      text = "Timescale must be set to items.", -- [items/s-m-h] so we can extract the doubles we need for math
+      create_at_cursor = true,
+    }
+  end
+
+  local products = get_item_box_contents(root, item_box_products)
+  local byproducts = get_item_box_contents(root, item_box_byproducts)
+  local ingredients = get_item_box_contents(root, item_box_ingredients)
+
+  if #ingredients == 0 then
+    return player.create_local_flying_text{
+      text = "No ingredients defined at all.",
+      create_at_cursor = true,
+    }
+  end
+
+  for _, ingredient in ipairs(ingredients) do
+    if ingredient.type == "entity" then
+      return player.create_local_flying_text{
+        text = "Mining drills are not supported.", -- it seems selecting pumpjacks does not allow for oil to be selected
+        create_at_cursor = true,
+      }
+    end
+  end
+  
+  local table = root.children[2].children[2].children[2].children[3].children[1].children[1]
+  local columns = {} -- [fp.pu_recipe, fp.pu_machine, fp.pu_beacon]
+  for i, cell in ipairs(table.children) do -- the table has no rows, everything is a cell
+    if cell.type ~= "label" then break end -- stop once we have all the column names
+    columns[cell.caption[1]] = i -- thanks to preferences the amount & positions of columns can vary
+  end
+
+  local column_count = table_size(columns)
+  local row_count = #table.children / (column_count + 1) -- + 1 for the horizontal flow
+
+  for row = 2, row_count do
+    local offset = (row-1) * (column_count + 1) -- don't question the +1, it just works
+    local recipe = table.children[offset + columns['fp.pu_recipe']].children[2].sprite
+    local machine = table.children[offset + columns['fp.pu_machine']].children[1].sprite
+
+    log(print_gui.serpent( table.children[offset + columns['fp.pu_machine']] ))
+
+    log(serpent.line({recipe, machine}))
+
+    if #table.children[offset + columns['fp.pu_beacon']].children > 1 then -- 1 = supports beacons, 2+ = beacon and module(s) selected
+      return player.create_local_flying_text{
+        text = "Beacons are not supported.",
+        create_at_cursor = true,
+      }
+    end
+  end
 
   if player.clear_cursor() == false then
-    player.create_local_flying_text{
+    return player.create_local_flying_text{
       text = "Failed to empty your hand.",
       create_at_cursor = true,
     }
   end
 
-  player.cursor_stack.set_stack({name = 'fietff-item-1', count = 1})
-  player.opened = nil
+  player.cursor_stack.set_stack({name = mod_prefix .. 'item-1', count = 1})
+  -- player.opened = nil
 end)

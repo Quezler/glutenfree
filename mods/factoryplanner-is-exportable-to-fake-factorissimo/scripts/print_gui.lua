@@ -35,12 +35,31 @@ end
 function print_gui.path_to_caption(gui_element, locale_key, level)
   if gui_element.caption then
     if gui_element.caption[1] == locale_key then return level end
+    if gui_element.caption[1] == "" then
+      if gui_element.caption[2][1] == locale_key then return level end
+    end
   end
 
   for i, child in ipairs(gui_element.children) do
     local path = print_gui.path_to_caption(child, locale_key, string.format(level .. '.children[%s]', i))
     if path then return path end
   end
+
+  -- return 'nil'
+end
+
+function print_gui.path_to_tooltip(gui_element, locale_key, level)
+  if gui_element.tooltip then
+    -- log(serpent.line(gui_element.tooltip))
+    if gui_element.tooltip[1] == locale_key then return level end
+  end
+
+  for i, child in ipairs(gui_element.children) do
+    local path = print_gui.path_to_tooltip(child, locale_key, string.format(level .. '.children[%s]', i))
+    if path then return path end
+  end
+
+  -- return 'nil'
 end
 
 return print_gui
