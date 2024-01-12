@@ -21,6 +21,23 @@ local function active_radio_button(buttons)
   error()
 end
 
+local function prefix_to_multiplier(locale_key)
+  local multiplier = 1
+  local prefixes = {"kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta"}
+
+  if locale_key == nil then
+    return multiplier
+  end
+
+  for _, prefix in ipairs(prefixes) do
+    if 'fp.prefix_' .. prefix == locale_key then
+      return multiplier * 1000
+    else
+      multiplier = multiplier * 1000
+    end
+  end
+end
+
 local function get_item_box_contents(root, item_box_index)
   local products = {}
   for _, sprite_button in ipairs(root.children[2].children[2].children[1].children[item_box_index].children[2].children[1].children[1].children) do
@@ -49,11 +66,11 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
   local energy_amount = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[2])
   local energy_prefix = root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[3][1] -- k/m/w (watt)
-  log(energy_amount .. (energy_prefix or ''))
+  log(energy_amount * prefix_to_multiplier(energy_prefix))
 
   local pollution_per_minute = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[3].tooltip[2])
   local pollution_per_minute_prefix = root.children[2].children[1].children[2].children[1].children[3].children[3].tooltip[3][1]
-  log(pollution_per_minute .. (pollution_per_minute_prefix or ''))
+  log(pollution_per_minute * prefix_to_multiplier(pollution_per_minute_prefix))
 
   local timescale_buttons = root.children[2].children[1].children[2].children[3].children[1].children[3].children
   local timescale_button = active_radio_button(timescale_buttons)
@@ -126,6 +143,15 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   for row = 2, row_count do
     local offset = (row - 1) * column_count
+    
+    -- if the sprite ever changes into something else yet still doesn't have a `/` in it an assert will failsafe-block it
+    if table.children[offset + columns['fp.pu_machine']].children[1].sprite == 'fp_generic_assembler' then
+      return player.create_local_flying_text{
+        text = "Subfloors are not supported.",
+        create_at_cursor = true,
+      }
+    end
+    
     local recipe_class, recipe_name = split_class_and_name(table.children[offset + columns['fp.pu_recipe']].children[2].sprite)
     local machine_class, machine_name = split_class_and_name(table.children[offset + columns['fp.pu_machine']].children[1].sprite)
 
