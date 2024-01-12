@@ -28,14 +28,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
   -- log(print_gui.path_to_caption(root, 'fp.pu_byproduct' , 'root')) -- root.children[2].children[2].children[1].children[2].children[1].children[1]
   -- log(print_gui.path_to_caption(root, 'fp.pu_ingredient', 'root')) -- root.children[2].children[2].children[1].children[3].children[1].children[1]
 
-  -- log(print_gui.serpent( root.children[2].children[2].children[2].children[1].children[9].children[1].caption[2][1] == "fp.pu_item" ))
-
-  -- log(print_gui.path_to_caption( root, 'fp.pu_item', 'root' ))
-  -- log(print_gui.serpent( root.children[2].children[2].children[1] ))
-
   -- log(print_gui.serpent( root ))
-  log(print_gui.serpent( root.children[2].children[2].children[2].children[3].children[1].children[1] ))
-  log(print_gui.path_to_tooltip( root, 'fp.column_done_tt', 'root' ))
 
   local ingredient_labels = root.children[2].children[2].children[1].children[item_box_products].children[1]
   if not ingredient_labels['ingredients_to_factorissimo'] then
@@ -91,6 +84,7 @@ script.on_event(defines.events.on_gui_click, function(event)
     end
   end
   
+  local _table = table
   local table = root.children[2].children[2].children[2].children[3].children[1].children[1]
   local columns = {} -- [fp.pu_recipe, fp.pu_machine, fp.pu_beacon]
   for i, cell in ipairs(table.children) do -- the table has no rows, everything is a cell
@@ -106,9 +100,15 @@ script.on_event(defines.events.on_gui_click, function(event)
     local recipe = table.children[offset + columns['fp.pu_recipe']].children[2].sprite
     local machine = table.children[offset + columns['fp.pu_machine']].children[1].sprite
 
-    log(print_gui.serpent( table.children[offset + columns['fp.pu_machine']] ))
+    local modules = {}
+    for i = 2, #table.children[offset + columns['fp.pu_machine']].children do
+      local module_button = table.children[offset + columns['fp.pu_machine']].children[i]
+      if module_button.sprite ~= "utility/add" then
+        _table.insert(modules, {module_button.sprite, module_button.number})
+      end
+    end
 
-    log(serpent.line({recipe, machine}))
+    log(serpent.line({recipe, machine, modules}))
 
     if #table.children[offset + columns['fp.pu_beacon']].children > 1 then -- 1 = supports beacons, 2+ = beacon and module(s) selected
       return player.create_local_flying_text{

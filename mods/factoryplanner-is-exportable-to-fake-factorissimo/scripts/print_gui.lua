@@ -23,6 +23,9 @@ function print_gui.describe(gui_element)
 
   if gui_element.type == "sprite-button" then
     node.sprite = gui_element.sprite
+    if gui_element.number ~= nil then
+      node.number = gui_element.number
+    end
   end
 
   return node
