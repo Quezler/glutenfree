@@ -38,7 +38,7 @@ function print_gui.path_to_caption(gui_element, locale_key, level)
   end
 
   for i, child in ipairs(gui_element.children) do
-    local path = print_gui.path_to_caption(child, locale_key, string.format(level .. '[%s]', i))
+    local path = print_gui.path_to_caption(child, locale_key, string.format(level .. '.children[%s]', i))
     if path then return path end
   end
 end
