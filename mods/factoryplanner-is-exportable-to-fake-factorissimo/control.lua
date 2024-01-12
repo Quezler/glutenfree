@@ -18,15 +18,32 @@ end
 script.on_event(defines.events.on_gui_opened, function(event)
   if event.gui_type ~= defines.gui_type.custom then return end
   if event.element.name ~= "fp_frame_main_dialog" then return end
-  game.print(event.element.name)
+  local root = event.element
 
-  -- log(print_gui.path_to_caption(event.element, 'fp.pu_product'     , 'event.element')) -- event.element[2][2][1][1][1][1]
-  -- log(print_gui.path_to_caption(event.element, 'fp.pu_byingredient', 'event.element')) -- event.element[2][2][1][2][1][1]
-  -- log(print_gui.path_to_caption(event.element, 'fp.pu_ingredient'  , 'event.element')) -- event.element[2][2][1][3][1][1]
+  game.print(root.name .. ' @ ' .. event.tick)
 
-  log(serpent.block({
-    products = get_item_box_contents(event.element, item_box_products),
-    byproducts = get_item_box_contents(event.element, item_box_byproducts),
-    ingredients = get_item_box_contents(event.element, item_box_ingredients),
-  }))
+  -- log(print_gui.path_to_caption(root, 'fp.pu_product'   , 'root')) -- root.children[2].children[2].children[1].children[1].children[1].children[1]
+  -- log(print_gui.path_to_caption(root, 'fp.pu_byproduct' , 'root')) -- root.children[2].children[2].children[1].children[2].children[1].children[1]
+  -- log(print_gui.path_to_caption(root, 'fp.pu_ingredient', 'root')) -- root.children[2].children[2].children[1].children[3].children[1].children[1]
+
+  -- log(print_gui.serpent( root ))
+  -- log(print_gui.serpent( root.children[2].children[2].children[1] ))
+
+  local ingredient_labels = root.children[2].children[2].children[1].children[item_box_products].children[1]
+  if not ingredient_labels['ingredients_to_factorissimo'] then
+    local button_factorissimo = ingredient_labels.add{
+      name = "ingredients_to_factorissimo",
+      type = "sprite-button",
+      sprite = "entity/fietff-container-1",
+      tooltip = {"fp.ingredients_to_factorissimo_tt"},
+      mouse_button_filter = {"left"},
+    }
+    button_factorissimo.style.size = 24
+    button_factorissimo.style.padding = -2
+    button_factorissimo.style.left_margin = 4
+  end
+
+  log('products: ' .. serpent.line(get_item_box_contents(root, item_box_products)))
+  log('byproducts: ' .. serpent.line(get_item_box_contents(root, item_box_byproducts)))
+  log('ingredients: ' .. serpent.line(get_item_box_contents(root, item_box_ingredients)))
 end)
