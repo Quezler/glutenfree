@@ -15,10 +15,9 @@ end
 
 local function active_radio_button(buttons)
   for _, button in ipairs(buttons) do
-    log(button.toggled)
     if button.toggled then return button end
   end
-  error()
+  error('none of the buttons are active')
 end
 
 local function prefix_to_multiplier(locale_key)
@@ -54,27 +53,11 @@ script.on_event(defines.events.on_gui_opened, function(event)
   if event.element.name ~= "fp_frame_main_dialog" then return end
   local root = event.element
 
-  game.print(root.name .. ' @ ' .. event.tick)
-
-  -- log(print_gui.path_to_caption(root, 'fp.pu_product'   , 'root')) -- root.children[2].children[2].children[1].children[1].children[1].children[1]
-  -- log(print_gui.path_to_caption(root, 'fp.pu_byproduct' , 'root')) -- root.children[2].children[2].children[1].children[2].children[1].children[1]
-  -- log(print_gui.path_to_caption(root, 'fp.pu_ingredient', 'root')) -- root.children[2].children[2].children[1].children[3].children[1].children[1]
+  -- game.print(root.name .. ' @ ' .. event.tick)
 
   -- log(print_gui.serpent( root ))
   -- log(print_gui.serpent( root.children[2].children[1].children[2].children[3].children[1].children[3] ))
   -- log(print_gui.path_to_tooltip(root, 'fp.timescale_tt', 'root'))
-
-  local energy_amount = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[2])
-  local energy_prefix = root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[3][1] -- k/m/w (watt)
-  log(energy_amount * prefix_to_multiplier(energy_prefix))
-
-  local pollution_per_minute = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[3].tooltip[2])
-  local pollution_per_minute_prefix = root.children[2].children[1].children[2].children[1].children[3].children[3].tooltip[3][1]
-  log(pollution_per_minute * prefix_to_multiplier(pollution_per_minute_prefix))
-
-  local timescale_buttons = root.children[2].children[1].children[2].children[3].children[1].children[3].children
-  local timescale_button = active_radio_button(timescale_buttons)
-  log(timescale_button.caption[3][1])
 
   local ingredient_labels = root.children[2].children[2].children[1].children[item_box_products].children[1]
   if not ingredient_labels['ingredients_to_factorissimo'] then
@@ -89,10 +72,6 @@ script.on_event(defines.events.on_gui_opened, function(event)
     button_factorissimo.style.padding = -2
     button_factorissimo.style.left_margin = 4
   end
-
-  log('products: ' .. serpent.line(get_item_box_contents(root, item_box_products)))
-  log('byproducts: ' .. serpent.line(get_item_box_contents(root, item_box_byproducts)))
-  log('ingredients: ' .. serpent.line(get_item_box_contents(root, item_box_ingredients)))
 end)
 
 script.on_event(defines.events.on_gui_click, function(event)
@@ -113,6 +92,10 @@ script.on_event(defines.events.on_gui_click, function(event)
   local products = get_item_box_contents(root, item_box_products)
   local byproducts = get_item_box_contents(root, item_box_byproducts)
   local ingredients = get_item_box_contents(root, item_box_ingredients)
+
+  log('products: ' .. serpent.line(products))
+  log('byproducts: ' .. serpent.line(byproducts))
+  log('ingredients: ' .. serpent.line(ingredients))
 
   if #ingredients == 0 then
     return player.create_local_flying_text{
@@ -185,6 +168,25 @@ script.on_event(defines.events.on_gui_click, function(event)
   if player.clear_cursor() == false then
     return player.create_local_flying_text{
       text = "Failed to empty your hand.",
+      create_at_cursor = true,
+    }
+  end
+
+  local energy_amount = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[2])
+  local energy_prefix = root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[3][1] -- k/m/w (watt)
+  log(energy_amount * prefix_to_multiplier(energy_prefix)) -- /60 = number to put into electric energy interface usage (* for buffer)
+
+  local pollution_per_minute = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[3].tooltip[2])
+  local pollution_per_minute_prefix = root.children[2].children[1].children[2].children[1].children[3].children[3].tooltip[3][1]
+  log(pollution_per_minute * prefix_to_multiplier(pollution_per_minute_prefix))
+
+  local timescale_buttons = root.children[2].children[1].children[2].children[3].children[1].children[3].children
+  local timescale_button = active_radio_button(timescale_buttons)
+  log(timescale_button.caption[3][1])
+
+  if energy_amount == 0 then
+    return player.create_local_flying_text{
+      text = "Factory must use (some) power.", -- because i want to use an interface's buffer as progress bar #lazy
       create_at_cursor = true,
     }
   end

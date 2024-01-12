@@ -97,3 +97,15 @@ local item_1 = {
 }
 
 data:extend{item_1}
+
+local interface_1 = {
+  type = 'electric-energy-interface',
+  name = mod_prefix .. 'electric-energy-interface-' .. 1,
+  icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', 1),
+  icon_size = 64,
+
+  collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
+  selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+}
+
+data:extend{interface_1}
