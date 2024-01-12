@@ -47,3 +47,23 @@ script.on_event(defines.events.on_gui_opened, function(event)
   log('byproducts: ' .. serpent.line(get_item_box_contents(root, item_box_byproducts)))
   log('ingredients: ' .. serpent.line(get_item_box_contents(root, item_box_ingredients)))
 end)
+
+script.on_event(defines.events.on_gui_click, function(event)
+  if event.element.name ~= "ingredients_to_factorissimo" then return end
+  local player = game.get_player(event.player_index)
+
+  player.create_local_flying_text{
+    text = "Beacons are not supported.",
+    create_at_cursor = true,
+  }
+
+  if player.clear_cursor() == false then
+    player.create_local_flying_text{
+      text = "Failed to empty your hand.",
+      create_at_cursor = true,
+    }
+  end
+
+  player.cursor_stack.set_stack({name = 'fietff-item-1', count = 1})
+  player.opened = nil
+end)

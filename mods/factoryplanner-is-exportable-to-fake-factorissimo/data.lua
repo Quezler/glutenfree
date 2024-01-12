@@ -85,3 +85,15 @@ local container_3 = create_container({
 })
 
 data:extend{container_1, container_2, container_3}
+
+local item_1 = {
+  type = 'item',
+  name = mod_prefix .. 'item-' .. 1,
+  flags = {'hidden', 'only-in-cursor'},
+  icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', 1),
+  icon_size = 64,
+  stack_size = 1,
+  place_result = container_1.name,
+}
+
+data:extend{item_1}
