@@ -1,4 +1,5 @@
 local print_gui = require('scripts.print_gui')
+local shared = require('shared')
 
 local mod_prefix = 'fietff-'
 
@@ -201,7 +202,7 @@ local function on_created_entity(event)
   local eei = entity.surface.create_entity{
     name = mod_prefix .. 'electric-energy-interface-1',
     force = entity.force,
-    position = {entity.position.x, entity.position.y + 2.1},
+    position = {entity.position.x, entity.position.y + shared.electric_energy_interface_1_y_offset},
   }
 
   eei.destructible = false

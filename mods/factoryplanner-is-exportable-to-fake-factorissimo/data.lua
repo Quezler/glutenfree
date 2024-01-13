@@ -1,5 +1,6 @@
 local mod_prefix = 'fietff-'
 local mod_path = '__factoryplanner-is-exportable-to-fake-factorissimo__'
+local shared = require('shared')
 
 local function create_container(config)
   local container = {
@@ -102,14 +103,12 @@ local interface_1 = {
   type = 'electric-energy-interface',
   name = mod_prefix .. 'electric-energy-interface-' .. 1,
   localised_name = {"entity-name.fietff-container-i", 1},
-  -- localised_name = {"", {"entity-name.fietff-container-i", 1}, '(power)'},
   icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', 1),
   icon_size = 64,
 
-  collision_box = {{-3.8, -3.8 - 2.1}, {3.8, 3.8 - 2.1}},
-  -- selection_box = {{-0.35, -0.4}, {0.35, 0.15}},
+  collision_box = {{-3.8, -3.8 - shared.electric_energy_interface_1_y_offset}, {3.8, 3.8 - shared.electric_energy_interface_1_y_offset}},
   selection_box = {{-0.4, -0.3}, {0.4, 0.3}},
-  -- alert_icon_shift = {0, -2.1},
+  selection_priority = 51,
 
   max_health = 10 * 1, -- mimic the storage size, because why not
 
@@ -124,17 +123,12 @@ local interface_1 = {
     usage_priority = "secondary-input"
   },
 
-  selection_priority = 51,
-
   picture = {
     filename = mod_path .. '/graphics/entities/electric-energy-interface.png',
     width = 30,
     height = 20,
     scale = 0.5,
-    -- shift = {0, -0.15},
   }
 }
 
 data:extend{interface_1}
-
--- data.raw['electric-energy-interface']['electric-energy-interface'].energy_source.usage_priority = "secondary-input"
