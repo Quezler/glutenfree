@@ -193,6 +193,64 @@ script.on_event(defines.events.on_gui_click, function(event)
     end
   end
 
+  do -- ensure all input/output fluids are barreled
+    for i, product in ipairs(clipboard.products) do
+      if product.type == "fluid" and global.can_be_barreled[product.name] then
+        clipboard.products[i] = {
+          type = "item",
+          name = product.name .. "-barrel",
+          amount = product.amount / 50,
+        }
+        merge_ingredients(clipboard.ingredients, {
+          type = "item",
+          name = "empty-barrel",
+          amount = product.amount / 50,
+        })
+      end
+    end
+
+    for i, byproduct in ipairs(clipboard.byproducts) do
+      if byproduct.type == "fluid" and global.can_be_barreled[byproduct.name] then
+        clipboard.byproducts[i] = {
+          type = "item",
+          name = byproduct.name .. "-barrel",
+          amount = byproduct.amount / 50,
+        }
+        merge_ingredients(clipboard.ingredients, {
+          type = "item",
+          name = "empty-barrel",
+          amount = byproduct.amount / 50,
+        })
+      end
+    end
+  
+    for i, ingredient in ipairs(clipboard.ingredients) do
+      if ingredient.type == "fluid" and global.can_be_unbarreled[ingredient.name] then
+        clipboard.ingredients[i] = {
+          type = "item",
+          name = ingredient.name .. "-barrel",
+          amount = ingredient.amount / 50,
+        }
+        merge_ingredients(clipboard.byproducts, {
+          type = "item",
+          name = "empty-barrel",
+          amount = ingredient.amount / 50,
+        })
+      end
+    end
+
+    for _, foo in ipairs({clipboard.products, clipboard.byproducts, clipboard.ingredients}) do
+      for _, bar in ipairs(foo) do
+        if bar.type == "fluid" then
+          return player.create_local_flying_text{
+            text = string.format('There is no barrel for the %s fluid.', bar.name),
+            create_at_cursor = true,
+          }
+        end
+      end
+    end
+  end
+
   if player.clear_cursor() == false then
     return player.create_local_flying_text{
       text = "Failed to empty your hand.",
@@ -317,6 +375,20 @@ end
 
 local function on_configuration_changed(event)
   global.clipboards = global.clipboards or {}
+
+  global.can_be_barreled = {}
+  global.can_be_unbarreled = {}
+
+  -- assume the recipes are like this, and that the research state of being able to barrel or unbarrel is insignificant
+  -- todo: loop through all recipe names, determine the input and output values, determine the item name of the barrel.
+  for fluid_name, fluid_prototype in pairs(game.fluid_prototypes) do
+    if game.recipe_prototypes['fill-' .. fluid_name .. '-barrel'] then
+      global.can_be_barreled[fluid_name] = true
+    end
+    if game.recipe_prototypes['empty-' .. fluid_name .. '-barrel'] then
+      global.can_be_unbarreled[fluid_name] = true
+    end
+  end
 end
 
 script.on_init(on_configuration_changed)
