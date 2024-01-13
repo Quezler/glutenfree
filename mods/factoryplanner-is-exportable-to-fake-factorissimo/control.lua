@@ -276,13 +276,13 @@ local function on_created_entity(event)
   for _, product in ipairs(clipboard.products) do
     io_string = io_string .. string.format('[%s=%s]', product.type, product.name)
   end
-  io_string = io_string .. '          '
+  io_string = io_string .. ' - '
 
   if #clipboard.byproducts > 0 then
     for _, byproduct in ipairs(clipboard.byproducts) do
       io_string = io_string .. string.format('[%s=%s]', byproduct.type, byproduct.name)
     end
-    io_string = io_string .. '          '
+    io_string = io_string .. ' - '
   end
 
   for _, ingredient in ipairs(clipboard.ingredients) do
@@ -297,7 +297,6 @@ local function on_created_entity(event)
     target_offset = {0, -3.00},
     alignment = "center",
     use_rich_text = true,
-    -- only_in_alt_mode = true,
     scale = 0.5,
   }
 end
