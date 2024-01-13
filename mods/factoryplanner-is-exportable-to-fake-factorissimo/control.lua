@@ -38,6 +38,16 @@ local function prefix_to_multiplier(locale_key)
   end
 end
 
+local function merge_ingredients(ingredients, new_ingredient)
+  for _, ingredient in ipairs(ingredients) do
+    if ingredient.type == new_ingredient.type and ingredient.name == new_ingredient.name then
+      ingredient.amount = ingredient.amount + new_ingredient.amount
+      return
+    end
+  end
+  table.insert(ingredients, new_ingredient)
+end
+
 local function get_item_box_contents(root, item_box_index)
   local products = {}
   for _, sprite_button in ipairs(root.children[2].children[2].children[1].children[item_box_index].children[2].children[1].children[1].children) do
@@ -94,26 +104,30 @@ script.on_event(defines.events.on_gui_click, function(event)
     }
   end
 
-  local products = get_item_box_contents(root, item_box_products)
-  local byproducts = get_item_box_contents(root, item_box_byproducts)
-  local ingredients = get_item_box_contents(root, item_box_ingredients)
+  local clipboard = {
+    tick = event.tick,
+  }
 
-  log('products: ' .. serpent.line(products))
-  log('byproducts: ' .. serpent.line(byproducts))
-  log('ingredients: ' .. serpent.line(ingredients))
+  clipboard.products = get_item_box_contents(root, item_box_products)
+  clipboard.byproducts = get_item_box_contents(root, item_box_byproducts)
+  clipboard.ingredients = get_item_box_contents(root, item_box_ingredients)
+
+  log('products: ' .. serpent.line(clipboard.products))
+  log('byproducts: ' .. serpent.line(clipboard.byproducts))
+  log('ingredients: ' .. serpent.line(clipboard.ingredients))
 
   -- todo: check if products can be barreled
   -- todo: check if byproducts can be barreled
   -- todo: check if ingredients can be unbarreled
 
-  if #ingredients == 0 then
+  if #clipboard.ingredients == 0 then
     return player.create_local_flying_text{
       text = "No ingredients defined at all.", -- a check whether a factory is selected "should" come first, but who has none?
       create_at_cursor = true,
     }
   end
 
-  for _, ingredient in ipairs(ingredients) do
+  for _, ingredient in ipairs(clipboard.ingredients) do
     if ingredient.type == "entity" then
       return player.create_local_flying_text{
         text = "Mining drills are not supported.", -- it seems selecting pumpjacks does not allow for oil to be selected
@@ -133,6 +147,8 @@ script.on_event(defines.events.on_gui_click, function(event)
   local column_count = table_size(columns) + 1 -- + 1 for the horizontal flow
   local row_count = #table.children / column_count
 
+  clipboard.buildings = {}
+
   for row = 2, row_count do
     local offset = (row - 1) * column_count
     
@@ -147,17 +163,19 @@ script.on_event(defines.events.on_gui_click, function(event)
     local recipe_class, recipe_name = split_class_and_name(table.children[offset + columns['fp.pu_recipe']].children[2].sprite)
     local machine_class, machine_name = split_class_and_name(table.children[offset + columns['fp.pu_machine']].children[1].sprite)
     local machine_count = math.ceil(table.children[offset + columns['fp.pu_machine']].children[1].number)
+    merge_ingredients(clipboard.buildings, {type = machine_class, name = machine_name, amount = machine_count})
 
     local modules = {}
     for i = 2, #table.children[offset + columns['fp.pu_machine']].children do
       local module_button = table.children[offset + columns['fp.pu_machine']].children[i]
       if module_button.sprite ~= "utility/add" then
         local module_class, module_name = split_class_and_name(module_button.sprite)
-        _table.insert(modules, {type = module_class, name = module_name, amount = module_button.number})
+        -- _table.insert(modules, {type = module_class, name = module_name, amount = module_button.number})
+        merge_ingredients(clipboard.buildings, {type = module_class, name = module_name, amount = module_button.number})
       end
     end
 
-    log(serpent.line({recipe_name, machine_count .. 'x ' .. machine_name, modules}))
+    -- log(serpent.line({recipe_name, machine_count .. 'x ' .. machine_name, modules}))
 
     if #table.children[offset + columns['fp.pu_beacon']].children > 1 then -- 1 = supports beacons, 2+ = beacon and module(s) selected
       return player.create_local_flying_text{
@@ -183,20 +201,23 @@ script.on_event(defines.events.on_gui_click, function(event)
   end
 
   local factories = root.children[2].children[1].children[1].children[2].children
-  local factory_name = active_radio_button(factories).caption[3]
-  log(factory_name)
+  clipboard.factory_name = active_radio_button(factories).caption[3]
+  log(clipboard.factory_name)
 
   local energy_amount = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[2])
   local energy_prefix = root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[3][1] -- k/m/w (watt)
-  log(energy_amount * prefix_to_multiplier(energy_prefix)) -- /60 = number to put into electric energy interface usage (* for buffer)
+  clipboard.watts = energy_amount * prefix_to_multiplier(energy_prefix)
+  log(clipboard.watts) -- /60 = number to put into electric energy interface usage (* for buffer)
 
   local pollution_per_minute = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[3].tooltip[2])
   local pollution_per_minute_prefix = root.children[2].children[1].children[2].children[1].children[3].children[3].tooltip[3][1]
-  log(pollution_per_minute * prefix_to_multiplier(pollution_per_minute_prefix))
+  clipboard.pollution = pollution_per_minute * prefix_to_multiplier(pollution_per_minute_prefix)
+  log(clipboard.pollution)
 
   local timescale_buttons = root.children[2].children[1].children[2].children[3].children[1].children[3].children
   local timescale_button = active_radio_button(timescale_buttons)
-  log(timescale_button.caption[3][1])
+  clipboard.timescale = timescale_button.caption[3][1] -- [fp.unit_second, fp.unit_minute, fp.unit_hours]
+  log(clipboard.timescale)
 
   if energy_amount == 0 then
     return player.create_local_flying_text{
@@ -208,10 +229,8 @@ script.on_event(defines.events.on_gui_click, function(event)
   player.cursor_stack.set_stack({name = mod_prefix .. 'item-1', count = 1})
   -- player.opened = nil
 
-  global.clipboards[player.index] = {
-    tick = event.tick,
-    factory_name = factory_name,
-  }
+  global.clipboards[player.index] = clipboard
+  log(serpent.block(clipboard, {sortkeys = false}))
 end)
 
 local function on_created_entity(event)
@@ -250,6 +269,36 @@ local function on_created_entity(event)
     target_offset = {0, -3.75},
     alignment = "center",
     use_rich_text = true,
+  }
+
+  local io_string = ""
+
+  for _, product in ipairs(clipboard.products) do
+    io_string = io_string .. string.format('[%s=%s]', product.type, product.name)
+  end
+  io_string = io_string .. '          '
+
+  if #clipboard.byproducts > 0 then
+    for _, byproduct in ipairs(clipboard.byproducts) do
+      io_string = io_string .. string.format('[%s=%s]', byproduct.type, byproduct.name)
+    end
+    io_string = io_string .. '          '
+  end
+
+  for _, ingredient in ipairs(clipboard.ingredients) do
+    io_string = io_string .. string.format('[%s=%s]', ingredient.type, ingredient.name)
+  end
+
+  rendering.draw_text{
+    text = io_string,
+    color = {1, 1, 1},
+    surface = entity.surface,
+    target = entity,
+    target_offset = {0, -3.00},
+    alignment = "center",
+    use_rich_text = true,
+    -- only_in_alt_mode = true,
+    scale = 0.5,
   }
 end
 
