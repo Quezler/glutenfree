@@ -207,10 +207,32 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   player.cursor_stack.set_stack({name = mod_prefix .. 'item-1', count = 1})
   -- player.opened = nil
+
+  global.clipboards[player.index] = {
+    tick = event.tick,
+    factory_name = factory_name,
+  }
 end)
 
 local function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
+
+  if event.player_index == nil then
+    game.print(string.format('The %s should only be built by players.', entity.name))
+    entity.destroy()
+  end
+
+  local player = game.get_player(event.player_index)
+  local clipboard = global.clipboards[player.index]
+  if not clipboard then
+    entity.destroy()
+    return player.create_local_flying_text{
+      text = "Grab a new one from the factory planner gui.",
+      create_at_cursor = true,
+    }
+  else
+    global.clipboards[player.index] = nil -- mark clipboard as consumed
+  end
 
   local eei = entity.surface.create_entity{
     name = mod_prefix .. 'electric-energy-interface-1',
@@ -219,6 +241,16 @@ local function on_created_entity(event)
   }
 
   eei.destructible = false
+
+  rendering.draw_text{
+    text = clipboard.factory_name,
+    color = {1, 1, 1},
+    surface = entity.surface,
+    target = entity,
+    target_offset = {0, -3.75},
+    alignment = "center",
+    use_rich_text = true,
+  }
 end
 
 for _, event in ipairs({
@@ -226,7 +258,7 @@ for _, event in ipairs({
   defines.events.on_robot_built_entity,
   defines.events.script_raised_built,
   defines.events.script_raised_revive,
-  -- defines.events.on_entity_cloned,
+  defines.events.on_entity_cloned,
 }) do
   script.on_event(event, on_created_entity, {
     {filter = 'name', name = mod_prefix .. 'container-1'},
@@ -234,3 +266,10 @@ for _, event in ipairs({
     {filter = 'name', name = mod_prefix .. 'container-3'},
   })
 end
+
+local function on_configuration_changed(event)
+  global.clipboards = global.clipboards or {}
+end
+
+script.on_init(on_configuration_changed)
+script.on_configuration_changed(on_configuration_changed)
