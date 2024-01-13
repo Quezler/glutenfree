@@ -56,7 +56,11 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
   -- game.print(root.name .. ' @ ' .. event.tick)
 
-  -- log(print_gui.serpent( root ))
+  -- log(print_gui.serpent( root.children[2].children[1].children[1].children[2] ))
+  -- local factories = root.children[2].children[1].children[1].children[2].children
+  -- local factory_name = active_radio_button(factories).caption[3]
+  -- log(factory_name)
+  
   -- log(print_gui.serpent( root.children[2].children[1].children[2].children[3].children[1].children[3] ))
   -- log(print_gui.path_to_tooltip(root, 'fp.timescale_tt', 'root'))
 
@@ -98,9 +102,13 @@ script.on_event(defines.events.on_gui_click, function(event)
   log('byproducts: ' .. serpent.line(byproducts))
   log('ingredients: ' .. serpent.line(ingredients))
 
+  -- todo: check if products can be barreled
+  -- todo: check if byproducts can be barreled
+  -- todo: check if ingredients can be unbarreled
+
   if #ingredients == 0 then
     return player.create_local_flying_text{
-      text = "No ingredients defined at all.",
+      text = "No ingredients defined at all.", -- a check whether a factory is selected "should" come first, but who has none?
       create_at_cursor = true,
     }
   end
@@ -138,6 +146,7 @@ script.on_event(defines.events.on_gui_click, function(event)
     
     local recipe_class, recipe_name = split_class_and_name(table.children[offset + columns['fp.pu_recipe']].children[2].sprite)
     local machine_class, machine_name = split_class_and_name(table.children[offset + columns['fp.pu_machine']].children[1].sprite)
+    local machine_count = math.ceil(table.children[offset + columns['fp.pu_machine']].children[1].number)
 
     local modules = {}
     for i = 2, #table.children[offset + columns['fp.pu_machine']].children do
@@ -148,7 +157,7 @@ script.on_event(defines.events.on_gui_click, function(event)
       end
     end
 
-    log(serpent.line({recipe_name, machine_name, modules}))
+    log(serpent.line({recipe_name, machine_count .. 'x ' .. machine_name, modules}))
 
     if #table.children[offset + columns['fp.pu_beacon']].children > 1 then -- 1 = supports beacons, 2+ = beacon and module(s) selected
       return player.create_local_flying_text{
@@ -172,6 +181,10 @@ script.on_event(defines.events.on_gui_click, function(event)
       create_at_cursor = true,
     }
   end
+
+  local factories = root.children[2].children[1].children[1].children[2].children
+  local factory_name = active_radio_button(factories).caption[3]
+  log(factory_name)
 
   local energy_amount = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[2])
   local energy_prefix = root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[3][1] -- k/m/w (watt)

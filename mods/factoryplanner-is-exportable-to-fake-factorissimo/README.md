@@ -32,7 +32,10 @@ It falls to the player to use common sense, and to not simulate an entire SPM fa
 
 Well as you can see my data stage mod failed due to complexity reasons, easier to let another mod do the work, i just read the finished result from the gui.
 
-# licences
+# credits
 
-- the files under `./graphics/` and their prototype defintions are MIT licenced to MagmaMcFry (original author) and notnotmelon (fork maintainer)
+- `./graphics/factory/*` and their prototype defintions are MIT licenced to MagmaMcFry (original author) and notnotmelon (fork maintainer)
+- `./graphics/icon/*` and their prototype defintions are MIT licenced to MagmaMcFry (original author) and notnotmelon (fork maintainer)
 - parts of the control script (e.g. the `ingredients_to_factorissimo` button style/construction) come from Therenas's MIT licenced Factory Planner mod
+- the thumbnail is part of a frame from a rick and morty episode about the car battery
+- the power panel above the factory archways is a sprite from among us
