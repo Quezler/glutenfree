@@ -194,3 +194,29 @@ script.on_event(defines.events.on_gui_click, function(event)
   player.cursor_stack.set_stack({name = mod_prefix .. 'item-1', count = 1})
   -- player.opened = nil
 end)
+
+local function on_created_entity(event)
+  local entity = event.created_entity or event.entity or event.destination
+
+  local eei = entity.surface.create_entity{
+    name = mod_prefix .. 'electric-energy-interface-1',
+    force = entity.force,
+    position = {entity.position.x, entity.position.y + 2.1},
+  }
+
+  eei.destructible = false
+end
+
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+  -- defines.events.on_entity_cloned,
+}) do
+  script.on_event(event, on_created_entity, {
+    {filter = 'name', name = mod_prefix .. 'container-1'},
+    {filter = 'name', name = mod_prefix .. 'container-2'},
+    {filter = 'name', name = mod_prefix .. 'container-3'},
+  })
+end

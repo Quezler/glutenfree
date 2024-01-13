@@ -101,11 +101,40 @@ data:extend{item_1}
 local interface_1 = {
   type = 'electric-energy-interface',
   name = mod_prefix .. 'electric-energy-interface-' .. 1,
+  localised_name = {"entity-name.fietff-container-i", 1},
+  -- localised_name = {"", {"entity-name.fietff-container-i", 1}, '(power)'},
   icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', 1),
   icon_size = 64,
 
-  collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
-  selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+  collision_box = {{-3.8, -3.8 - 2.1}, {3.8, 3.8 - 2.1}},
+  -- selection_box = {{-0.35, -0.4}, {0.35, 0.15}},
+  selection_box = {{-0.4, -0.3}, {0.4, 0.3}},
+  -- alert_icon_shift = {0, -2.1},
+
+  max_health = 10 * 1, -- mimic the storage size, because why not
+
+  flags = {
+    'placeable-off-grid',
+  },
+
+  gui_mode = 'all', -- todo: remove
+  energy_source =
+  {
+    type = "electric",
+    usage_priority = "secondary-input"
+  },
+
+  selection_priority = 51,
+
+  picture = {
+    filename = mod_path .. '/graphics/entities/electric-energy-interface.png',
+    width = 30,
+    height = 20,
+    scale = 0.5,
+    -- shift = {0, -0.15},
+  }
 }
 
 data:extend{interface_1}
+
+-- data.raw['electric-energy-interface']['electric-energy-interface'].energy_source.usage_priority = "secondary-input"
