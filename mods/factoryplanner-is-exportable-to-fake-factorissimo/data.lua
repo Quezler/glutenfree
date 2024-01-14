@@ -41,7 +41,9 @@ local function create_container(config)
           shift = config.shift,
         }
       }
-    }
+    },
+
+    se_allow_in_space = true,
   }
 
   for _, layer in ipairs(container.picture.layers) do
@@ -213,3 +215,30 @@ local assembling_machine = {
 }
 
 data:extend{coin, category, recipe, assembling_machine}
+
+local combinator = {
+  type = 'constant-combinator',
+  name = mod_prefix .. 'constant-combinator',
+  collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
+  selection_box = {{-4.0, -4.0}, {4.0, 4.0}},
+  selection_priority = 48,
+  -- selectable_in_game = false,
+
+  -- item_slot_count = 4294967295,
+  item_slot_count = 40,
+  energy_source = {type = "void"},
+  
+  circuit_wire_connection_points = data.raw['constant-combinator']['constant-combinator'].circuit_wire_connection_points,
+  activity_led_light_offsets = data.raw['constant-combinator']['constant-combinator'].activity_led_light_offsets,
+  circuit_wire_max_distance = data.raw['constant-combinator']['constant-combinator'].circuit_wire_max_distance,
+  draw_circuit_wires = false,
+
+  flags = {
+    'not-on-map',
+    'hide-alt-info',
+  },
+}
+
+data:extend{combinator}
+
+assert(combinator.item_slot_count == container_1.inventory_size)

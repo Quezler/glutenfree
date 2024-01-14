@@ -44,3 +44,7 @@ e.g. slots in terms of buildings & materials it can fit, amount of text that can
 - parts of the control script (e.g. the `ingredients_to_factorissimo` button style/construction) come from Therenas's MIT licenced Factory Planner mod
 - the thumbnail is part of a frame from a rick and morty episode about the car battery
 - the power panel above the factory archways is a sprite from among us
+
+# 1.0.0 release
+
+I am not yet fully satisfied, the code is still a bit of a mess but i've been working on this mod for days at this point, and i want to play again.

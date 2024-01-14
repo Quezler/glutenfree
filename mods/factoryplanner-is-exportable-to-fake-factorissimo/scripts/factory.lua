@@ -3,6 +3,31 @@ local shared = require('shared')
 local mod_prefix = 'fietff-'
 local Factory = {}
 
+function Factory.get_constant_combinator_parameters(clipboard)
+  local parameters = {}
+  local i = 1
+
+  for _, building in ipairs(clipboard.buildings) do
+    table.insert(parameters, {
+      signal = {type = "item", name = building.name},
+      count = -building.amount,
+      index = i,
+    })
+    i = i + 1
+  end
+
+  for _, ingredient in ipairs(clipboard.ingredients) do
+    table.insert(parameters, {
+      signal = {type = "item", name = ingredient.name},
+      count = -math.ceil(ingredient.amount),
+      index = i,
+    })
+    i = i + 1
+  end
+
+  return parameters
+end
+
 function Factory.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
@@ -23,6 +48,22 @@ function Factory.on_created_entity(event)
   else
     global.clipboards[player.index] = nil -- mark clipboard as consumed
   end
+
+  local combinator = entity.surface.create_entity{
+    name = mod_prefix .. 'constant-combinator',
+    force = entity.force,
+    position = {entity.position.x, entity.position.y},
+  }
+  combinator.destructible = false
+  combinator.get_control_behavior().parameters = Factory.get_constant_combinator_parameters(clipboard) -- will crash if a factory needs over 40 slots (excl. output)
+  combinator.connect_neighbour({
+    target_entity = entity,
+    wire = defines.wire_type.red,
+  })
+  combinator.connect_neighbour({
+    target_entity = entity,
+    wire = defines.wire_type.green,
+  })
 
   local assembler = entity.surface.create_entity{
     name = mod_prefix .. 'assembling-machine-1',
@@ -74,7 +115,7 @@ function Factory.on_created_entity(event)
 
   Factory.tick_struct(global.structs[entity.unit_number])
 
-  global.deathrattles[script.register_on_entity_destroyed(entity)] = {assembler, eei}
+  global.deathrattles[script.register_on_entity_destroyed(entity)] = {combinator, assembler, eei}
 end
 
 function Factory.tick_struct(struct)
