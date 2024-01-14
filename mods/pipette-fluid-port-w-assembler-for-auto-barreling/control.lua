@@ -118,6 +118,8 @@ end)
 script.on_event(defines.events.on_player_pipette, function(event)
   local player = game.get_player(event.player_index)
 
+  game.print('pipetted player.selected ('.. player.name ..' & '.. event.item.name ..')')
+
   if player.selected == nil then return game.print('pipetted player.selected = nil, how? ('.. player.name ..' & '.. event.item.name ..')') end
   if player.selected.name ~= "pipe-connection" then return end
 
