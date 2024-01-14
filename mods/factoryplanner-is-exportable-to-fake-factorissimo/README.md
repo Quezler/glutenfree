@@ -51,6 +51,8 @@ I am not yet fully satisfied, the code is still a bit of a mess but i've been wo
 
 Note that this mod is currently unrestricted in terms of which recipes/steps are allowed, as well as no block for "surface specific" recipes like waterless/space.
 
+Factories currently have 40 slots, this is shared between buildings, modules, inputs & outputs, factories that "do too much" quickly can become impractical to wield.
+
 # potato
 
 Oh nice you've read it all? Then here is some useful information: the circuit network of the factory tells you what it is missing with negative signals.

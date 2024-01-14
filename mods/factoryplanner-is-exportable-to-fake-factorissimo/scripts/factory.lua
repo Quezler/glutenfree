@@ -94,7 +94,7 @@ function Factory.on_created_entity(event)
     input_buffer = {},
     output_buffer = {},
 
-    output_slots_required = table_size(clipboard.products) + table_size(clipboard.byproducts),
+    output_slots_required = table_size(clipboard.products) + table_size(clipboard.byproducts), -- todo: check stack sizes in case a lot is made per minute :o
     rendered = {},
   }
 
@@ -208,6 +208,12 @@ function Factory.tick_struct(struct)
 
   -- is there room for the next craft cycle?
   if struct.output_slots_required > inventory.count_empty_stacks() then return rendering.set_text(struct.rendered.factory_message, "not enough output space") end
+
+  for _, product in ipairs(struct.clipboard.products) do
+    if inventory_contents[product.name] then
+      return rendering.set_text(struct.rendered.factory_message, "products still present") -- since output_slots_required isn't that accurate due to stack size atm
+    end
+  end
 
   local item_statistics = struct.container.force.item_production_statistics
 
