@@ -39,6 +39,9 @@ function Handler.on_configuration_changed(event)
   Handler.regenerate_item_request_proxy_whitelist()
 end
 
+local entity_name_bypasses_proxy_whitelist = {
+  ['fietff-container-1'] = true,
+}
 function Handler.regenerate_item_request_proxy_whitelist()
   global.item_request_proxy_whitelist = {}
   local module_prototypes = game.get_filtered_item_prototypes({{filter = "type", type = "module"}})
@@ -78,7 +81,7 @@ function Handler.items_to_place_this(alert_target)
   elseif alert_target.name == "item-request-proxy" then
     local items_to_place_this = {}
     for name, count in pairs(alert_target.item_requests) do
-      if global.item_request_proxy_whitelist[name] then
+      if global.item_request_proxy_whitelist[name] or entity_name_bypasses_proxy_whitelist[alert_target.proxy_target.name] then
         table.insert(items_to_place_this, {name = name, count = count})
       end
     end
