@@ -220,8 +220,10 @@ function Factory.tick_struct(struct)
   for _, ingredient in ipairs(struct.clipboard.ingredients) do
     -- refill the buffer, which will now have enough for a cycle
     local top_up_with = math.ceil(ingredient.amount - struct.input_buffer[ingredient.name])
-    item_statistics.on_flow(ingredient.name, -top_up_with)
-    struct.input_buffer[ingredient.name] = struct.input_buffer[ingredient.name] + inventory.remove({name = ingredient.name, count = top_up_with})
+    if top_up_with > 0 then
+      item_statistics.on_flow(ingredient.name, -top_up_with)
+      struct.input_buffer[ingredient.name] = struct.input_buffer[ingredient.name] + inventory.remove({name = ingredient.name, count = top_up_with})
+    end
 
     -- and now we subtract the ingredient costs from the buffer
     struct.input_buffer[ingredient.name] = struct.input_buffer[ingredient.name] - ingredient.amount
