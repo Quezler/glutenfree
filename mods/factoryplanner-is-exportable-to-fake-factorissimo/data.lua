@@ -123,6 +123,7 @@ local interface_1 = {
   icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', 1),
   icon_size = 64,
 
+  collision_mask = {},
   collision_box = {{-3.8, -3.8 - shared.electric_energy_interface_1_y_offset}, {3.8, 3.8 - shared.electric_energy_interface_1_y_offset}},
   selection_box = {{-0.4, -0.3}, {0.4, 0.3}},
   selection_priority = 51,
@@ -196,6 +197,7 @@ local assembling_machine = {
     'no-automated-item-insertion',
   },
 
+  collision_mask = {},
   collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
   selection_box = {{-3.8, -3.8}, {3.8, 3.8}},
   selectable_in_game = false,
@@ -219,6 +221,7 @@ data:extend{coin, category, recipe, assembling_machine}
 local combinator = {
   type = 'constant-combinator',
   name = mod_prefix .. 'constant-combinator',
+  collision_mask = {},
   collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
   selection_box = {{-4.0, -4.0}, {4.0, 4.0}},
   selection_priority = 48,
