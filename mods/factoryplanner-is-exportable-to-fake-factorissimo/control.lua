@@ -275,13 +275,6 @@ script.on_event(defines.events.on_gui_click, function(event)
   clipboard.timescale = timescale_button.caption[3][1] -- [fp.unit_second, fp.unit_minute, fp.unit_hours]
   -- log(clipboard.timescale)
 
-  if energy_amount == 0 then
-    return player.create_local_flying_text{
-      text = "Factory must use (some) power.", -- because i want to use an interface's buffer as progress bar #lazy
-      create_at_cursor = true,
-    }
-  end
-
   player.cursor_stack.set_stack({name = mod_prefix .. 'item-1', count = 1})
   -- player.opened = nil
 
@@ -324,7 +317,7 @@ local function on_created_entity(event)
   eei.destructible = false
 
   eei.power_usage = clipboard.watts / 60
-  eei.electric_buffer_size = clipboard.watts -- buffer for 1 second
+  eei.electric_buffer_size = math.max(1, clipboard.watts) -- buffer for 1 second
 
   rendering.draw_text{
     text = clipboard.factory_name,
