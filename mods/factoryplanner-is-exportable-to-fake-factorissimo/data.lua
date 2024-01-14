@@ -88,6 +88,18 @@ local container_1 = create_container({
 
 data:extend{container_1, --[[container_2, container_3--]]}
 
+circuit_connector_definition = circuit_connector_definitions.create
+(
+  universal_connector_template,
+  {
+    { variation = 1, main_offset = util.by_pixel(3, -72), shadow_offset = util.by_pixel(0, 0), show_shadow = false },
+  }
+)
+
+container_1.circuit_wire_connection_point = circuit_connector_definition.points
+container_1.circuit_connector_sprites = circuit_connector_definition.sprites
+container_1.circuit_wire_max_distance = default_circuit_wire_max_distance
+
 local item_1 = {
   type = 'item',
   name = mod_prefix .. 'item-' .. 1,
@@ -139,6 +151,8 @@ data:extend{interface_1}
 local coin = {
   type = 'item',
   name = mod_prefix .. 'coin',
+
+  flags = {'hidden'},
 
   icon = data.raw['item']['coin'].icon,
   icon_size = data.raw['item']['coin'].icon_size,
