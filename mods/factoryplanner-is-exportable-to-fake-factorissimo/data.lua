@@ -174,6 +174,8 @@ local recipe = {
   category = category.name,
   hide_from_stats = true,
 
+  flags = {'hidden'},
+
   ingredients = {},
   results = {{
     type = "item",
