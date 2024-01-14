@@ -174,6 +174,7 @@ local assembling_machine = {
   flags = {
     'not-on-map',
     'hide-alt-info',
+    'no-automated-item-removal',
   },
 
   collision_box = {{-3.8, -3.8}, {3.8, 3.8}},

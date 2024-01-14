@@ -1,5 +1,5 @@
 local print_gui = require('scripts.print_gui')
-local shared = require('shared')
+local Factory = require('scripts.factory')
 
 local mod_prefix = 'fietff-'
 
@@ -159,6 +159,20 @@ script.on_event(defines.events.on_gui_click, function(event)
     local recipe_class, recipe_name = split_class_and_name(table.children[offset + columns['fp.pu_recipe']].children[2].sprite)
     local machine_class, machine_name = split_class_and_name(table.children[offset + columns['fp.pu_machine']].children[1].sprite)
     local machine_count = math.ceil(table.children[offset + columns['fp.pu_machine']].children[1].number)
+
+    local machine_prototype = game.entity_prototypes[machine_name]
+    local item_to_place_this = machine_prototype.items_to_place_this[1]
+    if item_to_place_this == nil then
+      return player.create_local_flying_text{
+        text = string.format("The %s machine has no building materials.", machine_name),
+        create_at_cursor = true,
+      }
+    else
+      machine_class = "item"
+      machine_name = item_to_place_this.name
+      machine_count = machine_count * (item_to_place_this.count or 1)
+    end
+
     merge_ingredients(clipboard.buildings, {type = machine_class, name = machine_name, amount = machine_count})
 
     local modules = {}
@@ -282,83 +296,6 @@ script.on_event(defines.events.on_gui_click, function(event)
   log(serpent.block(clipboard, {sortkeys = false}))
 end)
 
-local function on_created_entity(event)
-  local entity = event.created_entity or event.entity or event.destination
-
-  if event.player_index == nil then
-    game.print(string.format('The %s should only be built by players.', entity.name))
-    entity.destroy()
-  end
-
-  local player = game.get_player(event.player_index)
-  local clipboard = global.clipboards[player.index]
-  if not clipboard then
-    entity.destroy()
-    return player.create_local_flying_text{
-      text = "Grab a new one from the factory planner gui.",
-      create_at_cursor = true,
-    }
-  else
-    global.clipboards[player.index] = nil -- mark clipboard as consumed
-  end
-
-  local assembler = entity.surface.create_entity{
-    name = mod_prefix .. 'assembling-machine-1',
-    force = entity.force,
-    position = {entity.position.x, entity.position.y},
-  }
-  assembler.destructible = false
-
-  local eei = entity.surface.create_entity{
-    name = mod_prefix .. 'electric-energy-interface-1',
-    force = entity.force,
-    position = {entity.position.x, entity.position.y + shared.electric_energy_interface_1_y_offset},
-  }
-  eei.destructible = false
-
-  eei.power_usage = clipboard.watts / 60
-  eei.electric_buffer_size = math.max(1, clipboard.watts) -- buffer for 1 second
-
-  rendering.draw_text{
-    text = clipboard.factory_name,
-    color = {1, 1, 1},
-    surface = entity.surface,
-    target = entity,
-    target_offset = {0, -3.75},
-    alignment = "center",
-    use_rich_text = true,
-  }
-
-  local io_string = ""
-
-  for _, product in ipairs(clipboard.products) do
-    io_string = io_string .. string.format('[%s=%s]', product.type, product.name)
-  end
-  io_string = io_string .. ' - '
-
-  if #clipboard.byproducts > 0 then
-    for _, byproduct in ipairs(clipboard.byproducts) do
-      io_string = io_string .. string.format('[%s=%s]', byproduct.type, byproduct.name)
-    end
-    io_string = io_string .. ' - '
-  end
-
-  for _, ingredient in ipairs(clipboard.ingredients) do
-    io_string = io_string .. string.format('[%s=%s]', ingredient.type, ingredient.name)
-  end
-
-  rendering.draw_text{
-    text = io_string,
-    color = {1, 1, 1},
-    surface = entity.surface,
-    target = entity,
-    target_offset = {0, -3.00},
-    alignment = "center",
-    use_rich_text = true,
-    scale = 0.5,
-  }
-end
-
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
@@ -366,7 +303,7 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, on_created_entity, {
+  script.on_event(event, Factory.on_created_entity, {
     {filter = 'name', name = mod_prefix .. 'container-1'},
     {filter = 'name', name = mod_prefix .. 'container-2'},
     {filter = 'name', name = mod_prefix .. 'container-3'},
@@ -389,7 +326,25 @@ local function on_configuration_changed(event)
       global.can_be_unbarreled[fluid_name] = true
     end
   end
+
+  global.structs = global.structs or {}
+  global.deathrattles = global.deathrattles or {}
 end
 
 script.on_init(on_configuration_changed)
 script.on_configuration_changed(on_configuration_changed)
+
+script.on_nth_tick(600, function(event)
+  for unit_minute, struct in pairs(global.structs) do
+    Factory.tick_struct(struct)
+  end
+end)
+
+script.on_event(defines.events.on_entity_destroyed, function(event)
+  local deathrattle = global.deathrattles[event.registration_number]
+  if deathrattle then global.deathrattles[event.registration_number] = nil
+    for _, entity in ipairs(deathrattle) do
+      entity.destroy()
+    end
+  end
+end)
