@@ -3,6 +3,14 @@ local shared = require('shared')
 local mod_prefix = 'fietff-'
 local Factory = {}
 
+function Factory.flying_text(struct, text)
+  struct.container.surface.create_entity{
+    name = 'flying-text',
+    position = struct.container.position,
+    text = text,
+  }
+end
+
 function Factory.get_constant_combinator_parameters(clipboard)
   local parameters = {}
   local i = 1
@@ -103,7 +111,7 @@ function Factory.on_created_entity(event)
     scale = 0.5,
   }
 
-  global.structs[entity.unit_number] = {
+  local struct = {
     unit_number = entity.unit_number,
     container = entity,
 
@@ -111,9 +119,27 @@ function Factory.on_created_entity(event)
     eei = eei,
 
     clipboard = clipboard,
+
+    input_buffer = {},
+    output_buffer = {},
+
+    output_slots_required = table_size(clipboard.products) + table_size(clipboard.byproducts)
   }
 
-  Factory.tick_struct(global.structs[entity.unit_number])
+  for _, ingredient in ipairs(clipboard.ingredients) do
+    struct.input_buffer[ingredient.name] = 0
+  end
+
+  for _, product in ipairs(clipboard.products) do
+    struct.output_buffer[product.name] = 0
+  end
+
+  for _, byproduct in ipairs(clipboard.byproducts) do
+    struct.output_buffer[byproduct.name] = 0
+  end
+
+  global.structs[entity.unit_number] = struct
+  Factory.tick_struct(struct)
 
   global.deathrattles[script.register_on_entity_destroyed(entity)] = {combinator, assembler, eei}
 end
@@ -154,13 +180,64 @@ function Factory.tick_struct(struct)
     struct.eei.power_usage = 0
     return -- wait for the factory to be constructed
   elseif struct.proxy then
-    game.print('construction complete.')
+    Factory.flying_text(struct, "Construction complete.")
     struct.eei.power_usage = struct.clipboard.watts / 60
     struct.proxy.destroy()
     struct.proxy = nil
   end
 
   game.print('craft cycle')
+
+  local purse = struct.assembler.get_inventory(defines.inventory.assembling_machine_output)
+  local purse_coin_count = purse.get_item_count(mod_prefix .. 'coin')
+  if 60 > purse_coin_count then
+    return Factory.flying_text(struct, (60 - purse_coin_count) .. " more seconds till next cycle.")
+    -- return -- power ("rent") costs not paid in full yet
+  end
+  struct.eei.power_usage = 0 -- disable power usage until after a successful craft cycle
+
+  -- can we afford the next craft cycle?
+  for _, ingredient in ipairs(struct.clipboard.ingredients) do
+    local available = (inventory_contents[ingredient.name] or 0) + struct.input_buffer[ingredient.name]
+    if ingredient.amount > available then return Factory.flying_text(struct, "Not enough ingredients.") end
+  end
+
+  -- is there room for the next craft cycle?
+  if struct.output_slots_required > inventory.count_empty_stacks() then return Factory.flying_text(struct, "Not enough output space.") end
+
+  local item_statistics = struct.container.force.item_production_statistics
+
+  for _, ingredient in ipairs(struct.clipboard.ingredients) do
+    -- refill the buffer, which will now have enough for a cycle
+    local top_up_with = math.ceil(ingredient.amount - struct.input_buffer[ingredient.name])
+    item_statistics.on_flow(ingredient.name, -top_up_with)
+    struct.input_buffer[ingredient.name] = struct.input_buffer[ingredient.name] + inventory.remove({name = ingredient.name, count = top_up_with})
+
+    -- and now we subtract the ingredient costs from the buffer
+    struct.input_buffer[ingredient.name] = struct.input_buffer[ingredient.name] - ingredient.amount
+  end
+
+  do -- calculate and give the output
+    for _, product in ipairs(struct.clipboard.products) do
+      struct.output_buffer[product.name] = struct.output_buffer[product.name] + product.amount
+    end
+  
+    for _, byproduct in ipairs(struct.clipboard.byproducts) do
+      struct.output_buffer[byproduct.name] = struct.output_buffer[byproduct.name] + byproduct.amount
+    end
+  
+    for item_name, item_count in pairs(struct.output_buffer) do
+      local payout = math.floor(item_count)
+      if payout > 0 then
+        item_statistics.on_flow(item_name, payout)
+        struct.output_buffer[item_name] = struct.output_buffer[item_name] - inventory.insert({name = item_name, count = item_count})
+      end
+    end
+  end
+
+  -- now that we've outputed results, use power again
+  purse.clear() -- claim the 60 coins in there
+  struct.eei.power_usage = struct.clipboard.watts / 60
 end
 
 return Factory

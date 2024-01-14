@@ -315,6 +315,14 @@ script.on_event(defines.events.on_gui_click, function(event)
   clipboard.timescale = timescale_button.caption[3][1] -- [fp.unit_second, fp.unit_minute, fp.unit_hours]
   -- log(clipboard.timescale)
 
+  -- whilst i could simply go over the products/byproducts/ingredients and multiply or divide them by 60 (seconds or hours respectively), not right now.
+  if clipboard.timescale ~= "fp.unit_minute" then
+    return player.create_local_flying_text{
+      text = "Timescale must be set to minutes.",
+      create_at_cursor = true,
+    }
+  end
+
   -- player.cursor_stack.set_stack({name = mod_prefix .. 'item-1', count = 1})
   player.cursor_stack.set_stack({name = 'er:screenshot-camera', count = 1}) -- give `RemoteView.get_stack_limit(stack)` more options for modders plox
   -- player.opened = nil
