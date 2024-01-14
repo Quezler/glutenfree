@@ -193,9 +193,10 @@ local assembling_machine = {
     'not-on-map',
     'hide-alt-info',
     'no-automated-item-removal',
+    'no-automated-item-insertion',
   },
 
-  collision_box = {{-0.5, -0.5}, {0.5, 0.5}},
+  collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
   selection_priority = 51,
   -- selectable_in_game = false,

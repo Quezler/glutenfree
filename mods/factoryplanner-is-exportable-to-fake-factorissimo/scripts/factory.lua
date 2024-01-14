@@ -3,14 +3,6 @@ local shared = require('shared')
 local mod_prefix = 'fietff-'
 local Factory = {}
 
-function Factory.flying_text(struct, text)
-  struct.container.surface.create_entity{
-    name = 'flying-text',
-    position = struct.container.position,
-    text = text,
-  }
-end
-
 function Factory.get_constant_combinator_parameters(clipboard)
   local parameters = {}
   local i = 1
@@ -90,27 +82,6 @@ function Factory.on_created_entity(event)
   -- eei.power_usage = clipboard.watts / 60
   eei.electric_buffer_size = math.max(1, clipboard.watts) -- buffer for 1 second
 
-  rendering.draw_text{
-    text = clipboard.factory_name,
-    color = {1, 1, 1},
-    surface = entity.surface,
-    target = entity,
-    target_offset = {0, -3.75},
-    alignment = "center",
-    use_rich_text = true,
-  }
-
-  rendering.draw_text{
-    text = clipboard.factory_description,
-    color = {1, 1, 1},
-    surface = entity.surface,
-    target = entity,
-    target_offset = {0, -3.00},
-    alignment = "center",
-    use_rich_text = true,
-    scale = 0.5,
-  }
-
   local struct = {
     unit_number = entity.unit_number,
     container = entity,
@@ -123,7 +94,8 @@ function Factory.on_created_entity(event)
     input_buffer = {},
     output_buffer = {},
 
-    output_slots_required = table_size(clipboard.products) + table_size(clipboard.byproducts)
+    output_slots_required = table_size(clipboard.products) + table_size(clipboard.byproducts),
+    rendered = {},
   }
 
   for _, ingredient in ipairs(clipboard.ingredients) do
@@ -137,6 +109,38 @@ function Factory.on_created_entity(event)
   for _, byproduct in ipairs(clipboard.byproducts) do
     struct.output_buffer[byproduct.name] = 0
   end
+
+  struct.rendered.factory_name = rendering.draw_text{
+    text = clipboard.factory_name,
+    color = {1, 1, 1},
+    surface = entity.surface,
+    target = entity,
+    target_offset = {0, -3.75},
+    alignment = "center",
+    use_rich_text = true,
+  }
+
+  struct.rendered.factory_description = rendering.draw_text{
+    text = clipboard.factory_description,
+    color = {1, 1, 1},
+    surface = entity.surface,
+    target = entity,
+    target_offset = {0, -3.00},
+    alignment = "center",
+    use_rich_text = true,
+    scale = 0.5,
+  }
+
+  struct.rendered.factory_message = rendering.draw_text{
+    text = 'owo',
+    color = {1, 1, 1},
+    surface = entity.surface,
+    target = entity,
+    target_offset = {0, 0.75},
+    alignment = "center",
+    use_rich_text = true,
+    scale = 1,
+  }
 
   global.structs[entity.unit_number] = struct
   Factory.tick_struct(struct)
@@ -178,20 +182,20 @@ function Factory.tick_struct(struct)
       }
     end
     struct.eei.power_usage = 0
+    rendering.set_text(struct.rendered.factory_message, 'missing buildings/modules')
     return -- wait for the factory to be constructed
   elseif struct.proxy then
-    Factory.flying_text(struct, "Construction complete.")
     struct.eei.power_usage = struct.clipboard.watts / 60
     struct.proxy.destroy()
     struct.proxy = nil
   end
 
-  game.print('craft cycle')
+  -- game.print('craft cycle')
 
   local purse = struct.assembler.get_inventory(defines.inventory.assembling_machine_output)
   local purse_coin_count = purse.get_item_count(mod_prefix .. 'coin')
   if 60 > purse_coin_count then
-    return Factory.flying_text(struct, (60 - purse_coin_count) .. " more seconds till next cycle.")
+    return rendering.set_text(struct.rendered.factory_message, string.format('charging up seconds (%s/60)', purse_coin_count))
     -- return -- power ("rent") costs not paid in full yet
   end
   struct.eei.power_usage = 0 -- disable power usage until after a successful craft cycle
@@ -199,11 +203,11 @@ function Factory.tick_struct(struct)
   -- can we afford the next craft cycle?
   for _, ingredient in ipairs(struct.clipboard.ingredients) do
     local available = (inventory_contents[ingredient.name] or 0) + struct.input_buffer[ingredient.name]
-    if ingredient.amount > available then return Factory.flying_text(struct, "Not enough ingredients.") end
+    if ingredient.amount > available then return rendering.set_text(struct.rendered.factory_message, "not enough ingredients") end
   end
 
   -- is there room for the next craft cycle?
-  if struct.output_slots_required > inventory.count_empty_stacks() then return Factory.flying_text(struct, "Not enough output space.") end
+  if struct.output_slots_required > inventory.count_empty_stacks() then return rendering.set_text(struct.rendered.factory_message, "not enough output space") end
 
   local item_statistics = struct.container.force.item_production_statistics
 
@@ -238,6 +242,7 @@ function Factory.tick_struct(struct)
   -- now that we've outputed results, use power again
   purse.clear() -- claim the 60 coins in there
   struct.eei.power_usage = struct.clipboard.watts / 60
+  rendering.set_text(struct.rendered.factory_message, "produced output")
 end
 
 return Factory
