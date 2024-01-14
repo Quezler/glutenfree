@@ -112,13 +112,9 @@ script.on_event(defines.events.on_gui_click, function(event)
   clipboard.byproducts = get_item_box_contents(root, item_box_byproducts)
   clipboard.ingredients = get_item_box_contents(root, item_box_ingredients)
 
-  log('products: ' .. serpent.line(clipboard.products))
-  log('byproducts: ' .. serpent.line(clipboard.byproducts))
-  log('ingredients: ' .. serpent.line(clipboard.ingredients))
-
-  -- todo: check if products can be barreled
-  -- todo: check if byproducts can be barreled
-  -- todo: check if ingredients can be unbarreled
+  -- log('products: ' .. serpent.line(clipboard.products))
+  -- log('byproducts: ' .. serpent.line(clipboard.byproducts))
+  -- log('ingredients: ' .. serpent.line(clipboard.ingredients))
 
   if #clipboard.ingredients == 0 then
     return player.create_local_flying_text{
@@ -249,6 +245,8 @@ script.on_event(defines.events.on_gui_click, function(event)
         end
       end
     end
+
+    -- todo: check if there are no duplicates in the products/byproducts/ingredients, especially barrels
   end
 
   if player.clear_cursor() == false then
@@ -260,22 +258,22 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   local factories = root.children[2].children[1].children[1].children[2].children
   clipboard.factory_name = active_radio_button(factories).caption[3]
-  log(clipboard.factory_name)
+  -- log(clipboard.factory_name)
 
   local energy_amount = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[2])
   local energy_prefix = root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[3][1] -- k/m/w (watt)
   clipboard.watts = energy_amount * prefix_to_multiplier(energy_prefix)
-  log(clipboard.watts) -- /60 = number to put into electric energy interface usage (* for buffer)
+  -- log(clipboard.watts) -- /60 = number to put into electric energy interface usage (* for buffer)
 
   local pollution_per_minute = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[3].tooltip[2])
   local pollution_per_minute_prefix = root.children[2].children[1].children[2].children[1].children[3].children[3].tooltip[3][1]
   clipboard.pollution = pollution_per_minute * prefix_to_multiplier(pollution_per_minute_prefix)
-  log(clipboard.pollution)
+  -- log(clipboard.pollution)
 
   local timescale_buttons = root.children[2].children[1].children[2].children[3].children[1].children[3].children
   local timescale_button = active_radio_button(timescale_buttons)
   clipboard.timescale = timescale_button.caption[3][1] -- [fp.unit_second, fp.unit_minute, fp.unit_hours]
-  log(clipboard.timescale)
+  -- log(clipboard.timescale)
 
   if energy_amount == 0 then
     return player.create_local_flying_text{
@@ -311,16 +309,22 @@ local function on_created_entity(event)
     global.clipboards[player.index] = nil -- mark clipboard as consumed
   end
 
+  local assembler = entity.surface.create_entity{
+    name = mod_prefix .. 'assembling-machine-1',
+    force = entity.force,
+    position = {entity.position.x, entity.position.y},
+  }
+  assembler.destructible = false
+
   local eei = entity.surface.create_entity{
     name = mod_prefix .. 'electric-energy-interface-1',
     force = entity.force,
     position = {entity.position.x, entity.position.y + shared.electric_energy_interface_1_y_offset},
   }
-
   eei.destructible = false
 
   eei.power_usage = clipboard.watts / 60
-  eei.electric_buffer_size = clipboard.watts * 10 -- buffer for 10 seconds
+  eei.electric_buffer_size = clipboard.watts -- buffer for 1 second
 
   rendering.draw_text{
     text = clipboard.factory_name,
