@@ -177,8 +177,9 @@ local assembling_machine = {
   },
 
   collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
-  selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
-  selection_priority = 51,
+  selection_box = {{-3.9, -3.9}, {3.9, 3.9}},
+  selection_priority = 49,
+  -- selectable_in_game = false,
 
   crafting_categories = {category.name},
   fixed_recipe = recipe.name,
