@@ -133,7 +133,7 @@ local interface_1 = {
     'placeable-off-grid',
   },
 
-  gui_mode = 'all', -- todo: remove
+  -- gui_mode = 'all',
   energy_source =
   {
     type = "electric",
@@ -199,7 +199,7 @@ local assembling_machine = {
   collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
   selection_priority = 51,
-  -- selectable_in_game = false,
+  selectable_in_game = false,
 
   crafting_categories = {category.name},
   fixed_recipe = recipe.name,
@@ -223,7 +223,7 @@ local combinator = {
   collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
   selection_box = {{-4.0, -4.0}, {4.0, 4.0}},
   selection_priority = 48,
-  -- selectable_in_game = false,
+  selectable_in_game = false,
 
   -- item_slot_count = 4294967295,
   item_slot_count = 40,

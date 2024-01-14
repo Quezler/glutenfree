@@ -218,10 +218,10 @@ script.on_event(defines.events.on_gui_click, function(event)
 
     local force_recipe = player.force.recipes[recipe_name]
     if force_recipe.enabled == false then -- wouldn't want players obtaining item outputs they shouldn't have unlocked yet (or cheaper recipes)
-      -- return player.create_local_flying_text{
-      --   text = string.format("Recipe [%s] not researched yet.", recipe_name),
-      --   create_at_cursor = true,
-      -- }
+      return player.create_local_flying_text{
+        text = string.format("Recipe [%s] not researched yet.", recipe_name),
+        create_at_cursor = true,
+      }
     end
   end
 

@@ -48,3 +48,9 @@ e.g. slots in terms of buildings & materials it can fit, amount of text that can
 # 1.0.0 release
 
 I am not yet fully satisfied, the code is still a bit of a mess but i've been working on this mod for days at this point, and i want to play again.
+
+Note that this mod is currently unrestricted in terms of which recipes/steps are allowed, as well as no block for "surface specific" recipes like waterless/space.
+
+# potato
+
+Oh nice you've read it all? Then here is some useful information: the circuit network of the factory tells you what it is missing with negative signals.
