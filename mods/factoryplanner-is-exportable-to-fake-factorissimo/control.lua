@@ -59,6 +59,28 @@ local function get_item_box_contents(root, item_box_index)
   return products
 end
 
+local function get_factory_description(clipboard)
+  local description = ""
+
+  for _, product in ipairs(clipboard.products) do
+    description = description .. string.format('[%s=%s]', product.type, product.name)
+  end
+  description = description .. ' - '
+
+  if #clipboard.byproducts > 0 then
+    for _, byproduct in ipairs(clipboard.byproducts) do
+      description = description .. string.format('[%s=%s]', byproduct.type, byproduct.name)
+    end
+    description = description .. ' - '
+  end
+
+  for _, ingredient in ipairs(clipboard.ingredients) do
+    description = description .. string.format('[%s=%s]', ingredient.type, ingredient.name)
+  end
+
+  return description
+end
+
 script.on_event(defines.events.on_gui_opened, function(event)
   if event.gui_type ~= defines.gui_type.custom then return end
   if event.element.name ~= "fp_frame_main_dialog" then return end
@@ -202,6 +224,10 @@ script.on_event(defines.events.on_gui_click, function(event)
       -- }
     end
   end
+
+  -- set the factory description before replacing fluids with barrels
+  clipboard.factory_name = '' -- so the order gets preserved for the dump
+  clipboard.factory_description = get_factory_description(clipboard)
 
   do -- ensure all input/output fluids are barreled
     for i, product in ipairs(clipboard.products) do
