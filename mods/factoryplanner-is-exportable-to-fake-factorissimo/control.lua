@@ -319,6 +319,9 @@ local function on_created_entity(event)
 
   eei.destructible = false
 
+  eei.power_usage = clipboard.watts / 60
+  eei.electric_buffer_size = clipboard.watts * 10 -- buffer for 10 seconds
+
   rendering.draw_text{
     text = clipboard.factory_name,
     color = {1, 1, 1},
