@@ -79,7 +79,7 @@ function Factory.on_created_entity(event)
   }
   eei.destructible = false
 
-  eei.power_usage = clipboard.watts / 60
+  -- eei.power_usage = clipboard.watts / 60
   eei.electric_buffer_size = math.max(1, clipboard.watts) -- buffer for 1 second
 
   rendering.draw_text{
@@ -151,13 +151,16 @@ function Factory.tick_struct(struct)
         target = struct.container,
       }
     end
+    struct.eei.power_usage = 0
     return -- wait for the factory to be constructed
   elseif struct.proxy then
     game.print('construction complete.')
+    struct.eei.power_usage = struct.clipboard.watts / 60
     struct.proxy.destroy()
     struct.proxy = nil
   end
 
+  game.print('craft cycle')
 end
 
 return Factory
