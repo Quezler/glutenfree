@@ -98,6 +98,8 @@ local item_1 = {
   place_result = container_1.name,
 }
 
+item_1.name = 'er:screenshot-camera' -- easiest way to allow space exploration's remote view to hold one :)
+
 data:extend{item_1}
 
 local interface_1 = {

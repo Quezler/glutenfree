@@ -8,6 +8,6 @@
     "dependencies": [
         "base",
         "factoryplanner",
-        "(?) space-exploration"
+        "! eradicators-screenshot-maker"
     ]
 }

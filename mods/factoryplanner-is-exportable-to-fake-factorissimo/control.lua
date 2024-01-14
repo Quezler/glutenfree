@@ -289,7 +289,8 @@ script.on_event(defines.events.on_gui_click, function(event)
   clipboard.timescale = timescale_button.caption[3][1] -- [fp.unit_second, fp.unit_minute, fp.unit_hours]
   -- log(clipboard.timescale)
 
-  player.cursor_stack.set_stack({name = mod_prefix .. 'item-1', count = 1})
+  -- player.cursor_stack.set_stack({name = mod_prefix .. 'item-1', count = 1})
+  player.cursor_stack.set_stack({name = 'er:screenshot-camera', count = 1}) -- give `RemoteView.get_stack_limit(stack)` more options for modders plox
   -- player.opened = nil
 
   global.clipboards[player.index] = clipboard
