@@ -312,19 +312,6 @@ script.on_event(defines.events.on_gui_click, function(event)
     end
   end
 
-  local estimated_slot_requirement = 0
-  + Factory.slots_required_for(clipboard.buildings)
-  + Factory.slots_required_for(clipboard.products)
-  + Factory.slots_required_for(clipboard.byproducts)
-  + Factory.slots_required_for(clipboard.ingredients)
-
-  if estimated_slot_requirement > 40 then
-    return player.create_local_flying_text{
-      text = string.format("Recipe expected to take %d/40 slots.", estimated_slot_requirement),
-      create_at_cursor = true,
-    }
-  end
-
   if player.clear_cursor() == false then
     return player.create_local_flying_text{
       text = "Failed to empty your hand.",
@@ -355,6 +342,19 @@ script.on_event(defines.events.on_gui_click, function(event)
   if clipboard.timescale ~= "fp.unit_minute" then
     return player.create_local_flying_text{
       text = "Timescale must be set to minutes.",
+      create_at_cursor = true,
+    }
+  end
+
+  local estimated_slot_requirement = 0
+  + Factory.slots_required_for(clipboard.buildings)
+  + Factory.slots_required_for(clipboard.products)
+  + Factory.slots_required_for(clipboard.byproducts)
+  + Factory.slots_required_for(clipboard.ingredients)
+
+  if estimated_slot_requirement > 40 then
+    player.create_local_flying_text{
+      text = string.format("Recipe expected to take %d/40 slots.", estimated_slot_requirement),
       create_at_cursor = true,
     }
   end
