@@ -161,17 +161,16 @@ script.on_event(defines.events.on_gui_click, function(event)
       }
     end
   end
-  
-  local _table = table
-  local table = root.children[2].children[2].children[2].children[3].children[1].children[1]
+
+  local production_table = root.children[2].children[2].children[2].children[3].children[1].children[1]
   local columns = {} -- [fp.pu_recipe, fp.pu_machine, fp.pu_beacon]
-  for i, cell in ipairs(table.children) do -- the table has no rows, everything is a cell
+  for i, cell in ipairs(production_table.children) do -- the table has no rows, everything is a cell
     if cell.type ~= "label" then break end -- stop once we have all the column names
     columns[cell.caption[1]] = i -- thanks to preferences the amount & positions of columns can vary
   end
 
   local column_count = table_size(columns) + 1 -- + 1 for the horizontal flow
-  local row_count = #table.children / column_count
+  local row_count = #production_table.children / column_count
 
   clipboard.buildings = {}
 
@@ -179,16 +178,16 @@ script.on_event(defines.events.on_gui_click, function(event)
     local offset = (row - 1) * column_count
     
     -- if the sprite ever changes into something else yet still doesn't have a `/` in it an assert will failsafe-block it
-    if table.children[offset + columns['fp.pu_machine']].children[1].sprite == 'fp_generic_assembler' then
+    if production_table.children[offset + columns['fp.pu_machine']].children[1].sprite == 'fp_generic_assembler' then
       return player.create_local_flying_text{
         text = "Subfloors are not supported.",
         create_at_cursor = true,
       }
     end
     
-    local recipe_class, recipe_name = split_class_and_name(table.children[offset + columns['fp.pu_recipe']].children[2].sprite)
-    local machine_class, machine_name = split_class_and_name(table.children[offset + columns['fp.pu_machine']].children[1].sprite)
-    local machine_count = math.ceil(table.children[offset + columns['fp.pu_machine']].children[1].number)
+    local recipe_class, recipe_name = split_class_and_name(production_table.children[offset + columns['fp.pu_recipe']].children[2].sprite)
+    local machine_class, machine_name = split_class_and_name(production_table.children[offset + columns['fp.pu_machine']].children[1].sprite)
+    local machine_count = math.ceil(production_table.children[offset + columns['fp.pu_machine']].children[1].number)
 
     local machine_prototype = game.entity_prototypes[machine_name]
     local item_to_place_this = machine_prototype.items_to_place_this[1]
@@ -206,18 +205,18 @@ script.on_event(defines.events.on_gui_click, function(event)
     merge_ingredients(clipboard.buildings, {type = machine_class, name = machine_name, amount = machine_count})
 
     local modules = {}
-    for i = 2, #table.children[offset + columns['fp.pu_machine']].children do
-      local module_button = table.children[offset + columns['fp.pu_machine']].children[i]
+    for i = 2, #production_table.children[offset + columns['fp.pu_machine']].children do
+      local module_button = production_table.children[offset + columns['fp.pu_machine']].children[i]
       if module_button.sprite ~= "utility/add" then
         local module_class, module_name = split_class_and_name(module_button.sprite)
-        -- _table.insert(modules, {type = module_class, name = module_name, amount = module_button.number})
+        -- table.insert(modules, {type = module_class, name = module_name, amount = module_button.number})
         merge_ingredients(clipboard.buildings, {type = module_class, name = module_name, amount = module_button.number})
       end
     end
 
     -- log(serpent.line({recipe_name, machine_count .. 'x ' .. machine_name, modules}))
 
-    if #table.children[offset + columns['fp.pu_beacon']].children > 1 then -- 1 = supports beacons, 2+ = beacon and module(s) selected
+    if #production_table.children[offset + columns['fp.pu_beacon']].children > 1 then -- 1 = supports beacons, 2+ = beacon and module(s) selected
       return player.create_local_flying_text{
         text = "Beacons are not supported.",
         create_at_cursor = true,
