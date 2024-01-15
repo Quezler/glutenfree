@@ -28,6 +28,16 @@ function Factory.get_constant_combinator_parameters(clipboard)
   return parameters
 end
 
+function Factory.slots_required_for(ingredients)
+  local slots = 0
+  for _, ingredient in ipairs(ingredients) do
+    assert(ingredient.type == "item")
+    local item_prototype = game.item_prototypes[ingredient.name]
+    slots = slots + math.ceil(ingredient.amount / item_prototype.stack_size)
+  end
+  return slots
+end
+
 function Factory.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
@@ -94,7 +104,7 @@ function Factory.on_created_entity(event)
     input_buffer = {},
     output_buffer = {},
 
-    output_slots_required = table_size(clipboard.products) + table_size(clipboard.byproducts), -- todo: check stack sizes in case a lot is made per minute :o
+    output_slots_required = Factory.slots_required_for(clipboard.products) + Factory.slots_required_for(clipboard.byproducts),
     rendered = {},
   }
 
@@ -206,8 +216,9 @@ function Factory.tick_struct(struct)
     if ingredient.amount > available then return rendering.set_text(struct.rendered.factory_message, "not enough ingredients") end
   end
 
-  -- is there room for the next craft cycle?
-  if struct.output_slots_required > inventory.count_empty_stacks() then return rendering.set_text(struct.rendered.factory_message, "not enough output space") end
+  -- is there room for the next craft cycle? (products & byproducts stacking and/or merging existing partial stacks is not taken into account)
+  local empty_slots = inventory.count_empty_stacks()
+  if struct.output_slots_required > empty_slots then return rendering.set_text(struct.rendered.factory_message, string.format("not enough output space (%d>%d)", struct.output_slots_required, empty_slots)) end
 
   for _, product in ipairs(struct.clipboard.products) do
     if inventory_contents[product.name] then
