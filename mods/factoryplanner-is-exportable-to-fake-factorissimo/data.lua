@@ -175,8 +175,6 @@ local recipe = {
   hide_from_stats = true,
   hide_from_player_crafting = true,
 
-  flags = {'hidden'},
-
   ingredients = {},
   results = {{
     type = "item",
