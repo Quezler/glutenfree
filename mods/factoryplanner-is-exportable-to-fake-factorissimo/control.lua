@@ -354,7 +354,7 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   if estimated_slot_requirement > 40 then
     player.create_local_flying_text{
-      text = string.format("Recipe expected to take %d/40 slots.", estimated_slot_requirement),
+      text = string.format("Recipe may take %d/40 slots.", estimated_slot_requirement),
       create_at_cursor = true,
     }
   end
