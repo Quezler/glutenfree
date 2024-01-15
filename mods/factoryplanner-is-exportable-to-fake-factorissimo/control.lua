@@ -298,7 +298,7 @@ script.on_event(defines.events.on_gui_click, function(event)
 
     do -- cancel out empty barrel ingredients & byproducts
       local barrel_byproduct, i1 = get_ingredient(clipboard.byproducts, 'item', 'empty-barrel')
-      local barrel_ingredient, i2 = get_ingredient(clipboard.ingredient, 'item', 'empty-barrel')
+      local barrel_ingredient, i2 = get_ingredient(clipboard.ingredients, 'item', 'empty-barrel')
 
       if barrel_byproduct and barrel_ingredient then
         if barrel_byproduct.amount > barrel_ingredient.amount then
