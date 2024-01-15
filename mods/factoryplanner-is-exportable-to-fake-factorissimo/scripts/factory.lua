@@ -264,7 +264,7 @@ function Factory.on_entity_settings_pasted(event)
     -- no struct.container.valid check needed since the unit number we check comes from it, right?
 
     for i, ingredient in ipairs(struct.clipboard.ingredients) do
-      event.destination.set_request_slot({name = ingredient.name, count = ingredient.amount}, i)
+      event.destination.set_request_slot({name = ingredient.name, count = math.ceil(ingredient.amount)}, i)
     end
   end
 end
