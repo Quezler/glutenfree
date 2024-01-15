@@ -42,7 +42,7 @@ end
 
 script.on_load(function(event)
   if #global.next_tick_events > 0 then
-    script.on_event(defines.events.on_tick, Handler.on_tick)
+    script.on_event(defines.events.on_tick, on_tick)
   end
 end)
 
