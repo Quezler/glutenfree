@@ -204,16 +204,18 @@ function Factory.tick_struct(struct)
 
   local purse = struct.assembler.get_inventory(defines.inventory.assembling_machine_output)
   local purse_coin_count = purse.get_item_count(mod_prefix .. 'coin')
-  if 60 > purse_coin_count then
-    return rendering.set_text(struct.rendered.factory_message, string.format('[img=utility/status_working] charging up seconds (%s/60)', purse_coin_count))
-    -- return -- power ("rent") costs not paid in full yet
+  if 60 == purse_coin_count then
+    struct.eei.power_usage = 0 -- disable power usage until after a successful craft cycle
   end
-  struct.eei.power_usage = 0 -- disable power usage until after a successful craft cycle
 
   -- can we afford the next craft cycle?
   for _, ingredient in ipairs(struct.clipboard.ingredients) do
     local available = (inventory_contents[ingredient.name] or 0) + struct.input_buffer[ingredient.name]
     if ingredient.amount > available then return rendering.set_text(struct.rendered.factory_message, "[img=utility/status_not_working] not enough ingredients") end
+  end
+
+  if 60 > purse_coin_count then
+    return rendering.set_text(struct.rendered.factory_message, string.format('[img=utility/status_working] charging up seconds (%s/60)', purse_coin_count))
   end
 
   -- is there room for the next craft cycle? (products & byproducts stacking and/or merging existing partial stacks is not taken into account)
