@@ -282,4 +282,15 @@ function Factory.on_entity_settings_pasted(event)
   end
 end
 
+commands.add_command(mod_prefix .. "struct", nil, function(command)
+  local player = game.get_player(command.player_index)
+  if player.selected == nil then return end
+  if player.selected.unit_number == nil then return end
+
+  local struct = global.structs[player.selected.unit_number]
+  if struct == nil then return end
+
+  player.print(serpent.line( struct ))
+end)
+
 return Factory
