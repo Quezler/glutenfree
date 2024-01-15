@@ -192,7 +192,7 @@ function Factory.tick_struct(struct)
       }
     end
     struct.eei.power_usage = 0
-    rendering.set_text(struct.rendered.factory_message, 'missing buildings/modules')
+    rendering.set_text(struct.rendered.factory_message, '[img=utility/status_not_working] missing buildings/modules')
     return -- wait for the factory to be constructed
   elseif struct.proxy then
     struct.eei.power_usage = struct.clipboard.watts / 60
@@ -205,7 +205,7 @@ function Factory.tick_struct(struct)
   local purse = struct.assembler.get_inventory(defines.inventory.assembling_machine_output)
   local purse_coin_count = purse.get_item_count(mod_prefix .. 'coin')
   if 60 > purse_coin_count then
-    return rendering.set_text(struct.rendered.factory_message, string.format('charging up seconds (%s/60)', purse_coin_count))
+    return rendering.set_text(struct.rendered.factory_message, string.format('[img=utility/status_working] charging up seconds (%s/60)', purse_coin_count))
     -- return -- power ("rent") costs not paid in full yet
   end
   struct.eei.power_usage = 0 -- disable power usage until after a successful craft cycle
@@ -213,16 +213,16 @@ function Factory.tick_struct(struct)
   -- can we afford the next craft cycle?
   for _, ingredient in ipairs(struct.clipboard.ingredients) do
     local available = (inventory_contents[ingredient.name] or 0) + struct.input_buffer[ingredient.name]
-    if ingredient.amount > available then return rendering.set_text(struct.rendered.factory_message, "not enough ingredients") end
+    if ingredient.amount > available then return rendering.set_text(struct.rendered.factory_message, "[img=utility/status_not_working] not enough ingredients") end
   end
 
   -- is there room for the next craft cycle? (products & byproducts stacking and/or merging existing partial stacks is not taken into account)
   local empty_slots = inventory.count_empty_stacks()
-  if struct.output_slots_required > empty_slots then return rendering.set_text(struct.rendered.factory_message, string.format("not enough output space (%d>%d)", struct.output_slots_required, empty_slots)) end
+  if struct.output_slots_required > empty_slots then return rendering.set_text(struct.rendered.factory_message, string.format("[img=utility/status_not_working] not enough output space (%d>%d)", struct.output_slots_required, empty_slots)) end
 
   for _, product in ipairs(struct.clipboard.products) do
     if inventory_contents[product.name] then
-      return rendering.set_text(struct.rendered.factory_message, "product(s) still present")
+      return rendering.set_text(struct.rendered.factory_message, "[img=utility/status_yellow] output full")
     end
   end
 
@@ -261,7 +261,7 @@ function Factory.tick_struct(struct)
   -- now that we've outputed results, use power again
   purse.clear() -- claim the 60 coins in there
   struct.eei.power_usage = struct.clipboard.watts / 60
-  rendering.set_text(struct.rendered.factory_message, "produced output")
+  rendering.set_text(struct.rendered.factory_message, "[img=utility/status_working] produced output")
 end
 
 function Factory.on_entity_settings_pasted(event)
