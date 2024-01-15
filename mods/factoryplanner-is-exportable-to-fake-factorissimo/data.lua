@@ -173,6 +173,7 @@ local recipe = {
   name = mod_prefix .. 'seconds',
   category = category.name,
   hide_from_stats = true,
+  hide_from_player_crafting = true,
 
   flags = {'hidden'},
 
