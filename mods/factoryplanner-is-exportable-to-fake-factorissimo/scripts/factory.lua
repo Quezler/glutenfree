@@ -269,7 +269,7 @@ end
 function Factory.on_entity_settings_pasted(event)
   if event.source.name == mod_prefix .. "container-1" and event.destination.type == "logistic-container" then
     for i = 1, event.destination.request_slot_count, 1 do
-      entity.clear_request_slot(i)
+      event.destination.clear_request_slot(i)
     end
 
     local struct = global.structs[event.source.unit_number]
