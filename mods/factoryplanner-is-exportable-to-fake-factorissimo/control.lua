@@ -59,6 +59,14 @@ local function get_item_box_contents(root, item_box_index)
   return products
 end
 
+local function get_ingredient(ingredients, ingredient_type, ingredient_name)
+  for i, ingredient in ipairs(ingredients) do
+    if ingredient.type == ingredient_type and ingredient.name == ingredient_name then
+      return ingredient, i
+    end
+  end
+end
+
 local function get_factory_description(clipboard)
   local description = ""
 
@@ -279,14 +287,30 @@ script.on_event(defines.events.on_gui_click, function(event)
       for _, bar in ipairs(foo) do
         if bar.type == "fluid" then
           return player.create_local_flying_text{
-            text = string.format('There is no barrel for the %s fluid.', bar.name),
+            text = string.format('There is no barrel for the [%s] fluid.', bar.name),
             create_at_cursor = true,
           }
         end
       end
     end
 
-    -- todo: check if there are no duplicates in the products/byproducts/ingredients, especially barrels
+    -- todo: check if there are no duplicates in the products/byproducts/ingredients
+
+    do -- cancel out empty barrel ingredients & byproducts
+      local barrel_byproduct, i1 = get_ingredient(clipboard.byproducts, 'item', 'empty-barrel')
+      local barrel_ingredient, i2 = get_ingredient(clipboard.ingredient, 'item', 'empty-barrel')
+
+      if barrel_byproduct and barrel_ingredient then
+        if barrel_byproduct.amount > barrel_ingredient.amount then
+          barrel_byproduct.amount = barrel_byproduct.amount - barrel_ingredient.amount
+          table.remove(clipboard.ingredients, i2)
+        end
+        if barrel_ingredient.amount > barrel_byproduct.amount then
+          barrel_ingredient.amount = barrel_ingredient.amount - barrel_byproduct.amount
+          table.remove(clipboard.byproducts, i1)
+        end
+      end
+    end
   end
 
   if player.clear_cursor() == false then
