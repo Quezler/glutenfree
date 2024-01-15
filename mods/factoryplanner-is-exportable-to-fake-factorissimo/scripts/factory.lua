@@ -273,8 +273,8 @@ function Factory.on_entity_settings_pasted(event)
     end
 
     local struct = global.structs[event.source.unit_number]
-    if struct == nil then return end
-    -- no struct.container.valid check needed since the unit number we check comes from it, right?
+    -- if struct == nil then return end
+    -- if struct.container.valid == false then return end
 
     for i, ingredient in ipairs(struct.clipboard.ingredients) do
       event.destination.set_request_slot({name = ingredient.name, count = math.ceil(ingredient.amount)}, i)
