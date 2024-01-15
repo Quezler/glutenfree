@@ -253,4 +253,20 @@ function Factory.tick_struct(struct)
   rendering.set_text(struct.rendered.factory_message, "produced output")
 end
 
+function Factory.on_entity_settings_pasted(event)
+  if event.source.name == mod_prefix .. "container-1" and event.destination.type == "logistic-container" then
+    for i = 1, event.destination.request_slot_count, 1 do
+      entity.clear_request_slot(i)
+    end
+
+    local struct = global.structs[event.source.unit_number]
+    if struct == nil then return end
+    -- no struct.container.valid check needed since the unit number we check comes from it, right?
+
+    for i, ingredient in ipairs(struct.clipboard.ingredients) do
+      event.destination.set_request_slot({name = ingredient.name, count = ingredient.amount}, i)
+    end
+  end
+end
+
 return Factory

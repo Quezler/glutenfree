@@ -407,3 +407,5 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
     end
   end
 end)
+
+script.on_event(defines.events.on_entity_settings_pasted, Factory.on_entity_settings_pasted)
