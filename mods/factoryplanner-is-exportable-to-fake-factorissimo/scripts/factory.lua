@@ -222,7 +222,7 @@ function Factory.tick_struct(struct)
 
   for _, product in ipairs(struct.clipboard.products) do
     if inventory_contents[product.name] then
-      return rendering.set_text(struct.rendered.factory_message, "products still present") -- since output_slots_required isn't that accurate due to stack size atm
+      return rendering.set_text(struct.rendered.factory_message, "product(s) still present")
     end
   end
 
