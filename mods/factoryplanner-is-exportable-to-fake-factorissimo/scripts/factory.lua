@@ -231,15 +231,15 @@ function Factory.tick_struct(struct)
     return rendering.set_text(struct.rendered.factory_message, string.format('[img=utility/status_working] charging up seconds (%s/60)', purse_coin_count))
   end
 
-  -- is there room for the next craft cycle? (products & byproducts stacking and/or merging existing partial stacks is not taken into account)
-  local empty_slots = inventory.count_empty_stacks()
-  if struct.output_slots_required > empty_slots then return rendering.set_text(struct.rendered.factory_message, string.format("[img=utility/status_not_working] not enough output space (%d>%d)", struct.output_slots_required, empty_slots)) end
-
   for _, product in ipairs(struct.clipboard.products) do
     if inventory_contents[product.name] then
       return rendering.set_text(struct.rendered.factory_message, "[img=utility/status_yellow] output full")
     end
   end
+
+  -- is there room for the next craft cycle? (products & byproducts stacking and/or merging existing partial stacks is not taken into account)
+  local empty_slots = inventory.count_empty_stacks()
+  if struct.output_slots_required > empty_slots then return rendering.set_text(struct.rendered.factory_message, string.format("[img=utility/status_not_working] not enough output space (%d>%d)", struct.output_slots_required, empty_slots)) end
 
   local item_statistics = struct.container.force.item_production_statistics
 
