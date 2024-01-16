@@ -123,7 +123,10 @@ script.on_event(defines.events.on_gui_click, function(event)
   if event.element.name ~= "ingredients_to_factorissimo" then return end
   local player = game.get_player(event.player_index)
   local root = player.opened
-  assert(root.name == 'fp_frame_main_dialog')
+  if root.name ~= 'fp_frame_main_dialog' then
+    log(print_gui.serpent(root))
+    error(string.format("Played opened %s instead of fp_frame_main_dialog.", root.name))
+  end
 
   local items_per_timescale_button = root.children[2].children[2].children[2].children[1].children[9].children[1]
   assert(items_per_timescale_button.caption[2][1] == "fp.pu_item")
