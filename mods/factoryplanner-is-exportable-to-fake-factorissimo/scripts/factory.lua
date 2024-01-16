@@ -94,8 +94,9 @@ function Factory.on_created_entity(event)
 
   local struct = {
     unit_number = entity.unit_number,
-    container = entity,
+    version = 1,
 
+    container = entity,
     assembler = assembler,
     eei = eei,
 
@@ -130,8 +131,13 @@ function Factory.on_created_entity(event)
     use_rich_text = true,
   }
 
+  local factory_description_prefix = ''
+  if #clipboard.products == 1 then
+    factory_description_prefix = clipboard.products[1].amount .. 'x '
+  end
+
   struct.rendered.factory_description = rendering.draw_text{
-    text = clipboard.factory_description,
+    text = factory_description_prefix .. clipboard.factory_description,
     color = {1, 1, 1},
     surface = entity.surface,
     target = entity,
@@ -162,6 +168,13 @@ function Factory.tick_struct(struct)
   if struct.container.valid == false then
     global.structs[struct.unit_number] = nil
     return
+  end
+
+  if (struct.version or 0) == 0 then
+    if #struct.clipboard.products == 1 then
+      rendering.set_text(struct.rendered.factory_description, struct.clipboard.products[1].amount .. 'x ' .. struct.clipboard.factory_description)
+    end
+    struct.version = 1
   end
 
   local inventory = struct.container.get_inventory(defines.inventory.chest)
