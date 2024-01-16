@@ -7,6 +7,11 @@ local item_box_products = 1
 local item_box_byproducts = 2
 local item_box_ingredients = 3
 
+local is_fp_frame_main_dialog = {
+  ["fp_frame_main_dialog"] = true,
+  ["factoryplanner_mainframe"] = true,
+}
+
 local function split_class_and_name(class_and_name)
   local class, name = class_and_name:match('([^/]+)/([^/]+)')
   assert(class)
@@ -91,7 +96,7 @@ end
 
 script.on_event(defines.events.on_gui_opened, function(event)
   if event.gui_type ~= defines.gui_type.custom then return end
-  if event.element.name ~= "fp_frame_main_dialog" then return end
+  if is_fp_frame_main_dialog[event.element.name] ~= true then return end
   local root = event.element
 
   -- game.print(root.name .. ' @ ' .. event.tick)
@@ -123,7 +128,7 @@ script.on_event(defines.events.on_gui_click, function(event)
   if event.element.name ~= "ingredients_to_factorissimo" then return end
   local player = game.get_player(event.player_index)
   local root = player.opened
-  if root.name ~= 'fp_frame_main_dialog' then
+  if is_fp_frame_main_dialog[root.name] ~= true then
     log(print_gui.serpent(root))
     error(string.format("Played opened %s instead of fp_frame_main_dialog.", root.name))
   end
