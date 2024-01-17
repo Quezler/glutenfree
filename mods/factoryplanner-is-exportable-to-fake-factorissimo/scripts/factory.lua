@@ -273,6 +273,8 @@ function Factory.tick_struct(struct)
     end
   end
 
+  struct.container.surface.pollute(struct.container.position, struct.clipboard.pollution)
+
   -- now that we've outputed results, use power again
   purse.clear() -- claim the 60 coins in there
   struct.eei.power_usage = struct.clipboard.watts / 60
