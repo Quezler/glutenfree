@@ -44,6 +44,13 @@ for i = 1, 8 do
     width = 8,
     shift = {1 / 8, (-1 + i * 2) / 8},
   })
+  table.insert(rvp.layers, {
+    filename = "__core__/graphics/visualization-construction-radius.png",
+    height = 8,
+    priority = "extra-high-no-scale",
+    width = 8,
+    shift = {1 / 8, -(-1 + i * 2) / 8},
+  })
 end
 
 table.insert(rvp.layers, {
