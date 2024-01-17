@@ -36,21 +36,47 @@
 local rvp = data.raw['electric-pole']['se-pylon-construction'].radius_visualisation_picture
 rvp.layers = {}
 
-for i = 1, 8 do
-  table.insert(rvp.layers, {
-    filename = "__core__/graphics/visualization-construction-radius.png",
-    height = 8,
-    priority = "extra-high-no-scale",
-    width = 8,
-    shift = {1 / 8, (-1 + i * 2) / 8},
-  })
-  table.insert(rvp.layers, {
-    filename = "__core__/graphics/visualization-construction-radius.png",
-    height = 8,
-    priority = "extra-high-no-scale",
-    width = 8,
-    shift = {1 / 8, -(-1 + i * 2) / 8},
-  })
+-- construction radius of 32 / 4 = 8
+-- 4 is the size of the power area sprite, so in blocks of 4 we need to fill up the area
+-- todo: grab the values from the prototype and handle steps that aren't a multiple of 4
+
+for w = 1, 8 do
+  for h = 1, 8 do
+    table.insert(rvp.layers, {
+      filename = "__core__/graphics/visualization-construction-radius.png",
+      height = 8,
+      priority = "extra-high-no-scale",
+      width = 8,
+      shift = {(-1 + w * 2) / 8, (-1 + h * 2) / 8},
+      blend_mode = "additive-soft", -- looks the best out of all the blend modes
+    })
+    table.insert(rvp.layers, {
+      filename = "__core__/graphics/visualization-construction-radius.png",
+      height = 8,
+      priority = "extra-high-no-scale",
+      width = 8,
+      shift = {(-1 + w * 2) / 8, -(-1 + h * 2) / 8},
+      blend_mode = "additive-soft",
+    })
+  end
+  for h = 1, 8 do
+    table.insert(rvp.layers, {
+      filename = "__core__/graphics/visualization-construction-radius.png",
+      height = 8,
+      priority = "extra-high-no-scale",
+      width = 8,
+      shift = {-(-1 + w * 2) / 8, (-1 + h * 2) / 8},
+      blend_mode = "additive-soft",
+    })
+    table.insert(rvp.layers, {
+      filename = "__core__/graphics/visualization-construction-radius.png",
+      height = 8,
+      priority = "extra-high-no-scale",
+      width = 8,
+      shift = {-(-1 + w * 2) / 8, -(-1 + h * 2) / 8},
+      blend_mode = "additive-soft",
+    })
+  end
 end
 
 table.insert(rvp.layers, {
