@@ -22,7 +22,7 @@ local function handle(name)
   end
 
   if port.logistics_radius then
-    assert(port.logistics_radius >= pole.supply_area_distance) -- hardcoded assumption that the logistic area is smaller than the power coverage
+    assert(pole.supply_area_distance >= port.logistics_radius) -- hardcoded assumption that the logistic area is smaller than the power coverage
     table.insert(layers, {
       filename = "__core__/graphics/visualization-logistic-radius.png",
       height = 8,
