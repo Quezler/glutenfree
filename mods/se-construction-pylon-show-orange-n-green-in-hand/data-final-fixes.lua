@@ -40,43 +40,21 @@ rvp.layers = {}
 -- 4 is the size of the power area sprite, so in blocks of 4 we need to fill up the area
 -- todo: grab the values from the prototype and handle steps that aren't a multiple of 4
 
-for w = 1, 16 do
-  for h = 1, 16 do
+local construction_radius = 64
+local power_radius = 4
+local times = construction_radius / power_radius
+
+for w = 1, times do
+  for h = 1, times do
     table.insert(rvp.layers, {
       filename = "__core__/graphics/visualization-construction-radius.png",
       height = 8,
       priority = "extra-high-no-scale",
       width = 8,
-      shift = {(-1 + (w - 8) * 2) / 8, (-1 + (h - 8) * 2) / 8},
+      shift = {(-1 + (w - times/2) * 2) / 8, (-1 + (h - times/2) * 2) / 8},
       blend_mode = "additive-soft", -- looks the best out of all the blend modes
     })
-    -- table.insert(rvp.layers, {
-    --   filename = "__core__/graphics/visualization-construction-radius.png",
-    --   height = 8,
-    --   priority = "extra-high-no-scale",
-    --   width = 8,
-    --   shift = {(-1 + w * 2) / 8, -(-1 + h * 2) / 8},
-    --   blend_mode = "additive-soft",
-    -- })
   end
-  -- for h = 1, 8 do
-  --   table.insert(rvp.layers, {
-  --     filename = "__core__/graphics/visualization-construction-radius.png",
-  --     height = 8,
-  --     priority = "extra-high-no-scale",
-  --     width = 8,
-  --     shift = {-(-1 + w * 2) / 8, (-1 + h * 2) / 8},
-  --     blend_mode = "additive-soft",
-  --   })
-  --   table.insert(rvp.layers, {
-  --     filename = "__core__/graphics/visualization-construction-radius.png",
-  --     height = 8,
-  --     priority = "extra-high-no-scale",
-  --     width = 8,
-  --     shift = {-(-1 + w * 2) / 8, -(-1 + h * 2) / 8},
-  --     blend_mode = "additive-soft",
-  --   })
-  -- end
 end
 
 table.insert(rvp.layers, {
