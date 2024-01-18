@@ -1,0 +1,11 @@
+{
+    "name": "reactors-warm-up-faster-so-you-don_t-have-to-wait",
+    "title": "Reactors warm up faster so you don't have to wait",
+    "description": "Reactors use fuel quicker whilst their tempratures are below useful levels.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "? base"
+    ]
+}
