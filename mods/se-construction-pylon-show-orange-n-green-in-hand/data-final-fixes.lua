@@ -16,7 +16,7 @@ local function handle(name)
         priority = "extra-high-no-scale",
         width = 8,
         shift = {(-1 + (w - times/2) * 2) / 8, (-1 + (h - times/2) * 2) / 8},
-        blend_mode = "additive-soft", -- looks the best out of all the blend modes
+        blend_mode = "normal", -- default, but left in for easy modification
       })
     end
   end
@@ -29,7 +29,7 @@ local function handle(name)
       priority = "extra-high-no-scale",
       width = 8,
       scale = port.logistics_radius / pole.supply_area_distance,
-      blend_mode = "additive-soft", -- looks the best out of all the blend modes
+      blend_mode = "normal", -- default, but left in for easy modification
     })
   end
 
