@@ -20,6 +20,18 @@ local function handle(name)
     end
   end
 
+  if port.logistics_radius then
+    assert(port.logistics_radius >= pole.supply_area_distance) -- hardcoded assumption that the logistic area is smaller than the power coverage
+    table.insert(layers, {
+      filename = "__core__/graphics/visualization-logistic-radius.png",
+      height = 8,
+      priority = "extra-high-no-scale",
+      width = 8,
+      scale = port.logistics_radius / pole.supply_area_distance,
+      blend_mode = "additive-soft", -- looks the best out of all the blend modes
+    })
+  end
+
   table.insert(layers, {
     filename = "__base__/graphics/entity/small-electric-pole/electric-pole-radius-visualization.png",
     height = 8,

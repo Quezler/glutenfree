@@ -2,7 +2,7 @@
     "name": "se-construction-pylon-show-orange-n-green-in-hand",
     "title": "Space Exploration - construction pylon show orange n green in hand",
     "description": "By default it only shows the power coverage, which is not ideal when trying to space them. (pun intended)",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
