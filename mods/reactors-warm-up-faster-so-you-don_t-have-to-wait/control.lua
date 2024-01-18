@@ -1,14 +1,14 @@
 local one_minute = 60 * 60
 
 local function tick_reactor(struct)
-  local entity = struct.entity
-  local entity_name = entity.name
-
-  if entity.valid == false then
+  if struct.entity.valid == false then
     global.structs_count = global.structs_count - 1
     global.structs[struct.unit_number] = nil
     return
   end
+
+  local entity = struct.entity
+  local entity_name = entity.name
 
   if game.tick > struct.tick + one_minute then
     -- game.print('reactor timed out.')
