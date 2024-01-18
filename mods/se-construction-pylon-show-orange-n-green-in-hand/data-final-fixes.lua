@@ -1,4 +1,5 @@
 -- i'd say i'm allowed to require postprocess since i want that description, and that mod generates it :)
+-- (or at least it was the original plan to swap the cursor item with pipette, but then settled for this)
 
 local function handle(name)
   local pole = data.raw['electric-pole'][name]
