@@ -59,8 +59,17 @@ script.on_event(defines.events.on_player_main_inventory_changed, function(event)
 
   left_align_filters(opened)
 
+  local position = opened.position
+  if opened.type == "loader-1x1" or opened.type == "loader" then
+    position = player.surface.find_non_colliding_position('beacon', player.position, player.reach_distance, 1, true)
+    if position == nil then
+      -- why a beacon? a 3x3 entity unlikely to be overriden by mods, so 1x1 loaders cannot touch belts and cause snapping
+      error(string.format('no beacon could be placed within reach distance of %s.', player.name))
+    end
+  end
+
   local clone = opened.clone{
-    position = opened.position,
+    position = position,
     surface = opened.surface,
     force = opened.force,
     create_build_effect_smoke = false,
