@@ -1,11 +1,12 @@
 local CoreMiner = require('__space-exploration-scripts__.core-miner')
+local Zone = require('__space-exploration-scripts__.zone')
 
 local function ends_with(str, ending)
   return ending == "" or str:sub(-#ending) == ending
 end
 
-function on_core_miners_equalized(surface_index)
-  local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface_index})
+function on_core_miners_equalized(surface_index, prefetched_zone)
+  local zone = prefetched_zone or remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface_index})
 
   zone.core_mining = {}
   local new_amount, efficiency, mined_resources = CoreMiner.get_resource_data(zone)
@@ -66,6 +67,14 @@ for _, event in ipairs({
   })
 end
 
--- the entry points to equalize that we still need to handle:
--- CoreMiner.equalise_all() (on_configuration_changed)
--- CoreMiner.equalise() (generate_core_seam_positions)
+local function on_configuration_changed(event)
+  for _, surface in pairs(game.surfaces) do
+    local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface.index})
+    if zone and Zone.is_solid(zone) then
+      on_core_miners_equalized(surface.index, zone)
+    end
+  end
+end
+
+script.on_init(on_configuration_changed)
+script.on_configuration_changed(on_configuration_changed)
