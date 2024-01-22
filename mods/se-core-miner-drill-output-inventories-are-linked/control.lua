@@ -14,6 +14,8 @@ function on_entity_created(event)
   
     chest.destructible = false
     chest.link_id = entity.surface.index
+  else
+    chest.teleport(entity.position) -- se-core-miner-drilling-mud compatibility
   end
 
   entity.drop_target = chest
