@@ -105,8 +105,14 @@ function update_content_for_player(content, player, zone_index)
   local mining_productivity = 1 + player.force.mining_drill_productivity_bonus
   local last_per_second = 0
 
+  local no_diminishing_returns = game.active_mods['se-core-miner-no-diminishing-returns'] ~= nil
+  local per_second_for_one = nil
+
   for i = 1, Zone_get_core_seam_count(zone) do
     local per_second = ((100 / get_mining_time(fragment_name)) * ((zone.radius + 5000) / 5000) * mining_productivity * i) / math.sqrt(i)
+
+    if per_second_for_one == nil then per_second_for_one = per_second end
+    if no_diminishing_returns then per_second = per_second_for_one * i end
 
     local flow = coremining.add{
       type = "flow",
