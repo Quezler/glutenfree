@@ -1,0 +1,12 @@
+{
+    "name": "se-core-miner-efficiency-updated-event",
+    "title": "Space Exploration - core miner efficiency updated event",
+    "description": "For other mods to listen to when core mining drills get placed or removed.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "space-exploration",
+        "space-exploration-scripts >= 1.0.9"
+    ]
+}
