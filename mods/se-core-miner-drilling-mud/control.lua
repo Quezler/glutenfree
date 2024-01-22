@@ -28,3 +28,20 @@ end
 
 script.on_init(register_events)
 script.on_load(register_events)
+
+local function on_created_entity(event)
+  local entity = event.created_entity or event.entity
+
+  entity.insert_fluid({name = 'se-core-miner-drill-drilling-mud', amount = 0.01})
+end
+
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+}) do
+  script.on_event(event, on_created_entity, {
+    {filter = 'name', name = 'se-core-miner-drill'},
+  })
+end
