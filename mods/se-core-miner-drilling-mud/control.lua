@@ -9,15 +9,21 @@ local function on_efficiency_updated(event)
     local resource = resource_set.resource
 
     if ends_with(resource.name, '-sealed') == false then
-      local drilling_mud = resource.surface.find_entity(resource.name .. '-drilling-mud', resource.position)
+      local drilling_mud_position = {resource.position.x, resource.position.y + 1}
+
+      local drilling_mud = resource.surface.find_entity(resource.name .. '-drilling-mud', drilling_mud_position)
       if drilling_mud == nil then
         drilling_mud = resource.surface.create_entity{
           name = resource.name .. '-drilling-mud',
-          position = resource.position,
+          position = drilling_mud_position,
         }
       end
 
-      drilling_mud.amount = resource.amount * 5 -- drill switches between the normal & this one (i think?)
+      if game.active_mods['se-core-miner-no-diminishing-returns'] then
+        drilling_mud.amount = event.new_amount_for_one * 2.5
+      else
+        drilling_mud.amount = event.new_amount * 2.5
+      end
     end
   end
 end
@@ -28,20 +34,3 @@ end
 
 script.on_init(register_events)
 script.on_load(register_events)
-
-local function on_created_entity(event)
-  local entity = event.created_entity or event.entity
-
-  entity.insert_fluid({name = 'se-core-miner-drill-drilling-mud', amount = 0.01})
-end
-
-for _, event in ipairs({
-  defines.events.on_built_entity,
-  defines.events.on_robot_built_entity,
-  defines.events.script_raised_built,
-  defines.events.script_raised_revive,
-}) do
-  script.on_event(event, on_created_entity, {
-    {filter = 'name', name = 'se-core-miner-drill'},
-  })
-end

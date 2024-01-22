@@ -18,8 +18,6 @@ for _, resource in pairs(data.raw['resource']) do
       clone.selection_priority = (clone.selection_priority or 50) - 1
       clone.minable.required_fluid = 'se-core-miner-drill-drilling-mud'
       clone.minable.fluid_amount = 1
-      resource.minable.required_fluid = 'se-core-miner-drill-drilling-mud'
-      resource.minable.fluid_amount = 0
       
       table.insert(to_extend, clone)
     end
