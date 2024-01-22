@@ -1,9 +1,9 @@
 script.on_event(defines.events.on_gui_click, function(event)
-  if event.element.type ~= 'camera' then end
+  if event.element.type ~= 'camera' then return end
 
   local entity = event.element.entity
-  if entity == nil then end -- untargeted beam?
-  if entity.name ~= 'energy-glaive-beam' then end
+  if entity == nil then return end -- untargeted beam?
+  if entity.name ~= 'energy-glaive-beam' then return end
 
   local player = game.get_player(event.player_index)
   local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = entity.surface.index})
