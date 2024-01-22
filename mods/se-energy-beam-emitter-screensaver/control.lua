@@ -3,7 +3,7 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   local entity = event.element.entity
   if entity == nil then return end -- untargeted beam?
-  if entity.name ~= 'energy-glaive-beam' then return end
+  if entity.name ~= 'se-energy-glaive-beam' then return end
 
   local player = game.get_player(event.player_index)
   local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = entity.surface.index})
