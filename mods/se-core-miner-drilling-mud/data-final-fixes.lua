@@ -28,6 +28,8 @@ data:extend{{
     name = 'se-core-miner-drill-drilling-mud',
     amount = 200,
   }},
+
+  hide_from_player_crafting = true,
 }}
 
 table.insert(data.raw['technology']['se-core-miner'].effects, {type = "unlock-recipe", recipe = 'se-core-miner-drill-drilling-mud'})
