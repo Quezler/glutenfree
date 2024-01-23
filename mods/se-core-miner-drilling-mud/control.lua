@@ -68,6 +68,12 @@ end
 
 local function on_configuration_changed(event)
   global.deathrattles = global.deathrattles or {}
+
+  for _, surface in pairs(game.surfaces) do
+    for _, entity in pairs(surface.find_entities_filtered({name = {'se-core-miner-drill'}})) do
+      on_created_entity({entity = entity})
+    end
+  end
 end
 
 script.on_init(on_configuration_changed)
