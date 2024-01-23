@@ -9,9 +9,9 @@ data:extend{{
     {icon = data.raw['item' ]['landfill' ].icon, icon_size = data.raw['item' ]['landfill' ].icon_size, scale = 0.25, shift = {0, 4}},
   },
   auto_barrel = false,
-  heat_capacity = 1*2.5 .. "KJ",
+  heat_capacity = 1*2.5*5 .. "KJ",
   default_temperature = 0,
-  max_temperature = 100,
+  max_temperature = 200,
 }}
 
 local coreminer = data.raw['mining-drill']['se-core-miner-drill']
@@ -35,11 +35,11 @@ coreminer.energy_source = {
   },
 }
 
--- 100 fluid per second, heat is % of normal speed
-coreminer.energy_usage = 1000/6*2.5 .. "KJ"
--- coreminer.mining_speed = 100
-coreminer.animations.layers[2].animation_speed = 2
-
 if mods['se-core-miner-drill-output-inventories-are-linked'] then
   table.insert(coreminer.energy_source.fluid_box.pipe_connections, {position = { 0, -6}})
 end
+
+-- 50 fluid per second, heat is % of normal speed
+coreminer.energy_usage = 1000/6*2.5 .. "KJ"
+coreminer.mining_speed = 200 -- twice the default
+coreminer.animations.layers[2].animation_speed = 2

@@ -7,8 +7,7 @@
     "factorio_version": "1.1",
     "dependencies": [
         "space-exploration",
-        "se-core-miner-efficiency-updated-event",
-        "? se-core-miner-no-diminishing-returns",
-        "? se-core-miner-drill-output-inventories-are-linked"
+        "? se-core-miner-drill-output-inventories-are-linked",
+        "(?) se-core-miner-no-diminishing-returns"
     ]
 }

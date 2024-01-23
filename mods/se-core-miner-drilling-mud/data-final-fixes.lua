@@ -39,3 +39,5 @@ data:extend{{
 }}
 
 table.insert(data.raw['technology']['se-core-miner'].effects, {type = "unlock-recipe", recipe = 'se-core-miner-drill-drilling-mud'})
+
+local coreminer = data.raw['mining-drill']['se-core-miner-drill']
