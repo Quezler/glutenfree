@@ -5,7 +5,7 @@ end
 local function on_efficiency_updated(event)
   local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = event.zone_index})
 
-  for _, resource_set in pairs(zone.core_seam_resources) do
+  for _, resource_set in pairs(zone.core_seam_resources or {}) do
     local resource = resource_set.resource
 
     if ends_with(resource.name, '-sealed') == false then
