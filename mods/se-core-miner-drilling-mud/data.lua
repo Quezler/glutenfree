@@ -1,7 +1,6 @@
 data:extend{{
   type = 'fluid',
   name = 'se-core-miner-drill-drilling-mud',
-  default_temperature = 15,
   base_color = {r=146, g=098, b=053},
   flow_color = {r=146, g=098, b=053},
   icons = {
@@ -10,25 +9,37 @@ data:extend{{
     {icon = data.raw['item' ]['landfill' ].icon, icon_size = data.raw['item' ]['landfill' ].icon_size, scale = 0.25, shift = {0, 4}},
   },
   auto_barrel = false,
+  heat_capacity = 1*2.5 .. "KJ",
+  default_temperature = 0,
+  max_temperature = 100,
 }}
 
 local coreminer = data.raw['mining-drill']['se-core-miner-drill']
 
-coreminer.input_fluid_box = {
-  production_type = "input-output",
-  pipe_picture = assembler2pipepictures(),
-  pipe_covers = pipecoverspictures(),
-  base_area = 1,
-  height = 2,
-  base_level = -1,
-  pipe_connections =
-  {
-    {position = {-6,  0}},
-    {position = { 6,  0}},
-    {position = { 0,  6}},
-  }
+coreminer.energy_source = {
+  type = "fluid",
+  fluid_box = {
+    production_type = "input",
+    pipe_picture = assembler2pipepictures(),
+    pipe_covers = pipecoverspictures(),
+    base_area = 1,
+    height = 2,
+    base_level = -1,
+    pipe_connections =
+    {
+      {position = {-6,  0}},
+      {position = { 6,  0}},
+      {position = { 0,  6}},
+    },
+    filter = "se-core-miner-drill-drilling-mud",
+  },
 }
 
+-- 100 fluid per second, heat is % of normal speed
+coreminer.energy_usage = 1000/6*2.5 .. "KJ"
+-- coreminer.mining_speed = 100
+coreminer.animations.layers[2].animation_speed = 2
+
 if mods['se-core-miner-drill-output-inventories-are-linked'] then
-  table.insert(coreminer.input_fluid_box.pipe_connections, {position = { 0, -6}})
+  table.insert(coreminer.energy_source.fluid_box.pipe_connections, {position = { 0, -6}})
 end
