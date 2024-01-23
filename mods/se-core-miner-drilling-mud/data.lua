@@ -8,7 +8,8 @@ data:extend{{
     {icon = data.raw['fluid']['heavy-oil'].icon, icon_size = data.raw['fluid']['heavy-oil'].icon_size},
     {icon = data.raw['fluid']['light-oil'].icon, icon_size = data.raw['fluid']['light-oil'].icon_size, tint = {1, 1, 1, 0.5}},
     {icon = data.raw['item' ]['landfill' ].icon, icon_size = data.raw['item' ]['landfill' ].icon_size, scale = 0.25, shift = {0, 4}},
-  }
+  },
+  auto_barrel = false,
 }}
 
 local coreminer = data.raw['mining-drill']['se-core-miner-drill']
