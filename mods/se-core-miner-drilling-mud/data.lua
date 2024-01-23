@@ -9,7 +9,7 @@ data:extend{{
     {icon = data.raw['item' ]['landfill' ].icon, icon_size = data.raw['item' ]['landfill' ].icon_size, scale = 0.25, shift = {0, 4}},
   },
   auto_barrel = false,
-  heat_capacity = 1*2.5*5 .. "KJ",
+  heat_capacity = 1*2.5/2 .. "KJ", -- *5 = 10 per second, /2 = 100 per second
   default_temperature = 0,
   max_temperature = 200,
 }}
