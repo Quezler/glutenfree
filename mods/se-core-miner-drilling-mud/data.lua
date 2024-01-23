@@ -44,10 +44,19 @@ coreminer.energy_usage = 1000/6*2.5 .. "KJ"
 coreminer.mining_speed = 200 -- twice the default
 coreminer.animations.layers[2].animation_speed = 2
 
-local up1 = table.deepcopy(data.raw['infinity-pipe']['infinity-pipe'])
-local up2 = table.deepcopy(data.raw['infinity-pipe']['infinity-pipe'])
-local up3 = table.deepcopy(data.raw['infinity-pipe']['infinity-pipe'])
-local up4 = table.deepcopy(data.raw['infinity-pipe']['infinity-pipe'])
+local up0 = table.deepcopy(data.raw['infinity-pipe']['infinity-pipe'])
+local ptg = table.deepcopy(data.raw['pipe-to-ground']['pipe-to-ground'])
+-- up0.fluid_box.pipe_connections = {up0.fluid_box.pipe_connections[1]}
+
+up0.pictures.ending_up = ptg.pictures.up
+up0.pictures.ending_down = ptg.pictures.down
+up0.pictures.ending_left = ptg.pictures.left
+up0.pictures.ending_right = ptg.pictures.right
+
+local up1 = table.deepcopy(up0) -- place @ bottom
+local up2 = table.deepcopy(up0) -- place @ right
+local up3 = table.deepcopy(up0) -- place @ top
+local up4 = table.deepcopy(up0) -- place @ left
 
 up1.name = 'infinity-pipe-drilling-mud-1'
 up2.name = 'infinity-pipe-drilling-mud-2'
@@ -55,8 +64,15 @@ up3.name = 'infinity-pipe-drilling-mud-3'
 up4.name = 'infinity-pipe-drilling-mud-4'
 
 up1.fluid_box.pipe_connections = {up1.fluid_box.pipe_connections[1]}
-up2.fluid_box.pipe_connections = {up1.fluid_box.pipe_connections[2]}
-up3.fluid_box.pipe_connections = {up1.fluid_box.pipe_connections[3]}
-up4.fluid_box.pipe_connections = {up1.fluid_box.pipe_connections[4]}
+up2.fluid_box.pipe_connections = {up2.fluid_box.pipe_connections[2]}
+up3.fluid_box.pipe_connections = {up3.fluid_box.pipe_connections[3]}
+up4.fluid_box.pipe_connections = {up4.fluid_box.pipe_connections[4]}
+
+up1.pictures.straight_vertical_single = up1.pictures.ending_up
+up2.pictures.straight_vertical_single = up1.pictures.ending_right
+up3.pictures.straight_vertical_single = up1.pictures.ending_down
+up4.pictures.straight_vertical_single = up1.pictures.ending_left
 
 data:extend{up1, up2, up3, up4}
+
+-- log(serpent.block(up0.fluid_box))
