@@ -2,6 +2,7 @@ data:extend{{
   type = 'recipe',
   name = 'se-core-miner-drill-drilling-mud',
   category = 'chemistry',
+  subgroup = 'oil',
 
   ingredients = {
     {
