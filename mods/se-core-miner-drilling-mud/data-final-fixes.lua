@@ -31,6 +31,11 @@ data:extend{{
   }},
 
   hide_from_player_crafting = true,
+
+  crafting_machine_tint = {
+    primary = data.raw['fluid']['heavy-oil'].flow_color,
+    secondary = data.raw['fluid']['light-oil'].flow_color,
+  },
 }}
 
 table.insert(data.raw['technology']['se-core-miner'].effects, {type = "unlock-recipe", recipe = 'se-core-miner-drill-drilling-mud'})
