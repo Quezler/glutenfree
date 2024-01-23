@@ -22,12 +22,13 @@ data:extend{{
     },
   },
 
-  energy_required = 50,
+  energy_required = 2,
   
   results = {{
     type = "fluid",
     name = 'se-core-miner-drill-drilling-mud',
-    amount = 200,
+    temperature = 200,
+    amount = 1000,
   }},
 
   hide_from_player_crafting = true,
