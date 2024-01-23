@@ -46,7 +46,12 @@ coreminer.animations.layers[2].animation_speed = 2
 
 local up0 = table.deepcopy(data.raw['infinity-pipe']['infinity-pipe'])
 local ptg = table.deepcopy(data.raw['pipe-to-ground']['pipe-to-ground'])
--- up0.fluid_box.pipe_connections = {up0.fluid_box.pipe_connections[1]}
+
+up0.fluid_box.base_level = -1
+up0.minable = {mining_time = 0.1}
+up0.placeable_by = {item = 'pipe-to-ground', count = 1}
+table.insert(up0.flags, 'not-blueprintable')
+up0.gui_mode = "none"
 
 up0.pictures.ending_up = ptg.pictures.up
 up0.pictures.ending_down = ptg.pictures.down
@@ -74,5 +79,3 @@ up3.pictures.straight_vertical_single = up1.pictures.ending_down
 up4.pictures.straight_vertical_single = up1.pictures.ending_left
 
 data:extend{up1, up2, up3, up4}
-
--- log(serpent.block(up0.fluid_box))
