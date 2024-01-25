@@ -42,11 +42,18 @@ commands.add_command('reset-launch-trigger-to-manual', nil, function(command)
 
     game.print(trigger_selected)
     if trigger_selected ~= "space-exploration.trigger-none" then
+
+      log(print_gui.serpent(root.children[2].children[2]))
+
+      local destination_dropdown = root.children[2].children[2]['launchpad-list-zones']
+      local destination_selected = destination_dropdown.items[destination_dropdown.selected_index]
+      log(serpent.line(destination_selected)) -- "    [img=virtual-signal/se-planet] Nauvis"
+
+      local position_dropdown = root.children[2].children[2]['launchpad-list-landing-pad-names']
+      local position_selected = position_dropdown.items[position_dropdown.selected_index]
+      log(serpent.line(position_selected)) -- {"space-exploration.none_general_vicinity"} or "Nauvis Landing Pad"
+
       reset_launch_trigger_to_manual(selected, player)
     end
-
-    -- log(serpent.block( trigger_dropdown.items[trigger_dropdown.selected_index] ))
-    -- log(print_gui.serpent(root.children[2].children[2]['trigger']))
-    -- reset_launch_trigger_to_manual(selected, player)
   end
 end)
