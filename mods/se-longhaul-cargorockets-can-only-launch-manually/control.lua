@@ -89,6 +89,8 @@ for _, event in ipairs({
 end
 
 script.on_init(function(event)
+  global.fuel_k = settings.global["se-rocket-launch-pad-fuel-k"].value
+
   global.structs = {}
   global.structs_to_open = {}
 
@@ -99,9 +101,19 @@ script.on_init(function(event)
   end
 end)
 
-script.on_configuration_changed(function(event)
+local function on_configuration_changed(event)
+  global.fuel_k = settings.global["se-rocket-launch-pad-fuel-k"].value
   for unit_number, struct in pairs(global.structs) do
     global.structs_to_open[unit_number] = true
+  end
+  script.on_event(defines.events.on_tick, on_tick)
+end
+
+script.on_configuration_changed(on_configuration_changed)
+
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+  if event.setting == "se-rocket-launch-pad-fuel-k" then
+    on_configuration_changed(event)
   end
 end)
 
@@ -117,7 +129,7 @@ local function get_is_fuel_within_bounds(root)
   local fuel_k_string = fuel_progressbar.caption[2][3]
   if fuel_k_string == '?' then fuel_k_string = '0k' end
   local fuel_k = tonumber(fuel_k_string:sub(1, -2)) -- remove the k, then cast to number
-  local fuel_within_bounds = 400 > fuel_k
+  local fuel_within_bounds = global.fuel_k > fuel_k
   return fuel_within_bounds
 end
 
