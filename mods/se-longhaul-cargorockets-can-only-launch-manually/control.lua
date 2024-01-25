@@ -152,8 +152,6 @@ local function on_gui_opened(event)
 
   if trigger_selected ~= "space-exploration.trigger-none" then
 
-    -- log(print_gui.serpent(root.children[2].children[1]))
-
     local tags = {
       name = event.entity.surface.name,
       launch_trigger = "none",
@@ -174,7 +172,7 @@ local function on_gui_opened(event)
       tags.landing_pad_name = remove_rich_text(position_selected)
     end
 
-    log(serpent.line(tags))
+    log(serpent.line(tags, {sortkeys = false}))
 
     -- tags.exists_only_for_one_tick = true
     reset_launch_trigger_to_manual(event.entity, player, tags)
