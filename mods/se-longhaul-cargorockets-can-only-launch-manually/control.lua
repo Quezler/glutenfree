@@ -20,7 +20,7 @@ function remove_rich_text(s) -- includes [color] blocks
   return table.concat(words, ' ')
 end
 
-local function reset_launch_trigger_to_manual(entity, player)
+local function reset_launch_trigger_to_manual(entity, player, tags)
   local position = entity.surface.find_non_colliding_position(entity.name, entity.position, 0, 1, true)
   local ghost = entity.surface.create_entity{
     name = 'entity-ghost',
@@ -30,14 +30,10 @@ local function reset_launch_trigger_to_manual(entity, player)
     create_build_effect_smoke = false,
   }
 
-  local _, revived, _ = ghost.revive()
+  -- ghost.tags = tags
 
-  script.raise_script_revive({entity = revived, tags = {
-    name = "Nauvis",
-    launch_trigger = "none",
-    zone_name = "Nauvis Orbit",
-    landing_pad_name = "Nauvis Orbit Landing Pad",
-  }})
+  local _, revived, _ = ghost.revive()
+  script.raise_script_revive({entity = revived, tags = tags})
 
   entity.copy_settings(revived, player)
   revived.destroy()
@@ -54,22 +50,33 @@ commands.add_command('reset-launch-trigger-to-manual', nil, function(command)
 
     local trigger_dropdown = root.children[2].children[2]['trigger']
     local trigger_selected = trigger_dropdown.items[trigger_dropdown.selected_index][1]
+    -- game.print(trigger_selected)
 
-    game.print(trigger_selected)
     if trigger_selected ~= "space-exploration.trigger-none" then
 
       log(print_gui.serpent(root.children[2].children[2]))
 
+      local tags = {
+        name = selected.surface.name,
+        launch_trigger = "none",
+      }
+
       local destination_dropdown = root.children[2].children[2]['launchpad-list-zones']
       local destination_selected = destination_dropdown.items[destination_dropdown.selected_index]
-      log(serpent.line(destination_selected)) -- "    [img=virtual-signal/se-planet] Nauvis"
-      log(serpent.line(remove_rich_text(destination_selected))) -- Nauvis
+      -- log(serpent.line(destination_selected)) -- {"space-exploration.any_landing_pad_with_name"} or "    [img=virtual-signal/se-planet] Nauvis"
+      -- log(serpent.line(remove_rich_text(destination_selected))) -- Nauvis
+      if #destination_selected > 1 then
+        tags.zone_name = remove_rich_text(destination_selected)
+      end
 
       local position_dropdown = root.children[2].children[2]['launchpad-list-landing-pad-names']
       local position_selected = position_dropdown.items[position_dropdown.selected_index]
-      log(serpent.line(position_selected)) -- {"space-exploration.none_general_vicinity"} or "Nauvis Landing Pad"
+      -- log(serpent.line(position_selected)) -- {"space-exploration.none_general_vicinity"} or "Nauvis Landing Pad"
+      if #position_selected > 1 then
+        tags.landing_pad_name = remove_rich_text(position_selected)
+      end
 
-      reset_launch_trigger_to_manual(selected, player)
+      reset_launch_trigger_to_manual(selected, player, tags)
     end
   end
 end)
