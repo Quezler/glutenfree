@@ -112,6 +112,15 @@ script.on_load(function(event)
   end
 end)
 
+local function get_is_fuel_within_bounds(root)
+  local fuel_progressbar = root.children[2].children[1]['fuel_capacity_progress']
+  local fuel_k_string = fuel_progressbar.caption[2][3]
+  if fuel_k_string == '?' then fuel_k_string = '0k' end
+  local fuel_k = tonumber(fuel_k_string:sub(1, -2)) -- remove the k, then cast to number
+  local fuel_within_bounds = 400 > fuel_k
+  return fuel_within_bounds
+end
+
 local function on_gui_opened(event)
   if not event.entity then return end
   if event.entity.name ~= Launchpad.name_rocket_launch_pad then return end
@@ -121,17 +130,13 @@ local function on_gui_opened(event)
   local root = player.gui.relative[LaunchpadGUI.name_rocket_launch_pad_gui_root]
   if not (root and root.tags and root.tags.unit_number) then return end
 
-  local fuel_progressbar = root.children[2].children[1]['fuel_capacity_progress']
-  local fuel_k_string = fuel_progressbar.caption[2][3]
-  if fuel_k_string == '?' then fuel_k_string = '0k' end
-  local fuel_k = tonumber(fuel_k_string:sub(1, -2)) -- remove the k, then cast to number
-  local fuel_within_bounds = 400 > fuel_k
+  local fuel_within_bounds = get_is_fuel_within_bounds(root)
 
   local trigger_dropdown = root.children[2].children[2]['trigger']
   local trigger_selected = trigger_dropdown.items[trigger_dropdown.selected_index][1]
 
   trigger_dropdown.enabled = fuel_within_bounds
-  if fuel_within_bounds == false then return end
+  if fuel_within_bounds == true then return end
 
   if trigger_selected ~= "space-exploration.trigger-none" then
 
@@ -165,3 +170,21 @@ local function on_gui_opened(event)
 end
 
 script.on_event(defines.events.on_gui_opened, on_gui_opened)
+
+local function on_gui_selection_state_changed(event)
+  if not (event.element and event.element.valid) then return end
+  local element = event.element
+  local player = game.get_player(event.player_index)
+  local root = player.gui.relative[LaunchpadGUI.name_rocket_launch_pad_gui_root]
+  if not (root and root.tags and root.tags.unit_number) then return end
+
+  if element.name == "launchpad-list-zones" then
+    local fuel_within_bounds = get_is_fuel_within_bounds(root)
+    local trigger_dropdown = root.children[2].children[2]['trigger']
+
+    -- we do not need to force the selected option to manual since SE does that for us when the zone changes
+    trigger_dropdown.enabled = fuel_within_bounds
+  end
+end
+
+script.on_event(defines.events.on_gui_selection_state_changed, on_gui_selection_state_changed)
