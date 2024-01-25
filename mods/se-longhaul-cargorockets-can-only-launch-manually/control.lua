@@ -122,12 +122,16 @@ local function on_gui_opened(event)
   if not (root and root.tags and root.tags.unit_number) then return end
 
   local fuel_progressbar = root.children[2].children[1]['fuel_capacity_progress']
-  local fuel_k = tonumber(fuel_progressbar.caption[2][3]:sub(1, -2)) -- remove the k, then cast to number
-  if 400 > fuel_k then return end
+  local fuel_k_string = fuel_progressbar.caption[2][3]
+  if fuel_k_string == '?' then fuel_k_string = '0k' end
+  local fuel_k = tonumber(fuel_k_string:sub(1, -2)) -- remove the k, then cast to number
+  local fuel_within_bounds = 400 > fuel_k
 
   local trigger_dropdown = root.children[2].children[2]['trigger']
   local trigger_selected = trigger_dropdown.items[trigger_dropdown.selected_index][1]
-  -- game.print(trigger_selected)
+
+  trigger_dropdown.enabled = fuel_within_bounds
+  if fuel_within_bounds == false then return end
 
   if trigger_selected ~= "space-exploration.trigger-none" then
 
@@ -161,12 +165,3 @@ local function on_gui_opened(event)
 end
 
 script.on_event(defines.events.on_gui_opened, on_gui_opened)
-
--- commands.add_command('reset-launch-trigger-to-manual', nil, function(command)
---   local player = game.get_player(command.player_index)
---   local selected = player.selected
-
---   if selected and selected.name == Launchpad.name_rocket_launch_pad then
---     on_created_entity({entity = entity})
---   end
--- end)
