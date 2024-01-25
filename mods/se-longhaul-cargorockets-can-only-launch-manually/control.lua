@@ -178,13 +178,14 @@ local function on_gui_selection_state_changed(event)
   local root = player.gui.relative[LaunchpadGUI.name_rocket_launch_pad_gui_root]
   if not (root and root.tags and root.tags.unit_number) then return end
 
-  if element.name == "launchpad-list-zones" then
-    local fuel_within_bounds = get_is_fuel_within_bounds(root)
-    local trigger_dropdown = root.children[2].children[2]['trigger']
+  local fuel_within_bounds = get_is_fuel_within_bounds(root)
+  local trigger_dropdown = root.children[2].children[2]['trigger']
 
-    -- we do not need to force the selected option to manual since SE does that for us when the zone changes
-    trigger_dropdown.enabled = fuel_within_bounds
-  end
+  -- we do not need to force the selected option to manual since SE does that for us when the zone changes
+  trigger_dropdown.enabled = fuel_within_bounds
 end
 
 script.on_event(defines.events.on_gui_selection_state_changed, on_gui_selection_state_changed)
+
+-- "technically" we should listen to the entity setting pasted event too,
+-- but since it shouldn't be possible to get in an illegal state to begin with leaving it out seems harmless.
