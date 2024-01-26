@@ -133,7 +133,7 @@ function Handler.handle_construction_alert(alert_target)
             break -- succesfully delivered any amount to a network providing construction coverage
           end
 
-          if inserted == 0 then
+          if inserted == 0 and #network.storages > 0 then
             -- local cell = network.cells[math.random(1, #network.cells)]
             local cell = network.find_cell_closest_to(v1_struct.entity.position)
             for _, connected_player in ipairs(game.connected_players) do
