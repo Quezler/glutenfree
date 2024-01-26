@@ -41,7 +41,7 @@ local function reset_launch_trigger_to_manual(entity, player, tags)
   script.raise_script_revive({entity = revived, tags = tags})
 
   entity.copy_settings(revived, player)
-  revived.destroy()
+  revived.destroy{raise_destroy = true}
 end
 
 local function on_tick(event)
