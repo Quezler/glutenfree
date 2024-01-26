@@ -4,7 +4,7 @@ local poles = {}
 
 function poles.init()
   for _, surface in pairs(game.surfaces) do
-    for _, entity in pairs(surface.find_entities_filtered({ type = "electric-pole", name = "se-addon-power-pole" })) do
+    for _, entity in pairs(surface.find_entities_filtered({ name = 'se-addon-power-pole' })) do
       poles.random_tick(entity)
     end
   end
@@ -12,8 +12,6 @@ end
 
 function poles.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
-  if entity.type ~= "electric-pole" then return end
-  if entity.name ~= "se-addon-power-pole" then return end
 
   poles.random_tick(entity)
 end
