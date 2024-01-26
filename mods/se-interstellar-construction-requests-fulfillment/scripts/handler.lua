@@ -132,6 +132,16 @@ function Handler.handle_construction_alert(alert_target)
             itemstack.count = itemstack.count - inserted
             break -- succesfully delivered any amount to a network providing construction coverage
           end
+
+          if inserted == 0 then
+            -- local cell = network.cells[math.random(1, #network.cells)]
+            local cell = network.find_cell_closest_to(v1_struct.entity.position)
+            for _, connected_player in ipairs(game.connected_players) do
+              if connected_player.force == alert_target.force then
+                connected_player.add_alert(cell.owner, defines.alert_type.no_storage)
+              end
+            end
+          end
         end
       end
 
