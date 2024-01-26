@@ -124,7 +124,7 @@ function Handler.handle_construction_alert(alert_target)
       local available = v1_struct.entity.get_item_count(itemstack.name)
       if available > 0 then
         for _, network in ipairs(networks) do
-          local inserted = network.insert({name = itemstack.name, count = math.min(itemstack.count, available)})
+          local inserted = network.insert({name = itemstack.name, count = math.min(itemstack.count, available)}, 'storage')
           if inserted > 0 then
             Handler.shoot(v1_struct)
             v1_struct.entity.remove_item({name = itemstack.name, count = inserted})
