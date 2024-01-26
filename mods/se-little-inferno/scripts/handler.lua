@@ -1,4 +1,5 @@
 util = require("util")
+local Zone = require('__space-exploration-scripts__.zone')
 
 local Handler = {}
 
@@ -184,6 +185,20 @@ function Handler.on_gui_click(event)
 
   table.insert(global.next_tick_events, {surface_index = zone.surface_index, name = defines.events.on_surface_created})
   script.on_event(defines.events.on_tick, Handler.on_tick)
+end
+
+function Handler.on_trigger_created_entity(event)
+  if not event.entity and event.entity.valid then return end
+  local entity_name = event.entity.name
+
+  if entity_name == 'se-plague-cloud' then
+    local surface_index = event.entity.surface.index
+    local zone = Zone.from_surface_index(surface_index)
+
+    if zone and Zone.is_solid(zone) then
+      Handler.set_enabled_for_surface_index({surface_index = surface_index, enabled = true})
+    end
+  end
 end
 
 return Handler

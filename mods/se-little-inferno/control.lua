@@ -26,3 +26,4 @@ remote.add_interface("se-little-inferno", {
 })
 
 script.on_event(defines.events.on_gui_click, handler.on_gui_click)
+script.on_event(defines.events.on_trigger_created_entity, handler.on_trigger_created_entity)
