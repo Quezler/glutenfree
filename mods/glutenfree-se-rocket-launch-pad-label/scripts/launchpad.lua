@@ -22,7 +22,6 @@ end
 
 function launchpad.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
-  if entity.name ~= 'se-rocket-launch-pad' then return end
 
   launchpad.register_silo(entity)
 end
