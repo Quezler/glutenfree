@@ -48,11 +48,12 @@ for _, prototype in pairs(data.raw['fluid-wagon']) do
   local sprite = {
     type = 'sprite',
     name = prototype.name .. '-flushable',
-    filename = "__base__/graphics/entity/fluid-wagon/fluid-wagon-1.png",
-    slice_x = 4,
-    slice_y = 8,
-    width = 208,
-    height = 210,
+    filename = "__base__/graphics/entity/fluid-wagon/hr-fluid-wagon-1.png",
+    -- slice_x = 4,
+    -- slice_y = 8,
+    width = 416,
+    height = 419,
+    scale = 0.25,
   }
 
   data:extend{sprite}

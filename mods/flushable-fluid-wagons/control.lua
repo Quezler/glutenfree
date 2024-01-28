@@ -64,7 +64,7 @@ script.on_event(defines.events.on_player_main_inventory_changed, function(event)
       style = 'invisible_frame',
       -- direction="vertical",
       -- tags={unit_number=struct.unit_number} -- store unit_number in tag
-      ignored_by_interaction = true,
+      -- ignored_by_interaction = true,
     }
   end
 
@@ -78,9 +78,14 @@ script.on_event(defines.events.on_player_main_inventory_changed, function(event)
   local sprite = root.add{
     type = 'sprite',
     sprite = 'fluid-wagon-flushable',
+    resize_to_sprite = false,
   }
 
-  sprite.style.bottom_margin = -50
+  sprite.style.height = 419
+  sprite.style.width = 416
+
+  -- sprite.style.bottom_margin = -50
+  -- sprite.style.right_margin = -50
   root.bring_to_front()
 end)
 
