@@ -4,7 +4,6 @@ local launchpad = {}
 
 function launchpad.init()
   global.entries = {}
-  global.deathrattles = {}
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered({name = 'se-rocket-launch-pad'})) do
@@ -18,6 +17,7 @@ end
 
 function launchpad.on_configuration_changed()
   global.has_opened_every_silo = false
+  global.deathrattles = nil
 end
 
 function launchpad.on_created_entity(event)
@@ -125,11 +125,6 @@ end
 function launchpad.update_by_unit_number(unit_number, destination)
   local entry = global.entries[unit_number]
 
-  if entry.label then
-    entry.label.destroy()
-    entry.label = nil
-  end
-
   if destination == nil then return end
 
   -- entry.label = rendering.draw_text({
@@ -141,21 +136,21 @@ function launchpad.update_by_unit_number(unit_number, destination)
   --   alignment = 'center',
   -- })
 
-  local position = entry.container.position
-  position.y = position.y + 1.9
-
-  entry.label = entry.container.surface.create_entity{name = 'hovering-text', position = position, text = destination}
-  global.deathrattles[script.register_on_entity_destroyed(entry.container)] = {entry.label}
-end
-
-function launchpad.on_entity_destroyed(event)
-  if not global.deathrattles[event.registration_number] then return end
-
-  for _, entity in ipairs(global.deathrattles[event.registration_number]) do
-    entity.destroy()
+  if entry.destination_id == nil then
+    entry.destination_id = rendering.draw_text{
+      text = destination,
+      color = {1, 1, 1, 1},
+      surface = entry.container.surface,
+      position = entry.container.position,
+      target = entry.container,
+      target_offset = {0, 1.9},
+      alignment = 'center',
+      use_rich_text = true,
+      scale_with_zoom = true,
+    }
+  else
+    rendering.set_text(entry.destination_id, destination)
   end
-
-  global.deathrattles[event.registration_number] = nil
 end
 
 return launchpad

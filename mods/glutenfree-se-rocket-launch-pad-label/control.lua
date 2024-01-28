@@ -28,7 +28,7 @@ for _, event in ipairs({
   defines.events.script_raised_built,
   defines.events.script_raised_revive,
 }) do
-  script.on_event(event, on_created_entity, {
+  script.on_event(event, handler.on_created_entity, {
     {filter = 'name', name = 'se-rocket-launch-pad'},
   })
 end
@@ -36,8 +36,6 @@ end
 local events = {
   [defines.events.on_gui_opened] = handler.on_gui_opened,
   [defines.events.on_gui_selection_state_changed] = handler.on_gui_selection_state_changed,
-
-  [defines.events.on_entity_destroyed] = handler.on_entity_destroyed,
 }
 
 for event, handler in pairs(events) do
