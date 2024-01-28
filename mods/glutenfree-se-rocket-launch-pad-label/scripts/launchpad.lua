@@ -24,6 +24,14 @@ function launchpad.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
   launchpad.register_silo(entity)
+
+  for _, connected_player in ipairs(game.connected_players) do
+    if connected_player.force == entity.force and connected_player.opened == nil then
+      connected_player.opened = entity
+      connected_player.opened = nil
+      break
+    end
+  end
 end
 
 function launchpad.register_silo(entity)
