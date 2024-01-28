@@ -23,6 +23,12 @@ for _, prototype in pairs(data.raw['fluid-wagon']) do
     flow_length_in_ticks = 1,
 
     selection_box = {{ -0.5, -0.5}, {0.5, 0.5}},
+
+    icons = {
+      {
+        icon = prototype.icon, icon_size = prototype.icon_size, icon_mipmaps = prototype.icon_mipmaps, tint = {1, 0.5, 0.5},
+      },
+    },
   }
 
   data:extend{tank}
