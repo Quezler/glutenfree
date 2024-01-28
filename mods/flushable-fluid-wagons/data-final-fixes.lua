@@ -37,10 +37,10 @@ for _, prototype in pairs(data.raw['fluid-wagon']) do
       'placeable-off-grid',
       'not-on-map',
       'hide-alt-info',
-      -- 'not-selectable-in-game',
     },
 
     selection_priority = (prototype.selection_priority or 50) + 1,
+    selectable_in_game = false,
   }
 
   data:extend{tank}

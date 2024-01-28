@@ -37,8 +37,6 @@ script.on_event('open-fluid-wagon', function(event)
   end
 
   _global.player_should_open[player.index] = tank
-
-  -- global.wagon_number_to_tank[entity.unit_number] = tank
   global.tank_number_to_wagon[tank.unit_number] = entity
 
   global.structs[tank.unit_number] = { -- tank's unit number so multiple per wagon can exist
