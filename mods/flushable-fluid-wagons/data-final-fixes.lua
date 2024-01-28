@@ -36,7 +36,7 @@ for _, prototype in pairs(data.raw['fluid-wagon']) do
       'placeable-player',
       'placeable-off-grid',
       'not-on-map',
-      -- 'hide-alt-info',
+      'hide-alt-info',
       -- 'not-selectable-in-game',
     },
 
@@ -44,18 +44,4 @@ for _, prototype in pairs(data.raw['fluid-wagon']) do
   }
 
   data:extend{tank}
-
-  local sprite = {
-    type = 'sprite',
-    name = prototype.name .. '-flushable',
-    filename = "__base__/graphics/entity/fluid-wagon/hr-fluid-wagon-1.png",
-    -- slice_x = 4,
-    -- slice_y = 8,
-    width = 416,
-    height = 419,
-    scale = 0.3,
-    flags = {'no-crop'}
-  }
-
-  data:extend{sprite}
 end
