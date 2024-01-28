@@ -53,7 +53,8 @@ for _, prototype in pairs(data.raw['fluid-wagon']) do
     -- slice_y = 8,
     width = 416,
     height = 419,
-    scale = 0.25,
+    scale = 0.3,
+    flags = {'no-crop'}
   }
 
   data:extend{sprite}

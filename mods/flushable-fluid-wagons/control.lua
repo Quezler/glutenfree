@@ -78,11 +78,13 @@ script.on_event(defines.events.on_player_main_inventory_changed, function(event)
   local sprite = root.add{
     type = 'sprite',
     sprite = 'fluid-wagon-flushable',
-    resize_to_sprite = false,
+    -- resize_to_sprite = false,
+    -- x_scale = 0.5,
+    -- y_scale = 0.5,
   }
 
-  sprite.style.height = 419
-  sprite.style.width = 416
+  -- sprite.style.height = 419
+  -- sprite.style.width = 416
 
   -- sprite.style.bottom_margin = -50
   -- sprite.style.right_margin = -50
