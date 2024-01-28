@@ -1,1 +1,1 @@
-Could i have instead of gui Z layer trickery used a relative gui? yes i could have, but where's the fun in that :3
+Fluid wagons that contain liquids can be clicked to show your typical pipe/tank flush buttons.

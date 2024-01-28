@@ -29,6 +29,10 @@ local function tick_struct(struct)
     struct.tank.clear_fluid_inside()
     struct.tank.insert_fluid(fluid)
   end
+
+  if struct.tank.position ~= struct.wagon.position then
+    struct.tank.teleport(struct.wagon.position)
+  end
 end
 
 local function on_tick(event)
