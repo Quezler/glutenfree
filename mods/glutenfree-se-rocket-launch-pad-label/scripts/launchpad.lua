@@ -104,7 +104,7 @@ function launchpad.on_gui_selection_state_changed(event)
     local unit_number = event.element.parent.parent.parent.tags.unit_number
     if not unit_number then error('could not get this silo\'s unit number.') end
 
-    launchpad.update_by_unit_number(unit_number, launchpad.get_destination(event.element) or "Any landing pad with name", nil)
+    launchpad.update_by_unit_number(unit_number, launchpad.get_destination(event.element) or "Any landing pad with name", "None - General vicinity")
   end
 
   if event.element.name == 'launchpad-list-landing-pad-names' then
