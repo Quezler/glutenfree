@@ -45,4 +45,28 @@ script.on_event(defines.events.on_player_main_inventory_changed, function(event)
   if tank == nil then return end
   _global.player_should_open[player.index] = nil
   player.opened = tank
+
+  local root = player.gui.relative[tank.name]
+  if root == nil then
+    root = player.gui.relative.add{
+      type= "frame",
+      name = tank.name,
+      anchor = {gui = defines.relative_gui_type.storage_tank_gui, position = defines.relative_gui_position.top},
+      -- style = 'invisible_frame',
+      -- direction="vertical",
+      -- tags={unit_number=struct.unit_number} -- store unit_number in tag
+    }
+  end
+
+  root.style.width = 448
+  root.style.horizontal_align = 'center'
+  -- root.style.top_padding = -50
+
+  local sprite = root.add{
+    type = 'sprite',
+    sprite = 'entity/fluid-wagon',
+  }
+
+  sprite.style.bottom_margin = -50
+  sprite.bring_to_front()
 end)
