@@ -92,7 +92,7 @@ function launchpad.on_gui_opened(event)
     local zones_dropdown = get_child(launchpad_gui_inner, 'launchpad-list-zones')
     local selected = launchpad.get_destination(zones_dropdown)
 
-    launchpad.update_by_unit_number(event.entity.unit_number, selected)
+    launchpad.update_by_unit_number(event.entity.unit_number, selected or "Any landing pad with name")
   end
 end
 
@@ -102,12 +102,13 @@ function launchpad.on_gui_selection_state_changed(event)
   local unit_number = event.element.parent.parent.parent.tags.unit_number
   if not unit_number then error('could not get this silo\'s unit number.') end
 
-  launchpad.update_by_unit_number(unit_number, launchpad.get_destination(event.element))
+  launchpad.update_by_unit_number(unit_number, launchpad.get_destination(event.element) or "Any landing pad with name")
 end
 
 function launchpad.get_destination(zones_dropdown)
   local selected = zones_dropdown.items[zones_dropdown.selected_index]
 
+  if zones_dropdown.selected_index == 1 then return nil end -- ### known locations
   if selected[1] == "space-exploration.any_landing_pad_with_name" then selected = nil end
 
   -- "        [img=virtual-signal/se-planet-orbit] Nauvis Orbit"
@@ -125,7 +126,7 @@ end
 function launchpad.update_by_unit_number(unit_number, destination)
   local entry = global.entries[unit_number]
 
-  if destination == nil then return end
+  assert(destination)
 
   -- entry.label = rendering.draw_text({
   --   text = destination,
@@ -143,13 +144,30 @@ function launchpad.update_by_unit_number(unit_number, destination)
       surface = entry.container.surface,
       position = entry.container.position,
       target = entry.container,
-      target_offset = {0, 1.9},
+      target_offset = {0, 1.55},
       alignment = 'center',
       use_rich_text = true,
-      scale_with_zoom = true,
+      -- scale_with_zoom = true,
     }
   else
     rendering.set_text(entry.destination_id, destination)
+  end
+
+  local position = "Nauvis Orbit Landing Pad"
+  if entry.position_id == nil then
+    entry.position_id = rendering.draw_text{
+      text = position,
+      color = {1, 1, 1, 1},
+      surface = entry.container.surface,
+      position = entry.container.position,
+      target = entry.container,
+      target_offset = {0, 2.25},
+      alignment = 'center',
+      use_rich_text = true,
+      -- scale_with_zoom = true,
+    }
+  else
+    rendering.set_text(entry.position_id, position)
   end
 end
 
