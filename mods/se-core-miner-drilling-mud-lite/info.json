@@ -1,0 +1,13 @@
+{
+    "name": "se-core-miner-drilling-mud-lite",
+    "title": "Space Exploration - core miner drilling mud (lite)",
+    "description": "All core mining drills now require a special fluid to function at all.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "space-exploration",
+        "? se-core-miner-drill-output-inventories-are-linked",
+        "! se-core-miner-drilling-mud"
+    ]
+}
