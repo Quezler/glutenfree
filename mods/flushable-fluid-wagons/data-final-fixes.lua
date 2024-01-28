@@ -23,12 +23,24 @@ for _, prototype in pairs(data.raw['fluid-wagon']) do
     flow_length_in_ticks = 1,
 
     selection_box = {{ -0.5, -0.5}, {0.5, 0.5}},
+    collision_box = {{ -0.5, -0.5}, {0.5, 0.5}},
+    collision_mask = {},
 
     icons = {
       {
         icon = prototype.icon, icon_size = prototype.icon_size, icon_mipmaps = prototype.icon_mipmaps, tint = {1, 0.5, 0.5},
       },
     },
+
+    flags = {
+      'placeable-player',
+      'placeable-off-grid',
+      'not-on-map',
+      -- 'hide-alt-info',
+      -- 'not-selectable-in-game',
+    },
+
+    selection_priority = (prototype.selection_priority or 50) + 1,
   }
 
   data:extend{tank}
