@@ -71,9 +71,7 @@ script.on_event('open-fluid-wagon', function(event)
   }
 
   tank.destructible = false
-  if fluid then
-    tank.insert_fluid(fluid)
-  end
+  tank.insert_fluid(fluid)
 
   _global.player_should_open[player.index] = tank
   global.tank_number_to_wagon[tank.unit_number] = entity
