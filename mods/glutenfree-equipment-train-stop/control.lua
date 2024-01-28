@@ -25,13 +25,19 @@ end)
 
 --
 
-local events = {
-  [defines.events.on_built_entity] = handler.on_created_entity,
-  [defines.events.on_robot_built_entity] = handler.on_created_entity,
-  [defines.events.script_raised_built] = handler.on_created_entity,
-  [defines.events.script_raised_revive] = handler.on_created_entity,
-  [defines.events.on_entity_cloned] = handler.on_created_entity,
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+  defines.events.on_entity_cloned,
+}) do
+  script.on_event(event, on_created_entity, {
+    {filter = 'name', name = 'glutenfree-equipment-train-stop-station'},
+  })
+end
 
+local events = {
   [defines.events.on_entity_destroyed] = handler.on_entity_destroyed,
   [defines.events.on_tick] = handler.on_tick, -- todo: only have this handler active while global.tripwires_to_replace is not empty
 }

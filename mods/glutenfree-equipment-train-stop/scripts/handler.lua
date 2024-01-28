@@ -24,7 +24,6 @@ end
 
 function handler.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
-  if entity.name ~= mod_prefix .. 'station' then return end
 
   handler.register_train_stop(entity)
 end
