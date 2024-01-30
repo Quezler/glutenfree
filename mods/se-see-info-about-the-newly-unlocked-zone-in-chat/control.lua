@@ -21,6 +21,7 @@ local function get_threat(zone)
     -- end
     return threat
   end
+  return 0
 end
 
 local research_can_trigger_zone_unlock = {
@@ -29,7 +30,7 @@ local research_can_trigger_zone_unlock = {
   ['se-zone-discovery-deep'] = true,
 }
 script.on_event(defines.events.on_research_finished, function(event)
-  game.print(event.research.name)
+  -- game.print(event.research.name)
   if research_can_trigger_zone_unlock[event.research.name] then
     
     local force = event.research.force
@@ -47,17 +48,34 @@ script.on_event(defines.events.on_research_finished, function(event)
     for zone_index, _ in pairs(new_known_zones) do
       if old_known_zones[zone_index] == nil then
         local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = tonumber(zone_index)})
-        game.print(zone.name)
+        -- game.print(zone.name)
 
         -- local surface = game.get_surface(zone.surface_index)
 
-        table.insert(description, string.format('radius: %d', zone.radius and (string.format("%.0f", zone.radius)) or "-"))
-        table.insert(description, 'resource: ' .. ((zone.primary_resource and zone.type ~= "orbit") and "[img=entity/".. zone.primary_resource.."]" or "-"))
-        table.insert(description, string.format('threat: %d%%', get_threat(zone) * 100))
-        -- table.insert(description, string.format('img=item/solar-panel] %d', surface.solar_power_multiplier))
+        -- if zone.type == "planet" then
+        --   table.insert(description, 'This ')
+        -- end
+
+        -- if zone.radius then
+        --   table.insert(description, string.format('This zone has a radius of %d, ', zone.radius)
+        -- else
+        --   table.insert(description, string.format('This zone has a radius of %d, ', zone.radius)
+        -- end
+
+        -- force.print(string.format('I'))
+
+        -- force.print(string.format("The primary resource of this zone is [img=entity/%s].", zone.primary_resource))
+        -- force.print({"", string.format("The primary resource of this zone is [img=entity/%s] ", zone.primary_resource), {"entity-name." .. zone.primary_resource}})
+        force.print({"", string.format("[img=entity/%s] ", zone.primary_resource), {"entity-name." .. zone.primary_resource}, " is the primary resource, and the threat level is ", string.format('%d%%', get_threat(zone) * 100), "."})
+        
+
+        -- table.insert(description, string.format('radius: %s', zone.radius and (string.format("%.0f", zone.radius)) or "-"))
+        -- table.insert(description, 'resource: ' .. ((zone.primary_resource and zone.type ~= "orbit") and "[img=entity/".. zone.primary_resource.."]" or "-"))
+        -- table.insert(description, string.format('threat: %d%%', get_threat(zone) * 100))
+        -- table.insert(description, string.format('solar = %d', remote.call("space-exploration", "solar_for_surface", {surface_index = surface_index}) ))
         -- zone.description = description
         -- game.print(string.format('%s, %d', zone.primary_resource, zone.radius))
-        game.print(table.concat(description, ' '))
+        -- game.print(table.concat(description, ' '))
       end
     end
 
