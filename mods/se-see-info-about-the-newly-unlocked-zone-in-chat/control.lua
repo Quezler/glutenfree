@@ -33,7 +33,7 @@ script.on_event(defines.events.on_research_finished, function(event)
       return
     end
 
-    local to_print = {}
+    local to_print = nil
 
     for zone_index, _ in pairs(new_known_zones) do
       if old_known_zones[zone_index] == nil then
