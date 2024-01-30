@@ -51,9 +51,9 @@ script.on_event(defines.events.on_research_finished, function(event)
 
         -- local surface = game.get_surface(zone.surface_index)
 
-        table.insert(description, string.format('[img=virtual-signal/se-radius] %d', zone.radius and (string.format("%.0f", zone.radius)) or "-"))
-        table.insert(description, (zone.primary_resource and zone.type ~= "orbit") and "[img=entity/".. zone.primary_resource.."]" or "-")
-        table.insert(description, string.format('[img=item/artillery-targeting-remote] %d', get_threat(zone) * 100))
+        table.insert(description, string.format('radius: %d', zone.radius and (string.format("%.0f", zone.radius)) or "-"))
+        table.insert(description, 'resource: ' .. ((zone.primary_resource and zone.type ~= "orbit") and "[img=entity/".. zone.primary_resource.."]" or "-"))
+        table.insert(description, string.format('threat: %d%%', get_threat(zone) * 100))
         -- table.insert(description, string.format('img=item/solar-panel] %d', surface.solar_power_multiplier))
         -- zone.description = description
         -- game.print(string.format('%s, %d', zone.primary_resource, zone.radius))
