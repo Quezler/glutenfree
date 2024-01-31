@@ -1,0 +1,11 @@
+{
+    "name": "se-early-arcolink-storage-through-pyramid-looting",
+    "title": "Space Exploration - early arcolink storage through pyramid looting",
+    "description": "Arcolink chests are neat and all, but they're so far down the tech tree.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "space-exploration"
+    ]
+}
