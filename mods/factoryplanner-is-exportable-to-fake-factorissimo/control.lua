@@ -218,7 +218,7 @@ script.on_event(defines.events.on_gui_click, function(event)
       if module_button.sprite ~= "utility/add" then
         local module_class, module_name = split_class_and_name(module_button.sprite)
         -- table.insert(modules, {type = module_class, name = module_name, amount = module_button.number})
-        merge_ingredients(clipboard.buildings, {type = module_class, name = module_name, amount = module_button.number})
+        merge_ingredients(clipboard.buildings, {type = module_class, name = module_name, amount = module_button.number * machine_count})
       end
     end
 
