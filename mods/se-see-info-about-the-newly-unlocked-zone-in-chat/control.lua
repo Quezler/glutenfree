@@ -35,7 +35,9 @@ local function tick_force(force)
     end
   end
 
-  force.print(to_print)
+  if to_print then
+    force.print(to_print)
+  end
 
   ::skip::
   global.known_zones[force.name] = new_known_zones
