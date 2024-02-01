@@ -13,5 +13,16 @@ script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
     player.print({"space-exploration.gps_invalid"})
   end
 
+  local textfield = player.gui.center.add{
+    type = 'textfield',
+    text = event.surface,
+  }
+
+  textfield.focus()
+  textfield.select_all()
+
+  textfield.style.width = 750 -- fits "https://mods.factorio.com/mod/wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww" (49 max length, w max width)
+  textfield.style.horizontal_align = "center"
+
   player.print('[img=newsletter-for-mods-made-by-quezler-crater] Quezler released a new mod!')
 end)
