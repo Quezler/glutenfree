@@ -9,6 +9,7 @@ script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
 
   local player = game.get_player(event.player_index)
 
+  -- space exploration blurts this out if the surface does not exist or isn't a zone, so we just hijack that translation string
   if game.active_mods['space-exploration'] == nil then
     player.print({"space-exploration.gps_invalid"})
   end
@@ -27,10 +28,9 @@ script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
 
   textfield.focus()
   textfield.select_all()
-  -- textfield.read_only = true
 
   textfield.style.width = 750 -- fits "https://mods.factorio.com/mod/wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww" (49 max length, w max width)
-  textfield.style.horizontal_align = "center"
+  textfield.style.horizontal_align = 'center'
 
   player.print(string.format('[img=%s] Quezler released a new mod!', mod_prefix .. 'crater'))
 end)
