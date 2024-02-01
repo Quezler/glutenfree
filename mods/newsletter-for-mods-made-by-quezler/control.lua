@@ -44,3 +44,9 @@ local function close_textfield(event)
 end
 
 script.on_event('newsletter-for-mods-made-by-quezler-leftclick-button', close_textfield)
+
+script.on_event(defines.events.on_gui_text_changed, function(event)
+  if event.element.name == 'newsletter-for-mods-made-by-quezler-textfield' then
+    close_textfield(event)
+  end
+end)
