@@ -13,12 +13,17 @@ script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
     player.print({"space-exploration.gps_invalid"})
   end
 
-  local textfield = player.gui.center.add{
-    type = 'textfield',
-    text = event.surface,
-    name = 'newsletter-for-mods-made-by-quezler-textfield',
-    -- tags = {tick = event.tick}
-  }
+  local textfield = player.gui.center['newsletter-for-mods-made-by-quezler-textfield']
+  if textfield == nil then
+    textfield = player.gui.center.add{
+      type = 'textfield',
+      name = 'newsletter-for-mods-made-by-quezler-textfield',
+      
+      text = event.surface,
+    }
+  else
+    textfield.text = event.surface
+  end
 
   textfield.focus()
   textfield.select_all()
@@ -31,17 +36,11 @@ script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
 end)
 
 local function close_textfield(event)
-  -- game.print(event.tick)
   local player = game.get_player(event.player_index)
   local textfield = player.gui.center['newsletter-for-mods-made-by-quezler-textfield']
   if textfield == nil then return end
-  -- if textfield.tags.tick == event.tick then return end
 
-  -- game.print(serpent.line({textfield.tags.tick, event.tick}))
   textfield.destroy()
 end
 
--- script.on_event('newsletter-for-mods-made-by-quezler-escape-button', close_textfield)
 script.on_event('newsletter-for-mods-made-by-quezler-leftclick-button', close_textfield)
--- script.on_event('newsletter-for-mods-made-by-quezler-ctrl+c-button', close_textfield)
--- script.on_event('newsletter-for-mods-made-by-quezler-coppied', close_textfield)
