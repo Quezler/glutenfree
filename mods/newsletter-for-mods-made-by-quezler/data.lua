@@ -14,7 +14,7 @@ data:extend{{
 data:extend{
   {
     type = 'custom-input',
-    name =  mod_prefix .. 'leftclick-button',
+    name =  mod_prefix .. 'leftclick',
     key_sequence = '',
     linked_game_control = 'open-gui',
   },

@@ -43,7 +43,7 @@ local function close_textfield(event)
   textfield.destroy()
 end
 
-script.on_event(mod_prefix .. 'leftclick-button', close_textfield)
+script.on_event(mod_prefix .. 'leftclick', close_textfield)
 
 script.on_event(defines.events.on_gui_text_changed, function(event)
   if event.element.name == mod_prefix .. 'textfield' then
