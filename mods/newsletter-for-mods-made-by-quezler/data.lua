@@ -6,5 +6,5 @@ data:extend{{
   height = 24,
   width = 24,
 
-  flags = {'no-crop', 'linear-minification', 'linear-magnification'},
+  flags = {'icon'},
 }}
