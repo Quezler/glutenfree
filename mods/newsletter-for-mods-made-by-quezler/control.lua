@@ -18,7 +18,7 @@ script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
     textfield = player.gui.center.add{
       type = 'textfield',
       name = 'newsletter-for-mods-made-by-quezler-textfield',
-      
+
       text = event.surface,
     }
   else
