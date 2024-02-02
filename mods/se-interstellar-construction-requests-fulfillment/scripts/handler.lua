@@ -41,6 +41,7 @@ end
 
 local entity_name_bypasses_proxy_whitelist = {
   ['fietff-container-1'] = true,
+  ['glutenfree-equipment-train-stop-template-container'] = true,
 }
 function Handler.regenerate_item_request_proxy_whitelist()
   global.item_request_proxy_whitelist = {}
