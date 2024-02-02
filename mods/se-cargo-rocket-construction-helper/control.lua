@@ -27,17 +27,17 @@ end)
 
 --
 
-local events = {
-  [defines.events.on_built_entity] = silo.on_created_entity,
-  [defines.events.on_robot_built_entity] = silo.on_created_entity,
-  [defines.events.script_raised_built] = silo.on_created_entity,
-  [defines.events.script_raised_revive] = silo.on_created_entity,
-  [defines.events.on_entity_cloned] = silo.on_created_entity,
-}
-
-for event, handler in pairs(events) do
-  script.on_event(event, handler)
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+}) do
+  script.on_event(event, silo.on_created_entity, {
+    {filter = 'name', name = 'se-rocket-launch-pad'},
+  })
 end
+
 
 script.on_nth_tick(60 * 10, function()
   silo.every_10_seconds()

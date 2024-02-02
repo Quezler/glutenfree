@@ -11,20 +11,9 @@ function silo.init()
 
 end
 
-function silo.is_valid_cargo_rocket_silo(entity)
-  if not entity then return false end
-  if not entity.valid then return false end
-  if entity.type ~= "container" then return false end
-  if entity.name ~= "se-rocket-launch-pad" then return false end
-
-  return true
-end
-
 function silo.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
-  if not silo.is_valid_cargo_rocket_silo(entity) then return end
 
-  -- game.print(entity.name)
   silo.register(entity)
 end
 
@@ -65,8 +54,10 @@ function silo.random_tick(entry)
 
   --
 
-  local missing_sections = 100 - entry.combinator.get_or_create_control_behavior().get_signal(2).count -- todo: - any sections still in the container
-  local missing_capsules = 1   - entry.combinator.get_or_create_control_behavior().get_signal(3).count -- todo: - any capsules still in the container
+  local container_inventory = entry.container.get_inventory(defines.inventory.chest)
+  
+  local missing_sections = 100 - entry.combinator.get_or_create_control_behavior().get_signal(2).count - container_inventory.get_item_count('se-cargo-rocket-section')
+  local missing_capsules = 1   - entry.combinator.get_or_create_control_behavior().get_signal(3).count - container_inventory.get_item_count('se-space-capsule')
 
   if missing_sections > 0 or missing_capsules > 0 then
 
