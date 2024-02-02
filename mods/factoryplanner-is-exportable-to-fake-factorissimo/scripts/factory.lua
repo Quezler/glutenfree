@@ -1,4 +1,5 @@
 local shared = require('shared')
+local util = require('__core__.lualib.util')
 
 local mod_prefix = 'fietff-'
 local Factory = {}
@@ -36,6 +37,20 @@ function Factory.slots_required_for(ingredients)
     slots = slots + math.ceil(ingredient.amount / item_prototype.stack_size)
   end
   return slots
+end
+
+function Factory.inflate_buffers(struct)
+  for _, ingredient in ipairs(struct.clipboard.ingredients) do
+    struct.input_buffer[ingredient.name] = struct.input_buffer[ingredient.name] or 0
+  end
+
+  for _, product in ipairs(struct.clipboard.products) do
+    struct.output_buffer[product.name] = struct.output_buffer[product.name] or 0
+  end
+
+  for _, byproduct in ipairs(struct.clipboard.byproducts) do
+    struct.output_buffer[byproduct.name] = struct.output_buffer[byproduct.name] or 0
+  end
 end
 
 function Factory.on_created_entity(event)
@@ -109,17 +124,7 @@ function Factory.on_created_entity(event)
     rendered = {},
   }
 
-  for _, ingredient in ipairs(clipboard.ingredients) do
-    struct.input_buffer[ingredient.name] = 0
-  end
-
-  for _, product in ipairs(clipboard.products) do
-    struct.output_buffer[product.name] = 0
-  end
-
-  for _, byproduct in ipairs(clipboard.byproducts) do
-    struct.output_buffer[byproduct.name] = 0
-  end
+  Factory.inflate_buffers(struct)
 
   struct.rendered.factory_name = rendering.draw_text{
     text = clipboard.factory_name,
@@ -279,6 +284,7 @@ function Factory.tick_struct(struct)
 end
 
 function Factory.on_entity_settings_pasted(event)
+  -- game.print(event.source.name .. ' -> ' .. event.destination.name)
   if event.source.name == mod_prefix .. "container-1" and event.destination.type == "logistic-container" then
     for i = 1, event.destination.request_slot_count, 1 do
       event.destination.clear_request_slot(i)
@@ -291,6 +297,23 @@ function Factory.on_entity_settings_pasted(event)
     for i, ingredient in ipairs(struct.clipboard.ingredients) do
       event.destination.set_request_slot({name = ingredient.name, count = math.ceil(ingredient.amount)}, i)
     end
+  end
+
+  if event.source.name == mod_prefix .. "container-1" and event.destination.name == mod_prefix .. "container-1" then
+    local source_struct = global.structs[event.source.unit_number]
+    local destination_struct = global.structs[event.destination.unit_number]
+
+    destination_struct.clipboard = table.deepcopy(source_struct.clipboard)
+    Factory.inflate_buffers(destination_struct) -- we do not erase the old buffers
+    destination_struct.output_slots_required = table.deepcopy(source_struct.output_slots_required)
+
+    rendering.set_text(destination_struct.rendered.factory_name, rendering.get_text(source_struct.rendered.factory_name))
+    rendering.set_text(destination_struct.rendered.factory_description, rendering.get_text(source_struct.rendered.factory_description))
+
+    -- hmm, shall we also take out the coins and reset power usage here? or shall we keep it simple and allow it to persist?
+    -- since well the factory gets a tick right after and if not all the stuff is in there it'll wait for construction first anyways.
+
+    Factory.tick_struct(destination_struct)
   end
 end
 
