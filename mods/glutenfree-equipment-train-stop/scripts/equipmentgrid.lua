@@ -30,22 +30,37 @@ function equipmentgrid.tick_rolling_stock(entry, entity)
   local template_contents = template.grid.get_contents()
   if equipmentgrid.contents_are_equal(template_contents, contents) then return end
 
-  local network = entry.train_stop.surface.find_logistic_network_by_position(entry.template_container.position, entry.train_stop.force)
-  if not network then return equipmentgrid.flying_text(entry.train_stop, 'Template chest needs logistic coverage.') end
+  -- local network = entry.train_stop.surface.find_logistic_network_by_position(entry.template_container.position, entry.train_stop.force)
+  -- if not network then return equipmentgrid.flying_text(entry.train_stop, 'Template chest needs logistic coverage.') end
 
   -- game.print('i should update this grid')
 
   -- todo: currently does not return what is missing
-  if not equipmentgrid.logistic_network_has_contents(network, template_contents) then
-    return equipmentgrid.flying_text(entry.train_stop, 'Logistic network is lacking one or more items.')
+
+  if not equipmentgrid.contents_a_has_contents_b(template_inventory.get_contents(), template_contents) then
+    local proxy = entry.template_container.surface.find_entity('item-request-proxy', entry.template_container.position)
+
+    if proxy then
+      proxy.item_requests = template_contents
+    else
+      entity.surface.create_entity({
+        name = "item-request-proxy",
+        target = entry.template_container,
+        modules = template_contents,
+        position = entity.position,
+        force = entity.force,
+      })
+    end
+
+    return equipmentgrid.flying_text(entry.train_stop, 'Template chest is lacking one or more items.')
   end
 
   -- dump the entire current grid on the ground, we're gonna fill it from scratch
-  equipmentgrid.spill_rolling_stock_grid(entity)
+  equipmentgrid.spill_rolling_stock_grid_if_not_fit_into(entity, template_inventory)
 
   -- teleport the items over from the logistic network one-by-one and insert it
   for _, equipment in ipairs(template.grid.equipment) do
-    network.remove_item({name = equipment.name, count = 1})
+    template_inventory.remove({name = equipment.name, count = 1})
     grid.put({
       name = equipment.name,
       position = equipment.position
@@ -70,21 +85,25 @@ function equipmentgrid.flying_text(entity, text)
 end
 
 -- does the logistic network has equal or more of each of the requested contents?
-function equipmentgrid.logistic_network_has_contents(logistic_network, contents)
-  local items = logistic_network.get_contents()
-
-  for name, count in pairs(contents) do
-    if items[name] == nil then return false end
-    if items[name] < count then return false end
+function equipmentgrid.contents_a_has_contents_b(contents_a, contents_b)
+  for name, count in pairs(contents_b) do
+    if contents_a[name] == nil then return false end
+    if contents_a[name] < count then return false end
   end
 
   return true
 end
 
-function equipmentgrid.spill_rolling_stock_grid(entity)
+function equipmentgrid.spill_rolling_stock_grid_if_not_fit_into(entity, inventory)
   for item, count in pairs(entity.grid.take_all()) do
     local stack = {name = item, count = count}
-    entity.surface.spill_item_stack(entity.position, stack, false, entity.force, false)
+
+    local inserted = inventory.insert(stack)
+    stack.count = stack.count - inserted
+
+    if stack.count > 0 then
+      entity.surface.spill_item_stack(entity.position, stack, false, entity.force, false)
+    end
   end
 end
 
