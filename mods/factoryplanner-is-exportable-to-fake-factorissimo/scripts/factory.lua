@@ -104,8 +104,8 @@ function Factory.on_created_entity(event)
   }
   eei.destructible = false
 
-  -- eei.power_usage = clipboard.watts / 60
   eei.electric_buffer_size = math.max(1, clipboard.watts) -- buffer for 1 second
+  eei.power_usage = clipboard.watts / 60
 
   local struct = {
     unit_number = entity.unit_number,
@@ -310,8 +310,10 @@ function Factory.on_entity_settings_pasted(event)
     rendering.set_text(destination_struct.rendered.factory_name, rendering.get_text(source_struct.rendered.factory_name))
     rendering.set_text(destination_struct.rendered.factory_description, rendering.get_text(source_struct.rendered.factory_description))
 
-    -- hmm, shall we also take out the coins and reset power usage here? or shall we keep it simple and allow it to persist?
-    -- since well the factory gets a tick right after and if not all the stuff is in there it'll wait for construction first anyways.
+    destination_struct.eei.electric_buffer_size = math.max(1, destination_struct.clipboard.watts)
+    destination_struct.eei.power_usage = 0
+
+    destination_struct.assembler.get_inventory(defines.inventory.assembling_machine_output).clear()
 
     Factory.tick_struct(destination_struct)
   end
