@@ -70,6 +70,7 @@ function Factory.on_created_entity(event)
         goto clipboard_copied_from_source_struct
       end
     end
+    return
   end
 
   if event.robot then
