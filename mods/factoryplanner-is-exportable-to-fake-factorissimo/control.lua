@@ -233,6 +233,8 @@ script.on_event(defines.events.on_gui_click, function(event)
 
     local force_recipe = player.force.recipes[recipe_name]
     if force_recipe == nil then
+      -- todo: research impostor recipes, even though this just says "water", is "impostor water" even in the lua table?
+      -- https://github.com/ClaudeMetz/FactoryPlanner/commit/516e2d75e1dbfb9278b4d9aa59e57923301ae29e
       return player.create_local_flying_text{
         text = string.format("Force has no recipe for [%s].", recipe_name),
         create_at_cursor = true,
