@@ -56,6 +56,13 @@ end
 function Factory.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
+  if event.robot then
+    local cells = event.robot.logistic_network.cells
+    if #cells == 1 and cells[1].owner.type == "character" then
+      event.player_index = cells[1].owner.player.index
+    end
+  end
+
   if event.player_index == nil then
     game.print(string.format('The %s should only be built by players.', entity.name))
     entity.destroy()
