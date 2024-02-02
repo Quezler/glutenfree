@@ -218,7 +218,7 @@ function Factory.tick_struct(struct)
   local purse = struct.assembler.get_inventory(defines.inventory.assembling_machine_output)
   local purse_coin_count = purse.get_item_count(mod_prefix .. 'coin')
   if 60 > purse_coin_count then
-    return rendering.set_text(struct.rendered.factory_message, string.format('[img=utility/status_working] charging up seconds (%s/60)', purse_coin_count))
+    return rendering.set_text(struct.rendered.factory_message, string.format('[img=utility/status_working] working (%s/60)', purse_coin_count))
   end
   struct.eei.power_usage = 0 -- disable power usage until after a successful craft cycle
 
