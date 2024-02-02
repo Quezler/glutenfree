@@ -56,6 +56,22 @@ end
 function Factory.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
+  local clipboard = nil
+  local player = nil
+
+  if entity.type == "entity-ghost" then
+    if entity.tags and entity.tags.source_struct_unit_number then
+      local source_struct = global.structs[entity.tags.source_struct_unit_number]
+      if source_struct then
+        clipboard = table.deepcopy(source_struct.clipboard)
+        local _, revived, _ = entity.revive{}
+        if revived == nil then return end
+        entity = revived
+        goto clipboard_copied_from_source_struct
+      end
+    end
+  end
+
   if event.robot then
     local cells = event.robot.logistic_network.cells
     if #cells == 1 and cells[1].owner.type == "character" then
@@ -69,8 +85,8 @@ function Factory.on_created_entity(event)
     return
   end
 
-  local player = game.get_player(event.player_index)
-  local clipboard = global.clipboards[player.index]
+  player = game.get_player(event.player_index)
+  clipboard = global.clipboards[player.index]
   if not clipboard then
     entity.destroy()
     return player.create_local_flying_text{
@@ -80,6 +96,8 @@ function Factory.on_created_entity(event)
   else
     global.clipboards[player.index] = nil -- mark clipboard as consumed
   end
+  
+  ::clipboard_copied_from_source_struct::
 
   local combinator = entity.surface.create_entity{
     name = mod_prefix .. 'constant-combinator',
@@ -323,6 +341,37 @@ function Factory.on_entity_settings_pasted(event)
     destination_struct.assembler.get_inventory(defines.inventory.assembling_machine_output).clear()
 
     Factory.tick_struct(destination_struct)
+  end
+end
+
+function Factory.on_player_setup_blueprint(event)
+  local player = game.get_player(event.player_index)
+  if player.connected == false then return end
+
+  local blueprint = nil
+
+  if player.blueprint_to_setup and player.blueprint_to_setup.valid_for_read then blueprint = player.blueprint_to_setup
+  elseif player.cursor_stack.valid_for_read and player.cursor_stack.is_blueprint then blueprint = player.cursor_stack end
+
+  if blueprint == nil then return end
+  if blueprint.is_blueprint_setup() == false then return end
+
+  local mapping = event.mapping.get()
+  local blueprint_entities = blueprint.get_blueprint_entities()
+  if blueprint_entities then
+    for _, blueprint_entity in ipairs(blueprint_entities) do
+      if blueprint_entity.name == mod_prefix .. "container-1" then
+        local entity = mapping[blueprint_entity.entity_number]
+        if entity then
+          local struct = global.structs[entity.unit_number]
+          if struct then
+            blueprint.set_blueprint_entity_tags(blueprint_entity.entity_number, {
+              source_struct_unit_number = struct.unit_number,
+            })
+          end
+        end
+      end
+    end
   end
 end
 

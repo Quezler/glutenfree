@@ -395,6 +395,10 @@ for _, event in ipairs({
     {filter = 'name', name = mod_prefix .. 'container-1'},
     {filter = 'name', name = mod_prefix .. 'container-2'},
     {filter = 'name', name = mod_prefix .. 'container-3'},
+
+    {filter = 'ghost_name', name = mod_prefix .. 'container-1'},
+    {filter = 'ghost_name', name = mod_prefix .. 'container-2'},
+    {filter = 'ghost_name', name = mod_prefix .. 'container-3'},
   })
 end
 
@@ -438,3 +442,4 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
 end)
 
 script.on_event(defines.events.on_entity_settings_pasted, Factory.on_entity_settings_pasted)
+script.on_event(defines.events.on_player_setup_blueprint, Factory.on_player_setup_blueprint)
