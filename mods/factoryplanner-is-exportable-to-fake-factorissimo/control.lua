@@ -198,10 +198,17 @@ script.on_event(defines.events.on_gui_click, function(event)
     local machine_count = math.ceil(production_table.children[offset + columns['fp.pu_machine']].children[1].number)
 
     local machine_prototype = game.entity_prototypes[machine_name]
-    local item_to_place_this = machine_prototype.items_to_place_this[1]
+    if machine_prototype.type == 'rocket-silo' or machine_prototype.type == 'offshore-pump' then
+      return player.create_local_flying_text{
+        text = string.format("Machines of type [%s] cannot be placed inside.", machine_prototype.type),
+        create_at_cursor = true,
+      }
+    end
+    
+    local item_to_place_this = machine_prototype.items_to_place_this and machine_prototype.items_to_place_this[1] or nil -- placed by compound entities
     if item_to_place_this == nil then
       return player.create_local_flying_text{
-        text = string.format("The %s machine has no building materials.", machine_name),
+        text = string.format("The [%s] machine has no building materials.", machine_name),
         create_at_cursor = true,
       }
     else
