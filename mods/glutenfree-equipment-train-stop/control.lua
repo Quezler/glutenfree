@@ -32,7 +32,7 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, on_created_entity, {
+  script.on_event(event, handler.on_created_entity, {
     {filter = 'name', name = 'glutenfree-equipment-train-stop-station'},
   })
 end
