@@ -394,11 +394,14 @@ script.on_event(defines.events.on_gui_click, function(event)
   + Factory.slots_required_for(clipboard.byproducts)
   + Factory.slots_required_for(clipboard.ingredients)
 
+  local close_gui_after_grabbing_factory = true
+
   if estimated_slot_requirement > 40 then
     player.create_local_flying_text{
       text = string.format("Recipe may take %d/40 slots.", estimated_slot_requirement),
       create_at_cursor = true,
     }
+    close_gui_after_grabbing_factory = false
   end
 
   local factory_item = mod_prefix .. 'item-1'
@@ -424,7 +427,7 @@ script.on_event(defines.events.on_gui_click, function(event)
   end
 
   player.cursor_stack.set_stack({name = factory_item, count = 1}) -- give `RemoteView.get_stack_limit(stack)` more options for modders plox
-  -- player.opened = nil
+  if close_gui_after_grabbing_factory then player.opened = nil end
 
   global.clipboards[player.index] = clipboard
   log(serpent.block(clipboard, {sortkeys = false}))
