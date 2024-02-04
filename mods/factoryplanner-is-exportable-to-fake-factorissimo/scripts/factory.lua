@@ -135,9 +135,10 @@ function Factory.on_created_entity(event)
 
   local struct = {
     unit_number = entity.unit_number,
-    version = 1,
+    version = 2,
 
     container = entity,
+    combinator = combinator,
     assembler = assembler,
     eei = eei,
 
@@ -206,6 +207,11 @@ function Factory.tick_struct(struct)
       rendering.set_text(struct.rendered.factory_description, struct.clipboard.products[1].amount .. 'x ' .. struct.clipboard.factory_description)
     end
     struct.version = 1
+  end
+
+  if struct.version == 1 then
+    struct.combinator = struct.container.surface.find_entity(mod_prefix .. 'constant-combinator', struct.container.position)
+    struct.version = 2
   end
 
   local inventory = struct.container.get_inventory(defines.inventory.chest)
@@ -330,6 +336,8 @@ function Factory.on_entity_settings_pasted(event)
     local destination_struct = global.structs[event.destination.unit_number]
 
     destination_struct.clipboard = table.deepcopy(source_struct.clipboard)
+    destination_struct.combinator.get_control_behavior().parameters = source_struct.combinator.get_control_behavior().parameters
+
     Factory.inflate_buffers(destination_struct) -- we do not erase the old buffers
     destination_struct.output_slots_required = table.deepcopy(source_struct.output_slots_required)
 
