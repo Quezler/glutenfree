@@ -18,8 +18,7 @@ local function create_container(config)
     selection_box = config.selection_box,
     vehicle_impact_sound = { filename = '__base__/sound/car-stone-impact.ogg', volume = 1.0 },
   
-    -- inventory_size = 10 * config.i,
-    inventory_size = 40,
+    inventory_size = 40 * config.i,
     enable_inventory_bar = false,
   
     flags = {
