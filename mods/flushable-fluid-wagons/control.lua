@@ -103,11 +103,10 @@ script.on_event(defines.events.on_player_main_inventory_changed, function(event)
   local player = game.get_player(event.player_index)
 
   local tank = _global.player_should_open[player.index]
-  _global.player_should_open[player.index] = nil
-  
   if tank == nil then return end
-  if tank.valid == false then return end
+  _global.player_should_open[player.index] = nil
 
+  if tank.valid == false then return end
   player.opened = tank
 end)
 
