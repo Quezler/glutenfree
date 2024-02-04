@@ -134,6 +134,14 @@ script.on_event(defines.events.on_gui_click, function(event)
   end
 
   local items_per_timescale_button = root.children[2].children[2].children[2].children[1].children[9].children[1]
+  
+  if items_per_timescale_button.caption == "" then
+    return player.create_local_flying_text{
+      text = "You must create a factory first.",
+      create_at_cursor = true,
+    }
+  end
+  
   assert(items_per_timescale_button.caption[2][1] == "fp.pu_item")
   if items_per_timescale_button.toggled == false then
     return player.create_local_flying_text{
