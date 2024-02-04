@@ -52,6 +52,16 @@ local function create_container(config)
     end
   end
 
+  circuit_connector_definition = circuit_connector_definitions.create(universal_connector_template,
+    {
+      { variation = config.circuit_variation, main_offset = config.circuit_main_offset, shadow_offset = util.by_pixel(0, 0), show_shadow = false },
+    }
+  )
+
+  container.circuit_wire_connection_point = circuit_connector_definition.points
+  container.circuit_connector_sprites = circuit_connector_definition.sprites
+  container.circuit_wire_max_distance = default_circuit_wire_max_distance
+
   return container
 end
 
@@ -64,43 +74,37 @@ local container_1 = create_container({
     height = 320,
     shift = {1.5, 0},
   },
+  circuit_variation = 1,
+  circuit_main_offset = util.by_pixel(3, -72),
 })
 
--- local container_2 = create_container({
---   i = 2,
---   collision_box = {{-5.8, -5.8}, {5.8, 5.8}},
---   selection_box = {{-5.8, -5.8}, {5.8, 5.8}},
---   layers_inject = {
---     width = 544,
---     height = 448,
---     shift = {1.5, 0},
---   }
--- })
+local container_2 = create_container({
+  i = 2,
+  collision_box = {{-5.8, -5.8}, {5.8, 5.8}},
+  selection_box = {{-5.8, -5.8}, {5.8, 5.8}},
+  layers_inject = {
+    width = 544,
+    height = 448,
+    shift = {1.5, 0},
+  },
+  circuit_variation = 2,
+  circuit_main_offset = util.by_pixel(0, -72),
+})
 
--- local container_3 = create_container({
---   i = 3,
---   collision_box = {{-7.8, -7.8}, {7.8, 7.8}},
---   selection_box = {{-7.8, -7.8}, {7.8, 7.8}},
---   layers_inject = {
---     width = 704,
---     height = 608,
---     shift = {2, -0.09375},
---   }
--- })
+local container_3 = create_container({
+  i = 3,
+  collision_box = {{-7.8, -7.8}, {7.8, 7.8}},
+  selection_box = {{-7.8, -7.8}, {7.8, 7.8}},
+  layers_inject = {
+    width = 704,
+    height = 608,
+    shift = {2, -0.09375},
+  },
+  circuit_variation = 4,
+  circuit_main_offset = util.by_pixel(-4, -72),
+})
 
-data:extend{container_1, --[[container_2, container_3--]]}
-
-circuit_connector_definition = circuit_connector_definitions.create
-(
-  universal_connector_template,
-  {
-    { variation = 1, main_offset = util.by_pixel(3, -72), shadow_offset = util.by_pixel(0, 0), show_shadow = false },
-  }
-)
-
-container_1.circuit_wire_connection_point = circuit_connector_definition.points
-container_1.circuit_connector_sprites = circuit_connector_definition.sprites
-container_1.circuit_wire_max_distance = default_circuit_wire_max_distance
+data:extend{container_1, container_2, container_3}
 
 local item_1 = {
   type = 'item',
