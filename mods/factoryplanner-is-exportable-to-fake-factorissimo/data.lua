@@ -205,40 +205,49 @@ local recipe = {
   energy_required = 1,
 }
 
-local assembling_machine = {
-  type = 'assembling-machine',
-  name = mod_prefix .. 'assembling-machine-' .. 1,
-  localised_name = {"", {"entity-name.fietff-container-i", 1}, ' ', '(rent)'},
-  icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', 1),
-  icon_size = 64,
+data:extend{coin, category, recipe}
 
-  flags = {
-    'not-on-map',
-    'hide-alt-info',
-    'no-automated-item-removal',
-    'no-automated-item-insertion',
-  },
+local function create_assember(config)
+  local container = data.raw['container'][mod_prefix .. 'container-' .. config.i]
+  return {
+    type = 'assembling-machine',
+    name = mod_prefix .. 'assembling-machine-' .. config.i,
+    localised_name = {"", {"entity-name.fietff-container-i", config.i}, ' ', '(rent)'},
+    icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', config.i),
+    icon_size = 64,
 
-  collision_mask = {},
-  collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
-  selection_box = {{-3.8, -3.8}, {3.8, 3.8}},
-  selectable_in_game = false,
+    flags = {
+      'not-on-map',
+      'hide-alt-info',
+      'no-automated-item-removal',
+      'no-automated-item-insertion',
+    },
 
-  crafting_categories = {category.name},
-  fixed_recipe = recipe.name,
-  crafting_speed = 1,
-  energy_usage = "100kW",
-  energy_source =
-  {
-    type = "electric",
-    usage_priority = "secondary-input",
-    drain = '0kW',
-  },
+    collision_mask = {},
+    collision_box = container.collision_box,
+    selection_box = container.selection_box,
+    selectable_in_game = false,
 
-  bottleneck_ignore = true,
-}
+    crafting_categories = {category.name},
+    fixed_recipe = recipe.name,
+    crafting_speed = 1,
+    energy_usage = string.format("%dkW", 100 * config.i), -- charge more rent for higher tiers
+    energy_source =
+    {
+      type = "electric",
+      usage_priority = "secondary-input",
+      drain = '0kW',
+    },
 
-data:extend{coin, category, recipe, assembling_machine}
+    bottleneck_ignore = true,
+  }
+end
+
+local assembler_1 = create_assembler({i = 1})
+local assembler_2 = create_assembler({i = 2})
+local assembler_3 = create_assembler({i = 3})
+
+data:extend{assembler_1, assembler_2, assembler_3}
 
 local combinator = {
   type = 'constant-combinator',

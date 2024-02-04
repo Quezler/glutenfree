@@ -125,7 +125,7 @@ function Factory.on_created_entity(event)
   })
 
   local assembler = entity.surface.create_entity{
-    name = mod_prefix .. 'assembling-machine-1',
+    name = mod_prefix .. 'assembling-machine-' .. tier,
     force = entity.force,
     position = {entity.position.x, entity.position.y},
   }
