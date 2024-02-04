@@ -343,7 +343,7 @@ end
 
 function Factory.on_entity_settings_pasted(event)
   -- game.print(event.source.name .. ' -> ' .. event.destination.name)
-  if event.source.name == mod_prefix .. "container-1" and event.destination.type == "logistic-container" then
+  if container_name_to_tier[event.source.name] and event.destination.type == "logistic-container" then
     for i = 1, event.destination.request_slot_count, 1 do
       event.destination.clear_request_slot(i)
     end
@@ -357,7 +357,10 @@ function Factory.on_entity_settings_pasted(event)
     end
   end
 
-  if event.source.name == mod_prefix .. "container-1" and event.destination.name == mod_prefix .. "container-1" then
+  -- only allow copying between the same factory tiers
+  local tier_a = container_name_to_tier[event.source.name]
+  local tier_b = container_name_to_tier[event.destination.name]
+  if tier_a and tier_b and tier_a == tier_b then
     local source_struct = global.structs[event.source.unit_number]
     local destination_struct = global.structs[event.destination.unit_number]
 
