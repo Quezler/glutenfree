@@ -221,7 +221,7 @@ data:extend{coin, category, recipe, assembling_machine}
 
 local combinator = {
   type = 'constant-combinator',
-  name = mod_prefix .. 'constant-combinator',
+  name = mod_prefix .. 'constant-combinator-' .. 1,
   collision_mask = {},
   collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
   selection_box = {{-4.0, -4.0}, {4.0, 4.0}},

@@ -101,7 +101,7 @@ function Factory.on_created_entity(event)
   ::clipboard_copied_from_source_struct::
 
   local combinator = entity.surface.create_entity{
-    name = mod_prefix .. 'constant-combinator',
+    name = mod_prefix .. 'constant-combinator-1',
     force = entity.force,
     position = {entity.position.x, entity.position.y},
   }
@@ -210,7 +210,7 @@ function Factory.tick_struct(struct)
   end
 
   if struct.version == 1 then
-    struct.combinator = struct.container.surface.find_entity(mod_prefix .. 'constant-combinator', struct.container.position)
+    struct.combinator = struct.container.surface.find_entity(mod_prefix .. 'constant-combinator-1', struct.container.position)
     struct.version = 2
   end
 
