@@ -405,6 +405,16 @@ script.on_event(defines.events.on_gui_click, function(event)
     factory_item = mod_prefix .. 'item-3'
   end
 
+  if game.active_mods['space-exploration'] and factory_item ~= 'er:screenshot-camera' then
+    if remote.call("space-exploration", "remote_view_is_active", {player = player}) then
+      player.create_local_flying_text{
+        text = string.format("This tier cannot be placed in remote view."),
+        create_at_cursor = true,
+      }
+      return
+    end
+  end
+
   local close_gui_after_grabbing_factory = true
 
   -- game.print(serpent.block(global.inventory_size_from_item))
@@ -414,16 +424,6 @@ script.on_event(defines.events.on_gui_click, function(event)
       create_at_cursor = true,
     }
     close_gui_after_grabbing_factory = false
-  end
-
-  if game.active_mods['space-exploration'] and factory_item ~= 'er:screenshot-camera' then
-    if remote.call("space-exploration", "remote_view_is_active", {player = player}) then
-      player.create_local_flying_text{
-        text = string.format("This tier cannot be placed in remote view."),
-        create_at_cursor = true,
-      }
-      return
-    end
   end
 
   player.cursor_stack.set_stack({name = factory_item, count = 1}) -- give `RemoteView.get_stack_limit(stack)` more options for modders plox
