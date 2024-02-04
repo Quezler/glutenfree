@@ -55,17 +55,19 @@ script.on_configuration_changed(on_configuration_changed)
 
 local function on_tick(event)
   for registration_number, deathrattle in pairs(global.deathrattles_out) do
-    -- i suppose i could also have just checked the deathrattles after only the player placed event,
-    -- but hey this is bound to work too and i use structures like this in my other mods, so force of habit.
-    local placed_roboport = deathrattle.surface.find_entity(deathrattle.default_name, deathrattle.position)
-    if placed_roboport and deathrattle.surface.valid then
-      placed_roboport.destroy()
-      deathrattle.surface.create_entity{
-        name = deathrattle.mode_name,
-        force = deathrattle.force,
-        position = deathrattle.position,
-        raise_built = true,
-      }
+    if deathrattle.surface.valid then
+      -- i suppose i could also have just checked the deathrattles after only the player placed event,
+      -- but hey this is bound to work too and i use structures like this in my other mods, so force of habit.
+      local placed_roboport = deathrattle.surface.find_entity(deathrattle.default_name, deathrattle.position)
+      if placed_roboport then
+        placed_roboport.destroy()
+        deathrattle.surface.create_entity{
+          name = deathrattle.mode_name,
+          force = deathrattle.force,
+          position = deathrattle.position,
+          raise_built = true,
+        }
+      end
     end
     global.deathrattles_out[registration_number] = nil
     global.deathrattles_out_count = global.deathrattles_out_count - 1
