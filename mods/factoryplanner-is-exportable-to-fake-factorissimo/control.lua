@@ -200,9 +200,19 @@ script.on_event(defines.events.on_gui_click, function(event)
         create_at_cursor = true,
       }
     end
+
+    local recipe_cell = production_table.children[offset + columns['fp.pu_recipe']].children[2]
+    local machine_cell = production_table.children[offset + columns['fp.pu_machine']].children[1]
+
+    if machine_cell.style.name == "flib_slot_button_pink_small" or machine_cell.style.name == "flib_slot_button_orange_small" then
+      return player.create_local_flying_text{
+        text = string.format("Limiting machines is not supported."),
+        create_at_cursor = true,
+      }
+    end
     
-    local recipe_class, recipe_name = split_class_and_name(production_table.children[offset + columns['fp.pu_recipe']].children[2].sprite)
-    local machine_class, machine_name = split_class_and_name(production_table.children[offset + columns['fp.pu_machine']].children[1].sprite)
+    local recipe_class, recipe_name = split_class_and_name(recipe_cell.sprite)
+    local machine_class, machine_name = split_class_and_name(machine_cell.sprite)
     local machine_count = math.ceil(production_table.children[offset + columns['fp.pu_machine']].children[1].number)
 
     local machine_prototype = game.entity_prototypes[machine_name]
