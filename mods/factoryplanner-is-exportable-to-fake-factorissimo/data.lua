@@ -106,19 +106,27 @@ local container_3 = create_container({
 
 data:extend{container_1, container_2, container_3}
 
-local item_1 = {
-  type = 'item',
-  name = mod_prefix .. 'item-' .. 1,
-  flags = {'hidden', 'only-in-cursor'},
-  icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', 1),
-  icon_size = 64,
-  stack_size = 1,
-  place_result = container_1.name,
-}
+local function create_item(config)
+  return {
+    type = 'item',
+    name = mod_prefix .. 'item-' .. config.i,
+    flags = {'hidden', 'only-in-cursor'},
+    icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', config.i),
+    icon_size = 64,
+    stack_size = 1,
+    place_result = mod_prefix .. 'container-' ..config.i,
+  }
+end
 
-item_1.name = 'er:screenshot-camera' -- easiest way to allow space exploration's remote view to hold one :)
+local item_1 = create_item({i = 1})
+local item_2 = create_item({i = 2})
+local item_3 = create_item({i = 3})
 
-data:extend{item_1}
+if mods['space-exploration'] then
+  item_1.name = 'er:screenshot-camera' -- easiest way to allow space exploration's remote view to hold one :)
+end
+
+data:extend{item_1, item_2, item_3}
 
 local interface_1 = {
   type = 'electric-energy-interface',

@@ -116,7 +116,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
       type = "sprite-button",
       sprite = "entity/fietff-container-1",
       tooltip = {"fp.ingredients_to_factorissimo_tt"},
-      mouse_button_filter = {"left"},
+      mouse_button_filter = {"left", "middle", "right"},
     }
     button_factorissimo.style.size = 24
     button_factorissimo.style.padding = -2
@@ -399,6 +399,26 @@ script.on_event(defines.events.on_gui_click, function(event)
       text = string.format("Recipe may take %d/40 slots.", estimated_slot_requirement),
       create_at_cursor = true,
     }
+  end
+
+  local factory_item = mod_prefix .. 'item-1'
+  if game.active_mods['space-exploration'] then
+    factory_item = 'er:screenshot-camera'
+  end
+
+  if event.button == defines.mouse_button_type.middle then
+    factory_item = mod_prefix .. 'item-2'
+  end 
+  if event.button == defines.mouse_button_type.right then
+    factory_item = mod_prefix .. 'item-3'
+  end
+
+  if game.active_mods['space-exploration'] and factory_item ~= 'er:screenshot-camera' and player.cheat_mode == true then -- todo: check for remote view properly
+    player.create_local_flying_text{
+      text = string.format("This factory building cannot be placed in remote view."),
+      create_at_cursor = true,
+    }
+    return
   end
 
   -- player.cursor_stack.set_stack({name = mod_prefix .. 'item-1', count = 1})
