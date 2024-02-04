@@ -63,6 +63,10 @@ function Factory.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
   local tier = container_name_to_tier[entity.name]
+  if entity.type == "entity-ghost" then
+    tier = container_name_to_tier[entity.ghost_name]
+  end
+  assert(tier)
 
   local clipboard = nil
   local player = nil
