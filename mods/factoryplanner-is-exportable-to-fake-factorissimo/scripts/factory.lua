@@ -109,7 +109,7 @@ function Factory.on_created_entity(event)
   ::clipboard_copied_from_source_struct::
 
   local combinator = entity.surface.create_entity{
-    name = mod_prefix .. 'constant-combinator-1',
+    name = mod_prefix .. 'constant-combinator-' .. tier,
     force = entity.force,
     position = {entity.position.x, entity.position.y},
   }

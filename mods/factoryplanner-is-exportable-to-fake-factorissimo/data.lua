@@ -207,7 +207,7 @@ local recipe = {
 
 data:extend{coin, category, recipe}
 
-local function create_assember(config)
+local function create_assembler(config)
   local container = data.raw['container'][mod_prefix .. 'container-' .. config.i]
   return {
     type = 'assembling-machine',
@@ -249,30 +249,37 @@ local assembler_3 = create_assembler({i = 3})
 
 data:extend{assembler_1, assembler_2, assembler_3}
 
-local combinator = {
-  type = 'constant-combinator',
-  name = mod_prefix .. 'constant-combinator-' .. 1,
-  collision_mask = {},
-  collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
-  selection_box = {{-4.0, -4.0}, {4.0, 4.0}},
-  selection_priority = 48,
-  selectable_in_game = false,
+local function create_combinator(config)
+  local container = data.raw['container'][mod_prefix .. 'container-' .. config.i]
+  return {
+    type = 'constant-combinator',
+    name = mod_prefix .. 'constant-combinator-' .. config.i,
+    collision_mask = {},
+    collision_box = container.collision_box,
+    selection_box = {
+      {container.selection_box[1][1] - 0.2, container.selection_box[1][2] + 0.2},
+      {container.selection_box[2][1] - 0.2, container.selection_box[2][2] + 0.2},
+    },
+    selection_priority = 48,
+    selectable_in_game = false,
 
-  -- item_slot_count = 4294967295,
-  item_slot_count = 40,
-  energy_source = {type = "void"},
-  
-  circuit_wire_connection_points = data.raw['constant-combinator']['constant-combinator'].circuit_wire_connection_points,
-  activity_led_light_offsets = data.raw['constant-combinator']['constant-combinator'].activity_led_light_offsets,
-  circuit_wire_max_distance = data.raw['constant-combinator']['constant-combinator'].circuit_wire_max_distance,
-  draw_circuit_wires = false,
+    item_slot_count = container.inventory_size,
+    energy_source = {type = "void"},
+    
+    circuit_wire_connection_points = data.raw['constant-combinator']['constant-combinator'].circuit_wire_connection_points,
+    activity_led_light_offsets = data.raw['constant-combinator']['constant-combinator'].activity_led_light_offsets,
+    circuit_wire_max_distance = data.raw['constant-combinator']['constant-combinator'].circuit_wire_max_distance,
+    draw_circuit_wires = false,
 
-  flags = {
-    'not-on-map',
-    'hide-alt-info',
-  },
-}
+    flags = {
+      'not-on-map',
+      'hide-alt-info',
+    },
+  }
+end
 
-data:extend{combinator}
+local combinator_1 = create_combinator({i = 1})
+local combinator_2 = create_combinator({i = 2})
+local combinator_3 = create_combinator({i = 3})
 
-assert(combinator.item_slot_count == container_1.inventory_size)
+data:extend{combinator_1, combinator_2, combinator_3}
