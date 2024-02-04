@@ -161,12 +161,30 @@ function Factory.on_created_entity(event)
 
   Factory.inflate_buffers(struct)
 
+  local factory_name_offset = {
+    {0, -3.75},
+    {0, -5.75},
+    {0, -6.75},
+  }
+
+  local factory_description_offset = {
+    {0, -3.00},
+    {0, -5.00},
+    {0, -6.00},
+  }
+
+  local factory_message_offset = {
+    {0, 0.75},
+    {0, 1.75},
+    {0, 3.50},
+  }
+
   struct.rendered.factory_name = rendering.draw_text{
     text = clipboard.factory_name,
     color = {1, 1, 1},
     surface = entity.surface,
     target = entity,
-    target_offset = {0, -3.75},
+    target_offset = factory_name_offset[tier],
     alignment = "center",
     use_rich_text = true,
   }
@@ -181,7 +199,7 @@ function Factory.on_created_entity(event)
     color = {1, 1, 1},
     surface = entity.surface,
     target = entity,
-    target_offset = {0, -3.00},
+    target_offset = factory_description_offset[tier],
     alignment = "center",
     use_rich_text = true,
     scale = 0.5,
@@ -192,7 +210,7 @@ function Factory.on_created_entity(event)
     color = {1, 1, 1},
     surface = entity.surface,
     target = entity,
-    target_offset = {0, 0.75},
+    target_offset = factory_message_offset[tier],
     alignment = "center",
     use_rich_text = true,
     scale = 1,
