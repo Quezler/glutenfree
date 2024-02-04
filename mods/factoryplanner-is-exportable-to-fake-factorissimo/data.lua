@@ -127,40 +127,50 @@ end
 
 data:extend{item_1, item_2, item_3}
 
-local interface_1 = {
-  type = 'electric-energy-interface',
-  name = mod_prefix .. 'electric-energy-interface-' .. 1,
-  localised_name = {"", {"entity-name.fietff-container-i", 1}, ' ', '(power)'},
-  icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', 1),
-  icon_size = 64,
+local function create_interface(config)
+  local container = data.raw['container'][mod_prefix .. 'container-' .. config.i]
+  return {
+    type = 'electric-energy-interface',
+    name = mod_prefix .. 'electric-energy-interface-' .. config.i,
+    localised_name = {"", {"entity-name.fietff-container-i", config.i}, ' ', '(power)'},
+    icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', config.i),
+    icon_size = 64,
 
-  collision_mask = {},
-  collision_box = {{-3.8, -3.8 - shared.electric_energy_interface_1_y_offset}, {3.8, 3.8 - shared.electric_energy_interface_1_y_offset}},
-  selection_box = {{-0.4, -0.3}, {0.4, 0.3}},
-  selection_priority = 51,
+    collision_mask = {},
+    collision_box = {
+      {container.collision_box[1][1], container.collision_box[1][2] - shared[string.format('electric_energy_interface_%d_y_offset', config.i)]},
+      {container.collision_box[2][1], container.collision_box[2][2] - shared[string.format('electric_energy_interface_%d_y_offset', config.i)]},
+    },
+    selection_box = {{-0.4, -0.3}, {0.4, 0.3}},
+    selection_priority = 51,
 
-  max_health = 10 * 1, -- mimic the storage size, because why not
+    max_health = container.inventory_size, -- mimic the storage size, because why not
 
-  flags = {
-    'placeable-off-grid',
-  },
+    flags = {
+      'placeable-off-grid',
+    },
 
-  -- gui_mode = 'all',
-  energy_source =
-  {
-    type = "electric",
-    usage_priority = "secondary-input"
-  },
+    -- gui_mode = 'all',
+    energy_source =
+    {
+      type = "electric",
+      usage_priority = "secondary-input"
+    },
 
-  picture = {
-    filename = mod_path .. '/graphics/entities/electric-energy-interface.png',
-    width = 30,
-    height = 20,
-    scale = 0.5,
+    picture = {
+      filename = mod_path .. '/graphics/entities/electric-energy-interface.png',
+      width = 30,
+      height = 20,
+      scale = 0.5,
+    }
   }
-}
+end
 
-data:extend{interface_1}
+local interface_1 = create_interface({i = 1})
+local interface_2 = create_interface({i = 2})
+local interface_3 = create_interface({i = 3})
+
+data:extend{interface_1, interface_2, interface_3}
 
 local coin = {
   type = 'item',

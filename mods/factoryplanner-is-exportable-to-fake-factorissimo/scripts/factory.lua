@@ -53,8 +53,16 @@ function Factory.inflate_buffers(struct)
   end
 end
 
+local container_name_to_tier = {
+  [mod_prefix .. 'container-1'] = 1,
+  [mod_prefix .. 'container-2'] = 2,
+  [mod_prefix .. 'container-3'] = 3,
+}
+
 function Factory.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
+
+  local tier = container_name_to_tier[entity.name]
 
   local clipboard = nil
   local player = nil
@@ -124,9 +132,9 @@ function Factory.on_created_entity(event)
   assembler.destructible = false
 
   local eei = entity.surface.create_entity{
-    name = mod_prefix .. 'electric-energy-interface-1',
+    name = mod_prefix .. 'electric-energy-interface-' .. tier,
     force = entity.force,
-    position = {entity.position.x, entity.position.y + shared.electric_energy_interface_1_y_offset},
+    position = {entity.position.x, entity.position.y + shared[string.format('electric_energy_interface_%d_y_offset', tier)]},
   }
   eei.destructible = false
 
