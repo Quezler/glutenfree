@@ -393,16 +393,13 @@ script.on_event(defines.events.on_gui_click, function(event)
     end
   end
 
-  local close_gui_after_grabbing_factory = true
+  -- close the gui only if the factory has enough slots
+  local close_gui_after_grabbing_factory = global.inventory_size_from_item[factory_item] >= estimated_slot_requirement
 
-  -- game.print(serpent.block(global.inventory_size_from_item))
-  if estimated_slot_requirement > global.inventory_size_from_item[factory_item] then
-    player.create_local_flying_text{
-      text = string.format("Recipe may take %d/%d slots.", estimated_slot_requirement, global.inventory_size_from_item[factory_item]),
-      create_at_cursor = true,
-    }
-    close_gui_after_grabbing_factory = false
-  end
+  player.create_local_flying_text{
+    text = string.format("[item=%s] %d/%d", factory_item, estimated_slot_requirement, global.inventory_size_from_item[factory_item]),
+    create_at_cursor = true,
+  }
 
   player.cursor_stack.set_stack({name = factory_item, count = 1}) -- give `RemoteView.get_stack_limit(stack)` more options for modders plox
   if close_gui_after_grabbing_factory then player.opened = nil end
