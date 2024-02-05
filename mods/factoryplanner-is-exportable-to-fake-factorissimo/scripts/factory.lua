@@ -351,17 +351,28 @@ end
 
 function Factory.on_entity_settings_pasted(event)
   -- game.print(event.source.name .. ' -> ' .. event.destination.name)
+
   if container_name_to_tier[event.source.name] and event.destination.type == "logistic-container" then
     for i = 1, event.destination.request_slot_count, 1 do
       event.destination.clear_request_slot(i)
     end
 
     local struct = global.structs[event.source.unit_number]
-    -- if struct == nil then return end
-    -- if struct.container.valid == false then return end
 
     for i, ingredient in ipairs(struct.clipboard.ingredients) do
       event.destination.set_request_slot({name = ingredient.name, count = math.ceil(ingredient.amount)}, i)
+    end
+  end
+
+  if container_name_to_tier[event.source.name] and event.destination.type == "infinity-container" then
+    for i, filter in ipairs(event.destination.infinity_container_filters) do
+      event.destination.set_infinity_container_filter(filter.index, nil)
+    end
+
+    local struct = global.structs[event.source.unit_number]
+
+    for i, ingredient in ipairs(struct.clipboard.ingredients) do
+      event.destination.set_infinity_container_filter(i, {name = ingredient.name, count = math.ceil(ingredient.amount)})
     end
   end
 
