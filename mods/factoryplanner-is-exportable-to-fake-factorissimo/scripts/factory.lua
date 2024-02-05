@@ -349,6 +349,22 @@ function Factory.tick_struct(struct)
   rendering.set_text(struct.rendered.factory_message, "[img=utility/status_working] produced output")
 end
 
+-- local function infinity_container_get_gui_mode(entity_name)
+--   local prototype = game.entity_prototypes[entity_name]
+--   local description = prototype.localised_description
+
+--   if description == nil then return "all" end
+--   if description[1] ~= "?" then return "all" end
+
+--   for _, parameter in ipairs(description) do
+--     if parameter[1] == 'infinity-container.gui-mode-all' then return "all" end
+--     if parameter[1] == 'infinity-container.gui-mode-admins' then return "admins" end
+--     if parameter[1] == 'infinity-container.gui-mode-none' then return "none" end
+--   end
+
+--   return "all"
+-- end
+
 function Factory.on_entity_settings_pasted(event)
   -- game.print(event.source.name .. ' -> ' .. event.destination.name)
 
@@ -365,6 +381,16 @@ function Factory.on_entity_settings_pasted(event)
   end
 
   if container_name_to_tier[event.source.name] and event.destination.type == "infinity-container" then
+    local mode = infinity_container_get_gui_mode(event.destination.name)
+    -- local player = game.get_player(event.player_index)
+
+    -- if (mode == "none") or (mode == "admins" and player.admin == false) then
+    --   return player.create_local_flying_text{
+    --     text = string.format(string.format("data.raw['infinity-container']['%s'].gui_mode = '%s'", event.destination.name, mode)),
+    --     create_at_cursor = true,
+    --   }
+    -- end
+    
     for i, filter in ipairs(event.destination.infinity_container_filters) do
       event.destination.set_infinity_container_filter(filter.index, nil)
     end
