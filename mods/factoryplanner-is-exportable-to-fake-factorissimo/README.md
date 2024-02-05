@@ -37,6 +37,8 @@ Well as you can see my data stage mod failed due to complexity reasons, easier t
 Factorissimo has 3 building sizes, i currently only support the small one whilst i figure out how to "balance" them out,
 e.g. slots in terms of buildings & materials it can fit, amount of text that can fit over it and thus limit, and other stuff.
 
+1.1.0 update: you can get the 2nd and 3rd tier by middle & right clicking the button respectively 
+
 # credits
 
 - `./graphics/factory/*` and their prototype defintions are MIT licenced to MagmaMcFry (original author) and notnotmelon (fork maintainer)
