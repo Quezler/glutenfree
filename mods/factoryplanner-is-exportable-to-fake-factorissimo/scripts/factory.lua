@@ -255,6 +255,10 @@ function Factory.tick_struct(struct)
     if missing > 0 then
       proxy_requests[building.name] = missing
     end
+
+    -- pretend buildings (and their modules) are not in the inventory in case they're products too
+    inventory_contents[building.name] = (inventory_contents[building.name] or 0) - building.amount
+    if 0 >= inventory_contents[building.name] then inventory_contents[building.name] = nil end
   end
 
   if table_size(proxy_requests) > 0 then
