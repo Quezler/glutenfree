@@ -72,27 +72,7 @@ local function get_ingredient(ingredients, ingredient_type, ingredient_name)
   end
 end
 
-local function get_factory_description(clipboard)
-  local description = ""
-
-  for _, product in ipairs(clipboard.products) do
-    description = description .. string.format('[%s=%s]', product.type, product.name)
-  end
-  description = description .. ' - '
-
-  if #clipboard.byproducts > 0 then
-    for _, byproduct in ipairs(clipboard.byproducts) do
-      description = description .. string.format('[%s=%s]', byproduct.type, byproduct.name)
-    end
-    description = description .. ' - '
-  end
-
-  for _, ingredient in ipairs(clipboard.ingredients) do
-    description = description .. string.format('[%s=%s]', ingredient.type, ingredient.name)
-  end
-
-  return description
-end
+local get_factory_description = Factory.get_factory_description
 
 script.on_event(defines.events.on_gui_opened, function(event)
   if event.gui_type ~= defines.gui_type.custom then return end
@@ -274,10 +254,6 @@ script.on_event(defines.events.on_gui_click, function(event)
     end
   end
 
-  -- set the factory description before replacing fluids with barrels
-  clipboard.factory_name = '' -- so the order gets preserved for the dump
-  clipboard.factory_description = get_factory_description(clipboard)
-
   do -- ensure all input/output fluids are barreled
     for i, product in ipairs(clipboard.products) do
       if product.type == "fluid" and global.can_be_barreled[product.name] then
@@ -363,7 +339,9 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   local factories = root.children[2].children[1].children[1].children[2].children
   clipboard.factory_name = active_radio_button(factories).caption[3]
+  clipboard.factory_description = get_factory_description(clipboard)
   -- log(clipboard.factory_name)
+  -- log(clipboard.factory_description)
 
   local energy_amount = tonumber(root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[2])
   local energy_prefix = root.children[2].children[1].children[2].children[1].children[3].children[1].tooltip[3][1] -- k/m/w (watt)

@@ -4,6 +4,28 @@ local util = require('__core__.lualib.util')
 local mod_prefix = 'fietff-'
 local Factory = {}
 
+function Factory.get_factory_description(clipboard)
+  local description = ""
+
+  for _, product in ipairs(clipboard.products) do
+    description = description .. string.format('[%s=%s]', product.type, product.name)
+  end
+  description = description .. ' - '
+
+  if #clipboard.byproducts > 0 then
+    for _, byproduct in ipairs(clipboard.byproducts) do
+      description = description .. string.format('[%s=%s]', byproduct.type, byproduct.name)
+    end
+    description = description .. ' - '
+  end
+
+  for _, ingredient in ipairs(clipboard.ingredients) do
+    description = description .. string.format('[%s=%s]', ingredient.type, ingredient.name)
+  end
+
+  return description
+end
+
 function Factory.get_constant_combinator_parameters(clipboard)
   local parameters = {}
   local i = 1
@@ -147,7 +169,7 @@ function Factory.on_created_entity(event)
 
   local struct = {
     unit_number = entity.unit_number,
-    version = 2,
+    version = 3,
 
     container = entity,
     combinator = combinator,
@@ -242,6 +264,15 @@ function Factory.tick_struct(struct)
   if struct.version == 1 then
     struct.combinator = struct.container.surface.find_entity(mod_prefix .. 'constant-combinator-1', struct.container.position)
     struct.version = 2
+  end
+
+  if struct.version == 2 then
+    if #struct.clipboard.products == 1 then
+      rendering.set_text(struct.rendered.factory_description, struct.clipboard.products[1].amount .. 'x ' .. Factory.get_factory_description(struct.clipboard))
+    else
+      rendering.set_text(struct.rendered.factory_description, Factory.get_factory_description(struct.clipboard))
+    end
+    struct.version = 3
   end
 
   local inventory = struct.container.get_inventory(defines.inventory.chest)
