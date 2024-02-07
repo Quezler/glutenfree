@@ -231,7 +231,7 @@ local function create_assembler(config)
     crafting_categories = {category.name},
     fixed_recipe = recipe.name,
     crafting_speed = 1,
-    energy_usage = '1' .. string.rep('00', config.i) .. 'kW',
+    energy_usage = '100' .. string.rep('0', config.i) .. 'kW',
     energy_source =
     {
       type = "electric",
