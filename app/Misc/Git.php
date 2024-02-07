@@ -13,7 +13,7 @@ class Git
         // todo: bake with gluten
         foreach ($lines as $line) {
             if (str_ends_with($line, '/info.json')) $touched_info_json = true;
-            if (str_starts_with($line, '-    "version":') && $touched_info_json) return true;
+            if (str_starts_with($line, '+    "version":') && $touched_info_json) return true;
         }
 
         return false;

@@ -26,6 +26,7 @@ class Changelog
 
             $commit[] = $line;
         }
+        $commits[] = implode(PHP_EOL, $commit);
 
         array_shift($commits);
         $commits = array_reverse($commits);
