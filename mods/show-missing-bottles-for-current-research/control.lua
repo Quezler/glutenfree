@@ -104,18 +104,22 @@ local function get_missing_counts(force, list)
       if struct.entity.force == force then
         if struct.entity.status == defines.entity_status.missing_science_packs then
           local inventory = struct.entity.get_inventory(defines.inventory.lab_input)
-          for _, item_name in ipairs(list) do
-            if global.lab_inputs[struct.entity.name][item_name] then -- ignore labs that cannot use this item
-              if inventory.get_item_count(item_name) == 0 then
-                -- game.print(serpent.line({
-                --   item_name,
-                --   struct.entity.name,
-                --   struct.entity.surface.name,
-                --   struct.entity.position
-                -- }))
-                missing_counts[item_name] = (missing_counts[item_name] or 0) + 1
+          if inventory.is_empty() == false then
+            
+            for _, item_name in ipairs(list) do
+              if global.lab_inputs[struct.entity.name][item_name] then -- ignore labs that cannot use this item
+                if inventory.get_item_count(item_name) == 0 then
+                  -- game.print(serpent.line({
+                  --   item_name,
+                  --   struct.entity.name,
+                  --   struct.entity.surface.name,
+                  --   struct.entity.position
+                  -- }))
+                  missing_counts[item_name] = (missing_counts[item_name] or 0) + 1
+                end
               end
             end
+
           end
         end
       end
