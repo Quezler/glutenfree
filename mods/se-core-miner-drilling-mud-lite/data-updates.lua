@@ -10,12 +10,10 @@ local to_extend = {}
 
 for _, resource in pairs(data.raw['resource']) do
   if starts_with(resource.name, 'se-core-fragment-') == true then
-    if ends_with(resource.name, '-sealed') == false then
-      log(resource.name)
+    log(resource.name)
 
-      resource.minable.required_fluid = 'se-core-miner-drill-drilling-mud'
-      resource.minable.fluid_amount = 10
-    end
+    resource.minable.required_fluid = 'se-core-miner-drill-drilling-mud'
+    resource.minable.fluid_amount = 10
   end
 end
 
