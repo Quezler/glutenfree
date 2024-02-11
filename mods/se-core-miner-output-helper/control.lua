@@ -176,6 +176,7 @@ script.on_event(defines.events.on_gui_click, function(event)
   if event.element.tags and event.element.tags.action and event.element.tags.action == "go-to-zone" then
     -- todo: also check if the "se-map-view-zone-details" is open at all since "go-to-zone" sounds generic?
     local player = game.get_player(event.player_index)
+    if event.element.parent.parent.parent['right-flow'] == nil then return end -- when only 1 satellite has been launched
     local container = event.element.parent.parent.parent['right-flow']['container-frame']
     local content = container[Zonelist.name_zone_data_content_scroll_pane]
     local zone_index = event.element.tags.zone_index
