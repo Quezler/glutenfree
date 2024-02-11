@@ -7,10 +7,10 @@ tank.collision_box = {
   {tank.collision_box[1][1], tank.collision_box[1][2] -1},
   {tank.collision_box[2][1], tank.collision_box[2][2] -1},
 }
--- tank.selection_box = {
---   {tank.selection_box[1][1], tank.selection_box[1][2] -1},
---   {tank.selection_box[2][1], tank.selection_box[2][2] -1},
--- }
+tank.selection_box = {
+  {tank.selection_box[1][1], tank.selection_box[1][2] -1},
+  {tank.selection_box[2][1], tank.selection_box[2][2] -1},
+}
 
 for _, pipe_connection in ipairs(tank.fluid_box.pipe_connections) do
   pipe_connection.position[2] = pipe_connection.position[2] - 1
