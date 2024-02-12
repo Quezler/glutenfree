@@ -1,4 +1,5 @@
 local Spaceship = require('__space-exploration-scripts__.spaceship')
+Spaceship.name_spaceship_floor = Spaceship.names_spaceship_floors[1]
 
 -- we need to know when the spaceship is done with the integrity check, since "stop" calls Spaceship.check_integrity_stress(spaceship),
 -- the trick we will use is creating entities on created tiles that will be destroyed by the `entity.damage(150` detatched tiles mechanic,
@@ -18,11 +19,20 @@ local function register_on_integrity_check_passed_event(surface)
     table.insert(tiles, {x = engine_x, y = engine_y})
   end
 
+  local set_tiles = {}
+
   for _, position in ipairs(tiles) do
-    surface.create_entity{
-      name = 'small-lamp',
-      position = position,
-    }
+    if surface.get_tile(position).name ~= Spaceship.name_spaceship_floor then -- if there is already spaceship floor here, the engine is likely inside/stacked
+      surface.create_entity{
+        name = 'small-lamp',
+        position = position,
+      }
+      table.insert(set_tiles, {position = position, name = Spaceship.name_spaceship_floor})
+    end
+  end
+
+  if #set_tiles > 0 then
+    surface.set_tiles(set_tiles)
   end
 end
 
