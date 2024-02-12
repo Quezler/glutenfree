@@ -48,19 +48,18 @@ local function register_on_integrity_check_passed_event(surface)
 
   local struct = {
     surface = surface,
-
     lamps = {},
-    lamp_positions = {},
-    lamp_registration_numbers = {},
   }
 
   for _, lamp in ipairs(lamps) do
     local registration_number = script.register_on_entity_destroyed(lamp)
     global.on_integrity_check_passed_event[registration_number] = index
 
-    table.insert(struct.lamps, lamp)
-    table.insert(struct.lamp_positions, lamp.position)
-    table.insert(struct.lamp_registration_numbers, registration_number)
+    table.insert(struct.lamps, {
+      entity = lamp,
+      position = lamp.position,
+      registration_number = registration_number,
+    })
   end
 
   global.on_integrity_check_passed_events[index] = struct
@@ -142,16 +141,13 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
       local set_tiles = {}
 
       for _, lamp in ipairs(struct.lamps) do
-        lamp.destroy()
-        table.insert(set_tiles, {position = struct.lamp_positions[_], name = 'se-space'})
+        lamp.entity.destroy()
+        table.insert(set_tiles, {position = lamp.position, name = 'se-space'})
+        global.on_integrity_check_passed_event[lamp.registration_number] = nil
       end
 
       if #set_tiles > 0 then
         struct.surface.set_tiles(set_tiles)
-      end
-
-      for _, lamp_registration_number in ipairs(struct.lamp_registration_numbers) do
-        global.on_integrity_check_passed_event[lamp_registration_number] = nil
       end
 
       global.on_integrity_check_passed_events[struct_id] = nil
