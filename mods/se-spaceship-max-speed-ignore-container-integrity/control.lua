@@ -90,7 +90,6 @@ commands.add_command('se-spaceship-max-speed-ignore-container-integrity', nil, f
         inventory[slot].swap_stack(ghost.inventory[slot])
       end
       
-      -- todo: save inventory
       -- todo: preserve wires
       -- todo: preserve signals
 
@@ -107,22 +106,7 @@ commands.add_command('se-spaceship-max-speed-ignore-container-integrity', nil, f
     }
 
     register_on_integrity_check_passed_event(surface)
-
-    -- for _, ghost in ipairs(ghosts) do
-    --   local container = surface.create_entity{
-    --     name = ghost.name,
-    --     force = ghost.force,
-    --     position = ghost.position,
-    --   }
-
-    --   local inventory = container.get_inventory(defines.inventory.chest)
-
-    --   for slot = 1, #inventory do
-    --     inventory[slot].swap_stack(ghost.inventory[slot])
-    --   end
-
-    --   ghost.inventory.destroy()
-    -- end
+    global.surface_index_to_ghosts[surface.index] = ghosts
   end
 end)
 
@@ -130,7 +114,32 @@ script.on_init(function(event)
   global.on_integrity_check_passed_event_index = 0
   global.on_integrity_check_passed_event = {} -- registration_number to index
   global.on_integrity_check_passed_events = {} -- index to struct
+
+  global.surface_index_to_ghosts = {}
 end)
+
+local function restore_ghosts(surface)
+  local ghosts = global.surface_index_to_ghosts[surface.index]
+  if ghosts then global.surface_index_to_ghosts[surface.index] = nil
+
+    for _, ghost in ipairs(ghosts) do
+      local container = surface.create_entity{
+        name = ghost.name,
+        force = ghost.force,
+        position = ghost.position,
+      }
+
+      local inventory = container.get_inventory(defines.inventory.chest)
+
+      for slot = 1, #inventory do
+        inventory[slot].swap_stack(ghost.inventory[slot])
+      end
+
+      ghost.inventory.destroy()
+    end
+
+  end
+end
 
 script.on_event(defines.events.on_entity_destroyed, function(event)
   local struct_id = global.on_integrity_check_passed_event[event.registration_number]
@@ -153,6 +162,7 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
       global.on_integrity_check_passed_events[struct_id] = nil
 
       game.print('integrity check done!')
+      restore_ghosts(struct.surface)
     end
   end
 end)
