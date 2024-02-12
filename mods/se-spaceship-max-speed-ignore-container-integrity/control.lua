@@ -7,7 +7,10 @@ Spaceship.name_spaceship_floor = Spaceship.names_spaceship_floors[1]
 local function register_on_integrity_check_passed_event(surface)
   local tiles = {}
 
-  for _, entity in ipairs(surface.find_entities_filtered{name = Spaceship.names_engines}) do
+  local engines = surface.find_entities_filtered{name = Spaceship.names_engines}
+  if #engines == 0 then error('this mod currently cannot handle in-flight spaceships without engines.') end
+
+  for _, entity in ipairs(engines) do
     local box = entity.bounding_box
     local engine_y = math.floor(box.right_bottom.y) + 1
     local engine_x = math.floor((box.left_top.x + box.right_bottom.x) / 2)
@@ -33,6 +36,8 @@ local function register_on_integrity_check_passed_event(surface)
 
   if #set_tiles > 0 then
     surface.set_tiles(set_tiles)
+  else
+    error('at least one engine must have space tiles below it.')
   end
 end
 
