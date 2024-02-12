@@ -116,6 +116,7 @@ script.on_init(function(event)
   global.on_integrity_check_passed_events = {} -- index to struct
 
   global.surface_index_to_ghosts = {}
+  global.surfaces_to_restore_at_tick = {}
 end)
 
 local function restore_ghosts(surface)
@@ -162,7 +163,19 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
       global.on_integrity_check_passed_events[struct_id] = nil
 
       game.print('integrity check done!')
-      restore_ghosts(struct.surface)
+      local at_tick = event.tick + 1
+      global.surfaces_to_restore_at_tick[at_tick] = global.surfaces_to_restore_at_tick[at_tick] or {}
+      global.surfaces_to_restore_at_tick[at_tick][struct.surface.index] = struct.surface
+    end
+  end
+end)
+
+script.on_event(defines.events.on_tick, function(event)
+  local at_tick = event.tick
+  local surfaces_to_restore = global.surfaces_to_restore_at_tick[at_tick]
+  if surfaces_to_restore then global.surfaces_to_restore_at_tick[at_tick] = nil
+    for surface_index, surface in pairs(surfaces_to_restore) do
+      restore_ghosts(surface)
     end
   end
 end)
