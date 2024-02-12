@@ -23,13 +23,16 @@ local function register_on_integrity_check_passed_event(surface)
   end
 
   local set_tiles = {}
+  local lamps = {}
 
   for _, position in ipairs(tiles) do
     if surface.get_tile(position).name ~= Spaceship.name_spaceship_floor then -- if there is already spaceship floor here, the engine is likely inside/stacked
-      surface.create_entity{
+      local lamp = surface.create_entity{
         name = 'small-lamp',
         position = position,
       }
+
+      table.insert(lamps, lamp)
       table.insert(set_tiles, {position = position, name = Spaceship.name_spaceship_floor})
     end
   end
@@ -37,8 +40,30 @@ local function register_on_integrity_check_passed_event(surface)
   if #set_tiles > 0 then
     surface.set_tiles(set_tiles)
   else
-    error('at least one engine must have space tiles below it.')
+    error('at least one engine must have space tiles below it.') -- supposedly also triggers if you try to register it twice
   end
+
+  local index = global.on_integrity_check_passed_event_index
+  global.on_integrity_check_passed_event_index = index + 1
+
+  local struct = {
+    surface = surface,
+
+    lamps = {},
+    lamp_positions = {},
+    lamp_registration_numbers = {},
+  }
+
+  for _, lamp in ipairs(lamps) do
+    local registration_number = script.register_on_entity_destroyed(lamp)
+    global.on_integrity_check_passed_event[registration_number] = index
+
+    table.insert(struct.lamps, lamp)
+    table.insert(struct.lamp_positions, lamp.position)
+    table.insert(struct.lamp_registration_numbers, registration_number)
+  end
+
+  global.on_integrity_check_passed_events[index] = struct
 end
 
 commands.add_command('se-spaceship-max-speed-ignore-container-integrity', nil, function(command)
@@ -99,5 +124,39 @@ commands.add_command('se-spaceship-max-speed-ignore-container-integrity', nil, f
 
     --   ghost.inventory.destroy()
     -- end
+  end
+end)
+
+script.on_init(function(event)
+  global.on_integrity_check_passed_event_index = 0
+  global.on_integrity_check_passed_event = {} -- registration_number to index
+  global.on_integrity_check_passed_events = {} -- index to struct
+end)
+
+script.on_event(defines.events.on_entity_destroyed, function(event)
+  local struct_id = global.on_integrity_check_passed_event[event.registration_number]
+  if struct_id then
+    local struct = global.on_integrity_check_passed_events[struct_id]
+    if struct then
+
+      local set_tiles = {}
+
+      for _, lamp in ipairs(struct.lamps) do
+        lamp.destroy()
+        table.insert(set_tiles, {position = struct.lamp_positions[_], name = 'se-space'})
+      end
+
+      if #set_tiles > 0 then
+        struct.surface.set_tiles(set_tiles)
+      end
+
+      for _, lamp_registration_number in ipairs(struct.lamp_registration_numbers) do
+        global.on_integrity_check_passed_event[lamp_registration_number] = nil
+      end
+
+      global.on_integrity_check_passed_events[struct_id] = nil
+
+      game.print('integrity check done!')
+    end
   end
 end)
