@@ -64,6 +64,18 @@ local function get_item_box_contents(root, item_box_index)
   return products
 end
 
+local function all_item_boxes_are_green(root, item_box_index)
+  local products = {}
+  for _, sprite_button in ipairs(root.children[2].children[2].children[1].children[item_box_index].children[2].children[1].children[1].children) do
+    if sprite_button.sprite ~= "utility/add" then
+      if sprite_button.style.name ~= "flib_slot_button_green" then
+        return false
+      end
+    end
+  end
+  return true
+end
+
 local function get_ingredient(ingredients, ingredient_type, ingredient_name)
   for i, ingredient in ipairs(ingredients) do
     if ingredient.type == ingredient_type and ingredient.name == ingredient_name then
@@ -117,7 +129,7 @@ script.on_event(defines.events.on_gui_click, function(event)
   
   if items_per_timescale_button.caption == "" then
     return player.create_local_flying_text{
-      text = "You must create a factory first.",
+      text = "You must create a factory first.", -- `a check whether a factory is selected "should" come first, but who has none?` - Quezler
       create_at_cursor = true,
     }
   end
@@ -142,9 +154,9 @@ script.on_event(defines.events.on_gui_click, function(event)
   -- log('byproducts: ' .. serpent.line(clipboard.byproducts))
   -- log('ingredients: ' .. serpent.line(clipboard.ingredients))
 
-  if #clipboard.ingredients == 0 then
+  if all_item_boxes_are_green(root, item_box_products) == false then
     return player.create_local_flying_text{
-      text = "No ingredients defined at all.", -- a check whether a factory is selected "should" come first, but who has none?
+      text = "Not all products have a green background.",
       create_at_cursor = true,
     }
   end
