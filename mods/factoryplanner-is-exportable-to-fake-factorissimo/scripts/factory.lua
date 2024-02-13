@@ -489,6 +489,19 @@ function Factory.on_player_setup_blueprint(event)
   end
 end
 
+function Factory.on_dolly_moved_entity(event)
+  -- if event.moved_entity.unit_number == nil then return end
+  local struct = global.structs[event.moved_entity.unit_number]
+  if struct == nil then return end
+
+  local position = struct.container.position
+  struct.combinator.teleport(position)
+  struct.assembler.teleport(position)
+
+  local tier = container_name_to_tier[struct.container.name]
+  struct.eei.teleport({position.x, position.y + shared[string.format('electric_energy_interface_%d_y_offset', tier)]})
+end
+
 commands.add_command(mod_prefix .. "struct", nil, function(command)
   local player = game.get_player(command.player_index)
   if player.selected == nil then return end

@@ -468,7 +468,25 @@ local function on_configuration_changed(event)
   global.inventory_size_from_item[mod_prefix .. 'item-3'] = game.entity_prototypes[mod_prefix .. 'container-3'].get_inventory_size(defines.inventory.chest)
 end
 
-script.on_init(on_configuration_changed)
+local function on_load(event)
+  if remote.interfaces["PickerDollies"] and remote.interfaces["PickerDollies"]["dolly_moved_entity_id"] then
+    script.on_event(remote.call("PickerDollies", "dolly_moved_entity_id"), Factory.on_dolly_moved_entity)
+  end
+
+  if remote.interfaces["PickerDollies"] and remote.interfaces["PickerDollies"]["add_blacklist_name"] then
+    remote.call("PickerDollies", "add_blacklist_name", mod_prefix .. 'electric-energy-interface-' .. 1)
+    remote.call("PickerDollies", "add_blacklist_name", mod_prefix .. 'electric-energy-interface-' .. 2)
+    remote.call("PickerDollies", "add_blacklist_name", mod_prefix .. 'electric-energy-interface-' .. 3)
+  end
+end
+
+script.on_init(function(event)
+  on_configuration_changed(event)
+  on_load(event)
+end)
+
+script.on_load(on_load)
+
 script.on_configuration_changed(on_configuration_changed)
 
 script.on_nth_tick(600, function(event)
