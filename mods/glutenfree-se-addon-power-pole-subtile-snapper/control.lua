@@ -2,14 +2,8 @@ local poles = require('scripts.poles')
 
 --
 
-local function init()
-  global = {}
-
-  poles.init()
-end
-
-script.on_init(init)
-script.on_configuration_changed(init)
+script.on_init(poles.init)
+script.on_configuration_changed(poles.init)
 
 --
 
@@ -20,7 +14,7 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, poleson_created_entity, {
+  script.on_event(event, poles.on_created_entity, {
     {filter = 'name', name = 'se-addon-power-pole'},
   })
 end
