@@ -174,7 +174,9 @@ script.on_event(defines.events.on_gui_click, function(event)
   local columns = {} -- [fp.pu_recipe, fp.pu_machine, fp.pu_beacon]
   for i, cell in ipairs(production_table.children) do -- the table has no rows, everything is a cell
     if cell.type ~= "label" then break end -- stop once we have all the column names
-    columns[cell.caption[1]] = i -- thanks to preferences the amount & positions of columns can vary
+    local caption = cell.caption[1]
+    if caption == 'fp.info_label' then caption = caption .. cell.caption[2] end -- checkbox & percentage collide
+    columns[caption] = i -- thanks to preferences the amount & positions of columns can vary
   end
 
   local column_count = table_size(columns) + 1 -- + 1 for the horizontal flow
