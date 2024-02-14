@@ -29,7 +29,7 @@ local slingshot = {
   circuit_wire_max_distance = data.raw['constant-combinator']['constant-combinator'].circuit_wire_max_distance,
   draw_circuit_wires = false,
 
-  selection_box = {{-0.25, -0.25}, {0.25, 0.25}},
+  selection_box = {{-0.24, -0.24}, {0.24, 0.24}},
   -- selectable_in_game = false,
 
   selection_priority = 51,
