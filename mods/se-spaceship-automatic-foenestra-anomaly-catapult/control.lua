@@ -2,6 +2,14 @@ local util = require('__space-exploration__.scripts.util')
 local Zone = require('__space-exploration-scripts__.zone')
 local Spaceship = require('__space-exploration-scripts__.spaceship')
 
+-- they are assigned with slot++, so in the future if the amount/order changes this will be inaccurate
+local output_combinator_id = 1
+local output_combinator_speed = 2
+local output_combinator_distance = 3
+local output_combinator_destination = 4
+local output_combinator_density = 5
+local output_combinator_anchored = 6
+
 function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
@@ -61,7 +69,7 @@ local function tick_struct(struct)
 
   local output = struct.console_output.get_or_create_control_behavior()
 
-  game.print(serpent.line(output.get_signal(4)))
+  game.print(serpent.line(output.get_signal(output_combinator_destination)))
 end
 
 script.on_event(defines.events.on_tick, function(event)
