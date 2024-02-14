@@ -77,6 +77,9 @@ local function tick_struct(struct)
     {index = 1, signal = {type = 'virtual', name = 'se-anomaly'}, count = 1},
     {index = 2, signal = destination.signal, count = - destination.count},
   }
+
+  -- a: cancel out only the active destination
+  -- b: get the merged signals of all the inputs and negate each possible destination
 end
 
 script.on_event(defines.events.on_tick, function(event)
