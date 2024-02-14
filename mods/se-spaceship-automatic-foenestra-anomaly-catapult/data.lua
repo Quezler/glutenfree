@@ -2,7 +2,7 @@ local slingshot = {
   type = 'constant-combinator',
   name = 'se-spaceship-slingshot',
 
-  item_slot_count = 1,
+  item_slot_count = 2,
 
   sprites = {
     north = util.empty_sprite(),

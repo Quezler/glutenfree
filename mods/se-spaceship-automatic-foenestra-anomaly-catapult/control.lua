@@ -24,7 +24,7 @@ function on_created_entity(event)
     slingshot.destructible = false
 
     entity.connect_neighbour({target_entity = slingshot, wire = defines.wire_type.red})
-    entity.connect_neighbour({target_entity = slingshot, wire = defines.wire_type.green})
+    -- entity.connect_neighbour({target_entity = slingshot, wire = defines.wire_type.green})
   end
 
   local combinator = slingshot.get_control_behavior()
@@ -68,8 +68,15 @@ local function tick_struct(struct)
   assert(struct.console_output.valid)
 
   local output = struct.console_output.get_or_create_control_behavior()
+  local combinator = struct.slingshot.get_control_behavior()
 
-  game.print(serpent.line(output.get_signal(output_combinator_destination)))
+  local destination = output.get_signal(output_combinator_destination)
+  game.print(serpent.line(destination))
+
+  combinator.parameters = {
+    {index = 1, signal = {type = 'virtual', name = 'se-anomaly'}, count = 1},
+    {index = 2, signal = destination.signal, count = - destination.count},
+  }
 end
 
 script.on_event(defines.events.on_tick, function(event)
