@@ -29,6 +29,9 @@ local function on_created_entity(event)
     return -- ships lifting off from the anomaly will not be needing slingshotting.
   end
 
+  local known_zones = remote.call("space-exploration", "get_known_zones", {force_name = event.source.force.name})
+  if known_zones[1] == nil then return end -- this force has not discovered foenestra yet
+
   local slingshot = entity.surface.find_entity('se-spaceship-slingshot', entity.position)
   if slingshot == nil then
     slingshot = entity.surface.create_entity{
