@@ -3,3 +3,5 @@ Cannot be bothered with making your own on-ship memory cell so a ship can travel
 This mod will make the ship use the slingshot if the source & destination are not in the same solar system.
 
 Send a -1 anomaly signal to disable the mechanic for that ship, by default this is on for all ships.
+
+This mod expects you to set the destination signal through the clamp, whilst in flight sending a circuit signal breaks this simple mod.
