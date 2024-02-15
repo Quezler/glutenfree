@@ -77,6 +77,19 @@ local function on_created_entity(event)
       position = struct.console_input.position,
       text = 'slingshot enabled'
     }
+
+    local to_zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = destination.count})
+    if to_zone == nil then error('are you traveling to another spaceship?') end
+    rendering.draw_text{
+      text = Zone._get_rich_text_name(to_zone),
+      use_rich_text = true,
+      alignment = 'center',
+      color = {1,1,1},
+      surface = slingshot.surface,
+      target = slingshot,
+      target_offset = {0, -1.5},
+      scale = 0.5,
+    }
   end
 
   global.structs[entity.unit_number] = struct

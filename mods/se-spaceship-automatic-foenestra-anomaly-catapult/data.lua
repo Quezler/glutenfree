@@ -30,7 +30,7 @@ local slingshot = {
   draw_circuit_wires = false,
 
   selection_box = {{-0.24, -0.24}, {0.24, 0.24}},
-  -- selectable_in_game = false,
+  selectable_in_game = false,
 
   selection_priority = 51,
   collision_mask = {},
