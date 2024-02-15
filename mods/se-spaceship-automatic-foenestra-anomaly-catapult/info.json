@@ -7,6 +7,6 @@
     "factorio_version": "1.1",
     "dependencies": [
         "space-exploration",
-        "space-exploration-scripts"
+        "space-exploration-scripts >= 1.0.10"
     ]
 }

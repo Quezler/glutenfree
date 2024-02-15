@@ -15,16 +15,6 @@ local output_combinator_anchored = 6
 -- so when traveling to a neighbouring star it might take longer if the reported distance is above 20k whilst you're still close to the center.
 local distance_cutoff = 10000 * 2
 
-local function combinator_to_text(combinator)
-  local text = {'combinator signals:'}
-  for _, parameter in ipairs(combinator.parameters) do
-    if parameter.signal.name then
-      table.insert(text, serpent.line({name = parameter.signal.name, count = parameter.count}))
-    end
-  end
-  return table.concat(text, "\n")
-end
-
 local function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
@@ -32,10 +22,9 @@ local function on_created_entity(event)
     return -- ship anchored, we only want to detect when a ship lifts off.
   end
 
-  -- game.print(event.source.surface.name)
-  local from_zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = event.source.surface.index})
+  local from_zone = Zone.from_surface_index(event.source.surface.index)
   if from_zone.type == 'anomaly' then
-    return -- ships lifting off from the anomaly will not be needing slingshotting
+    return -- ships lifting off from the anomaly will not be needing slingshotting.
   end
 
   local slingshot = entity.surface.find_entity('se-spaceship-slingshot', entity.position)
@@ -48,6 +37,7 @@ local function on_created_entity(event)
 
     slingshot.destructible = false
 
+    -- i use red for output and green for input myself, so picking red here prevents it from leaking into how i design my own ships.
     entity.connect_neighbour({target_entity = slingshot, wire = defines.wire_type.red})
     -- entity.connect_neighbour({target_entity = slingshot, wire = defines.wire_type.green})
   end
@@ -67,20 +57,15 @@ local function on_created_entity(event)
   
   assert(struct.console_output.valid)
 
-  local output_combinator = struct.console_output.get_control_behavior()
-  -- game.print(combinator_to_text(output_combinator))
-
-  local spaceship_id = output_combinator.get_signal(output_combinator_id).count
-
   do
+    local output_combinator = struct.console_output.get_control_behavior()
+    local spaceship_id = output_combinator.get_signal(output_combinator_id).count
+
     local distance = output_combinator.get_signal(output_combinator_distance).count
-    if distance_cutoff >= distance then -- destination is close by
-      -- game.print(string.format('[%d] %d >= %d', spaceship_id, distance_cutoff, distance))
-      return
-    end
+    if distance_cutoff >= distance then return end -- destination is too close by
 
     local destination = output_combinator.get_signal(output_combinator_destination)
-    game.print(destination.signal.name .. ' ' .. destination.count)
+    -- game.print(destination.signal.name .. ' ' .. destination.count)
     struct.destination_zone_signal = destination.signal.name
     struct.destination_zone_index = destination.count
 
@@ -90,8 +75,7 @@ local function on_created_entity(event)
     struct.console_input.surface.create_entity{
       name = 'tutorial-flying-text',
       position = struct.console_input.position,
-    --text = 'slingshotting via the anomaly :)'
-      text = 'slingshot enabled',
+      text = 'slingshot enabled'
     }
   end
 
@@ -100,19 +84,9 @@ end
 
 script.on_init(function(event)
   global.structs = {}
-
-  -- for _, surface in pairs(game.surfaces) do
-  --   for _, entity in pairs(surface.find_entities_filtered({name = {'se-spaceship-console'}})) do
-  --     on_created_entity({entity = entity})
-  --   end
-  -- end
 end)
 
 for _, event in ipairs({
-  -- defines.events.on_built_entity,
-  -- defines.events.on_robot_built_entity,
-  -- defines.events.script_raised_built,
-  -- defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
   script.on_event(event, on_created_entity, {
@@ -122,11 +96,9 @@ end
 
 local function tick_struct(struct)
   local output_combinator = struct.console_output.get_or_create_control_behavior()
-  local combinator = struct.slingshot.get_control_behavior()
+  local slingshot_combinator = struct.slingshot.get_control_behavior()
 
   local destination = output_combinator.get_signal(output_combinator_destination)
-  -- assert(destination.signal.name == 'se-anomaly') -- if anything else, foenestra isn't discovered yet.
-  -- log(serpent.block(output.parameters))
 
   if destination.signal.name ~= 'se-anomaly' then
     if struct.destination_foenestra_confirmed then
@@ -136,8 +108,9 @@ local function tick_struct(struct)
       struct.console_input.surface.create_entity{
         name = 'tutorial-flying-text',
         position = struct.console_input.position,
-        text = 'slingshot disabled',
+        text = 'slingshot disabled'
       }
+      return
     else
       assert('a spaceship was still receiving a destination signal.')
     end
@@ -146,20 +119,14 @@ local function tick_struct(struct)
   if struct.destination_foenestra_confirmed == false then
     if destination.signal.name == 'se-anomaly' then
       struct.destination_foenestra_confirmed = true
-      combinator.set_signal(1, nil)
+      slingshot_combinator.set_signal(1, nil)
     end
   end
 
-  -- we have arrived at foenestra, re-insert the original destination :)
+  -- we have arrived at foenestra, input the original stored destination.
   if output_combinator.get_signal(output_combinator_distance).count == -1 then
-    combinator.set_signal(1, {signal = {type = 'virtual', name = struct.destination_zone_signal}, count = struct.destination_zone_index})
+    slingshot_combinator.set_signal(1, {signal = {type = 'virtual', name = struct.destination_zone_signal}, count = struct.destination_zone_index})
   end
-
-  -- combinator.set_signal(1, nil) -- destination has been set as the anomaly, we no longer need to output the signal.
-  -- combinator.parameters = {
-  --   {index = 1, signal = {type = 'virtual', name = 'se-anomaly'}, count = 1},
-  --   {index = 2, signal = destination.signal, count = - destination.count},
-  -- }
 
   -- a: cancel out only the active destination
   -- b: get the merged signals of all the inputs and negate each possible destination
