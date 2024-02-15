@@ -10,6 +10,11 @@ local output_combinator_destination = 4
 local output_combinator_density = 5
 local output_combinator_anchored = 6
 
+-- traveling to and from foenestra supposedly is 10k distance,
+-- but it seems to only start counting once you leave the solar system,
+-- so when traveling to a neighbouring star it might take longer if the reported distance is above 20k whilst you're still close to the center.
+local distance_cutoff = 10000 * 2
+
 function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
