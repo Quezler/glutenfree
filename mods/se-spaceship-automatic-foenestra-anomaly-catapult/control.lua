@@ -1,3 +1,5 @@
+local mod = {}
+
 local util = require('__space-exploration__.scripts.util')
 local Zone = require('__space-exploration-scripts__.zone')
 local Spaceship = require('__space-exploration-scripts__.spaceship')
@@ -93,10 +95,13 @@ local function on_created_entity(event)
   end
 
   global.structs[entity.unit_number] = struct
+  global.structs_count = global.structs_count + 1
+  script.on_event(defines.events.on_tick, mod.on_tick)
 end
 
 script.on_init(function(event)
   global.structs = {}
+  global.structs_count = 0
 end)
 
 for _, event in ipairs({
@@ -118,6 +123,7 @@ local function tick_struct(struct)
       -- we have arrived at foenestra and the last tick_struct entered the new destination, or a player/circuit picked another destination.
       struct.slingshot.destroy()
       global.structs[struct.unit_number] = nil
+      global.structs_count = global.structs_count - 1
       struct.console_input.surface.create_entity{
         name = 'tutorial-flying-text',
         position = struct.console_input.position,
@@ -145,7 +151,7 @@ local function tick_struct(struct)
   -- b: get the merged signals of all the inputs and negate each possible destination
 end
 
-script.on_event(defines.events.on_tick, function(event)
+function mod.on_tick(event)
   for unit_number, struct in pairs(global.structs) do
     if (unit_number + event.tick) % 60 == 0 then
       if struct.console_input.valid == false then
@@ -153,9 +159,29 @@ script.on_event(defines.events.on_tick, function(event)
           struct.slingshot.destroy()
         end
         global.structs[unit_number] = nil
+        global.structs_count = global.structs_count - 1
       else
         tick_struct(struct)
       end
     end
   end
+
+  if global.structs_count == 0 then
+    script.on_event(defines.events.on_tick, nil)
+  end
+end
+
+script.on_load(function(event)
+  if global.structs_count > 0 then
+    script.on_event(defines.events.on_tick, mod.on_tick)
+  end
+end)
+
+commands.add_command('foenestra-catapult-integrity', nil, function(command)
+  local player = game.get_player(command.player_index)
+  player.print(serpent.block({
+    actual_structs = table_size(global.structs),
+    expected_structs = global.structs_count,
+    on_tick_active = script.get_event_handler(defines.events.on_tick) ~= nil,
+  }))
 end)
