@@ -169,7 +169,7 @@ function Factory.on_created_entity(event)
 
   local struct = {
     unit_number = entity.unit_number,
-    version = 3,
+    version = 4,
 
     container = entity,
     combinator = combinator,
@@ -266,13 +266,14 @@ function Factory.tick_struct(struct)
     struct.version = 2
   end
 
-  if struct.version == 2 then
+  if struct.version == 2 or struct.version == 3 then
     if #struct.clipboard.products == 1 then
-      rendering.set_text(struct.rendered.factory_description, struct.clipboard.products[1].amount .. 'x ' .. Factory.get_factory_description(struct.clipboard))
+      struct.clipboard.factory_description = struct.clipboard.products[1].amount .. 'x ' .. Factory.get_factory_description(struct.clipboard)
     else
-      rendering.set_text(struct.rendered.factory_description, Factory.get_factory_description(struct.clipboard))
+      struct.clipboard.factory_description = Factory.get_factory_description(struct.clipboard)
     end
-    struct.version = 3
+    rendering.set_text(struct.rendered.factory_description, struct.clipboard.factory_description)
+    struct.version = 4
   end
 
   local inventory = struct.container.get_inventory(defines.inventory.chest)
