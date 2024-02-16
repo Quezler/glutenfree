@@ -1,7 +1,7 @@
 {
     "name": "se-k2-matter-equivalent-exchange",
     "title": "Space Exploration - Krastorio 2 matter equivalent exchange",
-    "description": "Removes the basic matter stabilizer and the effectiveness penalty.",
+    "description": "Speedy thing goes in, (equally) speedy thing goes out.",
     "version": "0.0.1",
     "author": "Quezler",
     "factorio_version": "1.1",
