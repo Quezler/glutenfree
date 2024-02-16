@@ -103,3 +103,33 @@ end
 
 -- se-vulcanite-to-matter
 -- matter-to-se-vulcanute
+
+local function make_matter_match(conversion, deconversion)
+  if type(conversion) == "string" then conversion = data.raw.recipe[conversion] end
+  if type(deconversion) == "string" then deconversion = data.raw.recipe[deconversion] end
+
+  assert(conversion.normal == nil)
+  assert(conversion.deconversion == nil)
+  assert(deconversion.normal == nil)
+  assert(deconversion.deconversion == nil)
+
+  for _, result in ipairs(conversion.results) do
+    if result.name == "matter" then
+      for _, ingredient in ipairs(deconversion.ingredients) do
+        if ingredient.name == "matter" then
+          ingredient.amount = result.amount
+          return
+        end
+      end
+    end
+  end
+
+  error()
+end
+
+make_matter_match('se-vulcanite-to-matter', 'matter-to-se-vulcanute')
+make_matter_match('se-cryonite-to-matter', 'matter-to-se-cryonite')
+make_matter_match('se-beryllium-ore-to-matter', 'matter-to-se-beryllium-ore')
+make_matter_match('se-holmium-ore-to-matter', 'matter-to-se-holmium-ore')
+make_matter_match('se-iridium-ore-to-matter', 'matter-to-se-iridium-ore')
+make_matter_match('raw-imersite-to-matter', 'matter-to-raw-imersite')
