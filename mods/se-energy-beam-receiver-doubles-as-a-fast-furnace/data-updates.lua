@@ -7,7 +7,7 @@ local function power_by_fluid(shown_mw, fluid_per_second, default_speed, max_spe
 
   fluid_per_second = fluid_per_second / 10 -- different than for drills?
   fluid.heat_capacity = (shown_mw / 10) / (fluid_per_second / 50) .. "KJ"
-  fluid.max_temperature = max_speed
+  fluid.max_temperature = max_speed * 10 -- custom max temp
 end
 
-power_by_fluid(1000, 1, 2, 20)
+power_by_fluid(1000, 1, 1, 1000)

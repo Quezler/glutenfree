@@ -52,3 +52,5 @@ furnace.energy_source = {
     filter = "se-energy-receiver-electric-furnace-fluid",
   },
 }
+
+furnace.minable = nil
