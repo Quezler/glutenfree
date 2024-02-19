@@ -27,7 +27,6 @@ data:extend{furnace}
 local fluid = {
   type = 'fluid',
   name = 'se-energy-receiver-electric-furnace-fluid',
-  -- localised_name = {'entity-name.' .. receiver.name},
   base_color = data.raw['fluid']['sulfuric-acid'].base_color,
   flow_color = data.raw['fluid']['sulfuric-acid'].flow_color,
   icons = {
@@ -46,7 +45,7 @@ furnace.energy_source = {
     production_type = "input",
     pipe_picture = assembler2pipepictures(),
     pipe_covers = pipecoverspictures(),
-    base_area = 1,
+    base_area = 50,
     height = 2,
     base_level = -1,
     pipe_connections = {},

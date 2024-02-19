@@ -15,6 +15,8 @@ local function on_created_entity(event)
     reactor = entity,
     furnace = furnace,
   }
+
+  furnace.insert_fluid({name = 'se-energy-receiver-electric-furnace-fluid', amount = 1000})
 end
 
 for _, event in ipairs({

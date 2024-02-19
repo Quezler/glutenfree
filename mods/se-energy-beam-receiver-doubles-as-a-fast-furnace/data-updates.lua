@@ -10,4 +10,4 @@ local function power_by_fluid(shown_mw, fluid_per_second, default_speed, max_spe
   fluid.max_temperature = max_speed
 end
 
-power_by_fluid(10, 10, 2, 20)
+power_by_fluid(1000, 1, 2, 20)
