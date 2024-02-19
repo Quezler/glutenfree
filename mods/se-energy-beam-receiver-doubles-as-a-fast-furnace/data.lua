@@ -23,3 +23,33 @@ furnace.scale_entity_info_icon = true
 table.insert(furnace.flags, 'placeable-off-grid')
 
 data:extend{furnace}
+
+local fluid = {
+  type = 'fluid',
+  name = 'se-energy-receiver-electric-furnace-fluid',
+  -- localised_name = {'entity-name.' .. receiver.name},
+  base_color = data.raw['fluid']['sulfuric-acid'].base_color,
+  flow_color = data.raw['fluid']['sulfuric-acid'].flow_color,
+  icons = {
+    {icon = receiver.icon, icon_size = receiver.icon_size},
+  },
+  -- hidden = true,
+  auto_barrel = false,
+  default_temperature = 0,
+}
+
+data:extend{fluid}
+
+furnace.energy_source = {
+  type = "fluid",
+  fluid_box = {
+    production_type = "input",
+    pipe_picture = assembler2pipepictures(),
+    pipe_covers = pipecoverspictures(),
+    base_area = 1,
+    height = 2,
+    base_level = -1,
+    pipe_connections = {},
+    filter = "se-energy-receiver-electric-furnace-fluid",
+  },
+}
