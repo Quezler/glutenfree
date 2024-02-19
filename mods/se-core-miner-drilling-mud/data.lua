@@ -80,14 +80,16 @@ up4.pictures.straight_vertical_single = up1.pictures.ending_left
 
 data:extend{up1, up2, up3, up4}
 
-local function power_by_fluid(per_second, default_speed, max_speed)
-  coreminer.energy_usage = 1000/6*2.5 .. "KJ"
+local function power_by_fluid(mw, per_second, default_speed, max_speed)
+  -- 5 = 50 mw
+  -- 2.5 = 25 mw
+  coreminer.energy_usage = 1000/6*(mw/10) .. "KJ"
   coreminer.mining_speed = max_speed
   coreminer.animations.layers[2].animation_speed = max_speed / default_speed
 
-  data.raw['fluid']['se-core-miner-drill-drilling-mud'].heat_capacity = 1*2.5/2 .. "KJ"
+  data.raw['fluid']['se-core-miner-drill-drilling-mud'].heat_capacity = 1*(mw/10)/2 .. "KJ"
   data.raw['fluid']['se-core-miner-drill-drilling-mud'].default_temperature = 0
   data.raw['fluid']['se-core-miner-drill-drilling-mud'].max_temperature = max_speed
 end
 
-power_by_fluid(100, 100, 200)
+power_by_fluid(25, 100, 100, 200)
