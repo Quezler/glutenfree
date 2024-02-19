@@ -9,9 +9,7 @@ data:extend{{
     {icon = data.raw['item' ]['landfill' ].icon, icon_size = data.raw['item' ]['landfill' ].icon_size, scale = 0.25, shift = {0, 4}},
   },
   auto_barrel = false,
-  -- heat_capacity = 1*2.5/2 .. "KJ", -- *5 = 10 per second, /2 = 100 per second
-  -- default_temperature = 0,
-  -- max_temperature = 200,
+  default_temperature = 0,
 }}
 
 local coreminer = data.raw['mining-drill']['se-core-miner-drill']
@@ -38,11 +36,6 @@ coreminer.energy_source = {
 if mods['se-core-miner-drill-output-inventories-are-linked'] then
   table.insert(coreminer.energy_source.fluid_box.pipe_connections, {position = { 0, -6}})
 end
-
--- 50 fluid per second, heat is % of normal speed
--- coreminer.energy_usage = 1000/6*2.5 .. "KJ"
--- coreminer.mining_speed = 200 -- twice the default
--- coreminer.animations.layers[2].animation_speed = 2
 
 local up0 = table.deepcopy(data.raw['infinity-pipe']['infinity-pipe'])
 local ptg = table.deepcopy(data.raw['pipe-to-ground']['pipe-to-ground'])
@@ -84,7 +77,6 @@ local function power_by_fluid(shown_mw, fluid_per_second, default_speed, max_spe
   -- 5 = 50 mw
   -- 2.5 = 25 mw
   coreminer.energy_usage = 1000/6*(shown_mw/10) .. "KJ"
-
   coreminer.mining_speed = max_speed
   coreminer.animations.layers[2].animation_speed = max_speed / default_speed
 
@@ -93,8 +85,6 @@ local function power_by_fluid(shown_mw, fluid_per_second, default_speed, max_spe
   -- 5 = 250/s
   -- 6 = 300/s
   data.raw['fluid']['se-core-miner-drill-drilling-mud'].heat_capacity = (shown_mw / 10) / (fluid_per_second / 50) .. "KJ"
-  
-  data.raw['fluid']['se-core-miner-drill-drilling-mud'].default_temperature = 0
   data.raw['fluid']['se-core-miner-drill-drilling-mud'].max_temperature = max_speed
 end
 
