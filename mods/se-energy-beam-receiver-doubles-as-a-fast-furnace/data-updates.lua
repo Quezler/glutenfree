@@ -7,7 +7,7 @@ local function power_by_fluid(shown_mw, fluid_per_second, max_speed)
   furnace.crafting_speed = max_speed
 
   fluid_per_second = fluid_per_second / 10 -- different than for drills?
-  fluid.heat_capacity = (shown_mw / 10) / (max_speed / fluid_per_second / 10) .. "KJ"
+  fluid.heat_capacity = (shown_mw / 10) / (fluid_per_second / 10) .. "KJ"
   fluid.max_temperature = max_speed
 end
 
