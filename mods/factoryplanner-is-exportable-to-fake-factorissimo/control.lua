@@ -458,31 +458,41 @@ local function on_configuration_changed(event)
   global.can_be_barreled = {}
   global.can_be_unbarreled = {}
 
+  local cannot_be_barreled = {}
+  local cannot_be_unbarreled = {}
+
   -- assume the recipes are like this, and that the research state of being able to barrel or unbarrel is insignificant
   -- todo: loop through all recipe names, determine the input and output values, determine the item name of the barrel.
   for fluid_name, fluid_prototype in pairs(game.fluid_prototypes) do
-    log(string.format('%s:', fluid_name))
     local barrel_prototype = game.recipe_prototypes['fill-' .. fluid_name .. '-barrel']
     if barrel_prototype then
       -- log(serpent.block(barrel_prototype.ingredients))
       global.can_be_barreled[fluid_name] = get_fluid_amount_from_ingredients_or_products(barrel_prototype.ingredients)
-      log(string.format('- %d in', global.can_be_barreled[fluid_name]))
     else
-      log(string.format('- cannot be barreled'))
+      table.insert(cannot_be_barreled, fluid_name)
     end
     local unbarrel_prototype = game.recipe_prototypes['empty-' .. fluid_name .. '-barrel']
     if unbarrel_prototype then
       -- log(serpent.block(unbarrel_prototype.products))
       global.can_be_unbarreled[fluid_name] = get_fluid_amount_from_ingredients_or_products(unbarrel_prototype.products)
-      log(string.format('- %d out', global.can_be_unbarreled[fluid_name]))
     else
-      log(string.format('- cannot be unbarreled'))
+      table.insert(cannot_be_unbarreled, fluid_name)
     end
-
-    -- log(string.format('%s can neither be barreled nor unbarreled.', fluid_name))
-    -- log(string.format('%s can be barreled per %s and unbarreled per %s.', fluid_name, global.can_be_barreled[fluid_name] or 'nil', global.can_be_unbarreled[fluid_name] or 'nil'))
-    -- log(string.format('%s: %s in %s out.', fluid_name, global.can_be_barreled[fluid_name] or 'nil', global.can_be_unbarreled[fluid_name] or 'nil'))
   end
+
+  log('are any of the 4 barrel sections deemed wrong? then this mod does not detect all of them properly:')
+  log('can be barreled:')
+  for fluid_name, fluid_amount in pairs(global.can_be_barreled) do
+    log(string.format('- %d x %s', fluid_amount, fluid_name))
+  end
+
+  log('can be unbarreled:')
+  for fluid_name, fluid_amount in pairs(global.can_be_unbarreled) do
+    log(string.format('- %d x %s', fluid_amount, fluid_name))
+  end
+
+  log('cannot be barreled: ' .. table.concat(cannot_be_barreled, ', '))
+  log('cannot be unbarreled: ' .. table.concat(cannot_be_unbarreled, ', '))
 
   global.structs = global.structs or {}
   global.deathrattles = global.deathrattles or {}
