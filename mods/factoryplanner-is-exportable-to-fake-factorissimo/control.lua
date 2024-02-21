@@ -274,12 +274,12 @@ script.on_event(defines.events.on_gui_click, function(event)
         clipboard.products[i] = {
           type = "item",
           name = product.name .. "-barrel",
-          amount = product.amount / 50,
+          amount = product.amount / global.can_be_barreled[product.name],
         }
         merge_ingredients(clipboard.ingredients, {
           type = "item",
           name = "empty-barrel",
-          amount = product.amount / 50,
+          amount = product.amount / global.can_be_barreled[product.name],
         })
       end
     end
@@ -289,12 +289,12 @@ script.on_event(defines.events.on_gui_click, function(event)
         clipboard.byproducts[i] = {
           type = "item",
           name = byproduct.name .. "-barrel",
-          amount = byproduct.amount / 50,
+          amount = byproduct.amount / global.can_be_barreled[byproduct.name],
         }
         merge_ingredients(clipboard.ingredients, {
           type = "item",
           name = "empty-barrel",
-          amount = byproduct.amount / 50,
+          amount = byproduct.amount / global.can_be_barreled[byproduct.name],
         })
       end
     end
@@ -304,12 +304,12 @@ script.on_event(defines.events.on_gui_click, function(event)
         clipboard.ingredients[i] = {
           type = "item",
           name = ingredient.name .. "-barrel",
-          amount = ingredient.amount / 50,
+          amount = ingredient.amount / global.can_be_unbarreled[ingredient.name],
         }
         merge_ingredients(clipboard.byproducts, {
           type = "item",
           name = "empty-barrel",
-          amount = ingredient.amount / 50,
+          amount = ingredient.amount / global.can_be_unbarreled[ingredient.name],
         })
       end
     end
@@ -440,6 +440,18 @@ for _, event in ipairs({
   })
 end
 
+local function get_fluid_amount_from_ingredients_or_products(entries)
+  assert(#entries == 2) -- one barrel and one fluid, deviating from that norm requires enhancing this function
+
+  for _, entry in ipairs(entries) do
+    if entry.type == "fluid" then
+      return entry.amount
+    end
+  end
+
+  error('no fluid found.')
+end
+
 local function on_configuration_changed(event)
   global.clipboards = global.clipboards or {}
 
@@ -449,13 +461,20 @@ local function on_configuration_changed(event)
   -- assume the recipes are like this, and that the research state of being able to barrel or unbarrel is insignificant
   -- todo: loop through all recipe names, determine the input and output values, determine the item name of the barrel.
   for fluid_name, fluid_prototype in pairs(game.fluid_prototypes) do
-    if game.recipe_prototypes['fill-' .. fluid_name .. '-barrel'] then
-      global.can_be_barreled[fluid_name] = true
+    local barrel_prototype = game.recipe_prototypes['fill-' .. fluid_name .. '-barrel']
+    if barrel_prototype then
+      -- log(serpent.block(barrel_prototype.ingredients))
+      global.can_be_barreled[fluid_name] = get_fluid_amount_from_ingredients_or_products(barrel_prototype.ingredients)
     end
-    if game.recipe_prototypes['empty-' .. fluid_name .. '-barrel'] then
-      global.can_be_unbarreled[fluid_name] = true
+    local unbarrel_prototype = game.recipe_prototypes['empty-' .. fluid_name .. '-barrel']
+    if unbarrel_prototype then
+      -- log(serpent.block(unbarrel_prototype.products))
+      global.can_be_unbarreled[fluid_name] = get_fluid_amount_from_ingredients_or_products(unbarrel_prototype.products)
     end
   end
+
+  log('can_be_barreled: ' .. serpent.block(global.can_be_barreled))
+  log('can_be_unbarreled: ' .. serpent.block(global.can_be_unbarreled))
 
   global.structs = global.structs or {}
   global.deathrattles = global.deathrattles or {}
