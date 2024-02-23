@@ -1,4 +1,11 @@
-Once you unlock foenestra its basically a shame to not use it when traveling to anything that's not adjacent to your home star.
+Wish you could (re)name zones to make universe explorer easier to navigate? well you've come to the right place.
 
-Sure there are circuits for it, but eh dealing with the different destination zone types in a sort of memory cell is above my paygrade,
-way easier for me to just write a mod that does it for me in good old lua, i prefer playing without any non-constant combinators on board.
+This allows you to give zones a name in the list in addition to its actual name, hopefully it helps.
+
+Due to effort <-> complexity this only affects the universe explorer list and not the star map.
+
+On that same note: searching on the custom names will not work, again due to the effort.
+
+There's only so much i can pull off outside of SE's codebase, a proof of concept.
+
+It's maintainers are free to implement this concept natively in their code.
