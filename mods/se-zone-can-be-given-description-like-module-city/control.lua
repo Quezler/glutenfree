@@ -56,7 +56,6 @@ local function update_zonelist_for_player(player, root)
       name = textfield_name,
       index = 1,
       lose_focus_on_confirm = true,
-      clear_and_focus_on_right_click = true,
     }
     rename = content[textfield_name]
     rename.style.width = 256
