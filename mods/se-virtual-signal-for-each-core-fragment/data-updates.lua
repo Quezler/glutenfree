@@ -28,6 +28,8 @@ for _, item in pairs(data.raw['item']) do
     for _, icon in ipairs(signal.icons) do
       icon.scale = (icon.scale or 1) * 0.7
     end
+    signal.icons = {signal.icons[#signal.icons]}
+    signal.icons[1].tint = {0.7, 0.7, 0.7, 0.7}
     table.insert(signal.icons, 1, signal_background)
 
     data:extend{signal}

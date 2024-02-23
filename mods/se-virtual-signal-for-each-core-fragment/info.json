@@ -2,7 +2,7 @@
     "name": "se-virtual-signal-for-each-core-fragment",
     "title": "Space Exploration - virtual signal for each core fragment",
     "description": "Adds a virtual signal for each core fragment present.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
