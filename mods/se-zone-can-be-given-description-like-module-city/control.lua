@@ -12,26 +12,30 @@ local function update_zonelist_for_player(player, root)
   for _, row in pairs(scroll_pane.children) do
     local name_cell = row.row_flow.children[3]
 
-    name_cell.caption = string.format('Module City [font=default-smaller]%s[/font]', name_cell.caption)
+    local caption = name_cell.caption
+    if type(caption) == "string" then 
+      caption = {"space-exploration.zonelist-renamed-zone", 'Module City', caption}
+    else
+      -- assert(caption[1] == 'space-exploration.zonelist-renamed-zone')
+      caption[2] = 'Landfill <3'
+    end
+    name_cell.caption = caption
+    
   end
 
-  local zone_index = nil
-  if not zone_index then
-    local parent = util.get_gui_element(root, Zonelist.path_zone_data_flow)
-    if not parent then return end
+  local parent = util.get_gui_element(root, Zonelist.path_zone_data_flow)
+  if not parent then return end
 
-    local container = parent[Zonelist.name_zone_data_container_frame]
-    local content = container[Zonelist.name_zone_data_content_scroll_pane]
+  local container = parent[Zonelist.name_zone_data_container_frame]
+  local content = container[Zonelist.name_zone_data_content_scroll_pane]
 
-    local button_flow = content.parent.parent[Zonelist.name_zone_data_bottom_button_flow]
-    local view_button = button_flow[Zonelist.name_zone_data_view_surface_button]
-    zone_index = view_button.tags.zone_index
+  local button_flow = content.parent.parent[Zonelist.name_zone_data_bottom_button_flow]
+  local view_button = button_flow[Zonelist.name_zone_data_view_surface_button]
+  local zone_index = view_button.tags.zone_index
 
-    if view_button.tags.zone_type == "spaceship" then
-      -- coremining_header.visible = false
-      -- coremining.visible = false
-      return
-    end
+  if view_button.tags.zone_type == "spaceship" then
+    -- todo: hide/disable name box
+    return
   end
 
   game.print(zone_index)
@@ -60,10 +64,4 @@ script.on_event(defines.events.on_gui_click, function(event)
   if not root then return end
 
   update_zonelist_for_player(player, root)
-
-  -- local parent = Util.get_gui_element(root, Zonelist.path_zone_data_flow)
-  -- if not parent then return end
-
-  -- local container = parent[Zonelist.name_zone_data_container_frame]
-  -- local content = container[Zonelist.name_zone_data_content_scroll_pane]
 end)
