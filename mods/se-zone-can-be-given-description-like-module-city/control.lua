@@ -2,6 +2,8 @@ local util = require('__space-exploration-scripts__.util')
 local Zonelist = require('__space-exploration-scripts__.zonelist')
 
 local textfield_name = 'se-zone-rename'
+local GuiCommon_icon_selector_name = (mod_prefix or 'se-') .. "icon-selector"
+local GuiCommon_rename_textfield_name = (mod_prefix or 'se-') .. "write-name"
 local print_gui = require('print_gui')
 
 local mod = {}
@@ -48,20 +50,36 @@ local function update_zonelist_for_player(player, root)
 
   local rename = content[textfield_name]
   if rename == nil then
-    content.add{
-      type = 'textfield',
+    local name_horizontal_flow = content.add{
+      type = 'flow',
       name = textfield_name,
+      direction = 'horizontal',
       index = 1,
+    }
+    name_horizontal_flow.add{
+      type = 'textfield',
+      name = GuiCommon_rename_textfield_name,
       lose_focus_on_confirm = true,
+      style = 'se_textfield_maximum_stretchable',
+    }
+    name_horizontal_flow.add{
+      type = "choose-elem-button",
+      elem_type = "signal",
+      signal = {
+        type = "virtual",
+        name = (mod_prefix or 'se-') .. "select-icon"
+      },
+      name = GuiCommon_icon_selector_name or 'se-icon-selector',
+      style = "se_icon_selector_button",
     }
     rename = content[textfield_name]
-    rename.style.width = 256
   end
 
-  rename.enabled = view_button.tags.zone_type ~= 'spaceship'
+  rename[GuiCommon_rename_textfield_name].enabled = view_button.tags.zone_type ~= 'spaceship'
+  rename[GuiCommon_icon_selector_name].enabled = rename[GuiCommon_rename_textfield_name].enabled
 
-  rename.tags = {action = 'rename-zone', zone_index = zone_index, zone_type = view_button.tags.zone_type}
-  rename.text = forcedata[zone_index] or ''
+  rename[GuiCommon_rename_textfield_name].tags = {action = 'rename-zone', zone_index = zone_index, zone_type = view_button.tags.zone_type}
+  rename[GuiCommon_rename_textfield_name].text = forcedata[zone_index] or ''
 
   global.action_zone_link_triggers[player.index] = {
     player = player,
@@ -98,6 +116,8 @@ script.on_init(on_init)
 script.on_load(mod.on_load)
 
 script.on_event(defines.events.on_gui_click, function(event)
+  if event.element.name == GuiCommon_icon_selector_name then return end -- it would erase any typed-yet-not-confirmed stuff when picking an icon
+
   local player = game.get_player(event.player_index)
 
   local root = Zonelist.get(player)
@@ -107,7 +127,7 @@ script.on_event(defines.events.on_gui_click, function(event)
 end)
 
 script.on_event(defines.events.on_gui_confirmed, function(event)
-  if event.element.name ~= textfield_name then return end
+  if event.element.name ~= GuiCommon_rename_textfield_name then return end
 
   -- we require the zone type to be present, as well as not a spaceship, to ensure forcedata does not get tainted.
   assert(event.element.tags.zone_type)
