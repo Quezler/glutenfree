@@ -4,6 +4,8 @@ local Zonelist = require('__space-exploration-scripts__.zonelist')
 local textfield_name = 'se-zone-rename'
 local print_gui = require('print_gui')
 
+local mod = {}
+
 local function update_zonelist_for_player(player, root)
   -- log(print_gui.serpent(root))
   
@@ -60,6 +62,12 @@ local function update_zonelist_for_player(player, root)
 
   rename.tags = {action = 'rename-zone', zone_index = zone_index, zone_type = view_button.tags.zone_type}
   rename.text = forcedata[zone_index] or ''
+
+  global.action_zone_link_triggers[player.index] = {
+    player = player,
+    element = content['details'].children[1],
+  }
+  script.on_event(defines.events.on_tick, mod.on_tick)
 end
 
 local function on_zonelist_opened(event)
@@ -71,6 +79,7 @@ local function on_zonelist_opened(event)
   update_zonelist_for_player(player, root)
 end
 
+
 local function register_events(event)
   script.on_event(remote.call("space-exploration-scripts", "on_zonelist_opened"), on_zonelist_opened)
 end
@@ -78,11 +87,15 @@ end
 local function on_init(event)
   global.forcedata = {}
 
+  -- in a zone's sidebar you can click on parents/spaceships to quickly go there,
+  -- but since those delete the element other mods cannot receive their click event.
+  global.action_zone_link_triggers = {}
+
   register_events(event)
 end
 
 script.on_init(on_init)
-script.on_load(register_events)
+script.on_load(mod.on_load)
 
 script.on_event(defines.events.on_gui_click, function(event)
   local player = game.get_player(event.player_index)
@@ -111,3 +124,32 @@ script.on_event(defines.events.on_gui_confirmed, function(event)
 
   update_zonelist_for_player(player, Zonelist.get(player))
 end)
+
+function mod.on_tick(event)
+  for _, action_zone_link_trigger in pairs(global.action_zone_link_triggers) do
+    if action_zone_link_trigger.element.valid == false then
+      global.action_zone_link_triggers[_] = nil
+
+      local root = Zonelist.get(action_zone_link_trigger.player)
+      if root then
+        update_zonelist_for_player(action_zone_link_trigger.player, root)
+      end
+    end
+  end
+
+  -- effectively when no-one has the universe explorer open
+  if table_size(global.action_zone_link_triggers) == 0 then
+    -- game.print('triggers emptied')
+    script.on_event(defines.events.on_tick, nil)
+  end
+end
+
+function mod.on_load(event)
+  if table_size(global.action_zone_link_triggers) > 0 then
+    script.on_event(defines.events.on_tick, mod.on_tick)
+  end
+
+  register_events(event)
+end
+
+script.on_event(defines.events.on_tick, on_tick)
