@@ -3,7 +3,7 @@ local Zonelist = require('__space-exploration-scripts__.zonelist')
 local GuiCommon = require('__space-exploration-scripts__.gui-common')
 
 local textfield_name = 'se-zone-rename'
-local print_gui = require('print_gui')
+-- local print_gui = require('print_gui')
 
 local mod = {}
 
