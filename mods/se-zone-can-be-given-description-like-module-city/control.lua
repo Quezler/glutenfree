@@ -44,11 +44,6 @@ local function update_zonelist_for_player(player, root)
   local view_button = button_flow[Zonelist.name_zone_data_view_surface_button]
   local zone_index = view_button.tags.zone_index
 
-  if view_button.tags.zone_type == "spaceship" then
-    -- todo: hide/disable name box
-    return
-  end
-
   local rename = content[textfield_name]
   if rename == nil then
     content.add{
@@ -61,8 +56,9 @@ local function update_zonelist_for_player(player, root)
     rename.style.width = 256
   end
 
-  assert(view_button.tags.zone_type ~= 'spaceship')
-  rename.tags = {action = 'rename-zone', zone_index = zone_index}
+  rename.enabled = view_button.tags.zone_type ~= 'spaceship'
+
+  rename.tags = {action = 'rename-zone', zone_index = zone_index, zone_type = view_button.tags.zone_type}
   rename.text = forcedata[zone_index] or ''
 end
 
@@ -99,6 +95,10 @@ end)
 
 script.on_event(defines.events.on_gui_confirmed, function(event)
   if event.element.name ~= textfield_name then return end
+
+  -- we require the zone type to be present, as well as not a spaceship, to ensure forcedata does not get tainted.
+  assert(event.element.tags.zone_type)
+  assert(event.element.tags.zone_type ~= 'spaceship')
 
   local player = game.get_player(event.player_index)
   if global.forcedata[player.force.name] == nil then global.forcedata[player.force.name] = {} end
