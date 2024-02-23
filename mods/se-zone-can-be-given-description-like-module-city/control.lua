@@ -38,6 +38,17 @@ local function update_zonelist_for_player(player, root)
     return
   end
 
+  local rename = content["rename"]
+  if rename == nil then
+    content.add{
+      type = 'textfield',
+      name = 'rename',
+      index = 1,
+    }
+    rename = content["rename"]
+    rename.style.width = 256
+  end
+
   game.print(zone_index)
 end
 
