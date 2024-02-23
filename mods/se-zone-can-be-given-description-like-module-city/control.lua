@@ -2,10 +2,7 @@ local util = require('__space-exploration-scripts__.util')
 local Zonelist = require('__space-exploration-scripts__.zonelist')
 
 local textfield_name = 'se-zone-rename'
-
 local print_gui = require('print_gui')
-
--- local function get_selected_zone_tags(content)
 
 local function update_zonelist_for_player(player, root)
   -- log(print_gui.serpent(root))
@@ -54,8 +51,7 @@ local function update_zonelist_for_player(player, root)
     rename = content[textfield_name]
     rename.style.width = 256
   end
-
-  game.print(zone_index)
+  rename.tags = {action = 'rename-zone', zone_index = zone_index}
 end
 
 local function on_zonelist_opened(event)
@@ -85,13 +81,6 @@ end)
 
 script.on_event(defines.events.on_gui_confirmed, function(event)
   if event.element.name ~= textfield_name then return end
-  -- game.print(event.element.name)
-  -- game.print(event.element.text)
 
-  -- event.element.parent.parent.parent
-
-  local button_flow = event.element.parent.parent.parent[Zonelist.name_zone_data_bottom_button_flow]
-  local view_button = button_flow[Zonelist.name_zone_data_view_surface_button]
-
-  game.print(serpent.line(view_button.tags))
+  game.print(serpent.line(event.element.tags))
 end)
