@@ -10,18 +10,30 @@ local function update_zonelist_for_player(player, root)
   local scroll_pane = util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
   if not scroll_pane then return end
 
-  for _, row in pairs(scroll_pane.children) do
-    local name_cell = row.row_flow.children[3]
+  local forcedata = global.forcedata[player.force.name] or {}
 
-    local caption = name_cell.caption
-    if type(caption) == "string" then 
-      caption = {"space-exploration.zonelist-renamed-zone", 'Module City', caption}
-    else
-      -- assert(caption[1] == 'space-exploration.zonelist-renamed-zone')
-      caption[2] = 'Landfill <3'
+  for _, row in pairs(scroll_pane.children) do
+    if row.tags.zone_type ~= 'spaceship' then
+      local name_cell = row.row_flow.children[3]
+
+      local renamed = forcedata[row.tags.zone_index]
+      local caption = name_cell.caption
+      if type(caption) == "string" then 
+        -- log(caption)
+        if renamed == nil then renamed = caption caption = '' end
+        caption = {"space-exploration.zonelist-renamed-zone", renamed, caption}
+      else
+        -- assert(caption[1] == 'space-exploration.zonelist-renamed-zone')
+        if renamed ~= nil and caption[3] == '' then caption[3] = caption[2] end
+
+        if renamed == nil and caption[3] ~= '' then renamed = caption[3] caption[3] = '' end
+        if renamed == nil and caption[3] == '' then renamed = caption[2] end
+
+        caption[2] = renamed
+      end
+      name_cell.caption = caption
+      log(serpent.line(caption))
     end
-    name_cell.caption = caption
-    
   end
 
   local parent = util.get_gui_element(root, Zonelist.path_zone_data_flow)
@@ -51,6 +63,8 @@ local function update_zonelist_for_player(player, root)
     rename = content[textfield_name]
     rename.style.width = 256
   end
+
+  assert(view_button.tags.zone_type ~= 'spaceship')
   rename.tags = {action = 'rename-zone', zone_index = zone_index}
 end
 
@@ -67,7 +81,13 @@ local function register_events(event)
   script.on_event(remote.call("space-exploration-scripts", "on_zonelist_opened"), on_zonelist_opened)
 end
 
-script.on_init(register_events)
+local function on_init(event)
+  global.forcedata = {}
+
+  register_events(event)
+end
+
+script.on_init(on_init)
 script.on_load(register_events)
 
 script.on_event(defines.events.on_gui_click, function(event)
@@ -82,5 +102,14 @@ end)
 script.on_event(defines.events.on_gui_confirmed, function(event)
   if event.element.name ~= textfield_name then return end
 
-  game.print(serpent.line(event.element.tags))
+  local player = game.get_player(event.player_index)
+  if global.forcedata[player.force.name] == nil then global.forcedata[player.force.name] = {} end
+
+  if event.element.text == "" then
+    global.forcedata[player.force.name][event.element.tags.zone_index] = nil
+  else
+    global.forcedata[player.force.name][event.element.tags.zone_index] = event.element.text
+  end
+
+  update_zonelist_for_player(player, Zonelist.get(player))
 end)
