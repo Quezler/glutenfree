@@ -19,11 +19,10 @@ local function update_zonelist_for_player(player, root)
       local renamed = forcedata[row.tags.zone_index]
       local caption = name_cell.caption
       if type(caption) == "string" then 
-        -- log(caption)
         if renamed == nil then renamed = caption caption = '' end
         caption = {"space-exploration.zonelist-renamed-zone", renamed, caption}
       else
-        -- assert(caption[1] == 'space-exploration.zonelist-renamed-zone')
+        assert(caption[1] == 'space-exploration.zonelist-renamed-zone')
         if renamed ~= nil and caption[3] == '' then caption[3] = caption[2] end
 
         if renamed == nil and caption[3] ~= '' then renamed = caption[3] caption[3] = '' end
@@ -32,7 +31,6 @@ local function update_zonelist_for_player(player, root)
         caption[2] = renamed
       end
       name_cell.caption = caption
-      log(serpent.line(caption))
     end
   end
 
@@ -66,6 +64,7 @@ local function update_zonelist_for_player(player, root)
 
   assert(view_button.tags.zone_type ~= 'spaceship')
   rename.tags = {action = 'rename-zone', zone_index = zone_index}
+  rename.text = forcedata[zone_index] or ''
 end
 
 local function on_zonelist_opened(event)
