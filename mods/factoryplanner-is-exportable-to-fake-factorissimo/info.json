@@ -1,8 +1,8 @@
 {
     "name": "factoryplanner-is-exportable-to-fake-factorissimo",
     "title": "Factory Planner - exportable to fake factorissimo",
-    "description": "Skips the building stage, just feed items into the magic box.",
-    "version": "1.2.1",
+    "description": "This mod lets you create custom assembling machine recipes ingame by combining existing recipes, or even several of the same recipe to increase their speed.",
+    "version": "1.2.2",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
