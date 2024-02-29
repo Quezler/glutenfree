@@ -4,6 +4,7 @@ end
 
 function on_efficiency_updated(event)
   local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = event.zone_index})
+  if zone.core_seam_resources == nil then return end -- 50x50 worlds?
 
   for _, resource_set in pairs(zone.core_seam_resources) do
     local resource = resource_set.resource
