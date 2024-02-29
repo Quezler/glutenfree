@@ -1,15 +1,17 @@
-script.on_init(function(event)
-  global.version = 1
+local mod = {}
 
-  global.next_tick_events = {}
+script.on_init(function(event)
+  global.version = 2
 
   global.player_index_to_selected_zones_map = {}
+
+  mod.register_events()
 end)
 
 local util = require('__space-exploration-scripts__.util')
 local Zonelist = require('__space-exploration-scripts__.zonelist')
 
-local function on_post_gui_opened(event)
+local function on_zonelist_opened(event)
   local player = game.get_player(event.player_index)
 
   local root = Zonelist.get(player)
@@ -33,28 +35,11 @@ local function on_post_gui_opened(event)
 
 end
 
-local function on_tick(event)
-  local next_tick_events = global.next_tick_events
-  global.next_tick_events = {}
-  
-  for _, e in ipairs(next_tick_events) do
-    if e.name == defines.events.on_gui_opened then on_post_gui_opened(e) end
-  end
-
-  if #global.next_tick_events > 0 then return end
-  script.on_event(defines.events.on_tick, nil)
+function mod.register_events(event)
+  script.on_event(remote.call("space-exploration-scripts", "on_zonelist_opened"), on_zonelist_opened)
 end
 
-script.on_load(function(event)
-  if #global.next_tick_events > 0 then
-    script.on_event(defines.events.on_tick, on_tick)
-  end
-end)
-
-script.on_event(defines.events.on_gui_opened, function(event)
-  table.insert(global.next_tick_events, event)
-  script.on_event(defines.events.on_tick, on_tick)
-end)
+script.on_load(mod.register_events)
 
 local function mark_as_seen(player_index, tags)
   global.player_index_to_selected_zones_map[player_index]                                  = global.player_index_to_selected_zones_map[player_index] or {}
@@ -73,7 +58,9 @@ script.on_event(defines.events.on_gui_click, function(event)
 end)
 
 script.on_configuration_changed(function(event)
-  if (global.version or 0) == 0 then
+  global.version = global.version or 0
+
+  if global.version == 0 then
     local zones = remote.call("space-exploration", "get_zone_index", {}) -- does not return `zone.type == spaceship`'s
 
     local zone_by_index = {}
@@ -83,30 +70,6 @@ script.on_configuration_changed(function(event)
 
     local player_index_to_selected_zones_map = global.player_index_to_selected_zones_map
     global.player_index_to_selected_zones_map = {}
-
-    local spaceship_ids = {}
-
-    -- for player_index, map in pairs(player_index_to_selected_zones_map) do
-    --   for zone_index, _ in pairs(map) do
-    --     local zone = zone_by_index[zone_index]
-    --     log(zone.type)
-    --     if zone == nil then
-    --       spaceship_ids[zone_index] = true
-    --     end
-    --   end
-    -- end
-
-    -- log(serpent.line(spaceship_ids))
-
-    -- for player_index, map in pairs(player_index_to_selected_zones_map) do
-    --   for zone_index, _ in pairs(map) do
-    --     local zone = zone_by_index[zone_index]
-    --     if zone and not spaceship_ids[zone_index] then
-    --       mark_as_seen(player_index, {zone_type = zone.type, zone_index = zone.index})
-    --     end
-    --     -- log(serpent.line(zone_index))
-    --   end
-    -- end
 
     for player_index, map in pairs(player_index_to_selected_zones_map) do
       local visible_zones = remote.call("space-exploration", "get_known_zones", {force_name = game.get_player(player_index).force.name})
@@ -125,5 +88,10 @@ script.on_configuration_changed(function(event)
     end
 
     global.version = 1
+  end
+
+  if global.version == 1 then
+    global.next_tick_events = nil
+    global.version = 2
   end
 end)
