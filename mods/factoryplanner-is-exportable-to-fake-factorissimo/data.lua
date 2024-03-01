@@ -279,3 +279,30 @@ local combinator_2 = create_combinator({i = 2})
 local combinator_3 = create_combinator({i = 3})
 
 data:extend{combinator_1, combinator_2, combinator_3}
+
+local function create_recipe(config)
+  return {
+    type = 'recipe',
+    name = mod_prefix .. 'item-' .. config.i .. '-unlock',
+    localised_name = {"entity-name.fietff-container-i", config.i},
+
+    icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', config.i),
+    icon_size = 64,
+
+    ingredients = {},
+    result = mod_prefix .. 'item-' .. config.i,
+    enabled = false,
+    hide_from_player_crafting = true,
+    energy_required = 1,
+  }
+end
+
+local recipe_1 = create_recipe({i = 1})
+local recipe_2 = create_recipe({i = 2})
+local recipe_3 = create_recipe({i = 3})
+
+data:extend{recipe_1, recipe_2, recipe_3}
+
+table.insert(data.raw['technology'][settings.startup[mod_prefix .. 'tier-1-research'].value].effects, {type = 'unlock-recipe', recipe = recipe_1.name})
+table.insert(data.raw['technology'][settings.startup[mod_prefix .. 'tier-2-research'].value].effects, {type = 'unlock-recipe', recipe = recipe_2.name})
+table.insert(data.raw['technology'][settings.startup[mod_prefix .. 'tier-3-research'].value].effects, {type = 'unlock-recipe', recipe = recipe_3.name})

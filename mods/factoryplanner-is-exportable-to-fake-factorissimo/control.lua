@@ -394,6 +394,13 @@ script.on_event(defines.events.on_gui_click, function(event)
     factory_item = mod_prefix .. 'item-3'
   end
 
+  if player.force.recipes[factory_item .. '-unlock'].enabled == false then
+    return player.create_local_flying_text{
+      text = "This factory tier is not yet researched.",
+      create_at_cursor = true,
+    }
+  end
+
   -- close the gui only if the factory has enough slots
   local close_gui_after_grabbing_factory = global.inventory_size_from_item[factory_item] >= estimated_slot_requirement
 
