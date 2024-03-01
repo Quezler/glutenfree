@@ -10,6 +10,6 @@
         "factoryplanner",
         "? PickerDollies",
         "(?) GUI_Unifyer",
-        "! eradicators-screenshot-maker"
+        "(?) space-exploration >= 0.6.122"
     ]
 }

@@ -387,24 +387,11 @@ script.on_event(defines.events.on_gui_click, function(event)
   + Factory.slots_required_for(clipboard.ingredients)
 
   local factory_item = mod_prefix .. 'item-1'
-  if game.active_mods['space-exploration'] then
-    factory_item = 'er:screenshot-camera'
-  end
   if event.button == defines.mouse_button_type.middle then
     factory_item = mod_prefix .. 'item-2'
   end 
   if event.button == defines.mouse_button_type.right then
     factory_item = mod_prefix .. 'item-3'
-  end
-
-  if game.active_mods['space-exploration'] and factory_item ~= 'er:screenshot-camera' then
-    if remote.call("space-exploration", "remote_view_is_active", {player = player}) then
-      player.create_local_flying_text{
-        text = string.format("This tier cannot be placed in remote view."),
-        create_at_cursor = true,
-      }
-      return
-    end
   end
 
   -- close the gui only if the factory has enough slots
@@ -498,11 +485,7 @@ local function on_configuration_changed(event)
   global.deathrattles = global.deathrattles or {}
 
   global.inventory_size_from_item = {}
-  if game.active_mods['space-exploration'] then
-    global.inventory_size_from_item['er:screenshot-camera'] = game.entity_prototypes[mod_prefix .. 'container-1'].get_inventory_size(defines.inventory.chest)
-  else
   global.inventory_size_from_item[mod_prefix .. 'item-1'] = game.entity_prototypes[mod_prefix .. 'container-1'].get_inventory_size(defines.inventory.chest)
-  end
   global.inventory_size_from_item[mod_prefix .. 'item-2'] = game.entity_prototypes[mod_prefix .. 'container-2'].get_inventory_size(defines.inventory.chest)
   global.inventory_size_from_item[mod_prefix .. 'item-3'] = game.entity_prototypes[mod_prefix .. 'container-3'].get_inventory_size(defines.inventory.chest)
 end

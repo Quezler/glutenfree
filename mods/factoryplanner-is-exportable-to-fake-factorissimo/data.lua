@@ -121,10 +121,6 @@ local item_1 = create_item({i = 1})
 local item_2 = create_item({i = 2})
 local item_3 = create_item({i = 3})
 
-if mods['space-exploration'] then
-  item_1.name = 'er:screenshot-camera' -- easiest way to allow space exploration's remote view to hold one :)
-end
-
 data:extend{item_1, item_2, item_3}
 
 local function create_interface(config)
