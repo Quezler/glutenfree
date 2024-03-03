@@ -475,7 +475,7 @@ function Factory.on_player_setup_blueprint(event)
   local blueprint_entities = blueprint.get_blueprint_entities()
   if blueprint_entities then
     for _, blueprint_entity in ipairs(blueprint_entities) do
-      if blueprint_entity.name == mod_prefix .. "container-1" then
+      if container_name_to_tier[blueprint_entity.name] then
         local entity = mapping[blueprint_entity.entity_number]
         if entity then
           local struct = global.structs[entity.unit_number]
