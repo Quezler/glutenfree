@@ -170,5 +170,3 @@ function mod.on_load(event)
 
   register_events(event)
 end
-
-script.on_event(defines.events.on_tick, on_tick)
