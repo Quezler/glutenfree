@@ -89,6 +89,8 @@ function Handler.items_to_place_this(alert_target)
     return items_to_place_this
   elseif alert_target.get_upgrade_target() then
     return alert_target.get_upgrade_target().items_to_place_this
+  elseif 1 > alert_target.get_health_ratio() then
+   return {{name = 'repair-pack', count = 1}}
   end
 end
 

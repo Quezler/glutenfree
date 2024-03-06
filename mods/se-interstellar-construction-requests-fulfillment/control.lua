@@ -18,13 +18,14 @@ end
 script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
 
 script.on_nth_tick(600, function(event) -- no_material_for_construction expires after 10 seconds
-  local forces_checked = {}
+  local force_checked_for_missing = {}
+  local force_checked_for_repair = {}
 
   for _, player in ipairs(game.connected_players) do
-    if not forces_checked[player.force.index] then
 
+    if not force_checked_for_missing[player.force.index] then
       if player.is_alert_enabled(defines.alert_type.no_material_for_construction) then
-        forces_checked[player.force.index] = true
+        force_checked_for_missing[player.force.index] = true
         local alerts = player.get_alerts{
           type = defines.alert_type.no_material_for_construction,
         }
@@ -41,8 +42,29 @@ script.on_nth_tick(600, function(event) -- no_material_for_construction expires 
         -- command response for `/alerts enable no_material_for_construction`
         player.print('Alert type no_material_for_construction has been enabled.')
       end
-
     end -- if
+
+    if not force_checked_for_repair[player.force.index] then
+      if player.is_alert_enabled(defines.alert_type.not_enough_repair_packs) then
+        force_checked_for_repair[player.force.index] = true
+        local alerts = player.get_alerts{
+          type = defines.alert_type.not_enough_repair_packs,
+        }
+
+        for surface_index, surface_alerts in pairs(alerts) do
+          for _, surface_alert in ipairs(surface_alerts[defines.alert_type.not_enough_repair_packs]) do
+            if surface_alert.target and surface_alert.target.valid and surface_alert.target.unit_number then
+              global.alert_targets[surface_alert.target.unit_number] = surface_alert.target
+            end
+          end
+        end
+      else
+        player.enable_alert(defines.alert_type.not_enough_repair_packs)
+        -- command response for `/alerts enable not_enough_repair_packs`
+        player.print('Alert type not_enough_repair_packs has been enabled.')
+      end
+    end -- if
+
   end -- for
 
   global.missing_items = {}
