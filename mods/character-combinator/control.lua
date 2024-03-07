@@ -14,11 +14,21 @@ end
 local function organize_combinator(entity)
   local parameters = {}
 
+  local values = {}
+  values['item'] = {}
+  values['fluid'] = {}
+  values['virtual'] = {}
+  for _, parameter in ipairs(entity.get_control_behavior().parameters) do
+    if parameter.signal.name then
+      values[parameter.signal.type][parameter.signal.name] = (values[parameter.signal.type][parameter.signal.name] or 0) + parameter.count
+    end
+  end
+
   for signal_type, name_to_slot in pairs(global.position) do
     for name, slot in pairs(name_to_slot) do
       table.insert(parameters, {
         signal = {type = signal_type, name = name},
-        count = 0,
+        count = (values[signal_type][name] or 0),
         index = slot
       })
     end
