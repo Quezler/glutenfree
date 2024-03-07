@@ -20,6 +20,7 @@ local combinator = table.deepcopy(data.raw['constant-combinator']['constant-comb
 combinator.name = 'character-combinator'
 combinator.minable.result = 'character-combinator'
 combinator.item_slot_count = 10000 -- todo: guess based on the amount of items, fluids & signals (and their subcategory split row buffer thingies)
+combinator.max_health = combinator.max_health * 5
 
 do_search_n_replace(combinator)
 -- log(serpent.block(combinator))
@@ -38,7 +39,7 @@ data:extend{item}
 local recipe = table.deepcopy(data.raw['recipe']['constant-combinator'])
 recipe.name = 'character-combinator'
 recipe.result = 'character-combinator'
-recipe.ingredients = {{'constant-combinator', 5}, {'raw-fish', 1}}
+recipe.ingredients = {{'constant-combinator', 5}, {'pistol', 1}}
 
 do_search_n_replace(recipe)
 -- log(serpent.block(recipe))
