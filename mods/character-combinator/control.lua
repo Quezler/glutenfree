@@ -35,6 +35,8 @@ local function organize_combinator(entity)
   end
 
   entity.get_control_behavior().parameters = parameters
+
+  entity.surface.create_entity{name = 'tutorial-flying-text', position = entity.position, text = '[entity=character]'}
 end
 
 local function on_created_entity(event)
