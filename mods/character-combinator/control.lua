@@ -89,6 +89,7 @@ local function on_configuration_changed(event)
   local slot = 1
 
   for _, item_group in pairs(game.item_group_prototypes) do
+    local slot_was = slot
     for _, item_subgroup in ipairs(item_group.subgroups) do
       local children = subgroup_children[item_subgroup.name]
       for _, child in ipairs(children) do
@@ -106,7 +107,11 @@ local function on_configuration_changed(event)
       end
       slot = next_10(slot-1) + 1
     end
-    slot = next_10(slot) + 1
+
+    -- skip adding a row between groups if none if its sub groups added anything
+    if slot > slot_was then
+      slot = next_10(slot) + 1
+    end
   end
 end
 
