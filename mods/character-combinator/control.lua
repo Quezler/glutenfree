@@ -52,9 +52,16 @@ local function on_created_entity(event)
     for _, item_subgroup in ipairs(item_group.subgroups) do
       local children = subgroup_children[item_subgroup.name]
       for _, child in ipairs(children) do
-        if (not child.flags) or (child.flags['hidden'] == nil) then
+        local signal_type = signal_type_for[child.object_name]
+        if signal_type == 'item' and child.flags and child.flags['hidden'] then
+          -- nothing
+        elseif signal_type == 'fluid' and child.hidden then
+          -- nothing
+        elseif signal_type == 'virtual' and child.special then
+          -- nothing
+        else
           table.insert(parameters, {
-            signal = {type = signal_type_for[child.object_name], name = child.name},
+            signal = {type = signal_type, name = child.name},
             count = 0,
             index = slot
           })
@@ -63,7 +70,7 @@ local function on_created_entity(event)
       end
       slot = next_10(slot-1) + 1
     end
-    break
+    slot = next_10(slot) + 1
   end
 
   entity.get_control_behavior().parameters = parameters
