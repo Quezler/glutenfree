@@ -1,0 +1,11 @@
+{
+    "name": "character-combinator",
+    "title": "Character combinator",
+    "description": "A preformatted constant combinator in the same way as the tabs you select the signals to begin with.",
+    "version": "0.0.1",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "base"
+    ]
+}
