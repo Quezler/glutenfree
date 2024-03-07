@@ -11,22 +11,53 @@ local function next_10(i)
   until(false)
 end
 
--- local function is_prototype_hidden(prototype)
---   for _, flag in i
--- end
+local function organize_combinator(entity)
+  local parameters = {}
+
+  for signal_type, name_to_slot in pairs(global.position) do
+    for name, slot in pairs(name_to_slot) do
+      table.insert(parameters, {
+        signal = {type = signal_type, name = name},
+        count = 0,
+        index = slot
+      })
+    end
+  end
+
+  entity.get_control_behavior().parameters = parameters
+end
 
 local function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
-  -- item groups and their subgroups seem to already be ordered by their order string, unexpected but neat.
-  -- for _, item_group in pairs(game.item_group_prototypes) do
-  --   game.print(item_group.name)
-  --   for _, item_subgroup in ipairs(item_group.subgroups) do
-  --     game.print(item_subgroup.name)
-  --   end
-  --   break
-    
-  -- end
+  organize_combinator(entity)
+end
+
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+  defines.events.on_entity_cloned,
+}) do
+  script.on_event(event, on_created_entity, {
+    {filter = 'name', name = 'character-combinator'},
+  })
+end
+
+script.on_event(defines.events.on_gui_closed, function(event)
+  if event.gui_type == defines.gui_type.entity then
+    if event.entity.name == 'character-combinator' then
+      organize_combinator(event.entity)
+    end
+  end
+end)
+
+local function on_configuration_changed(event)
+  global.position = {}
+  global.position['item'] = {}
+  global.position['fluid'] = {}
+  global.position['virtual'] = {}
 
   local subgroup_children = {}
   for _, item_group in pairs(game.item_group_prototypes) do
@@ -45,7 +76,6 @@ local function on_created_entity(event)
     table.insert(subgroup_children[signal.subgroup.name], signal)
   end
 
-  local parameters = {}
   local slot = 1
 
   for _, item_group in pairs(game.item_group_prototypes) do
@@ -60,11 +90,7 @@ local function on_created_entity(event)
         elseif signal_type == 'virtual' and child.special then
           -- nothing
         else
-          table.insert(parameters, {
-            signal = {type = signal_type, name = child.name},
-            count = 0,
-            index = slot
-          })
+          global.position[signal_type][child.name] = slot
           slot = slot + 1
         end
       end
@@ -72,18 +98,7 @@ local function on_created_entity(event)
     end
     slot = next_10(slot) + 1
   end
-
-  entity.get_control_behavior().parameters = parameters
 end
 
-for _, event in ipairs({
-  defines.events.on_built_entity,
-  defines.events.on_robot_built_entity,
-  defines.events.script_raised_built,
-  defines.events.script_raised_revive,
-  defines.events.on_entity_cloned,
-}) do
-  script.on_event(event, on_created_entity, {
-    {filter = 'name', name = 'character-combinator'},
-  })
-end
+script.on_init(on_configuration_changed)
+script.on_configuration_changed(on_configuration_changed)
