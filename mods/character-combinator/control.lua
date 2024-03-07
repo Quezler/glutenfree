@@ -11,6 +11,10 @@ local function next_10(i)
   until(false)
 end
 
+-- local function is_prototype_hidden(prototype)
+--   for _, flag in i
+-- end
+
 local function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
@@ -48,12 +52,14 @@ local function on_created_entity(event)
     for _, item_subgroup in ipairs(item_group.subgroups) do
       local children = subgroup_children[item_subgroup.name]
       for _, child in ipairs(children) do
-        table.insert(parameters, {
-          signal = {type = signal_type_for[child.object_name], name = child.name},
-          count = 0,
-          index = slot
-        })
-        slot = slot + 1
+        if (not child.flags) or (child.flags['hidden'] == nil) then
+          table.insert(parameters, {
+            signal = {type = signal_type_for[child.object_name], name = child.name},
+            count = 0,
+            index = slot
+          })
+          slot = slot + 1
+        end
       end
       slot = next_10(slot-1) + 1
     end
