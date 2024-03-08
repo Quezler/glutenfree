@@ -11,18 +11,25 @@ local function next_10(i)
   until(false)
 end
 
-local function organize_combinator(entity)
-  local parameters = {}
-
+local function sum_combinator_values(combinators)
   local values = {}
   values['item'] = {}
   values['fluid'] = {}
   values['virtual'] = {}
-  for _, parameter in ipairs(entity.get_control_behavior().parameters) do
-    if parameter.signal.name then
-      values[parameter.signal.type][parameter.signal.name] = (values[parameter.signal.type][parameter.signal.name] or 0) + parameter.count
+
+  for _, combinator in ipairs(combinators) do
+    for _, parameter in ipairs(combinator.get_control_behavior().parameters) do
+      if parameter.signal.name then
+        values[parameter.signal.type][parameter.signal.name] = (values[parameter.signal.type][parameter.signal.name] or 0) + parameter.count
+      end
     end
   end
+
+  return values
+end
+
+local function reset_combinator_with_values(combinator, values)
+  local parameters = {}
 
   for signal_type, name_to_slot in pairs(global.position) do
     for name, slot in pairs(name_to_slot) do
@@ -34,7 +41,11 @@ local function organize_combinator(entity)
     end
   end
 
-  entity.get_control_behavior().parameters = parameters
+  combinator.get_control_behavior().parameters = parameters
+end
+
+local function organize_combinator(entity)
+  reset_combinator_with_values(entity, sum_combinator_values({entity}))
 
   entity.surface.create_entity{name = 'tutorial-flying-text', position = entity.position, text = '[entity=character]'}
 end
@@ -119,3 +130,10 @@ end
 
 script.on_init(on_configuration_changed)
 script.on_configuration_changed(on_configuration_changed)
+
+script.on_event(defines.events.on_pre_entity_settings_pasted, function(event)
+  if event.source.name == 'constant-combinator' and event.destination.name == 'character-combinator' then
+    reset_combinator_with_values(event.destination, sum_combinator_values({event.destination, event.source}))
+    event.source.destroy()
+  end
+end)
