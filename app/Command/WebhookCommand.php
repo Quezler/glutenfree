@@ -55,7 +55,6 @@ class WebhookCommand extends Command
                 dump('1 ' . $link_to_post);
             }
             
-
             $guzzle->post($_ENV['DISCORD_WEBHOOK'], [
                 'form_params' => [
                     'content' => $link_to_post,
