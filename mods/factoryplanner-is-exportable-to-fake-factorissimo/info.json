@@ -2,7 +2,7 @@
     "name": "factoryplanner-is-exportable-to-fake-factorissimo",
     "title": "Factory Planner - exportable to fake factorissimo",
     "description": "Tired of building out certain annoying recipe ratios? This mod easily lets you define custom recipes without actually cheating all from the comfort of an ingame gui.",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [

@@ -169,7 +169,7 @@ function Factory.on_created_entity(event)
 
   local struct = {
     unit_number = entity.unit_number,
-    version = 4,
+    version = 5,
 
     container = entity,
     combinator = combinator,
@@ -203,6 +203,12 @@ function Factory.on_created_entity(event)
     {0, 0.75},
     {0, 1.75},
     {0, 3.50},
+  }
+
+  local factory_verbose_offset = {
+    {0, 0.75 + 0.25},
+    {0, 1.75 + 0.25},
+    {0, 3.50 + 0.25},
   }
 
   struct.rendered.factory_name = rendering.draw_text{
@@ -242,6 +248,17 @@ function Factory.on_created_entity(event)
     scale = 1,
   }
 
+  struct.rendered.factory_verbose = rendering.draw_text{
+    text = '',
+    color = {1, 1, 1},
+    surface = entity.surface,
+    target = entity,
+    target_offset = factory_verbose_offset[tier],
+    alignment = "center",
+    use_rich_text = true,
+    scale = 0.5,
+  }
+
   global.structs[entity.unit_number] = struct
   Factory.tick_struct(struct)
 
@@ -275,6 +292,28 @@ function Factory.tick_struct(struct)
     rendering.set_text(struct.rendered.factory_description, struct.clipboard.factory_description)
     struct.version = 4
   end
+
+  if struct.version == 4 then
+    local factory_verbose_offset = {
+      {0, 0.75 + 0.75},
+      {0, 1.75 + 0.75},
+      {0, 3.50 + 0.75},
+    }
+
+    struct.rendered.factory_verbose = rendering.draw_text{
+      text = '',
+      color = {1, 1, 1},
+      surface = struct.container.surface,
+      target = struct.container,
+      target_offset = factory_verbose_offset[container_name_to_tier[struct.container.name]],
+      alignment = "center",
+      use_rich_text = true,
+      scale = 0.5,
+    }
+    struct.version = 5
+  end
+
+  rendering.set_text(struct.rendered.factory_verbose, '')
 
   local inventory = struct.container.get_inventory(defines.inventory.chest)
   local inventory_contents = inventory.get_contents()
@@ -326,9 +365,17 @@ function Factory.tick_struct(struct)
   struct.eei.power_usage = 0 -- disable power usage until after a successful craft cycle
 
   -- can we afford the next craft cycle?
+  local missing_ingredients = {}
   for _, ingredient in ipairs(struct.clipboard.ingredients) do
     local available = (inventory_contents[ingredient.name] or 0) + struct.input_buffer[ingredient.name]
-    if ingredient.amount > available then return rendering.set_text(struct.rendered.factory_message, "[img=utility/status_not_working] not enough ingredients") end
+    if ingredient.amount > available then
+      table.insert(missing_ingredients, string.format('[%s=%s]', ingredient.type, ingredient.name))
+    end
+  end
+  if #missing_ingredients > 0 then
+    rendering.set_text(struct.rendered.factory_message, "[img=utility/status_not_working] not enough ingredients")
+    rendering.set_text(struct.rendered.factory_verbose, table.concat(missing_ingredients, ' '))
+    return
   end
 
   for _, product in ipairs(struct.clipboard.products) do
