@@ -1,3 +1,7 @@
+# welcome
+
+more user friendly introduction @ https://www.reddit.com/r/factorio/comments/1azqm1w/new_mod_factory_planner_x_factorissimo/
+
 # concept
 
 [this mod but control stage and more powerful](https://github.com/Quezler/glutenfree/tree/main/mods/se-catalogues-can-be-crafted-from-their-breakdown)
