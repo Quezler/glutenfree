@@ -291,7 +291,7 @@ local function create_recipe(config)
 
     ingredients = {},
     result = mod_prefix .. 'item-' .. config.i,
-    enabled = false,
+    enabled = true,
     hide_from_player_crafting = true,
     energy_required = 1,
   }
@@ -302,7 +302,3 @@ local recipe_2 = create_recipe({i = 2})
 local recipe_3 = create_recipe({i = 3})
 
 data:extend{recipe_1, recipe_2, recipe_3}
-
-table.insert(data.raw['technology'][settings.startup[mod_prefix .. 'tier-1-research'].value].effects, {type = 'unlock-recipe', recipe = recipe_1.name})
-table.insert(data.raw['technology'][settings.startup[mod_prefix .. 'tier-2-research'].value].effects, {type = 'unlock-recipe', recipe = recipe_2.name})
-table.insert(data.raw['technology'][settings.startup[mod_prefix .. 'tier-3-research'].value].effects, {type = 'unlock-recipe', recipe = recipe_3.name})
