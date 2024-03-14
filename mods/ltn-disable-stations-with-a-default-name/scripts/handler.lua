@@ -48,6 +48,7 @@ function Handler.on_entity_renamed(event)
   if entity.name ~= 'logistic-train-stop' then return end
 
   local combinator = entity.surface.find_entity('red-signal-on-backer-name-combinator', entity.position)
+  assert(combinator)
 
   if global.backer_names[entity.backer_name] then
     entity.connect_neighbour({target_entity = combinator, wire = defines.wire_type.red})
