@@ -3,5 +3,3 @@ Based on reactions of the [Core Miner Refactor](https://discord.com/channels/419
 It was argued that the diminishing returns were there for the pre-vein phase, what would happen to the balance if the penalty was removed?
 
 Obviously a massive cheat mod, but hey at least this helps keeping save sizes small since you'll need way less chunks overall.
-
-To give the illusion of balance this mod inis tcreases the power usage per core miner to 250MW (a times 10 increase)
