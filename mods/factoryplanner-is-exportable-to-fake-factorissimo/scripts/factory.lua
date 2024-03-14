@@ -1,3 +1,5 @@
+local LATEST_STRUCT_VERSION = 5
+
 local shared = require('shared')
 local util = require('__core__.lualib.util')
 
@@ -169,7 +171,7 @@ function Factory.on_created_entity(event)
 
   local struct = {
     unit_number = entity.unit_number,
-    version = 5,
+    version = LATEST_STRUCT_VERSION,
 
     container = entity,
     combinator = combinator,
@@ -271,46 +273,51 @@ function Factory.tick_struct(struct)
     return
   end
 
-  if (struct.version or 0) == 0 then
-    if #struct.clipboard.products == 1 then
-      rendering.set_text(struct.rendered.factory_description, struct.clipboard.products[1].amount .. 'x ' .. struct.clipboard.factory_description)
+  if LATEST_STRUCT_VERSION > (struct.version or 0) then
+
+    if (struct.version or 0) == 0 then
+      if #struct.clipboard.products == 1 then
+        rendering.set_text(struct.rendered.factory_description, struct.clipboard.products[1].amount .. 'x ' .. struct.clipboard.factory_description)
+      end
+      struct.version = 1
     end
-    struct.version = 1
-  end
 
-  if struct.version == 1 then
-    struct.combinator = struct.container.surface.find_entity(mod_prefix .. 'constant-combinator-1', struct.container.position)
-    struct.version = 2
-  end
-
-  if struct.version == 2 or struct.version == 3 then
-    if #struct.clipboard.products == 1 then
-      struct.clipboard.factory_description = struct.clipboard.products[1].amount .. 'x ' .. Factory.get_factory_description(struct.clipboard)
-    else
-      struct.clipboard.factory_description = Factory.get_factory_description(struct.clipboard)
+    if struct.version == 1 then
+      struct.combinator = struct.container.surface.find_entity(mod_prefix .. 'constant-combinator-1', struct.container.position)
+      struct.version = 2
     end
-    rendering.set_text(struct.rendered.factory_description, struct.clipboard.factory_description)
-    struct.version = 4
-  end
 
-  if struct.version == 4 then
-    local factory_verbose_offset = {
-      {0, 0.75 + 0.75},
-      {0, 1.75 + 0.75},
-      {0, 3.50 + 0.75},
-    }
+    if struct.version == 2 or struct.version == 3 then
+      if #struct.clipboard.products == 1 then
+        struct.clipboard.factory_description = struct.clipboard.products[1].amount .. 'x ' .. Factory.get_factory_description(struct.clipboard)
+      else
+        struct.clipboard.factory_description = Factory.get_factory_description(struct.clipboard)
+      end
+      rendering.set_text(struct.rendered.factory_description, struct.clipboard.factory_description)
+      struct.version = 4
+    end
 
-    struct.rendered.factory_verbose = rendering.draw_text{
-      text = '',
-      color = {1, 1, 1},
-      surface = struct.container.surface,
-      target = struct.container,
-      target_offset = factory_verbose_offset[container_name_to_tier[struct.container.name]],
-      alignment = "center",
-      use_rich_text = true,
-      scale = 0.5,
-    }
-    struct.version = 5
+    if struct.version == 4 then
+      local factory_verbose_offset = {
+        {0, 0.75 + 0.75},
+        {0, 1.75 + 0.75},
+        {0, 3.50 + 0.75},
+      }
+
+      struct.rendered.factory_verbose = rendering.draw_text{
+        text = '',
+        color = {1, 1, 1},
+        surface = struct.container.surface,
+        target = struct.container,
+        target_offset = factory_verbose_offset[container_name_to_tier[struct.container.name]],
+        alignment = "center",
+        use_rich_text = true,
+        scale = 0.5,
+      }
+      struct.version = 5
+    end
+
+    assert(struct.version == LATEST_STRUCT_VERSION)
   end
 
   rendering.set_text(struct.rendered.factory_verbose, '')
