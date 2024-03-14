@@ -46,6 +46,7 @@ e.g. slots in terms of buildings & materials it can fit, amount of text that can
 - parts of the control script (e.g. the `ingredients_to_factorissimo` button style/construction) come from Therenas's MIT licenced Factory Planner mod
 - the thumbnail is part of a frame from a rick and morty episode about the car battery
 - the power panel above the factory archways is a sprite from among us
+- the `-space` graphic files originate from Crazy_Editor's MIT licenced `space-factorissimo-lizard` mod
 
 # 1.0.0 release
 

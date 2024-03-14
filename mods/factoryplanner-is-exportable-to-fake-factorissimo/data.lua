@@ -2,6 +2,18 @@ local mod_prefix = 'fietff-'
 local mod_path = '__factoryplanner-is-exportable-to-fake-factorissimo__'
 local shared = require('shared')
 
+local collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile"}
+local icon_file_path = '/graphics/icon/factory-%d.png'
+local icon_size = 64
+local entity_pfile_ath = '/graphics/factory/factory-%d.png'
+
+if mods['space-exploration'] then
+  table.insert(collision_mask, 'ground-tile')
+  icon_file_path = '/graphics/icon/factory-%d-space.png'
+  icon_size = 32
+  entity_file_path = '/graphics/factory/factory-%d-space.png'
+end
+
 local function create_container(config)
   local container = {
     type = 'container',
@@ -9,11 +21,12 @@ local function create_container(config)
 
     localised_name = {"entity-name.fietff-container-i", config.i},
   
-    icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', config.i),
-    icon_size = 64,
+    icon = string.format(mod_path .. icon_file_path, config.i),
+    icon_size = icon_size,
 
     max_health = 500 + (1500 * config.i),
   
+    collision_mask = collision_mask,
     collision_box = config.collision_box,
     selection_box = config.selection_box,
     vehicle_impact_sound = { filename = '__base__/sound/car-stone-impact.ogg', volume = 1.0 },
@@ -36,7 +49,7 @@ local function create_container(config)
           draw_as_shadow = true
         },
         {
-          filename = string.format(mod_path .. '/graphics/factory/factory-%d-alt.png', config.i),
+          filename = string.format(mod_path .. entity_file_path, config.i),
           shift = config.shift,
         }
       }
@@ -103,6 +116,13 @@ local container_3 = create_container({
   circuit_main_offset = util.by_pixel(-4, -72),
 })
 
+if mods['space-exploration'] then
+  local data_util = require('__space-exploration__.data_util')
+  data_util.collision_description(container_1)
+  data_util.collision_description(container_2)
+  data_util.collision_description(container_3)
+end
+
 data:extend{container_1, container_2, container_3}
 
 local function create_item(config)
@@ -110,8 +130,8 @@ local function create_item(config)
     type = 'item',
     name = mod_prefix .. 'item-' .. config.i,
     flags = {'hidden', 'only-in-cursor'},
-    icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', config.i),
-    icon_size = 64,
+    icon = string.format(mod_path .. icon_file_path, config.i),
+    icon_size = icon_size,
     stack_size = 1,
     place_result = mod_prefix .. 'container-' ..config.i,
   }
@@ -129,8 +149,8 @@ local function create_interface(config)
     type = 'electric-energy-interface',
     name = mod_prefix .. 'electric-energy-interface-' .. config.i,
     localised_name = {"", {"entity-name.fietff-container-i", config.i}, ' ', '(power)'},
-    icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', config.i),
-    icon_size = 64,
+    icon = string.format(mod_path .. icon_file_path, config.i),
+    icon_size = icon_size,
 
     collision_mask = {},
     collision_box = {
@@ -209,8 +229,8 @@ local function create_assembler(config)
     type = 'assembling-machine',
     name = mod_prefix .. 'assembling-machine-' .. config.i,
     localised_name = {"", {"entity-name.fietff-container-i", config.i}, ' ', '(rent)'},
-    icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', config.i),
-    icon_size = 64,
+    icon = string.format(mod_path .. icon_file_path, config.i),
+    icon_size = icon_size,
 
     flags = {
       'not-on-map',
@@ -286,8 +306,8 @@ local function create_recipe(config)
     name = mod_prefix .. 'item-' .. config.i .. '-unlock',
     localised_name = {"entity-name.fietff-container-i", config.i},
 
-    icon = string.format(mod_path .. '/graphics/icon/factory-%d.png', config.i),
-    icon_size = 64,
+    icon = string.format(mod_path .. icon_file_path, config.i),
+    icon_size = icon_size,
 
     ingredients = {},
     result = mod_prefix .. 'item-' .. config.i,
