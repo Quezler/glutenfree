@@ -53,6 +53,15 @@ data:extend{{
     {icon = r_wire.icon, icon_size = r_wire.icon_size, icon_mipmaps = r_wire.icon_mipmaps, scale = 0.5},
   },
 
-  placeable_by = {item = 'red-wire', count = 1},
   flags = {"player-creation", "no-automated-item-removal", "no-automated-item-insertion", "not-on-map"},
+}}
+
+data:extend{{
+  type = 'item',
+  name = mod_prefix .. 'circuit-connector',
+
+  stack_size = 1,
+  icons = data.raw['container'][mod_prefix .. 'circuit-connector'].icons,
+  flags = {"hidden"},
+  place_result = mod_prefix .. 'circuit-connector',
 }}

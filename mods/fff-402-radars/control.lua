@@ -17,7 +17,7 @@ local function on_created_entity(event)
   if surfacedata.relay ~= nil and surfacedata.relay.valid == false then
     error("the surface's radar circuit relay got invalidated, what happened?")
   end
-  
+
   if surfacedata.relay == nil or surfacedata.relay.valid == false then
     surfacedata.relay = surface.create_entity{
       name = mod_prefix .. 'circuit-relay',
@@ -129,5 +129,28 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
         entity.destroy()
       end
     end
+  end
+end)
+
+script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
+  local player = game.get_player(event.player_index)
+  -- game.print(event.tick)
+
+  if player.selected and player.selected.name == mod_prefix .. 'circuit-connector' then
+    local radars = player.surface.find_entities_filtered{type = 'radar', position = player.selected.position}
+    for _, radar in ipairs(radars) do
+      if is_radar_supported(radar) then
+        player.pipette_entity(radar)
+        return
+      end
+    end
+  end
+
+  if player.cursor_stack and player.cursor_stack.valid_for_read and player.cursor_stack.name == mod_prefix .. 'circuit-connector' then
+    player.cursor_stack.clear()
+  end
+
+  if player.cursor_ghost and player.cursor_ghost.name == mod_prefix .. 'circuit-connector' then
+    player.cursor_ghost = nil
   end
 end)
