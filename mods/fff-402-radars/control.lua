@@ -14,6 +14,10 @@ local function on_created_entity(event)
   if not is_radar_supported(entity) then return end
 
   local surfacedata = global.surfacedata[surface.index]
+  if surfacedata.relay ~= nil and surfacedata.relay.valid == false then
+    error("the surface's radar circuit relay got invalidated, what happened?")
+  end
+  
   if surfacedata.relay == nil or surfacedata.relay.valid == false then
     surfacedata.relay = surface.create_entity{
       name = mod_prefix .. 'circuit-relay',

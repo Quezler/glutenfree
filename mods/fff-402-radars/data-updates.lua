@@ -26,7 +26,7 @@ data:extend{{
 
   icons = {
     {icon = radar.icon, icon_size = radar.icon_size, icon_mipmaps = radar.icon_mipmaps},
-    {icon = w_pole.icon, icon_size = w_pole.icon_size, icon_mipmaps = w_pole.icon_mipmaps, scale = 0.25},
+    {icon = w_pole.icon, icon_size = w_pole.icon_size, icon_mipmaps = w_pole.icon_mipmaps, scale = 0.5},
   },
 
   flags = {"no-automated-item-removal", "no-automated-item-insertion", "not-on-map"},
@@ -50,7 +50,7 @@ data:extend{{
 
   icons = {
     {icon = radar.icon, icon_size = radar.icon_size, icon_mipmaps = radar.icon_mipmaps},
-    {icon = r_wire.icon, icon_size = r_wire.icon_size, icon_mipmaps = r_wire.icon_mipmaps, scale = 0.25},
+    {icon = r_wire.icon, icon_size = r_wire.icon_size, icon_mipmaps = r_wire.icon_mipmaps, scale = 0.5},
   },
 
   placeable_by = {item = 'red-wire', count = 1},
