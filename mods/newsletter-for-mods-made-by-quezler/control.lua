@@ -45,6 +45,7 @@ end
 
 script.on_event(mod_prefix .. 'leftclick', close_textfield)
 
+-- so that walking with WASD makes you close the textfield as well
 script.on_event(defines.events.on_gui_text_changed, function(event)
   if event.element.name == mod_prefix .. 'textfield' then
     close_textfield(event)
