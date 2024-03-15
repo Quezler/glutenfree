@@ -19,6 +19,8 @@ local function on_created_entity(event)
     unit_number = entity.unit_number,
     entity = entity,
   }
+
+  global.deathrattles[script.register_on_entity_destroyed(entity)] = {red_wire_chest}
 end
 
 for _, event in ipairs({
@@ -50,13 +52,23 @@ script.on_event(defines.events.on_surface_deleted, on_surface_deleted)
 
 local function on_init(event)
   global.surfacedata = {}
+  global.deathrattles = {}
 
   for _, surface in pairs(game.surfaces) do
     on_surface_created({surface_index = surface.index})
-    for _, entity in pairs( surface.find_entities_filtered{type = 'radar'} ) do
+    for _, entity in pairs(surface.find_entities_filtered{type = 'radar'}) do
       on_created_entity({entity = entity})
     end
   end
 end
 
 script.on_init(on_init)
+
+script.on_event(defines.events.on_entity_destroyed, function(event)
+  local deathrattle = global.deathrattles[event.registration_number]
+  if deathrattle then global.deathrattles[event.registration_number] = nil
+    for _, entity in ipairs(deathrattle) do
+      entity.destroy()
+    end
+  end
+end)
