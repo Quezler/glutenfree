@@ -4,15 +4,15 @@ local function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
   local surface = entity.surface
 
-  local red_wire_chest = surface.find_entity(mod_prefix .. 'circuit-connector', entity.position)
-  if red_wire_chest == nil then
-    red_wire_chest = surface.create_entity{
+  local circuit_connector = surface.find_entity(mod_prefix .. 'circuit-connector', entity.position)
+  if circuit_connector == nil then
+    circuit_connector = surface.create_entity{
       name = mod_prefix .. 'circuit-connector',
       force = entity.force,
       position = entity.position,
     }
 
-    red_wire_chest.destructible = false
+    circuit_connector.destructible = false
   end
 
   local registration_number = script.register_on_entity_destroyed(entity)
@@ -20,10 +20,12 @@ local function on_created_entity(event)
   global.surfacedata[surface.index].structs[entity.unit_number] = {
     unit_number = entity.unit_number,
     entity = entity,
+
+    circuit_connector = circuit_connector,
   }
 
-  global.deathrattles[registration_number] = {red_wire_chest}
-  global.owned_by_deathrattle[red_wire_chest.unit_number] = registration_number
+  global.deathrattles[registration_number] = {circuit_connector}
+  global.owned_by_deathrattle[circuit_connector.unit_number] = registration_number
 end
 
 for _, event in ipairs({
@@ -53,6 +55,23 @@ end
 script.on_event(defines.events.on_surface_created, on_surface_created)
 script.on_event(defines.events.on_surface_deleted, on_surface_deleted)
 
+local function on_dolly_moved_entity(event)
+  local struct = global.surfacedata[event.moved_entity.surface.index].structs[event.moved_entity.unit_number]
+  if struct == nil then return end
+
+  struct.circuit_connector.teleport(event.moved_entity.position)
+end
+
+local function register_events()
+  if remote.interfaces["PickerDollies"] and remote.interfaces["PickerDollies"]["dolly_moved_entity_id"] then
+    script.on_event(remote.call("PickerDollies", "dolly_moved_entity_id"), on_dolly_moved_entity)
+  end
+
+  if remote.interfaces["PickerDollies"] and remote.interfaces["PickerDollies"]["add_blacklist_name"] then
+    remote.call("PickerDollies", "add_blacklist_name", mod_prefix .. 'circuit-connector')
+  end
+end
+
 local function on_init(event)
   global.surfacedata = {}
   global.deathrattles = {}
@@ -64,9 +83,12 @@ local function on_init(event)
       on_created_entity({entity = entity})
     end
   end
+
+  register_events()
 end
 
 script.on_init(on_init)
+script.on_load(register_events)
 
 script.on_event(defines.events.on_entity_destroyed, function(event)
   local deathrattle = global.deathrattles[event.registration_number]

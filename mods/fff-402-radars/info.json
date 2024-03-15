@@ -8,6 +8,7 @@
     "dependencies": [
         "? base",
         "? Krastorio2",
-        "? space-exploration"
+        "? space-exploration",
+        "? PickerDollies"
     ]
 }
