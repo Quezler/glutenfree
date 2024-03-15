@@ -4,10 +4,10 @@ local function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
   local surface = entity.surface
 
-  local red_wire_chest = surface.find_entity(mod_prefix .. 'radar' .. '-red-wire', entity.position)
+  local red_wire_chest = surface.find_entity(mod_prefix .. 'circuit-connector', entity.position)
   if red_wire_chest == nil then
     red_wire_chest = surface.create_entity{
-      name = mod_prefix .. 'radar' .. '-red-wire',
+      name = mod_prefix .. 'circuit-connector',
       force = entity.force,
       position = entity.position,
     }
