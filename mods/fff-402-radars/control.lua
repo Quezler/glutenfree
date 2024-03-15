@@ -1,8 +1,26 @@
 local mod_prefix = 'fff-402-radars-'
 
+local function is_radar_supported(entity)
+  local selection_box = entity.prototype.selection_box
+
+  -- only support 3x3 radars, those are likely recolors of the original radar and thus the circuit connector sprite is assumed to fit them
+  return selection_box.left_top.x == -1.5 and selection_box.left_top.y == -1.5 and selection_box.right_bottom.x == 1.5 and selection_box.right_bottom.y == 1.5 
+end
+
 local function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
   local surface = entity.surface
+
+  if not is_radar_supported(entity) then return end
+
+  local surfacedata = global.surfacedata[surface.index]
+  if surfacedata.relay == nil or surfacedata.relay.valid == false then
+    surfacedata.relay = surface.create_entity{
+      name = mod_prefix .. 'circuit-relay',
+      force = entity.force,
+      position = surface.find_non_colliding_position(mod_prefix .. 'circuit-relay', {0, 0}, 0, 1, true),
+    }
+  end
 
   local circuit_connector = surface.find_entity(mod_prefix .. 'circuit-connector', entity.position)
   if circuit_connector == nil then
@@ -13,6 +31,15 @@ local function on_created_entity(event)
     }
 
     circuit_connector.destructible = false
+
+    circuit_connector.connect_neighbour({
+      target_entity = surfacedata.relay,
+      wire = defines.wire_type.red,
+    })
+    circuit_connector.connect_neighbour({
+      target_entity = surfacedata.relay,
+      wire = defines.wire_type.green,
+    })
   end
 
   local registration_number = script.register_on_entity_destroyed(entity)
