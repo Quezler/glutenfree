@@ -13,7 +13,7 @@ data:extend{{
   type = 'container',
   name = mod_prefix .. 'circuit-relay',
 
-  -- selectable_in_game = false,
+  selectable_in_game = false,
   selection_box = radar.selection_box,
   collision_box = radar.collision_box,
   collision_mask = {},
