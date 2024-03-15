@@ -165,14 +165,8 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   if player.cursor_ghost and player.cursor_ghost.name == mod_prefix .. 'circuit-connector' then
     if player.selected and player.selected.name == mod_prefix .. 'circuit-connector' then
       local radars = player.surface.find_entities_filtered{type = 'radar', position = player.selected.position}
-      -- game.print(#radars)
-      -- game.print(serpent.line(radars))
       for _, radar in ipairs(radars) do
-        -- game.print(_)
         if is_radar_supported(radar) then
-          -- game.print('supported')
-          -- game.print(serpent.line(player.pipette_entity(radar.name)))
-          -- player.pipette_entity(radar.name)
           player.cursor_ghost = radar.name
           return
         end
