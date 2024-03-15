@@ -34,10 +34,11 @@ for _, radar in pairs(data.raw['radar']) do
   data:extend{{
     type = 'container',
     name = mod_prefix .. radar.name .. '-red-wire',
-    localised_name = {"", {'entity-name.' .. radar.name}, ' (fff 402 circuit)'},
+    localised_name = {"", {'entity-name.' .. radar.name}, ' <backer name>'},
+    localised_description = {'entity-description.' .. radar.name},
 
-    selection_priority = (radar.selection_priority or 50) - 1,
-    selection_box = radar.selection_box,
+    selection_priority = (radar.selection_priority or 50) + 1,
+    selection_box = {{-1.5, -1.5}, {0, 1.5}},
     collision_box = radar.collision_box,
     collision_mask = {},
 
