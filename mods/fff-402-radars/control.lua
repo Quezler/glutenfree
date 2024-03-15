@@ -15,12 +15,15 @@ local function on_created_entity(event)
     red_wire_chest.destructible = false
   end
 
+  local registration_number = script.register_on_entity_destroyed(entity)
+
   global.surfacedata[surface.index].structs[entity.unit_number] = {
     unit_number = entity.unit_number,
     entity = entity,
   }
 
-  global.deathrattles[script.register_on_entity_destroyed(entity)] = {red_wire_chest}
+  global.deathrattles[registration_number] = {red_wire_chest}
+  global.owned_by_deathrattle[red_wire_chest.unit_number] = registration_number
 end
 
 for _, event in ipairs({
@@ -53,6 +56,7 @@ script.on_event(defines.events.on_surface_deleted, on_surface_deleted)
 local function on_init(event)
   global.surfacedata = {}
   global.deathrattles = {}
+  global.owned_by_deathrattle = {}
 
   for _, surface in pairs(game.surfaces) do
     on_surface_created({surface_index = surface.index})
@@ -68,7 +72,9 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
   local deathrattle = global.deathrattles[event.registration_number]
   if deathrattle then global.deathrattles[event.registration_number] = nil
     for _, entity in ipairs(deathrattle) do
-      entity.destroy()
+      if global.owned_by_deathrattle[entity.unit_number] == event.registration_number then
+        entity.destroy()
+      end
     end
   end
 end)
