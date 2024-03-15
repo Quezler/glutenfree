@@ -28,6 +28,18 @@ local function on_created_entity(event)
 
   local circuit_connector = surface.find_entity(mod_prefix .. 'circuit-connector', entity.position)
   if circuit_connector == nil then
+    local entity_ghosts = surface.find_entities_filtered{
+      ghost_name = mod_prefix .. 'circuit-connector',
+      position = entity.position,
+      limit = 1
+    }
+
+    if entity_ghosts[1] then
+      local _, entity = entity_ghosts[1].revive({})
+      if entity then circuit_connector = entity end
+    end
+  end
+  if circuit_connector == nil then
     circuit_connector = surface.create_entity{
       name = mod_prefix .. 'circuit-connector',
       force = entity.force,
