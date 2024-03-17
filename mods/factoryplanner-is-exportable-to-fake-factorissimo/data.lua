@@ -5,7 +5,7 @@ local shared = require('shared')
 local collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile"}
 local icon_file_path = '/graphics/icon/factory-%d.png'
 local icon_size = 64
-local entity_pfile_ath = '/graphics/factory/factory-%d.png'
+local entity_file_path = '/graphics/factory/factory-%d.png'
 
 if mods['space-exploration'] then
   table.insert(collision_mask, 'ground-tile')
