@@ -137,7 +137,7 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
   local deathrattle = global.deathrattles[event.registration_number]
   if deathrattle then global.deathrattles[event.registration_number] = nil
     for _, entity in ipairs(deathrattle) do
-      if global.owned_by_deathrattle[entity.unit_number] == event.registration_number then
+      if entity.valid and global.owned_by_deathrattle[entity.unit_number] == event.registration_number then
         entity.destroy()
       end
     end
