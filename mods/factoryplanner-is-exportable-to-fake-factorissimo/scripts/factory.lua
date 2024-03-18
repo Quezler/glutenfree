@@ -208,9 +208,9 @@ function Factory.on_created_entity(event)
   }
 
   local factory_verbose_offset = {
-    {0, 0.75 + 0.25},
-    {0, 1.75 + 0.25},
-    {0, 3.50 + 0.25},
+    {0, 0.75 + 0.75},
+    {0, 1.75 + 0.75},
+    {0, 3.50 + 0.75},
   }
 
   struct.rendered.factory_name = rendering.draw_text{
