@@ -467,7 +467,7 @@ function Factory.on_entity_settings_pasted(event)
   end
 
   if container_name_to_tier[event.source.name] and event.destination.type == "infinity-container" then
-    local mode = infinity_container_get_gui_mode(event.destination.name)
+    -- local mode = infinity_container_get_gui_mode(event.destination.name)
     -- local player = game.get_player(event.player_index)
 
     -- if (mode == "none") or (mode == "admins" and player.admin == false) then
