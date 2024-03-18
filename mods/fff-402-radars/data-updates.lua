@@ -37,8 +37,8 @@ data:extend{{
   name = mod_prefix .. 'circuit-connector',
 
   selection_priority = 51,
-  selection_box = {{-1.5, -1.5}, {0  , 1.5}},
-  collision_box = {{-1.5, -1.5}, {1.5, 1.5}},
+  selection_box = {{-1.5, -1.5}, {0, 1.5}},
+  collision_box = radar.collision_box,
   collision_mask = {},
 
   inventory_size = 0,
