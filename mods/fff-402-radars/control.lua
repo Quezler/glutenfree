@@ -45,19 +45,19 @@ local function on_created_entity(event)
       force = entity.force,
       position = entity.position,
     }
-
-    circuit_connector.destructible = false
-
-    circuit_connector.connect_neighbour({
-      target_entity = surfacedata.relay,
-      wire = defines.wire_type.red,
-    })
-    circuit_connector.connect_neighbour({
-      target_entity = surfacedata.relay,
-      wire = defines.wire_type.green,
-    })
   end
 
+  circuit_connector.destructible = false
+
+  circuit_connector.connect_neighbour({
+    target_entity = surfacedata.relay,
+    wire = defines.wire_type.red,
+  })
+  circuit_connector.connect_neighbour({
+    target_entity = surfacedata.relay,
+    wire = defines.wire_type.green,
+  })
+  
   local registration_number = script.register_on_entity_destroyed(entity)
 
   global.surfacedata[surface.index].structs[entity.unit_number] = {
