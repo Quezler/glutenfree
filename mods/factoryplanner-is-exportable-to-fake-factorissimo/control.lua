@@ -273,12 +273,12 @@ script.on_event(defines.events.on_gui_click, function(event)
       if product.type == "fluid" and global.can_be_barreled[product.name] then
         clipboard.products[i] = {
           type = "item",
-          name = product.name .. "-barrel",
+          name = global.can_be_unbarreled_from[product.name],
           amount = product.amount / global.can_be_barreled[product.name],
         }
         merge_ingredients(clipboard.ingredients, {
           type = "item",
-          name = "empty-barrel",
+          name = global.can_be_barreled_with[product.name],
           amount = product.amount / global.can_be_barreled[product.name],
         })
       end
@@ -288,12 +288,12 @@ script.on_event(defines.events.on_gui_click, function(event)
       if byproduct.type == "fluid" and global.can_be_barreled[byproduct.name] then
         clipboard.byproducts[i] = {
           type = "item",
-          name = byproduct.name .. "-barrel",
+          name = global.can_be_unbarreled_from[byproduct.name],
           amount = byproduct.amount / global.can_be_barreled[byproduct.name],
         }
         merge_ingredients(clipboard.ingredients, {
           type = "item",
-          name = "empty-barrel",
+          name = global.can_be_barreled_with[byproduct.name],
           amount = byproduct.amount / global.can_be_barreled[byproduct.name],
         })
       end
@@ -303,12 +303,12 @@ script.on_event(defines.events.on_gui_click, function(event)
       if ingredient.type == "fluid" and global.can_be_unbarreled[ingredient.name] then
         clipboard.ingredients[i] = {
           type = "item",
-          name = ingredient.name .. "-barrel",
+          name = global.can_be_unbarreled_from[ingredient.name],
           amount = ingredient.amount / global.can_be_unbarreled[ingredient.name],
         }
         merge_ingredients(clipboard.byproducts, {
           type = "item",
-          name = "empty-barrel",
+          name = global.can_be_barreled_with[ingredient.name],
           amount = ingredient.amount / global.can_be_unbarreled[ingredient.name],
         })
       end
@@ -327,9 +327,10 @@ script.on_event(defines.events.on_gui_click, function(event)
 
     -- todo: check if there are no duplicates in the products/byproducts/ingredients
 
-    do -- cancel out empty barrel ingredients & byproducts
-      local barrel_byproduct, i1 = get_ingredient(clipboard.byproducts, 'item', 'empty-barrel')
-      local barrel_ingredient, i2 = get_ingredient(clipboard.ingredients, 'item', 'empty-barrel')
+    -- cancel out empty barrel ingredients & byproducts
+    for by_product_to_equalize, _ in pairs(global.by_products_to_equalize) do
+      local barrel_byproduct, i1 = get_ingredient(clipboard.byproducts, 'item', by_product_to_equalize)
+      local barrel_ingredient, i2 = get_ingredient(clipboard.ingredients, 'item', by_product_to_equalize)
 
       if barrel_byproduct and barrel_ingredient then
         if barrel_byproduct.amount > barrel_ingredient.amount then
@@ -446,11 +447,28 @@ local function get_fluid_amount_from_ingredients_or_products(entries)
   error('no fluid found.')
 end
 
+local function get_item_name_from_ingredients_or_products(entries)
+  assert(#entries == 2) -- one barrel and one fluid, deviating from that norm requires enhancing this function
+
+  for _, entry in ipairs(entries) do
+    if entry.type == "item" then
+      return entry.name
+    end
+  end
+
+  error('no item found.')
+end
+
 local function on_configuration_changed(event)
   global.clipboards = global.clipboards or {}
 
   global.can_be_barreled = {}
   global.can_be_unbarreled = {}
+
+  -- the commit that introduced this is likely to crash if a fluid has only one recipe (either unbarrel or barrel), will fix when reported.
+  global.can_be_barreled_with = {}
+  global.can_be_unbarreled_from = {}
+  global.by_products_to_equalize = {}
 
   local cannot_be_barreled = {}
   local cannot_be_unbarreled = {}
@@ -462,6 +480,7 @@ local function on_configuration_changed(event)
     if barrel_prototype then
       -- log(serpent.block(barrel_prototype.ingredients))
       global.can_be_barreled[fluid_name] = get_fluid_amount_from_ingredients_or_products(barrel_prototype.ingredients)
+      global.can_be_barreled_with[fluid_name] = get_item_name_from_ingredients_or_products(barrel_prototype.ingredients)
     else
       table.insert(cannot_be_barreled, fluid_name)
     end
@@ -469,9 +488,16 @@ local function on_configuration_changed(event)
     if unbarrel_prototype then
       -- log(serpent.block(unbarrel_prototype.products))
       global.can_be_unbarreled[fluid_name] = get_fluid_amount_from_ingredients_or_products(unbarrel_prototype.products)
+      assert(#unbarrel_prototype.ingredients == 1)
+      assert(unbarrel_prototype.ingredients[1].type == 'item')
+      global.can_be_unbarreled_from[fluid_name] = unbarrel_prototype.ingredients[1].name
     else
       table.insert(cannot_be_unbarreled, fluid_name)
     end
+  end
+
+  for fluid_name, barrel_name in pairs(global.can_be_barreled_with) do
+    global.by_products_to_equalize[barrel_name] = true
   end
 
   log('are any of the 4 barrel sections deemed wrong? then this mod does not detect all of them properly:')
