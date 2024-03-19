@@ -39,32 +39,40 @@ data:extend{
 for _, fluid in pairs(data.raw['fluid']) do
   data:extend{
     {
-      type = 'recipe',
-      name = string.format(mod_prefix .. 'fluid-port-%s-in', fluid.name),
-      localised_name = {"recipe-name.fietff-fluid-port-in", fluid.name},
+      type = 'storage-tank',
+      name = string.format(mod_prefix .. 'storage-tank-%s', fluid.name),
+      localised_name = {"entity-name.fietff-storage-tank-fluidname", fluid.name},
 
-      category = mod_prefix .. 'fluid-port',
-      subgroup = mod_prefix .. 'fluid-port-in',
-      icons = data.raw['item'][mod_prefix .. 'item-' .. 1].icons,
+      collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
+      selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
+      selection_priority = 51,
 
-      ingredients = {
-        {type = 'fluid', name = fluid.name, amount = 1},
+      fluid_box = {
+        production_type = "input-output",
+        pipe_picture = util.empty_sprite(),
+        pipe_covers = pipecoverspictures(),
+        base_area = 1,
+        base_level = -1,
+        filter = fluid.name,
+        pipe_connections = {{ type="input-output", position = {0, -1} }},
       },
-      results = {},
-    },
-    {
-      type = 'recipe',
-      name = string.format(mod_prefix .. 'fluid-port-%s-out', fluid.name),
-      localised_name = {"recipe-name.fietff-fluid-port-out", fluid.name},
 
-      category = mod_prefix .. 'fluid-port',
-      subgroup = mod_prefix .. 'fluid-port-out',
-      icons = data.raw['item'][mod_prefix .. 'item-' .. 2].icons,
+      window_bounding_box = {{0, 0}, {0 , 0}},
 
-      ingredients = {},
-      results = {
-        {type = 'fluid', name = fluid.name, amount = 1},
+      pictures = {
+        picture = util.empty_sprite(),
+        window_background = util.empty_sprite(),
+        fluid_background = util.empty_sprite(),
+        flow_sprite = util.empty_sprite(),
+        gas_flow = util.empty_sprite(),
       },
+
+      flow_length_in_ticks = 1,
+      max_health = 100,
+
+      -- flags = {"hide-alt-info"},
     }
   }
 end
+
+-- data.raw['storage-tank']['kr-fluid-storage-2'].fluid_box.filter = 'water'
