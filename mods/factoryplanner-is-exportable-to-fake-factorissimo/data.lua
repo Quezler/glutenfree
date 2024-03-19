@@ -7,7 +7,10 @@ local icon_file_path = '/graphics/icon/factory-%d.png'
 local icon_size = 64
 local entity_file_path = '/graphics/factory/factory-%d.png'
 
-if mods['space-exploration'] then
+local space_exploration_mode = mods['space-exploration']
+-- space_exploration_mode = false
+
+if space_exploration_mode then
   table.insert(collision_mask, 'ground-tile')
   icon_file_path = '/graphics/icon/factory-%d-space.png'
   icon_size = 32
@@ -116,7 +119,7 @@ local container_3 = create_container({
   circuit_main_offset = util.by_pixel(-4, -72),
 })
 
-if mods['space-exploration'] then
+if space_exploration_mode then
   local data_util = require('__space-exploration__.data_util')
   data_util.collision_description(container_1)
   data_util.collision_description(container_2)
