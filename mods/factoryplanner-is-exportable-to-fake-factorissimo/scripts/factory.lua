@@ -43,7 +43,7 @@ function Factory.get_constant_combinator_parameters(clipboard)
 
   for _, ingredient in ipairs(clipboard.ingredients) do
     table.insert(parameters, {
-      signal = {type = "item", name = ingredient.name},
+      signal = {type = ingredient.type, name = ingredient.name},
       count = -math.ceil(ingredient.amount),
       index = i,
     })
@@ -56,9 +56,14 @@ end
 function Factory.slots_required_for(ingredients)
   local slots = 0
   for _, ingredient in ipairs(ingredients) do
-    assert(ingredient.type == "item")
-    local item_prototype = game.item_prototypes[ingredient.name]
-    slots = slots + math.ceil(ingredient.amount / item_prototype.stack_size)
+    if ingredient.type == "item" then
+      local item_prototype = game.item_prototypes[ingredient.name]
+      slots = slots + math.ceil(ingredient.amount / item_prototype.stack_size)
+    elseif ingredient.type == "fluid" then
+      -- do nothing
+    else
+      error(ingredient.name .. ' ' .. ingredient.type)
+    end
   end
   return slots
 end

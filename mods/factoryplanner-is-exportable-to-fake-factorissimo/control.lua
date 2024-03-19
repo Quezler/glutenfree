@@ -268,83 +268,6 @@ script.on_event(defines.events.on_gui_click, function(event)
     end
   end
 
-  do -- ensure all input/output fluids are barreled
-    for i, product in ipairs(clipboard.products) do
-      if product.type == "fluid" and global.can_be_barreled[product.name] then
-        clipboard.products[i] = {
-          type = "item",
-          name = global.can_be_unbarreled_from[product.name],
-          amount = product.amount / global.can_be_barreled[product.name],
-        }
-        merge_ingredients(clipboard.ingredients, {
-          type = "item",
-          name = global.can_be_barreled_with[product.name],
-          amount = product.amount / global.can_be_barreled[product.name],
-        })
-      end
-    end
-
-    for i, byproduct in ipairs(clipboard.byproducts) do
-      if byproduct.type == "fluid" and global.can_be_barreled[byproduct.name] then
-        clipboard.byproducts[i] = {
-          type = "item",
-          name = global.can_be_unbarreled_from[byproduct.name],
-          amount = byproduct.amount / global.can_be_barreled[byproduct.name],
-        }
-        merge_ingredients(clipboard.ingredients, {
-          type = "item",
-          name = global.can_be_barreled_with[byproduct.name],
-          amount = byproduct.amount / global.can_be_barreled[byproduct.name],
-        })
-      end
-    end
-  
-    for i, ingredient in ipairs(clipboard.ingredients) do
-      if ingredient.type == "fluid" and global.can_be_unbarreled[ingredient.name] then
-        clipboard.ingredients[i] = {
-          type = "item",
-          name = global.can_be_unbarreled_from[ingredient.name],
-          amount = ingredient.amount / global.can_be_unbarreled[ingredient.name],
-        }
-        merge_ingredients(clipboard.byproducts, {
-          type = "item",
-          name = global.can_be_barreled_with[ingredient.name],
-          amount = ingredient.amount / global.can_be_unbarreled[ingredient.name],
-        })
-      end
-    end
-
-    for _, foo in ipairs({clipboard.products, clipboard.byproducts, clipboard.ingredients}) do
-      for _, bar in ipairs(foo) do
-        if bar.type == "fluid" then
-          return player.create_local_flying_text{
-            text = string.format('There is no barrel for the [%s] fluid.', bar.name),
-            create_at_cursor = true,
-          }
-        end
-      end
-    end
-
-    -- todo: check if there are no duplicates in the products/byproducts/ingredients
-
-    -- cancel out empty barrel ingredients & byproducts
-    for by_product_to_equalize, _ in pairs(global.by_products_to_equalize) do
-      local barrel_byproduct, i1 = get_ingredient(clipboard.byproducts, 'item', by_product_to_equalize)
-      local barrel_ingredient, i2 = get_ingredient(clipboard.ingredients, 'item', by_product_to_equalize)
-
-      if barrel_byproduct and barrel_ingredient then
-        if barrel_byproduct.amount > barrel_ingredient.amount then
-          barrel_byproduct.amount = barrel_byproduct.amount - barrel_ingredient.amount
-          table.remove(clipboard.ingredients, i2)
-        end
-        if barrel_ingredient.amount > barrel_byproduct.amount then
-          barrel_ingredient.amount = barrel_ingredient.amount - barrel_byproduct.amount
-          table.remove(clipboard.byproducts, i1)
-        end
-      end
-    end
-  end
-
   if player.clear_cursor() == false then
     return player.create_local_flying_text{
       text = "Failed to empty your hand.",
@@ -435,84 +358,18 @@ for _, event in ipairs({
   })
 end
 
-local function get_fluid_amount_from_ingredients_or_products(entries)
-  assert(#entries == 2) -- one barrel and one fluid, deviating from that norm requires enhancing this function
-
-  for _, entry in ipairs(entries) do
-    if entry.type == "fluid" then
-      return entry.amount
-    end
-  end
-
-  error('no fluid found.')
-end
-
-local function get_item_name_from_ingredients_or_products(entries)
-  assert(#entries == 2) -- one barrel and one fluid, deviating from that norm requires enhancing this function
-
-  for _, entry in ipairs(entries) do
-    if entry.type == "item" then
-      return entry.name
-    end
-  end
-
-  error('no item found.')
-end
-
 local function on_configuration_changed(event)
   global.clipboards = global.clipboards or {}
 
-  global.can_be_barreled = {}
-  global.can_be_unbarreled = {}
+  global.can_be_barreled = nil
+  global.can_be_unbarreled = nil
 
-  -- the commit that introduced this is likely to crash if a fluid has only one recipe (either unbarrel or barrel), will fix when reported.
-  global.can_be_barreled_with = {}
-  global.can_be_unbarreled_from = {}
-  global.by_products_to_equalize = {}
+  global.can_be_barreled_with = nil
+  global.can_be_unbarreled_from = nil
+  global.by_products_to_equalize = nil
 
-  local cannot_be_barreled = {}
-  local cannot_be_unbarreled = {}
-
-  -- assume the recipes are like this, and that the research state of being able to barrel or unbarrel is insignificant
-  -- todo: loop through all recipe names, determine the input and output values, determine the item name of the barrel.
-  for fluid_name, fluid_prototype in pairs(game.fluid_prototypes) do
-    local barrel_prototype = game.recipe_prototypes['fill-' .. fluid_name .. '-barrel']
-    if barrel_prototype then
-      -- log(serpent.block(barrel_prototype.ingredients))
-      global.can_be_barreled[fluid_name] = get_fluid_amount_from_ingredients_or_products(barrel_prototype.ingredients)
-      global.can_be_barreled_with[fluid_name] = get_item_name_from_ingredients_or_products(barrel_prototype.ingredients)
-    else
-      table.insert(cannot_be_barreled, fluid_name)
-    end
-    local unbarrel_prototype = game.recipe_prototypes['empty-' .. fluid_name .. '-barrel']
-    if unbarrel_prototype then
-      -- log(serpent.block(unbarrel_prototype.products))
-      global.can_be_unbarreled[fluid_name] = get_fluid_amount_from_ingredients_or_products(unbarrel_prototype.products)
-      assert(#unbarrel_prototype.ingredients == 1)
-      assert(unbarrel_prototype.ingredients[1].type == 'item')
-      global.can_be_unbarreled_from[fluid_name] = unbarrel_prototype.ingredients[1].name
-    else
-      table.insert(cannot_be_unbarreled, fluid_name)
-    end
-  end
-
-  for fluid_name, barrel_name in pairs(global.can_be_barreled_with) do
-    global.by_products_to_equalize[barrel_name] = true
-  end
-
-  log('are any of the 4 barrel sections deemed wrong? then this mod does not detect all of them properly:')
-  log('can be barreled:')
-  for fluid_name, fluid_amount in pairs(global.can_be_barreled) do
-    log(string.format('- %d x %s', fluid_amount, fluid_name))
-  end
-
-  log('can be unbarreled:')
-  for fluid_name, fluid_amount in pairs(global.can_be_unbarreled) do
-    log(string.format('- %d x %s', fluid_amount, fluid_name))
-  end
-
-  log('cannot be barreled: ' .. table.concat(cannot_be_barreled, ', '))
-  log('cannot be unbarreled: ' .. table.concat(cannot_be_unbarreled, ', '))
+  local cannot_be_barreled = nil
+  local cannot_be_unbarreled = nil
 
   global.structs = global.structs or {}
   global.deathrattles = global.deathrattles or {}
