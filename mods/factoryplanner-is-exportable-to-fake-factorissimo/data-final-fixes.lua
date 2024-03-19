@@ -20,3 +20,51 @@ end
 data.raw["container"][mod_prefix .. "container-1"].additional_pastable_entities = names_of_logistic_containers_with_request_slots
 data.raw["container"][mod_prefix .. "container-2"].additional_pastable_entities = names_of_logistic_containers_with_request_slots
 data.raw["container"][mod_prefix .. "container-3"].additional_pastable_entities = names_of_logistic_containers_with_request_slots
+
+data:extend{
+  {
+    type = 'item-subgroup',
+    name = mod_prefix .. 'fluid-port-in',
+
+    group = 'other',
+  },
+  {
+    type = 'item-subgroup',
+    name = mod_prefix .. 'fluid-port-out',
+
+    group = 'other',
+  },
+}
+
+for _, fluid in pairs(data.raw['fluid']) do
+  data:extend{
+    {
+      type = 'recipe',
+      name = string.format(mod_prefix .. 'fluid-port-%s-in', fluid.name),
+      localised_name = {"recipe-name.fietff-fluid-port-in", fluid.name},
+
+      category = mod_prefix .. 'fluid-port',
+      subgroup = mod_prefix .. 'fluid-port-in',
+      icons = data.raw['item'][mod_prefix .. 'item-' .. 1].icons,
+
+      ingredients = {
+        {type = 'fluid', name = fluid.name, amount = 1},
+      },
+      results = {},
+    },
+    {
+      type = 'recipe',
+      name = string.format(mod_prefix .. 'fluid-port-%s-out', fluid.name),
+      localised_name = {"recipe-name.fietff-fluid-port-out", fluid.name},
+
+      category = mod_prefix .. 'fluid-port',
+      subgroup = mod_prefix .. 'fluid-port-out',
+      icons = data.raw['item'][mod_prefix .. 'item-' .. 2].icons,
+
+      ingredients = {},
+      results = {
+        {type = 'fluid', name = fluid.name, amount = 1},
+      },
+    }
+  }
+end

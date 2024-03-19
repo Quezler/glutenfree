@@ -133,8 +133,7 @@ local function create_item(config)
     type = 'item',
     name = mod_prefix .. 'item-' .. config.i,
     flags = {'hidden', 'only-in-cursor'},
-    icon = string.format(mod_path .. icon_file_path, config.i),
-    icon_size = icon_size,
+    icons = {{icon = string.format(mod_path .. icon_file_path, config.i), icon_size = icon_size}},
     stack_size = 1,
     place_result = mod_prefix .. 'container-' ..config.i,
   }
@@ -326,14 +325,6 @@ local recipe_3 = create_recipe({i = 3})
 
 data:extend{recipe_1, recipe_2, recipe_3}
 
--- local foobor = 'foo'
-
--- if mods['barfoo'] then
---   foobar = 'bar'
--- end
-
--- assert(foobar)
-
 local fluid_port_category = {
   type = 'recipe-category',
   name = mod_prefix .. 'fluid-port',
@@ -345,26 +336,29 @@ local fluid_port = {
 
   collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
   selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
+  selection_priority = 51,
 
+  max_health = 100,
   energy_usage = '1W',
   crafting_speed = 1,
   crafting_categories = {fluid_port_category.name},
   energy_source = {type = 'void'},
+  show_recipe_icon = false,
 
   fluid_boxes = {
     {
       production_type = "input",
-      -- pipe_picture = assembler3pipepictures(),
+      pipe_picture = util.empty_sprite(),
       pipe_covers = pipecoverspictures(),
-      base_area = 10,
+      base_area = 1,
       base_level = -1,
       pipe_connections = {{ type="input", position = {0, -1} }},
     },
     {
       production_type = "output",
-      -- pipe_picture = assembler3pipepictures(),
+      pipe_picture = util.empty_sprite(),
       pipe_covers = pipecoverspictures(),
-      base_area = 10,
+      base_area = 1,
       base_level = -1,
       pipe_connections = {{ type="output", position = {0,  1} }},
     },
@@ -372,9 +366,6 @@ local fluid_port = {
   },
   se_allow_in_space = true,
   bottleneck_ignore = true,
-  max_health = 100,
-  show_recipe_icon = false,
-  selection_priority = 51,
 }
 
 data:extend{fluid_port_category, fluid_port}
