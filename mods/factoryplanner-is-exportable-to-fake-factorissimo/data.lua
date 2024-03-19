@@ -325,3 +325,56 @@ local recipe_2 = create_recipe({i = 2})
 local recipe_3 = create_recipe({i = 3})
 
 data:extend{recipe_1, recipe_2, recipe_3}
+
+-- local foobor = 'foo'
+
+-- if mods['barfoo'] then
+--   foobar = 'bar'
+-- end
+
+-- assert(foobar)
+
+local fluid_port_category = {
+  type = 'recipe-category',
+  name = mod_prefix .. 'fluid-port',
+}
+
+local fluid_port = {
+  type = 'assembling-machine',
+  name = mod_prefix .. 'fluid-port',
+
+  collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
+  selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
+
+  energy_usage = '1W',
+  crafting_speed = 1,
+  crafting_categories = {fluid_port_category.name},
+  energy_source = {type = 'void'},
+
+  fluid_boxes = {
+    {
+      production_type = "input",
+      -- pipe_picture = assembler3pipepictures(),
+      pipe_covers = pipecoverspictures(),
+      base_area = 10,
+      base_level = -1,
+      pipe_connections = {{ type="input", position = {0, -1} }},
+    },
+    {
+      production_type = "output",
+      -- pipe_picture = assembler3pipepictures(),
+      pipe_covers = pipecoverspictures(),
+      base_area = 10,
+      base_level = -1,
+      pipe_connections = {{ type="output", position = {0,  1} }},
+    },
+    off_when_no_fluid_recipe = true
+  },
+  se_allow_in_space = true,
+  bottleneck_ignore = true,
+  max_health = 100,
+  show_recipe_icon = false,
+  selection_priority = 51,
+}
+
+data:extend{fluid_port_category, fluid_port}
