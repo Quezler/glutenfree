@@ -69,25 +69,26 @@ commands.add_command(mod_prefix .. "fluidport", nil, function(command)
     -- }
   -- end
 
-  local slot = slots[1]
-  local position = {entity.position.x + slot.offset[1], entity.position.y + slot.offset[2]}
-  local fluid_port = entity.surface.create_entity{
-    name = string.format(mod_prefix .. 'storage-tank-%s', 'water'),
-    force = entity.force,
-    position = position,
-    direction = slot.direction,
-  }
-
-  struct.fluid_ports = {
-    {index = 1, entity = fluid_port, fluid = 'water'},
-  }
-
-  global.fluid_port_data[fluid_port.unit_number] = {
-    unit_number = fluid_port.unit_number,
-    entity = fluid_port,
-
-    struct_id = struct.unit_number,
-  }
+  local seeds = {{4, 'water'}, {6, 'lubricant'}, {8, 'steam'}}
+  for _, seed in ipairs(seeds) do
+    local slot = slots[seed[1]]
+    local position = {entity.position.x + slot.offset[1], entity.position.y + slot.offset[2]}
+    local fluid_port = entity.surface.create_entity{
+      name = string.format(mod_prefix .. 'storage-tank-%s', seed[2]),
+      force = entity.force,
+      position = position,
+      direction = slot.direction,
+    }
+  
+    table.insert(struct.fluid_ports, {index = seed[1], entity = fluid_port, fluid = seed[2]})
+  
+    global.fluid_port_data[fluid_port.unit_number] = {
+      unit_number = fluid_port.unit_number,
+      entity = fluid_port,
+  
+      struct_id = struct.unit_number,
+    }
+  end
 end)
 
 function FluidPort.direction_changed_clockwise(old_direction, new_direction)
@@ -99,6 +100,16 @@ function FluidPort.direction_changed_clockwise(old_direction, new_direction)
   return false
 end
 
+function FluidPort.get_fluid_port_index(struct, entity)
+  for i, fluid_port in ipairs(struct.fluid_ports) do
+    if entity == fluid_port.entity then
+      return i
+    end
+  end
+
+  error()
+end
+
 function FluidPort.on_player_rotated_entity(event)
   local entity = event.entity
   if string.find(entity.name, 'fietff%-storage%-tank%-') then
@@ -107,17 +118,19 @@ function FluidPort.on_player_rotated_entity(event)
       local struct = global.structs[fluid_port_data.struct_id]
       assert(struct)
 
+      local fluid_port_index = FluidPort.get_fluid_port_index(struct, entity)
       local fluid_port_slots = #FluidPort.tiers[1]
-      
+
       local sign = FluidPort.direction_changed_clockwise(event.previous_direction, entity.direction) and 1 or -1
-      local next_index = (struct.fluid_ports[1].index % fluid_port_slots) + sign
+      local next_index = (struct.fluid_ports[fluid_port_index].index % fluid_port_slots) + sign
       if 0 >= next_index then next_index = fluid_port_slots + next_index end
 
       local next_slot = FluidPort.tiers[1][next_index]
       local next_position = {struct.container.position.x + next_slot.offset[1], struct.container.position.y + next_slot.offset[2]}
+
       entity.teleport(next_position)
       entity.direction = next_slot.direction
-      struct.fluid_ports[1].index = next_index
+      struct.fluid_ports[fluid_port_index].index = next_index
     end
   end
 end

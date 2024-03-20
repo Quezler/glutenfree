@@ -1,4 +1,4 @@
-local LATEST_STRUCT_VERSION = 5
+local LATEST_STRUCT_VERSION = 6
 
 local shared = require('shared')
 local util = require('__core__.lualib.util')
@@ -190,6 +190,8 @@ function Factory.on_created_entity(event)
 
     output_slots_required = Factory.slots_required_for(clipboard.products) + Factory.slots_required_for(clipboard.byproducts),
     rendered = {},
+
+    fluid_ports = {},
   }
 
   Factory.inflate_buffers(struct)
@@ -320,6 +322,11 @@ function Factory.tick_struct(struct)
         scale = 0.5,
       }
       struct.version = 5
+    end
+
+    if struct.version == 5 then
+      struct.fluid_ports = {}
+      struct.version = 6
     end
 
     assert(struct.version == LATEST_STRUCT_VERSION)
