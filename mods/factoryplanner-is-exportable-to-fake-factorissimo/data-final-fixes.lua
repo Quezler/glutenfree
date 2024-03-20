@@ -41,11 +41,13 @@ for _, fluid in pairs(data.raw['fluid']) do
   local icons1 = table.deepcopy(data.raw['item'][mod_prefix .. 'item-' .. 1].icons)
   local icons2 = fluid.icons and table.deepcopy(fluid.icons) or {{icon = fluid.icon, icon_size = fluid.icon_size, icon_mipmaps = fluid.icon_mipmaps}}
 
+  assert(fluid.localised_name == nil, 'this mod does not yet support handling prelocalized fluids.')
+
   data:extend{
     {
       type = 'storage-tank',
       name = string.format(mod_prefix .. 'storage-tank-%s', fluid.name),
-      localised_name = {"entity-name.fietff-storage-tank-fluidname", fluid.name},
+      localised_name = {"entity-name.fietff-storage-tank-fluidname", {"fluid-name." .. fluid.name}},
 
       subgroup = mod_prefix .. 'storage-tanks',
       icons = util.combine_icons(icons1, icons2, {scale = 0.5}),
