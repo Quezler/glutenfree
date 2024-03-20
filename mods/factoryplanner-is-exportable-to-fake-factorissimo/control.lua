@@ -375,6 +375,8 @@ local function on_configuration_changed(event)
   global.structs = global.structs or {}
   global.deathrattles = global.deathrattles or {}
 
+  global.fluid_port_data = global.fluid_port_data or {}
+
   global.inventory_size_from_item = {}
   global.inventory_size_from_item[mod_prefix .. 'item-1'] = game.entity_prototypes[mod_prefix .. 'container-1'].get_inventory_size(defines.inventory.chest)
   global.inventory_size_from_item[mod_prefix .. 'item-2'] = game.entity_prototypes[mod_prefix .. 'container-2'].get_inventory_size(defines.inventory.chest)
@@ -419,3 +421,5 @@ end)
 
 script.on_event(defines.events.on_entity_settings_pasted, Factory.on_entity_settings_pasted)
 script.on_event(defines.events.on_player_setup_blueprint, Factory.on_player_setup_blueprint)
+
+script.on_event(defines.events.on_player_rotated_entity, FluidPort.on_player_rotated_entity)
