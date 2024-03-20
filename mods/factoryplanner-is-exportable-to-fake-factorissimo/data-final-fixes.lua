@@ -48,13 +48,14 @@ for _, fluid in pairs(data.raw['fluid']) do
       type = 'storage-tank',
       name = string.format(mod_prefix .. 'storage-tank-%s', fluid.name),
       localised_name = {"entity-name.fietff-storage-tank-fluidname", {"fluid-name." .. fluid.name}},
+      localised_description = {"entity-description.fietff-storage-tank-fluidname"},
 
       subgroup = mod_prefix .. 'storage-tanks',
       icons = util.combine_icons(icons1, icons2, {scale = 0.5}),
 
       collision_mask = {},
       collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
-      selection_box = {{-0.3, -0.3}, {0.3, 0.3}},
+      selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
       selection_priority = 51,
 
       fluid_box = {
