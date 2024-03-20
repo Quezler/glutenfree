@@ -63,12 +63,12 @@ for _, fluid in pairs(data.raw['fluid']) do
         pipe_picture = util.empty_sprite(),
         pipe_covers = pipecoverspictures(),
         base_area = 1,
-        base_level = -1,
+        base_level = 0,
         filter = fluid.name,
         pipe_connections = {{ type="input-output", position = {0, -1} }},
       },
 
-      window_bounding_box = {{0, 0}, {0 , 0}},
+      window_bounding_box = {{0, 0}, {0, 0}},
 
       pictures = {
         picture = util.empty_sprite(),
@@ -81,7 +81,7 @@ for _, fluid in pairs(data.raw['fluid']) do
       flow_length_in_ticks = 1,
       max_health = 100,
 
-      show_fluid_icon = false, -- >= 1.1.105
+      show_fluid_icon = false, -- >= 1.1.106
     }
   }
 
