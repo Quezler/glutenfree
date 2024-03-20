@@ -6,45 +6,44 @@ local FluidPort = {}
 FluidPort.tiers = {
   {
     -- top left to top right
-    {offset = {-3.5, -3.5}, direction = defines.direction.north},
+    {offset = {-3.5, -3.5}, direction = defines.direction.north, counter_clockwise_skip = 2},
     {offset = {-2.5, -3.5}, direction = defines.direction.north},
     {offset = {-1.5, -3.5}, direction = defines.direction.north},
     {offset = {-0.5, -3.5}, direction = defines.direction.north},
     {offset = { 0.5, -3.5}, direction = defines.direction.north},
     {offset = { 1.5, -3.5}, direction = defines.direction.north},
     {offset = { 2.5, -3.5}, direction = defines.direction.north},
-    {offset = { 3.5, -3.5}, direction = defines.direction.north},
+    {offset = { 3.5, -3.5}, direction = defines.direction.north, clockwise_skip = 2},
 
     -- top right to bottom right
-    {offset = { 3.5, -3.5}, direction = defines.direction.east},
+    {offset = { 3.5, -3.5}, direction = defines.direction.east, counter_clockwise_skip = 2},
     {offset = { 3.5, -2.5}, direction = defines.direction.east},
     {offset = { 3.5, -1.5}, direction = defines.direction.east},
     {offset = { 3.5, -0.5}, direction = defines.direction.east},
     {offset = { 3.5,  0.5}, direction = defines.direction.east},
     {offset = { 3.5,  1.5}, direction = defines.direction.east},
     {offset = { 3.5,  2.5}, direction = defines.direction.east},
-    {offset = { 3.5,  3.5}, direction = defines.direction.east},
+    {offset = { 3.5,  3.5}, direction = defines.direction.east, clockwise_skip = 2},
 
     -- bottom right to bottom left
-    {offset = { 3.5,  3.5}, direction = defines.direction.south},
+    {offset = { 3.5,  3.5}, direction = defines.direction.south, counter_clockwise_skip = 2},
     {offset = { 2.5,  3.5}, direction = defines.direction.south},
     {offset = { 1.5,  3.5}, direction = defines.direction.south},
-    {offset = { 0.5,  3.5}, direction = defines.direction.south},
-    {offset = {-0.5,  3.5}, direction = defines.direction.south},
-    {offset = {-1.5,  3.5}, direction = defines.direction.south},
+    -- {offset = { 0.5,  3.5}, direction = defines.direction.south},
+    -- {offset = {-0.5,  3.5}, direction = defines.direction.south},
     {offset = {-1.5,  3.5}, direction = defines.direction.south},
     {offset = {-2.5,  3.5}, direction = defines.direction.south},
-    {offset = {-3.5,  3.5}, direction = defines.direction.south},
+    {offset = {-3.5,  3.5}, direction = defines.direction.south, clockwise_skip = 2},
 
     -- bottom left to top left
-    {offset = {-3.5,  3.5}, direction = defines.direction.west},
+    {offset = {-3.5,  3.5}, direction = defines.direction.west, counter_clockwise_skip = 2},
     {offset = {-3.5,  2.5}, direction = defines.direction.west},
     {offset = {-3.5,  1.5}, direction = defines.direction.west},
     {offset = {-3.5,  0.5}, direction = defines.direction.west},
     {offset = {-3.5, -0.5}, direction = defines.direction.west},
     {offset = {-3.5, -1.5}, direction = defines.direction.west},
     {offset = {-3.5, -2.5}, direction = defines.direction.west},
-    {offset = {-3.5, -3.5}, direction = defines.direction.west},
+    {offset = {-3.5, -3.5}, direction = defines.direction.west, clockwise_skip = 2},
   }
 }
 

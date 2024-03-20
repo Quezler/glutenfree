@@ -81,8 +81,7 @@ for _, fluid in pairs(data.raw['fluid']) do
       flow_length_in_ticks = 1,
       max_health = 100,
 
-      -- flags = {"hide-alt-info"},
-      show_fluid_icon = false,
+      show_fluid_icon = false, -- >= 1.1.105
     }
   }
 
