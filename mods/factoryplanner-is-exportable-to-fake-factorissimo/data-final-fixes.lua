@@ -53,8 +53,8 @@ for _, fluid in pairs(data.raw['fluid']) do
       icons = util.combine_icons(icons1, icons2, {scale = 0.5}),
 
       collision_mask = {},
-      collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
-      selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
+      collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
+      selection_box = {{-0.3, -0.3}, {0.3, 0.3}},
       selection_priority = 51,
 
       fluid_box = {
