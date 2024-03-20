@@ -123,6 +123,14 @@ assert(FluidPort.clockwise_array_index(29, 30, 2) ==  1)
 assert(FluidPort.clockwise_array_index(1, 30, -9) == 22)
 assert(FluidPort.clockwise_array_index(1, 30, -1) == 30)
 
+function FluidPort.update_fluid_port_position(struct, fluid_port_index)
+  local fluid_port = struct.fluid_ports[fluid_port_index]
+  local slot = FluidPort.tiers[1][fluid_port.index]
+
+  fluid_port.entity.teleport({struct.container.position.x + slot.offset[1], struct.container.position.y + slot.offset[2]})
+  fluid_port.entity.direction = slot.direction
+end
+
 function FluidPort.on_player_rotated_entity(event)
   local entity = event.entity
   if string.find(entity.name, 'fietff%-storage%-tank%-') then
@@ -156,12 +164,8 @@ function FluidPort.on_player_rotated_entity(event)
         next_index = FluidPort.clockwise_array_index(next_index, fluid_port_slots, event.sign)
       until occupied_slots[next_index] == nil
 
-      local next_slot = FluidPort.tiers[1][next_index]
-      local next_position = {struct.container.position.x + next_slot.offset[1], struct.container.position.y + next_slot.offset[2]}
-
-      entity.teleport(next_position)
-      entity.direction = next_slot.direction
       struct.fluid_ports[fluid_port_index].index = next_index
+      FluidPort.update_fluid_port_position(struct, fluid_port_index)
     end
   end
 end

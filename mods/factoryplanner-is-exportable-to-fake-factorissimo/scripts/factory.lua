@@ -2,6 +2,7 @@ local LATEST_STRUCT_VERSION = 6
 
 local shared = require('shared')
 local util = require('__core__.lualib.util')
+local FluidPort = require('scripts.fluid-port')
 
 local mod_prefix = 'fietff-'
 local Factory = {}
@@ -567,6 +568,10 @@ function Factory.on_dolly_moved_entity(event)
 
   local tier = container_name_to_tier[struct.container.name]
   struct.eei.teleport({position.x, position.y + shared[string.format('electric_energy_interface_%d_y_offset', tier)]})
+
+  for fluid_port_index, fluid_port in ipairs(struct.fluid_ports) do
+    FluidPort.update_fluid_port_position(struct, fluid_port_index)
+  end
 end
 
 commands.add_command(mod_prefix .. "struct", nil, function(command)

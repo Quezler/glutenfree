@@ -166,6 +166,7 @@ local function create_interface(config)
 
     flags = {
       'placeable-off-grid',
+      'not-rotatable',
     },
 
     -- gui_mode = 'all',
