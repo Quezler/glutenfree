@@ -1,5 +1,6 @@
 local print_gui = require('scripts.print_gui')
 local Factory = require('scripts.factory')
+local FluidPort = require('scripts.fluid-port')
 
 local mod_prefix = 'fietff-'
 
