@@ -6,44 +6,44 @@ local FluidPort = {}
 FluidPort.tiers = {
   {
     -- top left to top right
-    {offset = {-3.5, -3.5}, direction = defines.direction.north, counter_clockwise_skip = 2},
+    {offset = {-3.5, -3.5}, direction = defines.direction.north, occupy = -1},
     {offset = {-2.5, -3.5}, direction = defines.direction.north},
     {offset = {-1.5, -3.5}, direction = defines.direction.north},
     {offset = {-0.5, -3.5}, direction = defines.direction.north},
     {offset = { 0.5, -3.5}, direction = defines.direction.north},
     {offset = { 1.5, -3.5}, direction = defines.direction.north},
     {offset = { 2.5, -3.5}, direction = defines.direction.north},
-    {offset = { 3.5, -3.5}, direction = defines.direction.north, clockwise_skip = 2},
+    {offset = { 3.5, -3.5}, direction = defines.direction.north, occupy =  1},
 
     -- top right to bottom right
-    {offset = { 3.5, -3.5}, direction = defines.direction.east, counter_clockwise_skip = 2},
+    {offset = { 3.5, -3.5}, direction = defines.direction.east, occupy = -1},
     {offset = { 3.5, -2.5}, direction = defines.direction.east},
     {offset = { 3.5, -1.5}, direction = defines.direction.east},
     {offset = { 3.5, -0.5}, direction = defines.direction.east},
     {offset = { 3.5,  0.5}, direction = defines.direction.east},
     {offset = { 3.5,  1.5}, direction = defines.direction.east},
     {offset = { 3.5,  2.5}, direction = defines.direction.east},
-    {offset = { 3.5,  3.5}, direction = defines.direction.east, clockwise_skip = 2},
+    {offset = { 3.5,  3.5}, direction = defines.direction.east, occupy =  1},
 
     -- bottom right to bottom left
-    {offset = { 3.5,  3.5}, direction = defines.direction.south, counter_clockwise_skip = 2},
+    {offset = { 3.5,  3.5}, direction = defines.direction.south, occupy = -1},
     {offset = { 2.5,  3.5}, direction = defines.direction.south},
     {offset = { 1.5,  3.5}, direction = defines.direction.south},
     -- {offset = { 0.5,  3.5}, direction = defines.direction.south},
     -- {offset = {-0.5,  3.5}, direction = defines.direction.south},
     {offset = {-1.5,  3.5}, direction = defines.direction.south},
     {offset = {-2.5,  3.5}, direction = defines.direction.south},
-    {offset = {-3.5,  3.5}, direction = defines.direction.south, clockwise_skip = 2},
+    {offset = {-3.5,  3.5}, direction = defines.direction.south, occupy =  1},
 
     -- bottom left to top left
-    {offset = {-3.5,  3.5}, direction = defines.direction.west, counter_clockwise_skip = 2},
+    {offset = {-3.5,  3.5}, direction = defines.direction.west, occupy = -1},
     {offset = {-3.5,  2.5}, direction = defines.direction.west},
     {offset = {-3.5,  1.5}, direction = defines.direction.west},
     {offset = {-3.5,  0.5}, direction = defines.direction.west},
     {offset = {-3.5, -0.5}, direction = defines.direction.west},
     {offset = {-3.5, -1.5}, direction = defines.direction.west},
     {offset = {-3.5, -2.5}, direction = defines.direction.west},
-    {offset = {-3.5, -3.5}, direction = defines.direction.west, clockwise_skip = 2},
+    {offset = {-3.5, -3.5}, direction = defines.direction.west, occupy =  1},
   }
 }
 
@@ -110,6 +110,19 @@ function FluidPort.get_fluid_port_index(struct, entity)
   error()
 end
 
+-- returns values in the 1-30 range, assuming array_length was 30 :)
+function FluidPort.clockwise_array_index(index, array_length, shift)
+  local next_index = (index + shift) % array_length
+  if 0 >= next_index then next_index = array_length + next_index end
+  return next_index
+end
+
+assert(FluidPort.clockwise_array_index(1, 30, 10) == 11)
+assert(FluidPort.clockwise_array_index(29, 30, 1) == 30)
+assert(FluidPort.clockwise_array_index(29, 30, 2) ==  1)
+assert(FluidPort.clockwise_array_index(1, 30, -9) == 22)
+assert(FluidPort.clockwise_array_index(1, 30, -1) == 30)
+
 function FluidPort.on_player_rotated_entity(event)
   local entity = event.entity
   if string.find(entity.name, 'fietff%-storage%-tank%-') then
@@ -118,12 +131,27 @@ function FluidPort.on_player_rotated_entity(event)
       local struct = global.structs[fluid_port_data.struct_id]
       assert(struct)
 
-      local fluid_port_index = FluidPort.get_fluid_port_index(struct, entity)
       local fluid_port_slots = #FluidPort.tiers[1]
 
-      local sign = FluidPort.direction_changed_clockwise(event.previous_direction, entity.direction) and 1 or -1
-      local next_index = (struct.fluid_ports[fluid_port_index].index % fluid_port_slots) + sign
-      if 0 >= next_index then next_index = fluid_port_slots + next_index end
+      local occupied_slots = {}
+      for _, fluid_port in ipairs(struct.fluid_ports) do
+        if fluid_port.entity ~= entity then
+          occupied_slots[fluid_port.index] = true
+
+          -- allow current entity to bypass corner reservations of itself
+          if fluid_port.entity ~= entity and FluidPort.tiers[1][fluid_port.index].occupy ~= nil then
+            occupied_slots[FluidPort.clockwise_array_index(fluid_port.index, fluid_port_slots, FluidPort.tiers[1][fluid_port.index].occupy)] = true
+          end
+        end
+      end
+
+      local fluid_port_index = FluidPort.get_fluid_port_index(struct, entity)
+      local next_index = struct.fluid_ports[fluid_port_index].index -- not yet the next! (wait till the repeat until)
+
+      repeat
+        local sign = FluidPort.direction_changed_clockwise(event.previous_direction, entity.direction) and 1 or -1
+        next_index = FluidPort.clockwise_array_index(next_index, fluid_port_slots, sign)
+      until occupied_slots[next_index] == nil
 
       local next_slot = FluidPort.tiers[1][next_index]
       local next_position = {struct.container.position.x + next_slot.offset[1], struct.container.position.y + next_slot.offset[2]}
