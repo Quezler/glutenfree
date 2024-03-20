@@ -148,9 +148,12 @@ function FluidPort.on_player_rotated_entity(event)
       local fluid_port_index = FluidPort.get_fluid_port_index(struct, entity)
       local next_index = struct.fluid_ports[fluid_port_index].index -- not yet the next! (wait till the repeat until)
 
+      if event.sign == nil then
+        event.sign = FluidPort.direction_changed_clockwise(event.previous_direction, entity.direction) and 1 or -1
+      end
+
       repeat
-        local sign = FluidPort.direction_changed_clockwise(event.previous_direction, entity.direction) and 1 or -1
-        next_index = FluidPort.clockwise_array_index(next_index, fluid_port_slots, sign)
+        next_index = FluidPort.clockwise_array_index(next_index, fluid_port_slots, event.sign)
       until occupied_slots[next_index] == nil
 
       local next_slot = FluidPort.tiers[1][next_index]
@@ -162,5 +165,39 @@ function FluidPort.on_player_rotated_entity(event)
     end
   end
 end
+
+function FluidPort.on_selected_entity_changed(event)
+  local entity = game.get_player(event.player_index).selected
+  if entity then
+    if string.find(entity.name, 'fietff%-storage%-tank%-') then
+      -- game.print('selected a fluid port')
+      global.selected_fluid_port[event.player_index] = entity
+    end
+  elseif global.selected_fluid_port[event.player_index] then
+    -- game.print('selected nothing')
+    global.selected_fluid_port[event.player_index] = nil
+  end
+end
+
+function FluidPort.on_player_pressed_rotate(event, sign)
+  local player = game.get_player(event.player_index)
+  local selected_fluid_port = global.selected_fluid_port[player.index]
+  if player.selected and selected_fluid_port and selected_fluid_port.valid and player.selected ~= selected_fluid_port then
+    FluidPort.on_player_rotated_entity({entity = selected_fluid_port, sign = sign})
+  end
+end
+
+function FluidPort.on_player_pressed_rotate_key(event)
+  FluidPort.on_player_pressed_rotate(event,  1)
+end
+
+function FluidPort.on_player_pressed_reverse_rotate_key(event)
+  FluidPort.on_player_pressed_rotate(event, -1)
+end
+
+script.on_event(defines.events.on_selected_entity_changed, FluidPort.on_selected_entity_changed)
+
+script.on_event(mod_prefix .. 'rotate', FluidPort.on_player_pressed_rotate_key)
+script.on_event(mod_prefix .. 'reverse-rotate', FluidPort.on_player_pressed_reverse_rotate_key)
 
 return FluidPort

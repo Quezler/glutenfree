@@ -376,6 +376,7 @@ local function on_configuration_changed(event)
   global.deathrattles = global.deathrattles or {}
 
   global.fluid_port_data = global.fluid_port_data or {}
+  global.selected_fluid_port = global.selected_fluid_port or {}
 
   global.inventory_size_from_item = {}
   global.inventory_size_from_item[mod_prefix .. 'item-1'] = game.entity_prototypes[mod_prefix .. 'container-1'].get_inventory_size(defines.inventory.chest)

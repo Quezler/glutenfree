@@ -324,3 +324,18 @@ local recipe_2 = create_recipe({i = 2})
 local recipe_3 = create_recipe({i = 3})
 
 data:extend{recipe_1, recipe_2, recipe_3}
+
+data:extend{
+  {
+    type = 'custom-input',
+    name =  mod_prefix .. 'rotate',
+    key_sequence = '',
+    linked_game_control = 'rotate',
+  },
+  {
+    type = 'custom-input',
+    name =  mod_prefix .. 'reverse-rotate',
+    key_sequence = '',
+    linked_game_control = 'reverse-rotate',
+  }
+}
