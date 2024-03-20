@@ -133,7 +133,7 @@ end
 
 function FluidPort.on_player_rotated_entity(event)
   local entity = event.entity
-  if string.find(entity.name, 'fietff%-storage%-tank%-') then
+  if global.fluid_port_names[entity.name] then
     local fluid_port_data = global.fluid_port_data[entity.unit_number]
     if fluid_port_data then
       local struct = global.structs[fluid_port_data.struct_id]
@@ -173,7 +173,7 @@ end
 function FluidPort.on_selected_entity_changed(event)
   local entity = game.get_player(event.player_index).selected
   if entity then
-    if string.find(entity.name, 'fietff%-storage%-tank%-') then
+    if global.fluid_port_names[entity.name] then
       -- game.print('selected a fluid port')
       global.selected_fluid_port[event.player_index] = entity
     end

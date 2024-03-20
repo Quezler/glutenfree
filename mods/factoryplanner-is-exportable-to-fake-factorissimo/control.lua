@@ -382,6 +382,13 @@ local function on_configuration_changed(event)
   global.inventory_size_from_item[mod_prefix .. 'item-1'] = game.entity_prototypes[mod_prefix .. 'container-1'].get_inventory_size(defines.inventory.chest)
   global.inventory_size_from_item[mod_prefix .. 'item-2'] = game.entity_prototypes[mod_prefix .. 'container-2'].get_inventory_size(defines.inventory.chest)
   global.inventory_size_from_item[mod_prefix .. 'item-3'] = game.entity_prototypes[mod_prefix .. 'container-3'].get_inventory_size(defines.inventory.chest)
+
+  global.fluid_port_names = {}
+  for _, entity_prototype in pairs(game.entity_prototypes) do
+    if string.find(entity_prototype.name, 'fietff%-storage%-tank%-') then
+      global.fluid_port_names[entity_prototype.name] = true
+    end
+  end
 end
 
 local function on_load(event)
@@ -393,6 +400,10 @@ local function on_load(event)
     remote.call("PickerDollies", "add_blacklist_name", mod_prefix .. 'electric-energy-interface-' .. 1)
     remote.call("PickerDollies", "add_blacklist_name", mod_prefix .. 'electric-energy-interface-' .. 2)
     remote.call("PickerDollies", "add_blacklist_name", mod_prefix .. 'electric-energy-interface-' .. 3)
+
+    for fluid_port_name, _ in pairs(global.fluid_port_names) do
+      remote.call("PickerDollies", "add_blacklist_name", fluid_port_name)
+    end
   end
 end
 
