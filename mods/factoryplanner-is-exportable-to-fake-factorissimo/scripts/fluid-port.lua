@@ -69,27 +69,50 @@ commands.add_command(mod_prefix .. "fluidport", nil, function(command)
     -- }
   -- end
 
-  local seeds = {{4, 'water'}, {6, 'lubricant'}, {8, 'steam'}}
-  for _, seed in ipairs(seeds) do
-    local slot = slots[seed[1]]
-    local position = {entity.position.x + slot.offset[1], entity.position.y + slot.offset[2]}
-    local fluid_port = entity.surface.create_entity{
-      name = string.format(mod_prefix .. 'storage-tank-%s', seed[2]),
-      force = entity.force,
-      position = position,
-      direction = slot.direction,
-    }
-
-    table.insert(struct.fluid_ports, {index = seed[1], entity = fluid_port, fluid = seed[2]})
-
-    global.fluid_port_data[fluid_port.unit_number] = {
-      unit_number = fluid_port.unit_number,
-      entity = fluid_port,
-
-      struct_id = struct.unit_number,
-    }
-  end
+  FluidPort.add_fluid_port(struct, 'water')
+  FluidPort.add_fluid_port(struct, 'lubricant')
+  FluidPort.add_fluid_port(struct, 'steam')
 end)
+
+function FluidPort.get_random_unoccupied_index(struct)
+  local occupied_slots = {}
+  for _, fluid_port in ipairs(struct.fluid_ports) do
+    occupied_slots[fluid_port.index] = true
+  end
+
+  local array_size = #FluidPort.tiers[1]
+  assert(array_size > table_size(occupied_slots))
+
+  ::again::
+  local random_index = math.random(1, array_size)
+  if occupied_slots[random_index] then goto again end
+
+  return random_index
+end
+
+function FluidPort.add_fluid_port(struct, fluid_name)
+  local entity = struct.container
+  local index = FluidPort.get_random_unoccupied_index(struct)
+
+  local slots = FluidPort.tiers[1]
+  local slot = slots[index]
+  local position = {entity.position.x + slot.offset[1], entity.position.y + slot.offset[2]}
+  local fluid_port = entity.surface.create_entity{
+    name = string.format(mod_prefix .. 'storage-tank-%s', fluid_name),
+    force = entity.force,
+    position = position,
+    direction = slot.direction,
+  }
+
+  table.insert(struct.fluid_ports, {index = index, entity = fluid_port, fluid = fluid_name})
+
+  global.fluid_port_data[fluid_port.unit_number] = {
+    unit_number = fluid_port.unit_number,
+    entity = fluid_port,
+
+    struct_id = struct.unit_number,
+  }
+end
 
 function FluidPort.direction_changed_clockwise(old_direction, new_direction)
   if old_direction == defines.direction.north and new_direction == defines.direction.east then return true end
