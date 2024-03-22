@@ -79,13 +79,13 @@ commands.add_command(mod_prefix .. "fluidport", nil, function(command)
       position = position,
       direction = slot.direction,
     }
-  
+
     table.insert(struct.fluid_ports, {index = seed[1], entity = fluid_port, fluid = seed[2]})
-  
+
     global.fluid_port_data[fluid_port.unit_number] = {
       unit_number = fluid_port.unit_number,
       entity = fluid_port,
-  
+
       struct_id = struct.unit_number,
     }
   end
@@ -185,6 +185,7 @@ end
 
 function FluidPort.on_player_pressed_rotate(event, sign)
   local player = game.get_player(event.player_index)
+  assert(player)
   local selected_fluid_port = global.selected_fluid_port[player.index]
   if player.selected and selected_fluid_port and selected_fluid_port.valid and player.selected ~= selected_fluid_port then
     FluidPort.on_player_rotated_entity({entity = selected_fluid_port, sign = sign})
