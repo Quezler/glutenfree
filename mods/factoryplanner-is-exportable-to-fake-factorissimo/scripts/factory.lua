@@ -140,7 +140,7 @@ function Factory.on_created_entity(event)
   else
     global.clipboards[player.index] = nil -- mark clipboard as consumed
   end
-  
+
   ::clipboard_copied_from_source_struct::
 
   local combinator = entity.surface.create_entity{
@@ -427,11 +427,11 @@ function Factory.tick_struct(struct)
     for _, product in ipairs(struct.clipboard.products) do
       struct.output_buffer[product.name] = struct.output_buffer[product.name] + product.amount
     end
-  
+
     for _, byproduct in ipairs(struct.clipboard.byproducts) do
       struct.output_buffer[byproduct.name] = struct.output_buffer[byproduct.name] + byproduct.amount
     end
-  
+
     for item_name, item_count in pairs(struct.output_buffer) do
       local payout = math.floor(item_count)
       if payout > 0 then
@@ -494,7 +494,7 @@ function Factory.on_entity_settings_pasted(event)
     --     create_at_cursor = true,
     --   }
     -- end
-    
+
     for i, filter in ipairs(event.destination.infinity_container_filters) do
       event.destination.set_infinity_container_filter(filter.index, nil)
     end
