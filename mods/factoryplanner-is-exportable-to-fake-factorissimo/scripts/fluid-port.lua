@@ -6,44 +6,44 @@ local FluidPort = {}
 FluidPort.tiers = {
   {
     -- top left to top right
-    {offset = {-3.5, -3.5}, direction = defines.direction.north, occupy = -1},
+    {offset = {-3.5, -3.5}, direction = defines.direction.north, corners = -1},
     {offset = {-2.5, -3.5}, direction = defines.direction.north},
     {offset = {-1.5, -3.5}, direction = defines.direction.north},
     {offset = {-0.5, -3.5}, direction = defines.direction.north},
     {offset = { 0.5, -3.5}, direction = defines.direction.north},
     {offset = { 1.5, -3.5}, direction = defines.direction.north},
     {offset = { 2.5, -3.5}, direction = defines.direction.north},
-    {offset = { 3.5, -3.5}, direction = defines.direction.north, occupy =  1},
+    {offset = { 3.5, -3.5}, direction = defines.direction.north, corners =  1},
 
     -- top right to bottom right
-    {offset = { 3.5, -3.5}, direction = defines.direction.east, occupy = -1},
+    {offset = { 3.5, -3.5}, direction = defines.direction.east, corners = -1},
     {offset = { 3.5, -2.5}, direction = defines.direction.east},
     {offset = { 3.5, -1.5}, direction = defines.direction.east},
     {offset = { 3.5, -0.5}, direction = defines.direction.east},
     {offset = { 3.5,  0.5}, direction = defines.direction.east},
     {offset = { 3.5,  1.5}, direction = defines.direction.east},
     {offset = { 3.5,  2.5}, direction = defines.direction.east},
-    {offset = { 3.5,  3.5}, direction = defines.direction.east, occupy =  1},
+    {offset = { 3.5,  3.5}, direction = defines.direction.east, corners =  1},
 
     -- bottom right to bottom left
-    {offset = { 3.5,  3.5}, direction = defines.direction.south, occupy = -1},
+    {offset = { 3.5,  3.5}, direction = defines.direction.south, corners = -1},
     {offset = { 2.5,  3.5}, direction = defines.direction.south},
     {offset = { 1.5,  3.5}, direction = defines.direction.south},
     -- {offset = { 0.5,  3.5}, direction = defines.direction.south},
     -- {offset = {-0.5,  3.5}, direction = defines.direction.south},
     {offset = {-1.5,  3.5}, direction = defines.direction.south},
     {offset = {-2.5,  3.5}, direction = defines.direction.south},
-    {offset = {-3.5,  3.5}, direction = defines.direction.south, occupy =  1},
+    {offset = {-3.5,  3.5}, direction = defines.direction.south, corners =  1},
 
     -- bottom left to top left
-    {offset = {-3.5,  3.5}, direction = defines.direction.west, occupy = -1},
+    {offset = {-3.5,  3.5}, direction = defines.direction.west, corners = -1},
     {offset = {-3.5,  2.5}, direction = defines.direction.west},
     {offset = {-3.5,  1.5}, direction = defines.direction.west},
     {offset = {-3.5,  0.5}, direction = defines.direction.west},
     {offset = {-3.5, -0.5}, direction = defines.direction.west},
     {offset = {-3.5, -1.5}, direction = defines.direction.west},
     {offset = {-3.5, -2.5}, direction = defines.direction.west},
-    {offset = {-3.5, -3.5}, direction = defines.direction.west, occupy =  1},
+    {offset = {-3.5, -3.5}, direction = defines.direction.west, corners =  1},
   }
 }
 
@@ -82,9 +82,9 @@ function FluidPort.get_occupied_slots(struct, ignore_entity)
     if fluid_port.entity ~= ignore_entity then
       occupied_slots[fluid_port.index] = true
 
-      -- if the fluid port is on a corner, occupy the slot around the corner as well.
-      if fluid_port.entity ~= ignore_entity and FluidPort.tiers[1][fluid_port.index].occupy ~= nil then
-        occupied_slots[FluidPort.clockwise_array_index(fluid_port.index, fluid_port_slots, FluidPort.tiers[1][fluid_port.index].occupy)] = true
+      -- fluid port slots can have a corner property, if its present the current slot's index + the offset in the `corners` is reserved as well.
+      if fluid_port.entity ~= ignore_entity and FluidPort.tiers[1][fluid_port.index].corners ~= nil then
+        occupied_slots[FluidPort.clockwise_array_index(fluid_port.index, fluid_port_slots, FluidPort.tiers[1][fluid_port.index].corners)] = true
       end
     end
   end
