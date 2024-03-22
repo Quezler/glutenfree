@@ -129,6 +129,7 @@ function Factory.on_created_entity(event)
   end
 
   player = game.get_player(event.player_index)
+  assert(player)
   clipboard = global.clipboards[player.index]
   if not clipboard then
     entity.destroy()
@@ -536,6 +537,7 @@ end
 
 function Factory.on_player_setup_blueprint(event)
   local player = game.get_player(event.player_index)
+  assert(player)
   if player.connected == false then return end
 
   local blueprint = nil
@@ -584,6 +586,7 @@ end
 
 commands.add_command(mod_prefix .. "struct", nil, function(command)
   local player = game.get_player(command.player_index)
+  assert(player)
   if player.selected == nil then return end
   if player.selected.unit_number == nil then return end
 
