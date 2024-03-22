@@ -474,8 +474,12 @@ function Factory.on_entity_settings_pasted(event)
 
     local struct = global.structs[event.source.unit_number]
 
-    for i, ingredient in ipairs(struct.clipboard.ingredients) do
-      event.destination.set_request_slot({name = ingredient.name, count = math.ceil(ingredient.amount)}, i)
+    local i = 0
+    for _, ingredient in ipairs(struct.clipboard.ingredients) do
+      if ingredient.type == 'item' then
+        i = i + 1
+        event.destination.set_request_slot({name = ingredient.name, count = math.ceil(ingredient.amount)}, i)
+      end
     end
   end
 
@@ -496,8 +500,12 @@ function Factory.on_entity_settings_pasted(event)
 
     local struct = global.structs[event.source.unit_number]
 
-    for i, ingredient in ipairs(struct.clipboard.ingredients) do
-      event.destination.set_infinity_container_filter(i, {name = ingredient.name, count = math.ceil(ingredient.amount)})
+    local i = 0
+    for _, ingredient in ipairs(struct.clipboard.ingredients) do
+      if ingredient.type == 'item' then
+        i = i + 1
+        event.destination.set_infinity_container_filter(i, {name = ingredient.name, count = math.ceil(ingredient.amount)})
+      end
     end
   end
 
