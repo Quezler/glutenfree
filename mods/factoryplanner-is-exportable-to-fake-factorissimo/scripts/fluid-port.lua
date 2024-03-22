@@ -74,11 +74,26 @@ commands.add_command(mod_prefix .. "fluidport", nil, function(command)
   FluidPort.add_fluid_port(struct, 'steam')
 end)
 
-function FluidPort.get_random_unoccupied_index(struct)
+function FluidPort.get_occupied_slots(struct, ignore_entity)
+  local fluid_port_slots = #FluidPort.tiers[1]
   local occupied_slots = {}
+
   for _, fluid_port in ipairs(struct.fluid_ports) do
-    occupied_slots[fluid_port.index] = true
+    if fluid_port.entity ~= ignore_entity then
+      occupied_slots[fluid_port.index] = true
+
+      -- if the fluid port is on a corner, occupy the slot around the corner as well.
+      if fluid_port.entity ~= ignore_entity and FluidPort.tiers[1][fluid_port.index].occupy ~= nil then
+        occupied_slots[FluidPort.clockwise_array_index(fluid_port.index, fluid_port_slots, FluidPort.tiers[1][fluid_port.index].occupy)] = true
+      end
+    end
   end
+
+  return occupied_slots
+end
+
+function FluidPort.get_random_unoccupied_index(struct)
+  local occupied_slots = FluidPort.get_occupied_slots(struct)
 
   local array_size = #FluidPort.tiers[1]
   assert(array_size > table_size(occupied_slots))
@@ -163,18 +178,7 @@ function FluidPort.on_player_rotated_entity(event)
       assert(struct)
 
       local fluid_port_slots = #FluidPort.tiers[1]
-
-      local occupied_slots = {}
-      for _, fluid_port in ipairs(struct.fluid_ports) do
-        if fluid_port.entity ~= entity then
-          occupied_slots[fluid_port.index] = true
-
-          -- allow current entity to bypass corner reservations of itself
-          if fluid_port.entity ~= entity and FluidPort.tiers[1][fluid_port.index].occupy ~= nil then
-            occupied_slots[FluidPort.clockwise_array_index(fluid_port.index, fluid_port_slots, FluidPort.tiers[1][fluid_port.index].occupy)] = true
-          end
-        end
-      end
+      local occupied_slots = FluidPort.get_occupied_slots(struct, entity)
 
       local fluid_port_index = FluidPort.get_fluid_port_index(struct, entity)
       local next_index = struct.fluid_ports[fluid_port_index].index -- not yet the next! (wait till the repeat until)
