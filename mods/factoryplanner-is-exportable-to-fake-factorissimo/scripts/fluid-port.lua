@@ -49,6 +49,7 @@ FluidPort.tiers = {
 
 commands.add_command(mod_prefix .. "fluidport", nil, function(command)
   local player = game.get_player(command.player_index)
+  assert(player)
   if player.selected == nil then return end
   if player.selected.unit_number == nil then return end
 

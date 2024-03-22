@@ -91,6 +91,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
   if event.gui_type ~= defines.gui_type.custom then return end
   if is_fp_frame_main_dialog[event.element.name] ~= true then return end
   local root = event.element
+  assert(root)
 
   -- game.print(root.name .. ' @ ' .. event.tick)
 
@@ -98,7 +99,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
   -- local factories = root.children[2].children[1].children[1].children[2].children
   -- local factory_name = active_radio_button(factories).caption[3]
   -- log(factory_name)
-  
+
   -- log(print_gui.serpent( root.children[2].children[1].children[2].children[3].children[1].children[3] ))
   -- log(print_gui.path_to_tooltip(root, 'fp.timescale_tt', 'root'))
 
@@ -120,21 +121,23 @@ end)
 script.on_event(defines.events.on_gui_click, function(event)
   if event.element.name ~= "ingredients_to_factorissimo" then return end
   local player = game.get_player(event.player_index)
+  assert(player)
   local root = player.opened
+  assert(root)
   if is_fp_frame_main_dialog[root.name] ~= true then
     log(print_gui.serpent(root))
     error(string.format("Played opened %s instead of fp_frame_main_dialog.", root.name))
   end
 
   local items_per_timescale_button = root.children[2].children[2].children[2].children[1].children[9].children[1]
-  
+
   if items_per_timescale_button.caption == "" then
     return player.create_local_flying_text{
       text = "You must create a factory first.", -- `a check whether a factory is selected "should" come first, but who has none?` - Quezler
       create_at_cursor = true,
     }
   end
-  
+
   assert(items_per_timescale_button.caption[2][1] == "fp.pu_item")
   if items_per_timescale_button.toggled == false then
     return player.create_local_flying_text{
@@ -176,6 +179,7 @@ script.on_event(defines.events.on_gui_click, function(event)
   for i, cell in ipairs(production_table.children) do -- the table has no rows, everything is a cell
     if cell.type ~= "label" then break end -- stop once we have all the column names
     local caption = cell.caption[1]
+    assert(caption)
     if caption == 'fp.info_label' then caption = caption .. cell.caption[2] end -- checkbox & percentage collide
     columns[caption] = i -- thanks to preferences the amount & positions of columns can vary
   end
@@ -187,7 +191,7 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   for row = 2, row_count do
     local offset = (row - 1) * column_count
-    
+
     -- if the sprite ever changes into something else yet still doesn't have a `/` in it an assert will failsafe-block it
     if production_table.children[offset + columns['fp.pu_machine']].children[1].sprite == 'fp_generic_assembler' then
       return player.create_local_flying_text{
@@ -205,7 +209,7 @@ script.on_event(defines.events.on_gui_click, function(event)
         create_at_cursor = true,
       }
     end
-    
+
     local recipe_class, recipe_name = split_class_and_name(recipe_cell.sprite)
     local machine_class, machine_name = split_class_and_name(machine_cell.sprite)
     local machine_count = math.ceil(production_table.children[offset + columns['fp.pu_machine']].children[1].number)
@@ -217,7 +221,7 @@ script.on_event(defines.events.on_gui_click, function(event)
         create_at_cursor = true,
       }
     end
-    
+
     local item_to_place_this = machine_prototype.items_to_place_this and machine_prototype.items_to_place_this[1] or nil -- placed by compound entities
     if item_to_place_this == nil then
       return player.create_local_flying_text{
@@ -314,7 +318,7 @@ script.on_event(defines.events.on_gui_click, function(event)
   local factory_item = mod_prefix .. 'item-1'
   if event.button == defines.mouse_button_type.middle then
     factory_item = mod_prefix .. 'item-2'
-  end 
+  end
   if event.button == defines.mouse_button_type.right then
     factory_item = mod_prefix .. 'item-3'
   end
