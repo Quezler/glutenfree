@@ -7,6 +7,16 @@ local FluidPort = require('scripts.fluid-port')
 local mod_prefix = 'fietff-'
 local Factory = {}
 
+function is_item_or_else_fluid(thing)
+  if thing.type == 'item' then
+    return true
+  elseif thing.type == 'fluid' then
+    return false
+  else
+    error()
+  end
+end
+
 function Factory.get_factory_description(clipboard)
   local description = ""
 
@@ -57,13 +67,11 @@ end
 function Factory.slots_required_for(ingredients)
   local slots = 0
   for _, ingredient in ipairs(ingredients) do
-    if ingredient.type == "item" then
+    if is_item_or_else_fluid(ingredient) then
       local item_prototype = game.item_prototypes[ingredient.name]
       slots = slots + math.ceil(ingredient.amount / item_prototype.stack_size)
-    elseif ingredient.type == "fluid" then
-      -- do nothing
     else
-      error(ingredient.name .. ' ' .. ingredient.type)
+      -- fluids need no stack sizes
     end
   end
   return slots
@@ -71,15 +79,18 @@ end
 
 function Factory.inflate_buffers(struct)
   for _, ingredient in ipairs(struct.clipboard.ingredients) do
-    struct.input_buffer[ingredient.name] = struct.input_buffer[ingredient.name] or 0
+    if ingredient.type == 'item' then struct.item_input_buffer[ingredient.name] = struct.item_input_buffer[ingredient.name] or 0 end
+    if ingredient.type == 'fluid' then struct.fluid_input_buffer[ingredient.name] = struct.fluid_input_buffer[ingredient.name] or 0 end
   end
 
   for _, product in ipairs(struct.clipboard.products) do
-    struct.output_buffer[product.name] = struct.output_buffer[product.name] or 0
+    if product.type == 'item' then struct.item_output_buffer[product.name] = struct.item_output_buffer[product.name] or 0 end
+    if product.type == 'fluid' then struct.fluid_output_buffer[product.name] = struct.fluid_output_buffer[product.name] or 0 end
   end
 
   for _, byproduct in ipairs(struct.clipboard.byproducts) do
-    struct.output_buffer[byproduct.name] = struct.output_buffer[byproduct.name] or 0
+    if byproduct.type == 'item' then struct.item_output_buffer[byproduct.name] = struct.item_output_buffer[byproduct.name] or 0 end
+    if byproduct.type == 'fluid' then struct.fluid_output_buffer[byproduct.name] = struct.fluid_output_buffer[byproduct.name] or 0 end
   end
 end
 
@@ -187,8 +198,10 @@ function Factory.on_created_entity(event)
 
     clipboard = clipboard,
 
-    input_buffer = {},
-    output_buffer = {},
+    item_input_buffer = {},
+    item_output_buffer = {},
+    fluid_input_buffer = {},
+    fluid_output_buffer = {},
 
     output_slots_required = Factory.slots_required_for(clipboard.products) + Factory.slots_required_for(clipboard.byproducts),
     rendered = {},
@@ -276,6 +289,21 @@ function Factory.on_created_entity(event)
   global.deathrattles[script.register_on_entity_destroyed(entity)] = {combinator, assembler, eei}
 end
 
+function Factory.get_items_and_fluids_from(array)
+  local items = {}
+  local fluids = {}
+
+  for _, entry in ipairs(array) do
+    if is_item_or_else_fluid(entry) then
+      table.insert(items, entry)
+    else
+      table.insert(fluids, entry)
+    end
+  end
+
+  return items, fluids
+end
+
 function Factory.tick_struct(struct)
   if struct.container.valid == false then
     global.structs[struct.unit_number] = nil
@@ -328,6 +356,15 @@ function Factory.tick_struct(struct)
 
     if struct.version == 5 then
       struct.fluid_ports = {}
+
+      struct.item_input_buffer = struct.input_buffer
+      struct.fluid_input_buffer = {}
+      struct.input_buffer = nil
+
+      struct.item_output_buffer = struct.output_buffer
+      struct.fluid_output_buffer = {}
+      struct.output_buffer = nil
+
       struct.version = 6
     end
 
@@ -388,7 +425,12 @@ function Factory.tick_struct(struct)
   -- can we afford the next craft cycle?
   local missing_ingredients = {}
   for _, ingredient in ipairs(struct.clipboard.ingredients) do
-    local available = (inventory_contents[ingredient.name] or 0) + struct.input_buffer[ingredient.name]
+    local available = nil
+    if is_item_or_else_fluid(ingredient) then
+      available = struct.item_input_buffer[ingredient.name] + (inventory_contents[ingredient.name] or 0)
+    else
+      available = struct.fluid_input_buffer[ingredient.name]
+    end
     if ingredient.amount > available then
       table.insert(missing_ingredients, string.format('[%s=%s]', ingredient.type, ingredient.name))
     end
@@ -398,6 +440,10 @@ function Factory.tick_struct(struct)
     rendering.set_text(struct.rendered.factory_verbose, table.concat(missing_ingredients, ' '))
     return
   end
+
+  local item_ingredients, fluid_ingredients = Factory.get_items_and_fluids_from(struct.clipboard.ingredients)
+  assert(item_ingredients)
+  assert(fluid_ingredients)
 
   for _, product in ipairs(struct.clipboard.products) do
     if inventory_contents[product.name] then
@@ -411,32 +457,32 @@ function Factory.tick_struct(struct)
 
   local item_statistics = struct.container.force.item_production_statistics
 
-  for _, ingredient in ipairs(struct.clipboard.ingredients) do
+  for _, ingredient in ipairs(item_ingredients) do
     -- refill the buffer, which will now have enough for a cycle
-    local top_up_with = math.ceil(ingredient.amount - struct.input_buffer[ingredient.name])
+    local top_up_with = math.ceil(ingredient.amount - struct.item_input_buffer[ingredient.name])
     if top_up_with > 0 then
       item_statistics.on_flow(ingredient.name, -top_up_with)
-      struct.input_buffer[ingredient.name] = struct.input_buffer[ingredient.name] + inventory.remove({name = ingredient.name, count = top_up_with})
+      struct.item_input_buffer[ingredient.name] = struct.item_input_buffer[ingredient.name] + inventory.remove({name = ingredient.name, count = top_up_with})
     end
 
     -- and now we subtract the ingredient costs from the buffer
-    struct.input_buffer[ingredient.name] = struct.input_buffer[ingredient.name] - ingredient.amount
+    struct.item_input_buffer[ingredient.name] = struct.item_input_buffer[ingredient.name] - ingredient.amount
   end
 
   do -- calculate and give the output
     for _, product in ipairs(struct.clipboard.products) do
-      struct.output_buffer[product.name] = struct.output_buffer[product.name] + product.amount
+      struct.item_output_buffer[product.name] = struct.item_output_buffer[product.name] + product.amount
     end
 
     for _, byproduct in ipairs(struct.clipboard.byproducts) do
-      struct.output_buffer[byproduct.name] = struct.output_buffer[byproduct.name] + byproduct.amount
+      struct.item_output_buffer[byproduct.name] = struct.item_output_buffer[byproduct.name] + byproduct.amount
     end
 
-    for item_name, item_count in pairs(struct.output_buffer) do
+    for item_name, item_count in pairs(struct.item_output_buffer) do
       local payout = math.floor(item_count)
       if payout > 0 then
         item_statistics.on_flow(item_name, payout)
-        struct.output_buffer[item_name] = struct.output_buffer[item_name] - inventory.insert({name = item_name, count = item_count})
+        struct.item_output_buffer[item_name] = struct.item_output_buffer[item_name] - inventory.insert({name = item_name, count = item_count})
       end
     end
   end
