@@ -283,6 +283,17 @@ function Factory.on_created_entity(event)
     scale = 0.5,
   }
 
+  for _, ingredient in pairs(struct.clipboard.ingredients) do
+    if is_item_or_else_fluid(ingredient) then
+      -- ignored
+    else
+      local port_count = math.ceil(ingredient.amount / 5000) -- each fluid port is rated for 5000 per minute (technically 6000, if its full every 10 secs)
+      for i = 1, port_count do
+        FluidPort.add_fluid_port(struct, ingredient.name)
+      end
+    end
+  end
+
   global.structs[entity.unit_number] = struct
   Factory.tick_struct(struct)
 
@@ -422,6 +433,24 @@ function Factory.tick_struct(struct)
   end
   struct.eei.power_usage = 0 -- disable power usage until after a successful craft cycle
 
+  local desired_fluids = {}
+  for _, ingredient in ipairs(struct.clipboard.ingredients) do
+    if is_item_or_else_fluid(ingredient) then
+    else
+      desired_fluids[ingredient.name] = ingredient.amount
+    end
+  end
+  for _, fluid_port in ipairs(struct.fluid_ports) do
+    local desired_amount = desired_fluids[fluid_port.fluid]
+    if desired_amount then
+      local missing = desired_amount - struct.fluid_input_buffer[fluid_port.fluid]
+      if missing > 0 then
+        local removed = fluid_port.entity.remove_fluid{name = fluid_port.fluid, amount = missing}
+        struct.fluid_input_buffer[fluid_port.fluid] = struct.fluid_input_buffer[fluid_port.fluid] + removed
+      end
+    end
+  end
+
   -- can we afford the next craft cycle?
   local missing_ingredients = {}
   for _, ingredient in ipairs(struct.clipboard.ingredients) do
@@ -523,7 +552,7 @@ function Factory.on_entity_settings_pasted(event)
 
     local i = 0
     for _, ingredient in ipairs(struct.clipboard.ingredients) do
-      if ingredient.type == 'item' then
+      if is_item_or_else_fluid(ingredient) then
         i = i + 1
         event.destination.set_request_slot({name = ingredient.name, count = math.ceil(ingredient.amount)}, i)
       end
@@ -549,7 +578,7 @@ function Factory.on_entity_settings_pasted(event)
 
     local i = 0
     for _, ingredient in ipairs(struct.clipboard.ingredients) do
-      if ingredient.type == 'item' then
+      if is_item_or_else_fluid(ingredient) then
         i = i + 1
         event.destination.set_infinity_container_filter(i, {name = ingredient.name, count = math.ceil(ingredient.amount)})
       end
