@@ -395,6 +395,7 @@ function Factory.tick_struct(struct)
   end
 
   rendering.set_text(struct.rendered.factory_verbose, '')
+  FluidPort.try_to_output_from_fluid_output_buffer(struct)
 
   local inventory = struct.container.get_inventory(defines.inventory.chest)
   local inventory_contents = inventory.get_contents()
@@ -489,6 +490,18 @@ function Factory.tick_struct(struct)
   assert(item_ingredients)
   assert(fluid_ingredients)
 
+  -- for fluid_name, fluid_amount in pairs(struct.fluid_output_buffer) do
+  --   if fluid_amount > 0 then
+  --     for _, fluid_port in ipairs(struct.fluid_ports) do
+  --       if fluid_port.fluid == fluid_name and fluid_amount > 0 then
+  --         local inserted = fluid_port.entity.insert_fluid{name = fluid_port.fluid, amount = fluid_amount}
+  --         struct.fluid_output_buffer[fluid_name] = fluid_amount - inserted
+  --         fluid_amount = struct.fluid_output_buffer[fluid_name]
+  --       end
+  --     end
+  --   end
+  -- end
+
   for _, product in ipairs(struct.clipboard.products) do
     if is_item_or_else_fluid(product) then
       if inventory_contents[product.name] then
@@ -544,6 +557,9 @@ function Factory.tick_struct(struct)
       end
     end
   end
+
+  -- todo: fluid statistics (also during pre-ingestion?)
+  FluidPort.try_to_output_from_fluid_output_buffer(struct)
 
   struct.container.surface.pollute(struct.container.position, struct.clipboard.pollution)
 

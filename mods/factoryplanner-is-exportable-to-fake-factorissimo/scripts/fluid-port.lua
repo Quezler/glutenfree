@@ -228,6 +228,20 @@ function FluidPort.on_player_pressed_reverse_rotate_key(event)
   FluidPort.on_player_pressed_rotate(event, -1)
 end
 
+function FluidPort.try_to_output_from_fluid_output_buffer(struct)
+  for fluid_name, fluid_amount in pairs(struct.fluid_output_buffer) do
+    if fluid_amount > 0 then
+      for _, fluid_port in ipairs(struct.fluid_ports) do
+        if fluid_port.fluid == fluid_name and fluid_amount > 0 then
+          local inserted = fluid_port.entity.insert_fluid{name = fluid_port.fluid, amount = fluid_amount}
+          struct.fluid_output_buffer[fluid_name] = fluid_amount - inserted
+          fluid_amount = struct.fluid_output_buffer[fluid_name]
+        end
+      end
+    end
+  end
+end
+
 script.on_event(defines.events.on_selected_entity_changed, FluidPort.on_selected_entity_changed)
 
 script.on_event(mod_prefix .. 'rotate', FluidPort.on_player_pressed_rotate_key)
