@@ -79,18 +79,27 @@ end
 
 function Factory.inflate_buffers(struct)
   for _, ingredient in ipairs(struct.clipboard.ingredients) do
-    if ingredient.type == 'item' then struct.item_input_buffer[ingredient.name] = struct.item_input_buffer[ingredient.name] or 0 end
-    if ingredient.type == 'fluid' then struct.fluid_input_buffer[ingredient.name] = struct.fluid_input_buffer[ingredient.name] or 0 end
+    if is_item_or_else_fluid(ingredient) then
+        struct.item_input_buffer[ingredient.name] = (struct.item_input_buffer[ingredient.name] or 0)
+      else
+        struct.fluid_input_buffer[ingredient.name] = (struct.fluid_input_buffer[ingredient.name] or 0)
+    end
   end
 
   for _, product in ipairs(struct.clipboard.products) do
-    if product.type == 'item' then struct.item_output_buffer[product.name] = struct.item_output_buffer[product.name] or 0 end
-    if product.type == 'fluid' then struct.fluid_output_buffer[product.name] = struct.fluid_output_buffer[product.name] or 0 end
+    if is_item_or_else_fluid(product) then
+      struct.item_output_buffer[product.name] = (struct.item_output_buffer[product.name] or 0)
+    else
+      struct.fluid_output_buffer[product.name] = (struct.fluid_output_buffer[product.name] or 0)
+    end
   end
 
   for _, byproduct in ipairs(struct.clipboard.byproducts) do
-    if byproduct.type == 'item' then struct.item_output_buffer[byproduct.name] = struct.item_output_buffer[byproduct.name] or 0 end
-    if byproduct.type == 'fluid' then struct.fluid_output_buffer[byproduct.name] = struct.fluid_output_buffer[byproduct.name] or 0 end
+    if is_item_or_else_fluid(byproduct) then
+      struct.item_output_buffer[byproduct.name] = (struct.item_output_buffer[byproduct.name] or 0)
+    else
+      struct.fluid_output_buffer[byproduct.name] = (struct.fluid_output_buffer[byproduct.name] or 0)
+    end
   end
 end
 
@@ -475,8 +484,14 @@ function Factory.tick_struct(struct)
   assert(fluid_ingredients)
 
   for _, product in ipairs(struct.clipboard.products) do
-    if inventory_contents[product.name] then
-      return rendering.set_text(struct.rendered.factory_message, "[img=utility/status_yellow] output full")
+    if is_item_or_else_fluid(product) then
+      if inventory_contents[product.name] then
+        return rendering.set_text(struct.rendered.factory_message, "[img=utility/status_yellow] item output full")
+      end
+    else
+      if struct.fluid_output_buffer[product.name] > 0 then
+        return rendering.set_text(struct.rendered.factory_message, "[img=utility/status_yellow] fluid output full")
+      end
     end
   end
 
@@ -500,13 +515,19 @@ function Factory.tick_struct(struct)
 
   do -- calculate and give the output
     for _, product in ipairs(struct.clipboard.products) do
-      assert(product.type == 'item')
-      struct.item_output_buffer[product.name] = struct.item_output_buffer[product.name] + product.amount
+      if is_item_or_else_fluid(product) then
+        struct.item_output_buffer[product.name] = struct.item_output_buffer[product.name] + product.amount
+      else
+        struct.fluid_output_buffer[product.name] = struct.fluid_output_buffer[product.name] + product.amount
+      end
     end
 
     for _, byproduct in ipairs(struct.clipboard.byproducts) do
-      assert(byproduct.type == 'item')
-      struct.item_output_buffer[byproduct.name] = struct.item_output_buffer[byproduct.name] + byproduct.amount
+      if is_item_or_else_fluid(byproduct) then
+        struct.item_output_buffer[byproduct.name] = struct.item_output_buffer[byproduct.name] + byproduct.amount
+      else
+        struct.fluid_output_buffer[byproduct.name] = struct.fluid_output_buffer[byproduct.name] + byproduct.amount
+      end
     end
 
     for item_name, item_count in pairs(struct.item_output_buffer) do
