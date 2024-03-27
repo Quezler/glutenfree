@@ -500,10 +500,12 @@ function Factory.tick_struct(struct)
 
   do -- calculate and give the output
     for _, product in ipairs(struct.clipboard.products) do
+      assert(product.type == 'item')
       struct.item_output_buffer[product.name] = struct.item_output_buffer[product.name] + product.amount
     end
 
     for _, byproduct in ipairs(struct.clipboard.byproducts) do
+      assert(byproduct.type == 'item')
       struct.item_output_buffer[byproduct.name] = struct.item_output_buffer[byproduct.name] + byproduct.amount
     end
 
