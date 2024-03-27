@@ -442,20 +442,23 @@ function Factory.tick_struct(struct)
   end
   struct.eei.power_usage = 0 -- disable power usage until after a successful craft cycle
 
-  local desired_fluids = {}
-  for _, ingredient in ipairs(struct.clipboard.ingredients) do
-    if is_item_or_else_fluid(ingredient) then
-    else
-      desired_fluids[ingredient.name] = ingredient.amount
+  do -- suck fluids from all the fluid ports into the fluid_input_buffer up until the amount required to complete the next craft.
+    local desired_fluids = {}
+    for _, ingredient in ipairs(struct.clipboard.ingredients) do
+      if is_item_or_else_fluid(ingredient) then
+      else
+        desired_fluids[ingredient.name] = ingredient.amount
+      end
     end
-  end
-  for _, fluid_port in ipairs(struct.fluid_ports) do
-    local desired_amount = desired_fluids[fluid_port.fluid]
-    if desired_amount then
-      local missing = desired_amount - struct.fluid_input_buffer[fluid_port.fluid]
-      if missing > 0 then
-        local removed = fluid_port.entity.remove_fluid{name = fluid_port.fluid, amount = missing}
-        struct.fluid_input_buffer[fluid_port.fluid] = struct.fluid_input_buffer[fluid_port.fluid] + removed
+
+    for _, fluid_port in ipairs(struct.fluid_ports) do
+      local desired_amount = desired_fluids[fluid_port.fluid]
+      if desired_amount then
+        local missing = desired_amount - struct.fluid_input_buffer[fluid_port.fluid]
+        if missing > 0 then
+          local removed = fluid_port.entity.remove_fluid{name = fluid_port.fluid, amount = missing}
+          struct.fluid_input_buffer[fluid_port.fluid] = struct.fluid_input_buffer[fluid_port.fluid] + removed
+        end
       end
     end
   end
