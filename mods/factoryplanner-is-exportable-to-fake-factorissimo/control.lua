@@ -393,12 +393,6 @@ local function on_configuration_changed(event)
       global.fluid_port_names[entity_prototype.name] = true
     end
   end
-end
-
-local function on_load(event)
-  if remote.interfaces["PickerDollies"] and remote.interfaces["PickerDollies"]["dolly_moved_entity_id"] then
-    script.on_event(remote.call("PickerDollies", "dolly_moved_entity_id"), Factory.on_dolly_moved_entity)
-  end
 
   if remote.interfaces["PickerDollies"] and remote.interfaces["PickerDollies"]["add_blacklist_name"] then
     remote.call("PickerDollies", "add_blacklist_name", mod_prefix .. 'electric-energy-interface-' .. 1)
@@ -408,6 +402,12 @@ local function on_load(event)
     for fluid_port_name, _ in pairs(global.fluid_port_names) do
       remote.call("PickerDollies", "add_blacklist_name", fluid_port_name)
     end
+  end
+end
+
+local function on_load(event)
+  if remote.interfaces["PickerDollies"] and remote.interfaces["PickerDollies"]["dolly_moved_entity_id"] then
+    script.on_event(remote.call("PickerDollies", "dolly_moved_entity_id"), Factory.on_dolly_moved_entity)
   end
 end
 
