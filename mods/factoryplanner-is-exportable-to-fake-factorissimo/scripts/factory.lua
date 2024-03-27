@@ -292,13 +292,16 @@ function Factory.on_created_entity(event)
     scale = 0.5,
   }
 
-  for _, ingredient in pairs(struct.clipboard.ingredients) do
-    if is_item_or_else_fluid(ingredient) then
-      -- ignored
-    else
-      local port_count = math.ceil(ingredient.amount / 5000) -- each fluid port is rated for 5000 per minute (technically 6000, if its full every 10 secs)
-      for i = 1, port_count do
-        FluidPort.add_fluid_port(struct, ingredient.name)
+  -- todo: prevent one of the products also being a partial byproduct or vice versa from creating extra ports.
+  for _, pbi in ipairs({struct.clipboard.products, struct.clipboard.byproducts, struct.clipboard.ingredients}) do
+    for _, thing in ipairs(pbi) do
+      if is_item_or_else_fluid(thing) then
+        -- ignored
+      else
+        local port_count = math.ceil(thing.amount / 5000) -- each fluid port is rated for 5000 per minute (technically 6000, if its full every 10 secs)
+        for i = 1, port_count do
+          FluidPort.add_fluid_port(struct, thing.name)
+        end
       end
     end
   end
