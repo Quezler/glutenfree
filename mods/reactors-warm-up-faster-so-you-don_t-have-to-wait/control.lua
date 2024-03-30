@@ -71,7 +71,10 @@ local function on_created_entity(event)
   if entity.prototype.burner_prototype == nil then return end
 
   -- case not yet handled (is it * the transfer, or does it also do something to the buffered energy?)
-  assert(entity.prototype.burner_prototype.effectivity == 1)
+  if entity.prototype.burner_prototype.effectivity ~= 1 then
+    game.print(string.format('reactor %s has a fuel effectivity of %d which is not yet supported by the warmup mod, report this please.', entity.prototype.name, entity.prototype.burner_prototype.effectivity))
+    return
+  end
 
   global.structs_count = global.structs_count + 1
   global.structs[entity.unit_number] = {
