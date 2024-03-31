@@ -207,6 +207,22 @@ function FluidPort.try_to_output_from_fluid_output_buffer(struct)
   end
 end
 
+function FluidPort.get_fluid_ports_required(clipboard)
+  local port_count = 0
+
+  for _, pbi in ipairs({clipboard.products, clipboard.byproducts, clipboard.ingredients}) do
+    for _, thing in ipairs(pbi) do
+      if is_item_or_else_fluid(thing) then
+        -- ignored
+      else
+        port_count = port_count + math.ceil(thing.amount / 5000) -- each fluid port is rated for 5000 per minute (technically 6000, if its full every 10 secs)
+      end
+    end
+  end
+
+  return port_count
+end
+
 script.on_event(defines.events.on_selected_entity_changed, FluidPort.on_selected_entity_changed)
 
 script.on_event(mod_prefix .. 'rotate', FluidPort.on_player_pressed_rotate_key)

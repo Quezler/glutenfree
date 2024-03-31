@@ -316,16 +316,26 @@ script.on_event(defines.events.on_gui_click, function(event)
   + Factory.slots_required_for(clipboard.ingredients)
 
   local factory_item = mod_prefix .. 'item-1'
+  local tier = 1
   if event.button == defines.mouse_button_type.middle then
     factory_item = mod_prefix .. 'item-2'
+    tier = 2
   end
   if event.button == defines.mouse_button_type.right then
     factory_item = mod_prefix .. 'item-3'
+    tier = 3
   end
 
   if player.force.recipes[factory_item .. '-unlock'].enabled == false then
     return player.create_local_flying_text{
       text = "This factory tier is not yet researched.",
+      create_at_cursor = true,
+    }
+  end
+
+  if FluidPort.get_fluid_ports_required(clipboard) > #FluidPort.tiers[tier] then
+    return player.create_local_flying_text{
+      text = string.format('Needs %d/%d fluid port slots.', FluidPort.get_fluid_ports_required(clipboard), #FluidPort.tiers[tier]),
       create_at_cursor = true,
     }
   end
