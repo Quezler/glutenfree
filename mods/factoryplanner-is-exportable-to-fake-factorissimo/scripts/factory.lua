@@ -548,6 +548,11 @@ function Factory.tick_struct(struct)
     struct.item_input_buffer[ingredient.name] = struct.item_input_buffer[ingredient.name] - ingredient.amount
   end
 
+  for _, ingredient in ipairs(fluid_ingredients) do
+    -- and now we subtract the ingredient costs from the buffer
+    struct.fluid_input_buffer[ingredient.name] = struct.fluid_input_buffer[ingredient.name] - ingredient.amount
+  end
+
   do -- calculate and give the output
     for _, product in ipairs(struct.clipboard.products) do
       if is_item_or_else_fluid(product) then
