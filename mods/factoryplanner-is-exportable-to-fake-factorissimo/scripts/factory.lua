@@ -645,6 +645,13 @@ function Factory.on_entity_settings_pasted(event)
     local source_struct = global.structs[event.source.unit_number]
     local destination_struct = global.structs[event.destination.unit_number]
 
+    if #source_struct.fluid_ports > 0 or #destination_struct.fluid_ports > 0 then
+      local player = game.get_player(event.player_index)
+      assert(player)
+      player.print('factories with fluid ports cannot be coppied to/from (yet).')
+      return
+    end
+
     destination_struct.clipboard = table.deepcopy(source_struct.clipboard)
     destination_struct.combinator.get_control_behavior().parameters = source_struct.combinator.get_control_behavior().parameters
 
