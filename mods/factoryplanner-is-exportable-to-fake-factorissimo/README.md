@@ -10,6 +10,8 @@ more user friendly introduction @ https://www.reddit.com/r/factorio/comments/1az
 
 Unlike Factorissimo 2 belts/pipes/chests up to the wall aren't a thing, interact with items via loaders or inserters, and fluids will need barrels.
 
+1.5.0 update: barrels are no longer enforced, for each 5000 fluid per minute the factory will give you a fluid port that can be moved by rotating it.
+
 # beacons
 
 Currently not supported, there would need to be an algorithm that checks how many beacons are needed to fit the machine sizes at that row,
