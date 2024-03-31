@@ -232,11 +232,11 @@ function FluidPort.update_fluid_combinator(struct)
   local parameters = {}
 
   for fluid_name, fluid_amount in pairs(struct.fluid_input_buffer) do
-    table.insert(parameters, {signal = {type = 'fluid', name = fluid_name}, count = fluid_amount, index = #parameters + 1})
+    table.insert(parameters, {signal = {type = 'fluid', name = fluid_name}, count = math.ceil(fluid_amount), index = #parameters + 1})
   end
 
   for fluid_name, fluid_amount in pairs(struct.fluid_output_buffer) do
-    table.insert(parameters, {signal = {type = 'fluid', name = fluid_name}, count = fluid_amount, index = #parameters + 1})
+    table.insert(parameters, {signal = {type = 'fluid', name = fluid_name}, count = math.floor(fluid_amount), index = #parameters + 1})
   end
 
   struct.fluid_combinator.get_control_behavior().parameters = parameters
