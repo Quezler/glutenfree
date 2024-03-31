@@ -194,17 +194,22 @@ function FluidPort.on_player_pressed_reverse_rotate_key(event)
 end
 
 function FluidPort.try_to_output_from_fluid_output_buffer(struct)
+  local outputted = false
+
   for fluid_name, fluid_amount in pairs(struct.fluid_output_buffer) do
     if fluid_amount > 0 then
       for _, fluid_port in ipairs(struct.fluid_ports) do
         if fluid_port.fluid == fluid_name and fluid_amount > 0 then
           local inserted = fluid_port.entity.insert_fluid{name = fluid_port.fluid, amount = fluid_amount}
+          if inserted > 0 then outputted = true end
           struct.fluid_output_buffer[fluid_name] = fluid_amount - inserted
           fluid_amount = struct.fluid_output_buffer[fluid_name]
         end
       end
     end
   end
+
+  if outputted then FluidPort.update_fluid_combinator(struct) end
 end
 
 function FluidPort.get_fluid_ports_required(clipboard)
@@ -221,6 +226,20 @@ function FluidPort.get_fluid_ports_required(clipboard)
   end
 
   return port_count
+end
+
+function FluidPort.update_fluid_combinator(struct)
+  local parameters = {}
+
+  for fluid_name, fluid_amount in pairs(struct.fluid_input_buffer) do
+    table.insert(parameters, {signal = {type = 'fluid', name = fluid_name}, count = fluid_amount, index = #parameters + 1})
+  end
+
+  for fluid_name, fluid_amount in pairs(struct.fluid_output_buffer) do
+    table.insert(parameters, {signal = {type = 'fluid', name = fluid_name}, count = fluid_amount, index = #parameters + 1})
+  end
+
+  struct.fluid_combinator.get_control_behavior().parameters = parameters
 end
 
 script.on_event(defines.events.on_selected_entity_changed, FluidPort.on_selected_entity_changed)

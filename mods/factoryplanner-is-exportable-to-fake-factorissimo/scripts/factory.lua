@@ -1,4 +1,4 @@
-local LATEST_STRUCT_VERSION = 7
+local LATEST_STRUCT_VERSION = 8
 
 local shared = require('shared')
 local util = require('__core__.lualib.util')
@@ -181,6 +181,22 @@ function Factory.on_created_entity(event)
     wire = defines.wire_type.green,
   })
 
+  local fluid_combinator = entity.surface.create_entity{
+    name = mod_prefix .. 'constant-combinator-fluids-' .. tier,
+    force = entity.force,
+    position = {entity.position.x, entity.position.y},
+  }
+  fluid_combinator.destructible = false
+  fluid_combinator.get_control_behavior().parameters = {} -- initialized empty, it'll hold the counts of fluids in the buffers
+  fluid_combinator.connect_neighbour({
+    target_entity = entity,
+    wire = defines.wire_type.red,
+  })
+  fluid_combinator.connect_neighbour({
+    target_entity = entity,
+    wire = defines.wire_type.green,
+  })
+
   local assembler = entity.surface.create_entity{
     name = mod_prefix .. 'assembling-machine-' .. tier,
     force = entity.force,
@@ -219,6 +235,7 @@ function Factory.on_created_entity(event)
 
     fluid_ports = {},
     tier = tier,
+    fluid_combinator = fluid_combinator,
   }
 
   Factory.inflate_buffers(struct)
@@ -295,7 +312,7 @@ function Factory.on_created_entity(event)
     scale = 0.5,
   }
 
-  global.deathrattles[script.register_on_entity_destroyed(entity)] = {combinator, assembler, eei}
+  global.deathrattles[script.register_on_entity_destroyed(entity)] = {combinator, assembler, eei, fluid_combinator}
 
   if fluid_ports then
     for _, fluid_port in ipairs(fluid_ports) do
@@ -407,6 +424,30 @@ function Factory.tick_struct(struct)
       struct.version = 7
     end
 
+    if struct.version == 7 then
+      local entity = struct.container
+      local fluid_combinator = entity.surface.create_entity{
+        name = mod_prefix .. 'constant-combinator-fluids-' .. struct.tier,
+        force = entity.force,
+        position = {entity.position.x, entity.position.y},
+      }
+      fluid_combinator.destructible = false
+      fluid_combinator.get_control_behavior().parameters = {} -- initialized empty, it'll hold the counts of fluids in the buffers
+      fluid_combinator.connect_neighbour({
+        target_entity = entity,
+        wire = defines.wire_type.red,
+      })
+      fluid_combinator.connect_neighbour({
+        target_entity = entity,
+        wire = defines.wire_type.green,
+      })
+
+      struct.fluid_combinator = fluid_combinator
+      table.insert(global.deathrattles[script.register_on_entity_destroyed(entity)], fluid_combinator)
+
+      struct.version = 8
+    end
+
     assert(struct.version == LATEST_STRUCT_VERSION)
   end
 
@@ -464,16 +505,21 @@ function Factory.tick_struct(struct)
     end
   end
 
+  local inputted = false
+
   for _, fluid_port in ipairs(struct.fluid_ports) do
     local desired_amount = desired_fluids[fluid_port.fluid]
     if desired_amount then
       local missing = desired_amount - struct.fluid_input_buffer[fluid_port.fluid]
       if missing > 0 then
         local removed = fluid_port.entity.remove_fluid{name = fluid_port.fluid, amount = missing}
+        if removed > 0 then inputted = true end
         struct.fluid_input_buffer[fluid_port.fluid] = struct.fluid_input_buffer[fluid_port.fluid] + removed
       end
     end
   end
+
+  if inputted then FluidPort.update_fluid_combinator(struct) end
 end
 
   local purse = struct.assembler.get_inventory(defines.inventory.assembling_machine_output)

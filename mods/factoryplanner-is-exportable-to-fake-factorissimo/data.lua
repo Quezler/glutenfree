@@ -286,7 +286,7 @@ local function create_combinator(config)
 
     item_slot_count = container.inventory_size,
     energy_source = {type = "void"},
-    
+
     circuit_wire_connection_points = data.raw['constant-combinator']['constant-combinator'].circuit_wire_connection_points,
     activity_led_light_offsets = data.raw['constant-combinator']['constant-combinator'].activity_led_light_offsets,
     circuit_wire_max_distance = data.raw['constant-combinator']['constant-combinator'].circuit_wire_max_distance,
@@ -304,6 +304,41 @@ local combinator_2 = create_combinator({i = 2})
 local combinator_3 = create_combinator({i = 3})
 
 data:extend{combinator_1, combinator_2, combinator_3}
+
+local function create_fluid_combinator(config)
+  local container = data.raw['container'][mod_prefix .. 'container-' .. config.i]
+  return {
+    type = 'constant-combinator',
+    name = mod_prefix .. 'constant-combinator-fluids-' .. config.i,
+    collision_mask = {},
+    collision_box = container.collision_box,
+    selection_box = {
+      {container.selection_box[1][1] - 0.3, container.selection_box[1][2] + 0.3},
+      {container.selection_box[2][1] - 0.3, container.selection_box[2][2] + 0.3},
+    },
+    selection_priority = 47,
+    selectable_in_game = false,
+
+    item_slot_count = 20 + (10 * config.i), -- 30 small, 40 medium, 50 large
+    energy_source = {type = "void"},
+
+    circuit_wire_connection_points = data.raw['constant-combinator']['constant-combinator'].circuit_wire_connection_points,
+    activity_led_light_offsets = data.raw['constant-combinator']['constant-combinator'].activity_led_light_offsets,
+    circuit_wire_max_distance = data.raw['constant-combinator']['constant-combinator'].circuit_wire_max_distance,
+    draw_circuit_wires = false,
+
+    flags = {
+      'not-on-map',
+      'hide-alt-info',
+    },
+  }
+end
+
+local fluid_combinator_1 = create_fluid_combinator({i = 1})
+local fluid_combinator_2 = create_fluid_combinator({i = 2})
+local fluid_combinator_3 = create_fluid_combinator({i = 3})
+
+data:extend{fluid_combinator_1, fluid_combinator_2, fluid_combinator_3}
 
 local function create_recipe(config)
   return {
