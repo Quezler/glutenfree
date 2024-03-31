@@ -255,6 +255,9 @@ script.on_event(defines.events.on_gui_click, function(event)
       }
     end
 
+    -- todo: figure out which things are unlocked by default
+    if recipe_name == 'steam' then goto skip_recipe_check end
+
     local force_recipe = player.force.recipes[recipe_name]
     if force_recipe == nil then
       -- todo: research impostor recipes, even though this just says "water", is "impostor water" even in the lua table?
@@ -271,6 +274,8 @@ script.on_event(defines.events.on_gui_click, function(event)
         create_at_cursor = true,
       }
     end
+
+    ::skip_recipe_check::
   end
 
   if player.clear_cursor() == false then
