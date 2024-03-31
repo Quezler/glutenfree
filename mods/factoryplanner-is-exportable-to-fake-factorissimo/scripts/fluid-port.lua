@@ -35,7 +35,8 @@ commands.add_command(mod_prefix .. "fluidport", nil, function(command)
 end)
 
 function FluidPort.get_occupied_slots(struct, ignore_entity)
-  local fluid_port_slots = #FluidPort.tiers[1]
+  local tier = struct.tier
+  local fluid_port_slots = #FluidPort.tiers[tier]
   local occupied_slots = {}
 
   for _, fluid_port in ipairs(struct.fluid_ports) do
@@ -43,8 +44,8 @@ function FluidPort.get_occupied_slots(struct, ignore_entity)
       occupied_slots[fluid_port.index] = true
 
       -- fluid port slots can have a corner property, if its present the current slot's index + the offset in the `corners` is reserved as well.
-      if fluid_port.entity ~= ignore_entity and FluidPort.tiers[1][fluid_port.index].corners ~= nil then
-        occupied_slots[FluidPort.clockwise_array_index(fluid_port.index, fluid_port_slots, FluidPort.tiers[1][fluid_port.index].corners)] = true
+      if fluid_port.entity ~= ignore_entity and FluidPort.tiers[tier][fluid_port.index].corners ~= nil then
+        occupied_slots[FluidPort.clockwise_array_index(fluid_port.index, fluid_port_slots, FluidPort.tiers[tier][fluid_port.index].corners)] = true
       end
     end
   end
@@ -55,7 +56,7 @@ end
 function FluidPort.get_random_unoccupied_index(struct)
   local occupied_slots = FluidPort.get_occupied_slots(struct)
 
-  local array_size = #FluidPort.tiers[1]
+  local array_size = #FluidPort.tiers[struct.tier]
   assert(array_size > table_size(occupied_slots))
 
   ::again::
@@ -69,7 +70,7 @@ function FluidPort.add_fluid_port(struct, fluid_name)
   local entity = struct.container
   local index = FluidPort.get_random_unoccupied_index(struct)
 
-  local slots = FluidPort.tiers[1]
+  local slots = FluidPort.tiers[struct.tier]
   local slot = slots[index]
   local position = {entity.position.x + slot.offset[1], entity.position.y + slot.offset[2]}
   local fluid_port = entity.surface.create_entity{
@@ -123,7 +124,7 @@ assert(FluidPort.clockwise_array_index(1, 30, -1) == 30)
 
 function FluidPort.update_fluid_port_position(struct, fluid_port_index)
   local fluid_port = struct.fluid_ports[fluid_port_index]
-  local slot = FluidPort.tiers[1][fluid_port.index]
+  local slot = FluidPort.tiers[struct.tier][fluid_port.index]
 
   fluid_port.entity.teleport({struct.container.position.x + slot.offset[1], struct.container.position.y + slot.offset[2]})
   fluid_port.entity.direction = slot.direction
@@ -137,7 +138,7 @@ function FluidPort.on_player_rotated_entity(event)
       local struct = global.structs[fluid_port_data.struct_id]
       assert(struct)
 
-      local fluid_port_slots = #FluidPort.tiers[1]
+      local fluid_port_slots = #FluidPort.tiers[struct.tier]
       local occupied_slots = FluidPort.get_occupied_slots(struct, entity)
 
       local fluid_port_index = FluidPort.get_fluid_port_index(struct, entity)

@@ -1,4 +1,4 @@
-local LATEST_STRUCT_VERSION = 6
+local LATEST_STRUCT_VERSION = 7
 
 local shared = require('shared')
 local util = require('__core__.lualib.util')
@@ -216,6 +216,7 @@ function Factory.on_created_entity(event)
     rendered = {},
 
     fluid_ports = {},
+    tier = tier,
   }
 
   Factory.inflate_buffers(struct)
@@ -389,6 +390,13 @@ function Factory.tick_struct(struct)
       struct.output_buffer = nil
 
       struct.version = 6
+    end
+
+    if struct.version == 6 then
+      struct.tier = container_name_to_tier[struct.container.name]
+      assert(struct.tier)
+
+      struct.version = 7
     end
 
     assert(struct.version == LATEST_STRUCT_VERSION)
