@@ -559,6 +559,7 @@ end
       if is_item_or_else_fluid(product) then
         struct.item_output_buffer[product.name] = struct.item_output_buffer[product.name] + product.amount
       else
+        fluid_statistics.on_flow(product.name, product.amount)
         struct.fluid_output_buffer[product.name] = struct.fluid_output_buffer[product.name] + product.amount
       end
     end
@@ -567,6 +568,7 @@ end
       if is_item_or_else_fluid(byproduct) then
         struct.item_output_buffer[byproduct.name] = struct.item_output_buffer[byproduct.name] + byproduct.amount
       else
+        fluid_statistics.on_flow(byproduct.name, byproduct.amount)
         struct.fluid_output_buffer[byproduct.name] = struct.fluid_output_buffer[byproduct.name] + byproduct.amount
       end
     end
