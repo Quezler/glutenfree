@@ -119,6 +119,7 @@ function Factory.on_created_entity(event)
   assert(tier)
 
   local clipboard = nil
+  local fluid_ports = nil
   local player = nil
 
   if entity.type == "entity-ghost" then
@@ -126,6 +127,7 @@ function Factory.on_created_entity(event)
       local source_struct = global.structs[entity.tags.source_struct_unit_number]
       if source_struct then
         clipboard = table.deepcopy(source_struct.clipboard)
+        fluid_ports = source_struct.fluid_ports
         local _, revived, _ = entity.revive{}
         if revived == nil then return end
         entity = revived
@@ -295,15 +297,21 @@ function Factory.on_created_entity(event)
 
   global.deathrattles[script.register_on_entity_destroyed(entity)] = {combinator, assembler, eei}
 
-  -- todo: prevent one of the products also being a partial byproduct or vice versa from creating extra ports.
-  for _, pbi in ipairs({struct.clipboard.products, struct.clipboard.byproducts, struct.clipboard.ingredients}) do
-    for _, thing in ipairs(pbi) do
-      if is_item_or_else_fluid(thing) then
-        -- ignored
-      else
-        local port_count = math.ceil(thing.amount / 5000) -- each fluid port is rated for 5000 per minute (technically 6000, if its full every 10 secs)
-        for i = 1, port_count do
-          FluidPort.add_fluid_port(struct, thing.name)
+  if fluid_ports then
+    for _, fluid_port in ipairs(fluid_ports) do
+      FluidPort.add_fluid_port(struct, fluid_port.fluid, fluid_port.index)
+    end
+  else
+    -- todo: prevent one of the products also being a partial byproduct or vice versa from creating extra ports.
+    for _, pbi in ipairs({struct.clipboard.products, struct.clipboard.byproducts, struct.clipboard.ingredients}) do
+      for _, thing in ipairs(pbi) do
+        if is_item_or_else_fluid(thing) then
+          -- ignored
+        else
+          local port_count = math.ceil(thing.amount / 5000) -- each fluid port is rated for 5000 per minute (technically 6000, if its full every 10 secs)
+          for i = 1, port_count do
+            FluidPort.add_fluid_port(struct, thing.name)
+          end
         end
       end
     end

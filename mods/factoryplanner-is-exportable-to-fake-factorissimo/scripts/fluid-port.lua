@@ -66,9 +66,9 @@ function FluidPort.get_random_unoccupied_index(struct)
   return random_index
 end
 
-function FluidPort.add_fluid_port(struct, fluid_name)
+function FluidPort.add_fluid_port(struct, fluid_name, index)
   local entity = struct.container
-  local index = FluidPort.get_random_unoccupied_index(struct)
+  if index == nil then index = FluidPort.get_random_unoccupied_index(struct) end
 
   local slots = FluidPort.tiers[struct.tier]
   local slot = slots[index]
