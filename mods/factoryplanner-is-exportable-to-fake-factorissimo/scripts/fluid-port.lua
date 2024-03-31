@@ -2,50 +2,7 @@ local mod_prefix = 'fietff-'
 
 local FluidPort = {}
 
--- i should generate these via code, but for the prototyping stage this was quicker.
-FluidPort.tiers = {
-  {
-    -- top left to top right
-    {offset = {-3.5, -3.5}, direction = defines.direction.north, corners = -1},
-    {offset = {-2.5, -3.5}, direction = defines.direction.north},
-    {offset = {-1.5, -3.5}, direction = defines.direction.north},
-    {offset = {-0.5, -3.5}, direction = defines.direction.north},
-    {offset = { 0.5, -3.5}, direction = defines.direction.north},
-    {offset = { 1.5, -3.5}, direction = defines.direction.north},
-    {offset = { 2.5, -3.5}, direction = defines.direction.north},
-    {offset = { 3.5, -3.5}, direction = defines.direction.north, corners =  1},
-
-    -- top right to bottom right
-    {offset = { 3.5, -3.5}, direction = defines.direction.east, corners = -1},
-    {offset = { 3.5, -2.5}, direction = defines.direction.east},
-    {offset = { 3.5, -1.5}, direction = defines.direction.east},
-    {offset = { 3.5, -0.5}, direction = defines.direction.east},
-    {offset = { 3.5,  0.5}, direction = defines.direction.east},
-    {offset = { 3.5,  1.5}, direction = defines.direction.east},
-    {offset = { 3.5,  2.5}, direction = defines.direction.east},
-    {offset = { 3.5,  3.5}, direction = defines.direction.east, corners =  1},
-
-    -- bottom right to bottom left
-    {offset = { 3.5,  3.5}, direction = defines.direction.south, corners = -1},
-    {offset = { 2.5,  3.5}, direction = defines.direction.south},
-    {offset = { 1.5,  3.5}, direction = defines.direction.south},
-    -- {offset = { 0.5,  3.5}, direction = defines.direction.south},
-    -- {offset = {-0.5,  3.5}, direction = defines.direction.south},
-    {offset = {-1.5,  3.5}, direction = defines.direction.south},
-    {offset = {-2.5,  3.5}, direction = defines.direction.south},
-    {offset = {-3.5,  3.5}, direction = defines.direction.south, corners =  1},
-
-    -- bottom left to top left
-    {offset = {-3.5,  3.5}, direction = defines.direction.west, corners = -1},
-    {offset = {-3.5,  2.5}, direction = defines.direction.west},
-    {offset = {-3.5,  1.5}, direction = defines.direction.west},
-    {offset = {-3.5,  0.5}, direction = defines.direction.west},
-    {offset = {-3.5, -0.5}, direction = defines.direction.west},
-    {offset = {-3.5, -1.5}, direction = defines.direction.west},
-    {offset = {-3.5, -2.5}, direction = defines.direction.west},
-    {offset = {-3.5, -3.5}, direction = defines.direction.west, corners =  1},
-  }
-}
+FluidPort.tiers = require('scripts.fluid-port-tiers')
 
 commands.add_command(mod_prefix .. "fluidport", nil, function(command)
   local player = game.get_player(command.player_index)
@@ -58,16 +15,18 @@ commands.add_command(mod_prefix .. "fluidport", nil, function(command)
 
   local entity = struct.container
   local slots = FluidPort.tiers[1]
+  -- local slots = FluidPort.tiers[2]
+  -- local slots = FluidPort.tiers[3]
 
   -- for _, slot in ipairs(slots) do
   --   local position = {entity.position.x + slot.offset[1], entity.position.y + slot.offset[2]}
 
-    -- entity.surface.create_entity{
-    --   name = string.format(mod_prefix .. 'storage-tank-%s', 'water'),
-    --   force = entity.force,
-    --   position = position,
-    --   direction = slot.direction,
-    -- }
+  --   entity.surface.create_entity{
+  --     name = string.format(mod_prefix .. 'storage-tank-%s', 'water'),
+  --     force = entity.force,
+  --     position = position,
+  --     direction = slot.direction,
+  --   }
   -- end
 
   FluidPort.add_fluid_port(struct, 'water')
