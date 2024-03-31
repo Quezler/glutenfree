@@ -321,20 +321,20 @@ function Factory.on_created_entity(event)
   Factory.tick_struct(struct)
 end
 
-function Factory.get_items_and_fluids_from(array)
-  local items = {}
-  local fluids = {}
+-- function Factory.get_items_and_fluids_from(array)
+--   local items = {}
+--   local fluids = {}
 
-  for _, entry in ipairs(array) do
-    if is_item_or_else_fluid(entry) then
-      table.insert(items, entry)
-    else
-      table.insert(fluids, entry)
-    end
-  end
+--   for _, entry in ipairs(array) do
+--     if is_item_or_else_fluid(entry) then
+--       table.insert(items, entry)
+--     else
+--       table.insert(fluids, entry)
+--     end
+--   end
 
-  return items, fluids
-end
+--   return items, fluids
+-- end
 
 function Factory.tick_struct(struct)
   if struct.container.valid == false then
@@ -456,25 +456,25 @@ function Factory.tick_struct(struct)
   -- game.print('craft cycle')
 
   do -- suck fluids from all the fluid ports into the fluid_input_buffer up until the amount required to complete the next craft.
-    local desired_fluids = {}
-    for _, ingredient in ipairs(struct.clipboard.ingredients) do
-      if is_item_or_else_fluid(ingredient) then
-      else
-        desired_fluids[ingredient.name] = ingredient.amount
-      end
+  local desired_fluids = {}
+  for _, ingredient in ipairs(struct.clipboard.ingredients) do
+    if is_item_or_else_fluid(ingredient) then
+    else
+      desired_fluids[ingredient.name] = ingredient.amount
     end
+  end
 
-    for _, fluid_port in ipairs(struct.fluid_ports) do
-      local desired_amount = desired_fluids[fluid_port.fluid]
-      if desired_amount then
-        local missing = desired_amount - struct.fluid_input_buffer[fluid_port.fluid]
-        if missing > 0 then
-          local removed = fluid_port.entity.remove_fluid{name = fluid_port.fluid, amount = missing}
-          struct.fluid_input_buffer[fluid_port.fluid] = struct.fluid_input_buffer[fluid_port.fluid] + removed
-        end
+  for _, fluid_port in ipairs(struct.fluid_ports) do
+    local desired_amount = desired_fluids[fluid_port.fluid]
+    if desired_amount then
+      local missing = desired_amount - struct.fluid_input_buffer[fluid_port.fluid]
+      if missing > 0 then
+        local removed = fluid_port.entity.remove_fluid{name = fluid_port.fluid, amount = missing}
+        struct.fluid_input_buffer[fluid_port.fluid] = struct.fluid_input_buffer[fluid_port.fluid] + removed
       end
     end
   end
+end
 
   local purse = struct.assembler.get_inventory(defines.inventory.assembling_machine_output)
   local purse_coin_count = purse.get_item_count(mod_prefix .. 'coin')
@@ -502,9 +502,9 @@ function Factory.tick_struct(struct)
     return
   end
 
-  local item_ingredients, fluid_ingredients = Factory.get_items_and_fluids_from(struct.clipboard.ingredients)
-  assert(item_ingredients)
-  assert(fluid_ingredients)
+  -- local item_ingredients, fluid_ingredients = Factory.get_items_and_fluids_from(struct.clipboard.ingredients)
+  -- assert(item_ingredients)
+  -- assert(fluid_ingredients)
 
   -- for fluid_name, fluid_amount in pairs(struct.fluid_output_buffer) do
   --   if fluid_amount > 0 then
@@ -535,22 +535,23 @@ function Factory.tick_struct(struct)
   if struct.output_slots_required > empty_slots then return rendering.set_text(struct.rendered.factory_message, string.format("[img=utility/status_not_working] not enough output space (%d>%d)", struct.output_slots_required, empty_slots)) end
 
   local item_statistics = struct.container.force.item_production_statistics
+  local fluid_statistics = struct.container.force.fluid_production_statistics
 
-  for _, ingredient in ipairs(item_ingredients) do
-    -- refill the buffer, which will now have enough for a cycle
-    local top_up_with = math.ceil(ingredient.amount - struct.item_input_buffer[ingredient.name])
-    if top_up_with > 0 then
-      item_statistics.on_flow(ingredient.name, -top_up_with)
-      struct.item_input_buffer[ingredient.name] = struct.item_input_buffer[ingredient.name] + inventory.remove({name = ingredient.name, count = top_up_with})
+  for _, ingredient in ipairs(struct.clipboard.ingredients) do
+    if is_item_or_else_fluid(ingredient) then
+      -- refill the buffer, which will now have enough for a cycle
+      local top_up_with = math.ceil(ingredient.amount - struct.item_input_buffer[ingredient.name])
+      if top_up_with > 0 then
+        item_statistics.on_flow(ingredient.name, -top_up_with)
+        struct.item_input_buffer[ingredient.name] = struct.item_input_buffer[ingredient.name] + inventory.remove({name = ingredient.name, count = top_up_with})
+      end
+
+      -- and now we subtract the ingredient costs from the buffer
+      struct.item_input_buffer[ingredient.name] = struct.item_input_buffer[ingredient.name] - ingredient.amount
+    else
+      fluid_statistics.on_flow(ingredient.name, -ingredient.amount)
+      struct.fluid_input_buffer[ingredient.name] = struct.fluid_input_buffer[ingredient.name] - ingredient.amount
     end
-
-    -- and now we subtract the ingredient costs from the buffer
-    struct.item_input_buffer[ingredient.name] = struct.item_input_buffer[ingredient.name] - ingredient.amount
-  end
-
-  for _, ingredient in ipairs(fluid_ingredients) do
-    -- and now we subtract the ingredient costs from the buffer
-    struct.fluid_input_buffer[ingredient.name] = struct.fluid_input_buffer[ingredient.name] - ingredient.amount
   end
 
   do -- calculate and give the output
