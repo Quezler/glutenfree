@@ -455,13 +455,6 @@ function Factory.tick_struct(struct)
 
   -- game.print('craft cycle')
 
-  local purse = struct.assembler.get_inventory(defines.inventory.assembling_machine_output)
-  local purse_coin_count = purse.get_item_count(mod_prefix .. 'coin')
-  if 60 > purse_coin_count then
-    return rendering.set_text(struct.rendered.factory_message, string.format('[img=utility/status_working] working (%s/60)', purse_coin_count))
-  end
-  struct.eei.power_usage = 0 -- disable power usage until after a successful craft cycle
-
   do -- suck fluids from all the fluid ports into the fluid_input_buffer up until the amount required to complete the next craft.
     local desired_fluids = {}
     for _, ingredient in ipairs(struct.clipboard.ingredients) do
@@ -482,6 +475,13 @@ function Factory.tick_struct(struct)
       end
     end
   end
+
+  local purse = struct.assembler.get_inventory(defines.inventory.assembling_machine_output)
+  local purse_coin_count = purse.get_item_count(mod_prefix .. 'coin')
+  if 60 > purse_coin_count then
+    return rendering.set_text(struct.rendered.factory_message, string.format('[img=utility/status_working] working (%s/60)', purse_coin_count))
+  end
+  struct.eei.power_usage = 0 -- disable power usage until after a successful craft cycle
 
   -- can we afford the next craft cycle?
   local missing_ingredients = {}
