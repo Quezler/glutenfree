@@ -88,6 +88,11 @@ function FluidPort.add_fluid_port(struct, fluid_name)
 
     struct_id = struct.unit_number,
   }
+
+  global.fluid_port_data_deathrattles[script.register_on_entity_destroyed(fluid_port)] = fluid_port.unit_number
+
+  -- add the fluid port to the list of entities to kill when the container gets destroyed
+  table.insert(global.deathrattles[script.register_on_entity_destroyed(struct.container)], fluid_port)
 end
 
 function FluidPort.direction_changed_clockwise(old_direction, new_direction)

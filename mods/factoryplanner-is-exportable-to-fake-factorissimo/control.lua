@@ -380,6 +380,7 @@ local function on_configuration_changed(event)
   global.deathrattles = global.deathrattles or {}
 
   global.fluid_port_data = global.fluid_port_data or {}
+  global.fluid_port_data_deathrattles = global.fluid_port_data_deathrattles or {}
   global.selected_fluid_port = global.selected_fluid_port or {}
 
   global.inventory_size_from_item = {}
@@ -432,6 +433,12 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
     for _, entity in ipairs(deathrattle) do
       entity.destroy()
     end
+  end
+
+  local fluid_port_data_deathrattle = global.fluid_port_data_deathrattles[event.registration_number]
+  if fluid_port_data_deathrattle then global.fluid_port_data_deathrattles[event.registration_number] = nil
+    assert(global.fluid_port_data[fluid_port_data_deathrattle])
+    global.fluid_port_data[fluid_port_data_deathrattle] = nil
   end
 end)
 

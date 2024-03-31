@@ -293,6 +293,8 @@ function Factory.on_created_entity(event)
     scale = 0.5,
   }
 
+  global.deathrattles[script.register_on_entity_destroyed(entity)] = {combinator, assembler, eei}
+
   -- todo: prevent one of the products also being a partial byproduct or vice versa from creating extra ports.
   for _, pbi in ipairs({struct.clipboard.products, struct.clipboard.byproducts, struct.clipboard.ingredients}) do
     for _, thing in ipairs(pbi) do
@@ -309,8 +311,6 @@ function Factory.on_created_entity(event)
 
   global.structs[entity.unit_number] = struct
   Factory.tick_struct(struct)
-
-  global.deathrattles[script.register_on_entity_destroyed(entity)] = {combinator, assembler, eei}
 end
 
 function Factory.get_items_and_fluids_from(array)
