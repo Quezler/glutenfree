@@ -22,8 +22,10 @@ local function on_created_entity(event)
     surfacedata.relay = surface.create_entity{
       name = mod_prefix .. 'circuit-relay',
       force = entity.force,
-      position = surface.find_non_colliding_position(mod_prefix .. 'circuit-relay', {0, 0}, 0, 1, true),
+      position = entity.position,
     }
+  else
+    surfacedata.relay.teleport(entity.position)
   end
 
   local circuit_connector = surface.find_entity(mod_prefix .. 'circuit-connector', entity.position)
@@ -57,7 +59,7 @@ local function on_created_entity(event)
     target_entity = surfacedata.relay,
     wire = defines.wire_type.green,
   })
-  
+
   local registration_number = script.register_on_entity_destroyed(entity)
 
   global.surfacedata[surface.index].structs[entity.unit_number] = {
@@ -146,6 +148,7 @@ end)
 
 script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   local player = game.get_player(event.player_index)
+  assert(player)
   -- game.print(event.tick)
 
   if player.cursor_stack and player.cursor_stack.valid_for_read and player.cursor_stack.name == mod_prefix .. 'circuit-connector' then
@@ -158,7 +161,7 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
         end
       end
     end
-    
+
     player.cursor_stack.clear()
   end
 

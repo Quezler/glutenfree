@@ -1,5 +1,4 @@
 local mod_prefix = 'fff-402-radars-'
-local corner_to_center = 1500000 -- 1.5 million, with like 0.1 of wiggle room
 
 local circuit_connector_definition = circuit_connector_definitions.create(universal_connector_template,
   {{variation = 24, main_offset = util.by_pixel(-42.5, -10), shadow_offset = util.by_pixel(-42, -7.5), show_shadow = false}}
@@ -9,11 +8,13 @@ local radar = data.raw['radar']['radar']
 local w_pole = data.raw['item']['small-electric-pole']
 local r_wire = data.raw['item']['red-wire']
 
+local debug_mode = false
+
 data:extend{{
   type = 'container',
   name = mod_prefix .. 'circuit-relay',
 
-  selectable_in_game = false,
+  selectable_in_game = debug_mode,
   selection_box = radar.selection_box,
   collision_box = radar.collision_box,
   collision_mask = {},
@@ -21,8 +22,8 @@ data:extend{{
   inventory_size = 0,
   picture = util.empty_sprite(),
 
-  circuit_wire_max_distance = corner_to_center,
-  draw_circuit_wires = false,
+  circuit_wire_max_distance = default_circuit_wire_max_distance,
+  draw_circuit_wires = debug_mode,
 
   icons = {
     {icon = radar.icon, icon_size = radar.icon_size, icon_mipmaps = radar.icon_mipmaps},
@@ -44,7 +45,7 @@ data:extend{{
   inventory_size = 0,
   picture = util.empty_sprite(),
 
-  circuit_wire_max_distance = corner_to_center,
+  circuit_wire_max_distance = default_circuit_wire_max_distance,
   circuit_wire_connection_point = circuit_connector_definition.points,
   circuit_connector_sprites = circuit_connector_definition.sprites,
 
