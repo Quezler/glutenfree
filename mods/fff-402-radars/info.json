@@ -2,13 +2,14 @@
     "name": "fff-402-radars",
     "title": "FFF 402 radars",
     "description": "Makes radars transmit and receive signals across the same surface.",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
         "? base",
         "? Krastorio2",
         "? space-exploration",
-        "? PickerDollies"
+        "? PickerDollies",
+        "? reconnect-cut-wires"
     ]
 }
