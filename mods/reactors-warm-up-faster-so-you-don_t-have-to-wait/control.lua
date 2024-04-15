@@ -45,7 +45,7 @@ local function tick_reactor(struct)
   local transfer = per_tick * multiplier * (1 + entity.neighbour_bonus)
 
   entity.burner.remaining_burning_fuel = entity.burner.remaining_burning_fuel - transfer
-  entity.temperature = entity.temperature + (transfer / global.specific_heat[entity_name])
+  entity.temperature = entity.temperature + (transfer / global.specific_heat[entity_name] * global.effectivity[entity_name])
 end
 
 local function on_tick(event)
@@ -72,7 +72,7 @@ local function on_created_entity(event)
 
   -- case not yet handled (is it * the transfer, or does it also do something to the buffered energy?)
   if entity.prototype.burner_prototype.effectivity ~= 1 then
-    game.print(string.format('reactor %s has a fuel effectivity of %d which is not yet supported by the warmup mod, report this please.', entity.prototype.name, entity.prototype.burner_prototype.effectivity))
+    game.print(string.format('reactor %s has a fuel effectivity of %f which is not yet supported by the warmup mod, report this please.', entity.prototype.name, entity.prototype.burner_prototype.effectivity))
     return
   end
 
@@ -88,6 +88,8 @@ end
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index)
+  assert(player)
+
   if player.selected and player.selected.type == 'reactor' and global.structs[player.selected.unit_number] == nil then
     on_created_entity({entity = player.selected, tick = event.tick})
   end
@@ -109,12 +111,14 @@ local function on_configuration_changed(event)
   global.max_energy_usage = {}
   global.max_temperature = {}
   global.specific_heat = {}
+  global.effectivity = {}
 
   local prototypes = game.get_filtered_entity_prototypes{{filter='type', type='reactor'}}
   for _, prototype in pairs(prototypes) do
     global.max_energy_usage[prototype.name] = prototype.max_energy_usage
     global.max_temperature[prototype.name] = prototype.heat_buffer_prototype.max_temperature
     global.specific_heat[prototype.name] = prototype.heat_buffer_prototype.specific_heat
+    global.effectivity[prototype.name] = prototype.burner_prototype.effectivity
   end
 end
 
