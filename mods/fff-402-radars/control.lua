@@ -24,6 +24,8 @@ local function on_created_entity(event)
       force = entity.force,
       position = entity.position,
     }
+
+    surfacedata.relay.destructible = false
   else
     surfacedata.relay.teleport(entity.position)
   end
@@ -177,5 +179,15 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
     end
 
     player.cursor_ghost = nil
+  end
+end)
+
+script.on_configuration_changed(function(event)
+  if global.migration_circuit_relay_destructible == nil then global.migration_circuit_relay_destructible = true
+    for _, surface in pairs(game.surfaces) do
+      for _, entity in pairs(surface.find_entities_filtered{name = mod_prefix .. 'circuit-relay'}) do
+        entity.destructible = false
+      end
+    end
   end
 end)
