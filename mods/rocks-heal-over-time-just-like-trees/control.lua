@@ -1,12 +1,12 @@
-local function get_gps_key(entity)
-  return entity.position.x .. ',' .. entity.position.x .. ',' .. entity.surface.name
+local function get_unique_index(entity)
+  return entity.position.x .. ',' .. entity.position.y .. ',' .. entity.surface.name
 end
 
 local function maybe_add_to_damaged_rocks(entity)
   if string.find(entity.name, "rock") and 1 > entity.get_health_ratio() then
-    local gps_key = get_gps_key(entity)
-    if not global.damaged_rocks[gps_key] then
-      global.damaged_rocks[gps_key] = entity
+    local unique_index = get_unique_index(entity)
+    if not global.damaged_rocks[unique_index] then
+      global.damaged_rocks[unique_index] = entity
     end
   end
 end
@@ -37,5 +37,6 @@ script.on_nth_tick(60 * 10, function(event) -- heal by 1 health every 10 seconds
     else
       global.damaged_rocks[_] = nil
     end
+
   end
 end)
