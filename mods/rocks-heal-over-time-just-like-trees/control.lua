@@ -1,13 +1,12 @@
-local function already_in_damaged_rocks(entity)
-  local key = entity.position.x .. ',' .. entity.position.x .. ',' .. entity.surface.name
-
-  return global.damaged_rocks[key] ~= nil
+local function get_gps_key(entity)
+  return entity.position.x .. ',' .. entity.position.x .. ',' .. entity.surface.name
 end
 
 local function maybe_add_to_damaged_rocks(entity)
   if string.find(entity.name, "rock") and 1 > entity.get_health_ratio() then
-    if not already_in_damaged_rocks(entity) then
-      table.insert(global.damaged_rocks, entity)
+    local gps_key = get_gps_key(entity)
+    if not global.damaged_rocks[gps_key] then
+      global.damaged_rocks[gps_key] = entity
     end
   end
 end
