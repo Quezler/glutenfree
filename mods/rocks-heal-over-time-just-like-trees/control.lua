@@ -30,7 +30,7 @@ script.on_init(on_init)
 script.on_configuration_changed(on_init)
 
 script.on_nth_tick(60 * 10, function(event) -- heal by 1 health every 10 seconds, this is on-par with trees.
-  for _, damaged_rock in ipairs(global.damaged_rocks) do
+  for _, damaged_rock in pairs(global.damaged_rocks) do
 
     if damaged_rock.valid and 1 > damaged_rock.get_health_ratio() then
       damaged_rock.health = damaged_rock.health + 1
