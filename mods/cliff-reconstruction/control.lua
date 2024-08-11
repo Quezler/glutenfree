@@ -49,8 +49,6 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   local existing_cliffs = event.surface.find_entities_filtered{area = event.area, type = 'cliff'}
   local to_clone_cliffs =       surface.find_entities_filtered{area = event.area, type = 'cliff'}
 
-  game.print(#existing_cliffs)
-
   for _, to_clone_cliff in ipairs(to_clone_cliffs) do
     if should_clone(to_clone_cliff, existing_cliffs) then
       local cloned_cliff = to_clone_cliff.clone{
