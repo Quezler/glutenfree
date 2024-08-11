@@ -1,0 +1,11 @@
+{
+    "name": "cliff-reconstruction",
+    "title": "Cliff reconstruction",
+    "description": "Allows you to restore cliffs in their original position.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "base"
+    ]
+}
