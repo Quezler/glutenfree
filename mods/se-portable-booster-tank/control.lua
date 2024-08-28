@@ -49,8 +49,26 @@ local function on_mined_entity(event)
   util.format_number(fluid.amount, true), ' at ', {'format-degrees-c-compact', math.ceil(fluid.temperature)}}
 end
 
+local function on_built_entity(event)
+  assert(event.stack.is_item_with_tags)
+
+  local tags = event.stack.get_tag('__se-portable-booster-tank__')
+  if tags == nil then return end
+
+  local inserted = event.created_entity.insert_fluid({
+    name = tags.fluid_name,
+    amount = tags.fluid_amount,
+    temperature = tags.fluid_temperature,
+  })
+
+  assert(inserted == tags.fluid_amount)
+end
+
 script.on_event(defines.events.on_player_mined_entity, on_mined_entity, booster_tanks_filter)
 script.on_event(defines.events.on_robot_mined_entity, on_mined_entity, booster_tanks_filter)
+
+script.on_event(defines.events.on_built_entity, on_built_entity, booster_tanks_filter)
+script.on_event(defines.events.on_robot_built_entity, on_built_entity, booster_tanks_filter)
 
 script.on_init(function(event)
  global.next_id = 1 -- to make sure booster tanks are unable to stack
