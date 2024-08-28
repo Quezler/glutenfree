@@ -1,3 +1,6 @@
-This mod encourages seeking out core seams on other planets in order to get a balanced diet.
+This mod hides all the core seams on nauvis, other/pvp homeworlds are currently not supported.
 
-Say `uninstall se-no-core-fragments-on-nauvis` in the chat before removing the mod from the world.
+The goal of this mod is to encourage you to do more on other planets since nauvis will eventually be mined dry.
+(effectively getting rid of furnaces and such on nauvis, making it a production powerhouse of shipped in goods)
+
+Use `/se-no-core-fragments-on-nauvis disable` before removing the mod to keep smoke and map tags intact.

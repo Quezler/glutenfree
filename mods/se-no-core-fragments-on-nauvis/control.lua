@@ -1,33 +1,51 @@
+local function get_nauvis()
+  local surface = game.get_surface(1)
+  assert(surface and surface.name == 'nauvis')
+
+  local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface.index})
+  assert(zone and zone.name == 'Nauvis')
+
+  return surface, zone
+end
+
 local function on_chunk_generated(event)
-  if event.surface.name ~= 'nauvis' then return end
+  if global.disabled then return end
 
-  local fissures = event.surface.find_entities_filtered{
-    area = event.area,
-    name = 'se-core-seam-fissure',
-  }
+  local surface = event.surface
+  if surface.name ~= 'nauvis' then return end
 
-  for _, fissure in ipairs(fissures) do
-    fissure.destroy()
+  local _, zone = get_nauvis()
+
+  local chunk_position = event.position
+  if zone.core_seam_chunks[chunk_position.x] and zone.core_seam_chunks[chunk_position.x][chunk_position.y] then
+    local resource_index = zone.core_seam_chunks[chunk_position.x][chunk_position.y]
+    local core_seam_resource = zone.core_seam_resources[resource_index]
+
+    core_seam_resource.fissure.destroy() -- registration_number seals the seam
+    core_seam_resource.smoke_generator.destroy()
   end
+
 end
 
 script.on_event(defines.events.on_chunk_generated, on_chunk_generated)
+-- script.on_event(defines.events.on_chunk_charted, on_chunk_charted) -- todo: care about other forces
 
-script.on_init(function(event)
-  local surface = game.get_surface(1)
-  assert(surface)
+local function enable()
+  local surface, zone = get_nauvis()
 
-  local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface.index})
-  assert(zone.name == 'Nauvis')
-
-  -- local core_miners_on_this_surface = table_size(zone.core_mining)
-  -- zone.core_seam_positions
-
-  -- log(serpent.block(zone))
+  local spill_positions = {}
+  for _, core_miner in pairs(zone.core_mining) do
+    table.insert(spill_positions, core_miner.position)
+    core_miner.drill.destroy()
+  end
 
   for _, core_seam_resource in pairs(zone.core_seam_resources) do
-    core_seam_resource.fissure.destroy() -- this seals the seam
-    core_seam_resource.smoke_generator.destroy() -- weird that sealed seams continue to smoke
+    core_seam_resource.fissure.destroy() -- registration_number seals the seam
+    core_seam_resource.smoke_generator.destroy()
+  end
+
+  for _, spill_position in ipairs(spill_positions) do
+    surface.spill_item_stack(spill_position, 'se-core-miner', true, 'player', false)
   end
 
   for _, force in pairs(game.forces) do
@@ -38,47 +56,74 @@ script.on_init(function(event)
     end
   end
 
+end
+
+local function disable()
+  local surface, zone = get_nauvis()
+
+  for _, core_seam_resource in pairs(zone.core_seam_resources) do
+    core_seam_resource.resource.destroy() -- registration_number removes and recreates the seam
+  end
+
+  local force = game.forces['player']
+
+  -- instead of doing it the sensible way we'll trigger on_chunk_charted and let SE recreate any/all map tags :3
+  for x, ys in pairs(zone.core_seam_chunks) do
+    for y, resource_index in pairs(ys) do
+      local chunk_position = {x, y}
+      if force.is_chunk_charted(surface, chunk_position) then
+        force.unchart_chunk(chunk_position, surface)
+        force.chart(surface, {{x * 32, y * 32}, {x * 32, y * 32}}) -- why this doesn't accept chunk coords is beyond me
+      end
+    end
+  end
+
+end
+
+script.on_init(function(event)
+  enable()
 end)
 
 script.on_event(defines.events.on_chart_tag_added, function(event)
-  local tag = event.tag
-  if tag.surface.name ~= 'nauvis' then return end
+  if global.disabled then return end
 
-  if tag.icon and tag.icon.name == "se-core-seam" then
-    tag.destroy()
+  local chart_tag = event.tag
+  if chart_tag.surface.name ~= 'nauvis' then return end
+
+  if chart_tag.icon and chart_tag.icon.name == "se-core-seam" then
+    chart_tag.destroy()
   end
+
 end)
 
-local function request_removal()
-  script.on_nth_tick(60 * 10, function(event)
-    game.print('"se-no-core-fragments-on-nauvis" got uninstalled, please remove the mod.')
-  end)
-end
-
-script.on_event(defines.events.on_console_chat, function(event)
-  if event.message ~= "uninstall se-no-core-fragments-on-nauvis" then return end
-
-  local player = game.get_player(event.player_index)
+commands.add_command('se-no-core-fragments-on-nauvis', nil, function(command)
+  local player = game.get_player(command.player_index)
   assert(player)
 
-  if player.admin == false then player.print('You are not an admin!') end
-
-  global.uninstalled = true
-  request_removal()
-
-  local surface = game.get_surface(1)
-  assert(surface)
-
-  local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface.index})
-  assert(zone.name == 'Nauvis')
-
-  for _, core_seam_resource in pairs(zone.core_seam_resources) do
-    core_seam_resource.resource.destroy() -- this triggers remove_seam followed by create_seam (effectively restores the smoke)
+  if command.parameter == nil then
+    return player.print('/se-no-core-fragments-on-nauvis <enable/disable>')
   end
-end)
 
-script.on_load(function(event)
-  if global.uninstalled then
-    request_removal()
+  if player.admin == false then
+    return player.print('You are not an admin!')
   end
+
+  if command.parameter == "enable" then
+    if global.disabled == nil then
+      return player.print('Already enabled.')
+    else
+      global.disabled = nil
+      enable()
+    end
+  end
+
+  if command.parameter == "disable" then
+    if global.disabled then
+      return player.print('Already disabled.')
+    else
+      global.disabled = true
+      disable()
+    end
+  end
+
 end)
