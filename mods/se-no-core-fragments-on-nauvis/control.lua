@@ -28,7 +28,6 @@ local function on_chunk_generated(event)
 end
 
 script.on_event(defines.events.on_chunk_generated, on_chunk_generated)
--- script.on_event(defines.events.on_chunk_charted, on_chunk_charted) -- todo: care about other forces
 
 local function enable()
   local surface, zone = get_nauvis()
