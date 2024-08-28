@@ -1,5 +1,11 @@
 local util = require('util')
 
+local booster_tanks_filter = {
+  {filter = 'name', name = 'se-spaceship-rocket-booster-tank'},
+  {filter = 'name', name = 'se-spaceship-ion-booster-tank'},
+  {filter = 'name', name = 'se-spaceship-antimatter-booster-tank'},
+}
+
 local tank_capacity = {}
 local function get_tank_capacity(entity_name)
   if not tank_capacity[entity_name] then
@@ -10,29 +16,35 @@ local function get_tank_capacity(entity_name)
 end
 
 script.on_event(defines.events.on_player_mined_entity, function(event)
-  game.print(serpent.block(event.buffer.get_contents()))
-
-  local itemstack, slot = event.buffer.find_item_stack('storage-tank')
+  local itemstack, slot = event.buffer.find_item_stack(event.entity.name)
   assert(itemstack and itemstack.is_item_with_tags)
 
-  local fluids = {}
+  -- game.print('blep' .. #event.entity.fluidbox)
+  game.print(serpent.block(event.entity.fluidbox[1]))
 
-  -- for _, fluidbox in ipairs(event.entity.fluidbox) do
-  --   game.print()
-  -- end
+  local fluid = event.entity.fluidbox[1]
+  if fluid == nil then return end -- tank already empty or managed to push fluids to neighbours
 
-  for i = 1, #event.entity.fluidbox do
-    local fluid = event.entity.fluidbox[i]
-    fluids[i] = fluid
-  end
+  itemstack.set_tag('__se-portable-booster-tank__', {
+    id = global.next_id,
+    fluid_name = fluid.name,
+    fluid_amount = fluid.amount,
+    fluid_temperature = fluid.temperature,
+  })
 
-  itemstack.tags = {fluids = fluids}
-  itemstack.custom_description = '[fluid=se-liquid-rocket-fuel] 1234k at 10 c'
-  itemstack.custom_description = {'', '[fluid=se-liquid-rocket-fuel] ', '[font=default-bold]', {'fluid-name.se-liquid-rocket-fuel'}, '[/font]', '\n', get_tank_capacity('storage-tank')}
-  itemstack.custom_description = {'', '[fluid=se-liquid-rocket-fuel] ', '[font=default-bold]', {'fluid-name.se-liquid-rocket-fuel'}, '[/font]', '\n', '[font=default-semibold]', math.ceil(fluids[1].amount), '[/font]', ' at ', '[font=default-semibold]', math.ceil(fluids[1].temperature), '[/font]', '°C'}
-  itemstack.custom_description = {'', '[fluid=se-liquid-rocket-fuel] ', '[color=255,230,192][font=default-bold]', {'fluid-name.se-liquid-rocket-fuel'}, '[/font][/color]', '\n', '[font=default-semibold]', math.ceil(fluids[1].amount), '[/font]', ' at ', '[font=default-semibold]', math.ceil(fluids[1].temperature), '[/font]', '°C'}
-  itemstack.custom_description = {'', '[fluid=se-liquid-rocket-fuel] ', '[color=255,230,192][font=default-bold]', {'fluid-name.se-liquid-rocket-fuel'}, '[/font][/color]', '\n', '[font=default-semibold]', util.format_number(fluids[1].amount, true), '[/font]', ' at ', '[font=default-semibold]', math.ceil(fluids[1].temperature), '[/font]', '°C'}
-  itemstack.health = math.random()
+  itemstack.custom_description = {'',
+  string.format('[fluid=%s] ', fluid.name), '[color=255,230,192][font=default-bold]', {'fluid-name.se-liquid-rocket-fuel'}, '[/font][/color]',
+  '\n',
+  '[font=default-semibold]', util.format_number(fluid.amount, true), '[/font]', ' at ', '[font=default-semibold]', math.ceil(fluid.temperature), '[/font]', '°C'}
 
-  game.print(serpent.block(fluids))
+  -- itemstack.health = fluid.amount / get_tank_capacity(event.entity.name)
+  -- itemstack.label = string.format('%d%% full', fluid.amount / get_tank_capacity(event.entity.name))
+  -- itemstack.label = {'', {'entity-name.' .. event.entity.name}, string.format(' (%d%% full)', fluid.amount / get_tank_capacity(event.entity.name))}
+  global.next_id = global.next_id + 1
+
+  -- game.print('boop')
+end, booster_tanks_filter)
+
+script.on_init(function(event)
+ global.next_id = 1 -- to make sure booster tanks are unable to stack
 end)
