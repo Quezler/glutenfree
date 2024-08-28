@@ -31,17 +31,18 @@ script.on_event(defines.events.on_player_mined_entity, function(event)
 
   fluid_color = game.fluid_prototypes[fluid.name].flow_color
 
+  local blocks = 17 -- matches the width the box already gets expanded to due to the 'Space Exploration - portable booster tank' prototype history (on my screen)
+  local fullness = fluid.amount / get_tank_capacity(event.entity.name) -- 0-1
+  local full_blocks = math.max(1, math.floor(blocks * fullness))
+  local empty_blocks = blocks - full_blocks
+
   itemstack.custom_description = {'',
   string.format('[fluid=%s] ', fluid.name), '[color=255,230,192][font=default-bold]', {'fluid-name.se-liquid-rocket-fuel'}, '[/font][/color]',
   '\n',
   string.format('[color=%f,%f,%f]', fluid_color.r, fluid_color.g, fluid_color.b),
-  -- '----------------------------------------',
-  -- '========================================',
-  -- '████████████████████',
-  -- '██████████████▓▓▒░░░',
-  '█████████████████',
+  string.rep('█', full_blocks),
   '[/color]',
-  '[color=gray]███[/color]',
+  '[color=gray]', string.rep('█', empty_blocks), '[/color]',
   '\n',
   util.format_number(fluid.amount, true), ' at ', {'format-degrees-c-compact', math.ceil(fluid.temperature)}}
 
