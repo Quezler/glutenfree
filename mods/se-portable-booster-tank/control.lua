@@ -19,9 +19,6 @@ script.on_event(defines.events.on_player_mined_entity, function(event)
   local itemstack, slot = event.buffer.find_item_stack(event.entity.name)
   assert(itemstack and itemstack.is_item_with_tags)
 
-  -- game.print('blep' .. #event.entity.fluidbox)
-  game.print(serpent.block(event.entity.fluidbox[1]))
-
   local fluid = event.entity.fluidbox[1]
   if fluid == nil then return end -- tank already empty or managed to push fluids to neighbours
 
@@ -32,17 +29,24 @@ script.on_event(defines.events.on_player_mined_entity, function(event)
     fluid_temperature = fluid.temperature,
   })
 
+  fluid_color = game.fluid_prototypes[fluid.name].flow_color
+
   itemstack.custom_description = {'',
   string.format('[fluid=%s] ', fluid.name), '[color=255,230,192][font=default-bold]', {'fluid-name.se-liquid-rocket-fuel'}, '[/font][/color]',
   '\n',
-  '[font=default-semibold]', util.format_number(fluid.amount, true), '[/font]', ' at ', '[font=default-semibold]', math.ceil(fluid.temperature), '[/font]', '°C'}
+  string.format('[color=%f,%f,%f]', fluid_color.r, fluid_color.g, fluid_color.b),
+  -- '----------------------------------------',
+  -- '========================================',
+  -- '████████████████████',
+  -- '██████████████▓▓▒░░░',
+  '█████████████████',
+  '[/color]',
+  '[color=gray]███[/color]',
+  '\n',
+  util.format_number(fluid.amount, true), ' at ', {'format-degrees-c-compact', math.ceil(fluid.temperature)}}
 
-  -- itemstack.health = fluid.amount / get_tank_capacity(event.entity.name)
-  -- itemstack.label = string.format('%d%% full', fluid.amount / get_tank_capacity(event.entity.name))
-  -- itemstack.label = {'', {'entity-name.' .. event.entity.name}, string.format(' (%d%% full)', fluid.amount / get_tank_capacity(event.entity.name))}
   global.next_id = global.next_id + 1
 
-  -- game.print('boop')
 end, booster_tanks_filter)
 
 script.on_init(function(event)
