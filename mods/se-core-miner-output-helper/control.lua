@@ -1,5 +1,7 @@
 script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index)
+  assert(player)
+
   local entity = player.selected
 
   if entity and entity.name == "se-core-miner-drill" and entity.mining_target then
@@ -180,7 +182,7 @@ script.on_event(defines.events.on_gui_click, function(event)
     local container = event.element.parent.parent.parent['right-flow']['container-frame']
     local content = container[Zonelist.name_zone_data_content_scroll_pane]
     local zone_index = event.element.tags.zone_index
-    update_content_for_player(content, player, zone_type)
+    update_content_for_player(content, player, zone_index)
     return
   end
 
