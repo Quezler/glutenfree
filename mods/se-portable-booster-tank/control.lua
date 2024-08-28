@@ -39,7 +39,7 @@ local function on_mined_entity(event)
   fluid_color = game.fluid_prototypes[fluid.name].flow_color
 
   itemstack.custom_description = {'',
-  string.format('[fluid=%s] ', fluid.name), '[color=255,230,192][font=default-bold]', {'fluid-name.se-liquid-rocket-fuel'}, '[/font][/color]',
+  string.format('[fluid=%s] ', fluid.name), '[color=255,230,192][font=default-bold]', {'fluid-name.' .. fluid.name}, '[/font][/color]',
   '\n',
   string.format('[color=%f,%f,%f]', fluid_color.r, fluid_color.g, fluid_color.b),
   string.rep('█', full_blocks),
