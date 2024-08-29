@@ -11,6 +11,7 @@ local Handler = {}
 
 function Handler.on_init()
   global.surfacedata = {}
+  global.deathrattles = {}
 
   for _, surface in pairs(game.surfaces) do
     Handler.on_surface_created({surface_index = surface.index})
@@ -19,11 +20,18 @@ function Handler.on_init()
       Handler.on_created_entity({entity = entity})
     end
   end
-
-  game.print(serpent.line(global.loader_pointed_at))
 end
 
 script.on_init(Handler.on_init)
+
+script.on_load(function() -- todo: remove before launch
+  if global.surfacedata == nil then
+    script.on_nth_tick(1, function(event)
+      Handler.on_init()
+      script.on_nth_tick(1, nil)
+    end)
+  end
+end)
 
 function Handler.on_surface_created(event)
   global.surfacedata[event.surface_index] = {
@@ -54,11 +62,13 @@ function Handler.on_created_entity(event)
     time_to_live = 60 * 2.5,
   }
 
+  -- todo: what if two loaders for whatever reason look at the same wall?
   global.surfacedata[surface.index].loader_pointed_at[util.positiontostr(wall_position)] = entity
 
   if entity.name == 'kr-se-loader' then
-    if surface.find_entity('se-spaceship-wall', wall_position) then
-      surface.create_entity{
+    local wall_entity = surface.find_entity('se-spaceship-wall', wall_position)
+    if wall_entity then
+      local loader_entity = surface.create_entity{
         name = 'kr-se-loader-spaceship',
         force = entity.force,
         position = entity.position,
@@ -66,6 +76,11 @@ function Handler.on_created_entity(event)
         type = entity.loader_type,
         fast_replace = true, spill = false,
         create_build_effect_smoke = false,
+      }
+
+      global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
+        wall_entity = wall_entity,
+        loader_entity = loader_entity,
       }
     end
   end
@@ -85,17 +100,29 @@ for _, event in ipairs({
   })
 end
 
+function Handler.on_entity_destroyed(event)
+  game.print('foo')
+  local deathrattle = global.deathrattles[event.registration_number]
+  if deathrattle then global.deathrattles[event.registration_number] = nil
+    local loader_entity = deathrattle.loader_entity
+    if loader_entity.valid then
+      game.print('bar')
+      loader_entity.surface.create_entity{
+        name = 'kr-se-loader',
+        force = loader_entity.force,
+        position = loader_entity.position,
+        direction = loader_entity.direction,
+        type = loader_entity.loader_type,
+        fast_replace = true, spill = false,
+        create_build_effect_smoke = false,
+      }
+    end
+  end
+end
+
+script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
+
 -- todo: script_raised_teleported on walls
-
-commands.add_command('loader-through-spaceship-wall', nil, function(command)
-  local player = assert(game.get_player(command.player_index))
-
-  -- local selected = player.selected
-  -- if selected == nil then return end
-  -- if selected.name ~= 'kr-se-loader-spaceship' then return end
-
-  Handler.on_init()
-end)
 
 script.on_event(defines.events.on_player_setup_blueprint, function(event)
   local player = assert(game.get_player(event.player_index))
