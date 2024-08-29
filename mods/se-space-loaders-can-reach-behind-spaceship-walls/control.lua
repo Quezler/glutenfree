@@ -68,20 +68,22 @@ function Handler.on_created_entity(event)
   if entity.name == 'kr-se-loader' then
     local wall_entity = surface.find_entity('se-spaceship-wall', wall_position)
     if wall_entity then
-      local loader_entity = surface.create_entity{
-        name = 'kr-se-loader-spaceship',
-        force = entity.force,
-        position = entity.position,
-        direction = entity.direction,
-        type = entity.loader_type,
-        fast_replace = true, spill = false,
-        create_build_effect_smoke = false,
-      }
+      local loader_entity = Handler.fast_replace_loader(entity, 'kr-se-loader-spaceship')
 
       global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
         wall_entity = wall_entity,
         loader_entity = loader_entity,
       }
+    end
+  elseif entity.name == 'kr-se-loader-spaceship' then
+    local wall_entity = surface.find_entity('se-spaceship-wall', wall_position)
+    if wall_entity then
+      global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
+        wall_entity = wall_entity,
+        loader_entity = entity,
+      }
+    else
+      Handler.fast_replace_loader(entity, 'kr-se-loader')
     end
   end
 end
@@ -101,23 +103,25 @@ for _, event in ipairs({
 end
 
 function Handler.on_entity_destroyed(event)
-  game.print('foo')
   local deathrattle = global.deathrattles[event.registration_number]
   if deathrattle then global.deathrattles[event.registration_number] = nil
     local loader_entity = deathrattle.loader_entity
     if loader_entity.valid then
-      game.print('bar')
-      loader_entity.surface.create_entity{
-        name = 'kr-se-loader',
-        force = loader_entity.force,
-        position = loader_entity.position,
-        direction = loader_entity.direction,
-        type = loader_entity.loader_type,
-        fast_replace = true, spill = false,
-        create_build_effect_smoke = false,
-      }
+      Handler.fast_replace_loader(loader_entity, 'kr-se-loader')
     end
   end
+end
+
+function Handler.fast_replace_loader(loader, new_name)
+  return loader.surface.create_entity{
+    name = new_name,
+    force = loader.force,
+    position = loader.position,
+    direction = loader.direction,
+    type = loader.loader_type,
+    fast_replace = true, spill = false,
+    create_build_effect_smoke = false,
+  }
 end
 
 script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
