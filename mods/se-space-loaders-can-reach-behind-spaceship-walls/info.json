@@ -1,0 +1,12 @@
+{
+    "name": "se-space-loaders-can-reach-behind-spaceship-walls",
+    "title": "Space Exploration - space loaders can reach behind spaceship walls",
+    "description": "The white Krastorio 2 loader will be able to load & unload through spaceship wall.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "space-exploration",
+        "Krastorio2"
+    ]
+}
