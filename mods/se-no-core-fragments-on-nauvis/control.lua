@@ -19,7 +19,12 @@ local function on_chunk_generated(event)
   local chunk_position = event.position
   if zone.core_seam_chunks[chunk_position.x] and zone.core_seam_chunks[chunk_position.x][chunk_position.y] then
     local resource_index = zone.core_seam_chunks[chunk_position.x][chunk_position.y]
-    local core_seam_resource = zone.core_seam_resources[resource_index]
+    local core_seam_resource = zone.core_seam_resources[resource_index] -- `Unknown key: "1"` on fresh world?
+
+    -- supposedly when a new world generates the seam already got sealed ant thus fissure is nil, not invalid.
+    if core_seam_resource.fissure == nil and game.tick == 0 then
+      return
+    end
 
     core_seam_resource.fissure.destroy() -- registration_number seals the seam
     core_seam_resource.smoke_generator.destroy()
