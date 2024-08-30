@@ -17,15 +17,6 @@ end
 
 script.on_init(Handler.on_init)
 
-script.on_load(function() -- todo: remove before launch
-  if global.surfacedata == nil then
-    script.on_nth_tick(1, function(event)
-      Handler.on_init()
-      script.on_nth_tick(1, nil)
-    end)
-  end
-end)
-
 function Handler.on_surface_created(event)
   global.surfacedata[event.surface_index] = {
     loaders_pointed_at = {},
@@ -175,6 +166,8 @@ script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
 script.on_event(defines.events.on_player_setup_blueprint, function(event)
   local player = assert(game.get_player(event.player_index))
   local item = player.blueprint_to_setup
+
+  if item.valid_for_read == false then return end -- copy paste tools?
 
   local entities = item.get_blueprint_entities()
   if entities == nil then return end
