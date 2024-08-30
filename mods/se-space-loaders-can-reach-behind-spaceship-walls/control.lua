@@ -49,14 +49,24 @@ end
 function Handler.point_loader_at(surfacedata, loader, wall_position)
   local wall_key = util.positiontostr(wall_position)
   surfacedata.loaders_pointed_at[wall_key] = surfacedata.loaders_pointed_at[wall_key] or {}
-  table.insert(surfacedata.loaders_pointed_at[wall_key], loader)
+  surfacedata.loaders_pointed_at[wall_key][loader.unit_number] = loader
 end
 
 function Handler.wakeup_loaders_pointed_at(surfacedata, position)
   local loaders = surfacedata.loaders_pointed_at[util.positiontostr(position)]
   if loaders == nil then return end
-  loaders = {table.unpack(loaders)}
-  for _, loader in ipairs(loaders or {}) do
+
+  -- on_created_entity adds 
+  -- local to_wakeup = {}
+
+  -- for unit_number, loader in pairs(loaders) do
+  --   if loader.valid then
+  --     table.insert(to_wakeup, loader)
+  --   end
+  -- end
+
+  -- for _, loader in ipairs(to_wakeup) do
+  for _, loader in pairs(loaders) do
     if loader.valid then
       Handler.on_created_entity({entity = loader})
     end
@@ -73,15 +83,6 @@ function Handler.on_created_entity(event)
   end
 
   local wall_position = Handler.get_wall_position(entity)
-
-  rendering.draw_circle{
-    color = {1, 1, 1},
-    radius = 0.2,
-    filled = true,
-    surface = surface,
-    target = wall_position,
-    time_to_live = 60 * 2.5,
-  }
 
   if entity.name == 'kr-se-loader-spaceship' then
     local wall_entity = surface.find_entity('se-spaceship-wall', wall_position)
@@ -178,15 +179,14 @@ function Handler.garbage_collection(event)
 
   for surface_index, surfacedata in pairs(global.surfacedata) do
     for wall_key, loaders_pointed_at in pairs(surfacedata.loaders_pointed_at) do
-      for i = #loaders_pointed_at, 1, -1 do
-        local loader = loaders_pointed_at[i]
+      for unit_number, loader in pairs(loaders_pointed_at) do
         if loader.valid == false then
           stale_loaders = stale_loaders + 1
-          table.remove(loaders_pointed_at, i)
+          loaders_pointed_at[unit_number] = nil
         end
       end
 
-      if #loaders_pointed_at == 0 then
+      if table_size(loaders_pointed_at) == 0 then
         log('no loaders pointing here anymore: ' .. wall_key)
         surfacedata.loaders_pointed_at[wall_key] = nil
       end
