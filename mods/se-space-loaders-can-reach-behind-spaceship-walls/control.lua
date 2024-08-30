@@ -59,21 +59,24 @@ function Handler.point_loader_at(surfacedata, loader, wall_position)
   table.insert(surfacedata.loaders_pointed_at[wall_key], loader)
 end
 
+function Handler.wakeup_loaders_pointed_at(surfacedata, position)
+  local loaders = surfacedata.loaders_pointed_at[util.positiontostr(position)]
+  if loaders == nil then return end
+  loaders = {table.unpack(loaders)}
+  for _, loader in ipairs(loaders or {}) do
+    if loader.valid then
+      Handler.on_created_entity({entity = loader})
+    end
+  end
+end
+
 function Handler.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
   local surface = entity.surface
   local surfacedata = global.surfacedata[surface.index]
 
   if entity.name == 'se-spaceship-wall' then
-    local loaders = surfacedata.loaders_pointed_at[util.positiontostr(entity.position)]
-    if loaders == nil then return end
-    loaders = {table.unpack(loaders)}
-    for _, loader in ipairs(loaders or {}) do
-      if loader.valid then
-        Handler.on_created_entity({entity = loader})
-      end
-    end
-    return
+    return Handler.wakeup_loaders_pointed_at(surfacedata, entity.position)
   end
 
   local wall_position = Handler.get_wall_position(entity)
@@ -92,7 +95,8 @@ function Handler.on_created_entity(event)
     if wall_entity then
       global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
         wall_entity = wall_entity,
-        loader_entity = entity,
+        wall_surface = wall_entity.surface,
+        wall_position = wall_position,
       }
 
       Handler.point_loader_at(surfacedata, entity, wall_position)
@@ -108,7 +112,8 @@ function Handler.on_created_entity(event)
 
       global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
         wall_entity = wall_entity,
-        loader_entity = loader_entity,
+        wall_surface = wall_entity.surface,
+        wall_position = wall_position,
       }
     else
       Handler.point_loader_at(surfacedata, entity, wall_position)
@@ -133,13 +138,9 @@ end
 function Handler.on_entity_destroyed(event)
   local deathrattle = global.deathrattles[event.registration_number]
   if deathrattle then global.deathrattles[event.registration_number] = nil
-    log('deathrattle')
-    local loader_entity = deathrattle.loader_entity
-    if loader_entity.valid then
-      Handler.on_created_entity({entity = loader_entity})
-      -- Handler.on_created_entity({entity = Handler.fast_replace_loader(loader_entity, 'kr-se-loader')})
-      -- local new_loader = Handler.fast_replace_loader(loader_entity, 'kr-se-loader')
-      -- Handler.point_loader_at(global.surfacedata[new_loader.surface.index], new_loader, Handler.get_wall_position(new_loader))
+    local wall_surface = deathrattle.wall_surface
+    if wall_surface.valid then
+      Handler.wakeup_loaders_pointed_at(global.surfacedata[wall_surface.index], deathrattle.wall_position)
     end
   end
 end
