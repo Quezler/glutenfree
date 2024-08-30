@@ -55,9 +55,8 @@ end
 
 function Handler.point_loader_at(surfacedata, loader, wall_position)
   local wall_key = util.positiontostr(wall_position)
-  local loader_key = util.positiontostr(loader.position)
   surfacedata.loaders_pointed_at[wall_key] = surfacedata.loaders_pointed_at[wall_key] or {}
-  table.insert(surfacedata.loaders_pointed_at[wall_key], {loader_key, loader})
+  table.insert(surfacedata.loaders_pointed_at[wall_key], loader)
 end
 
 function Handler.on_created_entity(event)
@@ -68,13 +67,10 @@ function Handler.on_created_entity(event)
   if entity.name == 'se-spaceship-wall' then
     local loaders = surfacedata.loaders_pointed_at[util.positiontostr(entity.position)]
     if loaders == nil then return end
-    local seen_loader_keys = {}
-    log(#loaders)
+    loaders = {table.unpack(loaders)}
     for _, loader in ipairs(loaders or {}) do
-      log('blep')
-      if loader[2].valid and seen_loader_keys[loader[1]] ~= true then
-        seen_loader_keys[loader[1]] = true
-        Handler.on_created_entity({entity = loader[2]})
+      if loader.valid then
+        Handler.on_created_entity({entity = loader})
       end
     end
     return
@@ -161,8 +157,7 @@ function Handler.fast_replace_loader(loader, new_name)
 end
 
 script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
-
--- todo: script_raised_teleported on walls
+-- script.on_event(defines.events.script_raised_teleported, Handler.script_raised_teleported) -- picker dollies is blocked from moving walls anyways
 
 script.on_event(defines.events.on_player_setup_blueprint, function(event)
   local player = assert(game.get_player(event.player_index))
