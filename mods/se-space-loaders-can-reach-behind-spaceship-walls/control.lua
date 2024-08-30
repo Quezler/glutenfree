@@ -52,20 +52,18 @@ function Handler.point_loader_at(surfacedata, loader, wall_position)
   surfacedata.loaders_pointed_at[wall_key][loader.unit_number] = loader
 end
 
+function Handler.unpoint_loader_from(surfacedata, loader, wall_position)
+  local wall_key = util.positiontostr(wall_position)
+  surfacedata.loaders_pointed_at[wall_key][loader.unit_number] = nil
+  if table_size(surfacedata.loaders_pointed_at[wall_key]) == 0 then
+    surfacedata.loaders_pointed_at[wall_key] = nil
+  end
+end
+
 function Handler.wakeup_loaders_pointed_at(surfacedata, position)
   local loaders = surfacedata.loaders_pointed_at[util.positiontostr(position)]
   if loaders == nil then return end
 
-  -- on_created_entity adds 
-  -- local to_wakeup = {}
-
-  -- for unit_number, loader in pairs(loaders) do
-  --   if loader.valid then
-  --     table.insert(to_wakeup, loader)
-  --   end
-  -- end
-
-  -- for _, loader in ipairs(to_wakeup) do
   for _, loader in pairs(loaders) do
     if loader.valid then
       Handler.on_created_entity({entity = loader})
@@ -140,6 +138,8 @@ function Handler.on_entity_destroyed(event)
 end
 
 function Handler.fast_replace_loader(loader, new_name)
+  Handler.unpoint_loader_from(global.surfacedata[loader.surface.index], loader, Handler.ge)
+
   return loader.surface.create_entity{
     name = new_name,
     force = loader.force,
