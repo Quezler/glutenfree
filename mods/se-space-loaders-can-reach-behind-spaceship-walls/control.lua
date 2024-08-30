@@ -65,17 +65,7 @@ function Handler.on_created_entity(event)
   -- todo: what if two loaders for whatever reason look at the same wall?
   global.surfacedata[surface.index].loader_pointed_at[util.positiontostr(wall_position)] = entity
 
-  if entity.name == 'kr-se-loader' then
-    local wall_entity = surface.find_entity('se-spaceship-wall', wall_position)
-    if wall_entity then
-      local loader_entity = Handler.fast_replace_loader(entity, 'kr-se-loader-spaceship')
-
-      global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
-        wall_entity = wall_entity,
-        loader_entity = loader_entity,
-      }
-    end
-  elseif entity.name == 'kr-se-loader-spaceship' then
+  if entity.name == 'kr-se-loader-spaceship' then
     local wall_entity = surface.find_entity('se-spaceship-wall', wall_position)
     if wall_entity then
       global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
@@ -84,6 +74,16 @@ function Handler.on_created_entity(event)
       }
     else
       Handler.fast_replace_loader(entity, 'kr-se-loader')
+    end
+  elseif entity.name == 'kr-se-loader' then
+    local wall_entity = surface.find_entity('se-spaceship-wall', wall_position)
+    if wall_entity then
+      local loader_entity = Handler.fast_replace_loader(entity, 'kr-se-loader-spaceship')
+
+      global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
+        wall_entity = wall_entity,
+        loader_entity = loader_entity,
+      }
     end
   end
 end
