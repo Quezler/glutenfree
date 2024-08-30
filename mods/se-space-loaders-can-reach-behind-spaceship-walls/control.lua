@@ -1,10 +1,3 @@
-local human_direction = {
-  [defines.direction.north] = 'north',
-  [defines.direction.east] = 'east',
-  [defines.direction.south] = 'south',
-  [defines.direction.west] = 'west',
-}
-
 local util = require('util')
 
 local Handler = {}
@@ -158,7 +151,11 @@ function Handler.fast_replace_loader(loader, new_name)
 end
 
 script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
--- script.on_event(defines.events.script_raised_teleported, Handler.script_raised_teleported) -- picker dollies is blocked from moving walls anyways
+
+-- loaders cannot teleport because they have a belt
+-- spaceship walls should not ever be teleported by other mods
+-- (its on the blacklist for picker dollies, so lets ignore teleporting)
+-- script.on_event(defines.events.script_raised_teleported, Handler.script_raised_teleported)
 
 script.on_event(defines.events.on_player_setup_blueprint, function(event)
   local player = assert(game.get_player(event.player_index))
@@ -175,3 +172,28 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
 
   item.set_blueprint_entities(entities)
 end)
+
+function Handler.garbage_collection(event)
+  local stale_loaders = 0
+
+  for surface_index, surfacedata in pairs(global.surfacedata) do
+    for wall_key, loaders_pointed_at in pairs(surfacedata.loaders_pointed_at) do
+      for i = #loaders_pointed_at, 1, -1 do
+        local loader = loaders_pointed_at[i]
+        if loader.valid == false then
+          stale_loaders = stale_loaders + 1
+          table.remove(loaders_pointed_at, i)
+        end
+      end
+
+      if #loaders_pointed_at == 0 then
+        log('no loaders pointing here anymore: ' .. wall_key)
+        surfacedata.loaders_pointed_at[wall_key] = nil
+      end
+    end
+  end
+
+  log('stale_loaders: ' .. stale_loaders)
+end
+
+script.on_nth_tick(60 * 60 * 10, Handler.garbage_collection)
