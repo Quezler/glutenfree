@@ -50,6 +50,14 @@ function Handler.point_loader_at(surfacedata, loader, wall_position)
   local wall_key = util.positiontostr(wall_position)
   surfacedata.loaders_pointed_at[wall_key] = surfacedata.loaders_pointed_at[wall_key] or {}
   surfacedata.loaders_pointed_at[wall_key][loader.unit_number] = loader
+
+  global.deathrattles[script.register_on_entity_destroyed(loader)] = {
+    type = 'loader',
+    wall_position = wall_position,
+    loader_entity = loader,
+    loader_surface = loader.surface,
+    loader_unit_number = loader.unit_number,
+  }
 end
 
 function Handler.wakeup_loaders_pointed_at(surfacedata, position)
@@ -78,6 +86,7 @@ function Handler.on_created_entity(event)
     local wall_entity = surface.find_entity('se-spaceship-wall', wall_position)
     if wall_entity then
       global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
+        type = 'wall',
         wall_entity = wall_entity,
         wall_surface = wall_entity.surface,
         wall_position = wall_position,
@@ -95,6 +104,7 @@ function Handler.on_created_entity(event)
       Handler.point_loader_at(surfacedata, loader_entity, wall_position)
 
       global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
+        type = 'wall',
         wall_entity = wall_entity,
         wall_surface = wall_entity.surface,
         wall_position = wall_position,
@@ -122,9 +132,23 @@ end
 function Handler.on_entity_destroyed(event)
   local deathrattle = global.deathrattles[event.registration_number]
   if deathrattle then global.deathrattles[event.registration_number] = nil
-    local wall_surface = deathrattle.wall_surface
-    if wall_surface.valid then
-      Handler.wakeup_loaders_pointed_at(global.surfacedata[wall_surface.index], deathrattle.wall_position)
+
+    if deathrattle.type == 'wall' then
+      local wall_surface = deathrattle.wall_surface
+      if wall_surface.valid then
+        Handler.wakeup_loaders_pointed_at(global.surfacedata[wall_surface.index], deathrattle.wall_position)
+      end
+    elseif deathrattle.type == 'loader' then
+      local loader_surface = deathrattle.loader_surface
+      if loader_surface.valid then
+        local surfacedata = global.surfacedata[loader_surface.index]
+        local wall_key = util.positiontostr(deathrattle.wall_position)
+
+        surfacedata.loaders_pointed_at[wall_key][deathrattle.loader_unit_number] = nil
+        if table_size(surfacedata.loaders_pointed_at[wall_key]) == 0 then
+          surfacedata.loaders_pointed_at[wall_key] = nil
+        end
+      end
     end
   end
 end
@@ -163,27 +187,3 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
 
   item.set_blueprint_entities(entities)
 end)
-
-function Handler.garbage_collection(event)
-  local stale_loaders = 0
-
-  for surface_index, surfacedata in pairs(global.surfacedata) do
-    for wall_key, loaders_pointed_at in pairs(surfacedata.loaders_pointed_at) do
-      for unit_number, loader in pairs(loaders_pointed_at) do
-        if loader.valid == false then
-          stale_loaders = stale_loaders + 1
-          loaders_pointed_at[unit_number] = nil
-        end
-      end
-
-      if table_size(loaders_pointed_at) == 0 then
-        log('no loaders pointing here anymore: ' .. wall_key)
-        surfacedata.loaders_pointed_at[wall_key] = nil
-      end
-    end
-  end
-
-  log('stale_loaders: ' .. stale_loaders)
-end
-
-script.on_nth_tick(60 * 60 * 10, Handler.garbage_collection)
