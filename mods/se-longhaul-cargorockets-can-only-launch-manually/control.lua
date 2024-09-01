@@ -103,10 +103,14 @@ end)
 
 local function on_configuration_changed(event)
   global.fuel_k = settings.global["se-rocket-launch-pad-fuel-k"].value
+
   for unit_number, struct in pairs(global.structs) do
     global.structs_to_open[unit_number] = true
   end
-  script.on_event(defines.events.on_tick, on_tick)
+
+  if table_size(global.structs_to_open) > 0 then
+    script.on_event(defines.events.on_tick, on_tick)
+  end
 end
 
 script.on_configuration_changed(on_configuration_changed)
