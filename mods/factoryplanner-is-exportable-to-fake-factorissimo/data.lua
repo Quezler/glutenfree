@@ -340,9 +340,17 @@ local fluid_combinator_3 = create_fluid_combinator({i = 3})
 
 data:extend{fluid_combinator_1, fluid_combinator_2, fluid_combinator_3}
 
+data:extend{
+  {
+    type = "recipe-category",
+    name = "fietff-unlocks"
+  }
+}
+
 local function create_recipe(config)
   return {
     type = 'recipe',
+    category = 'fietff-unlocks',
     name = mod_prefix .. 'item-' .. config.i .. '-unlock',
     localised_name = {"entity-name.fietff-container-i", config.i},
 
