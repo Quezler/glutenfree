@@ -3,7 +3,7 @@ local function get_unique_index(entity)
 end
 
 local function maybe_add_to_damaged_rocks(entity)
-  if string.find(entity.name, "rock") and 1 > entity.get_health_ratio() then
+  if global.whitelisted_names[entity.name] and 1 > entity.get_health_ratio() then
     local unique_index = get_unique_index(entity)
     if not global.damaged_rocks[unique_index] then
       global.damaged_rocks[unique_index] = entity
@@ -15,9 +15,28 @@ script.on_event(defines.events.on_entity_damaged, function(event)
   maybe_add_to_damaged_rocks(event.entity)
 end, {{filter = 'type', type = 'simple-entity'}})
 
+local function should_whitelist(simple_entity)
+  if string.find(simple_entity.name, "rock") then
+    return true
+  end
+
+  if simple_entity.localised_name and simple_entity.localised_name[1] and simple_entity.localised_name[1] == 'entity-name.meteorite' then
+    return true
+  end
+
+  return false
+end
+
 local function on_init(event)
   global = {}
   global.damaged_rocks = {}
+  global.whitelisted_names = {}
+
+  for _, simple_entity in pairs(game.get_filtered_entity_prototypes({{filter = "type", type = "simple-entity"}})) do
+    if should_whitelist(simple_entity) then
+      global.whitelisted_names[simple_entity.name] = true
+    end
+  end
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{type = 'simple-entity'}) do
