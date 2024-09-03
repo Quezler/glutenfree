@@ -23,6 +23,7 @@ function on_created_entity(event)
 end
 
 function Handler.activate()
+  assert(global.deactivated == true)
   global.deactivated = false
 
   for _, surface in pairs(game.surfaces) do
@@ -33,6 +34,7 @@ function Handler.activate()
 end
 
 -- function Handler.deactivate()
+-- assert(global.deactivated == false)
 --   global.deactivated = true
 
 --   for _, surface in pairs(game.surfaces) do
@@ -46,7 +48,7 @@ function Handler.check_technology_for_roboport(technology)
   for _, effect in ipairs(technology.effects) do
     if effect.type == 'unlock-recipe' and effect.recipe == 'roboport' then
       Handler.activate()
-      return
+      return true
     end
   end
 end
@@ -63,7 +65,9 @@ script.on_init(function(event)
   -- Handler.activate()
   for _, technology in pairs(game.forces['player'].technologies) do
     if technology.researched then
-      Handler.check_technology_for_roboport(technology)
+      if Handler.check_technology_for_roboport(technology) then
+        return
+      end
     end
   end
 end)
