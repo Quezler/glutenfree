@@ -2,11 +2,11 @@
     "name": "se-spaceship-max-speed-ignore-container-integrity",
     "title": "Space Exploration - spaceship max speed ignores container integrity",
     "description": "The max ship speed is determined by highest of the 2 integrity bars, with this mod only hull stress matters.",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
         "space-exploration",
-        "space-exploration-scripts"
+        "space-exploration-scripts >= 1.1.2"
     ]
 }
