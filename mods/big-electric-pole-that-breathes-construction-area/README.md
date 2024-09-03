@@ -1,0 +1,1 @@
+- the file `./graphics/repair_turret_shadow_animation.png` as well as the `roboport.base_animation` definition are licenced under GNU LGPLv3
