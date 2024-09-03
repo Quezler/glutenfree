@@ -1,0 +1,17 @@
+{
+    "name" : "se-fluid-permutations",
+    "version" : "1.0.0",
+    "factorio_version" : "1.1",
+    "title" : "Space Exploration - fluid permutations",
+    "author" : "spiwn",
+    "description" : "Fluid permutations fork for (K2)SE",
+    "dependencies" : [
+        "base",
+        "space-exploration",
+
+        "? Krastorio2",
+
+        "! fluid_permutations",
+        "! se-fluid-permutations-productivity-fixer"
+    ]
+}
