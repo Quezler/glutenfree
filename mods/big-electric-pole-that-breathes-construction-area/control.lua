@@ -1,5 +1,3 @@
--- local util = require('util')
-
 local Handler = {}
 
 function on_created_entity(event)
@@ -15,15 +13,16 @@ function on_created_entity(event)
   -- saninty check to make sure there is not already a roboport here
   assert(entity.surface.find_entity('big-electric-pole-roboport', entity.position) == nil)
 
-  entity.surface.create_entity{
+  local roboport = entity.surface.create_entity{
     name = 'big-electric-pole-roboport',
     force = entity.force,
     position = {entity.position.x, entity.position.y + 0.01}
   }
+
+  global.deathrattles[script.register_on_entity_destroyed(entity)] = roboport
 end
 
 function Handler.activate()
-  game.print('activated')
   global.deactivated = false
 
   for _, surface in pairs(game.surfaces) do
@@ -33,16 +32,15 @@ function Handler.activate()
   end
 end
 
-function Handler.deactivate()
-  game.print('deactivated')
-  global.deactivated = true
+-- function Handler.deactivate()
+--   global.deactivated = true
 
-  for _, surface in pairs(game.surfaces) do
-    for _, entity in pairs(surface.find_entities_filtered({name = {'big-electric-pole-roboport'}})) do
-      entity.destroy()
-    end
-  end
-end
+--   for _, surface in pairs(game.surfaces) do
+--     for _, entity in pairs(surface.find_entities_filtered({name = {'big-electric-pole-roboport'}})) do
+--       entity.destroy()
+--     end
+--   end
+-- end
 
 function Handler.check_technology_for_roboport(technology)
   for _, effect in ipairs(technology.effects) do
@@ -60,8 +58,14 @@ end)
 
 script.on_init(function(event)
   global.deactivated = true
+  global.deathrattles = {}
 
   -- Handler.activate()
+  for _, technology in pairs(game.forces['player'].technologies) do
+    if technology.researched then
+      Handler.check_technology_for_roboport(technology)
+    end
+  end
 end)
 
 for _, event in ipairs({
@@ -76,3 +80,10 @@ for _, event in ipairs({
     {filter = 'name', name = 'big-electric-pole-roboport'},
   })
 end
+
+script.on_event(defines.events.on_entity_destroyed, function(event)
+  local deathrattle = global.deathrattles[event.registration_number]
+  if deathrattle then global.deathrattles[event.registration_number] = nil
+    deathrattle.destroy()
+  end
+end)

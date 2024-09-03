@@ -13,7 +13,7 @@ local roboport = {
   charge_approach_distance = data.raw['roboport']['roboport'].charge_approach_distance,
   charging_energy = data.raw['roboport']['roboport'].charging_energy,
 
-  construction_radius = big_electric_pole.maximum_wire_distance + 4,
+  construction_radius = big_electric_pole.maximum_wire_distance + 2,
 
   door_animation_up = util.empty_sprite(),
   door_animation_down = util.empty_sprite(),
@@ -22,7 +22,7 @@ local roboport = {
   energy_usage = data.raw['roboport']['roboport'].energy_usage,
 
   logistics_radius = 0,
-  logistics_connection_distance = big_electric_pole.maximum_wire_distance + 4,
+  logistics_connection_distance = big_electric_pole.maximum_wire_distance + 2,
 
   material_slots_count = 0,
 
