@@ -4,6 +4,12 @@
 local green_tint = {r = 0.513, g = 0.849, b = 0.218, a = 1}
 local orange_tint = {r = 0.948, g = 0.532, b = 0.20, a = 1}
 
+local item_masks = {
+  ['roboport'] = true,
+  ['kr-large-roboport'] = true,
+  ['kr-small-roboport'] = true,
+}
+
 -- local function lessen_tint(tint)
 --   return {
 --     r = 1 - (tint.r / 2),
@@ -34,6 +40,22 @@ local function set_animation_tint(animation, tint)
   end
 end
 
+local function add_tinted_mask_to_icon(mask_name, item_prototype, tint)
+  assert(item_prototype.icon)
+  assert(item_prototype.icons == nil)
+
+  local mask_path = '__Krastorio2-roboport-mode-colored-textures__/graphics/icons/' .. mask_name .. '.png'
+
+  item_prototype.icons = {
+    {icon = item_prototype.icon, icon_size = 64, icon_mipmaps = 4},
+    {icon = mask_path          , icon_size = 64, icon_mipmaps = 4, tint = tint},
+  }
+
+  item_prototype.icon = nil
+  item_prototype.icon_size = nil
+  item_prototype.icon_mipmaps = nil
+end
+
 for _, roboport in pairs(data.raw['roboport']) do
   local logistic = data.raw['roboport'][roboport.name .. '-logistic-mode']
   local construction = data.raw['roboport'][roboport.name .. '-construction-mode']
@@ -61,6 +83,11 @@ for _, roboport in pairs(data.raw['roboport']) do
 
   set_animation_tint(logistic.base_animation, orange_tint)
   set_animation_tint(construction.base_animation, green_tint)
+
+  if item_masks[roboport.name] then
+    add_tinted_mask_to_icon(roboport.name .. '-mask', logistic, orange_tint)
+    add_tinted_mask_to_icon(roboport.name .. '-mask', construction, green_tint)
+  end
 
   ::continue::
 end
