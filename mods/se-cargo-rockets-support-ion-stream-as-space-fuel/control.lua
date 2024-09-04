@@ -1,6 +1,8 @@
 local Spaceship = require('__space-exploration-scripts__.spaceship')
 
 local function register_fuel()
+  global = {} -- not part of the example
+
   remote.call("se-cargo-rocket-custom-fuel-lib", "add_fuel", {
     name = "se-ion-stream",
     -- fuel_value = game.fluid_prototypes["se-ion-stream"].fuel_value, -- the default
