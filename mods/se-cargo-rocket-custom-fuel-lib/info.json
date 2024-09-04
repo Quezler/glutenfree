@@ -2,7 +2,7 @@
     "name": "se-cargo-rocket-custom-fuel-lib",
     "title": "Space Exploration - cargo rocket custom fuel lib",
     "description": "Allows other mods to add alternative cargo rocket fuels.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [

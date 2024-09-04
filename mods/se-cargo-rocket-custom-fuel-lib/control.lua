@@ -5,7 +5,7 @@ local LaunchpadGUI = {name_rocket_launch_pad_gui_root = 'se-rocket-launch-pad-gu
 
 local function on_init()
   global.fuels = {
-    ['se-liquid-rocket-fuel'] = {color = game.fluid_prototypes['se-liquid-rocket-fuel'].base_color},
+    ['se-liquid-rocket-fuel'] = {color = {r=242/255, g=106/255, b=15/255}},
   }
   global.structs = {}
   global.deathrattles = {}
@@ -20,7 +20,7 @@ end
 
 local function on_configuration_changed()
   global.fuels = {
-    ['se-liquid-rocket-fuel'] = {color = game.fluid_prototypes['se-liquid-rocket-fuel'].base_color},
+    ['se-liquid-rocket-fuel'] = {color = {r=242/255, g=106/255, b=15/255}},
   }
   global.surface_is_space = {}
 end
@@ -30,6 +30,7 @@ script.on_configuration_changed(on_configuration_changed)
 
 local function add_fuel(data)
   assert(data.name)
+  assert(data.name ~= 'se-liquid-rocket-fuel')
   assert(game.fluid_prototypes[data.name])
 
   if data.fuel_value == nil then
