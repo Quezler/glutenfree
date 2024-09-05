@@ -1,0 +1,13 @@
+{
+    "name": "remove-deconstruction-orders-for-hand-mined-tiles",
+    "title": "Remove deconstruction orders for hand mined tiles",
+    "description": "By default the deconstruction orders stay until a bot visits, not good.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "? base",
+        "? space-exploration",
+        "? Krastorio2"
+    ]
+}
