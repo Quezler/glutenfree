@@ -43,6 +43,12 @@ local function enable()
     core_miner.drill.destroy()
   end
 
+  if zone.core_seam_resources == nil then
+    if surface.map_gen_settings.width == 50 and surface.map_gen_settings.height == 50 then
+      return
+    end
+  end
+
   for _, core_seam_resource in pairs(zone.core_seam_resources) do
     core_seam_resource.fissure.destroy() -- registration_number seals the seam
     core_seam_resource.smoke_generator.destroy()
