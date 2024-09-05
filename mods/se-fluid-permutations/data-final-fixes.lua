@@ -486,12 +486,22 @@ local function generateRecipies()
 
     for _, moduleItem in pairs(data.raw.module) do
         if moduleItem.limitation then
-            local newRestrictions = {}
             for j = #moduleItem.limitation, 1, -1 do
                 local restriction = moduleItem.limitation[j]
                 if newRecipeNames[restriction] then
                     for i = 1, #newRecipeNames[restriction] do
                         moduleItem.limitation[#moduleItem.limitation + 1] = newRecipeNames[restriction][i]
+                    end
+                end
+            end
+        end
+
+        if moduleItem.limitation_blacklist then
+            for j = #moduleItem.limitation_blacklist, 1, -1 do
+                local restriction = moduleItem.limitation_blacklist[j]
+                if newRecipeNames[restriction] then
+                    for i = 1, #newRecipeNames[restriction] do
+                        moduleItem.limitation_blacklist[#moduleItem.limitation_blacklist + 1] = newRecipeNames[restriction][i]
                     end
                 end
             end
