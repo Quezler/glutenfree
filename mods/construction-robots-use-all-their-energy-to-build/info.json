@@ -1,0 +1,13 @@
+{
+    "name": "construction-robots-use-all-their-energy-to-build",
+    "title": "Construction robots use all their energy to build",
+    "descriptjon": "Construction robots will not require charging on the way their job site.",
+    "description": "And in turn require no power to move so they can get the job done first.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "? base",
+        "? configurable-bot-speed"
+    ]
+}
