@@ -1,5 +1,12 @@
 local function drain_battery(event)
-  event.robot.energy = 0
+  local robot = event.robot
+
+  local cells = robot.logistic_network.cells
+  if #cells == 1 and cells[1].owner.type == "character" then
+    return -- this is robot assigned to a personal roboport
+  end
+
+  robot.energy = 0
 end
 
 script.on_event(defines.events.on_robot_built_entity, drain_battery)
