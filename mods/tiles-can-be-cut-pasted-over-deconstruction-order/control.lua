@@ -7,12 +7,19 @@ script.on_event(defines.events.on_built_entity, function(event)
   local surface = entity.surface
   local tile = surface.get_tile(entity.position.x - 0.5, entity.position.y - 0.5)
 
+  local ghost = surface.find_entity('tile-ghost', entity.position)
   if tile.name == entity.tags.tile_name then
     local proxy = surface.find_entity('deconstructible-tile-proxy', entity.position)
     if proxy then proxy.destroy() end
-
-    local ghost = surface.find_entity('tile-ghost', entity.position)
     if ghost then ghost.destroy() end
+  elseif ghost then
+    ghost.destroy()
+    surface.create_entity{
+      name = 'tile-ghost',
+      force = entity.force,
+      position = entity.position,
+      inner_name = entity.tags.tile_name,
+    }
   end
 
   entity.destroy()

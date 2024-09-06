@@ -9,3 +9,6 @@ Does not work for blueprints in your library, place those in your inventory firs
 but honestly you'll likely be using cut paste anyways or you wouldn't really need this mod.
 
 This mod also cancels tile ghosts if you paste the already existing tile there over it. (just 2 more lines of code)
+
+And in addition to that and a few more lines of code, copy pasting tile ghosts over others override those too,
+but strangely if your blueprint is all red you'll have to click twice for that behavior to trigger, weird right?
