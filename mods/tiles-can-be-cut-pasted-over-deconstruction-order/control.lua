@@ -61,5 +61,6 @@ local function on_player_maybe_placed_blueprint(event)
   blueprint.set_blueprint_entities(blueprint_entities)
 end
 
+-- for some reason blueprints from the library do not trigger
 script.on_event('tcbcpodo-build', on_player_maybe_placed_blueprint)
 script.on_event('tcbcpodo-build-ghost', on_player_maybe_placed_blueprint)
