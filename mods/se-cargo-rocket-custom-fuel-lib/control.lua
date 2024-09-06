@@ -168,11 +168,38 @@ local function tick_player(player)
   fuel_capacity_progress.style.color = fuel_data.base_color
 
   local caption = fuel_capacity_progress.caption
+  -- log(serpent.block(caption))
   caption[1] = 'se-cargo-rocket-fuel-lib.fuel_label'
   caption[3] = caption[2]
   caption[2] = {'fluid-name.' .. fuel_data.name}
+  -- log(serpent.block(caption))
 
   local fuel_k_min_string = caption[3][2]
+  if fuel_k_min_string == nil then
+    -- {
+    --   "se-cargo-rocket-fuel-lib.fuel_label",
+    --   {
+    --     "fluid-name.se-ion-stream"
+    --   },
+    --   {
+    --     "fluid-name.se-ion-stream"
+    --   }
+    -- }
+    -- vs
+    -- {
+    --   "se-cargo-rocket-fuel-lib.fuel_label",
+    --   {
+    --     "fluid-name.se-ion-stream"
+    --   },
+    --   {
+    --     "space-exploration.simple-a-b-divide",
+    --     "2.60k",
+    --     "2.60k"
+    --   }
+    -- }
+    return -- this happens when you change the launch trigger, never looks empty to the human eye tho, weird.
+  end
+
   local fuel_k_min = tonumber(fuel_k_min_string:sub(1, -2))  -- remove the k, then cast to number
   caption[3][2] = Util.format_fuel(fuel_k_min / fuel_data.exchange_rate * 1000)
 
