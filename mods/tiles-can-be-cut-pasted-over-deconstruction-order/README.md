@@ -7,3 +7,5 @@ This mod checks your held blueprint for tiles and cancels the appropriate decons
 
 Does not work for blueprints in your library, place those in your inventory first,
 but honestly you'll likely be using cut paste anyways or you wouldn't really need this mod.
+
+This mod also cancels tile ghosts if you paste the already existing tile there over it. (just 2 more lines of code)

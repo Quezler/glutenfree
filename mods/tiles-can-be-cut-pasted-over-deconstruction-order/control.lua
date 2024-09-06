@@ -10,6 +10,9 @@ script.on_event(defines.events.on_built_entity, function(event)
   if tile.name == entity.tags.tile_name then
     local proxy = surface.find_entity('deconstructible-tile-proxy', entity.position)
     if proxy then proxy.destroy() end
+
+    local ghost = surface.find_entity('tile-ghost', entity.position)
+    if ghost then ghost.destroy() end
   end
 
   entity.destroy()
@@ -45,7 +48,7 @@ local function on_player_maybe_placed_blueprint(event)
 
   for _, blueprint_entity in ipairs(blueprint_entities) do
     if blueprint_entity.name == 'tcbcpodo-mayfly' then
-      error('already has mayflies')
+      return -- already has mayflies
     end
   end
 
