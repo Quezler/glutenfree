@@ -80,6 +80,11 @@ local function on_player_maybe_placed_blueprint(event)
   if blueprint == nil then return end
   if blueprint.is_blueprint == false then return end
 
+  -- local old_blueprint_snap_to_grid = blueprint.blueprint_snap_to_grid
+  -- blueprint.blueprint_snap_to_grid = {0, 0}
+  -- log(blueprint.export_stack())
+  -- blueprint.blueprint_snap_to_grid = old_blueprint_snap_to_grid
+
   game.print(serpent.line(event.cursor_position))
   game.print(math.floor(event.cursor_position.x))
   game.print(math.floor(event.cursor_position.y))
