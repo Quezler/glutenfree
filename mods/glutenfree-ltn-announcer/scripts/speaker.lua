@@ -44,19 +44,17 @@ function speaker.add_speaker_to_ltn_stop(entity)
   local speakerpole = nil
 
   local multiblock = entity.surface.find_entities(ltn.search_area(entity))
-  for _, mb_entity in ipairs(multiblock) do
-    log(mb_entity.name)
-  end
 
   for _, mb_entity in ipairs(multiblock) do
-    log(mb_entity.name)
     if mb_entity.name == "entity-ghost" then
       if mb_entity.ghost_name == 'logistic-train-stop-announcer' then
         _, speakerpole = mb_entity.revive()
+        break
       end
     else
       if mb_entity.name == 'logistic-train-stop-announcer' then
         speakerpole = mb_entity
+        break
       end
     end
   end
