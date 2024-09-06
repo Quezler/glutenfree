@@ -72,18 +72,18 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
   end
 end)
 
-script.on_event(defines.events.on_player_selected_area, function(event)
-  game.print('on_player_selected_area' .. event.item)
-end)
+local function on_player_maybe_placed_blueprint(event)
+  local player = game.get_player(event.player_index)
+  assert(player)
 
-script.on_event(defines.events.on_player_deconstructed_area, function(event)
-  game.print('on_player_deconstructed_area' .. event.item)
-end)
+  local blueprint = player.cursor_stack
+  if blueprint == nil then return end
+  if blueprint.is_blueprint == false then return end
 
-script.on_event(defines.events.on_player_setup_blueprint, function(event)
-  game.print('on_player_setup_blueprint' .. event.item)
-end)
+  game.print(serpent.line(event.cursor_position))
+  game.print(math.floor(event.cursor_position.x))
+  game.print(math.floor(event.cursor_position.y))
+end
 
-script.on_event(defines.events.on_player_configured_blueprint, function(event)
-  game.print('on_player_configured_blueprint')
-end)
+script.on_event('tcbcpodo-build', on_player_maybe_placed_blueprint)
+script.on_event('tcbcpodo-build-ghost', on_player_maybe_placed_blueprint)
