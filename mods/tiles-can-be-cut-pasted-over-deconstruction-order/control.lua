@@ -38,6 +38,8 @@ script.on_event(defines.events.on_built_entity, function(event)
   global.skip_player_this_tick[event.player_index] = true
   script.on_event(defines.events.on_tick, on_tick)
 
+  if event.stack.valid_for_read == false then return end -- stuff like undo
+
   log(event.stack.name)
   if event.stack.name ~= 'blueprint' then return end
   local tiles = event.stack.get_blueprint_tiles()
@@ -68,4 +70,20 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
   if deathrattle then global.deathrattles[event.registration_number] = nil
     global.key_to_proxy[deathrattle] = nil
   end
+end)
+
+script.on_event(defines.events.on_player_selected_area, function(event)
+  game.print('on_player_selected_area' .. event.item)
+end)
+
+script.on_event(defines.events.on_player_deconstructed_area, function(event)
+  game.print('on_player_deconstructed_area' .. event.item)
+end)
+
+script.on_event(defines.events.on_player_setup_blueprint, function(event)
+  game.print('on_player_setup_blueprint' .. event.item)
+end)
+
+script.on_event(defines.events.on_player_configured_blueprint, function(event)
+  game.print('on_player_configured_blueprint')
 end)
