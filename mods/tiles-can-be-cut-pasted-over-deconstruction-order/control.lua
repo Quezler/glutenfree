@@ -1,76 +1,34 @@
-local function get_key(surface_index, position)
-  return 's' .. surface_index .. 'x' .. math.floor(position.x) .. 'y' .. math.floor(position.y)
-end
-
-local function on_tile_marked_for_deconstruction(proxy)
-  local key = get_key(proxy.surface.index, proxy.position)
-
-  global.deathrattles[script.register_on_entity_destroyed(proxy)] = key
-  global.key_to_proxy[key] = proxy
-end
-
-script.on_init(function()
-  global.deathrattles = {} -- entity pointing to key
-  global.key_to_proxy = {} -- key pointing to entity
-
-  global.skip_player_this_tick = {}
-
-  for _, surface in pairs(game.surfaces) do
-    for _, entity in pairs(surface.find_entities_filtered({type = 'deconstructible-tile-proxy'})) do
-      on_tile_marked_for_deconstruction(entity)
-    end
-  end
-end)
-
-script.on_event(defines.events.on_marked_for_deconstruction, function(event)
-  on_tile_marked_for_deconstruction(event.entity)
-end, {
-  {filter = 'type', type = 'deconstructible-tile-proxy'},
-})
-
-local function on_tick(event)
-  global.skip_player_this_tick = {}
-  script.on_event(defines.events.on_tick, nil)
-end
+local ignore_player_this_tick = {}
 
 script.on_event(defines.events.on_built_entity, function(event)
-  if global.skip_player_this_tick[event.player_index] then return end
-  global.skip_player_this_tick[event.player_index] = true
-  script.on_event(defines.events.on_tick, on_tick)
+  local entity = event.created_entity
+  assert(entity.tags.tile_name)
 
-  if event.stack.valid_for_read == false then return end -- stuff like undo
+  local surface = entity.surface
+  local tile = surface.get_tile(entity.position.x - 0.5, entity.position.y - 0.5)
 
-  log(event.stack.name)
-  if event.stack.name ~= 'blueprint' then return end
-  local tiles = event.stack.get_blueprint_tiles()
-  assert(tiles) -- since we're listening for tile ghosts this cannot possibly be nil right?
+  if tile.name == entity.tags.tile_name then
+    local proxy = surface.find_entity('deconstructible-tile-proxy', entity.position)
+    if proxy then proxy.destroy() end
+  end
 
-  local surface = event.created_entity.surface
-  local surface_index = surface.index
+  entity.destroy()
 
-  for _, tile in ipairs(tiles) do
-    if global.key_to_proxy[get_key(surface_index, tile.position)] then
-      if tile.name == surface.get_tile(tile.position.x, tile.position.y).name then
-        surface.find_entity('deconstructible-tile-proxy', {tile.position.x + 0.5, tile.position.y + 0.5}).destroy()
-      end
+  -- this should remove the mayflies without desyncing even though its not stored in global, since it all happens in the same tick
+  if ignore_player_this_tick[event.player_index] and ignore_player_this_tick[event.player_index] == event.tick then return end
+  ignore_player_this_tick[event.player_index] = event.tick
+
+  local blueprint = event.stack
+  local blueprint_entities = assert(blueprint.get_blueprint_entities())
+  for i = #blueprint_entities, 1, -1 do
+    if blueprint_entities[i].name == 'tcbcpodo-mayfly' then
+      table.remove(blueprint_entities, i)
     end
   end
+  blueprint.set_blueprint_entities(blueprint_entities)
 end, {
-  {filter = 'type', type = 'tile-ghost'},
+  {filter = 'ghost_name', name = 'tcbcpodo-mayfly'},
 })
-
-script.on_load(function()
-  if table_size(global.skip_player_this_tick) > 0 then
-    script.on_event(defines.events.on_tick, on_tick)
-  end
-end)
-
-script.on_event(defines.events.on_entity_destroyed, function(event)
-  local deathrattle = global.deathrattles[event.registration_number]
-  if deathrattle then global.deathrattles[event.registration_number] = nil
-    global.key_to_proxy[deathrattle] = nil
-  end
-end)
 
 local function on_player_maybe_placed_blueprint(event)
   local player = game.get_player(event.player_index)
@@ -80,14 +38,27 @@ local function on_player_maybe_placed_blueprint(event)
   if blueprint == nil then return end
   if blueprint.is_blueprint == false then return end
 
-  -- local old_blueprint_snap_to_grid = blueprint.blueprint_snap_to_grid
-  -- blueprint.blueprint_snap_to_grid = {0, 0}
-  -- log(blueprint.export_stack())
-  -- blueprint.blueprint_snap_to_grid = old_blueprint_snap_to_grid
+  local tiles = blueprint.get_blueprint_tiles()
+  if tiles == nil then return end
 
-  game.print(serpent.line(event.cursor_position))
-  game.print(math.floor(event.cursor_position.x))
-  game.print(math.floor(event.cursor_position.y))
+  local blueprint_entities = blueprint.get_blueprint_entities() or {}
+
+  for _, blueprint_entity in ipairs(blueprint_entities) do
+    if blueprint_entity.name == 'tcbcpodo-mayfly' then
+      error('already has mayflies')
+    end
+  end
+
+  for _, tile in ipairs(tiles) do
+    table.insert(blueprint_entities, {
+      entity_number = #blueprint_entities + 1,
+      name = 'tcbcpodo-mayfly',
+      position = {tile.position.x + 0.5, tile.position.y + 0.5},
+      tags = {tile_name = tile.name},
+    })
+  end
+
+  blueprint.set_blueprint_entities(blueprint_entities)
 end
 
 script.on_event('tcbcpodo-build', on_player_maybe_placed_blueprint)
