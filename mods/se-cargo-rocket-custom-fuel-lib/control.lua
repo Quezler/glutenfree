@@ -3,6 +3,47 @@ local Zone = require('__space-exploration-scripts__.zone')
 local Launchpad = {name_rocket_launch_pad = 'se-rocket-launch-pad'}
 local LaunchpadGUI = {name_rocket_launch_pad_gui_root = 'se-rocket-launch-pad-gui'}
 
+local function on_created_entity(event)
+  local entity = event.created_entity or event.entity
+
+  local tank_position = {entity.position.x, entity.position.y + 1}
+  local mixed_tank_position = {entity.position.x, entity.position.y + 2}
+  local mixed_tank = entity.surface.find_entity('se-rocket-launch-pad-tank-mixed', mixed_tank_position)
+  if mixed_tank == nil then
+    mixed_tank = entity.surface.create_entity{
+      name = 'se-rocket-launch-pad-tank-mixed',
+      force = entity.force,
+      position = mixed_tank_position,
+    }
+    mixed_tank.destructible = false
+    entity.connect_neighbour({wire = defines.wire_type.red, target_entity = mixed_tank})
+    entity.connect_neighbour({wire = defines.wire_type.green, target_entity = mixed_tank})
+  end
+
+  global.deathrattles[script.register_on_entity_destroyed(entity)] = entity.unit_number
+
+  global.structs[entity.unit_number] = {
+    unit_number = entity.unit_number,
+
+    container = entity,
+    tank = entity.surface.find_entity('se-rocket-launch-pad-tank', tank_position),
+    mixed_tank = mixed_tank,
+
+    last_fuel = 'se-liquid-rocket-fuel',
+  }
+end
+
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+}) do
+  script.on_event(event, on_created_entity, {
+    {filter = 'name', name = 'se-rocket-launch-pad'},
+  })
+end
+
 local function on_init()
   global.fuels = {
     ['se-liquid-rocket-fuel'] = {color = {r=242/255, g=106/255, b=15/255}},
@@ -59,47 +100,6 @@ end
 remote.add_interface('se-cargo-rocket-custom-fuel-lib', {
   add_fuel = add_fuel,
 })
-
-local function on_created_entity(event)
-  local entity = event.created_entity or event.entity
-
-  local tank_position = {entity.position.x, entity.position.y + 1}
-  local mixed_tank_position = {entity.position.x, entity.position.y + 2}
-  local mixed_tank = entity.surface.find_entity('se-rocket-launch-pad-tank-mixed', mixed_tank_position)
-  if mixed_tank == nil then
-    mixed_tank = entity.surface.create_entity{
-      name = 'se-rocket-launch-pad-tank-mixed',
-      force = entity.force,
-      position = mixed_tank_position,
-    }
-    mixed_tank.destructible = false
-    entity.connect_neighbour({wire = defines.wire_type.red, target_entity = mixed_tank})
-    entity.connect_neighbour({wire = defines.wire_type.green, target_entity = mixed_tank})
-  end
-
-  global.deathrattles[script.register_on_entity_destroyed(entity)] = entity.unit_number
-
-  global.structs[entity.unit_number] = {
-    unit_number = entity.unit_number,
-
-    container = entity,
-    tank = entity.surface.find_entity('se-rocket-launch-pad-tank', tank_position),
-    mixed_tank = mixed_tank,
-
-    last_fuel = 'se-liquid-rocket-fuel',
-  }
-end
-
-for _, event in ipairs({
-  defines.events.on_built_entity,
-  defines.events.on_robot_built_entity,
-  defines.events.script_raised_built,
-  defines.events.script_raised_revive,
-}) do
-  script.on_event(event, on_created_entity, {
-    {filter = 'name', name = 'se-rocket-launch-pad'},
-  })
-end
 
 local function get_surface_is_space(surface)
   -- if 'debug' then return true end
@@ -182,8 +182,8 @@ local function tick_player(player)
     --     "fluid-name.se-ion-stream"
     --   },
     --   {
-    --     "fluid-name.se-ion-stream"
-    --   }
+      --   "fluid-name.se-ion-stream"
+      -- }
     -- }
     -- vs
     -- {
