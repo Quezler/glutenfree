@@ -101,6 +101,11 @@ function Handler.shuffle_array_in_place(t)
   end
 end
 
+local function logistic_network_is_personal(logistic_network)
+  local cells = logistic_network.cells
+  return #cells == 1 and cells[1].owner.type == "character"
+end
+
 function Handler.handle_construction_alert(alert_target)
   local items_to_place_this = Handler.items_to_place_this(alert_target)
   if not items_to_place_this then return end -- upgrade canceled?
@@ -127,21 +132,23 @@ function Handler.handle_construction_alert(alert_target)
       local available = v1_struct.entity.get_item_count(itemstack.name)
       if available > 0 then
         for _, network in ipairs(networks) do
-          local inserted = network.insert({name = itemstack.name, count = math.min(itemstack.count, available)}, 'storage')
-          if inserted > 0 then
-            Handler.shoot(v1_struct)
-            v1_struct.entity.remove_item({name = itemstack.name, count = inserted})
-            -- available = available - inserted
-            itemstack.count = itemstack.count - inserted
-            break -- succesfully delivered any amount to a network providing construction coverage
-          end
+          if logistic_network_is_personal(network) == false then
+            local inserted = network.insert({name = itemstack.name, count = math.min(itemstack.count, available)}, 'storage')
+            if inserted > 0 then
+              Handler.shoot(v1_struct)
+              v1_struct.entity.remove_item({name = itemstack.name, count = inserted})
+              -- available = available - inserted
+              itemstack.count = itemstack.count - inserted
+              break -- succesfully delivered any amount to a network providing construction coverage
+            end
 
-          if inserted == 0 and #network.storages > 0 then
-            -- local cell = network.cells[math.random(1, #network.cells)]
-            local cell = network.find_cell_closest_to(v1_struct.entity.position)
-            for _, connected_player in ipairs(game.connected_players) do
-              if connected_player.force == alert_target.force then
-                connected_player.add_alert(cell.owner, defines.alert_type.no_storage)
+            if inserted == 0 and #network.storages > 0 then
+              -- local cell = network.cells[math.random(1, #network.cells)]
+              local cell = network.find_cell_closest_to(v1_struct.entity.position)
+              for _, connected_player in ipairs(game.connected_players) do
+                if connected_player.force == alert_target.force then
+                  connected_player.add_alert(cell.owner, defines.alert_type.no_storage)
+                end
               end
             end
           end
