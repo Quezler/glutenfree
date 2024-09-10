@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use Carbon\Carbon;
+use App\Misc\ModPortal;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,27 +21,8 @@ class WebhookCommand extends Command
     {
         $guzzle = new Client();
 
-        $response1 = $guzzle->get('https://mods.factorio.com/api/mods?page_size=max');
-        $json1 = json_decode($response1->getBody()->getContents(), true);
-
-        $my_mods = [];
-        foreach ($json1['results'] as $mod) {
-            if ($mod['owner'] == 'Quezler') $my_mods[] = $mod['name'];
-        }
-
-        $response2 = $guzzle->post('https://mods.factorio.com/api/mods?page_size=max&full=true', [
-            'form_params' => ['namelist' => implode(',', $my_mods)],
-        ]);
-        $json2 = json_decode($response2->getBody()->getContents(), true);
-
-        foreach ($json2['results'] as $i => $mod) {
-            $json2['results'][$i]['carbon'] = Carbon::parse($mod['created_at']);
-        }
-
-        usort($json2['results'], fn($a, $b) => $a['carbon'] <=> $b['carbon']);
-
         $links_to_post = [];
-        foreach ($json2['results'] as $mod) {
+        foreach (ModPortal::get_my_mods_full()['results'] as $mod) {
             $links_to_post[] = 'https://mods.factorio.com/mod/' . $mod['name'];
         }
 

@@ -5,7 +5,9 @@
         "symfony/dotenv": "^5.4",
         "symfony/var-dumper": "^5.4",
         "symfony/finder": "^5.4",
-        "nesbot/carbon": "^2.72"
+        "nesbot/carbon": "^2.72",
+        "symfony/dom-crawler": "^5.4",
+        "symfony/css-selector": "^5.4"
     },
     "autoload": {
         "psr-4": {

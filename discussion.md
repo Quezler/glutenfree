@@ -1,0 +1,1 @@
+On the mod portal the inbox gets cleared whenever you click on it, so if i have read a post and then forgot about it without fixing it that just means it has slipped my mind, github issues luckily stay existing, but for the best effect *reach out* _to me_ __on__ **discord** periodically.

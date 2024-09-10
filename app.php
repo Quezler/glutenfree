@@ -19,5 +19,6 @@ $application->add(new \App\Command\UpdateCommand());
 $application->add(new \App\Command\CiCommand());
 $application->add(new \App\Command\ChangelogCommand());
 $application->add(new \App\Command\WebhookCommand());
+$application->add(new \App\Command\DiscussionCommand());
 
 $application->run();
