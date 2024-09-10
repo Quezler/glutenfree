@@ -4,13 +4,25 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   if event.item ~= "se-space-capsule-fast-travel-targeter" then return end
 
   local player = game.get_player(event.player_index)
+  assert(player)
+
+  if player.force.technologies["se-space-capsule-navigation"].researched == false then
+    player.create_local_flying_text({
+      text = {"", {"technology-name.se-space-capsule-navigation"}, " not yet researched."},
+      create_at_cursor = true,
+    })
+    return
+  end
 
   -- local inventory = player.get_main_inventory()
   local inventory = remote.call("space-exploration", "get_player_character", {player = player}).get_main_inventory()
-  if inventory.get_item_count(price) == 0 then return player.create_local_flying_text({
-    text = string.format("Fast travel requires a [item=%s]", price),
-    create_at_cursor = true,
-  }) end
+  if inventory.get_item_count(price) == 0 then
+    player.create_local_flying_text({
+      text = string.format("Fast travel requires a [item=%s]", price),
+      create_at_cursor = true,
+    })
+    return
+  end
   inventory.remove({name = price, count = 1})
   local left = inventory.get_item_count(price)
 
@@ -46,3 +58,35 @@ script.on_event(defines.events.on_player_selected_area, function(event)
 
   player.close_map()
 end)
+
+-- local technology_name = "se-space-capsule-navigation"
+
+-- local function update_player(player)
+--   player.set_shortcut_available("se-space-capsule-fast-travel", player.force.technologies[technology_name].researched)
+-- end
+
+-- script.on_init(function()
+--   for i, player in pairs(game.players) do
+--     update_player(player)
+--   end
+-- end)
+
+-- script.on_event(defines.events.on_player_created, function(event)
+--   update_player(game.get_player(event.player_index))
+-- end)
+
+-- script.on_event(defines.events.on_research_finished, function(event)
+--   if event.research.name ~= technology_name then return end
+
+--   for _, player in ipairs(event.research.force.players) do
+--     update_player(player)
+--   end
+-- end)
+
+-- script.on_event(defines.events.on_research_reversed, function(event)
+--   if event.research.name ~= technology_name then return end
+
+--   for _, player in ipairs(event.research.force.players) do
+--     update_player(player)
+--   end
+-- end)
