@@ -20,7 +20,7 @@ jobs:
       - run: echo FACTORIO_API_KEY=${{ secrets.FACTORIO_API_KEY }} >> .env
       - run: echo DISCORD_WEBHOOK=${{ secrets.DISCORD_WEBHOOK }} >> .env
       - run: echo LOCK_PASSWORD=${{ secrets.LOCK_PASSWORD }} >> .env
-      - run: echo WUBE_REMEMBER_TOKEN=${{ secrets.WUBE_REMEMBER_TOKEN }} >> .env
+      - run: echo WUBE_REMEMBER_TOKEN="${{ secrets.WUBE_REMEMBER_TOKEN }}" >> .env
 
       - run: php app.php ci
       - run: php app.php webhook
