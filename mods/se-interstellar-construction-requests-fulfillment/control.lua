@@ -32,8 +32,27 @@ script.on_nth_tick(600, function(event) -- no_material_for_construction expires 
 
         for surface_index, surface_alerts in pairs(alerts) do
           for _, surface_alert in ipairs(surface_alerts[defines.alert_type.no_material_for_construction]) do
-            if surface_alert.target and surface_alert.target.valid and surface_alert.target.unit_number then
-              global.alert_targets[surface_alert.target.unit_number] = surface_alert.target
+            if surface_alert.target.valid then
+
+              local unit_number = surface_alert.target.unit_number
+              if unit_number == nil and surface_alert.target.type == "cliff" then
+                unit_number = 'cliff-' .. script.register_on_entity_destroyed(surface_alert.target)
+              --   global.alert_targets[unit_number] = {
+              --     type = surface_alert.target.type,
+              --     name = surface_alert.target.name,
+              --     force = player.force,
+              --     valid = true,
+              --     get_upgrade_target = function ()
+              --       return nil
+              --     end
+              --   }
+              -- else
+              --   assert(unit_number)
+              --   global.alert_targets[unit_number] = surface_alert.target
+              end
+
+              assert(unit_number)
+              global.alert_targets[unit_number] = surface_alert.target
             end
           end
         end

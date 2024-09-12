@@ -89,6 +89,8 @@ function Handler.items_to_place_this(alert_target)
     return items_to_place_this
   elseif alert_target.get_upgrade_target() then
     return alert_target.get_upgrade_target().items_to_place_this
+  elseif alert_target.type == "cliff" then
+    return {{name = 'cliff-explosives', count = 1}}
   elseif 1 > alert_target.get_health_ratio() then
    return {{name = 'repair-pack', count = 1}}
   end
@@ -110,7 +112,10 @@ function Handler.handle_construction_alert(alert_target)
   local items_to_place_this = Handler.items_to_place_this(alert_target)
   if not items_to_place_this then return end -- upgrade canceled?
 
-  local networks = alert_target.surface.find_logistic_networks_by_construction_area(alert_target.position, alert_target.force)
+  local alert_target_force = alert_target.force
+  if alert_target.force.name == "neutral" and alert_target.type == "cliff" then alert_target_force = game.forces["player"] end
+
+  local networks = alert_target.surface.find_logistic_networks_by_construction_area(alert_target.position, alert_target_force)
   if #networks == 0 then goto undeliverable end
 
   Handler.shuffle_array_in_place(global.v1_unit_numbers)
@@ -127,7 +132,7 @@ function Handler.handle_construction_alert(alert_target)
       if 0 >= itemstack.count then break end
 
       if v1_struct.entity.surface == alert_target.surface then break end
-      if v1_struct.entity.force ~= alert_target.force then break end
+      if v1_struct.entity.force ~= alert_target_force then break end
 
       local available = v1_struct.entity.get_item_count(itemstack.name)
       if available > 0 then
@@ -146,7 +151,7 @@ function Handler.handle_construction_alert(alert_target)
               -- local cell = network.cells[math.random(1, #network.cells)]
               local cell = network.find_cell_closest_to(v1_struct.entity.position)
               for _, connected_player in ipairs(game.connected_players) do
-                if connected_player.force == alert_target.force then
+                if connected_player.force == alert_target_force then
                   connected_player.add_alert(cell.owner, defines.alert_type.no_storage)
                 end
               end
