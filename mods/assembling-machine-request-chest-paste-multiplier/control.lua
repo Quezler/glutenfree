@@ -17,8 +17,8 @@ end
 script.on_init(on_configuration_changed)
 script.on_configuration_changed(on_configuration_changed)
 
-local function incompatible(event)
-  return (event.source.type == 'assembling-machine' and global.requester_chest_names[event.destination.name]) == false
+local function compatible(event)
+  return event.source.type == 'assembling-machine' and global.requester_chest_names[event.destination.name]
 end
 
 local function serialize_requests(requester_chest)
@@ -35,7 +35,7 @@ end
 local _global = {}
 
 script.on_event(defines.events.on_pre_entity_settings_pasted, function(event)
-  if incompatible(event) then return end
+  if not compatible(event) then return end
   local requester_chest = event.destination
 
   _global[requester_chest.unit_number] = serialize_requests(requester_chest)
@@ -67,7 +67,7 @@ local function requests_match(old_requests, new_requests)
 end
 
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
-  if incompatible(event) then return end
+  if not compatible(event) then return end
   local requester_chest = event.destination
 
   local old_requests = _global[requester_chest.unit_number] -- this might contain gaps
