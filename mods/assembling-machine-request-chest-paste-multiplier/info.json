@@ -1,0 +1,11 @@
+{
+    "name": "assembling-machine-request-chest-paste-multiplier",
+    "title": "Assembling machine request chest paste multiplier",
+    "description": "Pasting an assembling machine several times on a requester chest increases the total requested.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "? base"
+    ]
+}
