@@ -59,6 +59,7 @@ class PublishCommand extends Command
         ]);
 
         dump($response->getBody()->getContents());
+        exec("open https://mods.factorio.com/mod/{$input->getArgument('name')}/edit");
 
         return Command::SUCCESS;
     }
