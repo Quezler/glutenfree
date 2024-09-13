@@ -45,6 +45,7 @@ local function sync_combinator(entity)
   end
 
   combinator.get_control_behavior().parameters = parameters
+  combinator.get_control_behavior().enabled = entity.get_control_behavior().enabled
 end
 
 script.on_event(defines.events.on_gui_opened, function(event)
