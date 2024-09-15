@@ -25,17 +25,18 @@ local function tick_force(force)
   end
 
   local to_print = nil
+  local zone = nil
 
   for zone_index, _ in pairs(new_known_zones) do
     if old_known_zones[zone_index] == nil then
-      local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = tonumber(zone_index)})
+      zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = tonumber(zone_index)})
 
       if to_print then goto skip end
       to_print = {"", string.format("[img=entity/%s] ", zone.primary_resource), {"entity-name." .. zone.primary_resource}, " is the primary resource, and the threat level is ", string.format('%d%%', get_threat(zone) * 100), "."}
     end
   end
 
-  if to_print then
+  if to_print and assert(zone).type ~= "star" then
     force.print(to_print)
   end
 
