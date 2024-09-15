@@ -32,7 +32,7 @@ script.on_nth_tick(600, function(event) -- no_material_for_construction expires 
 
         for surface_index, surface_alerts in pairs(alerts) do
           for _, surface_alert in ipairs(surface_alerts[defines.alert_type.no_material_for_construction]) do
-            if surface_alert.target.valid then
+            if surface_alert.target and surface_alert.target.valid then
 
               local unit_number = surface_alert.target.unit_number
               if unit_number == nil and surface_alert.target.type == "cliff" then
