@@ -15,4 +15,4 @@ mod_item.icons = {
 }
 
 data.raw['train-stop']['glutenfree-equipment-train-stop-station'].icons = mod_item.icons
-
+data.raw['land-mine']['glutenfree-equipment-train-stop-tripwire'].collision_mask = {'train-layer'}

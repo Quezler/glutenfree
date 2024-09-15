@@ -1,6 +1,6 @@
 local landmine = table.deepcopy(data.raw['land-mine']['land-mine'])
 landmine.name = mod_prefix .. 'tripwire'
-landmine.collision_mask = {'train-layer'}
+landmine.collision_mask = {'train-layer'} -- set again in final-fixes
 landmine.max_health = 1
 landmine.timeout = 4294967295 -- 2^32-1
 landmine.minable = nil
