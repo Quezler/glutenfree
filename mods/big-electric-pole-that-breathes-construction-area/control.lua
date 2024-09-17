@@ -19,6 +19,8 @@ function on_created_entity(event)
     position = {entity.position.x, entity.position.y + 0.01}
   }
 
+  roboport.destructible = false
+
   global.deathrattles[script.register_on_entity_destroyed(entity)] = roboport
 end
 
@@ -69,6 +71,19 @@ script.on_init(function(event)
         return
       end
     end
+  end
+end)
+
+script.on_configuration_changed(function(event)
+  global.version = (global.version or 0)
+
+  if global.version == 0 then
+    for unit_number, roboport in pairs(global.deathrattles) do
+      if roboport.valid then
+        roboport.destructible = false
+      end
+    end
+    global.version = 1
   end
 end)
 
