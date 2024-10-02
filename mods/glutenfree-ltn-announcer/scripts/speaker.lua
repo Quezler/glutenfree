@@ -196,13 +196,13 @@ function speaker.announce(entity)
   if entry.red_signal.valid then
     entry.red_signal.get_control_behavior().parameters = combinator.parameters_from_shipment(red)
   else
-    game.print('red signal no longer valid: ' .. entity.unit_number)
+    game.print('red signal no longer valid: ' .. entity.unit_number .. serpent.line(entity.position))
   end
 
   if entry.green_signal.valid then
     entry.green_signal.get_control_behavior().parameters = combinator.parameters_from_shipment(green)
   else
-    game.print('green signal no longer valid: ' .. entity.unit_number)
+    game.print('green signal no longer valid: ' .. entity.unit_number .. serpent.line(entity.position))
   end
 end
 
