@@ -25,9 +25,11 @@ data:extend({
     alt_selection_cursor_box_type = "entity",
     alt_reverse_selection_cursor_box_type = "entity",
 
-    entity_type_filters = filters, entity_filter_mode = "whitelist",
+    entity_type_filters = {"item-request-proxy"},
+    -- entity_filter_mode = "whitelist",
     -- alt_entity_type_filters = {}, alt_entity_filter_mode = "whitelist",
-    reverse_entity_type_filters = filters, reverse_entity_filter_mode = "whitelist",
+    reverse_entity_type_filters = filters,
+    -- reverse_entity_filter_mode = "whitelist",
     -- alt_reverse_entity_type_filters = {}, alt_reverse_entity_filter_mode = "whitelist",
 
     hidden = true,
