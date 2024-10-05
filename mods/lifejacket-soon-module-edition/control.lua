@@ -17,27 +17,34 @@ end)
 local function offer_proxy(proxy, item_name, item_count)
   local item_requests = proxy.item_requests
   local to_insert = math.min(assert(item_requests[item_name]), item_count)
+
   local inserted = proxy.proxy_target.get_inventory(module_inventory_for_type[proxy.proxy_target.type]).insert({name = item_name, count = to_insert})
-  -- log(item_name .. ' ' .. inserted)
   assert(inserted > 0)
 
-  -- log('i am requesting ' .. item_requests[item_name])
-  -- log('i will now remove ' .. inserted)
-
   item_requests[item_name] = item_requests[item_name] - inserted
-  -- log('this leaves me with ' .. item_requests[item_name])
   assert(item_requests[item_name] >= 0)
 
   proxy.item_requests = item_requests -- proxies die when all requests are 0
-  -- log('but i keep requesting ' .. proxy.item_requests[item_name])
-
   return inserted
 end
 
--- control.lua:24: i am requesting 5
--- control.lua:25: i will now remove 1
--- control.lua:28: this leaves me with 4
--- control.lua:32: but i keep requesting 5
+local function add_to_proxy_for(entity, item_name, item_count)
+  local proxy = entity.surface.find_entity("item-request-proxy", entity.position)
+  if proxy then
+    assert(proxy.proxy_target == entity)
+    local item_requests = proxy.item_requests
+    item_requests[item_name] = (item_requests[item_name] or 0) + item_count
+    proxy.item_requests = item_requests
+  else
+    proxy = entity.surface.create_entity{
+      name = "item-request-proxy",
+      force = entity.force,
+      position = entity.position,
+      modules = {[item_name] = item_count},
+      target = entity,
+    }
+  end
+end
 
 local function try_to_take_modules_from(entity, wishlist)
   local inventory = entity.get_inventory(module_inventory_for_type[entity.type])
@@ -49,8 +56,9 @@ local function try_to_take_modules_from(entity, wishlist)
         local inserted = offer_proxy(proxy, item_name, item_count)
         local removed = inventory.remove({name = item_name, count = inserted})
         assert(removed == inserted)
+        add_to_proxy_for(entity, item_name, removed)
 
-        log(proxy.item_requests[item_name])
+        -- if proxy died or the request for this item reached zero (nilled)
         if proxy.valid == nil or proxy.item_requests[item_name] == nil then
           wishlist[item_name][proxy_unit_number] = nil
         end
