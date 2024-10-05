@@ -2,7 +2,7 @@
     "name": "lifejacket-soon-module-edition",
     "title": "Lifejacket soon: module edition",
     "description": "Downgrades modules elsewhere and leaves construction requests so the current setup can use them.",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "author": "Quezler",
     "factorio_version": "1.1",
     "dependencies": [
