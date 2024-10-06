@@ -96,11 +96,11 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   local selected_entities = event.surface.find_entities_filtered{
     type = entity_types_with_module_slots,
     force = player.force,
+    area = assert(event.area),
   }
   for _, selected_entity in ipairs(selected_entities) do
     skip_unit_number[assert(selected_entity.unit_number)] = true
   end
-
 
   for _, surface in pairs(game.surfaces) do
     local entities = surface.find_entities_filtered{
