@@ -72,15 +72,10 @@ local function try_to_take_modules_from(entity, wishlist)
   end
 end
 
-local function excluded(position, area)
-  return area.left_top.x <= position.x
-     and area.left_top.y <= position.y
-     and area.right_bottom.x >= position.x
-     and area.right_bottom.y >= position.y
-end
-
 script.on_event(defines.events.on_player_selected_area, function(event)
   if event.item ~= "lifejacket-soon" then return end
+
+  local player = assert(game.get_player(event.player_index))
 
   -- module name to an array of proxies
   local wishlist = {}
@@ -95,8 +90,18 @@ script.on_event(defines.events.on_player_selected_area, function(event)
     end
   end
 
+  local skip_unit_number = {}
 
-  local player = assert(game.get_player(event.player_index))
+  -- instead of manually checking the bounding boxes we'll just piggyback on searching the selected again area ourselves.
+  local selected_entities = event.surface.find_entities_filtered{
+    type = entity_types_with_module_slots,
+    force = player.force,
+  }
+  for _, selected_entity in ipairs(selected_entities) do
+    skip_unit_number[assert(selected_entity.unit_number)] = true
+  end
+
+
   for _, surface in pairs(game.surfaces) do
     local entities = surface.find_entities_filtered{
       type = entity_types_with_module_slots,
@@ -104,8 +109,7 @@ script.on_event(defines.events.on_player_selected_area, function(event)
     }
 
     for _, entity in ipairs(entities) do
-      assert(entity.unit_number)
-      if not excluded(entity.position, event.area) then
+      if not skip_unit_number[assert(entity.unit_number)] then
         try_to_take_modules_from(entity, wishlist)
       end
     end
