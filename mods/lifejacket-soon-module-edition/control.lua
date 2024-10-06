@@ -72,20 +72,22 @@ local function try_to_take_modules_from(entity, wishlist)
   end
 end
 
+local function excluded(position, area)
+  return area.left_top.x <= position.x
+     and area.left_top.y <= position.y
+     and area.right_bottom.x >= position.x
+     and area.right_bottom.y >= position.y
+end
+
 script.on_event(defines.events.on_player_selected_area, function(event)
   if event.item ~= "lifejacket-soon" then return end
 
   -- module name to an array of proxies
   local wishlist = {}
 
-  -- avoid taking modules out of anywhere in the current selection
-  local in_selection = {}
-
   for _, proxy in ipairs(event.entities) do
     assert(proxy.proxy_target)
     assert(proxy.proxy_target.unit_number)
-
-    in_selection[proxy.proxy_target.unit_number] = true
 
     for module_name, module_count in pairs(proxy.item_requests) do
       wishlist[module_name] = wishlist[module_name] or {}
@@ -103,7 +105,7 @@ script.on_event(defines.events.on_player_selected_area, function(event)
 
     for _, entity in ipairs(entities) do
       assert(entity.unit_number)
-      if not in_selection[entity.unit_number] then
+      if not excluded(entity.position, event.area) then
         try_to_take_modules_from(entity, wishlist)
       end
     end
