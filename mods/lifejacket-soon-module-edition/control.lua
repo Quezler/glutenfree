@@ -84,6 +84,7 @@ script.on_event(defines.events.on_player_selected_area, function(event)
     assert(proxy.proxy_target)
     assert(proxy.proxy_target.unit_number)
 
+    -- todo: only check for actual modules and not just everything
     for module_name, module_count in pairs(proxy.item_requests) do
       wishlist[module_name] = wishlist[module_name] or {}
       wishlist[module_name][proxy.unit_number] = proxy -- this proxy wants 1+ of this module
