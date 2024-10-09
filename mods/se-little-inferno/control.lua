@@ -1,6 +1,7 @@
 local handler = require("scripts.handler")
 
 script.on_init(handler.on_init)
+script.on_configuration_changed(handler.on_configuration_changed)
 script.on_load(handler.on_load)
 
 script.on_event(defines.events.on_surface_created, handler.on_surface_created)

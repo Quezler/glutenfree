@@ -13,6 +13,14 @@ function Handler.on_init()
   end
 end
 
+function Handler.on_configuration_changed()
+  for _, surface in pairs(game.surfaces) do
+    if not global.surfaces[surface.index] then
+      Handler.on_surface_created({surface_index = surface.index, name = defines.events.on_surface_created})
+    end
+  end
+end
+
 function Handler.on_load()
   if #global.next_tick_events > 0 then
     script.on_event(defines.events.on_tick, Handler.on_tick)
@@ -85,7 +93,7 @@ function Handler.on_post_surface_created(event)
     if Handler.hostiles_extinct(zone) then
       Handler.set_enabled_for_surface_index({surface_index = event.surface_index, enabled = true})
     end
-    
+
   end
 end
 
@@ -106,7 +114,7 @@ function Handler.on_chunk_charted(event)
       name = "se-little-inferno",
       position = {event.position.x * 32 + 16, event.position.y * 32 + 16} -- the center of each chunk
     }
-  
+
     local entity = surface.find_entity(entity_to_create.name, entity_to_create.position)
     if not entity then
       entity = surface.create_entity(entity_to_create)
@@ -154,7 +162,7 @@ function Handler.get_enabled_for_surface_index(data)
 end
 
 function Handler.set_enabled_for_surface_index(data)
-  if global.surfaces[data.surface_index].enabled == data.enabled then return end 
+  if global.surfaces[data.surface_index].enabled == data.enabled then return end
 
   if data.enabled == true then
     global.surfaces[data.surface_index].enabled = true
