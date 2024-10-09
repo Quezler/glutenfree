@@ -11,7 +11,7 @@
 local combinator = table.deepcopy(data.raw["decider-combinator"]["decider-combinator"])
 
 combinator.name = "inactivity-combinator"
-combinator.placeable_by = {item = "decider-combinator", count = 1}
+-- combinator.placeable_by = {item = "decider-combinator", count = 1}
 
 -- combinator.icon = "__inactivity-combinator__/graphics/icons/inactivity-combinator.png"
 
@@ -43,4 +43,26 @@ end
 
 do_search_n_replace(combinator)
 
+combinator.minable.result = 'inactivity-combinator'
 data:extend{combinator}
+
+local item = table.deepcopy(data.raw['item']['decider-combinator'])
+item.name = 'inactivity-combinator'
+item.place_result = 'inactivity-combinator'
+item.order = 'd[other]-c[inactivity-combinator]'
+
+do_search_n_replace(item)
+data:extend{item}
+
+local recipe = table.deepcopy(data.raw['recipe']['decider-combinator'])
+recipe.name = 'inactivity-combinator'
+recipe.result = 'inactivity-combinator'
+recipe.ingredients = {{'arithmetic-combinator', 3}, {'decider-combinator', 2}}
+
+do_search_n_replace(recipe)
+data:extend{recipe}
+
+local technology = data.raw['technology']['circuit-network']
+table.insert(technology.effects, {
+  type = 'unlock-recipe', recipe = 'inactivity-combinator'
+})
