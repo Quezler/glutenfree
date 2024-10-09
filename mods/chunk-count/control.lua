@@ -25,6 +25,10 @@ script.on_init(function(event)
   global.ticks_played_on_init = game.ticks_played
 end)
 
+script.on_configuration_changed(function()
+  global.chunks = sum_chunks_for_surfaces()
+end)
+
 script.on_event(defines.events.on_chunk_generated, function(event)
   if game.ticks_played == global.ticks_played_on_init then return end
   global.chunks[event.surface.index] = global.chunks[event.surface.index] + 1
