@@ -1,0 +1,11 @@
+{
+    "name": "inactivity-combinator",
+    "title": "Inactivity combinator",
+    "description": "Detects in seconds the time since the last red value, allowing you to output a signal of 1 based on the virtual S signal.",
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "? base"
+    ]
+}
