@@ -20,7 +20,7 @@ local function sum_chunks_for_surfaces()
   return chunks
 end
 
-script.on_init(function(event)
+script.on_init(function()
   global.chunks = sum_chunks_for_surfaces()
   global.ticks_played_on_init = game.ticks_played
 end)
