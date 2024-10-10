@@ -1,6 +1,7 @@
 local print_gui = require('scripts.print_gui')
 local Factory = require('scripts.factory')
 local FluidPort = require('scripts.fluid-port')
+local FilterHelper = require('scripts.filter-helper')
 
 local mod_prefix = 'fietff-'
 
@@ -88,6 +89,10 @@ end
 local get_factory_description = Factory.get_factory_description
 
 script.on_event(defines.events.on_gui_opened, function(event)
+  if game.active_mods["FilterHelper"] then
+    FilterHelper.on_gui_opened(event)
+  end
+
   if event.gui_type ~= defines.gui_type.custom then return end
   if is_fp_frame_main_dialog[event.element.name] ~= true then return end
   local root = event.element
@@ -435,6 +440,20 @@ end)
 script.on_load(on_load)
 
 script.on_configuration_changed(on_configuration_changed)
+
+-- script.on_event(defines.events.on_tick, function(event)
+--   if event.tick % 600 == 0 then
+--     if game.active_mods["FilterHelper"] then
+--       FilterHelper.on_nth_tick_60(event)
+--     end
+--   end
+-- end)
+
+-- script.on_nth_tick(60, function(event)
+--   if game.active_mods["FilterHelper"] then
+--     FilterHelper.on_nth_tick_60(event)
+--   end
+-- end)
 
 script.on_nth_tick(600, function(event)
   for unit_minute, struct in pairs(global.structs) do
