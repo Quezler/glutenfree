@@ -4,20 +4,16 @@ local input_side = defines.circuit_connector_id.combinator_input
 local output_side = defines.circuit_connector_id.combinator_output
 
 script.on_init(function ()
+  global.version = 1
+
   global.deathrattles = {}
   global.x_offset = 0
 
   local surface = game.surfaces[mod_surface_name]
-  assert(surface == nil)
+  assert(surface == nil, 'contact the mod author for help with world that previously already had this mod installed.')
 
   surface = game.create_surface(mod_surface_name)
   surface.generate_with_lab_tiles = true
-
-  surface.create_entity{
-    name = 'electric-energy-interface',
-    force = 'neutral',
-    position = {-1, -1},
-  }
 end)
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
@@ -62,16 +58,9 @@ local function on_created_entity(event)
 
   local surface = game.surfaces[mod_surface_name]
 
-  -- enouch reach for the 4 combinators
-  local pole_1 = surface.create_entity{
-    name = 'medium-electric-pole',
-    force = 'neutral',
-    position = {x = 1.5 + global.x_offset, y = -0.5},
-  }
-
   -- each + 0 = each
   local combinator_1 = surface.create_entity{
-    name = 'arithmetic-combinator',
+    name = 'inactivity-arithmetic-combinator',
     force = 'neutral',
     position = {x = 1 + global.x_offset, y = 0.5},
     direction = defines.direction.east,
@@ -79,7 +68,7 @@ local function on_created_entity(event)
 
   -- everything == t?, everything input count
   local combinator_2 = surface.create_entity{
-    name = 'decider-combinator',
+    name = 'inactivity-decider-combinator',
     force = 'neutral',
     position = {x = 1 + global.x_offset, y = 1.5},
     direction = defines.direction.east,
@@ -87,7 +76,7 @@ local function on_created_entity(event)
 
   -- t + 2 = t
   local combinator_3 = surface.create_entity{
-    name = 'arithmetic-combinator',
+    name = 'inactivity-arithmetic-combinator',
     force = 'neutral',
     position = {x = 1 + global.x_offset, y = 2.5},
     direction = defines.direction.west,
@@ -95,13 +84,12 @@ local function on_created_entity(event)
 
   -- t / 60 = s
   local combinator_4 = surface.create_entity{
-    name = 'arithmetic-combinator',
+    name = 'inactivity-arithmetic-combinator',
     force = 'neutral',
     position = {x = 1 + global.x_offset, y = 3.5},
     direction = defines.direction.east,
   }
 
-  assert(pole_1)
   assert(combinator_1)
   assert(combinator_2)
   assert(combinator_3)
@@ -134,6 +122,24 @@ local function on_created_entity(event)
 
   global.x_offset = global.x_offset + 2
 end
+
+script.on_configuration_changed(function ()
+  global.version = (global.version or 0)
+
+  if global.version == 0 then
+    for _, entity in ipairs(game.surfaces[mod_surface_name].find_entities()) do
+      entity.destroy()
+    end
+
+    for _, surface in pairs(game.surfaces) do
+      for _, entity in pairs(surface.find_entities_filtered({name = {'inactivity-combinator'}})) do
+        on_created_entity({entity = entity})
+      end
+    end
+
+    global.version = 1
+  end
+end)
 
 for _, event in ipairs({
   defines.events.on_built_entity,

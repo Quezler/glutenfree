@@ -66,3 +66,13 @@ local technology = data.raw['technology']['circuit-network']
 table.insert(technology.effects, {
   type = 'unlock-recipe', recipe = 'inactivity-combinator'
 })
+
+for _, prototype in ipairs({
+  data.raw['decider-combinator']['decider-combinator'],
+  data.raw['arithmetic-combinator']['arithmetic-combinator'],
+}) do
+  local powerless = table.deepcopy(prototype)
+  powerless.name = 'inactivity-' .. powerless.name
+  powerless.energy_source = {type = 'void'}
+  data:extend{powerless}
+end
