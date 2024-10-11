@@ -17,6 +17,11 @@ function is_item_or_else_fluid(thing)
   end
 end
 
+-- local function logistic_network_is_personal(logistic_network)
+--   local cells = logistic_network.cells
+--   return #cells == 1 and cells[1].owner.type == "character"
+-- end
+
 function Factory.get_factory_description(clipboard)
   local description = ""
 
