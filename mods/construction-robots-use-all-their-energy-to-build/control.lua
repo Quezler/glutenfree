@@ -1,10 +1,12 @@
+local function logistic_network_is_personal(logistic_network)
+  local cells = logistic_network.cells
+  return #cells == 1 and cells[1].owner.type == "character"
+end
+
 local function drain_battery(event)
   local robot = event.robot
 
-  local cells = robot.logistic_network.cells
-  if #cells == 1 and cells[1].owner.type == "character" then
-    return -- this is robot assigned to a personal roboport
-  end
+  if logistic_network_is_personal(robot.logistic_network) then return end
 
   robot.energy = 0
 end
