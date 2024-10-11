@@ -35,6 +35,13 @@ end
 local _global = {}
 
 script.on_event(defines.events.on_pre_entity_settings_pasted, function(event)
+  -- local player = assert(game.get_player(event.player_index))
+  -- if player.entity_copy_source then
+  --   game.print(player.entity_copy_source.name)
+  -- else
+  --   game.print('nil')
+  -- end
+
   if not compatible(event) then return end
   local requester_chest = event.destination
 
