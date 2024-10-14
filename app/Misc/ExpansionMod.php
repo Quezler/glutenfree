@@ -36,7 +36,7 @@ class ExpansionMod
         passthru(sprintf("(cd %s && zip -FSr %s %s)", __GLUTENFREE__ . '/build/', "{$dest}.zip", $zip_name_without_extension));
     }
 
-    public function publish(): void
+    public function publish(): string
     {
         $zip_filename = $this->name . '_' . $this->info()['version'] . '.zip';
         $zip_pathname = __GLUTENFREE__ . '/build/' . $zip_filename;
@@ -78,7 +78,6 @@ class ExpansionMod
             ]
         ]);
 
-        dump($response->getBody()->getContents());
-        exec("open https://mods.factorio.com/mod/{$this->name}/edit");
+        return $response->getBody()->getContents();
     }
 }
