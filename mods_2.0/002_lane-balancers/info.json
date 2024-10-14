@@ -1,0 +1,22 @@
+{
+    "name": "lane-balancers",
+    "title": "Lane balancers",
+    "description": "Adds recipes and tiers for the single tile lane splitters.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "base",
+        "? space-age"
+    ]
+}
