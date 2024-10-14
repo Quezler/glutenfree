@@ -27,7 +27,6 @@ class MakeModCommand extends Command
         if (strlen($mod_name) > 49) throw new \LogicException();
 
         $mod_directory = __GLUTENFREE__ . '/mods_2.0/' . $prefix . '_' . $mod_name;
-
         mkdir($mod_directory);
 
         file_put_contents("{$mod_directory}/changelog.txt", implode(PHP_EOL, [
@@ -38,32 +37,36 @@ class MakeModCommand extends Command
             '    - Initial commit'
         ]));
 
-        $info = [
-            "name" => $mod_name,
-            "title" => ucfirst(str_replace('-', ' ', $mod_name)),
-            "description" => "It probably has something to do with the title.",
+        $mod_title = ucfirst(str_replace('-', ' ', $mod_name));
+        $info = <<<EOF
+{
+    "name": "{$mod_name}",
+    "title": "{$mod_title}",
+    "description": "It probably has something to do with the title.",
 
-            "version" => "0.0.1",
-            "author" => "Quezler",
-            "factorio_version" => "2.0",
+    "version": "0.0.1",
+    "author": "Quezler",
+    "factorio_version": "2.0",
 
-            "quality_required" => false,
-            "rail_bridges_required" => false,
-            "space_travel_required" => false,
-            "spoiling_required" => false,
-            "freezing_required" => false,
-            "segmented_units_required" => false,
-            "expansion_shaders_required" => false,
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
 
-            "dependencies" => [
-                "? base",
-                "? space-age",
-            ],
-        ];
+    "dependencies": [
+        "? base",
+        "? space-age"
+    ]
+}
+EOF;
 
-        dump($info);
+        $output->writeln($info);
+//        dump($info);
 
-        file_put_contents("{$mod_directory}/info.json", json_encode($info, JSON_PRETTY_PRINT) . PHP_EOL);
+        file_put_contents("{$mod_directory}/info.json", $info);
         file_put_contents("{$mod_directory}/README.md", '');
         
         return Command::SUCCESS;
