@@ -75,7 +75,7 @@ EOF;
     {
         $prefix = '001_';
 
-        $directories = Finder::create()->in(__GLUTENFREE__ . '/mods_2.0')->directories();
+        $directories = Finder::create()->in(__GLUTENFREE__ . '/mods_2.0')->depth(0)->directories()->sortByName();
         foreach ($directories as $directory) {
 //            dump($directory->getBasename());
             preg_match('/(\d{3})_/', $directory->getFilename(), $matches);
