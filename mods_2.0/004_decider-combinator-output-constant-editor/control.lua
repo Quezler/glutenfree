@@ -110,7 +110,7 @@ script.on_event(defines.events.on_gui_closed, function(event)
   if event.entity and event.entity.type == 'decider-combinator' then
     local player = assert(game.get_player(event.player_index))
 
-    local textfield = player.gui.relative['dcov-textfield']
+    local textfield = player.gui.relative['dcoce-textfield']
     if textfield then
       textfield.destroy()
       storage.playerdata[player.index] = nil
