@@ -26,7 +26,7 @@ class MakeModCommand extends Command
         $mod_name = $input->getArgument('name');
         if (strlen($mod_name) > 49) throw new \LogicException();
 
-        $mod_directory = __GLUTENFREE__ . '/mods_2.0/' . $prefix . '_' . $mod_name;
+        $mod_directory = __GLUTENFREE__ . '/mods_2.0/' . $prefix . $mod_name;
         mkdir($mod_directory);
 
         file_put_contents("{$mod_directory}/changelog.txt", implode(PHP_EOL, [

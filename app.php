@@ -14,6 +14,7 @@ $dotenv->load(__GLUTENFREE__ . '/.env');
 
 ini_set('user_agent', 'https://github.com/Quezler/glutenfree');
 
+// 1.1
 $application->add(new \App\Command\InitCommand());
 $application->add(new \App\Command\RsyncCommand());
 $application->add(new \App\Command\PublishCommand());
@@ -23,6 +24,9 @@ $application->add(new \App\Command\ChangelogCommand());
 $application->add(new \App\Command\WebhookCommand());
 $application->add(new \App\Command\DiscussionCommand());
 $application->add(new \App\Command\NewsletterCommand());
+
+// 2.0
 $application->add(new \App\Command\MakeModCommand());
+$application->add(new \App\Command\BuildModCommand());
 
 $application->run();

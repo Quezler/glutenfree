@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aaf91425735a8ea5c6819162427c02e3",
+    "content-hash": "16dc5d9ae537f100fff5d85240897356",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1190,6 +1190,73 @@
                 }
             ],
             "time": "2022-02-15T17:04:12+00:00"
+        },
+        {
+            "name": "symfony/filesystem",
+            "version": "v5.4.44",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/filesystem.git",
+                "reference": "76c3818964e9d32be3862c9318ae3ba9aa280ddc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/76c3818964e9d32be3862c9318ae3ba9aa280ddc",
+                "reference": "76c3818964e9d32be3862c9318ae3ba9aa280ddc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/polyfill-ctype": "~1.8",
+                "symfony/polyfill-mbstring": "~1.8",
+                "symfony/polyfill-php80": "^1.16"
+            },
+            "require-dev": {
+                "symfony/process": "^5.4|^6.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Filesystem\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides basic utilities for the filesystem",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/filesystem/tree/v5.4.44"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-09-16T14:52:48+00:00"
         },
         {
             "name": "symfony/finder",
