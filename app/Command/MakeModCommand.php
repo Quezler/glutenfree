@@ -64,7 +64,6 @@ class MakeModCommand extends Command
 EOF;
 
         $output->writeln($info);
-//        dump($info);
 
         file_put_contents("{$mod_directory}/info.json", $info);
         file_put_contents("{$mod_directory}/README.md", '');
