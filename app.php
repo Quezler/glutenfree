@@ -23,5 +23,6 @@ $application->add(new \App\Command\ChangelogCommand());
 $application->add(new \App\Command\WebhookCommand());
 $application->add(new \App\Command\DiscussionCommand());
 $application->add(new \App\Command\NewsletterCommand());
+$application->add(new \App\Command\MakeModCommand());
 
 $application->run();
