@@ -1,0 +1,21 @@
+{
+    "name": "decider-combinator-output-constant-editor",
+    "title": "Decider combinator output constant editor",
+    "description": "Allows you to change the 1 to any number by pressing the I key over the icon.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "base"
+    ]
+}
