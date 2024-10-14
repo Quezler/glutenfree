@@ -23,7 +23,7 @@ class PublishModCommand extends Command
         $mod->build();
 
         $success = $mod->publish(); // "{"success":true,"url":"/api/mods/decider-combinator-output-constant-editor/full"}"
-        $output->writeln("<info>{$success}</info>");
+        $output->writeln($success);
         exec("open https://mods.factorio.com/mod/{$mod->name}/edit");
 
         return Command::SUCCESS;
