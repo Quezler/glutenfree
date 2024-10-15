@@ -1,0 +1,22 @@
+{
+    "name": "no-spoilage",
+    "title": "No spoilage",
+    "description": "There is no spoilage in Ba Sing Se.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": true,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "base",
+        "space-age"
+    ]
+}
