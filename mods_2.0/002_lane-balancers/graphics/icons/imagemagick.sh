@@ -1,20 +1,4 @@
-# splitters="splitter fast-splitter express-splitter tungsten-splitter"
-
-# for splitter in $splitters
-# do
-#   magick $splitter.png -crop 64x64+0+0 $splitter-64x64.png
-
-#   magick $splitter-64x64.png -crop 64x12+0+0 $splitter-top.png
-#   magick $splitter-64x64.png -gravity South -crop 64x24+0+0 $splitter-bottom.png
-
-#   magick $splitter-top.png $splitter-bottom.png -alpha on -append $splitter-1x1.jpg
-#   magick $splitter-1x1.png -gravity center -background none -extent 64x64 $splitter-balancer.png
-# done
-
-# find . -type f -name "*-1x1.jpg" -delete
-# find . -type f -name "*-balancer.png" -delete
-
-tiers="emptystring fast- express- tungsten-"
+tiers="emptystring fast- express- turbo-"
 
 for tier in $tiers
 do

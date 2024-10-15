@@ -68,7 +68,7 @@ local function apply_splitter_texture_to_balancer(splitter, balancer)
   balancer.structure_patch.east.filename = splitter.structure_patch.east.filename
   balancer.structure_patch.west.filename = splitter.structure_patch.west.filename
 
-  if balancer.name == 'tungsten-lane-splitter' then
+  if balancer.name == 'turbo-lane-splitter' then
     override_width_and_height(balancer.structure.north, splitter.structure.north)
     override_width_and_height(balancer.structure.east, splitter.structure.east)
     override_width_and_height(balancer.structure.south, splitter.structure.south)
@@ -114,7 +114,7 @@ local function handle(config)
   data:extend{item, entity}
 
   -- log(entity.name .. ' is an upgrade for ' .. entity_handled_last.name)
-  entity.next_upgrade = nil -- so tungsten doesn't upgrade to red
+  entity.next_upgrade = nil -- so turbo doesn't upgrade to red
   if entity_handled_last then
     -- log(entity_handled_last.name .. ' will upgrade to ' .. entity.name)
     entity_handled_last.next_upgrade = entity.name
@@ -136,15 +136,11 @@ handle({
   order = 'c',
 })
 
--- log(entity_handled_last.name)
-
 if mods['space-age'] then
   handle({
-    prefix = 'tungsten-',
-    tech = 'tungsten-transport-belt',
+    prefix = 'turbo-',
+    tech = 'turbo-transport-belt',
     previous_prefix = 'express-',
     order = 'd',
   })
 end
-
--- log(data.raw['lane-splitter']['tungsten-lane-splitter'].next_upgrade)
