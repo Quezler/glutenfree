@@ -34,7 +34,8 @@ class MakeModCommand extends Command
             'Version: 0.0.1',
             'Date: ????',
             '  Info:',
-            '    - Initial commit'
+            '    - Initial commit',
+            '',
         ]));
 
         $mod_title = ucfirst(str_replace('-', ' ', $mod_name));
