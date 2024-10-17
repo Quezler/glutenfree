@@ -13,11 +13,13 @@ class UpdateDetailsCommand extends Command
 
     protected function configure(): void
     {
-        // --all
+        $this->addOption('all');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if ($input->getOption('all') !== true) throw new \LogicException("Currently its all or nothing");
+
         foreach (ExpansionMods::list() as $expansionMod) {
             $response = $expansionMod->editDetails();
             $output->writeln($response->getBody()->getContents());
