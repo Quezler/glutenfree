@@ -144,12 +144,19 @@ class ExpansionMod
         $changelog = file_get_contents($changelog_pathname = "{$this->get_pathname()}/changelog.txt");
         $lines = explode(PHP_EOL, $changelog);
 
+        $line_to_add = '    - ' . $info;
+
         $info_found = false;
         foreach ($lines as $i => $line) {
+            if ($line == $line_to_add) return;
             if (str_starts_with($line, '  Info:')) $info_found = true;
             if ($info_found && str_starts_with($line, '    - ') === false) {
-                array_splice( $lines, $i + 1, 0, '    - ' . $info);
+                array_splice( $lines, $i + 1, 0, $line_to_add);
                 file_put_contents($changelog_pathname, implode(PHP_EOL, $lines));
+
+                passthru("git add {$changelog_pathname}");
+                passthru('git commit --amend --no-edit');
+
                 return;
             }
         }
