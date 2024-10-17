@@ -113,4 +113,28 @@ class ExpansionMod
             ]
         ]);
     }
+
+    public function tryAddNewSectionToChangelog()
+    {
+        $changelog = file_get_contents($changelog_pathname = "{$this->get_pathname()}/changelog.txt");
+
+        $lines = explode(PHP_EOL, $changelog);
+        if ($lines[2] == 'Date: ????') return;
+
+        preg_match('/^Version: (\d+)\.(\d+)\.(\d+)$/', $lines[1], $matches);
+        if (count($matches) == 0) throw new \LogicException();
+
+        list(, $major, $minor, $patch) = $matches;
+        $patch = intval($patch) + 1;
+
+        $lines = array_merge([
+            '---------------------------------------------------------------------------------------------------',
+            "Version: {$major}.{$minor}.{$patch}",
+            'Date: ????',
+            '  Info:',
+            '    - ?',
+        ], $lines);
+
+        file_put_contents($changelog_pathname, implode(PHP_EOL, $lines));
+    }
 }
