@@ -22,6 +22,10 @@ jobs:
       - run: echo LOCK_PASSWORD=${{ secrets.LOCK_PASSWORD }} >> .env
       - run: echo WUBE_REMEMBER_TOKEN="${{ secrets.WUBE_REMEMBER_TOKEN }}" >> .env
 
+      # 2.0
+      - run: php artisan update:details --all
+
+      # 1.1
       - run: php app.php ci
       - run: php app.php webhook
 

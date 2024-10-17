@@ -4,6 +4,7 @@ namespace App\Misc;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Utils;
+use Psr\Http\Message\ResponseInterface;
 
 class ExpansionMod
 {
@@ -79,5 +80,27 @@ class ExpansionMod
         ]);
 
         return $response->getBody()->getContents();
+    }
+
+    public function editDetails(): ResponseInterface
+    {
+        return $response = (new Client)->post('https://mods.factorio.com/api/v2/mods/edit_details', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $_ENV['FACTORIO_API_KEY'],
+            ],
+            'form_params' => [
+                'mod' => $this->name,
+                'title' => $this->info()['title'],
+                'summary' => $this->info()['description'],
+                'description' => file_get_contents("{$this->get_pathname()}/README.md"),
+                // category
+                // tags
+                // license
+                'homepage' => 'https://discord.gg/ktZNgJcaVA',
+                // deprecated
+                // source_url
+                // faq
+            ]
+        ]);
     }
 }

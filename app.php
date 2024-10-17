@@ -29,5 +29,6 @@ $application->add(new \App\Command\NewsletterCommand());
 $application->add(new \App\Command\MakeModCommand());
 $application->add(new \App\Command\BuildModCommand());
 $application->add(new \App\Command\PublishModCommand());
+$application->add(new \App\Command\UpdateDetailsCommand());
 
 $application->run();
