@@ -32,7 +32,7 @@ class MakeModCommand extends Command
         file_put_contents("{$mod_directory}/changelog.txt", implode(PHP_EOL, [
             '---------------------------------------------------------------------------------------------------',
             'Version: 0.0.1',
-            'Date: ????',
+            'Date: ' . date('Y. m. d'),
             '  Info:',
             '    - Initial commit',
             '',
