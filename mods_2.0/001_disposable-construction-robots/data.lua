@@ -49,7 +49,7 @@ data:extend({
   {
     type = "recipe",
     name = "disposable-construction-robot",
-    category = "handcrafting",    
+    category = "handcrafting",
     ingredients =
     {
       {type = "item", name = "iron-gear-wheel", amount = 2},
