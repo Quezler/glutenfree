@@ -19,11 +19,15 @@ class GitPostCommitCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $modified_mod_directories = $this->getModifiedDirectories();
-        dump($modified_mod_directories);
+//        dump($modified_mod_directories);
+
+        exec('git log -1 HEAD --pretty=format:%s', $commit_message);
+        $commit_message = $commit_message[0];
+        $output->writeln("<comment>$commit_message</comment>");
 
         foreach (ExpansionMods::list() as $expansionMod) {
-            if ($modified_mod_directories[$expansionMod->directory]) {
-//                $expansionMod->tryAddNewSectionToChangelog();
+            if ($modified_mod_directories[$expansionMod->directory] ?? false) {
+                $expansionMod->addInfoToChangelog($commit_message);
             }
         }
 
@@ -40,7 +44,7 @@ class GitPostCommitCommand extends Command
             if (str_starts_with($line, ':')) {
                 preg_match('/mods_2\.0\/(.*)\//', $line, $matches);
                 if (count($matches) > 0) {
-                    $modified_mod_directories[] = $matches[1];
+                    $modified_mod_directories[$matches[1]] = true;
                 }
             }
         }

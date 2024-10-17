@@ -132,9 +132,28 @@ class ExpansionMod
             "Version: {$major}.{$minor}.{$patch}",
             'Date: ????',
             '  Info:',
-            '    - ?',
         ], $lines);
 
         file_put_contents($changelog_pathname, implode(PHP_EOL, $lines));
+    }
+
+    public function addInfoToChangelog(string $info)
+    {
+        $this->tryAddNewSectionToChangelog();
+
+        $changelog = file_get_contents($changelog_pathname = "{$this->get_pathname()}/changelog.txt");
+        $lines = explode(PHP_EOL, $changelog);
+
+        $info_found = false;
+        foreach ($lines as $i => $line) {
+            if (str_starts_with($line, '  Info:')) $info_found = true;
+            if ($info_found && str_starts_with($line, '    - ') === false) {
+                array_splice( $lines, $i + 1, 0, '    - ' . $info);
+                file_put_contents($changelog_pathname, implode(PHP_EOL, $lines));
+                return;
+            }
+        }
+
+        throw new \LogicException();
     }
 }
