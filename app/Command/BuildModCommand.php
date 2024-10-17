@@ -20,7 +20,7 @@ class BuildModCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $mod = ExpansionMods::find($input->getArgument('name'));
+        $mod = ExpansionMods::findOrFail($input->getArgument('name'));
 
         $this->clear_build_directory();
         $mod->build();

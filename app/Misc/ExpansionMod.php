@@ -27,6 +27,7 @@ class ExpansionMod
         return json_decode(file_get_contents("{$this->get_pathname()}/info.json"), true);
     }
 
+    // creates a versioned folder and a zip
     public function build(): void
     {
         $source = __GLUTENFREE__ . '/mods_2.0/' . $this->directory;
@@ -35,6 +36,15 @@ class ExpansionMod
 
         passthru(sprintf("rsync -avr --delete %s/ %s", $source, $dest));
         passthru(sprintf("(cd %s && zip -FSr %s %s)", __GLUTENFREE__ . '/build/', "{$dest}.zip", $zip_name_without_extension));
+    }
+
+    // creates an unversioned folder
+    public function test(): void
+    {
+        $source = __GLUTENFREE__ . '/mods_2.0/' . $this->directory;
+        $dest = '/Users/quezler/Library/Application\ Support/factorio/mods/' . $this->name;
+
+        passthru(sprintf("rsync -avr --delete %s/ %s", $source, $dest));
     }
 
     public function publish(): string

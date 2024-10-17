@@ -19,7 +19,7 @@ class ExpansionMods
         }
     }
 
-    public static function find(string $mod_name): ExpansionMod
+    public static function findOrFail(string $mod_name): ExpansionMod
     {
         foreach (self::list() as $mod)
             if ($mod->name == $mod_name)

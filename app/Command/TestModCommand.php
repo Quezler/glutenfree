@@ -8,23 +8,23 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PublishModCommand extends Command
+class TestModCommand extends Command
 {
-    protected static $defaultName = 'publish:mod';
+    protected static $defaultName = 'test:mod';
 
     protected function configure(): void
     {
         $this->addArgument('name', InputArgument::REQUIRED);
+        $this->addOption('watch');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $mod = ExpansionMods::findOrFail($input->getArgument('name'));
-        $mod->build();
 
-        $success = $mod->publish(); // "{"success":true,"url":"/api/mods/decider-combinator-output-constant-editor/full"}"
-        $output->writeln($success);
-        exec("open https://mods.factorio.com/mod/{$mod->name}/edit");
+        do {
+            $mod->test();
+        } while ($input->getOption('watch') && sleep(2) == 0);
 
         return Command::SUCCESS;
     }
