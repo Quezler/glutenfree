@@ -21,6 +21,8 @@ class UpdateDetailsCommand extends Command
         if ($input->getOption('all') !== true) throw new \LogicException("Currently its all or nothing");
 
         foreach (ExpansionMods::list() as $expansionMod) {
+            if ($expansionMod->majorVersionIsBelowOne()) continue;
+
             $response = $expansionMod->editDetails();
             $output->writeln($response->getBody()->getContents());
         }
