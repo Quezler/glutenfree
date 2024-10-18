@@ -17,6 +17,7 @@ script.on_event(defines.events.on_tick, function(event)
       local current_order = robot_order_queue[1]
       if current_order and current_order.target then -- target can sometimes be optional
         -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
+        -- looks like ->activeNeighbourForcesSet/show-active-forces-around debug is rather generous btw
         assert(construction_robot.teleport(current_order.target.position))
       end
 
