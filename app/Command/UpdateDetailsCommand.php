@@ -23,6 +23,7 @@ class UpdateDetailsCommand extends Command
         foreach (ExpansionMods::list() as $expansionMod) {
             if ($expansionMod->majorVersionIsBelowOne()) continue;
 
+            $output->writeln($expansionMod->name);
             $response = $expansionMod->editDetails();
             $output->writeln($response->getBody()->getContents());
         }
