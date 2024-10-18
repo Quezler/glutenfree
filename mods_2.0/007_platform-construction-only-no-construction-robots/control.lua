@@ -15,12 +15,12 @@ script.on_event(defines.events.on_tick, function(event)
       end
 
       local current_order = robot_order_queue[1]
-      if current_order then
-        log(serpent.block(current_order))
+      if current_order and current_order.target then -- target can sometimes be optional
+        -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
         assert(construction_robot.teleport(current_order.target.position))
       end
 
-      -- log(serpent.block( robot_order_queue ))
+      log(serpent.block( robot_order_queue ))
     end
   end
 end)

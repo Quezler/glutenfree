@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Experiment with teleporting each bot to their target
     - Debug that the target can be nil
+    - Prevent crash when the target is nil
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 17
