@@ -23,6 +23,8 @@ end)
 function Handler.on_surface_created(event)
   storage.surfacedata[event.surface_index] = {
     force_to_constant_combinator = {},
+    struct_auto_increment = 0,
+    structs = {},
   }
 end
 
@@ -45,7 +47,7 @@ function Handler.get_or_create_decider_combinator(surface_index, force_index)
 
   decider_combinator = mod_surface.create_entity{
     name = "awesome-decider-combinator",
-    force = force_index,
+    force = "neutral",
     position = position,
     direction = defines.direction.north,
   }
@@ -53,7 +55,7 @@ function Handler.get_or_create_decider_combinator(surface_index, force_index)
 
   local green_out = decider_combinator.get_wire_connector(defines.wire_connector_id.combinator_output_green, false)
   local green_in  = decider_combinator.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
-  green_out.connect_to(green_in, false, defines.wire_origin.player)
+  assert(green_out.connect_to(green_in, false, defines.wire_origin.player))
 
   --- @diagnostic disable-next-line: inject-field
   decider_combinator.get_control_behavior().parameters = decider_combinator_parameters
@@ -67,7 +69,43 @@ function Handler.get_or_create_decider_combinator(surface_index, force_index)
 end
 
 function Handler.register_awesome_sink(entity)
+  local surfacedata = storage.surfacedata[entity.surface.index]
+
   local decider_combinator = Handler.get_or_create_decider_combinator(entity.surface.index, entity.force.index)
+
+  local mod_surface = game.surfaces[mod_surface_name]
+  local y_offset = 7 * (entity.surface.index - 1)
+
+  local arithmetic_combinator = mod_surface.create_entity{
+    name = "awesome-arithmetic-combinator",
+    force = "neutral",
+    position = {0.5 + surfacedata.struct_auto_increment, 1.0 + y_offset},
+    direction = defines.direction.south,
+  }
+  assert(arithmetic_combinator)
+  --- @diagnostic disable-next-line: inject-field 
+  arithmetic_combinator.get_control_behavior().parameters = arithmetic_combinator_parameters
+  arithmetic_combinator.combinator_description = string.format("force %d (%s)\ngame.player.teleport({%d, %d}, %s)\n[gps=%d,%d,%s]",
+    entity.force.index, game.forces[entity.force.index].name,
+    entity.position.x, entity.position.y, entity.surface.name,
+    entity.position.x, entity.position.y, entity.surface.name
+  )
+
+  local red_out = arithmetic_combinator.get_wire_connector(defines.wire_connector_id.combinator_output_red, false)
+  local red_in  = decider_combinator.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
+  assert(red_out.connect_to(red_in, false, defines.wire_origin.player))
+
+  local awesome_sink = mod_surface.create_entity{
+    name = "awesome-sink",
+    force = "neutral",
+    position = {0.5 + surfacedata.struct_auto_increment, -1.0 + y_offset},
+    direction = defines.direction.south,
+  }
+  assert(awesome_sink, "did auto increment break and did this get placed over an existing transportbelt connectable?")
+  awesome_sink.linked_belt_type = "output"
+  awesome_sink.connect_linked_belts(entity)
+
+  surfacedata.struct_auto_increment = surfacedata.struct_auto_increment + 1
 end
 
 function Handler.on_created_entity(event)

@@ -8,6 +8,7 @@ Date: ????
     - Tweak linked chest prototype
     - Setup the control circuitry for every surface
     - Rework entities on the hidden surface to make room for multiple forces
+    - Create the arithmatic and linked belt on the mod surface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 18
