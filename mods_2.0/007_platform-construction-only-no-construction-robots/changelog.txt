@@ -6,6 +6,7 @@ Date: ????
     - Debug that the target can be nil
     - Prevent crash when the target is nil
     - Leave another comment
+    - Cleanup prototype code
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 17
