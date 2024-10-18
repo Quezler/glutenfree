@@ -105,6 +105,42 @@ function Handler.register_awesome_sink(entity)
   awesome_sink.linked_belt_type = "output"
   awesome_sink.connect_linked_belts(entity)
 
+  local transport_belt = mod_surface.create_entity{
+    name = "transport-belt",
+    force = "neutral",
+    position = {0.5 + surfacedata.struct_auto_increment, -2.0 + y_offset},
+    direction = defines.direction.north,
+  }
+  assert(transport_belt)
+
+  local red2_out = transport_belt.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+  local red2_in  = arithmetic_combinator.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
+  assert(red2_out.connect_to(red2_in, false, defines.wire_origin.player))
+
+  local transport_belt_control = assert(transport_belt.get_control_behavior())
+  --- @diagnostic disable-next-line: inject-field
+  transport_belt_control.read_contents = true
+  --- @diagnostic disable-next-line: undefined-field
+  assert(transport_belt_control.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.pulse )
+
+  local loader_1_1 = mod_surface.create_entity{
+    name = "loader-1x1",
+    force = "neutral",
+    position = {0.5 + surfacedata.struct_auto_increment, -3.0 + y_offset},
+    direction = defines.direction.south,
+  }
+  assert(loader_1_1)
+  loader_1_1.loader_type = "input"
+
+  local infinity_chest = mod_surface.create_entity{
+    name = "infinity-chest",
+    force = "neutral",
+    position = {0.5 + surfacedata.struct_auto_increment, -4.0 + y_offset},
+    direction = defines.direction.north,
+  }
+  assert(infinity_chest)
+  infinity_chest.remove_unfiltered_items = true
+
   surfacedata.struct_auto_increment = surfacedata.struct_auto_increment + 1
 end
 
