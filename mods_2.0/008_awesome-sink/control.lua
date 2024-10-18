@@ -8,6 +8,7 @@ local Handler = {}
 script.on_init(function ()
   storage.version = 0
   storage.surfacedata = {}
+  storage.deathrattles = {}
 
   local mod_surface = game.surfaces[mod_surface_name]
   assert(surface == nil, "contact the mod author for help with world that previously already had this mod installed.")
@@ -23,8 +24,7 @@ end)
 function Handler.on_surface_created(event)
   storage.surfacedata[event.surface_index] = {
     force_to_constant_combinator = {},
-    struct_auto_increment = 0,
-    structs = {},
+    auto_increment = 0,
   }
 end
 
@@ -79,7 +79,7 @@ function Handler.register_awesome_sink(entity)
   local arithmetic_combinator = mod_surface.create_entity{
     name = "awesome-arithmetic-combinator",
     force = "neutral",
-    position = {0.5 + surfacedata.struct_auto_increment, 1.0 + y_offset},
+    position = {0.5 + surfacedata.auto_increment, 1.0 + y_offset},
     direction = defines.direction.south,
   }
   assert(arithmetic_combinator)
@@ -98,7 +98,7 @@ function Handler.register_awesome_sink(entity)
   local awesome_sink = mod_surface.create_entity{
     name = "awesome-sink",
     force = "neutral",
-    position = {0.5 + surfacedata.struct_auto_increment, -1.0 + y_offset},
+    position = {0.5 + surfacedata.auto_increment, -1.0 + y_offset},
     direction = defines.direction.south,
   }
   assert(awesome_sink, "did auto increment break and did this get placed over an existing transportbelt connectable?")
@@ -108,7 +108,7 @@ function Handler.register_awesome_sink(entity)
   local transport_belt = mod_surface.create_entity{
     name = "transport-belt",
     force = "neutral",
-    position = {0.5 + surfacedata.struct_auto_increment, -2.0 + y_offset},
+    position = {0.5 + surfacedata.auto_increment, -2.0 + y_offset},
     direction = defines.direction.north,
   }
   assert(transport_belt)
@@ -126,7 +126,7 @@ function Handler.register_awesome_sink(entity)
   local loader_1_1 = mod_surface.create_entity{
     name = "loader-1x1",
     force = "neutral",
-    position = {0.5 + surfacedata.struct_auto_increment, -3.0 + y_offset},
+    position = {0.5 + surfacedata.auto_increment, -3.0 + y_offset},
     direction = defines.direction.south,
   }
   assert(loader_1_1)
@@ -135,13 +135,21 @@ function Handler.register_awesome_sink(entity)
   local infinity_chest = mod_surface.create_entity{
     name = "infinity-chest",
     force = "neutral",
-    position = {0.5 + surfacedata.struct_auto_increment, -4.0 + y_offset},
+    position = {0.5 + surfacedata.auto_increment, -4.0 + y_offset},
     direction = defines.direction.north,
   }
   assert(infinity_chest)
   infinity_chest.remove_unfiltered_items = true
 
-  surfacedata.struct_auto_increment = surfacedata.struct_auto_increment + 1
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {
+    arithmetic_combinator,
+    awesome_sink,
+    transport_belt,
+    loader_1_1,
+    infinity_chest
+  }
+
+  surfacedata.auto_increment = surfacedata.auto_increment + 1
 end
 
 function Handler.on_created_entity(event)
@@ -168,3 +176,13 @@ for _, event in ipairs({
     {filter = "name", name = "awesome-shop"},
   })
 end
+
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    for _, entity in pairs(deathrattle) do
+      entity.destroy()
+    end
+  end
+end)
