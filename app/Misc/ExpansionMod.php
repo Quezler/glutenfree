@@ -114,6 +114,14 @@ class ExpansionMod
         ]);
     }
 
+    public function getLastVersionFromChangelog(): string
+    {
+        $changelog = file_get_contents($changelog_pathname = "{$this->get_pathname()}/changelog.txt");
+        $lines = explode(PHP_EOL, $changelog);
+
+        return explode('Version: ', $lines[1])[1];
+    }
+
     public function tryAddNewSectionToChangelog()
     {
         $changelog = file_get_contents($changelog_pathname = "{$this->get_pathname()}/changelog.txt");
@@ -121,15 +129,21 @@ class ExpansionMod
         $lines = explode(PHP_EOL, $changelog);
         if ($lines[2] == 'Date: ????') return;
 
-        preg_match('/^Version: (\d+)\.(\d+)\.(\d+)$/', $lines[1], $matches);
-        if (count($matches) == 0) throw new \LogicException();
+        $next_version = $this->info()['version'];
 
-        list(, $major, $minor, $patch) = $matches;
-        $patch = intval($patch) + 1;
+        if ($next_version == $this->getLastVersionFromChangelog()) {
+            preg_match('/^Version: (\d+)\.(\d+)\.(\d+)$/', $lines[1], $matches);
+            if (count($matches) == 0) throw new \LogicException();
+
+            list(, $major, $minor, $patch) = $matches;
+            $patch = intval($patch) + 1;
+
+            $next_version = "{$major}.{$minor}.{$patch}";
+        }
 
         $lines = array_merge([
             '---------------------------------------------------------------------------------------------------',
-            "Version: {$major}.{$minor}.{$patch}",
+            "Version: {$next_version}",
             'Date: ????',
             '  Info:',
         ], $lines);
