@@ -38,3 +38,15 @@ data:extend{
   sink, sink_item,
   shop, shop_item,
 }
+
+for _, prototype in ipairs({
+  data.raw["decider-combinator"]["decider-combinator"],
+  data.raw["arithmetic-combinator"]["arithmetic-combinator"],
+}) do
+  local awesome_combinator = table.deepcopy(prototype)
+  awesome_combinator.name = "awesome-" .. awesome_combinator.name
+  awesome_combinator.energy_source = {type = "void"}
+  awesome_combinator.minable.result = nil
+  awesome_combinator.hidden_in_factoriopedia = true
+  data:extend{awesome_combinator}
+end
