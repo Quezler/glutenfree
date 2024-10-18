@@ -6,6 +6,7 @@ Date: ????
     - Setup the entity and item prototypes
     - Prepare tooling needed for the custom surface
     - Tweak linked chest prototype
+    - Setup the control circuitry for every surface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 18
