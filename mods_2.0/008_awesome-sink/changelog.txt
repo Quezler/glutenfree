@@ -5,6 +5,7 @@ Date: ????
     - Prepare awesome shop and sink graphics
     - Setup the entity and item prototypes
     - Prepare tooling needed for the custom surface
+    - Tweak linked chest prototype
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 18

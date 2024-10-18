@@ -34,6 +34,11 @@ shop_item.weight = 10 * tons
 sink_item.stack_size = 1
 shop_item.stack_size = 1
 
+shop.inventory_size = 48
+shop.inventory_type = "normal"
+shop.gui_mode = "none"
+table.insert(shop.flags, "no-automated-item-insertion")
+
 data:extend{
   sink, sink_item,
   shop, shop_item,
