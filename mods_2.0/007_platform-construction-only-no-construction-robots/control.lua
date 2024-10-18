@@ -16,10 +16,11 @@ script.on_event(defines.events.on_tick, function(event)
 
       local current_order = robot_order_queue[1]
       if current_order then
+        log(serpent.block(current_order))
         assert(construction_robot.teleport(current_order.target.position))
       end
 
-      log(serpent.block( robot_order_queue ))
+      -- log(serpent.block( robot_order_queue ))
     end
   end
 end)
