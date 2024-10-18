@@ -42,7 +42,7 @@ class GitPostCommitCommand extends Command
 
         foreach ($lines as $line) {
             if (str_starts_with($line, ':')) {
-                preg_match('/mods_2\.0\/(.*)\//', $line, $matches);
+                preg_match('/mods_2\.0\/(.*)\//U', $line, $matches);
                 if (count($matches) > 0) {
                     $modified_mod_directories[$matches[1]] = true;
                 }
