@@ -181,9 +181,9 @@ class ExpansionMod
         throw new \LogicException();
     }
 
-    public function majorVersionIsBelowOne(): bool
+    public function majorVersionIsZero(): bool
     {
         $version = explode('.', $this->info()['version']);
-        return $version[0] != "0";
+        return $version[0] == "0";
     }
 }
