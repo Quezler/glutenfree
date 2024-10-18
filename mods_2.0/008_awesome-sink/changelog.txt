@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Prepare awesome shop and sink graphics
+    - Setup the entity and item prototypes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 18
