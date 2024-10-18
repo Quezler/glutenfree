@@ -7,6 +7,7 @@ Date: ????
     - Prepare tooling needed for the custom surface
     - Tweak linked chest prototype
     - Setup the control circuitry for every surface
+    - Rework entities on the hidden surface to make room for multiple forces
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 18
