@@ -23,14 +23,14 @@ end)
 
 function Handler.on_surface_created(event)
   storage.surfacedata[event.surface_index] = {
-    force_to_constant_combinator = {},
+    force_to_decider_combinator = {},
     auto_increment = 0,
   }
 end
 
 function Handler.on_surface_deleted(event)
-  for _, constant_combinator in pairs(storage.surfacedata[event.surface_index].force_to_constant_combinator) do
-    constant_combinator.destroy()
+  for _, decider_combinator in pairs(storage.surfacedata[event.surface_index].force_to_decider_combinator) do
+    decider_combinator.destroy()
   end
 
   storage.surfacedata[event.surface_index] = nil
@@ -40,7 +40,7 @@ script.on_event(defines.events.on_surface_created, Handler.on_surface_created)
 script.on_event(defines.events.on_surface_deleted, Handler.on_surface_deleted)
 
 function Handler.get_or_create_decider_combinator(surface_index, force_index)
-  local decider_combinator = storage.surfacedata[surface_index].force_to_constant_combinator[force_index]
+  local decider_combinator = storage.surfacedata[surface_index].force_to_decider_combinator[force_index]
   if decider_combinator then return decider_combinator end
 
   local mod_surface = game.surfaces[mod_surface_name]
@@ -68,7 +68,7 @@ function Handler.get_or_create_decider_combinator(surface_index, force_index)
     force_index, game.forces[force_index].name
   )
 
-  storage.surfacedata[surface_index].force_to_constant_combinator[force_index] = decider_combinator
+  storage.surfacedata[surface_index].force_to_decider_combinator[force_index] = decider_combinator
   return decider_combinator
 end
 
@@ -189,4 +189,60 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       entity.destroy()
     end
   end
+end)
+
+function get_next_quality(quality_name)
+  return prototypes.quality[quality_name or "normal"].next
+end
+
+function Handler.flash_decider_combinator_outputs()
+  for surface_index, surfacedata in pairs(storage.surfacedata) do
+    for force_index, decider_combinator in pairs(surfacedata.force_to_decider_combinator) do
+      local control_behavior = decider_combinator.get_control_behavior()
+      local green_network = decider_combinator.get_circuit_network(defines.wire_connector_id.combinator_output_green)
+
+      for _, signal_and_count in ipairs(green_network.signals or {}) do
+
+        local payout = math.floor(signal_and_count.count / 1000)
+        if payout > 0 then
+
+          local next_quality = get_next_quality(signal_and_count.signal.quality)
+          if next_quality then
+
+            local inventory = game.forces[force_index].get_linked_inventory("awesome-shop", surface_index)
+            if inventory then
+
+              local inserted = inventory.insert({name=signal_and_count.signal.name, count=payout, quality=next_quality})
+              if inserted > 0 then
+
+                control_behavior.add_output({
+                  signal = {
+                    type = "item",
+                    name = signal_and_count.signal.name,
+                    quality = signal_and_count.signal.quality,
+                  },
+                  constant = -(payout * 1000),
+                  copy_count_from_input = false,
+                })
+              end
+            end
+          end
+        end
+      end
+
+    end
+  end
+end
+
+function Handler.reset_decider_combinator_outputs()
+  for _, surfacedata in pairs(storage.surfacedata) do
+    for _, decider_combinator in pairs(surfacedata.force_to_decider_combinator) do
+      decider_combinator.get_control_behavior().parameters = decider_combinator_parameters
+    end
+  end
+end
+
+script.on_event(defines.events.on_tick, function(event)
+  if (event.tick + 1) % 60 == 0 then Handler.flash_decider_combinator_outputs() end
+  if (event.tick + 0) % 60 == 0 then Handler.reset_decider_combinator_outputs() end
 end)

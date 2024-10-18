@@ -1,11 +1,11 @@
 return {
   conditions = {
     {
-      comparator = ">",
+      comparator = "≠",
       compare_type = "or",
       constant = 0,
       first_signal = {
-        name = "signal-each",
+        name = "signal-everything",
         type = "virtual"
       },
       first_signal_networks = {
@@ -26,7 +26,7 @@ return {
         red = true
       },
       signal = {
-        name = "signal-each",
+        name = "signal-everything",
         type = "virtual"
       }
     }
