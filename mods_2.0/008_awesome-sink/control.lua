@@ -29,7 +29,11 @@ function Handler.on_surface_created(event)
 end
 
 function Handler.on_surface_deleted(event)
-  error("surface deletion not handled yet.")
+  for _, constant_combinator in pairs(storage.surfacedata[event.surface_index].force_to_constant_combinator) do
+    constant_combinator.destroy()
+  end
+
+  storage.surfacedata[event.surface_index] = nil
 end
 
 script.on_event(defines.events.on_surface_created, Handler.on_surface_created)

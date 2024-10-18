@@ -11,6 +11,7 @@ Date: ????
     - Create the arithmatic and linked belt on the mod surface
     - Create the belt, loader & infinity chest
     - Remove right side stuff when the linked belt vanishes
+    - Handle surface deletion
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 18
