@@ -52,6 +52,7 @@ for _, prototype in ipairs({
   awesome_combinator.name = "awesome-" .. awesome_combinator.name
   awesome_combinator.energy_source = {type = "void"}
   awesome_combinator.minable.result = nil
+  awesome_combinator.hidden = true
   awesome_combinator.hidden_in_factoriopedia = true
   data:extend{awesome_combinator}
 end
