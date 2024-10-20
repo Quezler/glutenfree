@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Payout every 1000 items
+    - So apparently modules do not draw on small selection boxes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18

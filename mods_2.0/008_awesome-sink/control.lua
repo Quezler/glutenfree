@@ -161,6 +161,14 @@ function Handler.on_created_entity(event)
 
   if entity.name == "awesome-sink" then
     Handler.register_awesome_sink(entity)
+  elseif entity.name == "awesome-sink-gui" then
+    entity.surface.create_entity{
+      name = "awesome-sink",
+      force = entity.force,
+      position = entity.position,
+      direction = entity.direction,
+      raise_built = true,
+    }
   elseif entity.name == "awesome-shop" then
     entity.link_id = entity.surface.index
   else
@@ -178,6 +186,7 @@ for _, event in ipairs({
   script.on_event(event, Handler.on_created_entity, {
     {filter = "name", name = "awesome-sink"},
     {filter = "name", name = "awesome-shop"},
+    {filter = "name", name = "awesome-sink-gui"},
   })
 end
 
@@ -245,4 +254,12 @@ end
 script.on_event(defines.events.on_tick, function(event)
   if (event.tick + 1) % 60 == 0 then Handler.flash_decider_combinator_outputs() end
   if (event.tick + 0) % 60 == 0 then Handler.reset_decider_combinator_outputs() end
+end)
+
+script.on_event(defines.events.on_player_rotated_entity, function(event)
+  assert(event.entity)
+
+  if event.entity.name == "awesome-sink-gui" then
+    event.entity.surface.find_entity("awesome-sink", event.entity.position).direction = event.entity.direction
+  end
 end)
