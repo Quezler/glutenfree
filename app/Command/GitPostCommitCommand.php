@@ -24,6 +24,7 @@ class GitPostCommitCommand extends Command
         exec('git log -1 HEAD --pretty=format:%s', $commit_message);
         $commit_message = $commit_message[0];
         $output->writeln("<comment>$commit_message</comment>");
+        if ($commit_message == "Bump version") return Command::SUCCESS;
 
         foreach (ExpansionMods::list() as $expansionMod) {
             if ($modified_mod_directories[$expansionMod->directory] ?? false) {
