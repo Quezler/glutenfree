@@ -74,7 +74,8 @@ function Handler.get_or_create_decider_combinator(surface_index, force_index)
   return decider_combinator
 end
 
-function Handler.register_awesome_sink(entity)
+function Handler.register_awesome_sink(awesome_sink, awesome_sink_gui)
+  local entity = awesome_sink
   local surfacedata = storage.surfacedata[entity.surface.index]
 
   local decider_combinator = Handler.get_or_create_decider_combinator(entity.surface.index, entity.force.index)
@@ -152,87 +153,73 @@ function Handler.register_awesome_sink(entity)
     awesome_sink,
     transport_belt,
     loader_1_1,
-    infinity_chest
+    infinity_chest,
+  }
+
+  storage.assembler_to_arithmetic_map[awesome_sink_gui.unit_number] = {
+    assembler = entity,
+    assembler_unit_number = entity.unit_number,
+
+    arithmetic = arithmetic_combinator,
+    arithmetic_unit_number = arithmetic_combinator.unit_number,
+
+    last_quality = 0,
   }
 
   surfacedata.auto_increment = surfacedata.auto_increment + 1
 end
 
--- function Handler.find_entity_or_revive_ghost(surface, name, position)
---   local entities = surface.find_entities_filtered{
---     name = name,
---     position = position,
---     limit = 1,
---   }
-
---   if entities[1] then return entities[1] end
-
---   local ghosts = surface.find_entities_filtered{
---     ghost_name = name,
---     position = position,
---     limit = 1,
---   }
-
---   if entities[1] then return entities[1] end
-
---   if ghosts[1] then
---     local _, entity = ghosts[1].revive({})
---     if entity then return entity end
---   end
--- end
-
-local function surface_find_ghost(surface, name, position)
-  local ghosts = surface.find_entities_filtered{
-    ghost_name = name,
+function Handler.findentity_or_reviveentity_or_createentity(surface, force, name, position)
+  local entities = surface.find_entities_filtered{
+    name = name,
+    force = force,
     position = position,
     limit = 1,
   }
 
   if entities[1] then return entities[1] end
+
+  local ghosts = surface.find_entities_filtered{
+    ghost_name = name,
+    force = force,
+    position = position,
+    limit = 1,
+  }
+
+  if entities[1] then return entities[1] end
+
+  if ghosts[1] then
+    local _, entity = ghosts[1].revive({})
+    if entity then return entity end
+  end
+
+  return surface.create_entity{
+    name = name,
+    force = force,
+    position = position,
+  }
+end
+
+function Handler.create_at_position(surface, force, position, direction, quality)
+  local awesome_sink     = Handler.findentity_or_reviveentity_or_createentity(surface, force, position, "awesome-sink")
+  local awesome_sink_gui = Handler.findentity_or_reviveentity_or_createentity(surface, force, position, "awesome-sink-gui")
+
+  awesome_sink    .direction = direction
+  awesome_sink_gui.direction = direction
+
+  awesome_sink    .quality = quality
+  awesome_sink_gui.quality = quality
+
+  Handler.register_awesome_sink(awesome_sink, awesome_sink_gui)
 end
 
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
   if entity.name == "awesome-sink" then
-    local awesome_sink_gui = entity.surface.find_entity("awesome-sink-gui", entity.position)
-    assert(awesome_sink_gui == nil)
-
-    awesome_sink_gui = surface_find_ghost(entity.surface, "awesome-sink-gui", entity.position)
-    if awesome_sink_gui == nil then
-      awesome_sink_gui = entity.surface.create_entity{
-        name = "awesome-sink-gui",
-        force = entity.force,
-        position = entity.position,
-        direction = entity.direction,
-      }
-    end
-
-    assert(entity.valid)
-    assert(awesome_sink_gui.valid)
-
-    Handler.register_awesome_sink(entity)
+    Handler.create_at_position(entity.surface, entity.force, entity.position, entity.direction, entity.quality)
   elseif entity.name == "awesome-sink-gui" then
-    local awesome_sink = entity.surface.find_entity("awesome-sink", entity.position)
-    assert(awesome_sink == nil)
-
-    awesome_sink = surface_find_ghost(entity.surface, "awesome-sink", entity.position)
-    if awesome_sink == nil then
-      awesome_sink = entity.surface.create_entity{
-        name = "awesome-sink",
-        force = entity.force,
-        position = entity.position,
-        direction = entity.direction,
-      }
-    end
-
-    assert(entity.valid)
-    assert(awesome_sink.valid)
-
-    storage.assembler_to_arithmetic_map[entity.unit_number] = {
-      assembler = entity,
-      arithmetic = "get the awesome sink, folow the link, then find the arithmetic combinator below it"
-    }
+    Handler.create_at_position(entity.surface, entity.force, entity.position, entity.direction, entity.quality)
   elseif entity.name == "awesome-shop" then
     entity.link_id = entity.surface.index
   else
@@ -266,6 +253,23 @@ end)
 
 function get_next_quality(quality_name)
   return prototypes.quality[quality_name or "normal"].next
+end
+
+function Handler.sync_module_qualities_with_arithmetic_combinators()
+  -- math.floor(num + 0.5)
+  for key, map in pairs(storage.assembler_to_arithmetic_map) do
+    -- converts two place decimal into nearest full number
+    local quality = math.floor((map.assembler.effects["quality"] or 0) * 100 + 0.5)
+    if map.last_quality ~= quality then
+      map.last_quality = quality
+
+      local parameters = map.arithmetic.parameters
+      parameters.second_constant = quality
+      map.arithmetic.parameters = parameters
+
+      log(string.format("each item from %d now counts as %d", key, quality))
+    end
+  end
 end
 
 function Handler.flash_decider_combinator_outputs()
@@ -316,6 +320,7 @@ function Handler.reset_decider_combinator_outputs()
 end
 
 script.on_event(defines.events.on_tick, function(event)
+  if (event.tick + 2) % 60 == 0 then Handler.sync_module_qualities_with_arithmetic_combinators() end
   if (event.tick + 1) % 60 == 0 then Handler.flash_decider_combinator_outputs() end
   if (event.tick + 0) % 60 == 0 then Handler.reset_decider_combinator_outputs() end
 end)

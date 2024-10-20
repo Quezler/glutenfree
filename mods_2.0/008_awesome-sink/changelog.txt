@@ -14,6 +14,7 @@ Date: ????
     - Match the sink's assembler name with the linked belt
     - Conceptualize lookup map
     - Prepare to create the other entity in eachothers event
+    - Rework creation workflow, and sync module effects
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18
