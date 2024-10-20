@@ -103,3 +103,38 @@ local assembler = {
 }
 
 data:extend{assembler}
+
+data:extend{
+  {
+    type = "recipe",
+    name = "awesome-sink",
+    enabled = false,
+    energy_required = 10,
+    ingredients =
+    {
+      {type = "item", name = "underground-belt", amount = 1},
+      {type = "item", name = "assembling-machine-1", amount = 1},
+    },
+    results = {{type = "item", name = sink_item.name, amount = 1}},
+  },
+  {
+    type = "recipe",
+    name = "awesome-shop",
+    enabled = false,
+    energy_required = 10,
+    ingredients =
+    {
+      {type = "item", name = "steel-chest", amount = 1},
+      {type = "item", name = "small-lamp", amount = 1},
+    },
+    results = {{type = "item", name = shop_item.name, amount = 1}},
+  },
+}
+
+table.insert(data.raw["technology"]["quality-module"].effects, {type = "unlock-recipe", recipe = "awesome-sink"})
+table.insert(data.raw["technology"]["quality-module"].effects, {type = "unlock-recipe", recipe = "awesome-shop"})
+
+sink_item.subgroup = "module"
+shop_item.subgroup = "module"
+sink_item.order = "e[awesome]-a[awesome-sink]"
+shop_item.order = "e[awesome]-b[awesome-shop]"
