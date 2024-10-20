@@ -11,6 +11,7 @@ Date: ????
     - Allow the assembler sink to be placed with the underground
     - Make the assembling machine minable
     - Hide awesome combinators from circuit filters
+    - Match the sink's assembler name with the linked belt
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18
