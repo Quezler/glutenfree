@@ -263,3 +263,11 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
     event.entity.surface.find_entity("awesome-sink", event.entity.position).direction = event.entity.direction
   end
 end)
+
+script.on_event(defines.events.on_player_flipped_entity, function(event)
+  assert(event.entity)
+
+  if event.entity.name == "awesome-sink-gui" then
+    event.entity.surface.find_entity("awesome-sink", event.entity.position).direction = event.entity.direction
+  end
+end)

@@ -78,7 +78,7 @@ local assembler = {
 
   energy_usage = "1kW",
   energy_source = {type = "void"},
-  crafting_speed = 15, -- todo: ask for an interface request that assembling machines can opt out of quality boosts
+  crafting_speed = 1, -- todo: ask for an interface request that assembling machines can opt out of quality boosts
 
   selection_priority = 51,
   icon_draw_specification = {scale = 0},
