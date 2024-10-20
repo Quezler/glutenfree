@@ -27,7 +27,6 @@ function Handler.on_surface_created(event)
   storage.surfacedata[event.surface_index] = {
     force_to_decider_combinator = {},
     auto_increment = 0,
-    force_to_awesome_sinks = {}, -- gc upon accessing
   }
 end
 
@@ -177,9 +176,6 @@ function Handler.register_awesome_sink(awesome_sink, awesome_sink_gui)
     last_points = 0,
   }
 
-  surfacedata.force_to_awesome_sinks[awesome_sink.force.index] = surfacedata.force_to_awesome_sinks[awesome_sink.force.index] or {}
-  table.insert(surfacedata.force_to_awesome_sinks[awesome_sink.force.index], awesome_sink)
-
   surfacedata.auto_increment = surfacedata.auto_increment + 1
 end
 
@@ -288,7 +284,6 @@ for _, quality_prototype in pairs(prototypes.quality) do
   next_quality[quality_prototype.name] = quality_prototype.next
 end
 
-local spill_immediately = {}
 function get_spoil_result(item_name)
   local prototype = prototypes.item[item_name]
 
@@ -298,14 +293,11 @@ function get_spoil_result(item_name)
   local spoil_result = prototype.spoil_result
   if spoil_result then return get_spoil_result(spoil_result.name) end -- in case of spoilage chains
 
-  -- spill so it spoils in the outside world
   if prototype.spoil_to_trigger_result ~= nil then
-    spill_immediately[item_name] = true
-    log(item_name)
-    return nil
+    return nil -- this item might spawn biters
   end
 
-  -- this item spoils but into nothing
+  -- this item spoils but nothing will happen
   return nil
 end
 
@@ -314,46 +306,7 @@ for _, item_prototype in pairs(prototypes.item) do
   spoil_result[item_prototype.name] = get_spoil_result(item_prototype.name)
 end
 
--- log('spill_immediately: ' .. serpent.block(spill_immediately))
-
-function Handler.get_random_awesome_sink(surface_index, force_index)
-  local awesome_sinks = storage.surfacedata[force_index].force_to_awesome_sinks[force_index]
-  for i = #awesome_sinks, 1, -1 do
-    if awesome_sinks[i].valid == false then
-      table.remove(awesome_sinks, i)
-    end
-  end
-
-  return awesome_sinks[math.random(1, #awesome_sinks)]
-end
-
 function Handler.handle_signal(surface_index, force_index, cb, signal_and_count)
-  if spill_immediately[signal_and_count.signal.name] then
-    local surface = game.surfaces[surface_index]
-
-    surface.spill_item_stack{
-      position = Handler.get_random_awesome_sink(surface_index, force_index).position,
-      stack = {
-        name = signal_and_count.signal.name,
-        count = signal_and_count.count,
-        quality = signal_and_count.signal.quality,
-        spoil_percent = 0.99,
-      },
-      allow_belts = false,
-    }
-
-    cb.add_output({
-      signal = {
-        type = "item",
-        name = signal_and_count.signal.name,
-        quality = signal_and_count.signal.quality,
-      },
-      constant = -signal_and_count.count,
-      copy_count_from_input = false,
-    })
-    return
-  end
-
   local payout = math.floor(signal_and_count.count / 1000)
   if payout == 0 then return end
 
