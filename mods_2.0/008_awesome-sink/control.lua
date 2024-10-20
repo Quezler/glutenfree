@@ -158,22 +158,76 @@ function Handler.register_awesome_sink(entity)
   surfacedata.auto_increment = surfacedata.auto_increment + 1
 end
 
+-- function Handler.find_entity_or_revive_ghost(surface, name, position)
+--   local entities = surface.find_entities_filtered{
+--     name = name,
+--     position = position,
+--     limit = 1,
+--   }
+
+--   if entities[1] then return entities[1] end
+
+--   local ghosts = surface.find_entities_filtered{
+--     ghost_name = name,
+--     position = position,
+--     limit = 1,
+--   }
+
+--   if entities[1] then return entities[1] end
+
+--   if ghosts[1] then
+--     local _, entity = ghosts[1].revive({})
+--     if entity then return entity end
+--   end
+-- end
+
+local function surface_find_ghost(surface, name, position)
+  local ghosts = surface.find_entities_filtered{
+    ghost_name = name,
+    position = position,
+    limit = 1,
+  }
+
+  if entities[1] then return entities[1] end
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
   if entity.name == "awesome-sink" then
+    local awesome_sink_gui = entity.surface.find_entity("awesome-sink-gui", entity.position)
+    assert(awesome_sink_gui == nil)
+
+    awesome_sink_gui = surface_find_ghost(entity.surface, "awesome-sink-gui", entity.position)
+    if awesome_sink_gui == nil then
+      awesome_sink_gui = entity.surface.create_entity{
+        name = "awesome-sink-gui",
+        force = entity.force,
+        position = entity.position,
+        direction = entity.direction,
+      }
+    end
+
+    assert(entity.valid)
+    assert(awesome_sink_gui.valid)
+
     Handler.register_awesome_sink(entity)
   elseif entity.name == "awesome-sink-gui" then
     local awesome_sink = entity.surface.find_entity("awesome-sink", entity.position)
     assert(awesome_sink == nil)
 
-    awesome_sink = entity.surface.create_entity{
-      name = "awesome-sink",
-      force = entity.force,
-      position = entity.position,
-      direction = entity.direction,
-      raise_built = true,
-    }
+    awesome_sink = surface_find_ghost(entity.surface, "awesome-sink", entity.position)
+    if awesome_sink == nil then
+      awesome_sink = entity.surface.create_entity{
+        name = "awesome-sink",
+        force = entity.force,
+        position = entity.position,
+        direction = entity.direction,
+      }
+    end
+
+    assert(entity.valid)
+    assert(awesome_sink.valid)
 
     storage.assembler_to_arithmetic_map[entity.unit_number] = {
       assembler = entity,
