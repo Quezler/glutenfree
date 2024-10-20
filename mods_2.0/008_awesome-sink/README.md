@@ -1,4 +1,29 @@
+Greetings pione.. ahem engineer,
+
+This mod allows you to get quality items without the random aspect,
+simply place down an awesome sink and insert quality modules into the slots,
+then each time you insert enough of an item (100 / total module quality of the sink) you get the next tier.
+(note: ~~there are no notes~~ quality does not skip a tier, you get exactly one of the next tier of quality)
+
+Your reward items can be withdrawn from the awesome shop, points are shared between all your sinks on the surface.
+
+Legendary items and items that spoil into enemies currently do nothing, but please do not sink, wube does not waste.
+
+The sink is limited to 15 items per second, but you can place multiple sinks and even use belt stacking.
+
+For balance reasons the sink is currently limited to 2 module slots (though arguably it should even be 1),
+this mod currently does not nerf quality gained from normal assemblers, so you "could" cheese it to get the most overall.
+
+todo:
+- a gui when you open the shop that shows the progress for each tracked item, ideally with a search field and quality dropdown
+- better graphics, ideally 3x3 or bigger assembling machine that can be rotated 4 ways (help on both these points will be neat)
+
+Final note: this mod has gone through intensive development/testing over the last few days, 1.0.0 will be deemed stable,
+however note that future versions of this mod are likely to exist that are totally different,
+therefore keep the "major" version number in mind when picking your ~~poison~~ upgrades.
+
 # Concept
+(note: written before typing any code, the above is acurate)
 
 Items are inserted either via belts or inserters into a loader or linked chest,
 on a hidden surface it'll pulse count and void the items into lava or something.

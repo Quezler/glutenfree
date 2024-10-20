@@ -25,6 +25,7 @@ Date: ????
     - Support removing an awesome sink
     - Attempt to deal spoil_to_trigger_result
     - Revert spilling/spawning biter/pentapod eggs
+    - Update readme and set a thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18
