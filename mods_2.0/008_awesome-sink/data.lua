@@ -80,7 +80,7 @@ local assembler = {
   energy_source = {type = "void"},
   crafting_speed = 0.5,
 
-  icon_draw_specification = {scale = 0.35},
+  icon_draw_specification = {scale = 0},
   selection_priority = 51,
 }
 
@@ -119,6 +119,10 @@ local assembler = {
 --   }})
 -- }
 
-assembler.selection_box = {{-1, -1}, {1, 1}}
+-- assembler.selection_box = {{-1, -1}, {1, 1}}
+assembler.icons_positioning =
+{
+  {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 0}, max_icon_rows = 1, max_icons_per_row = 2, scale = 0.45}
+}
 
 data:extend{assembler}
