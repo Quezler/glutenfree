@@ -93,6 +93,7 @@ local assembler = {
   vector_to_place_result = {0, -1}, -- without this the furnace doesn't want to rotate, though assembling machines will.
 
   placeable_by = {item = sink_item.name, count = 1},
+  minable = sink.minable,
 }
 
 data:extend{assembler}
