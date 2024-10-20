@@ -286,10 +286,37 @@ function get_spoil_result(item_name)
   if spoil_result then return get_spoil_result(spoil_result.name) end -- in case of spoilage chains
 
   -- if we got here the item spoils but into nothing, we'll decrement the counter and give nothing
-  assert(spoil_result ~= nil) -- todo: allow not returning anything
 
   -- but, what if the item does something when it spoils? we'll get there eventually and fix it
   assert(prototype.spoil_to_trigger_result == nil, "items that e.g. spawn entities are not supported atm.")
+end
+
+function Handler.handle_signal(surface_index, force_index, cb, signal_and_count)
+  local payout = math.floor(signal_and_count.count / 1000)
+  if payout == 0 then return end
+
+  local next_quality = get_next_quality(signal_and_count.signal.quality)
+  if next_quality == nil then return end
+
+  local item_to_insert = get_spoil_result(signal_and_count.signal.name)
+  if item_to_insert == nil then return end
+
+  local inventory = game.forces[force_index].get_linked_inventory("awesome-shop", surface_index)
+  if inventory == nil then return end
+
+  local inserted = inventory.insert({name =item_to_insert, count=payout, quality=next_quality})
+  if inserted == 0 then return end
+
+  -- this output will be removed again in the next tick, effectively subtracting the signal
+  cb.add_output({
+    signal = {
+      type = "item",
+      name = signal_and_count.signal.name,
+      quality = signal_and_count.signal.quality,
+    },
+    constant = -(payout * 1000),
+    copy_count_from_input = false,
+  })
 end
 
 function Handler.flash_decider_combinator_outputs()
@@ -299,33 +326,7 @@ function Handler.flash_decider_combinator_outputs()
       local green_network = decider_combinator.get_circuit_network(defines.wire_connector_id.combinator_output_green)
 
       for _, signal_and_count in ipairs(green_network.signals or {}) do
-
-        local payout = math.floor(signal_and_count.count / 1000)
-        if payout > 0 then
-
-          local next_quality = get_next_quality(signal_and_count.signal.quality)
-          if next_quality then
-            local item_to_insert = get_spoil_result(signal_and_count.signal.name)
-
-            local inventory = game.forces[force_index].get_linked_inventory("awesome-shop", surface_index)
-            if inventory then
-
-              local inserted = inventory.insert({name=item_to_insert, count=payout, quality=next_quality})
-              if inserted > 0 then
-
-                control_behavior.add_output({
-                  signal = {
-                    type = "item",
-                    name = signal_and_count.signal.name,
-                    quality = signal_and_count.signal.quality,
-                  },
-                  constant = -(payout * 1000),
-                  copy_count_from_input = false,
-                })
-              end
-            end
-          end
-        end
+        Handler.handle_signal(surface_index, force_index, control_behavior, signal_and_count)
       end
 
     end

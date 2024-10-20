@@ -18,6 +18,7 @@ Date: ????
     - Test code of the previous commit ingame
     - Prepare to optimize next quality check
     - Return the spoil result in case the item spoils
+    - Flatten the nested ifs
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18
