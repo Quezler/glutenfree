@@ -138,3 +138,17 @@ sink_item.subgroup = "module"
 shop_item.subgroup = "module"
 sink_item.order = "e[awesome]-a[awesome-sink]"
 shop_item.order = "e[awesome]-b[awesome-shop]"
+
+-- do not allow awesome sinks & shops in space
+sink.surface_conditions = {
+  {
+    property = "gravity",
+    min = 1
+  }
+}
+shop.surface_conditions = {
+  {
+    property = "gravity",
+    min = 1
+  }
+}

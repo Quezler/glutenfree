@@ -21,6 +21,7 @@ Date: ????
     - Flatten the nested ifs
     - Give the awesome sink its own category
     - Add recipes and unlock them with the quality module
+    - Only allow awesome buildings on planets
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18
