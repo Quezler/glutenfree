@@ -102,15 +102,15 @@ function Handler.register_awesome_sink(awesome_sink, awesome_sink_gui)
   local red_in  = decider_combinator.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
   assert(red_out.connect_to(red_in, false, defines.wire_origin.player))
 
-  local awesome_sink = mod_surface.create_entity{
+  local awesome_sink_out = mod_surface.create_entity{
     name = "awesome-sink",
     force = "neutral",
     position = {0.5 + surfacedata.auto_increment, -1.0 + y_offset},
     direction = defines.direction.south,
   }
-  assert(awesome_sink, "did auto increment break and did this get placed over an existing transportbelt connectable?")
-  awesome_sink.linked_belt_type = "output"
-  awesome_sink.connect_linked_belts(entity)
+  assert(awesome_sink_out, "did auto increment break and did this get placed over an existing transportbelt connectable?")
+  awesome_sink_out.linked_belt_type = "output"
+  awesome_sink_out.connect_linked_belts(entity)
 
   local transport_belt = mod_surface.create_entity{
     name = "transport-belt",
@@ -148,13 +148,23 @@ function Handler.register_awesome_sink(awesome_sink, awesome_sink_gui)
   assert(infinity_chest)
   infinity_chest.remove_unfiltered_items = true
 
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = {
-    arithmetic_combinator,
-    awesome_sink,
-    transport_belt,
-    loader_1_1,
-    infinity_chest,
+  local deathrattle = {
+    entities_to_destroy = {
+      awesome_sink,
+      awesome_sink_gui,
+
+      arithmetic_combinator,
+      awesome_sink_out,
+      transport_belt,
+      loader_1_1,
+      infinity_chest,
+    },
+
+    assembler_to_arithmetic_map_key_to_clear = awesome_sink_gui.unit_number,
   }
+
+  storage.deathrattles[script.register_on_object_destroyed(awesome_sink)] = deathrattle
+  storage.deathrattles[script.register_on_object_destroyed(awesome_sink_gui)] = deathrattle
 
   storage.assembler_to_arithmetic_map[awesome_sink_gui.unit_number] = {
     assembler = awesome_sink_gui,
@@ -244,9 +254,11 @@ end
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    for _, entity in pairs(deathrattle) do
+    for _, entity in pairs(deathrattle.entities_to_destroy) do
       entity.destroy()
     end
+
+    storage.assembler_to_arithmetic_map[deathrattle.assembler_to_arithmetic_map_key_to_clear] = nil
   end
 end)
 
