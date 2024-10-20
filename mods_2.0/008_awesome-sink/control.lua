@@ -276,6 +276,22 @@ function get_next_quality(quality_name)
   return prototypes.quality[quality_name or "normal"].next
 end
 
+function get_spoil_result(item_name)
+  local prototype = prototypes.item[item_name]
+
+  local spoils = prototype.get_spoil_ticks() > 0
+  if spoils == false then return item_name end
+
+  local spoil_result = prototype.spoil_result
+  if spoil_result then return get_spoil_result(spoil_result.name) end -- in case of spoilage chains
+
+  -- if we got here the item spoils but into nothing, we'll decrement the counter and give nothing
+  assert(spoil_result ~= nil) -- todo: allow not returning anything
+
+  -- but, what if the item does something when it spoils? we'll get there eventually and fix it
+  assert(prototype.spoil_to_trigger_result == nil, "items that e.g. spawn entities are not supported atm.")
+end
+
 function Handler.flash_decider_combinator_outputs()
   for surface_index, surfacedata in pairs(storage.surfacedata) do
     for force_index, decider_combinator in pairs(surfacedata.force_to_decider_combinator) do
@@ -289,11 +305,12 @@ function Handler.flash_decider_combinator_outputs()
 
           local next_quality = get_next_quality(signal_and_count.signal.quality)
           if next_quality then
+            local item_to_insert = get_spoil_result(signal_and_count.signal.name)
 
             local inventory = game.forces[force_index].get_linked_inventory("awesome-shop", surface_index)
             if inventory then
 
-              local inserted = inventory.insert({name=signal_and_count.signal.name, count=payout, quality=next_quality})
+              local inserted = inventory.insert({name=item_to_insert, count=payout, quality=next_quality})
               if inserted > 0 then
 
                 control_behavior.add_output({
