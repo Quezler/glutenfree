@@ -10,6 +10,8 @@ script.on_init(function ()
   storage.surfacedata = {}
   storage.deathrattles = {}
 
+  storage.assembler_to_arithmetic_map = {}
+
   local mod_surface = game.surfaces[mod_surface_name]
   assert(surface == nil, "contact the mod author for help with world that previously already had this mod installed.")
 
@@ -162,12 +164,20 @@ function Handler.on_created_entity(event)
   if entity.name == "awesome-sink" then
     Handler.register_awesome_sink(entity)
   elseif entity.name == "awesome-sink-gui" then
-    entity.surface.create_entity{
+    local awesome_sink = entity.surface.find_entity("awesome-sink", entity.position)
+    assert(awesome_sink == nil)
+
+    awesome_sink = entity.surface.create_entity{
       name = "awesome-sink",
       force = entity.force,
       position = entity.position,
       direction = entity.direction,
       raise_built = true,
+    }
+
+    storage.assembler_to_arithmetic_map[entity.unit_number] = {
+      assembler = entity,
+      arithmetic = "get the awesome sink, folow the link, then find the arithmetic combinator below it"
     }
   elseif entity.name == "awesome-shop" then
     entity.link_id = entity.surface.index

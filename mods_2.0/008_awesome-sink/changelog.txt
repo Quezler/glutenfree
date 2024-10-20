@@ -12,6 +12,7 @@ Date: ????
     - Make the assembling machine minable
     - Hide awesome combinators from circuit filters
     - Match the sink's assembler name with the linked belt
+    - Conceptualize lookup map
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18
