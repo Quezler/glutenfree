@@ -59,7 +59,7 @@ end
 -- data.raw["container"]["wooden-chest"].picture.layers[1] = util.empty_sprite()
 
 local assembler = {
-  type = "assembling-machine",
+  type = "furnace",
   name = "awesome-sink-gui",
 
   icon = sink_item.icon,
@@ -85,7 +85,12 @@ local assembler = {
   icons_positioning =
   {
     {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 0}, max_icon_rows = 1, max_icons_per_row = 2, scale = 0.45}
-  }
+  },
+
+  max_health = sink.max_health,
+  source_inventory_size = 0,
+  result_inventory_size = 0,
+  vector_to_place_result = {0, -1}, -- without this the furnace doesn't want to rotate, though assembling machines will.
 }
 
 data:extend{assembler}

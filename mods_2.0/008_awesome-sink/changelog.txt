@@ -6,6 +6,7 @@ Date: ????
     - So apparently modules do not draw on small selection boxes
     - Tinker with the alt mode drawing
     - Cleanup 〃
+    - Turn the assembling machine into a furnace
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18
