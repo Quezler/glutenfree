@@ -59,6 +59,11 @@ end
 
 -- data.raw["container"]["wooden-chest"].picture.layers[1] = util.empty_sprite()
 
+data:extend{{
+  type = "recipe-category",
+  name = "awesome-sink",
+}}
+
 local assembler = {
   type = "furnace",
   name = "awesome-sink-gui",
@@ -70,7 +75,7 @@ local assembler = {
   collision_mask = sink.collision_mask,
 
   flags = {"placeable-neutral", "placeable-player", "player-creation"},
-  crafting_categories = {"crafting", "basic-crafting", "advanced-crafting"}, -- todo: awesome sink
+  crafting_categories = {"awesome-sink"},
 
   graphics_set = util.empty_sprite(),
 
