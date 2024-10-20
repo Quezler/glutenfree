@@ -4,6 +4,16 @@ Date: 2024. 10. 20
   Info:
     - Mod portal release
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2024. 10. 20
+  Info:
+    - Add recipes and unlock them with the quality module
+    - Only allow awesome buildings on planets
+    - Support removing an awesome sink
+    - Attempt to deal spoil_to_trigger_result
+    - Revert spilling/spawning biter/pentapod eggs
+    - Update readme and set a thumbnail
+---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 10. 20
   Info:
@@ -25,12 +35,6 @@ Date: 2024. 10. 20
     - Return the spoil result in case the item spoils
     - Flatten the nested ifs
     - Give the awesome sink its own category
-    - Add recipes and unlock them with the quality module
-    - Only allow awesome buildings on planets
-    - Support removing an awesome sink
-    - Attempt to deal spoil_to_trigger_result
-    - Revert spilling/spawning biter/pentapod eggs
-    - Update readme and set a thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18
