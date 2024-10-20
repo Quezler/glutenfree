@@ -78,51 +78,14 @@ local assembler = {
 
   energy_usage = "1kW",
   energy_source = {type = "void"},
-  crafting_speed = 0.5,
+  crafting_speed = 15, -- todo: ask for an interface request that assembling machines can opt out of quality boosts
 
-  icon_draw_specification = {scale = 0},
   selection_priority = 51,
-}
-
--- honestly im not even gonna try, its too much pain for too little effort merely to make blueprint support better rn
--- assembler.graphics_set =
--- {
---   animation = make_4way_animation_from_spritesheet({ layers =
---   {
---     {
---       filename = "__awesome-sink__/graphics/entity/awesome-sink.png",
---       width = 220,
---       height = 292,
---       frame_count = 24,
---       line_length = 12,
---       shift = util.by_pixel(0.5, -9),
---       scale = 0.5
---     },
---     -- {
---     --   filename = "__base__/graphics/entity/chemical-plant/chemical-plant.png",
---     --   width = 220,
---     --   height = 292,
---     --   frame_count = 24,
---     --   line_length = 12,
---     --   shift = util.by_pixel(0.5, -9),
---     --   scale = 0.5
---     -- },
---     -- {
---     --   filename = "__base__/graphics/entity/chemical-plant/chemical-plant-shadow.png",
---     --   width = 312,
---     --   height = 222,
---     --   repeat_count = 24,
---     --   shift = util.by_pixel(27, 6),
---     --   draw_as_shadow = true,
---     --   scale = 0.5
---     -- }
---   }})
--- }
-
--- assembler.selection_box = {{-1, -1}, {1, 1}}
-assembler.icons_positioning =
-{
-  {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 0}, max_icon_rows = 1, max_icons_per_row = 2, scale = 0.45}
+  icon_draw_specification = {scale = 0},
+  icons_positioning =
+  {
+    {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 0}, max_icon_rows = 1, max_icons_per_row = 2, scale = 0.45}
+  }
 }
 
 data:extend{assembler}
