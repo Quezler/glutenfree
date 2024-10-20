@@ -241,7 +241,6 @@ for _, event in ipairs({
   })
 end
 
-
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
@@ -250,10 +249,6 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     end
   end
 end)
-
-function get_next_quality(quality_name)
-  return prototypes.quality[quality_name or "normal"].next
-end
 
 function Handler.sync_module_qualities_with_arithmetic_combinators()
   for key, map in pairs(storage.assembler_to_arithmetic_map) do
@@ -270,6 +265,15 @@ function Handler.sync_module_qualities_with_arithmetic_combinators()
       log(string.format("each item sunk in #%d now counts as %d points", key, points))
     end
   end
+end
+
+-- local next_quality = {}
+-- for _, quality_prototype in pairs(prototypes.quality) do
+--   next_quality[quality_prototype.name] = quality_prototype.next
+-- end
+
+function get_next_quality(quality_name)
+  return prototypes.quality[quality_name or "normal"].next
 end
 
 function Handler.flash_decider_combinator_outputs()

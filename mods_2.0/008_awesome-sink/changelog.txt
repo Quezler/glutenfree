@@ -16,6 +16,7 @@ Date: ????
     - Prepare to create the other entity in eachothers event
     - Rework creation workflow, and sync module effects
     - Test code of the previous commit ingame
+    - Prepare to optimize next quality check
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18
