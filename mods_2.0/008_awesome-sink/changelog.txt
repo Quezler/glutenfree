@@ -8,6 +8,7 @@ Date: ????
     - Cleanup 〃
     - Turn the assembling machine into a furnace
     - Check for flipped
+    - Allow the assembler sink to be placed with the underground
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18

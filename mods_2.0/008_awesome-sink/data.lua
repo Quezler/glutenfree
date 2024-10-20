@@ -91,6 +91,8 @@ local assembler = {
   source_inventory_size = 0,
   result_inventory_size = 0,
   vector_to_place_result = {0, -1}, -- without this the furnace doesn't want to rotate, though assembling machines will.
+
+  placeable_by = {item = sink_item.name, count = 1},
 }
 
 data:extend{assembler}
