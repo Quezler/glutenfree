@@ -23,6 +23,7 @@ Date: ????
     - Add recipes and unlock them with the quality module
     - Only allow awesome buildings on planets
     - Support removing an awesome sink
+    - Attempt to deal spoil_to_trigger_result
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18
