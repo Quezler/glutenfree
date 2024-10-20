@@ -157,19 +157,19 @@ function Handler.register_awesome_sink(awesome_sink, awesome_sink_gui)
   }
 
   storage.assembler_to_arithmetic_map[awesome_sink_gui.unit_number] = {
-    assembler = entity,
-    assembler_unit_number = entity.unit_number,
+    assembler = awesome_sink_gui,
+    assembler_unit_number = awesome_sink_gui.unit_number,
 
     arithmetic = arithmetic_combinator,
     arithmetic_unit_number = arithmetic_combinator.unit_number,
 
-    last_quality = 0,
+    last_points = 0,
   }
 
   surfacedata.auto_increment = surfacedata.auto_increment + 1
 end
 
-function Handler.findentity_or_reviveentity_or_createentity(surface, force, name, position)
+function Handler.findentity_or_reviveentity_or_createentity(surface, force, position, name, quality_in_case_of_create)
   local entities = surface.find_entities_filtered{
     name = name,
     force = force,
@@ -197,18 +197,18 @@ function Handler.findentity_or_reviveentity_or_createentity(surface, force, name
     name = name,
     force = force,
     position = position,
+    quality = quality_in_case_of_create,
   }
 end
 
 function Handler.create_at_position(surface, force, position, direction, quality)
-  local awesome_sink     = Handler.findentity_or_reviveentity_or_createentity(surface, force, position, "awesome-sink")
-  local awesome_sink_gui = Handler.findentity_or_reviveentity_or_createentity(surface, force, position, "awesome-sink-gui")
+  local awesome_sink     = Handler.findentity_or_reviveentity_or_createentity(surface, force, position, "awesome-sink", quality)
+  local awesome_sink_gui = Handler.findentity_or_reviveentity_or_createentity(surface, force, position, "awesome-sink-gui", quality)
+
+  assert(awesome_sink.quality.name == awesome_sink_gui.quality.name)
 
   awesome_sink    .direction = direction
   awesome_sink_gui.direction = direction
-
-  awesome_sink    .quality = quality
-  awesome_sink_gui.quality = quality
 
   Handler.register_awesome_sink(awesome_sink, awesome_sink_gui)
 end
@@ -256,18 +256,18 @@ function get_next_quality(quality_name)
 end
 
 function Handler.sync_module_qualities_with_arithmetic_combinators()
-  -- math.floor(num + 0.5)
   for key, map in pairs(storage.assembler_to_arithmetic_map) do
     -- converts two place decimal into nearest full number
-    local quality = math.floor((map.assembler.effects["quality"] or 0) * 100 + 0.5)
-    if map.last_quality ~= quality then
-      map.last_quality = quality
+    local points = math.floor((map.assembler.effects["quality"] or 0) * 100 + 0.5)
+    if map.last_points ~= points then
+      map.last_points = points
 
-      local parameters = map.arithmetic.parameters
-      parameters.second_constant = quality
-      map.arithmetic.parameters = parameters
+      local cb = map.arithmetic.get_control_behavior()
+      local parameters = cb.parameters
+      parameters.second_constant = points
+      cb.parameters = parameters
 
-      log(string.format("each item from %d now counts as %d", key, quality))
+      log(string.format("each item sunk in #%d now counts as %d points", key, points))
     end
   end
 end

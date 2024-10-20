@@ -15,6 +15,7 @@ Date: ????
     - Conceptualize lookup map
     - Prepare to create the other entity in eachothers event
     - Rework creation workflow, and sync module effects
+    - Test code of the previous commit ingame
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 18
