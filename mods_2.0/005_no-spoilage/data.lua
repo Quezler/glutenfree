@@ -17,7 +17,6 @@
 -- item:captive-biter-spawner
 -- item:biter-egg
 -- item:pentapod-egg
--- item:disposable-construction-robot
 -- capsule:raw-fish
 -- capsule:yumako
 -- capsule:jellynut
@@ -38,7 +37,6 @@ remove_spoil_mechanic(data.raw["item"]["nutrients"])
 remove_spoil_mechanic(data.raw["item"]["captive-biter-spawner"])
 remove_spoil_mechanic(data.raw["item"]["biter-egg"])
 remove_spoil_mechanic(data.raw["item"]["pentapod-egg"])
-remove_spoil_mechanic(data.raw["item"]["disposable-construction-robot"])
 remove_spoil_mechanic(data.raw["capsule"]["raw-fish"])
 remove_spoil_mechanic(data.raw["capsule"]["yumako"])
 remove_spoil_mechanic(data.raw["capsule"]["jellynut"])
