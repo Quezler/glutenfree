@@ -43,7 +43,7 @@ script.on_event('dcoce-i', function(event)
 
   -- game.print(serpent.block(output))
 
-  local textfield = player.gui.relative['dcov-textfield'] or player.gui.relative.add{
+  local textfield = player.gui.relative['dcoce-textfield'] or player.gui.relative.add{
     type = 'textfield',
     name = 'dcoce-textfield',
     numeric = true,
