@@ -6,3 +6,5 @@ This mod adds the entity for the red and blue tiers, as well as for green if you
 (the lane splitter itself is not locked behind an expansion feature flag, so from the 21st anyone can use it)
 
 The recipes are the same as for the splitters but the recipe just crafts two, they're under the same technology too.
+
+- third party belt support: submit a pull request with the **splitter texture** that is a recolor of the vanilla style splitter, and modify the data with your tier.
