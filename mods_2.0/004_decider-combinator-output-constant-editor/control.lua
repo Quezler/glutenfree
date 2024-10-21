@@ -77,7 +77,10 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
 
   local player = assert(game.get_player(event.player_index))
   local opened = player.opened
-  assert(opened and opened.type == 'decider-combinator')
+  if not (opened and opened.type == 'decider-combinator') then
+    game.print("latency issue, decider combinator already removed.")
+    return
+  end
 
   local playerdata = storage.playerdata[player.index]
 

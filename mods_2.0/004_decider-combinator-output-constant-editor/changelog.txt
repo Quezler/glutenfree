@@ -5,6 +5,7 @@ Date: ????
     - Fix locale entry
     - Fix `attempt to index local 'output' (a nil value)`
     - Fix `bad argument #1 of 2 to 'ipairs' (table expected, got nil)`
+    - Note instead of crash when latency tries to update removed combinator
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2024. 10. 21
