@@ -1,5 +1,5 @@
 local function find_output(selected_prototype, outputs)
-  for i, output in ipairs(outputs) do
+  for i, output in ipairs(outputs or {}) do
     if output.signal and output.signal.name == selected_prototype.name then
       return i, output
     end
