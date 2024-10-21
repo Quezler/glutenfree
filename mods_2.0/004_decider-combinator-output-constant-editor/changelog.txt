@@ -3,6 +3,7 @@ Version: 1.0.3
 Date: ????
   Info:
     - Fix locale entry
+    - Fix `attempt to index local 'output' (a nil value)`
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2024. 10. 21
