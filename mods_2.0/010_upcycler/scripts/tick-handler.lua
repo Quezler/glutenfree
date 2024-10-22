@@ -32,7 +32,9 @@ function TickHandler.update_struct(struct)
     -- game.print(serpent.line(struct.force.is_quality_unlocked(next_quality)))
 
     local inventory = struct.entities.upcycler.get_inventory(defines.inventory.furnace_result)
+    -- log(serpent.line({name=signal_and_count.signal.name, count=payout, quality=next_quality}))
     local inserted = inventory.insert({name=signal_and_count.signal.name, count=payout, quality=next_quality})
+    -- log('crashed before this line')
     if inserted == 0 then goto continue end
 
     control_behavior.add_output({
