@@ -5,6 +5,7 @@ Date: ????
     - Create data.lua
     - Setup the entity, item & recipe, and hide quality modules
     - Load the recolored sprites
+    - Change what can go into the upcycler
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 22

@@ -43,3 +43,14 @@ upcycler_entity.graphics_set_flipped.animation.north.layers[1].filename = "__upc
 upcycler_entity.graphics_set_flipped.animation.east.layers [1].filename = "__upcycler__/graphics/entity/upcycler/upcycler-flipped-E.png"
 upcycler_entity.graphics_set_flipped.animation.south.layers[1].filename = "__upcycler__/graphics/entity/upcycler/upcycler-flipped-S.png"
 upcycler_entity.graphics_set_flipped.animation.west.layers [1].filename = "__upcycler__/graphics/entity/upcycler/upcycler-flipped-W.png"
+
+upcycler_entity.module_slots = 0
+upcycler_entity.allowed_effects = {}
+upcycler_entity.source_inventory_size = 0
+
+data:extend{{
+  type = "recipe-category",
+  name = "upcycling",
+}}
+upcycler_entity.categories = {"upcycling"}
+upcycler_entity.energy_source = {type = "void"}
