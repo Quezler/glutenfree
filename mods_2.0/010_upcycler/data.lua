@@ -33,3 +33,13 @@ replace_recipe_ingredient(upcycler_recipe, "concrete", "stone-brick")
 data:extend{upcycler_recipe}
 
 table.insert(data.raw["technology"]["quality-module"].effects, 1, {type = "unlock-recipe", recipe = upcycler_recipe.name})
+
+upcycler_entity.graphics_set.animation.north.layers[1].filename = "__upcycler__/graphics/entity/upcycler/upcycler-N.png"
+upcycler_entity.graphics_set.animation.east.layers [1].filename = "__upcycler__/graphics/entity/upcycler/upcycler-E.png"
+upcycler_entity.graphics_set.animation.south.layers[1].filename = "__upcycler__/graphics/entity/upcycler/upcycler-S.png"
+upcycler_entity.graphics_set.animation.west.layers [1].filename = "__upcycler__/graphics/entity/upcycler/upcycler-W.png"
+
+upcycler_entity.graphics_set_flipped.animation.north.layers[1].filename = "__upcycler__/graphics/entity/upcycler/upcycler-flipped-N.png"
+upcycler_entity.graphics_set_flipped.animation.east.layers [1].filename = "__upcycler__/graphics/entity/upcycler/upcycler-flipped-E.png"
+upcycler_entity.graphics_set_flipped.animation.south.layers[1].filename = "__upcycler__/graphics/entity/upcycler/upcycler-flipped-S.png"
+upcycler_entity.graphics_set_flipped.animation.west.layers [1].filename = "__upcycler__/graphics/entity/upcycler/upcycler-flipped-W.png"
