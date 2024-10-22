@@ -6,6 +6,7 @@ Date: ????
     - Place chest in the right spot when mirrored too
     - Define custom linked chest prototype
     - Upcycler description
+    - Remove input chest when upcycler goes away
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 22

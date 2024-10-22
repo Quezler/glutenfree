@@ -1,5 +1,12 @@
 local Handler = {}
 
+function Handler.init()
+  storage.structs = {}
+  storage.deathrattles = {}
+end
+
+script.on_init(Handler.init)
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -11,7 +18,14 @@ function Handler.on_created_entity(event)
   local inserted = entity.get_inventory(defines.inventory.furnace_source).insert({name = "upcycle-any-quality", count = 1})
   assert(inserted > 0)
 
-  Handler.get_or_create_linkedchest_then_move(entity)
+  local upcycler_input = Handler.get_or_create_linkedchest_then_move(entity)
+
+  storage.structs[entity.unit_number] = {
+    upcycler = entity,
+    upcycler_input = upcycler_input,
+  }
+
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {to_destroy = {upcycler_input}}
 end
 
 for _, event in ipairs({
@@ -66,6 +80,8 @@ function Handler.get_or_create_linkedchest_then_move(entity)
       linked_chest.teleport({entity.position.x + 1, entity.position.y - 1})
     end
   end
+
+  return linked_chest
 end
 
 script.on_event(defines.events.on_player_rotated_entity, function(event)
@@ -77,5 +93,14 @@ end)
 script.on_event(defines.events.on_player_flipped_entity, function(event)
   if event.entity.name == "upcycler" then
     Handler.get_or_create_linkedchest_then_move(event.entity)
+  end
+end)
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    for _, to_destroy in pairs(deathrattle.to_destroy) do
+      to_destroy.destroy()
+    end
   end
 end)
