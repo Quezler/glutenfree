@@ -99,7 +99,7 @@ upcycler_entity.graphics_set_flipped.working_visualisations[2] = nil
 local upcycler_input = table.deepcopy(data.raw["linked-container"]["linked-chest"])
 upcycler_input.name = "upcycler-input"
 upcycler_input.collision_box = {{-0.2, -0.2}, {0.2, 0.2}}
-upcycler_input.collision_mask = {}
+upcycler_input.collision_mask = {layers = {}}
 upcycler_input.picture = util.empty_sprite()
 upcycler_input.inventory_size = 1
 upcycler_input.inventory_type = "normal"
