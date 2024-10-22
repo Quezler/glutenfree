@@ -1,8 +1,27 @@
+local decider_combinator_parameters = require("scripts.decider_combinator_parameters")
+
+local mod_surface_name = "upcycler"
+
 local Handler = {}
 
 function Handler.init()
   storage.structs = {}
   storage.deathrattles = {}
+  storage.next_x_offset = 0
+
+  local mod_surface = game.surfaces[mod_surface_name]
+  if mod_surface then mod_surface.clear() end
+  if mod_surface == nil then
+    mod_surface = game.create_surface(mod_surface_name)
+    mod_surface.generate_with_lab_tiles = true
+  end
+
+  mod_surface.create_global_electric_network()
+  mod_surface.create_entity{
+    name = "electric-energy-interface",
+    force = "neutral",
+    position = {-1, -1},
+  }
 end
 
 script.on_init(Handler.init)
@@ -20,12 +39,61 @@ function Handler.on_created_entity(event)
 
   local upcycler_input = Handler.get_or_create_linkedchest_then_move(entity)
 
+  local mod_surface = game.surfaces[mod_surface_name]
+  local upcycler_output = mod_surface.create_entity{
+    name = "upcycler-input",
+    force = "neutral",
+    position = {storage.next_x_offset, -0.5},
+  }
+  local inserter = mod_surface.create_entity{
+    name = "fast-inserter",
+    force = "neutral",
+    position = {storage.next_x_offset, -1.5},
+    direction = defines.direction.north,
+  }
+  local trash = mod_surface.create_entity{
+    name = "infinity-chest",
+    force = "neutral",
+    position = {storage.next_x_offset, -2.5},
+  }
+  local decider = mod_surface.create_entity{
+    name = "decider-combinator",
+    force = "neutral",
+    position = {storage.next_x_offset, -4.0},
+  }
+
+  upcycler_input.link_id = storage.next_x_offset
+  upcycler_output.link_id = storage.next_x_offset
+
+  local inserter_cb = inserter.get_or_create_control_behavior()
+  inserter_cb.circuit_read_hand_contents = true
+  inserter_cb.circuit_hand_read_mode = defines.control_behavior.inserter.hand_read_mode.pulse
+  inserter.inserter_stack_size_override = 1 -- this disables the gui entirely :|
+
+  trash.remove_unfiltered_items = true
+
+  decider.get_control_behavior().parameters = decider_combinator_parameters
+
+  local green_out = decider.get_wire_connector(defines.wire_connector_id.combinator_output_green, false)
+  local green_in  = decider.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
+  assert(green_out.connect_to(green_in, false, defines.wire_origin.player))
+
+  local red_out = inserter.get_wire_connector(defines.wire_connector_id.circuit_red, false)
+  local red_in  = decider.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
+  assert(red_out.connect_to(red_in, false, defines.wire_origin.player))
+
   storage.structs[entity.unit_number] = {
     upcycler = entity,
     upcycler_input = upcycler_input,
+    upcycler_output = upcycler_output,
+    inserter = inserter,
+    trash = trash,
+    decider = decider,
   }
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {to_destroy = {upcycler_input}}
+
+  storage.next_x_offset = storage.next_x_offset + 1
 end
 
 for _, event in ipairs({
