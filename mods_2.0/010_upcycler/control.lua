@@ -1,4 +1,5 @@
 local decider_combinator_parameters = require("scripts.decider_combinator_parameters")
+local TickHandler = require("scripts.tick-handler")
 
 local mod_surface_name = "upcycler"
 
@@ -6,8 +7,10 @@ local Handler = {}
 
 function Handler.init()
   storage.structs = {}
+  storage.struct_ids = {}
   storage.deathrattles = {}
   storage.next_x_offset = 0
+  storage.items_per_next_quality = 100
 
   local mod_surface = game.surfaces[mod_surface_name]
   if mod_surface then mod_surface.clear() end
@@ -83,6 +86,7 @@ function Handler.on_created_entity(event)
   assert(red_out.connect_to(red_in, false, defines.wire_origin.player))
 
   storage.structs[entity.unit_number] = {
+    force = entity.force,
     entities = {
       upcycler = entity,
       upcycler_input = upcycler_input,
@@ -92,6 +96,7 @@ function Handler.on_created_entity(event)
       decider = decider,
     }
   }
+  TickHandler.invalidate_struct_ids()
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct_id = entity.unit_number}
 
@@ -174,6 +179,9 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       for _, entity in pairs(struct.entities) do
         entity.destroy()
       end
+      TickHandler.invalidate_struct_ids()
     end
   end
 end)
+
+script.on_event(defines.events.on_tick, TickHandler.on_tick)
