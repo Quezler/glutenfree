@@ -28,7 +28,7 @@ end
 
 function Handler.get_or_create_linkedchest_then_move(entity)
   local linked_chest = entity.surface.find_entities_filtered{
-    name = "linked-chest",
+    name = "upcycler-input",
     area = entity.bounding_box,
     limit = 1,
   }
@@ -37,11 +37,14 @@ function Handler.get_or_create_linkedchest_then_move(entity)
 
   if linked_chest == nil then
     linked_chest = entity.surface.create_entity{
-      name = "linked-chest",
+      name = "upcycler-input",
       force = "neutral",
       position = entity.position,
     }
   end
+
+  entity.destructible = false
+
   if entity.mirroring then
     if entity.direction == defines.direction.north then
       linked_chest.teleport({entity.position.x - 1, entity.position.y + 1})

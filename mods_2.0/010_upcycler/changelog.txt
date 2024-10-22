@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Place linked chest on rotated chomper tile
     - Place chest in the right spot when mirrored too
+    - Define custom linked chest prototype
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 22

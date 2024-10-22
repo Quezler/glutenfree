@@ -16,6 +16,7 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
+        "base",
         "quality"
     ]
 }
