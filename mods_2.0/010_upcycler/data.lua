@@ -92,4 +92,6 @@ data:extend{{
 upcycler_entity.custom_input_slot_tooltip_key = "upcycler-input-slot-tooltip"
 upcycler_entity.cant_insert_at_source_message_key = "inventory-restriction.cant-be-upcycled-by-hand"
 
-upcycler_entity.graphics_set.working_visualisations[2] = nil -- disable large smoke, keep the small smoke
+ -- disable large smoke, keep the small smoke
+upcycler_entity.graphics_set.working_visualisations[2] = nil
+upcycler_entity.graphics_set_flipped.working_visualisations[2] = nil

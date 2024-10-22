@@ -8,6 +8,7 @@ Date: ????
     - Change what can go into the upcycler
     - Make the upcycler run continuously
     - Disable the large smoke
+    - 〃
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 22
