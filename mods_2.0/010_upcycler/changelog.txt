@@ -8,6 +8,7 @@ Date: ????
     - Upcycler description
     - Remove input chest when upcycler goes away
     - Setup the hidden entities when placing an upcycler
+    - Clean up all the entities when the upcycler goes away
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 10. 22

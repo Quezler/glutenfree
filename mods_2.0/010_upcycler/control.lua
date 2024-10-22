@@ -49,7 +49,7 @@ function Handler.on_created_entity(event)
     name = "fast-inserter",
     force = "neutral",
     position = {storage.next_x_offset, -1.5},
-    direction = defines.direction.north,
+    direction = defines.direction.south,
   }
   local trash = mod_surface.create_entity{
     name = "infinity-chest",
@@ -83,15 +83,17 @@ function Handler.on_created_entity(event)
   assert(red_out.connect_to(red_in, false, defines.wire_origin.player))
 
   storage.structs[entity.unit_number] = {
-    upcycler = entity,
-    upcycler_input = upcycler_input,
-    upcycler_output = upcycler_output,
-    inserter = inserter,
-    trash = trash,
-    decider = decider,
+    entities = {
+      upcycler = entity,
+      upcycler_input = upcycler_input,
+      upcycler_output = upcycler_output,
+      inserter = inserter,
+      trash = trash,
+      decider = decider,
+    }
   }
 
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = {to_destroy = {upcycler_input}}
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct_id = entity.unit_number}
 
   storage.next_x_offset = storage.next_x_offset + 1
 end
@@ -167,8 +169,11 @@ end)
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    for _, to_destroy in pairs(deathrattle.to_destroy) do
-      to_destroy.destroy()
+    local struct = storage.structs[deathrattle.struct_id]
+    if struct then storage.structs[deathrattle.struct_id] = nil
+      for _, entity in pairs(struct.entities) do
+        entity.destroy()
+      end
     end
   end
 end)
