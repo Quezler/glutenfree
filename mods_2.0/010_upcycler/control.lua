@@ -42,14 +42,37 @@ function Handler.get_or_create_linkedchest_then_move(entity)
       position = entity.position,
     }
   end
-
-  if entity.direction == defines.direction.north then
-    linked_chest.teleport({entity.position.x, entity.position.y + 1})
-  elseif entity.direction == defines.direction.east then
-    linked_chest.teleport({entity.position.x - 2, entity.position.y})
-  elseif entity.direction == defines.direction.south then
-    linked_chest.teleport({entity.position.x - 1, entity.position.y - 2})
-  elseif entity.direction == defines.direction.west then
-    linked_chest.teleport({entity.position.x + 1, entity.position.y - 1})
+  if entity.mirroring then
+    if entity.direction == defines.direction.north then
+      linked_chest.teleport({entity.position.x - 1, entity.position.y + 1})
+    elseif entity.direction == defines.direction.east then
+      linked_chest.teleport({entity.position.x - 2, entity.position.y - 1})
+    elseif entity.direction == defines.direction.south then
+      linked_chest.teleport({entity.position.x, entity.position.y - 2})
+    elseif entity.direction == defines.direction.west then
+      linked_chest.teleport({entity.position.x + 1, entity.position.y})
+    end
+  else
+    if entity.direction == defines.direction.north then
+      linked_chest.teleport({entity.position.x, entity.position.y + 1})
+    elseif entity.direction == defines.direction.east then
+      linked_chest.teleport({entity.position.x - 2, entity.position.y})
+    elseif entity.direction == defines.direction.south then
+      linked_chest.teleport({entity.position.x - 1, entity.position.y - 2})
+    elseif entity.direction == defines.direction.west then
+      linked_chest.teleport({entity.position.x + 1, entity.position.y - 1})
+    end
   end
 end
+
+script.on_event(defines.events.on_player_rotated_entity, function(event)
+  if event.entity.name == "upcycler" then
+    Handler.get_or_create_linkedchest_then_move(event.entity)
+  end
+end)
+
+script.on_event(defines.events.on_player_flipped_entity, function(event)
+  if event.entity.name == "upcycler" then
+    Handler.get_or_create_linkedchest_then_move(event.entity)
+  end
+end)
