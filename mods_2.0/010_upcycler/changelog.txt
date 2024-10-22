@@ -3,6 +3,7 @@ Version: 0.0.4
 Date: ????
   Info:
     - Fail to dispense the quality items (furnace output cannot hold non-output)
+    - Attempt to get around it by making every product valid
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 10. 22

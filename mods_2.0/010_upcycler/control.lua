@@ -71,7 +71,7 @@ function Handler.on_created_entity(event)
   local inserter_cb = inserter.get_or_create_control_behavior()
   inserter_cb.circuit_read_hand_contents = true
   inserter_cb.circuit_hand_read_mode = defines.control_behavior.inserter.hand_read_mode.pulse
-  inserter.inserter_stack_size_override = 1 -- this disables the gui entirely :|
+  -- inserter.inserter_stack_size_override = 1 -- this disables the gui entirely :|
 
   trash.remove_unfiltered_items = true
 

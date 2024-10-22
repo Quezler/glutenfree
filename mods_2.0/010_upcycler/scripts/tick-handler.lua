@@ -23,7 +23,7 @@ function TickHandler.update_struct(struct)
 
   for _, signal_and_count in ipairs(green_network.signals or {}) do
     local payout = math.floor(signal_and_count.count / storage.items_per_next_quality)
-    if payout == 0 then goto continue end
+    if payout <= 0 then goto continue end
 
     local next_quality = next_quality[signal_and_count.signal.quality or "normal"]
     if next_quality == nil then goto continue end
