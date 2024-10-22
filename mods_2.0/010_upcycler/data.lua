@@ -46,11 +46,48 @@ upcycler_entity.graphics_set_flipped.animation.west.layers [1].filename = "__upc
 
 upcycler_entity.module_slots = 0
 upcycler_entity.allowed_effects = {}
-upcycler_entity.source_inventory_size = 0
+-- upcycler_entity.source_inventory_size = 1
 
 data:extend{{
   type = "recipe-category",
   name = "upcycling",
 }}
-upcycler_entity.categories = {"upcycling"}
+upcycler_entity.crafting_categories = {"upcycling"}
 upcycler_entity.energy_source = {type = "void"}
+
+-- can't get this to work
+-- upcycler_entity.graphics_set.working_visualisations.idle_animation = upcycler_entity.graphics_set.animation
+-- upcycler_entity.graphics_set.working_visualisations.always_draw_idle_animation = true
+
+upcycler_entity.return_ingredients_on_change = false
+
+data:extend{{
+  type = "item",
+  name = "upcycle-any-quality",
+  icon = "__core__/graphics/icons/any-quality.png",
+  stack_size = 1,
+
+  hidden = true,
+  hidden_in_factoriopedia = true,
+}}
+
+data:extend{{
+  type = "recipe",
+  name = "upcycling",
+  category = "upcycling",
+  icon = util.empty_sprite().filename,
+  energy_required = 1 * hour * 24 * 365,
+
+  ingredients = {
+    {type = "item", name = "upcycle-any-quality", amount = 1}
+  },
+  results = {
+    {type = "item", name = "upcycle-any-quality", amount = 1}
+  },
+
+  auto_recycle = false,
+  hidden_in_factoriopedia = true,
+}}
+
+upcycler_entity.custom_input_slot_tooltip_key = "upcycler-input-slot-tooltip"
+upcycler_entity.cant_insert_at_source_message_key = "inventory-restriction.cant-be-upcycled-by-hand"

@@ -6,6 +6,7 @@ Date: ????
     - Setup the entity, item & recipe, and hide quality modules
     - Load the recolored sprites
     - Change what can go into the upcycler
+    - Make the upcycler run continuously
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 22
