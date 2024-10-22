@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2024. 10. 22
   Info:
     - Create data.lua
     - Setup the entity, item & recipe, and hide quality modules
