@@ -12,6 +12,7 @@ function Handler.init()
   storage.next_x_offset = 0
   storage.items_per_next_quality = settings.global["upcycling-items-per-next-quality"].value
   storage.decider_control_behaviors_to_override = {}
+  storage.observed_structs = {}
 
   local mod_surface = game.surfaces[mod_surface_name]
   if mod_surface then mod_surface.clear() end
@@ -98,7 +99,8 @@ function Handler.on_created_entity(event)
       inserter = inserter,
       trash = trash,
       decider = decider,
-    }
+    },
+    last_held_stack = nil,
   }
   TickHandler.invalidate_struct_ids()
 
@@ -201,6 +203,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
         entity.destroy()
       end
       TickHandler.invalidate_struct_ids()
+      storage.observed_structs[struct.id] = nil
     end
   end
 end)
@@ -214,3 +217,6 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     end
   end
 end)
+
+script.on_event(defines.events.on_selected_entity_changed, TickHandler.on_selected_entity_changed)
+script.on_event(defines.events.on_gui_opened, TickHandler.on_gui_opened)

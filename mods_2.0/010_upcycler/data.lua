@@ -87,6 +87,7 @@ data:extend{{
 
   auto_recycle = false,
   hidden_in_factoriopedia = true,
+  hide_from_player_crafting = true,
 }}
 
 data:extend{{
@@ -105,6 +106,7 @@ data:extend{{
 
   auto_recycle = false,
   hidden_in_factoriopedia = true,
+  hide_from_player_crafting = true,
 }}
 
 upcycler_entity.custom_input_slot_tooltip_key = "upcycler-input-slot-tooltip"
