@@ -82,7 +82,7 @@ data:extend{{
     {type = "item", name = "upcycle-any-quality", amount = 1}
   },
   results = {
-    {type = "item", name = "upcycle-any-quality", amount = 1}
+    -- {type = "item", name = "upcycle-any-quality", amount = 1}
   },
 
   auto_recycle = false,

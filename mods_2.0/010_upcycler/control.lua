@@ -11,6 +11,7 @@ function Handler.init()
   storage.deathrattles = {}
   storage.next_x_offset = 0
   storage.items_per_next_quality = 100
+  storage.decider_control_behaviors_to_override = {}
 
   local mod_surface = game.surfaces[mod_surface_name]
   if mod_surface then mod_surface.clear() end
@@ -86,6 +87,7 @@ function Handler.on_created_entity(event)
   assert(red_out.connect_to(red_in, false, defines.wire_origin.player))
 
   storage.structs[entity.unit_number] = {
+    id = entity.unit_number,
     force = entity.force,
     entities = {
       upcycler = entity,
