@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Misc\ExpansionMods;
 use App\Misc\ModPortal;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Command\Command;
@@ -21,7 +22,7 @@ class MakeModCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $prefix = $this->get_next_prefix();
+        $prefix = ExpansionMods::get_next_prefix();
 
         $mod_name = $input->getArgument('name');
         if (strlen($mod_name) > 49) throw new \LogicException();
@@ -70,21 +71,5 @@ EOF;
         file_put_contents("{$mod_directory}/README.md", '');
         
         return Command::SUCCESS;
-    }
-
-    private function get_next_prefix(): string
-    {
-        $prefix = '001_';
-
-        $directories = Finder::create()->in(__GLUTENFREE__ . '/mods_2.0')->depth(0)->directories()->sortByName();
-        foreach ($directories as $directory) {
-//            dump($directory->getBasename());
-            preg_match('/(\d{3})_/', $directory->getFilename(), $matches);
-            if (count($matches) > 0) {
-                $prefix = str_pad(intval($matches[1]) + 1, 3, '0', STR_PAD_LEFT) . '_';
-            }
-        }
-
-        return $prefix;
     }
 }

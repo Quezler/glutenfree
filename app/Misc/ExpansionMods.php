@@ -27,4 +27,19 @@ class ExpansionMods
 
         throw new \LogicException("no mod found called {$mod_name}.");
     }
+
+    public static function get_next_prefix(): string
+    {
+        $prefix = '001_';
+
+        $directories = Finder::create()->in(__GLUTENFREE__ . '/mods_2.0')->depth(0)->directories()->sortByName();
+        foreach ($directories as $directory) {
+            preg_match('/(\d{3})_/', $directory->getFilename(), $matches);
+            if (count($matches) > 0) {
+                $prefix = str_pad('' . intval($matches[1]) + 1, 3, '0', STR_PAD_LEFT) . '_';
+            }
+        }
+
+        return $prefix;
+    }
 }

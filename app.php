@@ -32,5 +32,6 @@ $application->add(new \App\Command\PublishModCommand());
 $application->add(new \App\Command\UpdateDetailsCommand());
 $application->add(new \App\Command\TestModCommand());
 $application->add(new \App\Command\GitPostCommitCommand());
+$application->add(new \App\Command\PortModCommand());
 
 $application->run();

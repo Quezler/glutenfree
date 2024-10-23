@@ -183,4 +183,32 @@ class ExpansionMod
         $version = explode('.', $this->info()['version']);
         return $version[0] == "0";
     }
+
+    public function getNextMajorVersion(): int
+    {
+        list($major, $minor, $patch) = explode('.', $this->info()['version']);
+        return intval($major) + 1;
+    }
+
+    public function setInfoJsonVersion(string $version): void
+    {
+        $search = $this->info()['version'];
+        $replace = $version;
+
+        // not done via json decode/encode to preserve whitespaces
+        $info_json_text = file_get_contents($info_json_path = "{$this->get_pathname()}/info.json");
+        $info_json_text = str_replace($search, $replace, $info_json_text);
+        file_put_contents($info_json_path, $info_json_text);
+    }
+
+    public function setInfoJsonFactorioVersion(string $version): void
+    {
+        $search = '    "factorio_version": "'. $this->info()['factorio_version'] .'",';
+        $replace = '    "factorio_version": "'. $version .'",';
+
+        // not done via json decode/encode to preserve whitespaces
+        $info_json_text = file_get_contents($info_json_path = "{$this->get_pathname()}/info.json");
+        $info_json_text = str_replace($search, $replace, $info_json_text);
+        file_put_contents($info_json_path, $info_json_text);
+    }
 }
