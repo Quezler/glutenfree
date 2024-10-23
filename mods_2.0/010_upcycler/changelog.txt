@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Subtract paid out items from the signals
     - Avoid hovering it looking batshit crazy
+    - Make the upcycle payout configurable
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 10. 22

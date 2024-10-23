@@ -10,7 +10,7 @@ function Handler.init()
   storage.struct_ids = {}
   storage.deathrattles = {}
   storage.next_x_offset = 0
-  storage.items_per_next_quality = 100
+  storage.items_per_next_quality = settings.global["upcycling-items-per-next-quality"].value
   storage.decider_control_behaviors_to_override = {}
 
   local mod_surface = game.surfaces[mod_surface_name]
@@ -187,3 +187,11 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 end)
 
 script.on_event(defines.events.on_tick, TickHandler.on_tick)
+
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+  if event.setting_type == "runtime-global" then
+    if event.setting == "upcycling-items-per-next-quality" then
+      storage.items_per_next_quality = settings.global["upcycling-items-per-next-quality"].value
+    end
+  end
+end)
