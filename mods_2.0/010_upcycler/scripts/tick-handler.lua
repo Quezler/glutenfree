@@ -56,6 +56,8 @@ function TickHandler.update_struct(struct)
     local inserted = force_insert(inventory, {name=signal_and_count.signal.name, count=payout, quality=next_quality})
     if inserted == 0 then goto continue end
 
+    struct.entities.upcycler.products_finished = struct.entities.upcycler + inserted
+
     control_behavior.add_output({
       signal = {
         type = "item",
