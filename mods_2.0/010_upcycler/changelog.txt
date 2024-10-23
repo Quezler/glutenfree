@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 10. 23
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: ????
+Date: 2024. 10. 23
   Info:
     - Subtract paid out items from the signals
     - Avoid hovering it looking batshit crazy

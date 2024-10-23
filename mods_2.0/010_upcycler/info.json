@@ -1,9 +1,9 @@
 {
     "name": "upcycler",
     "title": "Upcycler",
-    "description": "No quality modules, sacrifice 100 items to get the next tier.",
+    "description": "No quality modules, sacrifice x (configurable) items to get the next tier.",
 
-    "version": "0.0.3",
+    "version": "1.0.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
