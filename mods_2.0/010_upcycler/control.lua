@@ -89,6 +89,8 @@ function Handler.on_created_entity(event)
   storage.structs[entity.unit_number] = {
     id = entity.unit_number,
     force = entity.force,
+    surface = entity.surface,
+    position = entity.position,
     entities = {
       upcycler = entity,
       upcycler_input = upcycler_input,
@@ -173,11 +175,28 @@ script.on_event(defines.events.on_player_flipped_entity, function(event)
   end
 end)
 
+-- originally i planned to store the pending counts inside item metadata but eh effort,
+-- this will technically allow cheesing by storing all the things that can spoil or are damaged in here until you need them.
+function Handler.spill(struct)
+  local control_behavior = struct.entities.decider.get_control_behavior()
+  local green_network = struct.entities.decider.get_circuit_network(defines.wire_connector_id.combinator_output_green)
+
+  for _, signal_and_count in ipairs(green_network.signals or {}) do
+    struct.surface.spill_item_stack{
+      position = struct.position,
+      stack = {name=signal_and_count.signal.name, count=signal_and_count.count, quality=signal_and_count.signal.quality},
+      force = struct.force,
+      allow_belts = false,
+    }
+  end
+end
+
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     local struct = storage.structs[deathrattle.struct_id]
     if struct then storage.structs[deathrattle.struct_id] = nil
+      Handler.spill(struct)
       for _, entity in pairs(struct.entities) do
         entity.destroy()
       end
