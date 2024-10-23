@@ -162,9 +162,6 @@ class ExpansionMod
 
         $info_found = false;
         foreach ($lines as $i => $line) {
-            if ($line == $line_to_add) return;
-//            dump([$line, $line_to_add]);
-
             if ($info_found && str_starts_with($line, '    - ') === false) {
                 array_splice( $lines, $i, 0, $line_to_add);
                 file_put_contents($changelog_pathname, implode(PHP_EOL, $lines));
