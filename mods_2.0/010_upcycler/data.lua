@@ -82,6 +82,24 @@ data:extend{{
     {type = "item", name = "upcycle-any-quality", amount = 1}
   },
   results = {
+    {type = "item", name = "upcycle-any-quality", amount = 1}
+  },
+
+  auto_recycle = false,
+  hidden_in_factoriopedia = true,
+}}
+
+data:extend{{
+  type = "recipe",
+  name = "upcycling-output-slots",
+  category = "upcycling",
+  icon = util.empty_sprite().filename,
+  energy_required = 1 * hour * 24 * 365,
+
+  ingredients = {
+    {type = "item", name = "upcycle-any-quality", amount = 1}
+  },
+  results = {
     -- {type = "item", name = "upcycle-any-quality", amount = 1}
   },
 

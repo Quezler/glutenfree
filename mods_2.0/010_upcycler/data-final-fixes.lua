@@ -15,7 +15,7 @@ end
 -- i came too far in this mod's development to realize furnace slots cannot be forced to hold a non product output,
 -- tbh its on me for testing that at the time by lua-inserting iron plates directly into a recycler's output slot,
 -- so yea ima quick and dirty add one of each item as a potential output just so i can call it a day and go zzzz.
-local results = assert(data.raw["recipe"]["upcycling"].results)
+local results = assert(data.raw["recipe"]["upcycling-output-slots"].results)
 for type_name in pairs(defines.prototypes.item) do
   if data.raw[type_name] then
     for k, item in pairs(data.raw[type_name]) do
