@@ -12,6 +12,7 @@ local function try_to_give_player_personal_roboport(player)
 end
 
 script.on_event(defines.events.on_player_crafted_item, function(event)
+  if event.item_stack.valid_for_read == false then return end -- blueprint sandboxes mod?
   if event.item_stack.name ~= 'disposable-construction-robot' then return end
 
   local player = game.get_player(event.player_index)
