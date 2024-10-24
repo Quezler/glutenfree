@@ -17,6 +17,8 @@
 
     "dependencies": [
         "base",
-        "quality"
+        "quality",
+
+        "! awesome-sink"
     ]
 }
