@@ -3,6 +3,7 @@ Version: 1.0.1
 Date: ????
   Info:
     - Mark mod incompatible with awesome sink
+    - Fix crash when building upcycler on a platform
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2024. 10. 23
