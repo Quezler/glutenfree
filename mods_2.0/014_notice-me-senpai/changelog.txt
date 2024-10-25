@@ -5,6 +5,7 @@ Date: ????
     - Do not check for held item every time the player moves
     - Track chunks the player has put his character/remote-view on
     - Check all the chunks on screen
+    - Mark in green, yellow & red what is covered, in & out of range
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 25
