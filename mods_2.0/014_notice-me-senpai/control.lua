@@ -99,8 +99,8 @@ local function get_positions_from_area(area)
   local left_top = area.left_top
   local right_bottom = area.right_bottom
 
-  for y = left_top.y, right_bottom.y do
-      for x = left_top.x, right_bottom.x do
+  for y = left_top.y, right_bottom.y-1 do
+      for x = left_top.x, right_bottom.x-1 do
           table.insert(positions, {x = x, y = y})
       end
   end
