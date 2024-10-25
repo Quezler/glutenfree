@@ -51,6 +51,24 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
 
 end)
 
+local function get_chunks_in_viewport(chunk_position)
+  local chunk_positions = {}
+
+  local x = chunk_position.x
+  local y = chunk_position.y
+
+  -- this gets all the chunks on my 1920 x 1080 screen when i fully zoom out
+  local vertical = 2
+  local horizontal = 4
+
+  for i = y - vertical, y + vertical do
+      for j = x - horizontal, x + horizontal do
+          table.insert(chunk_positions, {x = j, y = i})
+      end
+  end
+
+  return chunk_positions
+end
 
 script.on_event(defines.events.on_player_changed_position, function(event)
   local playerdata = storage.playerdata[event.player_index]
@@ -59,26 +77,29 @@ script.on_event(defines.events.on_player_changed_position, function(event)
   local player = game.get_player(event.player_index)
   assert(player)
 
-  local chunk_position = flib_position.to_chunk(player.position)
+  local chunk_position_with_player = flib_position.to_chunk(player.position)
 
-  local chunk_key = string.format("[%g, %g]", chunk_position.x, chunk_position.y)
-  if playerdata.seen_chunks[chunk_key] then return end
-  playerdata.seen_chunks[chunk_key] = true
+  for _, chunk_position in ipairs(get_chunks_in_viewport(chunk_position_with_player)) do
+    local chunk_key = string.format("[%g, %g]", chunk_position.x, chunk_position.y)
+    if playerdata.seen_chunks[chunk_key] then goto continue end
+    playerdata.seen_chunks[chunk_key] = true
 
-  local left_top = flib_position.from_chunk(chunk_position)
-  local right_bottom = {left_top.x + 32, left_top.y + 32}
+    local left_top = flib_position.from_chunk(chunk_position)
+    local right_bottom = {left_top.x + 32, left_top.y + 32}
 
-  local rectangle = rendering.draw_rectangle{
-    surface = player.surface,
+    local rectangle = rendering.draw_rectangle{
+      surface = player.surface,
 
-    left_top = left_top,
-    right_bottom = right_bottom,
+      left_top = left_top,
+      right_bottom = right_bottom,
 
-    color = {0.25, 0.25, 0.25, 0.1},
-    filled = true,
-    only_in_alt_mode = true,
-    players = {player},
-  }
+      color = {0.25, 0.25, 0.25, 0.1},
+      filled = true,
+      only_in_alt_mode = true,
+      players = {player},
+    }
 
-  playerdata.rectangles[rectangle.id] = rectangle
+    playerdata.rectangles[rectangle.id] = rectangle
+    ::continue::
+  end
 end)
