@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 10. 25
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2024. 10. 25
   Info:
     - Do not check for held item every time the player moves
     - Track chunks the player has put his character/remote-view on
