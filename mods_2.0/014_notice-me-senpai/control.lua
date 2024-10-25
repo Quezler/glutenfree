@@ -116,11 +116,11 @@ end
 
 local function get_color_for_tile_key(playerdata, tile_key)
   if playerdata.green_position[tile_key] then
-    return {0, 0.5, 0, 0.5} -- green
+    return {0, 0.9, 0, 1} -- green
   elseif playerdata.yellow_position[tile_key] then
-    return {0.5, 0.5, 0, 0.5} -- yellow
+    return {0.9, 0.9, 0, 1} -- yellow
   else
-    return {0.5, 0, 0, 0.5} -- red
+    return {0.9, 0, 0, 1} -- red
   end
 end
 
@@ -189,14 +189,13 @@ script.on_event(defines.events.on_player_changed_position, function(event)
       local tile_key = position_key(tile_left_top)
 
       -- log(serpent.line(tile_right_bottom))
-      playerdata.ore_render_objects[tile_key] = rendering.draw_rectangle{
+      playerdata.ore_render_objects[tile_key] = rendering.draw_sprite{
         surface = surface,
 
-        left_top = tile_left_top,
-        right_bottom = tile_right_bottom,
+        target = ore,
 
-        color = get_color_for_tile_key(playerdata, tile_key),
-        filled = true,
+        sprite = "one-ore-texture-to-rule-them-all",
+        tint = get_color_for_tile_key(playerdata, tile_key),
 
         players = {player},
         only_in_alt_mode = true,
@@ -207,8 +206,10 @@ script.on_event(defines.events.on_player_changed_position, function(event)
   end
 
   -- we are redrawing because there might be new drills within render distance
-  log(string.format("recoloring %d ores.", table_size(playerdata.ore_render_objects)))
+  -- log(string.format("recoloring %d ores.", table_size(playerdata.ore_render_objects)))
   for tile_key, ore_render_object in pairs(playerdata.ore_render_objects) do
-    ore_render_object.color = get_color_for_tile_key(playerdata, tile_key)
+    if ore_render_object.valid then -- if the ore gets mined this kills itself
+      ore_render_object.color = get_color_for_tile_key(playerdata, tile_key)
+    end
   end
 end)
