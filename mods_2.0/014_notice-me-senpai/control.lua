@@ -194,9 +194,6 @@ script.on_event(defines.events.on_player_changed_position, function(event)
   -- we are redrawing because there might be new drills within render distance
   log(string.format("redrawing %d ores.", table_size(playerdata.ores)))
   for tile_key, ore in pairs(playerdata.ores) do
-    if ore.render_object then
-      ore.render_object.destroy()
-    end
 
     local color = {0.5, 0, 0, 0.5}
     if playerdata.green_position[tile_key] then
@@ -205,16 +202,20 @@ script.on_event(defines.events.on_player_changed_position, function(event)
       color = {0.5, 0.5, 0, 0.5}
     end
 
-    ore.render_object = rendering.draw_rectangle{
-      surface = surface,
+    if ore.render_object then
+      ore.render_object.color = color
+    else
+      ore.render_object = rendering.draw_rectangle{
+        surface = surface,
 
-      left_top = ore.left_top,
-      right_bottom = ore.right_bottom,
+        left_top = ore.left_top,
+        right_bottom = ore.right_bottom,
 
-      color = color,
-      filled = true,
-      only_in_alt_mode = true,
-      players = {player},
-    }
+        color = color,
+        filled = true,
+        only_in_alt_mode = true,
+        players = {player},
+      }
+    end
   end
 end)
