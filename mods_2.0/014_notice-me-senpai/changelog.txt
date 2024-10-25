@@ -10,6 +10,7 @@ Date: ????
     - Only chance the color when updating an ore
     - Simplify the last two commits
     - Replace the white square by a tintable ore texture
+    - Highlight ores when initially holding a drill
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 25

@@ -3,6 +3,8 @@ local flib_bounding_box = require("__flib__.bounding-box")
 
 local debug_mode = false
 
+local Handler = {}
+
 local is_mining_drill_entity = {}
 for _, entity in pairs(prototypes.entity) do
   is_mining_drill_entity[entity.name] = entity.type == "mining-drill"
@@ -42,8 +44,6 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   local player = game.get_player(event.player_index)
   assert(player)
 
-  -- game.print(event.tick .. ' ' .. serpent.line( is_player_holding_drill(player) ))
-
   local playerdata = storage.playerdata[player.index]
 
   if playerdata == nil then
@@ -52,13 +52,13 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
         rectangles = {},
         seen_chunks = {},
 
-        -- drills = {},
         green_position = {},
         yellow_position = {},
 
         ore_render_objects = {},
-        -- ore_render_objects = {},
       }
+
+      Handler.tick_player(event)
     end
   else
     if is_player_holding_drill(player) ~= true then
@@ -124,7 +124,7 @@ local function get_color_for_tile_key(playerdata, tile_key)
   end
 end
 
-script.on_event(defines.events.on_player_changed_position, function(event)
+function Handler.tick_player(event)
   local playerdata = storage.playerdata[event.player_index]
   if playerdata == nil then return end
 
@@ -164,8 +164,6 @@ script.on_event(defines.events.on_player_changed_position, function(event)
     }
 
     for _, drill in ipairs(drills) do
-      -- playerdata.drills[drill.unit_number] = drill
-
       local bounding_box = flib_bounding_box.ceil(drill.bounding_box)
       for _, position in ipairs(get_positions_from_area(bounding_box)) do
         playerdata.green_position[position_key(position)] = true
@@ -188,7 +186,6 @@ script.on_event(defines.events.on_player_changed_position, function(event)
       local tile_right_bottom = {tile_left_top.x + 1, tile_left_top.y + 1}
       local tile_key = position_key(tile_left_top)
 
-      -- log(serpent.line(tile_right_bottom))
       playerdata.ore_render_objects[tile_key] = rendering.draw_sprite{
         surface = surface,
 
@@ -212,4 +209,6 @@ script.on_event(defines.events.on_player_changed_position, function(event)
       ore_render_object.color = get_color_for_tile_key(playerdata, tile_key)
     end
   end
-end)
+end
+
+script.on_event(defines.events.on_player_changed_position, Handler.tick_player)
