@@ -11,6 +11,7 @@ Date: ????
     - Simplify the last two commits
     - Replace the white square by a tintable ore texture
     - Highlight ores when initially holding a drill
+    - Fix some ores erroneously being marked as red
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 25

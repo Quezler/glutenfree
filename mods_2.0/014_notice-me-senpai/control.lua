@@ -170,7 +170,7 @@ function Handler.tick_player(event)
       end
 
       local mining_drill_radius = mining_drill_radius[drill.name]
-      local mining_box = flib_bounding_box.ceil(flib_bounding_box.from_dimensions(drill.position, mining_drill_radius, mining_drill_radius))
+      local mining_box = flib_bounding_box.ceil(flib_bounding_box.from_dimensions(drill.position, mining_drill_radius * 2, mining_drill_radius * 2))
       for _, position in ipairs(get_positions_from_area(mining_box)) do
         playerdata.yellow_position[position_key(position)] = true
       end
