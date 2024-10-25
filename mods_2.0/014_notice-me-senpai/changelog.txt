@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Do not check for held item every time the player moves
+    - Track chunks the player has put his character/remote-view on
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 25
