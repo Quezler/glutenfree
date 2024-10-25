@@ -8,6 +8,7 @@ Date: ????
     - Mark in green, yellow & red what is covered, in & out of range
     - Always draw ores, not only when caching them
     - Only chance the color when updating an ore
+    - Simplify the last two commits
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 25

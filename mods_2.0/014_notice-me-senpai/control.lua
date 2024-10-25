@@ -56,7 +56,7 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
         green_position = {},
         yellow_position = {},
 
-        ores = {},
+        ore_render_objects = {},
         -- ore_render_objects = {},
       }
     end
@@ -65,8 +65,8 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
       for _, rectangle in pairs(playerdata.rectangles) do
         rectangle.destroy()
       end
-      for _, ore in pairs(playerdata.ores) do
-        ore.render_object.destroy() -- ore.render_object is never nil when on_player_changed_position finishes
+      for _, ore_render_object in pairs(playerdata.ore_render_objects) do
+        ore_render_object.destroy()
       end
       storage.playerdata[player.index] = nil
     end
@@ -112,6 +112,16 @@ local function position_key(position)
   assert(position.x)
   assert(position.y)
   return string.format("[%g, %g]", position.x, position.y)
+end
+
+local function get_color_for_tile_key(playerdata, tile_key)
+  if playerdata.green_position[tile_key] then
+    return {0, 0.5, 0, 0.5} -- green
+  elseif playerdata.yellow_position[tile_key] then
+    return {0.5, 0.5, 0, 0.5} -- yellow
+  else
+    return {0.5, 0, 0, 0.5} -- red
+  end
 end
 
 script.on_event(defines.events.on_player_changed_position, function(event)
@@ -179,12 +189,17 @@ script.on_event(defines.events.on_player_changed_position, function(event)
       local tile_key = position_key(tile_left_top)
 
       -- log(serpent.line(tile_right_bottom))
-      playerdata.ores[tile_key] = {
-        tile_key = tile_key,
-        resource = ore,
+      playerdata.ore_render_objects[tile_key] = rendering.draw_rectangle{
+        surface = surface,
+
         left_top = tile_left_top,
         right_bottom = tile_right_bottom,
-        render_object = nil,
+
+        color = get_color_for_tile_key(playerdata, tile_key),
+        filled = true,
+
+        players = {player},
+        only_in_alt_mode = true,
       }
     end
 
@@ -192,30 +207,8 @@ script.on_event(defines.events.on_player_changed_position, function(event)
   end
 
   -- we are redrawing because there might be new drills within render distance
-  log(string.format("redrawing %d ores.", table_size(playerdata.ores)))
-  for tile_key, ore in pairs(playerdata.ores) do
-
-    local color = {0.5, 0, 0, 0.5}
-    if playerdata.green_position[tile_key] then
-      color = {0, 0.5, 0, 0.5}
-    elseif playerdata.yellow_position[tile_key] then
-      color = {0.5, 0.5, 0, 0.5}
-    end
-
-    if ore.render_object then
-      ore.render_object.color = color
-    else
-      ore.render_object = rendering.draw_rectangle{
-        surface = surface,
-
-        left_top = ore.left_top,
-        right_bottom = ore.right_bottom,
-
-        color = color,
-        filled = true,
-        only_in_alt_mode = true,
-        players = {player},
-      }
-    end
+  log(string.format("recoloring %d ores.", table_size(playerdata.ore_render_objects)))
+  for tile_key, ore_render_object in pairs(playerdata.ore_render_objects) do
+    ore_render_object.color = get_color_for_tile_key(playerdata, tile_key)
   end
 end)
