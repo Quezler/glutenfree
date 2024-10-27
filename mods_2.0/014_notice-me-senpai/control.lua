@@ -143,6 +143,18 @@ function Handler.add_drill_to_playerdata(drill, playerdata)
   end
 end
 
+function Handler.redraw(playerdata)
+  playerdata.redraw = false
+
+  -- we are redrawing because there might be new drills within render distance
+  log(string.format("recoloring %d ores.", table_size(playerdata.ore_render_objects)))
+  for tile_key, ore_render_object in pairs(playerdata.ore_render_objects) do
+    if ore_render_object.valid then -- if the ore gets mined this kills itself
+      ore_render_object.color = get_color_for_tile_key(playerdata, tile_key)
+    end
+  end
+end
+
 function Handler.tick_player(event)
   local playerdata = storage.playerdata[event.player_index]
   if playerdata == nil then return end
@@ -213,16 +225,7 @@ function Handler.tick_player(event)
     ::continue::
   end
 
-  -- we are redrawing because there might be new drills within render distance
-  -- log(string.format("recoloring %d ores.", table_size(playerdata.ore_render_objects)))
-  if playerdata.redraw == true then
-    playerdata.redraw = false
-    for tile_key, ore_render_object in pairs(playerdata.ore_render_objects) do
-      if ore_render_object.valid then -- if the ore gets mined this kills itself
-        ore_render_object.color = get_color_for_tile_key(playerdata, tile_key)
-      end
-    end
-  end
+  if playerdata.redraw then Handler.redraw(playerdata) end
 end
 
 script.on_event(defines.events.on_player_changed_position, Handler.tick_player)
@@ -232,7 +235,7 @@ function Handler.on_created_entity(event)
 
   for _, playerdata in pairs(storage.playerdata) do
     Handler.add_drill_to_playerdata(entity, playerdata)
-    playerdata.redraw = true
+    Handler.redraw(playerdata)
   end
 end
 
