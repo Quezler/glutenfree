@@ -56,12 +56,12 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
       storage.playerdata[player.index] = {
         rectangles = {},
         seen_chunks = {},
-        seen_new_chunk = false,
 
         green_position = {},
         yellow_position = {},
 
         ore_render_objects = {},
+        redraw = false,
       }
 
       Handler.tick_player(event)
@@ -130,6 +130,19 @@ local function get_color_for_tile_key(playerdata, tile_key)
   end
 end
 
+function Handler.add_drill_to_playerdata(drill, playerdata)
+  local bounding_box = flib_bounding_box.ceil(drill.bounding_box)
+  for _, position in ipairs(get_positions_from_area(bounding_box)) do
+    playerdata.green_position[position_key(position)] = true
+  end
+
+  local mining_drill_radius = mining_drill_radius[drill.name]
+  local mining_box = flib_bounding_box.ceil(flib_bounding_box.from_dimensions(drill.position, mining_drill_radius * 2, mining_drill_radius * 2))
+  for _, position in ipairs(get_positions_from_area(mining_box)) do
+    playerdata.yellow_position[position_key(position)] = true
+  end
+end
+
 function Handler.tick_player(event)
   local playerdata = storage.playerdata[event.player_index]
   if playerdata == nil then return end
@@ -143,7 +156,7 @@ function Handler.tick_player(event)
     local chunk_key = position_key(chunk_position)
     if playerdata.seen_chunks[chunk_key] then goto continue end
     playerdata.seen_chunks[chunk_key] = true
-    playerdata.saw_new_chunk = true -- stricly speaking only required if there were new ores or drills found in this new chunk
+    playerdata.redraw = true -- stricly speaking only required if there were new ores or drills found in this new chunk
 
     local left_top = flib_position.from_chunk(chunk_position)
     local right_bottom = {left_top.x + 32, left_top.y + 32}
@@ -171,16 +184,7 @@ function Handler.tick_player(event)
     }
 
     for _, drill in ipairs(drills) do
-      local bounding_box = flib_bounding_box.ceil(drill.bounding_box)
-      for _, position in ipairs(get_positions_from_area(bounding_box)) do
-        playerdata.green_position[position_key(position)] = true
-      end
-
-      local mining_drill_radius = mining_drill_radius[drill.name]
-      local mining_box = flib_bounding_box.ceil(flib_bounding_box.from_dimensions(drill.position, mining_drill_radius * 2, mining_drill_radius * 2))
-      for _, position in ipairs(get_positions_from_area(mining_box)) do
-        playerdata.yellow_position[position_key(position)] = true
-      end
+      Handler.add_drill_to_playerdata(drill, playerdata)
     end
 
     local ores = surface.find_entities_filtered{
@@ -211,8 +215,8 @@ function Handler.tick_player(event)
 
   -- we are redrawing because there might be new drills within render distance
   -- log(string.format("recoloring %d ores.", table_size(playerdata.ore_render_objects)))
-  if playerdata.saw_new_chunk == true then
-    playerdata.saw_new_chunk = false
+  if playerdata.redraw == true then
+    playerdata.redraw = false
     for tile_key, ore_render_object in pairs(playerdata.ore_render_objects) do
       if ore_render_object.valid then -- if the ore gets mined this kills itself
         ore_render_object.color = get_color_for_tile_key(playerdata, tile_key)
@@ -222,3 +226,25 @@ function Handler.tick_player(event)
 end
 
 script.on_event(defines.events.on_player_changed_position, Handler.tick_player)
+
+function Handler.on_created_entity(event)
+  local entity = event.entity or event.destination
+
+  for _, playerdata in pairs(storage.playerdata) do
+    Handler.add_drill_to_playerdata(entity, playerdata)
+    playerdata.redraw = true
+  end
+end
+
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.on_space_platform_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+  defines.events.on_entity_cloned,
+}) do
+  script.on_event(event, Handler.on_created_entity, {
+    {filter = "type", type = "mining-drill"},
+  })
+end
