@@ -40,6 +40,11 @@ script.on_init(function()
   storage.playerdata = {}
 end)
 
+script.on_configuration_changed(function()
+  storage.playerdata = {}
+  rendering.clear("notice-me-senpai")
+end)
+
 script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   local player = game.get_player(event.player_index)
   assert(player)
@@ -51,6 +56,7 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
       storage.playerdata[player.index] = {
         rectangles = {},
         seen_chunks = {},
+        seen_new_chunk = false,
 
         green_position = {},
         yellow_position = {},
@@ -137,6 +143,7 @@ function Handler.tick_player(event)
     local chunk_key = position_key(chunk_position)
     if playerdata.seen_chunks[chunk_key] then goto continue end
     playerdata.seen_chunks[chunk_key] = true
+    playerdata.saw_new_chunk = true -- stricly speaking only required if there were new ores or drills found in this new chunk
 
     local left_top = flib_position.from_chunk(chunk_position)
     local right_bottom = {left_top.x + 32, left_top.y + 32}
@@ -204,9 +211,12 @@ function Handler.tick_player(event)
 
   -- we are redrawing because there might be new drills within render distance
   -- log(string.format("recoloring %d ores.", table_size(playerdata.ore_render_objects)))
-  for tile_key, ore_render_object in pairs(playerdata.ore_render_objects) do
-    if ore_render_object.valid then -- if the ore gets mined this kills itself
-      ore_render_object.color = get_color_for_tile_key(playerdata, tile_key)
+  if playerdata.saw_new_chunk == true then
+    playerdata.saw_new_chunk = false
+    for tile_key, ore_render_object in pairs(playerdata.ore_render_objects) do
+      if ore_render_object.valid then -- if the ore gets mined this kills itself
+        ore_render_object.color = get_color_for_tile_key(playerdata, tile_key)
+      end
     end
   end
 end
