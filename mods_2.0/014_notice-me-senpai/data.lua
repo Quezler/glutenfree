@@ -1,9 +1,12 @@
-data:extend{{
-  type = "sprite",
-  name = "one-ore-texture-to-rule-them-all",
+for _, suffix in ipairs({"red", "yellow", "green"}) do
+  data:extend{{
+    type = "sprite",
+    name = "notice-me-senpai-" .. suffix,
 
-  filename = "__notice-me-senpai__/graphics/icons/one-ore-texture-to-rule-them-all.png",
-  size = 128,
-  flags = {"icon"},
-  scale = 0.3,
-}}
+    filename = "__notice-me-senpai__/graphics/icons/notice-me-senpai-" .. suffix .. ".png",
+    size = 64,
+    flags = {"icon"},
+    scale = 0.45,
+  }}
+end
+
