@@ -174,7 +174,10 @@ end
 function Handler.add_drill_to_playerdata(drill, playerdata)
   if playerdata.drills[drill.unit_number] then return end -- either on a chunk border or my mod is bugged
 
-  local mining_drill_radius = mining_drill_radius[drill.name]
+  local drill_name = drill.name == "entity-ghost" and drill.ghost_name or drill.name
+  local mining_drill_radius = mining_drill_radius[drill_name]
+  assert(mining_drill_radius)
+
   local bounding_box = flib_bounding_box.ceil(drill.bounding_box)
   local mining_box = flib_bounding_box.ceil(flib_bounding_box.from_dimensions(drill.position, mining_drill_radius * 2, mining_drill_radius * 2))
 
@@ -246,6 +249,15 @@ function Handler.tick_player(event)
       playerdata.rectangles[rectangle.id] = rectangle
     end
 
+    local ghost_drills = surface.find_entities_filtered{
+      area = {left_top, right_bottom},
+      ghost_type = "mining-drill",
+      force = player.force,
+    }
+    for _, drill in ipairs(ghost_drills) do
+      Handler.add_drill_to_playerdata(drill, playerdata)
+    end
+
     local drills = surface.find_entities_filtered{
       area = {left_top, right_bottom},
       type = "mining-drill",
@@ -289,7 +301,8 @@ for _, event in ipairs({
   defines.events.on_entity_cloned,
 }) do
   script.on_event(event, Handler.on_created_entity, {
-    {filter = "type", type = "mining-drill"},
+    {filter =       "type", type = "mining-drill"},
+    {filter = "ghost_type", type = "mining-drill"},
   })
 end
 
