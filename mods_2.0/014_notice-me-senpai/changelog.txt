@@ -6,6 +6,7 @@ Date: ????
     - Redraw when a drill gets built
     - Redraw immediately when a new drill gets built
     - Remove render objects when a drill gets removed
+    - Purge caches completely when a drill gets removed
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2024. 10. 25

@@ -57,8 +57,14 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   if playerdata == nil then
     if is_player_holding_drill(player) then
       storage.playerdata[player.index] = {
+        player_index = player.index,
+        surface_index = player.surface.index,
+
         rectangles = {},
         seen_chunks = {},
+
+        ores = {},
+        drills = {},
 
         green_position = {},
         yellow_position = {},
@@ -133,41 +139,51 @@ local function get_color_for_tile_key(playerdata, tile_key)
   end
 end
 
+function Handler.add_ore_to_playerdata(ore, playerdata)
+  local tile_left_top = flib_position.to_tile(ore.position)
+  local tile_right_bottom = {tile_left_top.x + 1, tile_left_top.y + 1}
+  local tile_key = position_key(tile_left_top)
+
+  playerdata.ores[tile_key] = ore
+
+  playerdata.ore_render_objects[tile_key] = rendering.draw_sprite{
+    surface = playerdata.surface_index,
+
+    target = ore,
+
+    sprite = "one-ore-texture-to-rule-them-all",
+    tint = get_color_for_tile_key(playerdata, tile_key),
+
+    players = {playerdata.player_index},
+    only_in_alt_mode = true,
+  }
+end
+
 function Handler.add_drill_to_playerdata(drill, playerdata)
+  playerdata.drills[drill.unit_number] = drill
+
   local bounding_box = flib_bounding_box.ceil(drill.bounding_box)
   for _, position in ipairs(get_positions_from_area(bounding_box)) do
-    playerdata.green_position[position_key(position)] = drill
+    playerdata.green_position[position_key(position)] = true
   end
 
   local mining_drill_radius = mining_drill_radius[drill.name]
   local mining_box = flib_bounding_box.ceil(flib_bounding_box.from_dimensions(drill.position, mining_drill_radius * 2, mining_drill_radius * 2))
   for _, position in ipairs(get_positions_from_area(mining_box)) do
-    playerdata.yellow_position[position_key(position)] = drill
+    playerdata.yellow_position[position_key(position)] = true
   end
 
   storage.deathrattles[script.register_on_object_destroyed(drill)] = true
 end
 
-function Handler.validate_color_positions(playerdata)
-  local affected_tile_keys = {}
+function Handler.playerdata_refresh_drills(playerdata)
+  playerdata.green_position = {}
+  playerdata.yellow_position = {}
 
-  for tile_key, drill in pairs(playerdata.green_position) do
-    if not playerdata.green_position[tile_key].valid then
-      playerdata.green_position[tile_key] = nil
-      affected_tile_keys[tile_key] = true
+  for unit_number, drill in pairs(playerdata.drills) do
+    if drill.valid then
+      Handler.add_drill_to_playerdata(drill, playerdata)
     end
-  end
-
-  for tile_key, drill in pairs(playerdata.yellow_position) do
-    if not playerdata.yellow_position[tile_key].valid then
-      playerdata.yellow_position[tile_key] = nil
-      affected_tile_keys[tile_key] = true
-    end
-  end
-
-  for tile_key, _ in pairs(affected_tile_keys) do
-    local ore_render_object = playerdata.ore_render_objects[tile_key]
-    if ore_render_object then ore_render_object.destroy() end
   end
 end
 
@@ -222,7 +238,6 @@ function Handler.tick_player(event)
       type = "mining-drill",
       force = player.force,
     }
-
     for _, drill in ipairs(drills) do
       Handler.add_drill_to_playerdata(drill, playerdata)
     end
@@ -231,23 +246,8 @@ function Handler.tick_player(event)
       area = {left_top, right_bottom},
       type = "resource",
     }
-
     for _, ore in ipairs(ores) do
-      local tile_left_top = flib_position.to_tile(ore.position)
-      local tile_right_bottom = {tile_left_top.x + 1, tile_left_top.y + 1}
-      local tile_key = position_key(tile_left_top)
-
-      playerdata.ore_render_objects[tile_key] = rendering.draw_sprite{
-        surface = surface,
-
-        target = ore,
-
-        sprite = "one-ore-texture-to-rule-them-all",
-        tint = get_color_for_tile_key(playerdata, tile_key),
-
-        players = {player},
-        only_in_alt_mode = true,
-      }
+      Handler.add_ore_to_playerdata(ore, playerdata)
     end
 
     ::continue::
@@ -284,7 +284,18 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     for _, playerdata in pairs(storage.playerdata) do
-      Handler.validate_color_positions(playerdata)
+
+      for _, ore_render_object in pairs(playerdata.ore_render_objects) do
+        ore_render_object.destroy()
+      end
+      playerdata.ore_render_objects = {}
+
+      Handler.playerdata_refresh_drills(playerdata)
+
+      for _, ore in pairs(playerdata.ores) do
+        Handler.add_ore_to_playerdata(ore, playerdata)
+      end
+
     end
   end
 end)
