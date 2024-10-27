@@ -66,8 +66,8 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
         ores = {},
         drills = {},
 
-        green_position = {},
-        yellow_position = {},
+        green_positions = {},
+        yellow_positions = {},
 
         ore_render_objects = {},
         redraw = false,
@@ -130,9 +130,9 @@ local function position_key(position)
 end
 
 local function get_color_for_tile_key(playerdata, tile_key)
-  if playerdata.green_position[tile_key] then
+  if playerdata.green_positions[tile_key] then
     return {0, 0.9, 0, 1} -- green
-  elseif playerdata.yellow_position[tile_key] then
+  elseif playerdata.yellow_positions[tile_key] then
     return {0.9, 0.9, 0, 1} -- yellow
   else
     return {0.9, 0, 0, 1} -- red
@@ -159,31 +159,43 @@ function Handler.add_ore_to_playerdata(ore, playerdata)
   }
 end
 
-function Handler.add_drill_to_playerdata(drill, playerdata)
-  playerdata.drills[drill.unit_number] = drill
+function Handler.add_drill_color_positions(playerdata, drill_struct)
+  if drill_struct.entity.valid == false then return end
 
-  local bounding_box = flib_bounding_box.ceil(drill.bounding_box)
-  for _, position in ipairs(get_positions_from_area(bounding_box)) do
-    playerdata.green_position[position_key(position)] = true
+  for _, tile_position in ipairs(drill_struct.green_positions) do
+    playerdata.green_positions[position_key(tile_position)] = true
   end
+
+  for _, tile_position in ipairs(drill_struct.yellow_positions) do
+    playerdata.yellow_positions[position_key(tile_position)] = true
+  end
+end
+
+function Handler.add_drill_to_playerdata(drill, playerdata)
+  if playerdata.drills[drill.unit_number] then return end -- either on a chunk border or my mod is bugged
 
   local mining_drill_radius = mining_drill_radius[drill.name]
+  local bounding_box = flib_bounding_box.ceil(drill.bounding_box)
   local mining_box = flib_bounding_box.ceil(flib_bounding_box.from_dimensions(drill.position, mining_drill_radius * 2, mining_drill_radius * 2))
-  for _, position in ipairs(get_positions_from_area(mining_box)) do
-    playerdata.yellow_position[position_key(position)] = true
-  end
 
+  local drill_struct = {
+    entity = drill,
+
+    green_positions = get_positions_from_area(bounding_box),
+    yellow_positions = get_positions_from_area(mining_box),
+  }
+
+  playerdata.drills[drill.unit_number] = drill_struct
+  Handler.add_drill_color_positions(playerdata, drill_struct)
   storage.deathrattles[script.register_on_object_destroyed(drill)] = true
 end
 
-function Handler.playerdata_refresh_drills(playerdata)
-  playerdata.green_position = {}
-  playerdata.yellow_position = {}
+function Handler.reindex_color_positions(playerdata)
+  playerdata.green_positions = {}
+  playerdata.yellow_positions = {}
 
-  for unit_number, drill in pairs(playerdata.drills) do
-    if drill.valid then
-      Handler.add_drill_to_playerdata(drill, playerdata)
-    end
+  for _, drill_struct in pairs(playerdata.drills) do
+    Handler.add_drill_color_positions(playerdata, drill_struct)
   end
 end
 
@@ -285,16 +297,17 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     for _, playerdata in pairs(storage.playerdata) do
 
-      for _, ore_render_object in pairs(playerdata.ore_render_objects) do
-        ore_render_object.destroy()
-      end
-      playerdata.ore_render_objects = {}
+      -- for _, ore_render_object in pairs(playerdata.ore_render_objects) do
+      --   ore_render_object.destroy()
+      -- end
+      -- playerdata.ore_render_objects = {}
 
-      Handler.playerdata_refresh_drills(playerdata)
+      Handler.reindex_color_positions(playerdata)
+      Handler.redraw(playerdata)
 
-      for _, ore in pairs(playerdata.ores) do
-        Handler.add_ore_to_playerdata(ore, playerdata)
-      end
+      -- for _, ore in pairs(playerdata.ores) do
+      --   Handler.add_ore_to_playerdata(ore, playerdata)
+      -- end
 
     end
   end
