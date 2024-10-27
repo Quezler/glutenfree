@@ -66,8 +66,8 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
         ores = {},
         drills = {},
 
-        green_positions = {},
-        yellow_positions = {},
+        green_positions = {}, -- "[x, y]" = true
+        yellow_positions = {}, -- "[x, y]" = true
 
         ore_render_objects = {},
         redraw = false,
@@ -181,12 +181,13 @@ function Handler.add_drill_to_playerdata(drill, playerdata)
   local drill_struct = {
     entity = drill,
 
-    green_positions = get_positions_from_area(bounding_box),
-    yellow_positions = get_positions_from_area(mining_box),
+    green_positions = get_positions_from_area(bounding_box), -- {x = #, y = #}
+    yellow_positions = get_positions_from_area(mining_box), -- {x = #, y = #}
   }
 
   playerdata.drills[drill.unit_number] = drill_struct
   Handler.add_drill_color_positions(playerdata, drill_struct)
+
   storage.deathrattles[script.register_on_object_destroyed(drill)] = true
 end
 
@@ -203,7 +204,7 @@ function Handler.redraw(playerdata)
   playerdata.redraw = false
 
   -- we are redrawing because there might be new drills within render distance
-  log(string.format("recoloring %d ores.", table_size(playerdata.ore_render_objects)))
+  -- log(string.format("recoloring %d ores.", table_size(playerdata.ore_render_objects)))
   for tile_key, ore_render_object in pairs(playerdata.ore_render_objects) do
     if ore_render_object.valid then -- if the ore gets mined this kills itself
       ore_render_object.color = get_color_for_tile_key(playerdata, tile_key)
@@ -296,19 +297,8 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     for _, playerdata in pairs(storage.playerdata) do
-
-      -- for _, ore_render_object in pairs(playerdata.ore_render_objects) do
-      --   ore_render_object.destroy()
-      -- end
-      -- playerdata.ore_render_objects = {}
-
       Handler.reindex_color_positions(playerdata)
       Handler.redraw(playerdata)
-
-      -- for _, ore in pairs(playerdata.ores) do
-      --   Handler.add_ore_to_playerdata(ore, playerdata)
-      -- end
-
     end
   end
 end)
