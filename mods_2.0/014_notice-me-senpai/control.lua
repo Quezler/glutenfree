@@ -38,10 +38,13 @@ end
 
 script.on_init(function()
   storage.playerdata = {}
+  storage.deathrattles = {}
 end)
 
 script.on_configuration_changed(function()
   storage.playerdata = {}
+  storage.deathrattles = {}
+
   rendering.clear("notice-me-senpai")
 end)
 
@@ -133,13 +136,38 @@ end
 function Handler.add_drill_to_playerdata(drill, playerdata)
   local bounding_box = flib_bounding_box.ceil(drill.bounding_box)
   for _, position in ipairs(get_positions_from_area(bounding_box)) do
-    playerdata.green_position[position_key(position)] = true
+    playerdata.green_position[position_key(position)] = drill
   end
 
   local mining_drill_radius = mining_drill_radius[drill.name]
   local mining_box = flib_bounding_box.ceil(flib_bounding_box.from_dimensions(drill.position, mining_drill_radius * 2, mining_drill_radius * 2))
   for _, position in ipairs(get_positions_from_area(mining_box)) do
-    playerdata.yellow_position[position_key(position)] = true
+    playerdata.yellow_position[position_key(position)] = drill
+  end
+
+  storage.deathrattles[script.register_on_object_destroyed(drill)] = true
+end
+
+function Handler.validate_color_positions(playerdata)
+  local affected_tile_keys = {}
+
+  for tile_key, drill in pairs(playerdata.green_position) do
+    if not playerdata.green_position[tile_key].valid then
+      playerdata.green_position[tile_key] = nil
+      affected_tile_keys[tile_key] = true
+    end
+  end
+
+  for tile_key, drill in pairs(playerdata.yellow_position) do
+    if not playerdata.yellow_position[tile_key].valid then
+      playerdata.yellow_position[tile_key] = nil
+      affected_tile_keys[tile_key] = true
+    end
+  end
+
+  for tile_key, _ in pairs(affected_tile_keys) do
+    local ore_render_object = playerdata.ore_render_objects[tile_key]
+    if ore_render_object then ore_render_object.destroy() end
   end
 end
 
@@ -251,3 +279,12 @@ for _, event in ipairs({
     {filter = "type", type = "mining-drill"},
   })
 end
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    for _, playerdata in pairs(storage.playerdata) do
+      Handler.validate_color_positions(playerdata)
+    end
+  end
+end)

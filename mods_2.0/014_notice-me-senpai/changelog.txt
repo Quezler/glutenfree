@@ -5,6 +5,7 @@ Date: ????
     - Recolor render objects only if new chunks got scanned
     - Redraw when a drill gets built
     - Redraw immediately when a new drill gets built
+    - Remove render objects when a drill gets removed
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2024. 10. 25
