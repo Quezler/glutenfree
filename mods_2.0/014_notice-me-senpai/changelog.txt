@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
-Date: ????
+Date: 2024. 10. 27
   Info:
     - Recolor render objects only if new chunks got scanned
     - Redraw when a drill gets built
