@@ -64,15 +64,6 @@ local prioritized_items = {
 
 function Handler.pick_signal_and_count(signals)
   assert(signals)
-
-  for _, signal_and_count in ipairs(signals) do
-    if prioritized_items[signal_and_count.name] then
-      -- return prioritized_items
-    else
-      return signal_and_count
-    end
-  end
-
   return signals[1]
 end
 
@@ -90,3 +81,20 @@ function Handler.on_tick(event)
 end
 
 script.on_event(defines.events.on_tick, Handler.on_tick)
+
+script.on_event(defines.events.on_rocket_launch_ordered, function(event)
+  assert(event.rocket_silo)
+  if event.rocket_silo.name ~= "infinity-rocket-silo" then return end
+
+  local inventory = event.rocket.cargo_pod.get_inventory(defines.inventory.cargo_unit)
+  assert(inventory)
+
+  for slot = 1, #inventory do
+    local stack = inventory[slot]
+    if stack.valid_for_read and prioritized_items[stack.name] then
+      event.rocket.cargo_pod.force_finish_ascending()
+      -- event.rocket.cargo_pod.force_finish_descending()
+      return
+    end
+  end
+end)
