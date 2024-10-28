@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Add startup setting for disabling quality modules (on by default)
     - Make quality upcyclers actually faster (only newly placed ones)
+    - Badly match the crafting speed with the fast inserter rotation speed
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2024. 10. 24

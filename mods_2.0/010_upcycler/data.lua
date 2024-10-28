@@ -129,3 +129,5 @@ data:extend{upcycler_input}
 
 table.insert(upcycler_entity.flags, "no-automated-item-insertion")
 table.insert(upcycler_entity.flags, "no-automated-item-removal")
+
+upcycler_entity.crafting_speed = data.raw["inserter"]["fast-inserter"].rotation_speed * 60
