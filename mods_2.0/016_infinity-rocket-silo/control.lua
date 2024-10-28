@@ -67,7 +67,9 @@ function Handler.pick_signal_and_count(signals)
 
   for _, signal_and_count in ipairs(signals) do
     if prioritized_items[signal_and_count.name] then
-      return prioritized_items
+      -- return prioritized_items
+    else
+      return signal_and_count
     end
   end
 

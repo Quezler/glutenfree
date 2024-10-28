@@ -6,6 +6,7 @@ Date: ????
     - Speed up the rocket itself too
     - Get the control stage to force feed the rocket silo
     - Try to deliver cargo bays first
+    - The reverse does not work
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 28
