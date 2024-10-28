@@ -74,6 +74,11 @@ end
 
 function Handler.on_tick(event)
   for unit_number, struct in pairs(storage.structs) do
+    if struct.silo.valid == false then
+      storage.structs[unit_number] = nil
+      goto continue
+    end
+
     local network = struct.silo.get_circuit_network(defines.wire_connector_id.circuit_red)
     local signal_and_count = Handler.pick_signal_and_count(network.signals or {})
     if signal_and_count then
@@ -82,6 +87,8 @@ function Handler.on_tick(event)
       struct.inventory.clear()
       struct.inventory.insert({name = signal_and_count.signal.name, quality = signal_and_count.signal.quality, count = 1000000})
     end
+
+    ::continue::
   end
 end
 

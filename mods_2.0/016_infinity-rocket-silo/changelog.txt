@@ -9,6 +9,7 @@ Date: ????
     - The reverse does not work
     - Actually prioritize certain item deliveries
     - Ignore negative signals (why can they be negative?)
+    - Do not crash upon silo removal
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 28
