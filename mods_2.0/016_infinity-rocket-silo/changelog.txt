@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Make the infinity silo craft free rockets
+    - Speed up the rocket itself too
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 28

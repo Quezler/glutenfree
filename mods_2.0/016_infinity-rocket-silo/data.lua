@@ -52,5 +52,26 @@ local infinity_rocket_part_recipe = {
   hidden_in_factoriopedia = true,
 }
 
+silo.times_to_blink = 0
+silo.door_opening_speed = 1000000
+
 data:extend{silo, silo_item}
 data:extend{infinity_rocket_part_item, infinity_rocket_part_recipe}
+
+local rocket = table.deepcopy(data.raw["rocket-silo-rocket"]["rocket-silo-rocket"])
+rocket.name = "infinity-rocket-silo-rocket"
+silo.rocket_entity = rocket.name
+
+rocket.rising_speed = 1000000
+rocket.engine_starting_speed = 1000000
+rocket.flying_speed = 1000000
+rocket.flying_acceleration = 1000000
+
+data:extend{rocket}
+
+silo.arm_01_back_animation.animation_speed = 1000000
+silo.arm_02_right_animation.animation_speed = 1000000
+silo.arm_03_front_animation.animation_speed = 1000000
+
+silo.rocket_rising_delay = 1
+silo.launch_wait_time = 1
