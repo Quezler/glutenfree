@@ -55,6 +55,7 @@ function Handler.on_created_entity(event)
     force = "neutral",
     position = {storage.next_x_offset, -1.5},
     direction = defines.direction.south,
+    quality = entity.quality,
   }
   local trash = mod_surface.create_entity{
     name = "infinity-chest",

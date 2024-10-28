@@ -3,6 +3,7 @@ Version: 1.0.2
 Date: ????
   Info:
     - Add startup setting for disabling quality modules (on by default)
+    - Make quality upcyclers actually faster (only newly placed ones)
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2024. 10. 24
