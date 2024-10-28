@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2024. 10. 28
   Info:
     - Make the infinity silo craft free rockets
     - Speed up the rocket itself too
@@ -10,6 +10,7 @@ Date: ????
     - Actually prioritize certain item deliveries
     - Ignore negative signals (why can they be negative?)
     - Do not crash upon silo removal
+    - Touch up for the mod portal
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 28

@@ -1,18 +1,18 @@
 local Handler = {}
 
 script.on_init(function()
-  local items = remote.call("freeplay", "get_created_items")
-  items["infinity-rocket-silo"] = 1
-  -- items["space-platform-starter-pack"] = 1
-  remote.call("freeplay", "set_created_items", items)
+  -- local items = remote.call("freeplay", "get_created_items")
+  -- items["infinity-rocket-silo"] = 1
+  -- -- items["space-platform-starter-pack"] = 1
+  -- remote.call("freeplay", "set_created_items", items)
 
-  local platform = game.forces["player"].create_space_platform{
-    name = "platform",
-    planet = "nauvis",
-    starter_pack = "space-platform-starter-pack",
-  }
-  assert(platform)
-  platform.apply_starter_pack()
+  -- local platform = game.forces["player"].create_space_platform{
+  --   name = "platform",
+  --   planet = "nauvis",
+  --   starter_pack = "space-platform-starter-pack",
+  -- }
+  -- assert(platform)
+  -- platform.apply_starter_pack()
 
   storage.structs = {}
 end)
@@ -80,9 +80,14 @@ function Handler.on_tick(event)
     end
 
     local network = struct.silo.get_circuit_network(defines.wire_connector_id.circuit_red)
+    if not network then
+      struct.silo.destroy()
+      goto continue
+    end
+
     local signal_and_count = Handler.pick_signal_and_count(network.signals or {})
     if signal_and_count then
-      log(serpent.line(signal_and_count))
+      -- log(serpent.line(signal_and_count))
 
       struct.inventory.clear()
       struct.inventory.insert({name = signal_and_count.signal.name, quality = signal_and_count.signal.quality, count = 1000000})

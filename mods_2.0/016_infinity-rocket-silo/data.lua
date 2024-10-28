@@ -10,6 +10,7 @@ silo.base_front_sprite.filename = "__infinity-rocket-silo__/graphics/entity/infi
 
 silo_item.name = silo.name
 silo_item.icon = "__infinity-rocket-silo__/graphics/icons/infinity-rocket-silo.png"
+silo.icon = "__infinity-rocket-silo__/graphics/icons/infinity-rocket-silo.png"
 
 silo.hidden_in_factoriopedia = true
 silo_item.hidden_in_factoriopedia = true
