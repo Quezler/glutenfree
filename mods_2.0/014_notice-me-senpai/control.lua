@@ -146,13 +146,11 @@ function Handler.add_ore_to_playerdata(ore, playerdata)
 
   playerdata.ores[tile_key] = ore
 
-  playerdata.ore_render_objects[tile_key] = rendering.draw_rectangle{
+  playerdata.ore_render_objects[tile_key] = rendering.draw_circle{
     surface = playerdata.surface_index,
 
     target = ore,
-
-    left_top = {tile_left_top.x + 0.35, tile_left_top.y + 0.35},
-    right_bottom = {tile_right_bottom[1] - 0.35, tile_right_bottom[2] - 0.35},
+    radius = 0.2,
 
     color = get_color_for_tile_key(playerdata, tile_key),
     filled = true,
