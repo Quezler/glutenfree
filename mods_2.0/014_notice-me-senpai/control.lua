@@ -129,13 +129,13 @@ local function position_key(position)
   return string.format("[%g, %g]", position.x, position.y)
 end
 
-local function get_sprite_for_tile_key(playerdata, tile_key)
+local function get_color_for_tile_key(playerdata, tile_key)
   if playerdata.green_positions[tile_key] then
-    return "notice-me-senpai-green"
+    return {0, 0.9, 0, 1} -- green
   elseif playerdata.yellow_positions[tile_key] then
-    return "notice-me-senpai-yellow"
+    return {0.9, 0.9, 0, 1} -- yellow
   else
-    return "notice-me-senpai-red"
+    return {0.9, 0, 0, 1} -- red
   end
 end
 
@@ -146,12 +146,16 @@ function Handler.add_ore_to_playerdata(ore, playerdata)
 
   playerdata.ores[tile_key] = ore
 
-  playerdata.ore_render_objects[tile_key] = rendering.draw_sprite{
+  playerdata.ore_render_objects[tile_key] = rendering.draw_rectangle{
     surface = playerdata.surface_index,
 
     target = ore,
 
-    sprite = get_sprite_for_tile_key(playerdata, tile_key),
+    left_top = {tile_left_top.x + 0.35, tile_left_top.y + 0.35},
+    right_bottom = {tile_right_bottom[1] - 0.35, tile_right_bottom[2] - 0.35},
+
+    color = get_color_for_tile_key(playerdata, tile_key),
+    filled = true,
 
     players = {playerdata.player_index},
     only_in_alt_mode = true,
@@ -209,7 +213,7 @@ function Handler.redraw(playerdata)
   -- log(string.format("recoloring %d ores.", table_size(playerdata.ore_render_objects)))
   for tile_key, ore_render_object in pairs(playerdata.ore_render_objects) do
     if ore_render_object.valid then -- if the ore gets mined this kills itself
-      ore_render_object.sprite = get_sprite_for_tile_key(playerdata, tile_key)
+      ore_render_object.color = get_color_for_tile_key(playerdata, tile_key)
     end
   end
 end
