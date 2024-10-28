@@ -5,6 +5,7 @@ Date: ????
     - Make the infinity silo craft free rockets
     - Speed up the rocket itself too
     - Get the control stage to force feed the rocket silo
+    - Try to deliver cargo bays first
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 28

@@ -3,8 +3,16 @@ local Handler = {}
 script.on_init(function()
   local items = remote.call("freeplay", "get_created_items")
   items["infinity-rocket-silo"] = 1
-  items["space-platform-starter-pack"] = 1
+  -- items["space-platform-starter-pack"] = 1
   remote.call("freeplay", "set_created_items", items)
+
+  local platform = game.forces["player"].create_space_platform{
+    name = "platform",
+    planet = "nauvis",
+    starter_pack = "space-platform-starter-pack",
+  }
+  assert(platform)
+  platform.apply_starter_pack()
 
   storage.structs = {}
 end)
@@ -49,19 +57,33 @@ for _, event in ipairs({
   })
 end
 
+local prioritized_items = {
+  ["space-platform-foundation"] = true,
+  ["cargo-bay"] = true,
+}
+
+function Handler.pick_signal_and_count(signals)
+  assert(signals)
+
+  for _, signal_and_count in ipairs(signals) do
+    if prioritized_items[signal_and_count.name] then
+      return prioritized_items
+    end
+  end
+
+  return signals[1]
+end
+
 function Handler.on_tick(event)
   for unit_number, struct in pairs(storage.structs) do
     local network = struct.silo.get_circuit_network(defines.wire_connector_id.circuit_red)
-    for _, signal_and_count in pairs(network.signals or {}) do
+    local signal_and_count = Handler.pick_signal_and_count(network.signals or {})
+    if signal_and_count then
       game.print(serpent.line(signal_and_count))
 
       struct.inventory.clear()
       struct.inventory.insert({name = signal_and_count.signal.name, quality = signal_and_count.signal.quality, count = 1000000})
-
-      goto continue
     end
-
-    ::continue::
   end
 end
 
