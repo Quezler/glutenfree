@@ -8,6 +8,7 @@ Date: ????
     - Try to deliver cargo bays first
     - The reverse does not work
     - Actually prioritize certain item deliveries
+    - Ignore negative signals (why can they be negative?)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 28

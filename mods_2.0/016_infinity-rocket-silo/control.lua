@@ -64,7 +64,12 @@ local prioritized_items = {
 
 function Handler.pick_signal_and_count(signals)
   assert(signals)
-  return signals[1]
+
+  for _, signal_and_count in ipairs(signals) do
+    if signal_and_count.count > 0 then
+      return signal_and_count
+    end
+  end
 end
 
 function Handler.on_tick(event)
@@ -72,7 +77,7 @@ function Handler.on_tick(event)
     local network = struct.silo.get_circuit_network(defines.wire_connector_id.circuit_red)
     local signal_and_count = Handler.pick_signal_and_count(network.signals or {})
     if signal_and_count then
-      game.print(serpent.line(signal_and_count))
+      log(serpent.line(signal_and_count))
 
       struct.inventory.clear()
       struct.inventory.insert({name = signal_and_count.signal.name, quality = signal_and_count.signal.quality, count = 1000000})
