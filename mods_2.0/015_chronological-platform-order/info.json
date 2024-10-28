@@ -1,0 +1,22 @@
+{
+    "name": "chronological-platform-order",
+    "title": "Chronological platform order",
+    "description": "Instead of alphabetically, the platforms are sorted chronologically.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": true,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "base >= 2.0.13",
+        "space-age >= 2.0.13"
+    ]
+}
