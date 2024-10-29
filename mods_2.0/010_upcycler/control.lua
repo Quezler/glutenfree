@@ -39,8 +39,11 @@ function Handler.on_created_entity(event)
     label = {"upcycler.status"},
   }
 
-  local inserted = entity.get_inventory(defines.inventory.furnace_source).insert({name = "upcycle-any-quality", count = 1})
-  assert(inserted > 0)
+  -- skip giving a dummy item if the upcycler animation has already started (aka when the machine got upgraded in quality)
+  if entity.crafting_progress == 0 then
+    local inserted = entity.get_inventory(defines.inventory.furnace_source).insert({name = "upcycle-any-quality", count = 1})
+    assert(inserted > 0)
+  end
 
   local upcycler_input = Handler.get_or_create_linkedchest_then_move(entity)
 

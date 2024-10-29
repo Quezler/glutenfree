@@ -3,6 +3,7 @@ Version: 1.0.3
 Date: ????
   Info:
     - Fix crash when upgrading whilst the gui is open
+    - Fix upgrading showing a hidden item you could grab
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2024. 10. 28
