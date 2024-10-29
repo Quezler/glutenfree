@@ -89,7 +89,9 @@ function TickHandler.handle_observed_struct(struct)
 
   if TickHandler.is_entity_observed(struct.entities.upcycler) == false then
     storage.observed_structs[struct.id] = nil
-    struct.entities.upcycler.crafting_progress = 0.001
+    if struct.entities.upcycler.valid then -- pretty much only false if the entity was upgraded when the gui was open
+      struct.entities.upcycler.crafting_progress = 0.001
+    end
     -- log(string.format("upcycler #%d stopped being observed", struct.id))
     return
   end
