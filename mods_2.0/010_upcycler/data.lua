@@ -132,6 +132,3 @@ data:extend{upcycler_input}
 
 table.insert(upcycler_entity.flags, "no-automated-item-insertion")
 table.insert(upcycler_entity.flags, "no-automated-item-removal")
-
--- todo: this doesn't really match the effective inserter thoughput at higher qualities, a better formula would be nice.
-upcycler_entity.crafting_speed = data.raw["inserter"]["fast-inserter"].rotation_speed * 60
