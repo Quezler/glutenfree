@@ -45,6 +45,7 @@ function Handler.on_created_entity(event)
     assert(inserted > 0)
   end
 
+  -- game.print('i fire first @' .. game.tick)
   local upcycler_input = Handler.get_or_create_linkedchest_then_move(entity)
 
   local mod_surface = game.surfaces[mod_surface_name]
@@ -130,6 +131,7 @@ function Handler.get_or_create_linkedchest_then_move(entity)
   local linked_chest = entity.surface.find_entities_filtered{
     name = "upcycler-input",
     area = entity.bounding_box,
+    quality = entity.quality.name,
     limit = 1,
   }
 
@@ -140,6 +142,7 @@ function Handler.get_or_create_linkedchest_then_move(entity)
       name = "upcycler-input",
       force = "neutral",
       position = entity.position,
+      quality = entity.quality.name,
     }
   end
 
@@ -203,6 +206,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     local struct = storage.structs[deathrattle.struct_id]
     if struct then storage.structs[deathrattle.struct_id] = nil
+      -- game.print('i fire second @' .. game.tick)
       Handler.spill(struct)
       for _, entity in pairs(struct.entities) do
         entity.destroy()
