@@ -1,0 +1,20 @@
+{
+    "name": "remote-view-search-request-from-buffer-chests",
+    "title": "Remote view search 'request from buffer chests'",
+    "description": "Shows you which requester chests are requesting from buffers, just search for \"request\".",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+    ]
+}
