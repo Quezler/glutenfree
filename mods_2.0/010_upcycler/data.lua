@@ -125,6 +125,7 @@ upcycler_input.inventory_size = 1
 upcycler_input.inventory_type = "normal"
 upcycler_input.gui_mode = "none"
 upcycler_input.selectable_in_game = false
+upcycler_input.quality_indicator_scale = 0
 data:extend{upcycler_input}
 
 table.insert(upcycler_entity.flags, "no-automated-item-insertion")
