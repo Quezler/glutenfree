@@ -1,24 +1,5 @@
 local Update = {}
 
-local function get_upgrade_quality(target)
-  local inventory = game.create_inventory(1)
-  inventory.insert({name = "blueprint"})
-  inventory[1].create_blueprint{
-    surface = target.surface,
-    force = target.force,
-    area = target.bounding_box,
-  }
-
-  local blueprint_entities = inventory[1].get_blueprint_entities() or {}
-  assert(#blueprint_entities == 1, 'time to check for name and position.')
-  -- for _, entity in ipairs(blueprint_entities) do
-  --   --
-  -- end
-
-  inventory.destroy()
-  return blueprint_entities[1].quality -- string
-end
-
 local function override_quality(items, quality_name)
   if quality_name == "normal" then
     quality_name = nil
@@ -39,8 +20,9 @@ function Update.get_missing_items_for(target)
     return override_quality(target.ghost_prototype.items_to_place_this, target.quality.name)
   elseif target_name == "item-request-proxy" then
     return target.item_requests
-  elseif target.get_upgrade_target() then
-    return override_quality(target.get_upgrade_target().items_to_place_this, get_upgrade_quality(target))
+  elseif target.to_be_upgraded() then
+    local entity_prototype, quality_prototype = target.get_upgrade_target()
+    return override_quality(entity_prototype.items_to_place_this, quality_prototype.name)
   elseif target.type == "cliff" then
     return {{name = "cliff-explosives", count = 1}}
   end
