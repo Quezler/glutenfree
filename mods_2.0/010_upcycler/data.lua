@@ -21,8 +21,10 @@ upcycler_item.place_result = upcycler_entity.name
 data:extend{upcycler_entity, upcycler_item}
 
 data.raw["technology"]["quality-module"].icon = "__upcycler__/graphics/technology/upcycling.png"
-data.raw["technology"]["quality-module-2"].hidden = true
-data.raw["technology"]["quality-module-3"].hidden = true
+if settings.startup["upcycling-no-quality-modules"].value then
+  data.raw["technology"]["quality-module-2"].hidden = true
+  data.raw["technology"]["quality-module-3"].hidden = true
+end
 
 local upcycler_recipe = table.deepcopy(data.raw["recipe"]["recycler"])
 upcycler_recipe.name = upcycler_item.name
