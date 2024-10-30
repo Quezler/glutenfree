@@ -1,24 +1,28 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.3
-Date: ????
+Version: 1.0.5
+Date: 2024. 10. 30
+  Info:
+    - Add `/decider-combinator-output-constant-detector` command for justarandomgeek
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2024. 10. 21
   Info:
     - Fix locale entry
     - Fix `attempt to index local 'output' (a nil value)`
     - Fix `bad argument #1 of 2 to 'ipairs' (table expected, got nil)`
     - Note instead of crash when latency tries to update removed combinator
-    - Add `/decider-combinator-output-constant-detector` command for justarandomgeek
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.2
+Version: 1.0.3
 Date: 2024. 10. 21
   Info:
     - Fixed "already present in the parent element" caused by mod rename
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.1
+Version: 1.0.2
 Date: 2024. 10. 14
   Info:
     - Fixed "already present in the parent element" caused by mod rename
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.0
+Version: 1.0.1
 Date: 2024. 10. 14
   Info:
     - Mod portal release
