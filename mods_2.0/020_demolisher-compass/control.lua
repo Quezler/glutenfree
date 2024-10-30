@@ -135,9 +135,9 @@ commands.add_command("demolisher-compass", "Toggle rendering debug objects.", fu
 
   if storage.show_debug_for[command.player_index] then
     storage.show_debug_for[command.player_index] = nil
-    player.print("Demolisher compass debug visuals disabled.")
+    player.print("[demolisher-compass] debug visuals disabled.")
   else
     storage.show_debug_for[command.player_index] = player
-    player.print("Demolisher compass debug visuals enabled.")
+    player.print("[demolisher-compass] debug visuals enabled.")
   end
 end)
