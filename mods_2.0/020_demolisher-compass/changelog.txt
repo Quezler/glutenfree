@@ -9,6 +9,7 @@ Date: ????
     - Add command to see the debug objects with
     - Turn the debug command into a toggle
     - Prefix command response with [demolisher-compass]
+    - Grab the compass textures
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 30
