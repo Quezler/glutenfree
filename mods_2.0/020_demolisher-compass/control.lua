@@ -144,11 +144,6 @@ commands.add_command("demolisher-compass", "Toggle rendering debug objects.", fu
   end
 end)
 
--- local direction_to_name = {}
--- for name, direction in pairs(defines.direction) do
---   direction_to_name[direction] = name
--- end
-
 function flib_direction.from_positions(source, target, round)
   local deg = math.deg(math.atan2(target.y - source.y, target.x - source.x))
   local direction = (deg + 90) / 22.5
@@ -161,25 +156,13 @@ function flib_direction.from_positions(source, target, round)
   return direction --[[@as defines.direction]]
 end
 
-script.on_nth_tick(60, function(event)
+script.on_nth_tick(10, function(event)
   for _, player in ipairs(game.connected_players) do
     local zero_to_16 = flib_direction.from_positions(player.position, {x = 0, y = 0}, false)
-    local direction_16 = flib_math.round(zero_to_16)
     local zero_to_27 = zero_to_16 / 16 * 27
-    local direction_27 = flib_math.round(zero_to_27)
-    direction_27 = (direction_27 + 14) % 28
+    local sprite_nr = flib_math.round(zero_to_27)
+    sprite_nr = (sprite_nr + 14) % 28
 
-    -- game.print(direction-1)
-    -- game.print(direction_to_name[direction-1] .. ' ' .. sprite .. ' ' .. zero_to_16 .. ' ' .. zero_to_27)
-    player.cursor_stack.set_stack({name = string.format("demolisher-compass-%02d", direction_27)})
-
-    -- game.print(serpent.block(direction_to_name))
-
-    -- local direction = flib_direction.from_positions(player.position, {x = 0, y = 0}, false)
-    -- local direction_name = direction_to_name[flib_math.round(direction)]
-
-    -- local direction = flib_direction.from_positions(player.position, {x = 0, y = 0}, true)
-    -- local direction_name = direction_to_name[direction]
-    -- game.print(direction_name .. ' ' .. direction)
+    player.cursor_stack.set_stack({name = string.format("demolisher-compass-%02d", sprite_nr)})
   end
 end)

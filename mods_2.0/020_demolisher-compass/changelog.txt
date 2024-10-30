@@ -14,6 +14,7 @@ Date: ????
     - Spawn the demolisher compass via a shortcut
     - Try to get the compass to point where it is supposed to
     - Manage to get the compass pointing at world spawn
+    - Cleanup 〃
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 30
