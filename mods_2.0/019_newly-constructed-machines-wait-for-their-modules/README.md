@@ -10,3 +10,5 @@ machines-wait-for-their-modules-to-be-delivered
 new-crafters-wait-for-their-modules-to-be-delivered
 machines-remain-inactive-as-they-wait-for-modules
 newly-constructed-machines-wait-for-their-modules
+
+Anyways: consumption, speed & pollution are ignored, its not exactly bad if a machine goes a while without any of those right? (low power perhaps)

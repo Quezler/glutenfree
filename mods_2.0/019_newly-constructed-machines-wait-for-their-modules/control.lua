@@ -5,7 +5,6 @@ for _, item in pairs(prototypes.item) do
   if item.type == "module" then
     local effects = item.module_effects
     if effects then
-      -- consumption, speed & pollution are ignored, its not exactly bad if a machine goes a while without any of those right? (low power perhaps)
       if effects.productivity and effects.productivity > 0 then
         should_wait_for_module[item.name] = true
       end
@@ -15,16 +14,7 @@ for _, item in pairs(prototypes.item) do
     end
   end
 end
-
 -- log(serpent.block(should_wait_for_module))
--- {
---   ["productivity-module"] = true,
---   ["productivity-module-2"] = true,
---   ["productivity-module-3"] = true,
---   ["quality-module"] = true,
---   ["quality-module-2"] = true,
---   ["quality-module-3"] = true,
--- }
 
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
@@ -39,10 +29,6 @@ function Handler.on_created_entity(event)
 end
 
 -- local entity_types_with_module_slots = {"mining-drill", "furnace", "assembling-machine", "lab", "beacon", "rocket-silo"}
--- local on_created_entity_filter = {}
--- for _, entity_types_with_module_slot in ipairs(entity_types_with_module_slots) do
---   table.insert(on_created_entity_filter, )
--- end
 
 for _, event in ipairs({
   defines.events.on_built_entity,
@@ -59,6 +45,5 @@ for _, event in ipairs({
     {filter = "type", type = "lab"},
     {filter = "type", type = "beacon"},
     {filter = "type", type = "rocket-silo"},
-    -- {filter = "name", name = "item-request-proxy"},
   })
 end
