@@ -30,6 +30,9 @@ function Handler.on_created_entity(event)
     force = entity.force,
     position = {entity.position.x - 1, entity.position.y + 4},
   }
+  infinity_chest.minable = false
+  infinity_chest.operable = false
+  infinity_chest.destructible = false
 
   entity.get_or_create_control_behavior().read_mode = defines.control_behavior.rocket_silo.read_mode.orbital_requests
 
@@ -81,12 +84,8 @@ end
 function Handler.on_tick(event)
   for unit_number, struct in pairs(storage.structs) do
     if struct.silo.valid == false then
+      struct.infinity_chest.destroy()
       storage.structs[unit_number] = nil
-      goto continue
-    end
-
-    if struct.infinity_chest.valid == false then
-      struct.silo.destroy()
       goto continue
     end
 
