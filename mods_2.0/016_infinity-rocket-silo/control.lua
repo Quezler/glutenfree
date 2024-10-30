@@ -1,18 +1,17 @@
 local Handler = {}
 
 script.on_init(function()
-  -- local items = remote.call("freeplay", "get_created_items")
-  -- items["infinity-rocket-silo"] = 1
-  -- -- items["space-platform-starter-pack"] = 1
-  -- remote.call("freeplay", "set_created_items", items)
+  local items = remote.call("freeplay", "get_created_items")
+  items["infinity-rocket-silo"] = 1
+  remote.call("freeplay", "set_created_items", items)
 
-  -- local platform = game.forces["player"].create_space_platform{
-  --   name = "platform",
-  --   planet = "nauvis",
-  --   starter_pack = "space-platform-starter-pack",
-  -- }
-  -- assert(platform)
-  -- platform.apply_starter_pack()
+  local platform = game.forces["player"].create_space_platform{
+    name = "platform",
+    planet = "nauvis",
+    starter_pack = "space-platform-starter-pack",
+  }
+  assert(platform)
+  platform.apply_starter_pack()
 
   storage.structs = {}
 end)
@@ -20,16 +19,22 @@ end)
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
-  local pole = entity.surface.create_entity{
-    name = "small-electric-pole",
+  -- local pole = entity.surface.create_entity{
+  --   name = "small-electric-pole",
+  --   force = entity.force,
+  --   position = {entity.position.x + 2, entity.position.y + 5},
+  -- }
+
+  local infinity_chest = entity.surface.create_entity{
+    name = "infinity-chest",
     force = entity.force,
-    position = {entity.position.x + 2, entity.position.y + 5},
+    position = {entity.position.x - 1, entity.position.y + 4},
   }
 
   entity.get_or_create_control_behavior().read_mode = defines.control_behavior.rocket_silo.read_mode.orbital_requests
 
   local silo_connector = entity.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-  local pole_connector = pole.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+  local pole_connector = infinity_chest.get_wire_connector(defines.wire_connector_id.circuit_red, true)
   -- assert(silo_connector)
   -- assert(pole_connector)
   -- game.print(serpent.line(silo_connector))
@@ -38,7 +43,8 @@ function Handler.on_created_entity(event)
 
   storage.structs[entity.unit_number] = {
     silo = entity,
-    pole = pole,
+    -- pole = pole,
+    infinity_chest = infinity_chest,
 
     inventory = entity.get_inventory(defines.inventory.rocket_silo_rocket),
   }
@@ -79,9 +85,13 @@ function Handler.on_tick(event)
       goto continue
     end
 
-    local network = struct.silo.get_circuit_network(defines.wire_connector_id.circuit_red)
-    if not network then
+    if struct.infinity_chest.valid == false then
       struct.silo.destroy()
+      goto continue
+    end
+
+    local network = struct.infinity_chest.get_circuit_network(defines.wire_connector_id.circuit_red)
+    if not network then
       goto continue
     end
 
