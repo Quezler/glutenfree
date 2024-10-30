@@ -40,6 +40,8 @@ function Handler.on_created_entity(event)
   if proxy == nil then return end
   assert(proxy.proxy_target == entity)
 
+  if not proxy_requests_item_we_want_to_wait_for(proxy) then return end
+
   assert(entity.custom_status == nil, "some other mod has touched entity.custom_status already, do get in touch.")
   entity.custom_status = {
     diode = defines.entity_status_diode.yellow,
@@ -48,8 +50,6 @@ function Handler.on_created_entity(event)
 
   assert(entity.active == true, "some other mod has touched entity.active already, do get in touch.")
   entity.active = false
-
-  if not proxy_requests_item_we_want_to_wait_for(proxy) then return end
 
   local deathrattle_id = script.register_on_object_destroyed(proxy)
   storage.structs[deathrattle_id] = {
