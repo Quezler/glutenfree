@@ -53,8 +53,8 @@ local infinity_rocket_part_recipe = {
   hidden_in_factoriopedia = true,
 }
 
-silo.times_to_blink = 0
-silo.door_opening_speed = 1000000
+-- silo.times_to_blink = default
+-- silo.door_opening_speed = default
 
 data:extend{silo, silo_item}
 data:extend{infinity_rocket_part_item, infinity_rocket_part_recipe}
