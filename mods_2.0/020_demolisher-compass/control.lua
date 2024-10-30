@@ -1,4 +1,6 @@
 local flib_position = require("__flib__.position")
+local flib_direction = require("__flib__.direction")
+local flib_math = require("__flib__.math")
 
 local Handler = {}
 
@@ -139,5 +141,16 @@ commands.add_command("demolisher-compass", "Toggle rendering debug objects.", fu
   else
     storage.show_debug_for[command.player_index] = player
     player.print("[demolisher-compass] debug visuals enabled.")
+  end
+end)
+
+script.on_nth_tick(60, function(event)
+  for _, player in ipairs(game.connected_players) do
+    local zero_to_16 = flib_direction.from_positions(player.position, {x = 0, y = 0}, false)
+    local zero_to_27 = zero_to_16 / 16 * 27
+    local sprite = flib_math.round(zero_to_27)
+
+    game.print(sprite .. ' ' .. zero_to_16 .. ' ' .. zero_to_27)
+    player.cursor_stack.set_stack({name = string.format("demolisher-compass-%02d", sprite)})
   end
 end)

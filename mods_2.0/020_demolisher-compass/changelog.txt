@@ -12,6 +12,7 @@ Date: ????
     - Grab the compass textures
     - Load the compass sprite into items
     - Spawn the demolisher compass via a shortcut
+    - Try to get the compass to point where it is supposed to
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 30
