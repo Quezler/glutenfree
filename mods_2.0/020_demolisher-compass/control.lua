@@ -214,10 +214,14 @@ function Handler.on_nth_tick_10(event)
 
     if player_is_holding_compass(player) == false then goto continue end
 
-    local zero_to_16 = flib_direction.from_positions(player.position, {x = 0, y = 0}, false)
-    local zero_to_27 = zero_to_16 / 16 * 27
-    local sprite_nr = flib_math.round(zero_to_27)
-    sprite_nr = (sprite_nr + 14) % 28
+    -- local zero_to_16 = flib_direction.from_positions(player.position, {x = 0, y = 0}, false)
+    -- local zero_to_27 = zero_to_16 / 16 * 27
+    -- local sprite_nr = flib_math.round(zero_to_27)
+    -- sprite_nr = (sprite_nr + 14) % 28
+
+    local sprite_nr = (storage.player_needle_pointing_at[player.index] or 16) + math.random(0, 16) - 8
+    -- local sprite_nr = math.random(0, 27)
+    -- local sprite_nr = (storage.player_needle_pointing_at[player.index] or 16) + 6
 
     request_needle_direction(player, sprite_nr)
 

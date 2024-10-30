@@ -17,6 +17,7 @@ Date: ????
     - Cleanup 〃
     - Optimize when on_nth_tick_10 is registered at all
     - Make the compass feel nice
+    - Implement haywire compass mode
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 30
