@@ -16,6 +16,11 @@ for _, item in pairs(prototypes.item) do
 end
 -- log(serpent.block(should_wait_for_module))
 
+function Handler.on_init(event)
+  -- storage.structs = {}
+  storage.deathrattles = {}
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
   game.print(entity.name)
@@ -35,9 +40,15 @@ function Handler.on_created_entity(event)
 
   assert(entity.active == true, "some other mod has touched entity.active already, do get in touch.")
   entity.active = false
+
+  storage.deathrattles[script.register_on_object_destroyed(proxy)] = {
+    proxy_target = entity,
+  }
 end
 
 -- local entity_types_with_module_slots = {"mining-drill", "furnace", "assembling-machine", "lab", "beacon", "rocket-silo"}
+
+script.on_init(Handler.on_init)
 
 for _, event in ipairs({
   defines.events.on_built_entity,
@@ -56,3 +67,17 @@ for _, event in ipairs({
     {filter = "type", type = "rocket-silo"},
   })
 end
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    local proxy_target = deathrattle.proxy_target
+    if proxy_target.valid then
+      assert(proxy_target.active == false)
+      assert(proxy_target.custom_status.label[1] == "entity-status.waiting-for-modules")
+      assert(proxy_target.result_quality == nil, "crafting machine somehow has a result quality already, how'd the recipe start?")
+      proxy_target.active = true
+      proxy_target.custom_status = nil
+    end
+  end
+end)
