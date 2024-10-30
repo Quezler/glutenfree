@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Find new demolishers through their created trigger
+    - Start tracking (read: guessing) demolisher territories
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 30
