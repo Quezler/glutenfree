@@ -9,6 +9,7 @@ script.on_init(function()
   storage.deathrattles = {}
   storage.show_debug_for = {}
 
+  storage.player_needle_pointing_at = {}
   storage.players_holding_compasses = {}
   storage.any_player_holding_compass = false
 
@@ -169,6 +170,40 @@ local function player_is_holding_compass(player)
   return cursor_stack and cursor_stack.valid_for_read and is_demolisher_compass[cursor_stack.name]
 end
 
+local function request_needle_direction(player, new_direction)
+  local old_direction = (storage.player_needle_pointing_at[player.index] or 16)
+  local next_direction = old_direction
+
+  -- -- if math.random(1, 2) > 1 then
+  --   if new_direction > old_direction then
+  --     next_direction = next_direction + 1
+  --   end
+  --   if new_direction < old_direction then
+  --     next_direction = next_direction - 1
+  --   end
+  -- -- end
+
+  local diff = (new_direction - old_direction) % 28
+  if diff == 0 then return end
+
+  if diff > 14 then
+    diff = diff - 28
+  end
+
+  local change = math.random(1, math.abs(diff))
+
+  if diff > 0 then
+    next_direction = next_direction + change
+  elseif diff < 0 then
+    next_direction = next_direction - change
+  end
+
+  next_direction = next_direction % 28
+  storage.player_needle_pointing_at[player.index] = next_direction
+
+  player.cursor_stack.set_stack({name = string.format("demolisher-compass-%02d", next_direction)})
+end
+
 function Handler.on_nth_tick_10(event)
   for player_index, player in pairs(storage.players_holding_compasses) do
     if player.connected == false then
@@ -184,7 +219,7 @@ function Handler.on_nth_tick_10(event)
     local sprite_nr = flib_math.round(zero_to_27)
     sprite_nr = (sprite_nr + 14) % 28
 
-    player.cursor_stack.set_stack({name = string.format("demolisher-compass-%02d", sprite_nr)})
+    request_needle_direction(player, sprite_nr)
 
     ::continue::
   end
@@ -209,6 +244,7 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
     end
   else
     storage.players_holding_compasses[player.index] = nil
+    storage.player_needle_pointing_at[player.index] = nil
   end
 end)
 
