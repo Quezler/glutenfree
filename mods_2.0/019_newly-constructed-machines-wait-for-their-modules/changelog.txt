@@ -5,6 +5,7 @@ Date: ????
     - Cleanup prototype code
     - Add the "waiting for modules" status
     - Unfreeze the crafting machine when the proxy dies
+    - Check the proxy in case it is manually edited (or it had a mix of modules to begin with)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 30

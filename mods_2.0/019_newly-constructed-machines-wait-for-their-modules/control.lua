@@ -17,8 +17,19 @@ end
 -- log(serpent.block(should_wait_for_module))
 
 function Handler.on_init(event)
-  -- storage.structs = {}
+  storage.structs = {}
   storage.deathrattles = {}
+end
+
+local function proxy_requests_item_we_want_to_wait_for(proxy)
+  -- game.print(serpent.line( proxy.insert_plan ))
+  -- game.print(serpent.line( proxy.removal_plan ))
+
+  for _, blueprint_insert_plan in ipairs(proxy.insert_plan) do
+    if should_wait_for_module[blueprint_insert_plan.id.name] then
+      return true
+    end
+  end
 end
 
 function Handler.on_created_entity(event)
@@ -29,9 +40,6 @@ function Handler.on_created_entity(event)
   if proxy == nil then return end
   assert(proxy.proxy_target == entity)
 
-  game.print(serpent.line( proxy.insert_plan ))
-  -- game.print(serpent.line( proxy.removal_plan ))
-
   assert(entity.custom_status == nil, "some other mod has touched entity.custom_status already, do get in touch.")
   entity.custom_status = {
     diode = defines.entity_status_diode.yellow,
@@ -41,7 +49,16 @@ function Handler.on_created_entity(event)
   assert(entity.active == true, "some other mod has touched entity.active already, do get in touch.")
   entity.active = false
 
-  storage.deathrattles[script.register_on_object_destroyed(proxy)] = {
+  if not proxy_requests_item_we_want_to_wait_for(proxy) then return end
+
+  local deathrattle_id = script.register_on_object_destroyed(proxy)
+  storage.structs[deathrattle_id] = {
+    proxy = proxy,
+    proxy_target = entity,
+  }
+
+  storage.deathrattles[deathrattle_id] = {
+    struct_id = deathrattle_id,
     proxy_target = entity,
   }
 end
@@ -68,16 +85,40 @@ for _, event in ipairs({
   })
 end
 
+function Handler.remove_waiting_for_modules(entity)
+  assert(entity.active == false)
+  assert(entity.custom_status.label[1] == "entity-status.waiting-for-modules")
+  assert(entity.result_quality == nil, "crafting machine somehow has a result quality already, how'd the recipe start?")
+  entity.active = true
+  entity.custom_status = nil
+end
+
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     local proxy_target = deathrattle.proxy_target
     if proxy_target.valid then
-      assert(proxy_target.active == false)
-      assert(proxy_target.custom_status.label[1] == "entity-status.waiting-for-modules")
-      assert(proxy_target.result_quality == nil, "crafting machine somehow has a result quality already, how'd the recipe start?")
-      proxy_target.active = true
-      proxy_target.custom_status = nil
+      Handler.remove_waiting_for_modules(proxy_target)
+    end
+    storage.structs[deathrattle.struct_id] = nil
+  end
+end)
+
+-- local function on_player_selected_area(event)
+--   local player = assert(game.get_player(event.player_index))
+--   local surface = event.surface
+
+--   game.print("this does not trigger for native upgrade planners")
+-- end
+
+-- script.on_event(defines.events.on_player_selected_area, on_player_selected_area)
+-- script.on_event(defines.events.on_player_alt_selected_area, on_player_selected_area)
+
+script.on_nth_tick(60, function(event)
+  for struct_id, struct in pairs(storage.structs) do
+    if not proxy_requests_item_we_want_to_wait_for(struct.proxy) then
+      Handler.remove_waiting_for_modules(struct.proxy_target)
+      storage.structs[struct_id] = nil
     end
   end
 end)
