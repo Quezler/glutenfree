@@ -15,6 +15,7 @@ Date: ????
     - Try to get the compass to point where it is supposed to
     - Manage to get the compass pointing at world spawn
     - Cleanup 〃
+    - Optimize when on_nth_tick_10 is registered at all
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 30

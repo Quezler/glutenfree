@@ -9,6 +9,9 @@ script.on_init(function()
   storage.deathrattles = {}
   storage.show_debug_for = {}
 
+  storage.players_holding_compasses = {}
+  storage.any_player_holding_compass = false
+
   if game.surfaces["vulcanus"] then
     local demolishers = game.surfaces["vulcanus"].find_entities_filtered{
       type = "segmented-unit"
@@ -156,13 +159,61 @@ function flib_direction.from_positions(source, target, round)
   return direction --[[@as defines.direction]]
 end
 
-script.on_nth_tick(10, function(event)
-  for _, player in ipairs(game.connected_players) do
+local is_demolisher_compass = {}
+for i = 0, 27 do
+  is_demolisher_compass[string.format("demolisher-compass-%02d", i)] = true
+end
+
+local function player_is_holding_compass(player)
+  local cursor_stack = player.cursor_stack
+  return cursor_stack and cursor_stack.valid_for_read and is_demolisher_compass[cursor_stack.name]
+end
+
+function Handler.on_nth_tick_10(event)
+  for player_index, player in pairs(storage.players_holding_compasses) do
+    if player.connected == false then
+      storage.players_holding_compasses[player.index] = nil
+      player.clear_cursor()
+      goto continue
+    end
+
+    if player_is_holding_compass(player) == false then goto continue end
+
     local zero_to_16 = flib_direction.from_positions(player.position, {x = 0, y = 0}, false)
     local zero_to_27 = zero_to_16 / 16 * 27
     local sprite_nr = flib_math.round(zero_to_27)
     sprite_nr = (sprite_nr + 14) % 28
 
     player.cursor_stack.set_stack({name = string.format("demolisher-compass-%02d", sprite_nr)})
+
+    ::continue::
+  end
+
+  if table_size(storage.players_holding_compasses) == 0 then
+    game.print("any player holding a compass = false")
+    storage.any_player_holding_compass = false
+    script.on_nth_tick(10, nil)
+  end
+end
+
+script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
+  local player = game.get_player(event.player_index)
+  assert(player)
+
+  if player_is_holding_compass(player) then
+    storage.players_holding_compasses[player.index] = player
+    if storage.any_player_holding_compass == false then
+      game.print("any player holding a compass = true")
+      storage.any_player_holding_compass = true
+      script.on_nth_tick(10, Handler.on_nth_tick_10)
+    end
+  else
+    storage.players_holding_compasses[player.index] = nil
+  end
+end)
+
+script.on_load(function()
+  if storage.any_player_holding_compass then
+    script.on_nth_tick(10, Handler.on_nth_tick_10)
   end
 end)
