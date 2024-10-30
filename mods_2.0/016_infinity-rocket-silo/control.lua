@@ -99,6 +99,8 @@ function Handler.on_tick(event)
     if signal_and_count then
       -- log(serpent.line(signal_and_count))
       struct.inventory.insert({name = signal_and_count.signal.name, quality = signal_and_count.signal.quality, count = 1000000})
+    else
+      struct.inventory.insert({name = "space-platform-starter-pack"})
     end
 
     ::continue::
