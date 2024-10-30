@@ -1,3 +1,5 @@
+local shared = require("shared")
+
 -- there are so many children of item prototypes, might as well run through all the entities too since only items have spoil_ticks.
 -- log('these items have spoil ticks defined:')
 -- for _, prototypes in pairs(data.raw) do
@@ -31,16 +33,9 @@ local function remove_spoil_mechanic(prototype)
   prototype.spoil_to_trigger_result = nil
 end
 
--- remove_spoil_mechanic(data.raw["item"]["copper-bacteria"])
--- remove_spoil_mechanic(data.raw["item"]["iron-bacteria"])
-remove_spoil_mechanic(data.raw["item"]["nutrients"])
-remove_spoil_mechanic(data.raw["item"]["captive-biter-spawner"])
-remove_spoil_mechanic(data.raw["item"]["biter-egg"])
-remove_spoil_mechanic(data.raw["item"]["pentapod-egg"])
-remove_spoil_mechanic(data.raw["capsule"]["raw-fish"])
-remove_spoil_mechanic(data.raw["capsule"]["yumako"])
-remove_spoil_mechanic(data.raw["capsule"]["jellynut"])
-remove_spoil_mechanic(data.raw["capsule"]["yumako-mash"])
-remove_spoil_mechanic(data.raw["capsule"]["jelly"])
-remove_spoil_mechanic(data.raw["capsule"]["bioflux"])
-remove_spoil_mechanic(data.raw["tool"]["agricultural-science-pack"])
+for _, item in ipairs(shared.spoils) do
+  -- log("no-spoilage-item-" .. item.name)
+  if settings.startup["no-spoilage-item-" .. item.name].value then
+    remove_spoil_mechanic(data.raw[item.type][item.name])
+  end
+end

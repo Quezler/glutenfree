@@ -1,9 +1,9 @@
 {
     "name": "no-spoilage",
     "title": "No spoilage",
-    "description": "There is no spoilage in Ba Sing Se.",
+    "description": "There is no spoilage in Ba Sing Se. (configurable!)",
 
-    "version": "1.0.1",
+    "version": "1.1.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
