@@ -36,6 +36,8 @@ for i = 0, 27 do
 
     stack_size = 1,
     flags = {"not-stackable", "only-in-cursor", "spawnable"},
+
+    hidden = true,
     hidden_in_factoriopedia = true,
   }}
 end
