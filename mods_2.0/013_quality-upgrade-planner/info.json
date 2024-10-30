@@ -3,7 +3,7 @@
     "title": "Quality upgrade planner",
     "description": "Allows you to upgrade/downgrade an entire area.",
 
-    "version": "1.0.3",
+    "version": "1.0.4",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,7 +16,7 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
-        "base >= 1.0.13",
-        "quality >= 1.0.13"
+        "base >= 2.0.13",
+        "quality >= 2.0.13"
     ]
 }
