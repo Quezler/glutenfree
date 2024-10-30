@@ -4,6 +4,7 @@ local Handler = {}
 
 script.on_init(function()
   storage.demolishers = {}
+  storage.deathrattles = {}
 
   if game.surfaces["vulcanus"] then
     local demolishers = game.surfaces["vulcanus"].find_entities_filtered{
@@ -24,6 +25,8 @@ function Handler.register_demolisher(entity)
     entity = entity,
     territory = {},
   }
+
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = true
 end
 
 script.on_event(defines.events.on_script_trigger_effect, function(event)
@@ -46,5 +49,18 @@ script.on_nth_tick(600, function(event)
     local chunk_position = flib_position.to_chunk(demolisher.entity.position)
     local chunk_key = position_key(chunk_position)
     demolisher.territory[chunk_key] = (demolisher.territory[chunk_key] or 0) + 1
+  end
+end)
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    -- game.print("demolisher gone?")
+    -- game.print(serpent.block(event)) -- useful_id instead of unit_number
+    local demolisher = storage.demolishers[event.useful_id]
+    if demolisher then storage.demolishers[event.useful_id] = nil
+      -- game.print("demolisher gone!")
+      -- kill any render objects
+    end
   end
 end)
