@@ -132,3 +132,56 @@ end)
 script.on_init(function()
   storage.playerdata = {}
 end)
+
+commands.add_command("decider-combinator-output-constant-detector", "Receive a selection tool that detects deciders with constants.", function(command)
+  local player = game.get_player(command.player_index)
+  assert(player)
+
+  player.clear_cursor()
+  if player.cursor_stack.valid_for_read == true then return end -- cursor not cleared?
+
+  player.cursor_stack.set_stack({name = "decider-combinator-output-constant-detector"})
+end)
+
+local function decider_combinator_has_custom_constants(decider_combinator)
+  local parameters = decider_combinator.get_control_behavior().parameters
+
+  for _, output in ipairs(parameters.outputs) do
+    if output.constant ~= nil then
+      assert(output.constant ~= 1) -- if its the default it should be nil
+      return true
+    end
+  end
+
+  return false
+end
+
+local function on_player_selected_area(event)
+  local player = assert(game.get_player(event.player_index))
+  local surface = event.surface
+
+  local total = 0
+
+  for _, decider_combinator in ipairs(event.entities) do
+    if decider_combinator_has_custom_constants(decider_combinator) then
+      surface.create_entity{
+        name = "highlight-box",
+        position = decider_combinator.position,
+        bounding_box = decider_combinator.selection_box,
+        box_type = "train-visualization", -- white
+        render_player_index = player.index,
+        -- blink_interval = 30,
+        time_to_live = 60 * 5, -- 5 seconds
+      }
+      total = total + 1
+    end
+  end
+
+  player.create_local_flying_text{
+    text = total .. " have custom constants.",
+    create_at_cursor = true,
+  }
+end
+
+script.on_event(defines.events.on_player_selected_area, on_player_selected_area)
+script.on_event(defines.events.on_player_alt_selected_area, on_player_selected_area)
