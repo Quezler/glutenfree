@@ -3,7 +3,7 @@
     "title": "Remote view search 'request from buffer chests'",
     "description": "Shows you which requester chests are requesting from buffers, just search for \"request\".",
 
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
 

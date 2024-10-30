@@ -11,11 +11,13 @@ local recipe = {
 
   localised_name = {"gui-logistic.request-from-buffer-chests"},
   icon = icon,
-  hidden_from_player_crafting = true,
-  hidden_in_factoriopedia = true,
   energy_required = 1,
 
   category = category.name,
+
+  hidden = true,
+  hidden_in_factoriopedia = true,
+  hidden_from_player_crafting = true,
 }
 
 local assembler = {
@@ -42,7 +44,10 @@ local assembler = {
     "hide-alt-info",
     "no-automated-item-removal",
     "no-automated-item-insertion",
-  }
+  },
+
+  hidden = true,
+  hidden_in_factoriopedia = true,
 }
 
 data:extend{category, recipe, assembler}
