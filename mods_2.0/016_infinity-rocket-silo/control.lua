@@ -95,10 +95,9 @@ function Handler.on_tick(event)
     end
 
     local signal_and_count = Handler.pick_signal_and_count(network.signals or {})
+    struct.inventory.clear()
     if signal_and_count then
       -- log(serpent.line(signal_and_count))
-
-      struct.inventory.clear()
       struct.inventory.insert({name = signal_and_count.signal.name, quality = signal_and_count.signal.quality, count = 1000000})
     end
 

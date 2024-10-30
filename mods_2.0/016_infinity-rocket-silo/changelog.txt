@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Replace wooden pole with infinity chest
     - Remove chest when the silo goes, and make it unmodifyable
+    - Clear rocket inventory when there is nothing to deliver
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2024. 10. 28
