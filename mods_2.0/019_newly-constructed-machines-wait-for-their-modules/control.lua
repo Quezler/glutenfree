@@ -34,7 +34,7 @@ end
 
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
-  game.print(entity.name)
+  -- game.print(entity.name)
 
   local proxy = entity.surface.find_entity("item-request-proxy", entity.position)
   if proxy == nil then return end
@@ -103,16 +103,6 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     storage.structs[deathrattle.struct_id] = nil
   end
 end)
-
--- local function on_player_selected_area(event)
---   local player = assert(game.get_player(event.player_index))
---   local surface = event.surface
-
---   game.print("this does not trigger for native upgrade planners")
--- end
-
--- script.on_event(defines.events.on_player_selected_area, on_player_selected_area)
--- script.on_event(defines.events.on_player_alt_selected_area, on_player_selected_area)
 
 script.on_nth_tick(60, function(event)
   for struct_id, struct in pairs(storage.structs) do

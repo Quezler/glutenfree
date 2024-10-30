@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 10. 30
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2024. 10. 30
   Info:
     - Cleanup prototype code
     - Add the "waiting for modules" status
@@ -8,6 +13,6 @@ Date: ????
     - Check the proxy in case it is manually edited (or it had a mix of modules to begin with)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
-Date: 2024. 10. 30
+Date: 2024. 10. 29
   Info:
-    - Initial commit
+    - Initial commit (initial control.lua done on the 30th)
