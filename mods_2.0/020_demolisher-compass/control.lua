@@ -204,6 +204,15 @@ local function request_needle_direction(player, new_direction)
   player.cursor_stack.set_stack({name = string.format("demolisher-compass-%02d", next_direction)})
 end
 
+-- this lookup isn't very performant, but hey there are usually only like 20 demolishers a the time.
+function Handler.get_demolisher_from_chunk_key(chunk_key)
+  for _, demolisher in pairs(storage.demolishers) do
+    if demolisher.territory[chunk_key] then
+      return demolisher.entity
+    end
+  end
+end
+
 function Handler.on_nth_tick_10(event)
   for player_index, player in pairs(storage.players_holding_compasses) do
     if player.connected == false then
@@ -214,22 +223,25 @@ function Handler.on_nth_tick_10(event)
 
     if player_is_holding_compass(player) == false then goto continue end
 
-    -- local zero_to_16 = flib_direction.from_positions(player.position, {x = 0, y = 0}, false)
-    -- local zero_to_27 = zero_to_16 / 16 * 27
-    -- local sprite_nr = flib_math.round(zero_to_27)
-    -- sprite_nr = (sprite_nr + 14) % 28
+    local chunk_key = position_key(flib_position.to_chunk(player.position))
+    local demolisher = Handler.get_demolisher_from_chunk_key(chunk_key)
+    local sprite_nr
 
-    local sprite_nr = (storage.player_needle_pointing_at[player.index] or 16) + math.random(0, 16) - 8
-    -- local sprite_nr = math.random(0, 27)
-    -- local sprite_nr = (storage.player_needle_pointing_at[player.index] or 16) + 6
-
+    if demolisher then
+      local zero_to_16 = flib_direction.from_positions(player.position, demolisher.position, false)
+      local zero_to_27 = zero_to_16 / 16 * 27
+      sprite_nr = flib_math.round(zero_to_27)
+      sprite_nr = (sprite_nr + 14) % 28
+    else
+      sprite_nr = (storage.player_needle_pointing_at[player.index] or 16) + math.random(0, 16) - 8
+    end
     request_needle_direction(player, sprite_nr)
 
     ::continue::
   end
 
   if table_size(storage.players_holding_compasses) == 0 then
-    game.print("any player holding a compass = false")
+    -- game.print("any player holding a compass = false")
     storage.any_player_holding_compass = false
     script.on_nth_tick(10, nil)
   end
@@ -242,7 +254,7 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   if player_is_holding_compass(player) then
     storage.players_holding_compasses[player.index] = player
     if storage.any_player_holding_compass == false then
-      game.print("any player holding a compass = true")
+      -- game.print("any player holding a compass = true")
       storage.any_player_holding_compass = true
       script.on_nth_tick(10, Handler.on_nth_tick_10)
     end
