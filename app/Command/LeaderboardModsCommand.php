@@ -28,7 +28,7 @@ class LeaderboardModsCommand extends Command
             $mods_for_author[$mod['owner']] = ($mods_for_author[$mod['owner']] ?? 0) + 1;
         }
 
-        arsort($mods_for_author);
+        asort($mods_for_author);
         dump($mods_for_author);
 
         return Command::SUCCESS;
