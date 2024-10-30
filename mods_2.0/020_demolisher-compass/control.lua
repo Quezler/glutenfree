@@ -48,8 +48,27 @@ script.on_nth_tick(600, function(event)
   for _, demolisher in pairs(storage.demolishers) do
     local chunk_position = flib_position.to_chunk(demolisher.entity.position)
     local chunk_key = position_key(chunk_position)
-    demolisher.territory[chunk_key] = (demolisher.territory[chunk_key] or 0) + 1
+
+    local chunk = demolisher.territory[chunk_key]
+    if chunk == nil then
+      local left_top = flib_position.from_chunk(chunk_position)
+      local right_bottom = {left_top.x + 32, left_top.y + 32}
+
+      demolisher.territory[chunk_key] = {
+        position = chunk_position,
+
+        center = {left_top.x + 16, left_top.y + 16},
+        left_top = flib_position.from_chunk(chunk_position),
+        right_bottom = {left_top.x + 32, left_top.y + 32},
+
+        visits = 1,
+      }
+    else
+      chunk.visits = chunk.visits + 1
+    end
   end
+
+  Handler.visualize()
 end)
 
 script.on_event(defines.events.on_object_destroyed, function(event)
@@ -64,3 +83,41 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     end
   end
 end)
+
+function Handler.visualize()
+  local surface = game.surfaces["vulcanus"]
+  if surface == nil then return end
+
+  for _, demolisher in pairs(storage.demolishers) do
+    for _, chunk in pairs(demolisher.territory) do
+
+      rendering.draw_rectangle{
+        surface = surface,
+
+        left_top = chunk.left_top,
+        right_bottom = chunk.right_bottom,
+
+        color = {0.25, 0, 0, 0.1},
+        filled = true,
+        only_in_alt_mode = true,
+        time_to_live = 600,
+      }
+
+      rendering.draw_text{
+        surface = surface,
+        target = chunk.center,
+
+        text = chunk.visits,
+        color = {1, 1, 1},
+
+        scale = 5,
+        alignment = "center",
+        vertical_alignment = "middle",
+
+        only_in_alt_mode = true,
+        time_to_live = 600,
+      }
+
+    end
+  end
+end
