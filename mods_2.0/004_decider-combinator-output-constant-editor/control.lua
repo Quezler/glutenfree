@@ -157,6 +157,8 @@ local function decider_combinator_has_custom_constants(decider_combinator)
 end
 
 local function on_player_selected_area(event)
+  if event.item ~= "decider-combinator-output-constant-detector" then return end
+
   local player = assert(game.get_player(event.player_index))
   local surface = event.surface
 
