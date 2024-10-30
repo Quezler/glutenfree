@@ -67,24 +67,19 @@ script.on_nth_tick(600, function(event)
       chunk.visits = chunk.visits + 1
     end
   end
-
-  Handler.visualize()
 end)
 
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    -- game.print("demolisher gone?")
-    -- game.print(serpent.block(event)) -- useful_id instead of unit_number
     local demolisher = storage.demolishers[event.useful_id]
     if demolisher then storage.demolishers[event.useful_id] = nil
-      -- game.print("demolisher gone!")
       -- kill any render objects
     end
   end
 end)
 
-function Handler.visualize()
+function Handler.visualize(player_identification)
   local surface = game.surfaces["vulcanus"]
   if surface == nil then return end
 
@@ -99,7 +94,7 @@ function Handler.visualize()
 
         color = {0.25, 0, 0, 0.1},
         filled = true,
-        only_in_alt_mode = true,
+        players = {player_identification},
         time_to_live = 600,
       }
 
@@ -114,10 +109,14 @@ function Handler.visualize()
         alignment = "center",
         vertical_alignment = "middle",
 
-        only_in_alt_mode = true,
+        players = {player_identification},
         time_to_live = 600,
       }
 
     end
   end
 end
+
+commands.add_command("demolisher-compass", "Render the debug objects for 10 seconds.", function(command)
+  Handler.visualize(command.player_index)
+end)

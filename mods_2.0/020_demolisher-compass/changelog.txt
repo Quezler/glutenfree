@@ -6,6 +6,7 @@ Date: ????
     - Start tracking (read: guessing) demolisher territories
     - Demolishers can apparently despawn, wipe their data when they do
     - Visualize the territories on vulcanus
+    - Add command to see the debug objects with
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 30
