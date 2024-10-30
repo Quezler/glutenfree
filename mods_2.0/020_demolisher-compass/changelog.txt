@@ -11,6 +11,7 @@ Date: ????
     - Prefix command response with [demolisher-compass]
     - Grab the compass textures
     - Load the compass sprite into items
+    - Spawn the demolisher compass via a shortcut
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 30

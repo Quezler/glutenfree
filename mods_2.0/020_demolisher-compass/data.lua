@@ -35,7 +35,21 @@ for i = 0, 27 do
     icon_size = 160,
 
     stack_size = 1,
-    flags = {"not-stackable", "only-in-cursor"},
-    -- hidden_in_factoriopedia = true,
+    flags = {"not-stackable", "only-in-cursor", "spawnable"},
+    hidden_in_factoriopedia = true,
   }}
 end
+
+data:extend{{
+  type = "shortcut",
+  name = "demolisher-compass",
+
+  icon      = data.raw["item"]["demolisher-compass-16"].icon,
+  icon_size = data.raw["item"]["demolisher-compass-16"].icon_size,
+
+  small_icon      = data.raw["item"]["demolisher-compass-16"].icon,
+  small_icon_size = data.raw["item"]["demolisher-compass-16"].icon_size,
+
+  action = "spawn-item",
+  item_to_spawn = "demolisher-compass-16",
+}}
