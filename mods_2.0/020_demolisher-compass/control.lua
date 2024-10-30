@@ -94,7 +94,7 @@ function Handler.visualize(player_identification)
 
   for player_index, player in pairs(storage.show_debug_for) do
     if player.connected == false then
-      storage.show_debug_for = nil
+      storage.show_debug_for[player_index] = nil
     end
   end
 
