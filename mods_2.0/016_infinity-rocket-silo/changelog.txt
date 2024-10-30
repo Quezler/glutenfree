@@ -1,12 +1,13 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.1
-Date: ????
+Version: 1.1.0
+Date: 2024. 10. 20
   Info:
     - Replace wooden pole with infinity chest
     - Remove chest when the silo goes, and make it unmodifyable
     - Clear rocket inventory when there is nothing to deliver
     - When the rocket is idle, hold a platform starter pack
     - Do not speed up the initial blinking and opening (looks cooler)
+    - Fix silos placed by robots not being setup properly
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2024. 10. 28
