@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Cleanup prototype code
+    - Add the "waiting for modules" status
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 10. 30

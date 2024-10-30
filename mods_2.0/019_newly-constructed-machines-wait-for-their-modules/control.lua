@@ -26,6 +26,15 @@ function Handler.on_created_entity(event)
 
   game.print(serpent.line( proxy.insert_plan ))
   -- game.print(serpent.line( proxy.removal_plan ))
+
+  assert(entity.custom_status == nil, "some other mod has touched entity.custom_status already, do get in touch.")
+  entity.custom_status = {
+    diode = defines.entity_status_diode.yellow,
+    label = {"entity-status.waiting-for-modules"},
+  }
+
+  assert(entity.active == true, "some other mod has touched entity.active already, do get in touch.")
+  entity.active = false
 end
 
 -- local entity_types_with_module_slots = {"mining-drill", "furnace", "assembling-machine", "lab", "beacon", "rocket-silo"}
