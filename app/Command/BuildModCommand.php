@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Misc\ExpansionMod;
 use App\Misc\ExpansionMods;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -24,6 +25,7 @@ class BuildModCommand extends Command
 
         $this->clear_build_directory();
         $mod->build();
+        $this->remove_test_build_from_game($mod);
 
         return Command::SUCCESS;
     }
@@ -33,5 +35,14 @@ class BuildModCommand extends Command
         $filesystem = new Filesystem();
         $filesystem->remove(__GLUTENFREE__ . '/build');
         $filesystem->mkdir(__GLUTENFREE__ . '/build');
+    }
+
+    private function remove_test_build_from_game(ExpansionMod $mod): void
+    {
+        $unversioned_mod_directory = '/Users/quezler/Library/Application\ Support/factorio/mods/' . $mod->name;
+//        dump($unversioned_mod_directory);
+//        dump(file_exists($unversioned_mod_directory));
+//        if (file_exists($unversioned_mod_directory)) passthru(sprintf("rm -r %s", $unversioned_mod_directory));
+        passthru(sprintf("rm -r %s", $unversioned_mod_directory));
     }
 }
