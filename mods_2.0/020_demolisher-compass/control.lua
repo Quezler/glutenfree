@@ -5,6 +5,7 @@ local Handler = {}
 script.on_init(function()
   storage.demolishers = {}
   storage.deathrattles = {}
+  storage.show_debug_for = {}
 
   if game.surfaces["vulcanus"] then
     local demolishers = game.surfaces["vulcanus"].find_entities_filtered{
@@ -67,6 +68,8 @@ script.on_nth_tick(600, function(event)
       chunk.visits = chunk.visits + 1
     end
   end
+
+  Handler.visualize()
 end)
 
 script.on_event(defines.events.on_object_destroyed, function(event)
@@ -83,6 +86,15 @@ function Handler.visualize(player_identification)
   local surface = game.surfaces["vulcanus"]
   if surface == nil then return end
 
+  for player_index, player in pairs(storage.show_debug_for) do
+    if player.connected == false then
+      storage.show_debug_for = nil
+    end
+  end
+
+  -- avoid creating the debug objects if there are no (online) players to see it.
+  if next(storage.show_debug_for) == nil then return end
+
   for _, demolisher in pairs(storage.demolishers) do
     for _, chunk in pairs(demolisher.territory) do
 
@@ -94,7 +106,7 @@ function Handler.visualize(player_identification)
 
         color = {0.25, 0, 0, 0.1},
         filled = true,
-        players = {player_identification},
+        players = storage.show_debug_for,
         time_to_live = 600,
       }
 
@@ -109,7 +121,7 @@ function Handler.visualize(player_identification)
         alignment = "center",
         vertical_alignment = "middle",
 
-        players = {player_identification},
+        players = storage.show_debug_for,
         time_to_live = 600,
       }
 
@@ -117,6 +129,15 @@ function Handler.visualize(player_identification)
   end
 end
 
-commands.add_command("demolisher-compass", "Render the debug objects for 10 seconds.", function(command)
-  Handler.visualize(command.player_index)
+commands.add_command("demolisher-compass", "Toggle rendering debug objects.", function(command)
+  local player = game.get_player(command.player_index)
+  assert(player)
+
+  if storage.show_debug_for[command.player_index] then
+    storage.show_debug_for[command.player_index] = nil
+    player.print("Demolisher compass debug visuals disabled.")
+  else
+    storage.show_debug_for[command.player_index] = player
+    player.print("Demolisher compass debug visuals enabled.")
+  end
 end)
