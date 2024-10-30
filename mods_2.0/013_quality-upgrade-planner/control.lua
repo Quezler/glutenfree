@@ -31,7 +31,7 @@ local function on_configuration_changed()
         signal = {type = "quality", name = quality.name},
       }
     }
-    upgrade_planner.label = quality.name:gsub("^%l", string.upper)
+    upgrade_planner.label = string.format("[color=%f,%f,%f]", quality.color.r, quality.color.g, quality.color.b) .. quality.name:gsub("^%l", string.upper) .. "[/color]"
 
     local i = 1
     for _, entity in pairs(prototypes.entity) do
