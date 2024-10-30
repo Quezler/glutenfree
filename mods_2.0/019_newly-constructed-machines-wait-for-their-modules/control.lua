@@ -88,7 +88,6 @@ end
 function Handler.remove_waiting_for_modules(entity)
   assert(entity.active == false)
   assert(entity.custom_status.label[1] == "entity-status.waiting-for-modules")
-  assert(entity.result_quality == nil, "crafting machine somehow has a result quality already, how'd the recipe start?")
   entity.active = true
   entity.custom_status = nil
 end
