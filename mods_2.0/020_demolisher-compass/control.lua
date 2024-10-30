@@ -23,3 +23,9 @@ function Handler.register_demolisher(entity)
     territory = {},
   }
 end
+
+script.on_event(defines.events.on_script_trigger_effect, function(event)
+  if event.effect_id ~= "demolisher-compass-demolisher-created" then return end
+  assert(event.target_entity.type == "segmented-unit") -- some mod added this effect_id to random triggers?
+  Handler.register_demolisher(event.target_entity)
+end)
