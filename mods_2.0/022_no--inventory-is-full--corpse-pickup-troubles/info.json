@@ -2,10 +2,9 @@
     "name": "no--inventory-is-full--corpse-pickup-troubles",
     "title": "No \"inventory is full\" corpse pickup troubles",
     "description": "Mining a corpse equips your armor first before trying to insert the other items.",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
-        "? base"
     ]
 }
