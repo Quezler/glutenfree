@@ -36,6 +36,10 @@ script.on_init(function()
   handle_surfaces()
 end)
 
+script.on_event(defines.events.on_surface_created, function(event)
+  handle_surface(game.surfaces[event.surface_index])
+end)
+
 -- there is no hub renamed event
 -- script.on_event(defines.events.on_surface_renamed, function(event)
 --   handle_surface(game.surfaces[event.surface_index])
