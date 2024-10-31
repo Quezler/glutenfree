@@ -47,8 +47,16 @@ local function proxy_requests_item_we_want_to_wait_for(proxy)
   for _, blueprint_insert_plan in ipairs(proxy.insert_plan) do
     if should_wait_for_module[blueprint_insert_plan.id.name] then
       for _, inventory_position in ipairs(blueprint_insert_plan.items.in_inventory) do
+        -- this item is a module, has productivity or quality, and is requested for a module slot
         if inventory_position.inventory == inventory_index then
-          return true -- this item is a module, has productivity or quality, and is requested for a module slot
+          local target_stack = proxy.proxy_target.get_inventory(inventory_index)[inventory_position.stack+1]
+          if target_stack.valid_for_read == false then
+            return true -- target slot is empty
+          elseif should_wait_for_module[target_stack.name] then
+            -- swapping with a productivity/quality module of any tier/quality
+          else
+            return true -- target slot has a module we're not waiting for
+          end
         end
       end
     end

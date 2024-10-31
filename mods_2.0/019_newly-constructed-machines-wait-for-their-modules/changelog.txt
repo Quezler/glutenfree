@@ -7,6 +7,7 @@ Date: ????
     - Support pausing existing assemblers with new quality/prod requests
     - Pickup requests screw with the tick order, so put new_proxies in storage
     - Do not just check for the presence of the module request, confirm its for a module slot
+    - Sleep again when the requested module does not replace a module we wait for
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2024. 10. 30
