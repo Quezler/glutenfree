@@ -146,7 +146,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 end)
 
 script.on_load(function()
-  if next(storage.new_proxies) then
+  if storage.new_proxies and next(storage.new_proxies) then
     script.on_event(defines.events.on_tick, Handler.on_tick)
   end
 end)
