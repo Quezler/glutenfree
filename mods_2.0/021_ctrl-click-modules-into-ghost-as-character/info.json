@@ -1,7 +1,7 @@
 {
     "name": "ctrl-click-modules-into-ghost-as-character",
-    "title": "CTRL click modules into ghost as character",
-    "description": "Remove view can do it so why not you?",
+    "title": "CTRL + click modules into ghost as character",
+    "description": "Remove view can do it, so why not you?",
 
     "version": "1.0.0",
     "author": "Quezler",
@@ -16,7 +16,5 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
-        "? base",
-        "? space-age"
     ]
 }

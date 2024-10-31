@@ -1,10 +1,10 @@
 local module_inventory_for_type = {
-  ["furnace"           ] = defines.inventory.furnace_modules, -- 4
+  ["furnace"           ] = defines.inventory.furnace_modules,            -- 4
   ["assembling-machine"] = defines.inventory.assembling_machine_modules, -- 4
-  ["lab"               ] = defines.inventory.lab_modules, -- 3
-  ["mining-drill"      ] = defines.inventory.mining_drill_modules, -- 2
-  ["rocket-silo"       ] = defines.inventory.rocket_silo_modules, -- 4
-  ["beacon"            ] = defines.inventory.beacon_modules, -- 1
+  ["lab"               ] = defines.inventory.lab_modules,                -- 3
+  ["mining-drill"      ] = defines.inventory.mining_drill_modules,       -- 2
+  ["rocket-silo"       ] = defines.inventory.rocket_silo_modules,        -- 4
+  ["beacon"            ] = defines.inventory.beacon_modules,             -- 1
 }
 
 local module_inventory_size = {}
@@ -56,8 +56,6 @@ local function insert_plan_add_module(entity, inventory_index, slot, module_name
   local blueprint_insert_plan_with_matching_id = nil
 
   for _, blueprint_insert_plan in ipairs(insert_plan) do
-    -- todo: allow upgrading
-
     local quality_name = blueprint_insert_plan.id.quality and blueprint_insert_plan.id.quality.name or "normal"
     if blueprint_insert_plan.id.name == module_name and quality_name == module_quality then
       blueprint_insert_plan_with_matching_id = blueprint_insert_plan
@@ -66,8 +64,9 @@ local function insert_plan_add_module(entity, inventory_index, slot, module_name
     for _, inventory_position in ipairs(blueprint_insert_plan.items.in_inventory) do
       -- there is already a module request for this slot
       if inventory_position.inventory == inventory_index and inventory_position.stack == stack then
+        -- the new module is not an upgrade of the module that is already occuping this slot
         if is_upgrade_to(module_name, module_quality, blueprint_insert_plan.id.name, quality_name) == false then
-          return false -- the new module is not an upgrade of the module that is already occuping this slot
+          return false
         end
       end
     end
@@ -94,10 +93,6 @@ script.on_event("ctrl-click-modules-into-ghost-as-character", function(event)
   local player = game.get_player(event.player_index)
   assert(player)
 
-  -- game.print(event.tick)
-  -- game.print(player.controller_type)
-  -- game.print(serpent.line(defines.controllers))
-
   if player.controller_type ~= defines.controllers.character then return end
 
   local ghost = player.selected
@@ -108,25 +103,12 @@ script.on_event("ctrl-click-modules-into-ghost-as-character", function(event)
   if inventory_index == nil then return end -- ghost not of an entity that supports module slots
 
   local module_slots = module_inventory_size[ghost.ghost_name]
-  if module_slots == 0 then return end -- nothing to do here
+  if module_slots == 0 then return end
 
   local holding_module, module_name, module_quality = is_player_holding_module(player)
   if holding_module ~= true then return end
 
   -- todo: check if machine/recipe supports this module type
-
-  -- local in_inventory = {}
-  -- for i = 1, module_slots do
-  --   table.insert(in_inventory, {
-  --     inventory = inventory_index,
-  --     stack = i - 1,
-  --   })
-  -- end
-
-  -- ghost.insert_plan = {{
-  --   id = {name = module_name, quality = module_quality},
-  --   items = {in_inventory = in_inventory},
-  -- }}
 
   for slot = 1, module_slots do
     insert_plan_add_module(ghost, inventory_index, slot, module_name, module_quality)
