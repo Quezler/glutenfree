@@ -20,6 +20,10 @@ local function should_whitelist(simple_entity)
     return true
   end
 
+  if string.find(simple_entity.name, "chimney") then
+    return true
+  end
+
   if simple_entity.localised_name and simple_entity.localised_name[1] and simple_entity.localised_name[1] == "entity-name.meteorite" then
     return true
   end
