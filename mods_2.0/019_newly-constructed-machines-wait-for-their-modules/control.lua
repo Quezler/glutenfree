@@ -21,6 +21,8 @@ function Handler.on_init(event)
   storage.deathrattles = {}
 end
 
+script.on_init(Handler.on_init)
+
 local function proxy_requests_item_we_want_to_wait_for(proxy)
   -- game.print(serpent.line( proxy.insert_plan ))
   -- game.print(serpent.line( proxy.removal_plan ))
@@ -32,58 +34,9 @@ local function proxy_requests_item_we_want_to_wait_for(proxy)
   end
 end
 
-function Handler.on_created_entity(event)
-  local entity = event.entity or event.destination
-  game.print(game.tick .. entity.name)
-
-  local proxy = entity.surface.find_entity("item-request-proxy", entity.position)
-  if proxy == nil then return end
-  assert(proxy.proxy_target == entity)
-
-  if not proxy_requests_item_we_want_to_wait_for(proxy) then return end
-
-  assert(entity.custom_status == nil, "some other mod has touched entity.custom_status already, do get in touch.")
-  entity.custom_status = {
-    diode = defines.entity_status_diode.yellow,
-    label = {"entity-status.waiting-for-modules"},
-  }
-
-  assert(entity.active == true, "some other mod has touched entity.active already, do get in touch.")
-  entity.active = false
-
-  local deathrattle_id = script.register_on_object_destroyed(proxy)
-  storage.structs[deathrattle_id] = {
-    proxy = proxy,
-    proxy_target = entity,
-  }
-
-  storage.deathrattles[deathrattle_id] = {
-    struct_id = deathrattle_id,
-    proxy_target = entity,
-  }
-end
-
--- local entity_types_with_module_slots = {"mining-drill", "furnace", "assembling-machine", "lab", "beacon", "rocket-silo"}
-
-script.on_init(Handler.on_init)
-
-for _, event in ipairs({
-  defines.events.on_built_entity,
-  defines.events.on_robot_built_entity,
-  defines.events.on_space_platform_built_entity,
-  defines.events.script_raised_built,
-  defines.events.script_raised_revive,
-  defines.events.on_entity_cloned,
-}) do
-  script.on_event(event, Handler.on_created_entity, {
-    {filter = "type", type = "mining-drill"},
-    {filter = "type", type = "furnace"},
-    {filter = "type", type = "assembling-machine"},
-    {filter = "type", type = "lab"},
-    {filter = "type", type = "beacon"},
-    {filter = "type", type = "rocket-silo"},
-  })
-end
+-- todo: if an entity gets cloned it'll already be paused,
+-- as well as the new proxy trying to pause it running into an assert.
+-- we'll fix it when we get a report for it, space exploration isn't ported anyways.
 
 function Handler.remove_waiting_for_modules(entity)
   assert(entity.active == false)
@@ -131,6 +84,30 @@ function Handler.on_tick(event)
     if proxy.valid then -- proxy died in the same tick, possibly tried to request an item that doesn't fit in that slot?
       game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.insert_plan))
       game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.removal_plan))
+
+      if not proxy_requests_item_we_want_to_wait_for(proxy) then return end
+      local entity = proxy.proxy_target
+      assert(entity)
+
+      assert(entity.custom_status == nil, "some other mod has touched entity.custom_status already, do get in touch.")
+      entity.custom_status = {
+        diode = defines.entity_status_diode.yellow,
+        label = {"entity-status.waiting-for-modules"},
+      }
+
+      assert(entity.active == true, "some other mod has touched entity.active already, do get in touch.")
+      entity.active = false
+
+      local deathrattle_id = script.register_on_object_destroyed(proxy)
+      storage.structs[deathrattle_id] = {
+        proxy = proxy,
+        proxy_target = entity,
+      }
+
+      storage.deathrattles[deathrattle_id] = {
+        struct_id = deathrattle_id,
+        proxy_target = entity,
+      }
     end
   end
 
@@ -149,8 +126,6 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 
   local module_inventory_index = module_inventory_for_type[proxy.proxy_target.type]
   if module_inventory_index == nil then return end -- type does not have a module inventory
-
-  assert(new_proxies_tick == nil or new_proxies_tick == event.tick, "the expected on_tick did not fire yet, weird.")
 
   new_proxies[#new_proxies+1] = proxy
   new_proxies_tick = event.tick

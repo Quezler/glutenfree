@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Begin listening to item request proxies being created
     - Abuse created triggers firing before on_tick
+    - Support pausing existing assemblers with new quality/prod requests
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2024. 10. 30
