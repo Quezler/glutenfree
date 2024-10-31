@@ -1,17 +1,17 @@
 local Handler = {}
 
 script.on_init(function()
-  local items = remote.call("freeplay", "get_created_items")
-  items["infinity-rocket-silo"] = 1
-  remote.call("freeplay", "set_created_items", items)
+  -- local items = remote.call("freeplay", "get_created_items")
+  -- items["infinity-rocket-silo"] = 1
+  -- remote.call("freeplay", "set_created_items", items)
 
-  local platform = game.forces["player"].create_space_platform{
-    name = "platform",
-    planet = "nauvis",
-    starter_pack = "space-platform-starter-pack",
-  }
-  assert(platform)
-  platform.apply_starter_pack()
+  -- local platform = game.forces["player"].create_space_platform{
+  --   name = "platform",
+  --   planet = "nauvis",
+  --   starter_pack = "space-platform-starter-pack",
+  -- }
+  -- assert(platform)
+  -- platform.apply_starter_pack()
 
   storage.structs = {}
 end)
