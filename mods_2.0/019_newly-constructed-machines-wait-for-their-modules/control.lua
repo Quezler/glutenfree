@@ -19,9 +19,18 @@ end
 function Handler.on_init(event)
   storage.structs = {}
   storage.deathrattles = {}
+
+  -- proxies that get created with insertion plans run in the same tick,
+  -- proxies created through a removal request tend to run in the next.
+  storage.new_proxies = {}
+end
+
+function Handler.on_configuration_changed(event)
+  storage.new_proxies = storage.new_proxies or {}
 end
 
 script.on_init(Handler.on_init)
+script.on_configuration_changed(Handler.on_configuration_changed)
 
 local function proxy_requests_item_we_want_to_wait_for(proxy)
   -- game.print(serpent.line( proxy.insert_plan ))
@@ -74,13 +83,8 @@ local module_inventory_for_type = {
   ["beacon"            ] = defines.inventory.beacon_modules,
 }
 
-local new_proxies = {}
-local new_proxies_tick = nil
-
 function Handler.on_tick(event)
-  assert(new_proxies_tick == event.tick, string.format("this should have run for tick %d, not tick %d.", new_proxies_tick, event.tick))
-
-  for _, proxy in ipairs(new_proxies) do
+  for _, proxy in ipairs(storage.new_proxies) do
     if proxy.valid then -- proxy died in the same tick, possibly tried to request an item that doesn't fit in that slot?
       game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.insert_plan))
       game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.removal_plan))
@@ -111,8 +115,7 @@ function Handler.on_tick(event)
     end
   end
 
-  new_proxies = {}
-  new_proxies_tick = nil
+  storage.new_proxies = {}
   script.on_event(defines.events.on_tick, nil)
 end
 
@@ -127,7 +130,12 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local module_inventory_index = module_inventory_for_type[proxy.proxy_target.type]
   if module_inventory_index == nil then return end -- type does not have a module inventory
 
-  new_proxies[#new_proxies+1] = proxy
-  new_proxies_tick = event.tick
+  table.insert(storage.new_proxies, proxy)
   script.on_event(defines.events.on_tick, Handler.on_tick)
+end)
+
+script.on_load(function()
+  if next(storage.new_proxies) then
+    script.on_event(defines.events.on_tick, Handler.on_tick)
+  end
 end)
