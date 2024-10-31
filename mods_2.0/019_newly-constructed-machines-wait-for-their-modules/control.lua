@@ -32,13 +32,25 @@ end
 script.on_init(Handler.on_init)
 script.on_configuration_changed(Handler.on_configuration_changed)
 
+local module_inventory_for_type = {
+  ["furnace"           ] = defines.inventory.furnace_modules, -- 4
+  ["assembling-machine"] = defines.inventory.assembling_machine_modules, -- 4
+  ["lab"               ] = defines.inventory.lab_modules, -- 3
+  ["mining-drill"      ] = defines.inventory.mining_drill_modules, -- 2
+  ["rocket-silo"       ] = defines.inventory.rocket_silo_modules, -- 4
+  ["beacon"            ] = defines.inventory.beacon_modules, -- 1
+}
+
 local function proxy_requests_item_we_want_to_wait_for(proxy)
-  -- game.print(serpent.line( proxy.insert_plan ))
-  -- game.print(serpent.line( proxy.removal_plan ))
+  local inventory_index = module_inventory_for_type[proxy.proxy_target.type]
 
   for _, blueprint_insert_plan in ipairs(proxy.insert_plan) do
     if should_wait_for_module[blueprint_insert_plan.id.name] then
-      return true
+      for _, inventory_position in ipairs(blueprint_insert_plan.items.in_inventory) do
+        if inventory_position.inventory == inventory_index then
+          return true -- this item is a module, has productivity or quality, and is requested for a module slot
+        end
+      end
     end
   end
 end
@@ -74,20 +86,11 @@ script.on_nth_tick(60, function(event)
   end
 end)
 
-local module_inventory_for_type = {
-  ["furnace"           ] = defines.inventory.furnace_modules,
-  ["assembling-machine"] = defines.inventory.assembling_machine_modules,
-  ["lab"               ] = defines.inventory.lab_modules,
-  ["mining-drill"      ] = defines.inventory.mining_drill_modules,
-  ["rocket-silo"       ] = defines.inventory.rocket_silo_modules,
-  ["beacon"            ] = defines.inventory.beacon_modules,
-}
-
 function Handler.on_tick(event)
   for _, proxy in ipairs(storage.new_proxies) do
     if proxy.valid then -- proxy died in the same tick, possibly tried to request an item that doesn't fit in that slot?
-      game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.insert_plan))
-      game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.removal_plan))
+      -- game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.insert_plan))
+      -- game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.removal_plan))
 
       if not proxy_requests_item_we_want_to_wait_for(proxy) then return end
       local entity = proxy.proxy_target
