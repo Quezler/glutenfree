@@ -111,3 +111,27 @@ script.on_nth_tick(60, function(event)
     end
   end
 end)
+
+local module_inventory_for_type = {
+  ["furnace"           ] = defines.inventory.furnace_modules,
+  ["assembling-machine"] = defines.inventory.assembling_machine_modules,
+  ["lab"               ] = defines.inventory.lab_modules,
+  ["mining-drill"      ] = defines.inventory.mining_drill_modules,
+  ["rocket-silo"       ] = defines.inventory.rocket_silo_modules,
+  ["beacon"            ] = defines.inventory.beacon_modules,
+}
+
+script.on_event(defines.events.on_script_trigger_effect, function(event)
+  if event.effect_id ~= "item-request-proxy-created" then return end
+
+  local proxy = event.target_entity
+  assert(proxy)
+  assert(proxy.type == "item-request-proxy")
+  assert(proxy.proxy_target)
+
+  local module_inventory_index = module_inventory_for_type[proxy.proxy_target.type]
+  if module_inventory_index == nil then return end -- type does not have a module inventory
+
+  game.print(event.tick .. serpent.block(proxy.insert_plan))
+  game.print(event.tick .. serpent.block(proxy.removal_plan))
+end)
