@@ -34,7 +34,7 @@ end
 
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
-  -- game.print(entity.name)
+  game.print(game.tick .. entity.name)
 
   local proxy = entity.surface.find_entity("item-request-proxy", entity.position)
   if proxy == nil then return end
@@ -121,6 +121,24 @@ local module_inventory_for_type = {
   ["beacon"            ] = defines.inventory.beacon_modules,
 }
 
+local new_proxies = {}
+local new_proxies_tick = nil
+
+function Handler.on_tick(event)
+  assert(new_proxies_tick == event.tick, string.format("this should have run for tick %d, not tick %d.", new_proxies_tick, event.tick))
+
+  for _, proxy in ipairs(new_proxies) do
+    if proxy.valid then -- proxy died in the same tick, possibly tried to request an item that doesn't fit in that slot?
+      game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.insert_plan))
+      game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.removal_plan))
+    end
+  end
+
+  new_proxies = {}
+  new_proxies_tick = nil
+  script.on_event(defines.events.on_tick, nil)
+end
+
 script.on_event(defines.events.on_script_trigger_effect, function(event)
   if event.effect_id ~= "item-request-proxy-created" then return end
 
@@ -132,6 +150,9 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local module_inventory_index = module_inventory_for_type[proxy.proxy_target.type]
   if module_inventory_index == nil then return end -- type does not have a module inventory
 
-  game.print(event.tick .. serpent.block(proxy.insert_plan))
-  game.print(event.tick .. serpent.block(proxy.removal_plan))
+  assert(new_proxies_tick == nil or new_proxies_tick == event.tick, "the expected on_tick did not fire yet, weird.")
+
+  new_proxies[#new_proxies+1] = proxy
+  new_proxies_tick = event.tick
+  script.on_event(defines.events.on_tick, Handler.on_tick)
 end)
