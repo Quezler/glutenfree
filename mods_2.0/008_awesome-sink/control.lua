@@ -13,10 +13,11 @@ script.on_init(function ()
   storage.assembler_to_arithmetic_map = {}
 
   local mod_surface = game.surfaces[mod_surface_name]
-  assert(surface == nil, "contact the mod author for help with world that previously already had this mod installed.")
-
-  mod_surface = game.create_surface(mod_surface_name)
-  mod_surface.generate_with_lab_tiles = true
+  if mod_surface then mod_surface.clear() end
+  if mod_surface == nil then
+    mod_surface = game.create_surface(mod_surface_name)
+    mod_surface.generate_with_lab_tiles = true
+  end
 
   for _, surface in pairs(game.surfaces) do
     Handler.on_surface_created({surface_index = surface.index})
