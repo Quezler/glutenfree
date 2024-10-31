@@ -28,14 +28,16 @@ class ExpansionMod
     }
 
     // creates a versioned folder and a zip
-    public function build(): void
+    public function build(): string
     {
         $source = __GLUTENFREE__ . '/mods_2.0/' . $this->directory;
         $zip_name_without_extension = $this->name . '_' . $this->info()['version'];
         $dest = __GLUTENFREE__ . '/build/' . $zip_name_without_extension;
 
         passthru(sprintf("rsync -avr --delete %s/ %s", $source, $dest));
-        passthru(sprintf("(cd %s && zip -FSr %s %s)", __GLUTENFREE__ . '/build/', "{$dest}.zip", $zip_name_without_extension));
+        passthru(sprintf("(cd %s && zip -FSr %s %s)", __GLUTENFREE__ . '/build/', $pathname = "{$dest}.zip", $zip_name_without_extension));
+
+        return $pathname;
     }
 
     // creates an unversioned folder
