@@ -68,7 +68,7 @@ end
 -- we'll fix it when we get a report for it, space exploration isn't ported anyways.
 
 function Handler.remove_waiting_for_modules(entity)
-  assert(entity.active == false)
+  assert(entity.active == false, string.format("%s at [%d,%d,%s] unexpectedly already active.", entity.name, entity.position.x, entity.position.y, entity.surface.name))
   assert(entity.custom_status.label[1] == "entity-status.waiting-for-modules")
   entity.active = true
   entity.custom_status = nil
