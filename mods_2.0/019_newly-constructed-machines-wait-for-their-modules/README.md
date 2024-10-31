@@ -23,3 +23,7 @@ If the machine requested non productivity/quality modules initially and you chan
 what matters is the module requests the ghost has at the time a player/bot comes to build the entity, you can quickly add prod/qual to the ghost tho.
 
 TLDR: this stops a machine from starting with crafting until it has received all its initial modules that have a positive effect on the output item.
+
+# 1.1.0 update
+
+Now supports pausing existing entities if you're requesting productivity/quality modules for empty slots, or swapping out speed/efficiency modules.
