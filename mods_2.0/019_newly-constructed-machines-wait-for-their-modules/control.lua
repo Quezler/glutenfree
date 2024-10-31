@@ -77,11 +77,12 @@ end
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    local proxy_target = deathrattle.proxy_target
-    if proxy_target.valid then
-      Handler.remove_waiting_for_modules(proxy_target)
+    local struct = storage.structs[deathrattle.struct_id]
+    if struct then storage.structs[deathrattle.struct_id] = nil
+      if struct.proxy_target.valid then
+        Handler.remove_waiting_for_modules(struct.proxy_target)
+      end
     end
-    storage.structs[deathrattle.struct_id] = nil
   end
 end)
 
@@ -121,7 +122,6 @@ function Handler.on_tick(event)
 
       storage.deathrattles[deathrattle_id] = {
         struct_id = deathrattle_id,
-        proxy_target = entity,
       }
     end
   end
