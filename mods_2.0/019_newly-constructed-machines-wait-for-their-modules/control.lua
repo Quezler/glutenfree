@@ -168,19 +168,32 @@ script.on_load(function()
   end
 end)
 
-script.on_event(defines.events.on_entity_died, function(event)
-  game.print("entity died")
+-- when an entity that was "waiting for modules" dies the custom status apparently persists in the ghost,
+-- so when it is revived (no specific event, so we listen to all of them) we'll clear the custom status to be sure,
+-- when this code runs the proxy will already exist and have an insert plan, but it shouldn't have reached on_tick yet.
+-- nevertheless this feels incredibly fragile, but it seems to work well enough for now, lets see what the test of time says.
+function Handler.on_created_entity(event)
   local entity = event.entity
   if entity.custom_status and entity.custom_status.label[1] == "entity-status.waiting-for-modules" then
     entity.custom_status = nil
     entity.active = true
-    game.print("waiting cleared")
   end
-end, {
-  {filter = "type", type = "mining-drill"},
-  {filter = "type", type = "furnace"},
-  {filter = "type", type = "assembling-machine"},
-  {filter = "type", type = "lab"},
-  {filter = "type", type = "beacon"},
-  {filter = "type", type = "rocket-silo"},
-})
+end
+
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.on_space_platform_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+  defines.events.on_entity_cloned,
+}) do
+  script.on_event(event, Handler.on_created_entity, {
+    {filter = "type", type = "mining-drill"},
+    {filter = "type", type = "furnace"},
+    {filter = "type", type = "assembling-machine"},
+    {filter = "type", type = "lab"},
+    {filter = "type", type = "beacon"},
+    {filter = "type", type = "rocket-silo"},
+  })
+end

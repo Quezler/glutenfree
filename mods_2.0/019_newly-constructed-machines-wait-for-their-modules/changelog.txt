@@ -1,11 +1,12 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.7
-Date: ????
+Date: 2024. 11. 01
   Info:
     - Remove some nested tables from the debug message
     - Use serpent.block, there's enough room on the dialog
     - Do not sort the serpent keys
     - Try to clear custom_status & active upon entity death
+    - Clear the "waiting for modules" for new entities so revived ghosts do not already have it
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 2024. 11. 01
