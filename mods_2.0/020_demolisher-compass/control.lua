@@ -211,17 +211,42 @@ local function request_needle_direction(player, new_direction)
 end
 
 -- this lookup isn't very performant, but hey there are usually only like 20 demolishers a the time.
-function Handler.get_demolisher_from_chunk_key(chunk_key)
-  local i = 0
+function Handler.get_demolisher_from_chunk_key(chunk_key, chunk_position)
+  local flatmap = {}
+
+  -- local i = 0
   for _, demolisher in pairs(storage.demolishers) do
-    i = i + 1
+    -- i = i + 1
     if demolisher.territory[chunk_key] then
-      log(string.format("found a demolisher in this chunk after %d tries.", i))
+      -- log(string.format("found a demolisher in this chunk after %d tries.", i))
       return demolisher.entity
+    end
+
+    for other_chunk_key, _ in pairs(demolisher.territory) do
+      flatmap[other_chunk_key] = demolisher.entity
     end
   end
 
-  log(string.format("found no demolisher in this chunk after %d tries.", i))
+  -- log(string.format("found no demolisher in this chunk after %d tries.", i))
+
+  for i = 1, 20 do
+    local try_chunk_key = position_key({x = chunk_position.x, y = chunk_position.y - i})
+    -- log(try_chunk_key)
+    local demolisher = flatmap[try_chunk_key]
+    if demolisher then
+      -- game.print("demolisher found at i " .. i)
+
+      for j = 1, 20 do
+        local try_chunk_key = position_key({x = chunk_position.x, y = chunk_position.y + j})
+        -- log(try_chunk_key)
+        if demolisher == flatmap[try_chunk_key] then
+          -- game.print("im inside a territory")
+          return demolisher
+        end
+      end
+
+    end
+  end
 end
 
 function Handler.on_nth_tick_10(event)
@@ -234,19 +259,20 @@ function Handler.on_nth_tick_10(event)
 
     if player_is_holding_compass(player) == false then goto continue end
 
-    local chunk_key = position_key(flib_position.to_chunk(player.position))
+    local chunk_position = flib_position.to_chunk(player.position)
+    local chunk_key = position_key(chunk_position)
     local last_chunk_of_player = storage.last_chunk_of_player[player_index] -- todo: surface check
     if last_chunk_of_player == nil or last_chunk_of_player.chunk_key ~= chunk_key then
       storage.last_chunk_of_player[player_index] = {
         chunk_key = chunk_key,
-        demolisher = Handler.get_demolisher_from_chunk_key(chunk_key),
+        demolisher = Handler.get_demolisher_from_chunk_key(chunk_key, chunk_position),
       }
     end
 
     local demolisher = storage.last_chunk_of_player[player_index].demolisher
     local sprite_nr
 
-    if demolisher then
+    if demolisher and demolisher.valid then
       local zero_to_16 = flib_direction.from_positions(player.position, demolisher.position, false)
       local zero_to_27 = zero_to_16 / 16 * 27
       sprite_nr = flib_math.round(zero_to_27)
