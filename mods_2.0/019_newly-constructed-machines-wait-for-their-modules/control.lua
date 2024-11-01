@@ -167,3 +167,20 @@ script.on_load(function()
     script.on_event(defines.events.on_tick, Handler.on_tick)
   end
 end)
+
+script.on_event(defines.events.on_entity_died, function(event)
+  game.print("entity died")
+  local entity = event.entity
+  if entity.custom_status and entity.custom_status.label[1] == "entity-status.waiting-for-modules" then
+    entity.custom_status = nil
+    entity.active = true
+    game.print("waiting cleared")
+  end
+end, {
+  {filter = "type", type = "mining-drill"},
+  {filter = "type", type = "furnace"},
+  {filter = "type", type = "assembling-machine"},
+  {filter = "type", type = "lab"},
+  {filter = "type", type = "beacon"},
+  {filter = "type", type = "rocket-silo"},
+})
