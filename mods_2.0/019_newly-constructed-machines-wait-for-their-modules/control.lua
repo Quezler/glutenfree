@@ -76,7 +76,7 @@ function entity_debug_information(entity)
     custom_status = entity.custom_status,
 
     last_user = entity.last_user and entity.last_user.name or nil,
-  })
+  }, {sortkeys = false})
 end
 
 -- todo: if an entity gets cloned it'll already be paused,
