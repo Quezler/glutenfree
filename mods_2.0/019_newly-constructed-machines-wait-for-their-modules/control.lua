@@ -97,6 +97,7 @@ end)
 
 function Handler.on_tick(event)
   for _, proxy in ipairs(storage.new_proxies) do
+    game.print(game.tick .. ' hmm ' .. proxy.unit_number)
     if proxy.valid then -- proxy died in the same tick, possibly tried to request an item that doesn't fit in that slot?
       -- game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.insert_plan))
       -- game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.removal_plan))
@@ -104,6 +105,17 @@ function Handler.on_tick(event)
       if not proxy_requests_item_we_want_to_wait_for(proxy) then return end
       local entity = proxy.proxy_target
       assert(entity)
+
+      -- local proxies = proxy.surface.find_entities_filtered{
+      --   position = proxy.position,
+      --   name = proxy.name,
+      -- }
+
+      -- assert(#proxies == 1) -- just make sure there is no overlap
+      -- if entity.custom_status == nil then
+      --   game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.insert_plan))
+      --   game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.removal_plan))
+      -- end
 
       assert(entity.custom_status == nil, string.format("entity.custom_status for %s is %s but expected nil, please report.", entity.name, serpent.line(entity.custom_status)))
       entity.custom_status = {
@@ -132,6 +144,7 @@ end
 
 script.on_event(defines.events.on_script_trigger_effect, function(event)
   if event.effect_id ~= "item-request-proxy-created" then return end
+  game.print('new proxy! ' .. event.tick)
 
   local proxy = event.target_entity
   assert(proxy)
