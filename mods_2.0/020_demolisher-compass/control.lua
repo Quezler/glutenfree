@@ -206,11 +206,16 @@ end
 
 -- this lookup isn't very performant, but hey there are usually only like 20 demolishers a the time.
 function Handler.get_demolisher_from_chunk_key(chunk_key)
+  local i = 0
   for _, demolisher in pairs(storage.demolishers) do
+    i = i + 1
     if demolisher.territory[chunk_key] then
+      log(string.format("found a demolisher in this chunk after %d tries.", i))
       return demolisher.entity
     end
   end
+
+  log(string.format("found no demolisher in this chunk after %d tries.", i))
 end
 
 function Handler.on_nth_tick_10(event)
