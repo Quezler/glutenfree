@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Profile get_demolisher_from_chunk_key
     - Brain buffers purged
+    - Remember if the current chunk was already checked for demolisher ownership
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2024. 10. 30

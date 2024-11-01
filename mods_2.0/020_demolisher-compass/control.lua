@@ -13,7 +13,7 @@ script.on_init(function()
   storage.players_holding_compasses = {}
   storage.any_player_holding_compass = false
 
-  storage.chunk_key_to_demolisher = {}
+  storage.last_chunk_of_player = {}
 
   if game.surfaces["vulcanus"] then
     local demolishers = game.surfaces["vulcanus"].find_entities_filtered{
@@ -29,7 +29,7 @@ script.on_init(function()
 end)
 
 script.on_configuration_changed(function()
-  storage.chunk_key_to_demolisher = {}
+  storage.last_chunk_of_player = {}
 end)
 
 function Handler.register_demolisher(entity)
@@ -235,12 +235,15 @@ function Handler.on_nth_tick_10(event)
     if player_is_holding_compass(player) == false then goto continue end
 
     local chunk_key = position_key(flib_position.to_chunk(player.position))
-    local chunk_key_to_demolisher = storage.chunk_key_to_demolisher[chunk_key] -- todo: surface check
-    if chunk_key_to_demolisher == nil or chunk_key_to_demolisher.valid == false then
-      storage.chunk_key_to_demolisher[chunk_key] = 
+    local last_chunk_of_player = storage.last_chunk_of_player[player_index] -- todo: surface check
+    if last_chunk_of_player == nil or last_chunk_of_player.chunk_key ~= chunk_key then
+      storage.last_chunk_of_player[player_index] = {
+        chunk_key = chunk_key,
+        demolisher = Handler.get_demolisher_from_chunk_key(chunk_key),
+      }
     end
 
-    local demolisher = Handler.get_demolisher_from_chunk_key(chunk_key)
+    local demolisher = storage.last_chunk_of_player[player_index].demolisher
     local sprite_nr
 
     if demolisher then
@@ -277,6 +280,7 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   else
     storage.players_holding_compasses[player.index] = nil
     storage.player_needle_pointing_at[player.index] = nil
+    storage.last_chunk_of_player[player.index] = nil
   end
 end)
 
