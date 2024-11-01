@@ -64,7 +64,7 @@ local function proxy_requests_item_we_want_to_wait_for(proxy)
 end
 
 function entity_debug_information(entity)
-  return serpent.line({
+  return serpent.block({
     type = entity.type,
     name = entity.name,
 
