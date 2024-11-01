@@ -13,6 +13,8 @@ script.on_init(function()
   storage.players_holding_compasses = {}
   storage.any_player_holding_compass = false
 
+  storage.chunk_key_to_demolisher = {}
+
   if game.surfaces["vulcanus"] then
     local demolishers = game.surfaces["vulcanus"].find_entities_filtered{
       type = "segmented-unit"
@@ -24,6 +26,10 @@ script.on_init(function()
   end
 
   -- game.print(table_size(storage.demolishers))
+end)
+
+script.on_configuration_changed(function()
+  storage.chunk_key_to_demolisher = {}
 end)
 
 function Handler.register_demolisher(entity)
@@ -229,6 +235,11 @@ function Handler.on_nth_tick_10(event)
     if player_is_holding_compass(player) == false then goto continue end
 
     local chunk_key = position_key(flib_position.to_chunk(player.position))
+    local chunk_key_to_demolisher = storage.chunk_key_to_demolisher[chunk_key] -- todo: surface check
+    if chunk_key_to_demolisher == nil or chunk_key_to_demolisher.valid == false then
+      storage.chunk_key_to_demolisher[chunk_key] = 
+    end
+
     local demolisher = Handler.get_demolisher_from_chunk_key(chunk_key)
     local sprite_nr
 
