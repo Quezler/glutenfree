@@ -6,21 +6,20 @@ local function handle_surface(surface)
   local platform = surface.platform
   if not platform then return end
 
-  -- /c game.print(game.player.surface.platform.name)
-  -- log(surface.name .. ' ' .. platform.name)
+  local platform_name = platform.name
 
-  -- local prefix = string.format("[color=1,1,1,0.%04d][/color]", surface.index)
-  local surface_name_without_platform_hyphen = string.sub(surface.name, string.len("platform-") + 1)
-  -- local prefix = string.format("[color=1,1,1,0.%04d][/color]", tonumber(surface_name_without_platform_hyphen))
-  local decimal = string.format("%04d", tonumber(surface_name_without_platform_hyphen))
-  local prefix = string.format("[color=1,1,1,0.%s][/color]", decimal)
-  local detected_prefix = string.sub(platform.name, 1, string.len(prefix))
+  local decimal_v2 = string.format("%010d", tonumber(platform.index))
+  local prefix = string.format("[color=1,1,1,0.%s][/color]", decimal_v2)
+  local detected_prefix = string.sub(platform_name, 1, string.len(prefix))
 
   if detected_prefix ~= prefix then
+    local surface_name_without_platform_hyphen = string.sub(surface.name, string.len("platform-") + 1)
+    local decimal_v1 = string.format("%04d", tonumber(surface_name_without_platform_hyphen))
+
     -- in case the user added text to the front, search for our sorting markers further down in the string and kill them
-    local platform_name = string.gsub(platform.name, "%[color=1,1,1,0%.".. decimal .. "%]%[/color%]", "")
+    local platform_name = string.gsub(platform_name, "%[color=1,1,1,0%.".. decimal_v1 .. "%]%[/color%]", "")
+    local platform_name = string.gsub(platform_name, "%[color=1,1,1,0%.".. decimal_v2 .. "%]%[/color%]", "")
     platform.name = prefix .. platform_name
-    -- log(surface.name .. ' ' .. platform.name)
   end
 
   log(surface.name .. ' ' .. platform.name)
@@ -33,6 +32,10 @@ local function handle_surfaces()
 end
 
 script.on_init(function()
+  handle_surfaces()
+end)
+
+script.on_configuration_changed(function()
   handle_surfaces()
 end)
 
@@ -52,5 +55,3 @@ script.on_event(defines.events.on_gui_closed, function(event)
     end
   end
 end)
-
--- [color=1,1,1,0.990001][/color]
