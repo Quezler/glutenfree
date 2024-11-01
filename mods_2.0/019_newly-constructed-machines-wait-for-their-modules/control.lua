@@ -101,7 +101,7 @@ function Handler.on_tick(event)
       -- game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.insert_plan))
       -- game.print(string.format("%d %d ", event.tick, _) .. serpent.block(proxy.removal_plan))
 
-      if not proxy_requests_item_we_want_to_wait_for(proxy) then return end
+      if not proxy_requests_item_we_want_to_wait_for(proxy) then goto continue end
       local entity = proxy.proxy_target
       assert(entity)
 
@@ -124,6 +124,7 @@ function Handler.on_tick(event)
         struct_id = deathrattle_id,
       }
     end
+    ::continue::
   end
 
   storage.new_proxies = {}
