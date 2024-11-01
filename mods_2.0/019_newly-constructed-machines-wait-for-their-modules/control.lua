@@ -33,12 +33,12 @@ script.on_init(Handler.on_init)
 script.on_configuration_changed(Handler.on_configuration_changed)
 
 local module_inventory_for_type = {
-  ["furnace"           ] = defines.inventory.furnace_modules, -- 4
+  ["furnace"           ] = defines.inventory.furnace_modules,            -- 4
   ["assembling-machine"] = defines.inventory.assembling_machine_modules, -- 4
-  ["lab"               ] = defines.inventory.lab_modules, -- 3
-  ["mining-drill"      ] = defines.inventory.mining_drill_modules, -- 2
-  ["rocket-silo"       ] = defines.inventory.rocket_silo_modules, -- 4
-  ["beacon"            ] = defines.inventory.beacon_modules, -- 1
+  ["lab"               ] = defines.inventory.lab_modules,                -- 3
+  ["mining-drill"      ] = defines.inventory.mining_drill_modules,       -- 2
+  ["rocket-silo"       ] = defines.inventory.rocket_silo_modules,        -- 4
+  ["beacon"            ] = defines.inventory.beacon_modules,             -- 1
 }
 
 local function proxy_requests_item_we_want_to_wait_for(proxy)
@@ -69,7 +69,7 @@ end
 
 function Handler.remove_waiting_for_modules(entity)
   assert(entity.active == false, string.format("%s at [%d,%d,%s] unexpectedly already active.", entity.name, entity.position.x, entity.position.y, entity.surface.name))
-  assert(entity.custom_status.label[1] == "entity-status.waiting-for-modules")
+  assert(entity.custom_status.label[1] == "entity-status.waiting-for-modules", string.format("entity.custom_status.label[1] for %s is %s but expected \"entity-status.waiting-for-modules\", please report.", entity.name, serpent.line(entity.custom_status)))
   entity.active = true
   entity.custom_status = nil
 end
@@ -105,13 +105,13 @@ function Handler.on_tick(event)
       local entity = proxy.proxy_target
       assert(entity)
 
-      assert(entity.custom_status == nil, "some other mod has touched entity.custom_status already, do get in touch.")
+      assert(entity.custom_status == nil, string.format("entity.custom_status for %s is %s but expected nil, please report.", entity.name, serpent.line(entity.custom_status)))
       entity.custom_status = {
         diode = defines.entity_status_diode.yellow,
         label = {"entity-status.waiting-for-modules"},
       }
 
-      assert(entity.active == true, "some other mod has touched entity.active already, do get in touch.")
+      assert(entity.active == true, string.format("entity.status for %s is true but expected false, please report.", entity.name, serpent.line(entity.custom_status)))
       entity.active = false
 
       local deathrattle_id = script.register_on_object_destroyed(proxy)
