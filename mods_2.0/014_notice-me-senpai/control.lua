@@ -71,6 +71,8 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
 
         ore_render_objects = {},
         redraw = false,
+
+        alt_mode = player.game_view_settings.show_entity_info,
       }
 
       Handler.tick_player(event)
@@ -150,13 +152,12 @@ function Handler.add_ore_to_playerdata(ore, playerdata)
     surface = playerdata.surface_index,
 
     target = ore,
-    radius = 0.2,
+    radius = playerdata.alt_mode and 0.2 or 0.1,
 
     color = get_color_for_tile_key(playerdata, tile_key),
     filled = true,
 
     players = {playerdata.player_index},
-    only_in_alt_mode = true,
   }
 end
 
@@ -243,7 +244,6 @@ function Handler.tick_player(event)
 
         color = {0.25, 0.25, 0.25, 0.1},
         filled = true,
-        only_in_alt_mode = true,
         players = {player},
       }
 
@@ -313,6 +313,19 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     for _, playerdata in pairs(storage.playerdata) do
       Handler.reindex_color_positions(playerdata)
       Handler.redraw(playerdata)
+    end
+  end
+end)
+
+script.on_event(defines.events.on_player_toggled_alt_mode, function(event)
+  local playerdata = storage.playerdata[event.player_index]
+  if playerdata then
+    playerdata.alt_mode = event.alt_mode
+
+    for tile_key, ore_render_object in pairs(playerdata.ore_render_objects) do
+      if ore_render_object.valid then -- if the ore gets mined this kills itself
+        ore_render_object.radius = playerdata.alt_mode and 0.2 or 0.1
+      end
     end
   end
 end)
