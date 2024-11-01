@@ -63,13 +63,29 @@ local function proxy_requests_item_we_want_to_wait_for(proxy)
   end
 end
 
+function entity_debug_information(entity)
+  return serpent.line({
+    type = entity.type,
+    name = entity.name,
+
+    force = entity.force,
+    surface = entity.surface.name,
+    position = entity.position,
+
+    active = entity.active,
+    custom_status = entity.custom_status,
+
+    last_user = entity.last_user,
+  })
+end
+
 -- todo: if an entity gets cloned it'll already be paused,
 -- as well as the new proxy trying to pause it running into an assert.
 -- we'll fix it when we get a report for it, space exploration isn't ported anyways.
 
 function Handler.remove_waiting_for_modules(entity)
-  assert(entity.active == false, string.format("%s at [%d,%d,%s] unexpectedly already active.", entity.name, entity.position.x, entity.position.y, entity.surface.name))
-  assert(entity.custom_status.label[1] == "entity-status.waiting-for-modules", string.format("entity.custom_status.label[1] for %s is %s but expected \"entity-status.waiting-for-modules\", please report.", entity.name, serpent.line(entity.custom_status)))
+  assert(entity.active == false, "the entity is already active. " .. entity_debug_information(entity))
+  assert(entity.custom_status.label[1] == "entity-status.waiting-for-modules", "the entity is not waiting for modules. " .. entity_debug_information(entity))
   entity.active = true
   entity.custom_status = nil
 end
@@ -105,13 +121,13 @@ function Handler.on_tick(event)
       local entity = proxy.proxy_target
       assert(entity)
 
-      assert(entity.custom_status == nil, string.format("entity.custom_status for %s is %s but expected nil, please report.", entity.name, serpent.line(entity.custom_status)))
+      assert(entity.custom_status == nil, "expected entity.custom_status to be nil. " .. entity_debug_information(entity))
       entity.custom_status = {
         diode = defines.entity_status_diode.yellow,
         label = {"entity-status.waiting-for-modules"},
       }
 
-      assert(entity.active == true, string.format("entity.status for %s is true but expected false, please report.", entity.name, serpent.line(entity.custom_status)))
+      assert(entity.active == true, "expected entity.status to be false. " .. entity_debug_information(entity))
       entity.active = false
 
       local deathrattle_id = script.register_on_object_destroyed(proxy)
