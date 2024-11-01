@@ -68,14 +68,14 @@ function entity_debug_information(entity)
     type = entity.type,
     name = entity.name,
 
-    force = entity.force,
+    force = entity.force.name,
     surface = entity.surface.name,
     position = entity.position,
 
     active = entity.active,
     custom_status = entity.custom_status,
 
-    last_user = entity.last_user,
+    last_user = entity.last_user and entity.last_user.name or nil,
   })
 end
 
