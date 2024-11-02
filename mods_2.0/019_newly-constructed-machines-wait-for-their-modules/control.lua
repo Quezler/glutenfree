@@ -16,6 +16,11 @@ for _, item in pairs(prototypes.item) do
 end
 -- log(serpent.block(should_wait_for_module))
 
+local entity_status_name = {}
+for name, value in pairs(defines.entity_status) do
+  entity_status_name[value] = name
+end
+
 function Handler.on_init(event)
   storage.structs = {}
   storage.deathrattles = {}
@@ -73,6 +78,7 @@ function entity_debug_information(entity)
     position = entity.position,
 
     active = entity.active,
+    status = entity_status_name[entity.status],
     custom_status = entity.custom_status,
 
     last_user = entity.last_user and entity.last_user.name or nil,
@@ -127,7 +133,7 @@ function Handler.on_tick(event)
         label = {"entity-status.waiting-for-modules"},
       }
 
-      assert(entity.active == true, "expected entity.status to be false. " .. entity_debug_information(entity))
+      assert(entity.active == true, "expected entity.active to be true. " .. entity_debug_information(entity))
       entity.active = false
 
       local deathrattle_id = script.register_on_object_destroyed(proxy)
