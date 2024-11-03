@@ -16,14 +16,17 @@ end)
 
 script.on_event(defines.events.on_built_entity, function(event)
   rendering.draw_animation{
-    target = event.entity.position,
+    target = {entity = event.entity, offset = {0, -2}},
     surface = event.entity.surface,
     animation = "platform_entity_build_animations-front_left-top",
+    time_to_live = 32 * 2,
+    animation_offset = 0,
   }
 
-  rendering.draw_animation{
-    target = event.entity.position,
-    surface = event.entity.surface,
-    animation = "platform_entity_build_animations-front_left-body",
-  }
+  -- rendering.draw_animation{
+  --   target = event.entity.position,
+  --   surface = event.entity.surface,
+  --   animation = "platform_entity_build_animations-front_left-body",
+  --   time_to_live = 32 * 2,
+  -- }
 end)
