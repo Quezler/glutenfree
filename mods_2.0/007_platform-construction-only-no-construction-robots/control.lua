@@ -1,5 +1,9 @@
 local flib_bounding_box = require("__flib__.bounding-box")
 
+script.on_init(function()
+  storage.entities_being_built = {}
+end)
+
 script.on_event(defines.events.on_tick, function(event)
   local logistic_networks = game.forces["player"].logistic_networks["nauvis"] or {}
 
@@ -52,38 +56,83 @@ local function get_manhattan_distance(position, center)
   return math.abs(delta_x) + math.abs(delta_y)
 end
 
--- synced with __space-age__/graphics/entity/space-platform-build-anim/entity-build-animations.lua
-local frame_count = 32
-local animation_speed = 0.5
-
 script.on_event(defines.events.on_built_entity, function(event)
-  if event.entity.surface.platform then return end
+  local entity = event.entity
 
-  for _, position in ipairs(get_tilebox(event.entity.bounding_box)) do
+  if entity.surface.platform then return end
+  if entity.name == "entity-ghost" then return end
+  if entity.name == "tile-ghost" then return end
+
+  local surface = entity.surface
+
+  local entity_being_built = {
+    entity = event.entity,
+
+    animations = {},
+  }
+
+  for _, position in ipairs(get_tilebox(entity.bounding_box)) do
     position.x = position.x + 0.5
     position.y = position.y + 0.5
-    local piece = get_piece(position, event.entity.position)
+    local piece = get_piece(position, entity.position)
 
-    rendering.draw_animation{
+    local manhattan_distance = get_manhattan_distance(position, entity.position)
+    manhattan_distance = manhattan_distance * 8 -- frames between building
+
+    local top = rendering.draw_animation{
       target = position,
-      surface = event.entity.surface,
+      surface = surface,
       animation = "platform_entity_build_animations-" .. piece .. "-top",
-      time_to_live = frame_count / animation_speed - 2, -- or -2?
-      animation_offset = 1,
+      time_to_live = 60 * 10,
+      animation_offset = 0,
       animation_speed = 0,
       render_layer = "higher-object-above",
     }
 
-    rendering.draw_animation{
+    local body = rendering.draw_animation{
       target = position,
-      surface = event.entity.surface,
+      surface = surface,
       animation = "platform_entity_build_animations-" .. piece .. "-body",
-      time_to_live = frame_count / animation_speed - 2, -- or -2?
-      animation_offset = 1,
+      time_to_live = 60 * 10,
+      animation_offset = 0,
       animation_speed = 0,
       render_layer = is_back_piece(piece) and "lower-object-above-shadow" or "object",
     }
+
+    table.insert(entity_being_built.animations, {
+      top = top,
+      body = body,
+      animation_offset_at_tick = {
+        [event.tick + manhattan_distance + 1] = 1,
+        [event.tick + manhattan_distance + 4] = 2,
+        [event.tick + manhattan_distance + 6] = 3,
+        [event.tick + manhattan_distance + 8] = 4,
+        [event.tick + manhattan_distance + 10] = 5,
+        [event.tick + manhattan_distance + 12] = 6,
+        [event.tick + manhattan_distance + 14] = 7,
+        [event.tick + manhattan_distance + 16] = 8,
+        [event.tick + manhattan_distance + 18] = 9,
+        [event.tick + manhattan_distance + 20] = 10,
+        [event.tick + manhattan_distance + 22] = 11,
+        [event.tick + manhattan_distance + 24] = 12,
+        [event.tick + manhattan_distance + 26] = 13,
+        [event.tick + manhattan_distance + 28] = 14,
+      }
+    })
   end
 
-  -- event.entity.destroy()
+  assert(entity.unit_number)
+  storage.entities_being_built[entity.unit_number] = entity_being_built
+end)
+
+script.on_event(defines.events.on_tick, function(event)
+  for _, entity_being_built in pairs(storage.entities_being_built) do
+    for _, animation in ipairs(entity_being_built.animations) do
+      local animation_offset = animation.animation_offset_at_tick[event.tick]
+      if animation_offset ~= nil then
+        animation.top.animation_offset = animation_offset
+        animation.body.animation_offset = animation_offset
+      end
+    end
+  end
 end)

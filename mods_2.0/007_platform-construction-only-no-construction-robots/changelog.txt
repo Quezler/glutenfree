@@ -11,6 +11,7 @@ Date: ????
     - Draw the appropriate piece based on the offset
     - Do not trigger on platforms
     - Use the correct render layers
+    - Control the pacing of the animation entirely from lua
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 10. 20
