@@ -12,6 +12,7 @@ Date: ????
     - Do not trigger on platforms
     - Use the correct render layers
     - Control the pacing of the animation entirely from lua
+    - Move some magic numbers to constants
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 10. 20

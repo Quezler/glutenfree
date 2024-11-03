@@ -56,6 +56,11 @@ local function get_manhattan_distance(position, center)
   return math.abs(delta_x) + math.abs(delta_y)
 end
 
+local TICKS_PER_FRAME = 2
+local FRAMES_BEFORE_BUILT = 16
+local FRAMES_BETWEEN_BUILDING = 8
+local FRAMES_BETWEEN_REMOVING = 4
+
 script.on_event(defines.events.on_built_entity, function(event)
   local entity = event.entity
 
@@ -77,7 +82,6 @@ script.on_event(defines.events.on_built_entity, function(event)
     local piece = get_piece(position, entity.position)
 
     local manhattan_distance = get_manhattan_distance(position, entity.position)
-    manhattan_distance = manhattan_distance * 8 -- frames between building
 
     local top = rendering.draw_animation{
       target = position,
@@ -103,20 +107,21 @@ script.on_event(defines.events.on_built_entity, function(event)
       top = top,
       body = body,
       animation_offset_at_tick = {
-        [event.tick + manhattan_distance + 1] = 1,
-        [event.tick + manhattan_distance + 4] = 2,
-        [event.tick + manhattan_distance + 6] = 3,
-        [event.tick + manhattan_distance + 8] = 4,
-        [event.tick + manhattan_distance + 10] = 5,
-        [event.tick + manhattan_distance + 12] = 6,
-        [event.tick + manhattan_distance + 14] = 7,
-        [event.tick + manhattan_distance + 16] = 8,
-        [event.tick + manhattan_distance + 18] = 9,
-        [event.tick + manhattan_distance + 20] = 10,
-        [event.tick + manhattan_distance + 22] = 11,
-        [event.tick + manhattan_distance + 24] = 12,
-        [event.tick + manhattan_distance + 26] = 13,
-        [event.tick + manhattan_distance + 28] = 14,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING +  1 * TICKS_PER_FRAME] =  1,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING +  2 * TICKS_PER_FRAME] =  2,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING +  3 * TICKS_PER_FRAME] =  3,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING +  4 * TICKS_PER_FRAME] =  4,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING +  5 * TICKS_PER_FRAME] =  5,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING +  6 * TICKS_PER_FRAME] =  6,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING +  7 * TICKS_PER_FRAME] =  7,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING +  8 * TICKS_PER_FRAME] =  8,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING +  9 * TICKS_PER_FRAME] =  9,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING + 10 * TICKS_PER_FRAME] = 10,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING + 12 * TICKS_PER_FRAME] = 11,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING + 13 * TICKS_PER_FRAME] = 12,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING + 14 * TICKS_PER_FRAME] = 13,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING + 15 * TICKS_PER_FRAME] = 14,
+        [event.tick + 1 + manhattan_distance * FRAMES_BETWEEN_BUILDING + 16 * TICKS_PER_FRAME] = 16,
       }
     })
   end
