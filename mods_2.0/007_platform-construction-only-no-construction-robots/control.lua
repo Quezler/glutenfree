@@ -18,9 +18,10 @@ script.on_event(defines.events.on_built_entity, function(event)
   rendering.draw_animation{
     target = {entity = event.entity, offset = {0, -2}},
     surface = event.entity.surface,
-    animation = "platform_entity_build_animations-front_left-top",
-    time_to_live = 32 * 2,
-    animation_offset = 0,
+    animation = "platform_entity_build_animations-front_left-body",
+    time_to_live = 63,
+    -- animation_offset = 0,
+    animation_offset = -(game.tick * 0.5) % 32, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
   }
 
   -- rendering.draw_animation{

@@ -5,6 +5,7 @@ Date: ????
     - Make the mod require space age/travel (for the platform construction animation)
     - Make the space platform build animations usable in luarendering
     - Animation offset my ass
+    - Fix the animation offset being based on the current game tick
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 10. 20
