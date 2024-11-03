@@ -46,6 +46,7 @@ local frame_count = 32
 local animation_speed = 0.5
 
 script.on_event(defines.events.on_built_entity, function(event)
+  if event.entity.surface.platform then return end
 
   for _, position in ipairs(get_tilebox(event.entity.bounding_box)) do
     position.x = position.x + 0.5
@@ -56,7 +57,7 @@ script.on_event(defines.events.on_built_entity, function(event)
       target = position,
       surface = event.entity.surface,
       animation = "platform_entity_build_animations-" .. piece .. "-body",
-      time_to_live = frame_count / animation_speed - 1, -- or -2?
+      time_to_live = frame_count / animation_speed - 2, -- or -2?
       animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
     }
 
@@ -64,10 +65,10 @@ script.on_event(defines.events.on_built_entity, function(event)
       target = position,
       surface = event.entity.surface,
       animation = "platform_entity_build_animations-" .. piece .. "-body",
-      time_to_live = frame_count / animation_speed - 1, -- or -2?
+      time_to_live = frame_count / animation_speed - 2, -- or -2?
       animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
     }
   end
 
-  event.entity.destroy()
+  -- event.entity.destroy()
 end)
