@@ -125,6 +125,7 @@ end)
 local skip_active_true_check = {
   [defines.entity_status.frozen] = true,
   [defines.entity_status.recipe_not_researched] = true,
+  [defines.entity_status.disabled_by_control_behavior] = true,
 }
 
 function Handler.on_tick(event)
