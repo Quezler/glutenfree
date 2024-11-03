@@ -13,6 +13,7 @@ Date: ????
     - Use the correct render layers
     - Control the pacing of the animation entirely from lua
     - Move some magic numbers to constants
+    - Attempt to animate the destruction nicely too
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 10. 20
