@@ -133,7 +133,12 @@ function Handler.on_tick(event)
         label = {"entity-status.waiting-for-modules"},
       }
 
-      assert(entity.active == true, "expected entity.active to be true. " .. entity_debug_information(entity))
+      -- if an entity is frozen their .active reads as false
+      if entity.status ~= defines.entity_status.frozen then
+        assert(entity.active == true, "expected entity.active to be true. " .. entity_debug_information(entity))
+      end
+      -- but we'll still have to set .active to false or it'll start crafting when it becomes unfrozen,
+      -- fortunatently a lua'd .active doesn't get reset when the entity unfreezes, so it keeps waiting.
       entity.active = false
 
       local deathrattle_id = script.register_on_object_destroyed(proxy)
