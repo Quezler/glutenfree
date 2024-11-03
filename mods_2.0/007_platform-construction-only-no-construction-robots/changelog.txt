@@ -14,6 +14,7 @@ Date: ????
     - Control the pacing of the animation entirely from lua
     - Move some magic numbers to constants
     - Attempt to animate the destruction nicely too
+    - Animation frame is 0 based, so 32 would wrap around to frame 1
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 10. 20

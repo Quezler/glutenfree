@@ -163,8 +163,8 @@ script.on_event(defines.events.on_tick, function(event)
     for _, animation in ipairs(entity_being_built.animations) do
       local animation_offset = animation.animation_offset_at_tick[event.tick]
       if animation_offset ~= nil then
-        animation.top.animation_offset = animation_offset
-        animation.body.animation_offset = animation_offset
+        animation.top.animation_offset = animation_offset - 1
+        animation.body.animation_offset = animation_offset - 1
       end
     end
   end
