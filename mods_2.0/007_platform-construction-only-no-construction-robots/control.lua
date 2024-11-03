@@ -1,3 +1,5 @@
+local flib_bounding_box = require("__flib__.bounding-box")
+
 script.on_event(defines.events.on_tick, function(event)
   local logistic_networks = game.forces["player"].logistic_networks["nauvis"] or {}
 
@@ -14,24 +16,48 @@ script.on_event(defines.events.on_tick, function(event)
   end
 end)
 
+local function get_tilebox(bounding_box)
+  bounding_box = flib_bounding_box.ceil(bounding_box)
+  local left_top = bounding_box.left_top
+  local right_bottom = bounding_box.right_bottom
+
+  local positions = {}
+
+  for y = left_top.y, right_bottom.y - 1 do
+      for x = left_top.x, right_bottom.x - 1 do
+          table.insert(positions, {x = x, y = y})
+      end
+  end
+
+  return positions
+end
+
 -- synced with __space-age__/graphics/entity/space-platform-build-anim/entity-build-animations.lua
 local frame_count = 32
 local animation_speed = 0.5
 
 script.on_event(defines.events.on_built_entity, function(event)
-  rendering.draw_animation{
-    target = {entity = event.entity, offset = {0, -2}},
-    surface = event.entity.surface,
-    animation = "platform_entity_build_animations-front_left-body",
-    time_to_live = frame_count / animation_speed - 1, -- or -2?
-    animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
-  }
 
-  rendering.draw_animation{
-    target = {entity = event.entity, offset = {0, -2}},
-    surface = event.entity.surface,
-    animation = "platform_entity_build_animations-front_left-body",
-    time_to_live = frame_count / animation_speed - 1, -- or -2?
-    animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
-  }
+  for _, position in ipairs(get_tilebox(event.entity.bounding_box)) do
+    position.x = position.x + 0.5
+    position.y = position.y + 0.5
+
+    rendering.draw_animation{
+      target = position,
+      surface = event.entity.surface,
+      animation = "platform_entity_build_animations-front_left-body",
+      time_to_live = frame_count / animation_speed - 1, -- or -2?
+      animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
+    }
+
+    rendering.draw_animation{
+      target = position,
+      surface = event.entity.surface,
+      animation = "platform_entity_build_animations-front_left-body",
+      time_to_live = frame_count / animation_speed - 1, -- or -2?
+      animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
+    }
+  end
+
+  event.entity.destroy()
 end)

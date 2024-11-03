@@ -17,6 +17,8 @@
 
     "dependencies": [
         "base",
-        "space-age"
+        "space-age",
+        
+        "flib"
     ]
 }
