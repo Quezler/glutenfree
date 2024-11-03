@@ -6,6 +6,7 @@ Date: ????
     - Make the space platform build animations usable in luarendering
     - Animation offset my ass
     - Fix the animation offset being based on the current game tick
+    - Cleanup the animation trial and error
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 10. 20

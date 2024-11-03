@@ -14,20 +14,24 @@ script.on_event(defines.events.on_tick, function(event)
   end
 end)
 
+-- synced with __space-age__/graphics/entity/space-platform-build-anim/entity-build-animations.lua
+local frame_count = 32
+local animation_speed = 0.5
+
 script.on_event(defines.events.on_built_entity, function(event)
   rendering.draw_animation{
     target = {entity = event.entity, offset = {0, -2}},
     surface = event.entity.surface,
     animation = "platform_entity_build_animations-front_left-body",
-    time_to_live = 63,
-    -- animation_offset = 0,
-    animation_offset = -(game.tick * 0.5) % 32, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
+    time_to_live = frame_count / animation_speed - 1, -- or -2?
+    animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
   }
 
-  -- rendering.draw_animation{
-  --   target = event.entity.position,
-  --   surface = event.entity.surface,
-  --   animation = "platform_entity_build_animations-front_left-body",
-  --   time_to_live = 32 * 2,
-  -- }
+  rendering.draw_animation{
+    target = {entity = event.entity, offset = {0, -2}},
+    surface = event.entity.surface,
+    animation = "platform_entity_build_animations-front_left-body",
+    time_to_live = frame_count / animation_speed - 1, -- or -2?
+    animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
+  }
 end)
