@@ -41,6 +41,17 @@ local function get_piece(position, center)
   end
 end
 
+local function is_back_piece(piece)
+  return piece == "back_left" or piece == "back_right"
+end
+
+local function get_manhattan_distance(position, center)
+  local delta_x = position.x - center.x
+  local delta_y = position.y - center.y
+
+  return math.abs(delta_x) + math.abs(delta_y)
+end
+
 -- synced with __space-age__/graphics/entity/space-platform-build-anim/entity-build-animations.lua
 local frame_count = 32
 local animation_speed = 0.5
@@ -56,9 +67,11 @@ script.on_event(defines.events.on_built_entity, function(event)
     rendering.draw_animation{
       target = position,
       surface = event.entity.surface,
-      animation = "platform_entity_build_animations-" .. piece .. "-body",
+      animation = "platform_entity_build_animations-" .. piece .. "-top",
       time_to_live = frame_count / animation_speed - 2, -- or -2?
-      animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
+      animation_offset = 1,
+      animation_speed = 0,
+      render_layer = "higher-object-above",
     }
 
     rendering.draw_animation{
@@ -66,7 +79,9 @@ script.on_event(defines.events.on_built_entity, function(event)
       surface = event.entity.surface,
       animation = "platform_entity_build_animations-" .. piece .. "-body",
       time_to_live = frame_count / animation_speed - 2, -- or -2?
-      animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
+      animation_offset = 1,
+      animation_speed = 0,
+      render_layer = is_back_piece(piece) and "lower-object-above-shadow" or "object",
     }
   end
 

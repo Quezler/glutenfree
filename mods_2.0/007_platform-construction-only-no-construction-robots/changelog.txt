@@ -10,6 +10,7 @@ Date: ????
     - Run the animation for each of the entity's tiles
     - Draw the appropriate piece based on the offset
     - Do not trigger on platforms
+    - Use the correct render layers
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 10. 20
