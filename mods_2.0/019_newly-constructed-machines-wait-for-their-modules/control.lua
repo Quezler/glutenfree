@@ -54,7 +54,12 @@ local function proxy_requests_item_we_want_to_wait_for(proxy)
       for _, inventory_position in ipairs(blueprint_insert_plan.items.in_inventory) do
         -- this item is a module, has productivity or quality, and is requested for a module slot
         if inventory_position.inventory == inventory_index then
-          local target_stack = proxy.proxy_target.get_inventory(inventory_index)[inventory_position.stack+1]
+          local slot = inventory_position.stack + 1
+          local module_inventory = proxy.proxy_target.get_inventory(inventory_index)
+          if slot > #module_inventory then
+            return true -- requesting a module for a slot that doesn't exist yet (e.g. pending assembler 2 to 3 upgrade) gets treated as empty
+          end
+          local target_stack = module_inventory[slot]
           if target_stack.valid_for_read == false then
             return true -- target slot is empty
           elseif should_wait_for_module[target_stack.name] then
