@@ -32,6 +32,15 @@ local function get_tilebox(bounding_box)
   return positions
 end
 
+-- position is expected to have a .5 decimal
+local function get_piece(position, center)
+  if position.x > center.x then
+    return position.y < center.y and "back_right" or "front_right"
+  else
+    return position.y < center.y and "back_left" or "front_left"
+  end
+end
+
 -- synced with __space-age__/graphics/entity/space-platform-build-anim/entity-build-animations.lua
 local frame_count = 32
 local animation_speed = 0.5
@@ -41,11 +50,12 @@ script.on_event(defines.events.on_built_entity, function(event)
   for _, position in ipairs(get_tilebox(event.entity.bounding_box)) do
     position.x = position.x + 0.5
     position.y = position.y + 0.5
+    local piece = get_piece(position, event.entity.position)
 
     rendering.draw_animation{
       target = position,
       surface = event.entity.surface,
-      animation = "platform_entity_build_animations-front_left-body",
+      animation = "platform_entity_build_animations-" .. piece .. "-body",
       time_to_live = frame_count / animation_speed - 1, -- or -2?
       animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
     }
@@ -53,7 +63,7 @@ script.on_event(defines.events.on_built_entity, function(event)
     rendering.draw_animation{
       target = position,
       surface = event.entity.surface,
-      animation = "platform_entity_build_animations-front_left-body",
+      animation = "platform_entity_build_animations-" .. piece .. "-body",
       time_to_live = frame_count / animation_speed - 1, -- or -2?
       animation_offset = -(game.tick * animation_speed) % frame_count, -- Xorimuth @ https://discord.com/channels/1214952937613295676/1281881163702730763/1302647943576293469
     }

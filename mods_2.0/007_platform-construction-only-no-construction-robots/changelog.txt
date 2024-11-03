@@ -8,6 +8,7 @@ Date: ????
     - Fix the animation offset being based on the current game tick
     - Cleanup the animation trial and error
     - Run the animation for each of the entity's tiles
+    - Draw the appropriate piece based on the offset
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 10. 20
