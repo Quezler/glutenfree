@@ -13,3 +13,17 @@ script.on_event(defines.events.on_tick, function(event)
     end
   end
 end)
+
+script.on_event(defines.events.on_built_entity, function(event)
+  rendering.draw_animation{
+    target = event.entity.position,
+    surface = event.entity.surface,
+    animation = "platform_entity_build_animations-front_left-top",
+  }
+
+  rendering.draw_animation{
+    target = event.entity.position,
+    surface = event.entity.surface,
+    animation = "platform_entity_build_animations-front_left-body",
+  }
+end)
