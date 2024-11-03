@@ -117,6 +117,11 @@ script.on_nth_tick(60, function(event)
   end
 end)
 
+local skip_active_true_check = {
+  [defines.entity_status.frozen] = true,
+  [defines.entity_status.recipe_not_researched] = true,
+}
+
 function Handler.on_tick(event)
   for _, proxy in ipairs(storage.new_proxies) do
     if proxy.valid then -- proxy died in the same tick, possibly tried to request an item that doesn't fit in that slot?
@@ -134,7 +139,7 @@ function Handler.on_tick(event)
       }
 
       -- if an entity is frozen their .active reads as false
-      if entity.status ~= defines.entity_status.frozen then
+      if not skip_active_true_check[entity.status] then
         assert(entity.active == true, "expected entity.active to be true. " .. entity_debug_information(entity))
       end
       -- but we'll still have to set .active to false or it'll start crafting when it becomes unfrozen,
