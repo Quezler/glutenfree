@@ -79,7 +79,7 @@ local assembler = {
 
   graphics_set = util.empty_sprite(),
 
-  module_slots = 2,
+  module_slots = 4,
   allowed_effects = {"quality"},
 
   energy_usage = "1kW",
@@ -90,7 +90,7 @@ local assembler = {
   icon_draw_specification = {scale = 0},
   icons_positioning =
   {
-    {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 0}, max_icon_rows = 1, max_icons_per_row = 2, scale = 0.45}
+    {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 0}, max_icon_rows = 2, max_icons_per_row = 2, scale = 0.45}
   },
 
   max_health = sink.max_health,
