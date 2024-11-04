@@ -1,6 +1,6 @@
 local function is_better_armor(old_stack, new_stack)
   if old_stack == nil then return true end
-  if new_stack.prototype.inventory_size_bonus > old_stack.prototype.inventory_size_bonus then return true end
+  if new_stack.prototype.get_inventory_size_bonus(new_stack.quality) > old_stack.prototype.get_inventory_size_bonus(old_stack.quality) then return true end
 
   -- todo: if both the inventory stack size bonuses match and space exploration is installed, pick normal or spacesuit?
   -- todo: if both the inventory stack size bonuses match, determine which suit has better resistances/equipment in it.
