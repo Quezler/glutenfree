@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Setup the entity, item, sounds & test them
+    - Create the -active variant whilst you're hovering it
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
