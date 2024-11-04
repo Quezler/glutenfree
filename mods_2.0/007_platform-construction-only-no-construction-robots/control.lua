@@ -6,6 +6,10 @@ script.on_init(function()
   storage.entities_being_built = {}
 end)
 
+script.on_configuration_changed(function()
+  storage.entities_being_built = storage.entities_being_built or {}
+end)
+
 function Handler.on_tick_robots(event)
   local logistic_networks = game.forces["player"].logistic_networks["nauvis"] or {}
 

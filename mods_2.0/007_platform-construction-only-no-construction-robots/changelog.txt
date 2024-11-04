@@ -3,6 +3,7 @@ Version: 0.0.6
 Date: ????
   Info:
     - Begin the animation when a robot's next order is to pick up construction items
+    - Stash version uploaded to https://forums.factorio.com/viewtopic.php?f=7&t=119764
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 04
