@@ -70,12 +70,6 @@ script.on_event(defines.events.on_built_entity, function(event)
 
   local surface = entity.surface
 
-  local entity_being_built = {
-    entity = event.entity,
-
-    animations = {},
-  }
-
   local tilebox = get_tilebox(entity.bounding_box)
   local largest_manhattan_distance = 0
   for _, position in ipairs(tilebox) do
@@ -87,10 +81,18 @@ script.on_event(defines.events.on_built_entity, function(event)
     end
   end
 
+  local remove_scaffold_delay = (largest_manhattan_distance + 4) * FRAMES_BETWEEN_BUILDING
+  local entire_animation_done_at = event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME
+
+  local entity_being_built = {
+    entity = event.entity,
+    entire_animation_done_at = entire_animation_done_at,
+
+    animations = {},
+  }
+
   for _, position in ipairs(tilebox) do
     local piece = get_piece(position.center, entity.position)
-
-    local remove_scaffold_delay = (largest_manhattan_distance + 4) * FRAMES_BETWEEN_BUILDING
 
     -- not 100% sure if this is a tick too soon, too late, or just right
     local ttl = 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME
@@ -165,15 +167,20 @@ end)
 
 script.on_event(defines.events.on_tick, function(event)
   for _, entity_being_built in pairs(storage.entities_being_built) do
-    for _, animation in ipairs(entity_being_built.animations) do
-      local animation_offset = animation.animation_offset_at_tick[event.tick]
-      if animation_offset ~= nil then
-        if animation_offset == 0 then
-          animation.top.visible = true
-          animation.body.visible = true
+    if entity_being_built.entire_animation_done_at == event.tick then -- seems to be timed perfectly, well done quez! - quez
+      storage.entities_being_built[_] = nil
+      -- game.print("done")
+    else
+      for _, animation in ipairs(entity_being_built.animations) do
+        local animation_offset = animation.animation_offset_at_tick[event.tick]
+        if animation_offset ~= nil then
+          if animation_offset == 0 then
+            animation.top.visible = true
+            animation.body.visible = true
+          end
+          animation.top.animation_offset = animation_offset
+          animation.body.animation_offset = animation_offset
         end
-        animation.top.animation_offset = animation_offset
-        animation.body.animation_offset = animation_offset
       end
     end
   end

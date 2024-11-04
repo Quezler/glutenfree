@@ -6,6 +6,7 @@ Date: ????
     - Variable for how long to wait with removing the scaffold after everything is done
     - Satisfactory finish to the animation
     - Refractor animation end
+    - Cleanup the global struct when the animation is entirely done
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 03
