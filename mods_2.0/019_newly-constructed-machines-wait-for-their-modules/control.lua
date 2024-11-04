@@ -28,10 +28,13 @@ function Handler.on_init(event)
   -- proxies that get created with insertion plans run in the same tick,
   -- proxies created through a removal request tend to run in the next.
   storage.new_proxies = {}
+
+  storage.proxy_that_makes_this_entity_wait = {}
 end
 
 function Handler.on_configuration_changed(event)
   storage.new_proxies = storage.new_proxies or {}
+  storage.proxy_that_makes_this_entity_wait = storage.proxy_that_makes_this_entity_wait or {}
 end
 
 script.on_init(Handler.on_init)
@@ -101,7 +104,7 @@ function Handler.remove_waiting_for_modules(entity)
   entity.custom_status = nil
 end
 
-script.on_event(defines.events.on_object_destroyed, function(event)
+function Handler.on_object_destroyed(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     local struct = storage.structs[deathrattle.struct_id]
@@ -111,7 +114,9 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       end
     end
   end
-end)
+end
+
+script.on_event(defines.events.on_object_destroyed, Handler.on_object_destroyed)
 
 script.on_nth_tick(60, function(event)
   for struct_id, struct in pairs(storage.structs) do
@@ -137,6 +142,16 @@ function Handler.on_tick(event)
       if not proxy_requests_item_we_want_to_wait_for(proxy) then goto continue end
       local entity = proxy.proxy_target
       assert(entity)
+      assert(entity.unit_number)
+
+      -- if the last module ghost of a proxy is swapped with a new module ghost a new item request proxy gets created,
+      -- but this new proxy is reaching this bit of code before on_object_destroyed runs, so we manually deathrattle it.
+      local proxy_that_makes_this_entity_wait = storage.proxy_that_makes_this_entity_wait[entity.unit_number]
+      if proxy_that_makes_this_entity_wait then
+        assert(proxy_that_makes_this_entity_wait.proxy.valid == false)
+        assert(proxy_that_makes_this_entity_wait.proxy_target.valid == true)
+        Handler.on_object_destroyed({registration_number = proxy_that_makes_this_entity_wait.deathrattle_id})
+      end
 
       assert(entity.custom_status == nil, "expected entity.custom_status to be nil. " .. entity_debug_information(entity))
       entity.custom_status = {
@@ -156,10 +171,17 @@ function Handler.on_tick(event)
       storage.structs[deathrattle_id] = {
         proxy = proxy,
         proxy_target = entity,
+        proxy_target_unit_number = entity.unit_number,
       }
 
       storage.deathrattles[deathrattle_id] = {
         struct_id = deathrattle_id,
+      }
+
+      storage.proxy_that_makes_this_entity_wait[entity.unit_number] = {
+        proxy = proxy,
+        proxy_target = entity,
+        deathrattle_id = deathrattle_id,
       }
     end
     ::continue::
@@ -219,3 +241,11 @@ for _, event in ipairs({
     {filter = "type", type = "rocket-silo"},
   })
 end
+
+script.on_nth_tick(60 * 60, function(event) -- gc
+  for proxy_target_unit_number, proxy_that_makes_this_entity_wait in pairs(storage.proxy_that_makes_this_entity_wait) do
+    if proxy_that_makes_this_entity_wait.proxy.valid == false or proxy_that_makes_this_entity_wait.proxy_target.valid == false then
+      proxy_that_makes_this_entity_wait[proxy_target_unit_number] = nil
+    end
+  end
+end)
