@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Keep the render object invisible until it is set to frame 0 again
     - Variable for how long to wait with removing the scaffold after everything is done
+    - Satisfactory finish to the animation
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 03
