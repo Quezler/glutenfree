@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Setup the entity, item, sounds & test them
     - Create the -active variant whilst you're hovering it
+    - Fail to make two combinators not fight over render layers
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04

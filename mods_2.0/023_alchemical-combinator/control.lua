@@ -12,6 +12,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     selected.surface.create_entity{
       name = "alchemical-combinator-active",
       force = selected.force,
+      -- position = {x = selected.position.x, y = selected.position.y + 0.01},
       position = selected.position,
       direction = selected.direction,
       create_build_effect_smoke = false,

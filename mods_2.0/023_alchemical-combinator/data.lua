@@ -26,6 +26,16 @@ combinator_active.sprites.west .layers[1].filename = "__alchemical-combinator__/
 
 combinator_active.selection_priority = (combinator.selection_priority or 50) + 1
 
+-- table.insert(combinator_active.flags, "placeable-off-grid")
+-- combinator_active.selection_box = {
+--   {combinator_active.selection_box[1][1], combinator_active.selection_box[1][2] - 0.01},
+--   {combinator_active.selection_box[2][1], combinator_active.selection_box[2][2] - 0.01},
+-- }
+-- combinator_active.collision_box = {
+--   {combinator_active.collision_box[1][1], combinator_active.collision_box[1][2] - 0.01},
+--   {combinator_active.collision_box[2][1], combinator_active.collision_box[2][2] - 0.01},
+-- }
+
 data:extend{combinator, combinator_item, combinator_active}
 
 local sound_charge = {
