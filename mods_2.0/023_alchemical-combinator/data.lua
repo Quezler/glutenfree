@@ -19,10 +19,19 @@ combinator.sprites.east .layers[1].filename = "__alchemical-combinator__/graphic
 combinator.sprites.south.layers[1].filename = "__alchemical-combinator__/graphics/entity/combinator/alchemical-combinator.png"
 combinator.sprites.west .layers[1].filename = "__alchemical-combinator__/graphics/entity/combinator/alchemical-combinator.png"
 
-combinator_active.sprites.north.layers[1].filename = "__alchemical-combinator__/graphics/entity/combinator/alchemical-combinator-active.png"
-combinator_active.sprites.east .layers[1].filename = "__alchemical-combinator__/graphics/entity/combinator/alchemical-combinator-active.png"
-combinator_active.sprites.south.layers[1].filename = "__alchemical-combinator__/graphics/entity/combinator/alchemical-combinator-active.png"
-combinator_active.sprites.west .layers[1].filename = "__alchemical-combinator__/graphics/entity/combinator/alchemical-combinator-active.png"
+-- for _, direction in ipairs({defines.direction.north, defines.direction.east, defines.direction.south, defines.direction.west}) do
+for _, direction in ipairs({"north", "east", "south", "west"}) do
+  local sprite = table.deepcopy(combinator_active.sprites[direction].layers[1])
+  sprite.type = "sprite"
+  sprite.name = "alchemical-combinator-active-" .. direction
+  sprite.filename = "__alchemical-combinator__/graphics/entity/combinator/alchemical-combinator-active.png"
+  data:extend{sprite}
+end
+
+combinator_active.sprites.north = util.empty_sprite()
+combinator_active.sprites.east  = util.empty_sprite()
+combinator_active.sprites.south = util.empty_sprite()
+combinator_active.sprites.west  = util.empty_sprite()
 
 combinator_active.selection_priority = (combinator.selection_priority or 50) + 1
 
