@@ -314,6 +314,7 @@ function Handler.handle_signal(surface_index, force_index, cb, signal_and_count)
 
   local next_quality = next_quality[signal_and_count.signal.quality or "normal"]
   if next_quality == nil then return end
+  if game.forces[force_index].is_quality_unlocked(next_quality) == false then return end -- todo: cache
 
   local item_to_insert = spoil_result[signal_and_count.signal.name]
   if item_to_insert == nil then return end
