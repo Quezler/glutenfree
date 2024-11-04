@@ -1,10 +1,12 @@
 local flib_bounding_box = require("__flib__.bounding-box")
 
+local Handler = {}
+
 script.on_init(function()
   storage.entities_being_built = {}
 end)
 
-script.on_event(defines.events.on_tick, function(event)
+function Handler.on_tick_robots(event)
   local logistic_networks = game.forces["player"].logistic_networks["nauvis"] or {}
 
   for _, logistic_network in ipairs(logistic_networks) do
@@ -12,13 +14,21 @@ script.on_event(defines.events.on_tick, function(event)
       local robot_order = construction_robot.robot_order_queue[1]
 
       if robot_order and robot_order.target then -- target can sometimes be optional
+
+        if robot_order.type == defines.robot_order_type.pickup then
+          local next_order = construction_robot.robot_order_queue[2]
+          if next_order and next_order.type == defines.robot_order_type.construct and next_order.target then
+            Handler.request_platform_animation_for(next_order.target)
+          end
+        end
+
         -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
         -- looks like ->activeNeighbourForcesSet/show-active-forces-around debug is rather generous btw
         assert(construction_robot.teleport(robot_order.target.position))
       end
     end
   end
-end)
+end
 
 local function get_tilebox(bounding_box)
   bounding_box = flib_bounding_box.ceil(bounding_box)
@@ -61,13 +71,11 @@ local FRAMES_BEFORE_BUILT = 16
 local FRAMES_BETWEEN_BUILDING = 8
 local FRAMES_BETWEEN_REMOVING = 4
 
-script.on_event(defines.events.on_built_entity, function(event)
-  local entity = event.entity
+function Handler.request_platform_animation_for(entity)
+  assert(entity.unit_number)
+  if storage.entities_being_built[entity.unit_number] then return end
 
-  if entity.surface.platform then return end
-  if entity.name == "entity-ghost" then return end
-  if entity.name == "tile-ghost" then return end
-
+  local tick = game.tick
   local surface = entity.surface
 
   local tilebox = get_tilebox(entity.bounding_box)
@@ -82,10 +90,10 @@ script.on_event(defines.events.on_built_entity, function(event)
   end
 
   local remove_scaffold_delay = (largest_manhattan_distance + 4) * FRAMES_BETWEEN_BUILDING
-  local entire_animation_done_at = event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME
+  local entire_animation_done_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME
 
   local entity_being_built = {
-    entity = event.entity,
+    entity = entity,
     entire_animation_done_at = entire_animation_done_at,
 
     animations = {},
@@ -123,49 +131,58 @@ script.on_event(defines.events.on_built_entity, function(event)
       top = top,
       body = body,
       animation_offset_at_tick = {
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  1 * TICKS_PER_FRAME] =  0,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  2 * TICKS_PER_FRAME] =  1,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  3 * TICKS_PER_FRAME] =  2,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  4 * TICKS_PER_FRAME] =  3,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  5 * TICKS_PER_FRAME] =  4,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  6 * TICKS_PER_FRAME] =  5,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  7 * TICKS_PER_FRAME] =  6,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  8 * TICKS_PER_FRAME] =  7,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  9 * TICKS_PER_FRAME] =  8,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 10 * TICKS_PER_FRAME] =  9,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 12 * TICKS_PER_FRAME] = 10,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 13 * TICKS_PER_FRAME] = 11,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 14 * TICKS_PER_FRAME] = 12,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 15 * TICKS_PER_FRAME] = 13,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 16 * TICKS_PER_FRAME] = 14,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 17 * TICKS_PER_FRAME] = 15,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  1 * TICKS_PER_FRAME] =  0,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  2 * TICKS_PER_FRAME] =  1,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  3 * TICKS_PER_FRAME] =  2,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  4 * TICKS_PER_FRAME] =  3,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  5 * TICKS_PER_FRAME] =  4,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  6 * TICKS_PER_FRAME] =  5,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  7 * TICKS_PER_FRAME] =  6,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  8 * TICKS_PER_FRAME] =  7,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  9 * TICKS_PER_FRAME] =  8,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 10 * TICKS_PER_FRAME] =  9,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 12 * TICKS_PER_FRAME] = 10,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 13 * TICKS_PER_FRAME] = 11,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 14 * TICKS_PER_FRAME] = 12,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 15 * TICKS_PER_FRAME] = 13,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 16 * TICKS_PER_FRAME] = 14,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 17 * TICKS_PER_FRAME] = 15,
 
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  1 * TICKS_PER_FRAME] = 16,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  2 * TICKS_PER_FRAME] = 17,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  3 * TICKS_PER_FRAME] = 18,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  4 * TICKS_PER_FRAME] = 19,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  5 * TICKS_PER_FRAME] = 20,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  6 * TICKS_PER_FRAME] = 21,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  7 * TICKS_PER_FRAME] = 22,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  8 * TICKS_PER_FRAME] = 23,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  9 * TICKS_PER_FRAME] = 24,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 10 * TICKS_PER_FRAME] = 25,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 12 * TICKS_PER_FRAME] = 26,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 13 * TICKS_PER_FRAME] = 27,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 14 * TICKS_PER_FRAME] = 28,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 15 * TICKS_PER_FRAME] = 29,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 16 * TICKS_PER_FRAME] = 30,
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 17 * TICKS_PER_FRAME] = 31,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  1 * TICKS_PER_FRAME] = 16,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  2 * TICKS_PER_FRAME] = 17,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  3 * TICKS_PER_FRAME] = 18,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  4 * TICKS_PER_FRAME] = 19,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  5 * TICKS_PER_FRAME] = 20,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  6 * TICKS_PER_FRAME] = 21,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  7 * TICKS_PER_FRAME] = 22,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  8 * TICKS_PER_FRAME] = 23,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  9 * TICKS_PER_FRAME] = 24,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 10 * TICKS_PER_FRAME] = 25,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 12 * TICKS_PER_FRAME] = 26,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 13 * TICKS_PER_FRAME] = 27,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 14 * TICKS_PER_FRAME] = 28,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 15 * TICKS_PER_FRAME] = 29,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 16 * TICKS_PER_FRAME] = 30,
+        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 17 * TICKS_PER_FRAME] = 31,
       }
     })
   end
 
-  assert(entity.unit_number)
   storage.entities_being_built[entity.unit_number] = entity_being_built
   -- entity.destroy()
-end)
+end
 
-script.on_event(defines.events.on_tick, function(event)
+-- script.on_event(defines.events.on_built_entity, function(event)
+--   local entity = event.entity
+
+--   if entity.surface.platform then return end
+--   if entity.name == "entity-ghost" then return end
+--   if entity.name == "tile-ghost" then return end
+
+--   Handler.request_platform_animation_for(entity)
+-- end)
+
+function Handler.on_tick_entities_being_built(event)
   for _, entity_being_built in pairs(storage.entities_being_built) do
     if entity_being_built.entire_animation_done_at == event.tick then -- seems to be timed perfectly, well done quez! - quez
       storage.entities_being_built[_] = nil
@@ -184,4 +201,9 @@ script.on_event(defines.events.on_tick, function(event)
       end
     end
   end
+end
+
+script.on_event(defines.events.on_tick, function(event)
+  Handler.on_tick_robots(event)
+  Handler.on_tick_entities_being_built(event)
 end)
