@@ -17,9 +17,6 @@ end
 
 turn_construction_robots_invisible()
 
--- data.raw["roboport"]["roboport"].radar_range = 2
--- data.raw["roboport"]["roboport"].construction_radius = 1000000
-
 local space_platform_entity_build_animations = require("__space-age__/graphics/entity/space-platform-build-anim/entity-build-animations")
 
 local function make_animation_prototype(a, b)
