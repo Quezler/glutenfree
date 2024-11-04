@@ -10,7 +10,9 @@ end
 
 script.on_event(defines.events.on_pre_player_mined_item, function(event)
   local player = game.get_player(event.player_index)
+  assert(player)
   local armor = player.get_inventory(defines.inventory.character_armor)
+  assert(armor)
 
   if not armor.is_empty() then return end
   -- game.print(event.entity.name)
@@ -18,6 +20,7 @@ script.on_event(defines.events.on_pre_player_mined_item, function(event)
   local best_armor = nil
 
   local corpse = event.entity.get_inventory(defines.inventory.character_corpse)
+  assert(corpse)
   for i = 1, #corpse do
     local stack = corpse[i]
     if stack.valid_for_read and stack.is_armor then
