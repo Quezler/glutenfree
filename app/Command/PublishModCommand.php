@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Misc\ExpansionMods;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,6 +26,9 @@ class PublishModCommand extends Command
         $success = $mod->publish(); // "{"success":true,"url":"/api/mods/decider-combinator-output-constant-editor/full"}"
         $output->writeln($success);
         exec("open https://mods.factorio.com/mod/{$mod->name}/edit");
+
+        $command = $this->getApplication()->find('discussion:notice');
+        $command->run(new ArrayInput(['name' => $mod->name]), $output);
 
         return Command::SUCCESS;
     }

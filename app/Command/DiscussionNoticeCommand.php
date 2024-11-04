@@ -7,18 +7,24 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
-class DiscussionCommand extends Command
+class DiscussionNoticeCommand extends Command
 {
-    protected static $defaultName = 'discussion';
+    protected static $defaultName = 'discussion:notice';
 
     private Client $guzzle;
     private string $discussion_md;
 
     protected function configure(): void
+    {
+        $this->addArgument('name', InputArgument::OPTIONAL, 'all mods, or only this one?');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->guzzle = new Client([
             'cookies' => CookieJar::fromArray([
@@ -30,10 +36,12 @@ class DiscussionCommand extends Command
 
         if (! $_ENV['WUBE_REMEMBER_TOKEN']) throw new \LogicException();
         if (! $this->discussion_md) throw new \LogicException();
-    }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+        if ($mod_name = $input->getArgument('name')) {
+            $this->handle($mod_name);
+            return Command::SUCCESS;
+        }
+
         $mods = ModPortal::get_my_mods_full()['results'];
         $pb = new ProgressBar($output, count($mods));
 

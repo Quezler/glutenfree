@@ -22,7 +22,6 @@ $application->add(new \App\Command\UpdateCommand());
 $application->add(new \App\Command\CiCommand());
 $application->add(new \App\Command\ChangelogCommand());
 $application->add(new \App\Command\WebhookCommand());
-$application->add(new \App\Command\DiscussionCommand());
 $application->add(new \App\Command\NewsletterCommand());
 
 // 2.0
@@ -34,5 +33,8 @@ $application->add(new \App\Command\TestModCommand());
 $application->add(new \App\Command\GitPostCommitCommand());
 $application->add(new \App\Command\PortModCommand());
 $application->add(new \App\Command\LeaderboardModsCommand());
+
+// all
+$application->add(new \App\Command\DiscussionNoticeCommand());
 
 $application->run();
