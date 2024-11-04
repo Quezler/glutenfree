@@ -13,7 +13,11 @@ script.on_init(function ()
   storage.assembler_to_arithmetic_map = {}
 
   local mod_surface = game.surfaces[mod_surface_name]
-  if mod_surface then mod_surface.clear() end
+  if mod_surface then
+    for _, entity in ipairs(mod_surface.find_entities_filtered{}) do
+      entity.destroy()
+    end
+  end
   if mod_surface == nil then
     mod_surface = game.create_surface(mod_surface_name)
     mod_surface.generate_with_lab_tiles = true
