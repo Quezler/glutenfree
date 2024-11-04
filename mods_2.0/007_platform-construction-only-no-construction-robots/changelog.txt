@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
-Date: ????
+Date: 2024. 11. 03
   Info:
     - Make the mod require space age/travel (for the platform construction animation)
     - Make the space platform build animations usable in luarendering
