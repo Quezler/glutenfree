@@ -267,6 +267,7 @@ function Handler.sync_module_qualities_with_arithmetic_combinators()
   for key, map in pairs(storage.assembler_to_arithmetic_map) do
     -- converts two place decimal into nearest full number
     local points = math.floor((map.assembler.effects["quality"] or 0) * 100 + 0.5)
+    points = math.min(1000, points) -- caps the quality at 100% (aka no bonus items)
     if map.last_points ~= points then
       map.last_points = points
 
