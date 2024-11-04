@@ -90,8 +90,10 @@ script.on_event(defines.events.on_built_entity, function(event)
   for _, position in ipairs(tilebox) do
     local piece = get_piece(position.center, entity.position)
 
-    -- local ttl = 2 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + 17 * TICKS_PER_FRAME
-    local ttl = 60 * 60
+    local remove_scaffold_delay = (largest_manhattan_distance + 4) * FRAMES_BETWEEN_BUILDING
+
+    -- not 100% sure if this is a tick too soon, too late, or just right
+    local ttl = 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME
 
     local top = rendering.draw_animation{
       target = position.center,
@@ -114,8 +116,6 @@ script.on_event(defines.events.on_built_entity, function(event)
       render_layer = is_back_piece(piece) and "lower-object-above-shadow" or "object",
       visible = false,
     }
-
-    local remove_scaffold_delay = (largest_manhattan_distance + 4) * FRAMES_BETWEEN_BUILDING
 
     table.insert(entity_being_built.animations, {
       top = top,
@@ -154,8 +154,6 @@ script.on_event(defines.events.on_built_entity, function(event)
         [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 15 * TICKS_PER_FRAME] = 29,
         [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 16 * TICKS_PER_FRAME] = 30,
         [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 17 * TICKS_PER_FRAME] = 31,
-
-        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME] = 32,
       }
     })
   end
@@ -173,9 +171,6 @@ script.on_event(defines.events.on_tick, function(event)
         if animation_offset == 0 then
           animation.top.visible = true
           animation.body.visible = true
-        elseif animation_offset == 32 then
-          animation.top.visible = false
-          animation.body.visible = false
         end
         animation.top.animation_offset = animation_offset
         animation.body.animation_offset = animation_offset
