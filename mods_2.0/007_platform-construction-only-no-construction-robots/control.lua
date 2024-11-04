@@ -115,6 +115,8 @@ script.on_event(defines.events.on_built_entity, function(event)
       visible = false,
     }
 
+    local remove_scaffold_delay = (largest_manhattan_distance + 4) * FRAMES_BETWEEN_BUILDING
+
     table.insert(entity_being_built.animations, {
       top = top,
       body = body,
@@ -135,23 +137,23 @@ script.on_event(defines.events.on_built_entity, function(event)
         [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 15 * TICKS_PER_FRAME] = 13,
         [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 16 * TICKS_PER_FRAME] = 14,
 
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING +  1 * TICKS_PER_FRAME] = 15,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING +  2 * TICKS_PER_FRAME] = 16,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING +  3 * TICKS_PER_FRAME] = 17,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING +  4 * TICKS_PER_FRAME] = 18,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING +  5 * TICKS_PER_FRAME] = 19,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING +  6 * TICKS_PER_FRAME] = 20,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING +  7 * TICKS_PER_FRAME] = 21,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING +  8 * TICKS_PER_FRAME] = 22,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING +  9 * TICKS_PER_FRAME] = 23,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + 10 * TICKS_PER_FRAME] = 24,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + 12 * TICKS_PER_FRAME] = 25,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + 13 * TICKS_PER_FRAME] = 26,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + 14 * TICKS_PER_FRAME] = 27,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + 15 * TICKS_PER_FRAME] = 28,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + 16 * TICKS_PER_FRAME] = 29,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + 17 * TICKS_PER_FRAME] = 30,
-        [event.tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + 18 * TICKS_PER_FRAME] = 31,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  1 * TICKS_PER_FRAME] = 15,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  2 * TICKS_PER_FRAME] = 16,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  3 * TICKS_PER_FRAME] = 17,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  4 * TICKS_PER_FRAME] = 18,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  5 * TICKS_PER_FRAME] = 19,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  6 * TICKS_PER_FRAME] = 20,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  7 * TICKS_PER_FRAME] = 21,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  8 * TICKS_PER_FRAME] = 22,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  9 * TICKS_PER_FRAME] = 23,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 10 * TICKS_PER_FRAME] = 24,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 12 * TICKS_PER_FRAME] = 25,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 13 * TICKS_PER_FRAME] = 26,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 14 * TICKS_PER_FRAME] = 27,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 15 * TICKS_PER_FRAME] = 28,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 16 * TICKS_PER_FRAME] = 29,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 17 * TICKS_PER_FRAME] = 30,
+        [event.tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME] = 31,
       }
     })
   end
