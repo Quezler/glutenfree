@@ -186,6 +186,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
 
     storage.active_struct_ids[struct_id] = true
     script.on_event(defines.events.on_tick, Handler.on_tick)
+    Handler.tick_active_struct(struct)
     selected.surface.play_sound{
       path = "alchemical-combinator-charge",
       position = selected.position,
@@ -234,7 +235,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       for _, arithmetic in ipairs(struct.arithmetics) do
         arithmetic.destroy()
       end
-      storage.active_struct_ids[deathrattle.struct_id] = nil
+      storage.active_struct_ids[deathrattle.struct_id] = nil -- technically a 1 tick desync gap?
     end
 
     if deathrattle.alchemical_combinator_to_struct_id then
@@ -276,64 +277,66 @@ local function selected_by_any_player(entity)
   return false
 end
 
+function Handler.tick_active_struct(struct)
+  assert(struct)
+
+  if is_copy_source(struct.alchemical_combinator_active) then return end
+
+  -- during the first tick(s?) the player is still selecting the normal combinator
+  if (not selected_by_any_player(struct.alchemical_combinator_active)) and (not selected_by_any_player(struct.alchemical_combinator)) then
+    storage.active_struct_ids[struct.id] = nil
+
+    struct.alchemical_combinator.surface.play_sound{
+      path = "alchemical-combinator-uncharge",
+      position = struct.alchemical_combinator.position,
+    }
+
+    struct.alchemical_combinator_active.destroy()
+    struct.alchemical_combinator_active = nil
+  else
+    local signals = struct.alchemical_combinator.get_signals(defines.wire_connector_id.combinator_output_red, defines.wire_connector_id.combinator_output_green)
+    local parameters = struct.alchemical_combinator.get_control_behavior().parameters
+
+    -- trick the -active combinator into enabeling its outside side
+    table.insert(parameters.conditions, {
+      comparator = "≠",
+      compare_type = "or",
+      constant = 0,
+      first_signal = {
+        name = "signal-everything",
+        type = "virtual"
+      },
+      first_signal_networks = {
+        green = true,
+        red = true
+      },
+      second_signal_networks = {
+        green = true,
+        red = true
+      }
+    })
+
+    -- reset and fill the output side with signals artificially
+    local alchemical_combinator_active_cb = struct.alchemical_combinator_active.get_control_behavior()
+    alchemical_combinator_active_cb.parameters = parameters
+    for _, signal_and_count in ipairs(signals or {}) do
+      alchemical_combinator_active_cb.add_output({
+        signal = {
+          type = signal_and_count.signal.type or "item",
+          name = signal_and_count.signal.name,
+          quality = signal_and_count.signal.quality,
+        },
+        constant = signal_and_count.count / 2,
+        copy_count_from_input = false,
+      })
+    end
+  end
+end
+
 function Handler.on_tick(event)
   for struct_id, _ in pairs(storage.active_struct_ids) do
     local struct = storage.structs[struct_id]
-    assert(struct)
-
-    if is_copy_source(struct.alchemical_combinator_active) then goto continue end
-
-    -- during the first tick(s?) the player is still selecting the normal combinator
-    if (not selected_by_any_player(struct.alchemical_combinator_active)) and (not selected_by_any_player(struct.alchemical_combinator)) then
-      storage.active_struct_ids[struct_id] = nil
-
-      struct.alchemical_combinator.surface.play_sound{
-        path = "alchemical-combinator-uncharge",
-        position = struct.alchemical_combinator.position,
-      }
-
-      struct.alchemical_combinator_active.destroy()
-      struct.alchemical_combinator_active = nil
-    else
-      local signals = struct.alchemical_combinator.get_signals(defines.wire_connector_id.combinator_output_red, defines.wire_connector_id.combinator_output_green)
-      local parameters = struct.alchemical_combinator.get_control_behavior().parameters
-
-      -- trick the -active combinator into enabeling its outside side
-      table.insert(parameters.conditions, {
-        comparator = "≠",
-        compare_type = "or",
-        constant = 0,
-        first_signal = {
-          name = "signal-everything",
-          type = "virtual"
-        },
-        first_signal_networks = {
-          green = true,
-          red = true
-        },
-        second_signal_networks = {
-          green = true,
-          red = true
-        }
-      })
-
-      -- reset and fill the output side with signals artificially
-      local alchemical_combinator_active_cb = struct.alchemical_combinator_active.get_control_behavior()
-      alchemical_combinator_active_cb.parameters = parameters
-      for _, signal_and_count in ipairs(signals or {}) do
-        alchemical_combinator_active_cb.add_output({
-          signal = {
-            type = signal_and_count.signal.type or "item",
-            name = signal_and_count.signal.name,
-            quality = signal_and_count.signal.quality,
-          },
-          constant = signal_and_count.count / 2,
-          copy_count_from_input = false,
-        })
-      end
-    end
-
-    ::continue::
+    Handler.tick_active_struct(struct)
   end
 
   if next(storage.active_struct_ids) == nil then

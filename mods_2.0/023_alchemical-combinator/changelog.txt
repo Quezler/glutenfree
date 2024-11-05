@@ -46,6 +46,7 @@ Date: ????
     - Cleanup 〃
     - Only do on_tick when there are structs to tick
     - Make it technically not require any power so the output signals are always accurate
+    - Immediately tick hovered struct so the output shows
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
