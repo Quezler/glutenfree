@@ -118,6 +118,8 @@ function Handler.on_created_entity(event)
   local red_out_a =  entity.get_wire_connector(defines.wire_connector_id.combinator_output_red, false)
   local red_out_b = decider.get_wire_connector(defines.wire_connector_id.combinator_output_red, false)
   assert(red_out_a.connect_to(red_out_b, false, defines.wire_origin.script))
+
+  AlchemicalCombinator.reread(struct)
 end
 
 for _, event in ipairs({

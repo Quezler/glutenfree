@@ -39,6 +39,7 @@ Date: ????
     - Attempt to hijack the entity settings copy event
     - Keep active active whilst it is a copy source
     - Mildly optimize copy source check
+    - Make blueprints functional
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
