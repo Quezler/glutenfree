@@ -6,6 +6,7 @@ Date: ????
     - Stash version uploaded to https://forums.factorio.com/viewtopic.php?f=7&t=119764
     - Cleanup 〃
     - Bump version and abandon till 2.0.15
+    - Abandon till 2.0.16 (https://forums.factorio.com/119764)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 04

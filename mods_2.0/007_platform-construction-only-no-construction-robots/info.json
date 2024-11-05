@@ -16,8 +16,8 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
-        "base >= 2.0.15",
-        "space-age >= 2.0.15",
+        "base >= 2.0.16",
+        "space-age >= 2.0.16",
         
         "flib"
     ]
