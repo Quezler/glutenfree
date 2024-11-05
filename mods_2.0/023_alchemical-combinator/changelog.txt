@@ -30,6 +30,7 @@ Date: ????
     - Populate the blacklist
     - Make the not yet seen logic prettier
     - Bring the decider combinator output side back to the surface
+    - Comment wire connection blocks
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04

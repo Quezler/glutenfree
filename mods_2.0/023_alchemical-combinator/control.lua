@@ -77,6 +77,7 @@ function Handler.on_created_entity(event)
   struct.arithmetic = arithmetic
   arithmetic.get_control_behavior().parameters = arithmetic_combinator_parameters
 
+  -- outside to inside
   local green_in_a =     entity.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
   local green_in_b = arithmetic.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
   assert(green_in_a.connect_to(green_in_b, false, defines.wire_origin.script))
@@ -109,6 +110,7 @@ function Handler.on_created_entity(event)
   assert(arithmetic_red_out.connect_to(blacklist_red_in  , false))
   assert(constant_green_out.connect_to(blacklist_green_in, false))
 
+  -- inside to outside
   local green_out_a =  entity.get_wire_connector(defines.wire_connector_id.combinator_output_green, false)
   local green_out_b = decider.get_wire_connector(defines.wire_connector_id.combinator_output_green, false)
   assert(green_out_a.connect_to(green_out_b, false, defines.wire_origin.script))
