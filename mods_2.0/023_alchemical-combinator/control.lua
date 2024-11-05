@@ -21,6 +21,8 @@ function Handler.on_created_entity(event)
     -- index = storage.index,
     alchemical_combinator = entity,
     alchemical_combinator_active = nil,
+
+    sprite_render_object = nil,
   }
 
   storage.alchemical_combinator_to_struct_id[entity.unit_number] = storage.index
@@ -66,7 +68,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     }
     assert(active)
 
-    rendering.draw_sprite{
+    struct.sprite_render_object = rendering.draw_sprite{
       sprite = direction_to_sprite[selected.direction],
       surface = selected.surface,
       target = active,
@@ -120,3 +122,5 @@ script.on_event(defines.events.on_gui_opened, function(event)
     player.opened = struct.entity
   end
 end)
+
+require("scripts.trivial-event-handlers")

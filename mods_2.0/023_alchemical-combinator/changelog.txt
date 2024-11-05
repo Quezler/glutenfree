@@ -16,6 +16,7 @@ Date: ????
     - Always lookup struct via id (unit_number is ambiguous when things consist of multiple entities)
     - Remove green arrows from alchemical combinator icon sprites
     - Add recipe and add to technology
+    - Handle combinator being rotated or flipped
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
