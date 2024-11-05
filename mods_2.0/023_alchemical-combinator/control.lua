@@ -53,7 +53,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   assert(player)
   local selected = player.selected
 
-  if selected and selected.name == "alchemical-combinator" then
+  if selected and selected.name == "alchemical-combinator" and player.is_cursor_empty() then -- todo: re-select when cursor gets cleared?
     local struct_id = storage.alchemical_combinator_to_struct_id[selected.unit_number]
     assert(struct_id)
     local struct = storage.structs[struct_id]
