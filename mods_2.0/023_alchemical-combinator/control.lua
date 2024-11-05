@@ -126,7 +126,9 @@ script.on_event(defines.events.on_gui_opened, function(event)
     local struct = storage.structs[struct_id]
     assert(struct)
 
-    player.opened = struct.entity
+    assert(struct.alchemical_combinator)
+    assert(struct.alchemical_combinator.valid)
+    player.opened = struct.alchemical_combinator
   end
 end)
 

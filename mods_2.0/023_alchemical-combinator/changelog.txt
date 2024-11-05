@@ -20,6 +20,7 @@ Date: ????
     - Do not switch to active when something is being held
     - Connect the inputs of the normal & active combinators so the wires highlight
     - Support mining the combinator whilst active is active
+    - Fix gui not opening anymore
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
