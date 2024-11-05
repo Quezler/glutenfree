@@ -97,3 +97,12 @@ data:extend{combinator_recipe}
 
 local technology_effects = data.raw["technology"]["circuit-network"].effects
 table.insert(technology_effects, {type = "unlock-recipe", recipe = combinator_recipe.name})
+
+data:extend{{
+  type = "custom-input",
+  name = "alchemical-combinator-about-to-copy",
+
+  linked_game_control = "copy-entity-settings",
+  key_sequence = "SHIFT + mouse-button-2",
+  action = "lua",
+}}

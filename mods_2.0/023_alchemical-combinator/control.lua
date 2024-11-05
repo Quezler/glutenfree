@@ -24,6 +24,8 @@ script.on_init(function()
 
   storage.active_struct_ids = {}
 
+  storage.player_copying_at_tick = {}
+
   local mod_surface = game.surfaces[mod_surface_name]
   if mod_surface then
     for _, entity in ipairs(mod_surface.find_entities_filtered{}) do
@@ -150,6 +152,8 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     assert(struct_id)
     local struct = storage.structs[struct_id]
     assert(struct)
+
+    if struct.alchemical_combinator_active then return end
 
     local active = selected.surface.create_entity{
       name = "alchemical-combinator-active",
@@ -290,13 +294,23 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     local struct_id = storage.alchemical_combinator_active_to_struct_id[event.destination.unit_number]
     local struct = storage.structs[struct_id]
 
-    struct.alchemical_combinator.get_control_behavior().parameters = struct.alchemical_combinator_active.get_control_behavior().parameters 
+    struct.alchemical_combinator.get_control_behavior().parameters = struct.alchemical_combinator_active.get_control_behavior().parameters
     AlchemicalCombinator.reread(struct)
   elseif event.destination.name == "alchemical-combinator" then
     local struct_id = storage.alchemical_combinator_to_struct_id[event.destination.unit_number]
     local struct = storage.structs[struct_id]
 
     AlchemicalCombinator.reread(struct)
+  end
+end)
+
+script.on_event("alchemical-combinator-about-to-copy", function(event)
+  local player = game.get_player(event.player_index)
+  local selected = player.selected
+
+  if player.selected and player.selected.name == "alchemical-combinator-active" then
+    storage.player_copying_at_tick[player.index] = event.tick
+    player.selected.destroy()
   end
 end)
 

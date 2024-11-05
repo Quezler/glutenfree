@@ -36,6 +36,7 @@ Date: ????
     - Reuse struct.arithmetics where possible
     - Refractor to support entity settings pasted
     - Support copying onto -active
+    - Attempt to hijack the entity settings copy event
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
