@@ -8,8 +8,8 @@
 local arithmetic_combinator_parameters = require("scripts.arithmetic_combinator_parameters")
 local decider_combinator_parameters = require("scripts.decider_combinator_parameters")
 
-local ModSurface = require("scripts.mod-surface")
-local mod_surface_name = ModSurface.name
+local AlchemicalCombinator = require("scripts.alchemical-combinator")
+local mod_surface_name = "alchemical-combinator"
 
 local Handler = {}
 
@@ -49,7 +49,7 @@ function Handler.on_created_entity(event)
   local struct_id = storage.index
 
   local struct = {
-    -- index = storage.index,
+    id = struct_id,
     alchemical_combinator = entity,
     alchemical_combinator_active = nil,
 
@@ -277,6 +277,20 @@ end
 
 script.on_event(defines.events.on_tick, Handler.on_tick)
 
-script.on_event(defines.events.on_gui_closed, ModSurface.on_gui_closed)
+script.on_event(defines.events.on_gui_closed, function(event)
+  if event.entity and event.entity.name == "alchemical-combinator" then
+    local struct_id = storage.alchemical_combinator_to_struct_id[event.entity.unit_number]
+    local struct = storage.structs[struct_id]
+    AlchemicalCombinator.reread(struct)
+  end
+end)
+
+script.on_event(defines.events.on_entity_settings_pasted, function(event)
+  if event.destination.name == "alchemical-combinator" then
+    local struct_id = storage.alchemical_combinator_to_struct_id[event.destination.unit_number]
+    local struct = storage.structs[struct_id]
+    AlchemicalCombinator.reread(struct)
+  end
+end)
 
 require("scripts.trivial-event-handlers")
