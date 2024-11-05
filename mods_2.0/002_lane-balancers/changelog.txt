@@ -6,6 +6,7 @@ Date: ????
     - Add test scenario/world
     - Fix broken animation of the blue and green lane balancers
     - Support prismatic belts
+    - Replace stray yellow loader with red loader
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2024. 10. 15
