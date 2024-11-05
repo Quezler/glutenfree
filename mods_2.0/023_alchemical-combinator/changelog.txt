@@ -38,6 +38,7 @@ Date: ????
     - Support copying onto -active
     - Attempt to hijack the entity settings copy event
     - Keep active active whilst it is a copy source
+    - Mildly optimize copy source check
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04

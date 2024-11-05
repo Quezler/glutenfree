@@ -244,6 +244,18 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   end
 end)
 
+local function is_copy_source(entity)
+  for _, player in ipairs(game.connected_players) do
+    if player.connected then
+      if player.entity_copy_source and player.entity_copy_source == entity then
+        return true
+      end
+    end
+  end
+
+  return false
+end
+
 local function selected_by_any_player(entity)
   for _, player in ipairs(game.connected_players) do
     if player.connected then
@@ -252,10 +264,6 @@ local function selected_by_any_player(entity)
         if player.selected == entity then
           return true
         end
-      end
-
-      if player.entity_copy_source and player.entity_copy_source == entity then
-        return true
       end
     end
 
@@ -269,6 +277,8 @@ function Handler.on_tick(event)
     local struct = storage.structs[struct_id]
     assert(struct)
 
+    if is_copy_source(struct.alchemical_combinator_active) then goto continue end
+
     -- during the first tick(s?) the player is still selecting the normal combinator
     if (not selected_by_any_player(struct.alchemical_combinator_active)) and (not selected_by_any_player(struct.alchemical_combinator)) then
       storage.active_struct_ids[struct_id] = nil
@@ -281,6 +291,8 @@ function Handler.on_tick(event)
       struct.alchemical_combinator_active.destroy()
       struct.alchemical_combinator_active = nil
     end
+
+    ::continue::
   end
 end
 
