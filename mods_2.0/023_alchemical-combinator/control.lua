@@ -108,6 +108,13 @@ function Handler.on_created_entity(event)
   local arithmetic_red_out = arithmetic.get_wire_connector(defines.wire_connector_id.combinator_output_red , false)
   assert(arithmetic_red_out.connect_to(blacklist_red_in  , false))
   assert(constant_green_out.connect_to(blacklist_green_in, false))
+
+  local green_out_a =  entity.get_wire_connector(defines.wire_connector_id.combinator_output_green, false)
+  local green_out_b = decider.get_wire_connector(defines.wire_connector_id.combinator_output_green, false)
+  assert(green_out_a.connect_to(green_out_b, false, defines.wire_origin.script))
+  local red_out_a =  entity.get_wire_connector(defines.wire_connector_id.combinator_output_red, false)
+  local red_out_b = decider.get_wire_connector(defines.wire_connector_id.combinator_output_red, false)
+  assert(red_out_a.connect_to(red_out_b, false, defines.wire_origin.script))
 end
 
 for _, event in ipairs({

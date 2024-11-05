@@ -29,6 +29,7 @@ Date: ????
     - Read new conditions into struct when closing gui
     - Populate the blacklist
     - Make the not yet seen logic prettier
+    - Bring the decider combinator output side back to the surface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
