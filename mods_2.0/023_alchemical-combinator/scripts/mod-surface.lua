@@ -2,6 +2,12 @@ local ModSurface = {}
 
 ModSurface.name = "alchemical-combinator"
 
+local function not_yet_seen(seen, key)
+  if seen[key] then return false end
+  seen[key] = true
+  return true
+end
+
 function ModSurface.on_gui_closed(event)
   if event.entity and event.entity.name == "alchemical-combinator" then
     -- game.print(serpent.block( event.entity.get_control_behavior().parameters.conditions ))
@@ -27,9 +33,7 @@ function ModSurface.on_gui_closed(event)
       local first_signal = condition.first_signal
       if first_signal then
         local value = {type = first_signal.type or "item", name = first_signal.name, quality = first_signal.quality or "normal", comparator = '='}
-        local seen_key = value.type .. value.name .. value.quality
-        if seen[seen_key] == nil then
-          seen[seen_key] = true
+        if not_yet_seen(seen, value.type .. value.name .. value.quality) then
           section.set_slot(i, {
             value = value,
             min = 1,
