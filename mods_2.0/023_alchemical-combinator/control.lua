@@ -292,6 +292,24 @@ function Handler.on_tick(event)
 
       struct.alchemical_combinator_active.destroy()
       struct.alchemical_combinator_active = nil
+    else
+      local signals = struct.alchemical_combinator.get_signals(defines.wire_connector_id.combinator_output_red, defines.wire_connector_id.combinator_output_green)
+      game.print(event.tick .. serpent.line(signals))
+      local parameters = struct.alchemical_combinator.get_control_behavior().parameters
+      local alchemical_combinator_active_cb = struct.alchemical_combinator_active.get_control_behavior()
+      alchemical_combinator_active_cb.parameters = parameters
+
+      for _, signal_and_count in ipairs(signals or {}) do
+        alchemical_combinator_active_cb.add_output({
+          signal = {
+            type = signal_and_count.signal.type or "item",
+            name = signal_and_count.signal.name,
+            quality = signal_and_count.signal.quality,
+          },
+          constant = signal_and_count.count,
+          copy_count_from_input = false,
+        })
+      end
     end
 
     ::continue::

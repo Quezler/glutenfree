@@ -13,10 +13,12 @@ function AlchemicalCombinator.reread(struct)
 
   struct.conditions = {}
   for _, condition in ipairs(struct.alchemical_combinator.get_control_behavior().parameters.conditions) do
+    if condition.first_signal and condition.first_signal.name == "signal-everything" then goto continue end
     table.insert(struct.conditions, {
       first_signal = condition.first_signal,
       second_signal = condition.second_signal,
     })
+    ::continue::
   end
 
   local constant_cb = struct.constant.get_control_behavior()
@@ -87,12 +89,31 @@ end
 
 function AlchemicalCombinator.write_parameters_back(struct)
 
-  local conditions = {}
+  local conditions = {
+    {
+      comparator = "≠",
+      compare_type = "or",
+      constant = 0,
+      first_signal = {
+        name = "signal-everything",
+        type = "virtual"
+      },
+      first_signal_networks = {
+        green = true,
+        red = true
+      },
+      second_signal_networks = {
+        green = true,
+        red = true
+      }
+    }
+  }
+
   for _, condition in ipairs(struct.conditions) do
     table.insert(conditions, {
       constant = nil, -- no way to force it not be 0 :(
       comparator = "=",
-      compare_type = "and", -- probably better for performance?
+      compare_type = "or",
       first_signal = condition.first_signal,
       first_signal_networks = {
         green = true,
