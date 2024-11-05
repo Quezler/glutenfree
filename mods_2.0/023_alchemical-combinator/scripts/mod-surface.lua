@@ -42,6 +42,63 @@ function ModSurface.on_gui_closed(event)
       end
     end
 
+    for _, decider in ipairs(struct.deciders) do
+      decider.destroy()
+    end
+
+    local mod_surface = game.surfaces[ModSurface.name]
+    local to_outside_green = struct.decider.get_wire_connector(defines.wire_connector_id.combinator_output_green, false)
+    local to_outside_red   = struct.decider.get_wire_connector(defines.wire_connector_id.combinator_output_red  , false)
+    local to_inside_red    = struct.decider.get_wire_connector(defines.wire_connector_id.combinator_input_red   , false)
+
+    for i, condition in pairs(struct.conditions) do
+      local decider = mod_surface.create_entity{
+        name = "decider-combinator",
+        force = "neutral",
+        position = {struct_id - 1, -4 + (-2 * i)},
+        direction = defines.direction.south
+      }
+      assert(decider)
+      table.insert(struct.deciders, decider)
+
+      local parameters = {
+        conditions = {
+          {
+            comparator = "≠",
+            compare_type = "or",
+            first_signal_networks = {
+              green = true,
+              red = true
+            },
+            second_signal_networks = {
+              green = true,
+              red = true
+            }
+          }
+        },
+        outputs = {
+          {
+            copy_count_from_input = true,
+            networks = {
+              green = true,
+              red = true
+            },
+            signal = {
+              name = "iron-plate"
+            }
+          }
+        }
+      }
+
+      parameters.conditions[1].first_signal = condition.first_signal
+      parameters.outputs[1].signal = condition.second_signal
+      decider.get_control_behavior().parameters = parameters
+
+      assert(decider.get_wire_connector(defines.wire_connector_id.combinator_input_red, false).connect_to(to_inside_red, false))
+      assert(decider.get_wire_connector(defines.wire_connector_id.combinator_output_red, false).connect_to(to_outside_red, false))
+      assert(decider.get_wire_connector(defines.wire_connector_id.combinator_output_green, false).connect_to(to_outside_green, false))
+    end
+
     ModSurface.write_parameters_back(struct)
   end
 end

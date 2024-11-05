@@ -60,6 +60,7 @@ function Handler.on_created_entity(event)
     decider = nil,
 
     conditions = {},
+    deciders = {},
   }
 
   storage.structs[struct_id] = struct
@@ -225,6 +226,9 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       struct.arithmetic.destroy()
       struct.constant.destroy()
       struct.decider.destroy()
+      for _, decider in ipairs(struct.deciders) do
+        decider.destroy()
+      end
     end
 
     if deathrattle.alchemical_combinator_to_struct_id then

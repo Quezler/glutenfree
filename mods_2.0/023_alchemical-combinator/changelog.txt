@@ -31,6 +31,7 @@ Date: ????
     - Make the not yet seen logic prettier
     - Bring the decider combinator output side back to the surface
     - Comment wire connection blocks
+    - Make the deciders for each of the conditions
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
