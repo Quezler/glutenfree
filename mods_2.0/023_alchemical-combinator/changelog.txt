@@ -32,6 +32,7 @@ Date: ????
     - Bring the decider combinator output side back to the surface
     - Comment wire connection blocks
     - Make the deciders for each of the conditions
+    - Switch the condition combiners from decider to arithmetic
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
