@@ -7,6 +7,7 @@
 local mod_surface_name = "alchemical-combinator"
 
 local arithmetic_combinator_parameters = require("scripts.arithmetic_combinator_parameters")
+local decider_combinator_parameters = require("scripts.decider_combinator_parameters")
 
 local Handler = {}
 
@@ -49,6 +50,8 @@ function Handler.on_created_entity(event)
     sprite_render_object = nil,
 
     arithmetic = nil,
+    constant = nil,
+    decider = nil,
   }
   storage.structs[struct_id] = struct
 
@@ -62,7 +65,6 @@ function Handler.on_created_entity(event)
   }
   assert(arithmetic)
   struct.arithmetic = arithmetic
-
   arithmetic.get_control_behavior().parameters = arithmetic_combinator_parameters
 
   local green_in_a =     entity.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
@@ -71,6 +73,31 @@ function Handler.on_created_entity(event)
   local red_in_a =     entity.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
   local red_in_b = arithmetic.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
   assert(red_in_a.connect_to(red_in_b, false, defines.wire_origin.script))
+
+  local constant = mod_surface.create_entity{
+    name = "constant-combinator",
+    force = "neutral",
+    position = {struct_id - 1, -2.5},
+    direction = defines.direction.south,
+  }
+  assert(constant)
+  struct.constant = constant
+
+  local decider = mod_surface.create_entity{
+    name = "decider-combinator",
+    force = "neutral",
+    position = {struct_id - 1, -4.0},
+  }
+  assert(decider)
+  struct.decider = decider
+  decider.get_control_behavior().parameters = decider_combinator_parameters
+
+  local blacklist_green_in =    decider.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
+  local blacklist_red_in   =    decider.get_wire_connector(defines.wire_connector_id.combinator_input_red  , false)
+  local constant_green_out =   constant.get_wire_connector(defines.wire_connector_id.circuit_green         , false)
+  local arithmetic_red_out = arithmetic.get_wire_connector(defines.wire_connector_id.combinator_output_red , false)
+  assert(arithmetic_red_out.connect_to(blacklist_red_in  , false))
+  assert(constant_green_out.connect_to(blacklist_green_in, false))
 end
 
 for _, event in ipairs({
