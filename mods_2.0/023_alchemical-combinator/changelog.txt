@@ -7,6 +7,7 @@ Date: ????
     - Fail to make two combinators not fight over render layers
     - Luarender the active sprite
     - Disable the combinator screen
+    - Attempt to cut out the window
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
