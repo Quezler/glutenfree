@@ -24,6 +24,7 @@ Date: ????
     - Make the undo queue respect mining an active combinator
     - Grab the red and green signals for the hidden surface
     - Prepare the blacklist combinator and decider filter entities
+    - Cleanup storage when their respective entities die
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04

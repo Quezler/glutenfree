@@ -15,6 +15,8 @@ script.on_init(function()
   storage.index = 0
   storage.structs = {}
 
+  storage.deathrattles = {}
+
   storage.alchemical_combinator_to_struct_id = {}
   storage.alchemical_combinator_active_to_struct_id = {}
 
@@ -53,7 +55,9 @@ function Handler.on_created_entity(event)
     constant = nil,
     decider = nil,
   }
+
   storage.structs[struct_id] = struct
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct_id = struct_id, alchemical_combinator_to_struct_id = entity.unit_number}
 
   storage.alchemical_combinator_to_struct_id[entity.unit_number] = struct_id
 
@@ -157,6 +161,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
 
     struct.alchemical_combinator_active = active
     storage.alchemical_combinator_active_to_struct_id[active.unit_number] = struct_id
+    storage.deathrattles[script.register_on_object_destroyed(active)] = {alchemical_combinator_active_to_struct_id = active.unit_number}
     return
   end
 
@@ -209,9 +214,34 @@ script.on_event(defines.events.on_player_mined_entity, function(event)
   local struct = storage.structs[struct_id]
 
   local player = game.get_player(event.player_index)
+  assert(player)
   player.mine_entity(struct.alchemical_combinator)
 end, {
   {filter = "name", name = "alchemical-combinator-active"},
 })
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+
+    if deathrattle.struct_id then
+      local struct = storage.structs[deathrattle.struct_id]
+      assert(struct)
+      storage.structs[deathrattle.struct_id] = nil
+      struct.arithmetic.destroy()
+      struct.constant.destroy()
+      struct.decider.destroy()
+    end
+
+    if deathrattle.alchemical_combinator_to_struct_id then
+      storage.alchemical_combinator_to_struct_id[deathrattle.alchemical_combinator_to_struct_id] = nil
+    end
+
+    if deathrattle.alchemical_combinator_active_to_struct_id then
+      storage.alchemical_combinator_active_to_struct_id[deathrattle.alchemical_combinator_active_to_struct_id] = nil
+    end
+
+  end
+end)
 
 require("scripts.trivial-event-handlers")
