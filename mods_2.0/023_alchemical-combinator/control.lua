@@ -185,6 +185,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     storage.deathrattles[script.register_on_object_destroyed(active)] = {alchemical_combinator_active_to_struct_id = active.unit_number}
 
     storage.active_struct_ids[struct_id] = true
+    script.on_event(defines.events.on_tick, Handler.on_tick)
     selected.surface.play_sound{
       path = "alchemical-combinator-charge",
       position = selected.position,
@@ -233,6 +234,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       for _, arithmetic in ipairs(struct.arithmetics) do
         arithmetic.destroy()
       end
+      storage.active_struct_ids[deathrattle.struct_id] = nil
     end
 
     if deathrattle.alchemical_combinator_to_struct_id then
@@ -333,9 +335,17 @@ function Handler.on_tick(event)
 
     ::continue::
   end
+
+  if next(storage.active_struct_ids) == nil then
+    script.on_event(defines.events.on_tick, nil)
+  end
 end
 
-script.on_event(defines.events.on_tick, Handler.on_tick)
+script.on_load(function()
+  if next(storage.active_struct_ids) ~= nil then
+    script.on_event(defines.events.on_tick, Handler.on_tick)
+  end
+end)
 
 script.on_event(defines.events.on_gui_closed, function(event)
   if event.entity and event.entity.name == "alchemical-combinator" then

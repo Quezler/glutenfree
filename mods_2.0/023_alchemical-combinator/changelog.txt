@@ -44,6 +44,7 @@ Date: ????
     - Use wichcraft to make it display output signals on hover
     - Fix the duplicate signals by dividing (external signals might interere)
     - Cleanup 〃
+    - Only do on_tick when there are structs to tick
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
