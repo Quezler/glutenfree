@@ -14,6 +14,7 @@ Date: ????
     - Make active sidebar less weird by showing the sprite, no shadow tho
     - Begin conversion into struct
     - Always lookup struct via id (unit_number is ambiguous when things consist of multiple entities)
+    - Remove green arrows from alchemical combinator icon sprites
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
