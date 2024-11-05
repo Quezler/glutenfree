@@ -41,6 +41,16 @@ script.on_init(function()
     force = "neutral",
     position = {-1, -1},
   }
+
+  for _, force in pairs(game.forces) do
+    force.set_surface_hidden(mod_surface_name, true)
+  end
+end)
+
+script.on_configuration_changed(function(event)
+  for _, force in pairs(game.forces) do
+    force.set_surface_hidden(mod_surface_name, true)
+  end
 end)
 
 function Handler.on_created_entity(event)

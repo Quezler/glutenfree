@@ -26,3 +26,7 @@ script.on_event(defines.events.on_player_flipped_entity, function(event)
     on_changed_orientation(event.entity)
   end
 end)
+
+script.on_event(defines.events.on_force_created, function(event)
+  event.force.set_surface_hidden("alchemical-combinator", true)
+end)
