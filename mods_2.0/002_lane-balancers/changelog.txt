@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.2
-Date: ????
+Version: 1.1.0
+Date: 2024. 11. 05
   Info:
     - Add note for third part support
     - Add test scenario/world
