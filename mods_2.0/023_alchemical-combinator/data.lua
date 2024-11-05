@@ -77,3 +77,22 @@ end
 
 turn_off_combinator_screen(combinator)
 turn_off_combinator_screen(combinator_active)
+
+local combinator_recipe = {
+  type = "recipe",
+  name = "alchemical-combinator",
+  enabled = false,
+  ingredients =
+  {
+    {type = "item", name = "iron-plate", amount = 1},
+    {type = "item", name = "copper-plate", amount = 1},
+    {type = "item", name = "sulfur", amount = 2},
+    {type = "item", name = "decider-combinator", amount = 1}
+  },
+  results = {{type="item", name="alchemical-combinator", amount=1}}
+}
+
+data:extend{combinator_recipe}
+
+local technology_effects = data.raw["technology"]["circuit-network"].effects
+table.insert(technology_effects, {type = "unlock-recipe", recipe = combinator_recipe.name})
