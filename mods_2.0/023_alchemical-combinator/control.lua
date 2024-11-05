@@ -286,9 +286,16 @@ script.on_event(defines.events.on_gui_closed, function(event)
 end)
 
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
-  if event.destination.name == "alchemical-combinator" then
+  if event.destination.name == "alchemical-combinator-active" then
+    local struct_id = storage.alchemical_combinator_active_to_struct_id[event.destination.unit_number]
+    local struct = storage.structs[struct_id]
+
+    struct.alchemical_combinator.get_control_behavior().parameters = struct.alchemical_combinator_active.get_control_behavior().parameters 
+    AlchemicalCombinator.reread(struct)
+  elseif event.destination.name == "alchemical-combinator" then
     local struct_id = storage.alchemical_combinator_to_struct_id[event.destination.unit_number]
     local struct = storage.structs[struct_id]
+
     AlchemicalCombinator.reread(struct)
   end
 end)
