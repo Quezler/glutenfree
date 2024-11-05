@@ -68,6 +68,13 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     }
     assert(active)
 
+    local green_in_a = selected.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
+    local green_in_b =   active.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
+    assert(green_in_a.connect_to(green_in_b, false, defines.wire_origin.script))
+    local red_in_a = selected.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
+    local red_in_b =   active.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
+    assert(red_in_a.connect_to(red_in_b, false, defines.wire_origin.script))
+
     struct.sprite_render_object = rendering.draw_sprite{
       sprite = direction_to_sprite[selected.direction],
       surface = selected.surface,

@@ -18,6 +18,7 @@ Date: ????
     - Add recipe and add to technology
     - Handle combinator being rotated or flipped
     - Do not switch to active when something is being held
+    - Connect the inputs of the normal & active combinators so the wires highlight
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
