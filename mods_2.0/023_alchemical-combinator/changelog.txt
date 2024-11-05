@@ -42,6 +42,7 @@ Date: ????
     - Make blueprints functional
     - Bump alchemical combinator sprites (or is the atlas to blame?)
     - Use wichcraft to make it display output signals on hover
+    - Fix the duplicate signals by dividing (external signals might interere)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04

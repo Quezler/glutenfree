@@ -294,8 +294,28 @@ function Handler.on_tick(event)
       struct.alchemical_combinator_active = nil
     else
       local signals = struct.alchemical_combinator.get_signals(defines.wire_connector_id.combinator_output_red, defines.wire_connector_id.combinator_output_green)
-      game.print(event.tick .. serpent.line(signals))
+      -- game.print(event.tick .. serpent.line(signals))
       local parameters = struct.alchemical_combinator.get_control_behavior().parameters
+      table.insert(parameters.conditions, {
+        comparator = "≠",
+        compare_type = "or",
+        constant = 0,
+        first_signal = {
+          name = "signal-everything",
+          type = "virtual"
+        },
+        first_signal_networks = {
+          green = true,
+          red = true
+        },
+        second_signal_networks = {
+          green = true,
+          red = true
+        }
+      })
+      -- if #parameters.conditions >= 2 then
+      --   parameters.conditions[2].compare_type = "or"
+      -- end
       local alchemical_combinator_active_cb = struct.alchemical_combinator_active.get_control_behavior()
       alchemical_combinator_active_cb.parameters = parameters
 
@@ -306,7 +326,7 @@ function Handler.on_tick(event)
             name = signal_and_count.signal.name,
             quality = signal_and_count.signal.quality,
           },
-          constant = signal_and_count.count,
+          constant = signal_and_count.count / 2,
           copy_count_from_input = false,
         })
       end

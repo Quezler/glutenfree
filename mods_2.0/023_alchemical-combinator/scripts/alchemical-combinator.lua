@@ -89,31 +89,13 @@ end
 
 function AlchemicalCombinator.write_parameters_back(struct)
 
-  local conditions = {
-    {
-      comparator = "≠",
-      compare_type = "or",
-      constant = 0,
-      first_signal = {
-        name = "signal-everything",
-        type = "virtual"
-      },
-      first_signal_networks = {
-        green = true,
-        red = true
-      },
-      second_signal_networks = {
-        green = true,
-        red = true
-      }
-    }
-  }
+  local conditions = {}
 
   for _, condition in ipairs(struct.conditions) do
     table.insert(conditions, {
       constant = nil, -- no way to force it not be 0 :(
       comparator = "=",
-      compare_type = "or",
+      compare_type = "and", -- probably better for performance?
       first_signal = condition.first_signal,
       first_signal_networks = {
         green = true,
