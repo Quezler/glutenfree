@@ -97,3 +97,5 @@ data:extend{combinator_recipe}
 
 local technology_effects = data.raw["technology"]["circuit-network"].effects
 table.insert(technology_effects, {type = "unlock-recipe", recipe = combinator_recipe.name})
+
+combinator_active.energy_source = {type = "void"}
