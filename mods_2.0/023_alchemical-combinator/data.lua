@@ -68,3 +68,4 @@ local function turn_off_combinator_screen(combinator)
 end
 
 turn_off_combinator_screen(combinator)
+turn_off_combinator_screen(combinator_active)
