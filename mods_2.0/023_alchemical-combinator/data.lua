@@ -60,3 +60,14 @@ local sound_uncharge = {
 }
 
 data:extend{sound_charge, sound_uncharge}
+
+local function turn_off_combinator_screen(combinator)
+  for _, sprite_4_way in ipairs({"equal_symbol_sprites", "greater_symbol_sprites", "less_symbol_sprites", "not_equal_symbol_sprites", "greater_or_equal_symbol_sprites", "less_or_equal_symbol_sprites"}) do
+    for _, direction in ipairs({"north", "east", "south", "west"}) do
+      combinator[sprite_4_way][direction].x = 0
+      combinator[sprite_4_way][direction].y = 0
+    end
+  end
+end
+
+turn_off_combinator_screen(combinator)
