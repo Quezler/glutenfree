@@ -5,6 +5,7 @@ Date: ????
     - Add note for third part support
     - Add test scenario/world
     - Fix broken animation of the blue and green lane balancers
+    - Support prismatic belts
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2024. 10. 15

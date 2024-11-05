@@ -17,6 +17,9 @@
 
     "dependencies": [
         "base",
-        "? space-age >= 2.0.3"
+        "? space-age >= 2.0.3",
+
+        "? prismatic-belts",
+        "? prismatic-belts-space-age"
     ]
 }
