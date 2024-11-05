@@ -50,3 +50,12 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     event.last_entity.destroy()
   end
 end)
+
+script.on_event(defines.events.on_gui_opened, function(event)
+  local player = game.get_player(event.player_index)
+  local entity = event.entity
+
+  if entity and entity.name == "alchemical-combinator-active" then
+    player.opened = entity.surface.find_entity("alchemical-combinator", entity.position)
+  end
+end)
