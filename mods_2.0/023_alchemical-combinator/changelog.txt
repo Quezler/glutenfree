@@ -26,6 +26,7 @@ Date: ????
     - Prepare the blacklist combinator and decider filter entities
     - Cleanup storage when their respective entities die
     - Move deselection cleanup to on_tick
+    - Read new conditions into struct when closing gui
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04

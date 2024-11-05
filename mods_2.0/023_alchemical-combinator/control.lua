@@ -4,10 +4,12 @@
 -- }
 
 -- /c game.player.teleport({0, 0}, "alchemical-combinator")
-local mod_surface_name = "alchemical-combinator"
 
 local arithmetic_combinator_parameters = require("scripts.arithmetic_combinator_parameters")
 local decider_combinator_parameters = require("scripts.decider_combinator_parameters")
+
+local ModSurface = require("scripts.mod-surface")
+local mod_surface_name = ModSurface.name
 
 local Handler = {}
 
@@ -56,6 +58,8 @@ function Handler.on_created_entity(event)
     arithmetic = nil,
     constant = nil,
     decider = nil,
+
+    conditions = {},
   }
 
   storage.structs[struct_id] = struct
@@ -259,5 +263,7 @@ function Handler.on_tick(event)
 end
 
 script.on_event(defines.events.on_tick, Handler.on_tick)
+
+script.on_event(defines.events.on_gui_closed, ModSurface.on_gui_closed)
 
 require("scripts.trivial-event-handlers")
