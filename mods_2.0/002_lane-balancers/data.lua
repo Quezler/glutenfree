@@ -54,28 +54,17 @@ create_recipe({
   previous_prefix = 'this value does nothing since the yellow splitter is crafted from belts',
 })
 
-local function override_width_and_height(with, of)
-  with.width = of.width
-  with.height = of.height
-end
-
 local function apply_splitter_texture_to_balancer(splitter, balancer)
-  balancer.structure.north.filename = splitter.structure.north.filename
-  balancer.structure.east.filename = splitter.structure.east.filename
-  balancer.structure.south.filename = splitter.structure.south.filename
-  balancer.structure.west.filename = splitter.structure.west.filename
+  balancer.structure = table.deepcopy(splitter.structure)
+  balancer.structure_patch = table.deepcopy(splitter.structure_patch)
 
-  balancer.structure_patch.east.filename = splitter.structure_patch.east.filename
-  balancer.structure_patch.west.filename = splitter.structure_patch.west.filename
-
-  if balancer.name == 'turbo-lane-splitter' then
-    override_width_and_height(balancer.structure.north, splitter.structure.north)
-    override_width_and_height(balancer.structure.east, splitter.structure.east)
-    override_width_and_height(balancer.structure.south, splitter.structure.south)
-    override_width_and_height(balancer.structure.west, splitter.structure.west)
-
-    override_width_and_height(balancer.structure_patch.east, splitter.structure.east)
-    override_width_and_height(balancer.structure_patch.west, splitter.structure.west)
+  for _, animation_4_way in ipairs({balancer.structure, balancer.structure_patch}) do
+    for _, direction in ipairs({"north", "east", "south", "west"}) do
+      animation_4_way[direction].scale = (animation_4_way[direction].scale or 1) / 2
+      if animation_4_way[direction].shift then -- some of the structure path are util.empty_sprite(), which has no shift
+        animation_4_way[direction].shift = {animation_4_way[direction].shift[1] / 2, animation_4_way[direction].shift[2] / 2}
+      end
+    end
   end
 end
 
