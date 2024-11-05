@@ -13,7 +13,8 @@ function AlchemicalCombinator.reread(struct)
 
   struct.conditions = {}
   for _, condition in ipairs(struct.alchemical_combinator.get_control_behavior().parameters.conditions) do
-    if condition.first_signal and condition.first_signal.name == "signal-everything" then goto continue end
+    -- filter out any player configured special signals (or accidentally copied everything from -active)
+    if condition.first_signal and condition.first_signal.type == "virtual" then goto continue end
     table.insert(struct.conditions, {
       first_signal = condition.first_signal,
       second_signal = condition.second_signal,

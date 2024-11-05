@@ -294,8 +294,9 @@ function Handler.on_tick(event)
       struct.alchemical_combinator_active = nil
     else
       local signals = struct.alchemical_combinator.get_signals(defines.wire_connector_id.combinator_output_red, defines.wire_connector_id.combinator_output_green)
-      -- game.print(event.tick .. serpent.line(signals))
       local parameters = struct.alchemical_combinator.get_control_behavior().parameters
+
+      -- trick the -active combinator into enabeling its outside side
       table.insert(parameters.conditions, {
         comparator = "≠",
         compare_type = "or",
@@ -313,12 +314,10 @@ function Handler.on_tick(event)
           red = true
         }
       })
-      -- if #parameters.conditions >= 2 then
-      --   parameters.conditions[2].compare_type = "or"
-      -- end
+
+      -- reset and fill the output side with signals artificially
       local alchemical_combinator_active_cb = struct.alchemical_combinator_active.get_control_behavior()
       alchemical_combinator_active_cb.parameters = parameters
-
       for _, signal_and_count in ipairs(signals or {}) do
         alchemical_combinator_active_cb.add_output({
           signal = {
