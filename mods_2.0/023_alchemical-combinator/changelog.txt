@@ -8,6 +8,7 @@ Date: ????
     - Luarender the active sprite
     - Disable the combinator screen
     - Attempt to cut out the window
+    - Do not even render the empty screen
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
