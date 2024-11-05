@@ -7,8 +7,9 @@ combinator_item.name = combinator.name
 combinator.minable.result = combinator_item.name
 combinator_item.place_result = combinator.name
 
-local combinator_active = table.deepcopy(combinator) -- mine result = alchemical combinator
+local combinator_active = table.deepcopy(combinator)
 combinator_active.name = "alchemical-combinator-active"
+combinator.minable.result = nil
 
 combinator.icon = "__alchemical-combinator__/graphics/icons/alchemical-combinator.png"
 combinator_item.icon = "__alchemical-combinator__/graphics/icons/alchemical-combinator.png"

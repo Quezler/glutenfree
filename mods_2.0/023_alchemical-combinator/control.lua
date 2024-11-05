@@ -135,8 +135,9 @@ end)
 script.on_event(defines.events.on_player_mined_entity, function(event)
   local struct_id = storage.alchemical_combinator_active_to_struct_id[event.entity.unit_number]
   local struct = storage.structs[struct_id]
-  struct.alchemical_combinator.destroy()
-  -- storage.structs[struct_id] = nil -- todo
+
+  local player = game.get_player(event.player_index)
+  player.mine_entity(struct.alchemical_combinator)
 end, {
   {filter = "name", name = "alchemical-combinator-active"},
 })
