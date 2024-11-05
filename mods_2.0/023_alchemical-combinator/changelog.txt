@@ -12,6 +12,7 @@ Date: ????
     - Hide screen of active variant from sidebar
     - When opening the active variant, open the gui of the normal one
     - Make active sidebar less weird by showing the sprite, no shadow tho
+    - Begin conversion into struct
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
