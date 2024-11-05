@@ -3,6 +3,11 @@
 --   ["alchemical-combinator-active"] = true,
 -- }
 
+-- /c game.player.teleport({0, 0}, "alchemical-combinator")
+local mod_surface_name = "alchemical-combinator"
+
+local arithmetic_combinator_parameters = require("scripts.arithmetic_combinator_parameters")
+
 local Handler = {}
 
 script.on_init(function()
@@ -11,21 +16,61 @@ script.on_init(function()
 
   storage.alchemical_combinator_to_struct_id = {}
   storage.alchemical_combinator_active_to_struct_id = {}
+
+  local mod_surface = game.surfaces[mod_surface_name]
+  if mod_surface then
+    for _, entity in ipairs(mod_surface.find_entities_filtered{}) do
+      entity.destroy() -- unlike surface.clear() this is instant
+    end
+  end
+  if mod_surface == nil then
+    mod_surface = game.create_surface(mod_surface_name)
+    mod_surface.generate_with_lab_tiles = true
+  end
+
+  mod_surface.create_global_electric_network()
+  mod_surface.create_entity{
+    name = "electric-energy-interface",
+    force = "neutral",
+    position = {-1, -1},
+  }
 end)
 
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
   storage.index = storage.index + 1
+  local struct_id = storage.index
 
-  storage.structs[storage.index] = {
+  local struct = {
     -- index = storage.index,
     alchemical_combinator = entity,
     alchemical_combinator_active = nil,
 
     sprite_render_object = nil,
-  }
 
-  storage.alchemical_combinator_to_struct_id[entity.unit_number] = storage.index
+    arithmetic = nil,
+  }
+  storage.structs[struct_id] = struct
+
+  storage.alchemical_combinator_to_struct_id[entity.unit_number] = struct_id
+
+  local mod_surface = game.surfaces[mod_surface_name]
+  local arithmetic = mod_surface.create_entity{
+    name = "arithmetic-combinator",
+    force = "neutral",
+    position = {struct_id - 1, -1.0},
+  }
+  assert(arithmetic)
+  struct.arithmetic = arithmetic
+
+  arithmetic.get_control_behavior().parameters = arithmetic_combinator_parameters
+
+  local green_in_a =     entity.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
+  local green_in_b = arithmetic.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
+  assert(green_in_a.connect_to(green_in_b, false, defines.wire_origin.script))
+  local red_in_a =     entity.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
+  local red_in_b = arithmetic.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
+  assert(red_in_a.connect_to(red_in_b, false, defines.wire_origin.script))
 end
 
 for _, event in ipairs({
