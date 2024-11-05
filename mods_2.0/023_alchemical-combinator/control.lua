@@ -20,6 +20,8 @@ script.on_init(function()
   storage.alchemical_combinator_to_struct_id = {}
   storage.alchemical_combinator_active_to_struct_id = {}
 
+  storage.active_struct_ids = {}
+
   local mod_surface = game.surfaces[mod_surface_name]
   if mod_surface then
     for _, entity in ipairs(mod_surface.find_entities_filtered{}) do
@@ -143,6 +145,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
       create_build_effect_smoke = false,
     }
     assert(active)
+    active.last_user = selected.last_user
 
     local green_in_a = selected.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
     local green_in_b =   active.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
@@ -162,34 +165,12 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     struct.alchemical_combinator_active = active
     storage.alchemical_combinator_active_to_struct_id[active.unit_number] = struct_id
     storage.deathrattles[script.register_on_object_destroyed(active)] = {alchemical_combinator_active_to_struct_id = active.unit_number}
-    return
-  end
 
-  if selected and selected.name == "alchemical-combinator-active" then
-    local struct_id = storage.alchemical_combinator_active_to_struct_id[selected.unit_number]
-    assert(struct_id)
-    local struct = storage.structs[struct_id]
-    assert(struct)
-
-    player.play_sound{
+    storage.active_struct_ids[struct_id] = true
+    selected.surface.play_sound{
       path = "alchemical-combinator-charge",
       position = selected.position,
     }
-  end
-
-  if event.last_entity and event.last_entity.name == "alchemical-combinator-active" then
-    local struct_id = storage.alchemical_combinator_active_to_struct_id[event.last_entity.unit_number]
-    assert(struct_id)
-    local struct = storage.structs[struct_id]
-    assert(struct)
-
-    player.play_sound{
-      path = "alchemical-combinator-uncharge",
-      position = event.last_entity.position,
-    }
-
-    event.last_entity.destroy()
-    struct.alchemical_combinator_active = nil
   end
 end)
 
@@ -243,5 +224,40 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 
   end
 end)
+
+local function selected_by_any_player(entity)
+  for _, player in ipairs(game.connected_players) do
+    if player.connected and player.selected then
+      -- game.print(player.selected.name)
+      if player.selected == entity then
+        return true
+      end
+    end
+  end
+
+  return false
+end
+
+function Handler.on_tick(event)
+  for struct_id, _ in pairs(storage.active_struct_ids) do
+    local struct = storage.structs[struct_id]
+    assert(struct)
+
+    -- during the first tick(s?) the player is still selecting the normal combinator
+    if (not selected_by_any_player(struct.alchemical_combinator_active)) and (not selected_by_any_player(struct.alchemical_combinator)) then
+      storage.active_struct_ids[struct_id] = nil
+
+      struct.alchemical_combinator.surface.play_sound{
+        path = "alchemical-combinator-uncharge",
+        position = struct.alchemical_combinator.position,
+      }
+
+      struct.alchemical_combinator_active.destroy()
+      struct.alchemical_combinator_active = nil
+    end
+  end
+end
+
+script.on_event(defines.events.on_tick, Handler.on_tick)
 
 require("scripts.trivial-event-handlers")

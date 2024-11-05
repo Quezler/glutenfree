@@ -25,6 +25,7 @@ Date: ????
     - Grab the red and green signals for the hidden surface
     - Prepare the blacklist combinator and decider filter entities
     - Cleanup storage when their respective entities die
+    - Move deselection cleanup to on_tick
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04
