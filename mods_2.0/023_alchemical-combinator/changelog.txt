@@ -13,6 +13,7 @@ Date: ????
     - When opening the active variant, open the gui of the normal one
     - Make active sidebar less weird by showing the sprite, no shadow tho
     - Begin conversion into struct
+    - Always lookup struct via id (unit_number is ambiguous when things consist of multiple entities)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04

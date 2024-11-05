@@ -6,17 +6,24 @@
 local Handler = {}
 
 script.on_init(function()
+  storage.index = 0
   storage.structs = {}
-  storage.entity_that_owns = {}
+
+  storage.alchemical_combinator_to_struct_id = {}
+  storage.alchemical_combinator_active_to_struct_id = {}
 end)
 
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
+  storage.index = storage.index + 1
 
-  storage.structs[entity.unit_number] = {
-    entity = entity,
-    entity_active = nil,
+  storage.structs[storage.index] = {
+    -- index = storage.index,
+    alchemical_combinator = entity,
+    alchemical_combinator_active = nil,
   }
+
+  storage.alchemical_combinator_to_struct_id[entity.unit_number] = storage.index
 end
 
 for _, event in ipairs({
@@ -45,7 +52,9 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   local selected = player.selected
 
   if selected and selected.name == "alchemical-combinator" then
-    local struct = storage.structs[selected.unit_number]
+    local struct_id = storage.alchemical_combinator_to_struct_id[selected.unit_number]
+    assert(struct_id)
+    local struct = storage.structs[struct_id]
     assert(struct)
 
     local active = selected.surface.create_entity{
@@ -65,14 +74,15 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
       render_layer = "higher-object-under",
     }
 
-    struct.entity_active = active
-    storage.entity_that_owns[active.unit_number] = selected
+    struct.alchemical_combinator_active = active
+    storage.alchemical_combinator_active_to_struct_id[active.unit_number] = struct_id
     return
   end
 
   if selected and selected.name == "alchemical-combinator-active" then
-    local unit_number = storage.entity_that_owns[selected.unit_number].unit_number
-    local struct = storage.structs[unit_number]
+    local struct_id = storage.alchemical_combinator_active_to_struct_id[selected.unit_number]
+    assert(struct_id)
+    local struct = storage.structs[struct_id]
     assert(struct)
 
     player.play_sound{
@@ -82,8 +92,9 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   end
 
   if event.last_entity and event.last_entity.name == "alchemical-combinator-active" then
-    local unit_number = storage.entity_that_owns[event.last_entity.unit_number].unit_number
-    local struct = storage.structs[unit_number]
+    local struct_id = storage.alchemical_combinator_active_to_struct_id[event.last_entity.unit_number]
+    assert(struct_id)
+    local struct = storage.structs[struct_id]
     assert(struct)
 
     player.play_sound{
@@ -92,7 +103,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     }
 
     event.last_entity.destroy()
-    struct.entity_active = nil
+    struct.alchemical_combinator_active = nil
   end
 end)
 
@@ -101,6 +112,11 @@ script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
 
   if entity and entity.name == "alchemical-combinator-active" then
-    player.opened = assert(storage.entity_that_owns[entity.unit_number])
+    local struct_id = storage.alchemical_combinator_active_to_struct_id[entity.unit_number]
+    assert(struct_id)
+    local struct = storage.structs[struct_id]
+    assert(struct)
+
+    player.opened = struct.entity
   end
 end)
