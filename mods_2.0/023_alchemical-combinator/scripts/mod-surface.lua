@@ -42,24 +42,27 @@ function ModSurface.on_gui_closed(event)
       end
     end
 
-    for _, arithmetic in ipairs(struct.arithmetics) do
-      arithmetic.destroy()
-    end
-
     local mod_surface = game.surfaces[ModSurface.name]
     local to_outside_green = struct.decider.get_wire_connector(defines.wire_connector_id.combinator_output_green, false)
     local to_outside_red   = struct.decider.get_wire_connector(defines.wire_connector_id.combinator_output_red  , false)
     local to_inside_red    = struct.decider.get_wire_connector(defines.wire_connector_id.combinator_input_red   , false)
 
     for i, condition in pairs(struct.conditions) do
-      local arithmetic = mod_surface.create_entity{
-        name = "arithmetic-combinator",
-        force = "neutral",
-        position = {struct_id - 1, -4 + (-2 * i)},
-        direction = defines.direction.south
-      }
-      assert(arithmetic)
-      table.insert(struct.arithmetics, arithmetic)
+      local arithmetic = struct.arithmetics[i]
+      if arithmetic == nil then
+        arithmetic = mod_surface.create_entity{
+          name = "arithmetic-combinator",
+          force = "neutral",
+          position = {struct_id - 1, -4 + (-2 * i)},
+          direction = defines.direction.south
+        }
+        assert(arithmetic)
+        table.insert(struct.arithmetics, arithmetic)
+
+        assert(arithmetic.get_wire_connector(defines.wire_connector_id.combinator_input_red, false).connect_to(to_inside_red, false))
+        assert(arithmetic.get_wire_connector(defines.wire_connector_id.combinator_output_red, false).connect_to(to_outside_red, false))
+        assert(arithmetic.get_wire_connector(defines.wire_connector_id.combinator_output_green, false).connect_to(to_outside_green, false))
+      end
 
       arithmetic.get_control_behavior().parameters = {
         first_signal = condition.first_signal,
@@ -74,10 +77,12 @@ function ModSurface.on_gui_closed(event)
           red = true
         }
       }
+    end
 
-      assert(arithmetic.get_wire_connector(defines.wire_connector_id.combinator_input_red, false).connect_to(to_inside_red, false))
-      assert(arithmetic.get_wire_connector(defines.wire_connector_id.combinator_output_red, false).connect_to(to_outside_red, false))
-      assert(arithmetic.get_wire_connector(defines.wire_connector_id.combinator_output_green, false).connect_to(to_outside_green, false))
+    -- purge all the arithmetic combinators that were not used
+    for i = #struct.arithmetics, #struct.conditions + 1, -1 do
+      struct.arithmetics[i].destroy()
+      struct.arithmetics[i] = nil
     end
 
     ModSurface.write_parameters_back(struct)
