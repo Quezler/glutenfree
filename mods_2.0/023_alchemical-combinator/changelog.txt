@@ -27,6 +27,7 @@ Date: ????
     - Cleanup storage when their respective entities die
     - Move deselection cleanup to on_tick
     - Read new conditions into struct when closing gui
+    - Populate the blacklist
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04

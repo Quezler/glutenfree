@@ -16,6 +16,28 @@ function ModSurface.on_gui_closed(event)
       })
     end
 
+    local constant_cb = struct.constant.get_control_behavior()
+
+    -- making a new one ensures all the old ones are overwritten in case the total index count is lower
+    constant_cb.remove_section(1)
+    local section = constant_cb.add_section()
+
+    local seen = {}
+    for i, condition in pairs(struct.conditions) do
+      local first_signal = condition.first_signal
+      if first_signal then
+        local value = {type = first_signal.type or "item", name = first_signal.name, quality = first_signal.quality or "normal", comparator = '='}
+        local seen_key = value.type .. value.name .. value.quality
+        if seen[seen_key] == nil then
+          seen[seen_key] = true
+          section.set_slot(i, {
+            value = value,
+            min = 1,
+          })
+        end
+      end
+    end
+
     ModSurface.write_parameters_back(struct)
   end
 end
