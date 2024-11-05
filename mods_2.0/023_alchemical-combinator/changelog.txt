@@ -37,6 +37,7 @@ Date: ????
     - Refractor to support entity settings pasted
     - Support copying onto -active
     - Attempt to hijack the entity settings copy event
+    - Keep active active whilst it is a copy source
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 04

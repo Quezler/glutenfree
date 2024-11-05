@@ -24,8 +24,6 @@ script.on_init(function()
 
   storage.active_struct_ids = {}
 
-  storage.player_copying_at_tick = {}
-
   local mod_surface = game.surfaces[mod_surface_name]
   if mod_surface then
     for _, entity in ipairs(mod_surface.find_entities_filtered{}) do
@@ -153,8 +151,6 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     local struct = storage.structs[struct_id]
     assert(struct)
 
-    if struct.alchemical_combinator_active then return end
-
     local active = selected.surface.create_entity{
       name = "alchemical-combinator-active",
       force = selected.force,
@@ -164,6 +160,8 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     }
     assert(active)
     active.last_user = selected.last_user
+
+    active.get_control_behavior().parameters = selected.get_control_behavior().parameters
 
     local green_in_a = selected.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
     local green_in_b =   active.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
@@ -248,12 +246,19 @@ end)
 
 local function selected_by_any_player(entity)
   for _, player in ipairs(game.connected_players) do
-    if player.connected and player.selected then
-      -- game.print(player.selected.name)
-      if player.selected == entity then
+    if player.connected then
+      if player.selected then
+        -- game.print(player.selected.name)
+        if player.selected == entity then
+          return true
+        end
+      end
+
+      if player.entity_copy_source and player.entity_copy_source == entity then
         return true
       end
     end
+
   end
 
   return false
@@ -301,16 +306,6 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     local struct = storage.structs[struct_id]
 
     AlchemicalCombinator.reread(struct)
-  end
-end)
-
-script.on_event("alchemical-combinator-about-to-copy", function(event)
-  local player = game.get_player(event.player_index)
-  local selected = player.selected
-
-  if player.selected and player.selected.name == "alchemical-combinator-active" then
-    storage.player_copying_at_tick[player.index] = event.tick
-    player.selected.destroy()
   end
 end)
 
