@@ -9,6 +9,27 @@ local function get_starter_pack_name(platform_hub)
   error(string.format("no code yet to resolve the starter pack for %s.", platform.hub.name))
 end
 
+local function copy_hub_as_ghost(old_surface, new_surface)
+  local inventory = game.create_inventory(1)
+  inventory.insert({name = "blueprint"})
+  inventory[1].create_blueprint{
+    surface = old_surface,
+    force = old_surface.platform.force,
+    area = {{-1, -1}, {1, 1}}, -- the hub should be somewhere in the center
+  }
+
+  local blueprint_entities = inventory[1].get_blueprint_entities() or {}
+  assert(#blueprint_entities == 1)
+  assert(blueprint_entities[1].name == "space-platform-hub", string.format("unkown space platform hub name %s.", blueprint_entities[1].name))
+
+  inventory[1].build_blueprint{
+    surface = new_surface,
+    force = old_surface.platform.force,
+    position = {0, 0},
+  }
+  inventory.destroy()
+end
+
 script.on_event(defines.events.on_entity_died, function(event)
   if event.entity.name == "space-platform-hub" then
     -- game.print(event.entity.name)
@@ -65,6 +86,8 @@ script.on_event(defines.events.on_entity_died, function(event)
       expand_map = true,
       create_build_effect_smoke = false,
     }
+
+    copy_hub_as_ghost(old_surface, new_surface)
   end
 end)
 
