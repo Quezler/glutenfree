@@ -1,4 +1,6 @@
--- cancel_deletion()
+script.on_init(function()
+  storage.deathrattles = {}
+end)
 
 -- local space_platform_max_size = {{-1000000, -200}, {1000000, 1000000}}
 local space_platform_max_size = {{-1000, -1000}, {1000, 1000}}
@@ -22,12 +24,14 @@ local function copy_hub_as_ghost(old_surface, new_surface)
   assert(#blueprint_entities == 1)
   assert(blueprint_entities[1].name == "space-platform-hub", string.format("unkown space platform hub name %s.", blueprint_entities[1].name))
 
-  inventory[1].build_blueprint{
+  local built_entities = inventory[1].build_blueprint{
     surface = new_surface,
     force = old_surface.platform.force,
     position = {0, 0},
   }
   inventory.destroy()
+
+  return built_entities[1]
 end
 
 script.on_event(defines.events.on_entity_died, function(event)
@@ -87,7 +91,8 @@ script.on_event(defines.events.on_entity_died, function(event)
       create_build_effect_smoke = false,
     }
 
-    copy_hub_as_ghost(old_surface, new_surface)
+    local new_hub_ghost = copy_hub_as_ghost(old_surface, new_surface)
+    storage.deathrattles[script.register_on_object_destroyed(new_hub_ghost)] = {platform = space_platform}
   end
 end)
 
@@ -100,3 +105,10 @@ end)
 -- end, {
 --   {filter = "type", type = "space-platform-hub"},
 -- })
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    deathrattle.platform.destroy(0)
+  end
+end)
