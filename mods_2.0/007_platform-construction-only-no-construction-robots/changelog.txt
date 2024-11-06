@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.6
+Version: 0.0.7
 Date: ????
+  Info:
+    - Pull the robot_order_queue into lua
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2024. 11. 04
   Info:
     - Begin the animation when a robot's next order is to pick up construction items
     - Stash version uploaded to https://forums.factorio.com/viewtopic.php?f=7&t=119764

@@ -15,12 +15,13 @@ function Handler.on_tick_robots(event)
 
   for _, logistic_network in ipairs(logistic_networks) do
     for _, construction_robot in ipairs(logistic_network.construction_robots) do
-      local robot_order = construction_robot.robot_order_queue[1]
+      local robot_order_queue = construction_robot.robot_order_queue
+      local robot_order = robot_order_queue[1]
 
       if robot_order and robot_order.target then -- target can sometimes be optional
 
         if robot_order.type == defines.robot_order_type.pickup then
-          local next_order = construction_robot.robot_order_queue[2]
+          local next_order = robot_order_queue[2]
           if next_order and next_order.type == defines.robot_order_type.construct and next_order.target then
             Handler.request_platform_animation_for(next_order.target)
           end
