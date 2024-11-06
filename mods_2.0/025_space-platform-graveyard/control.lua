@@ -3,6 +3,12 @@
 -- local space_platform_max_size = {{-1000000, -200}, {1000000, 1000000}}
 local space_platform_max_size = {{-1000, -1000}, {1000, 1000}}
 
+-- https://forums.factorio.com/120077
+local function get_starter_pack_name(platform_hub)
+  if platform_hub.name == "space-platform-hub" then return "space-platform-starter-pack" end
+  error(string.format("no code yet to resolve the starter pack for %s.", platform.hub.name))
+end
+
 script.on_event(defines.events.on_entity_died, function(event)
   if event.entity.name == "space-platform-hub" then
     -- game.print(event.entity.name)
@@ -29,14 +35,16 @@ script.on_event(defines.events.on_entity_died, function(event)
     --   always_include_tiles = true,
     -- }
 
-    -- game.print(event.entity.surface.platform.starter_pack)
+    local platform = event.entity.surface.platform
+    assert(platform)
+
     local space_platform = event.entity.force.create_space_platform{
-      name = event.entity.surface.platform.name,
+      name = platform.name,
       planet = "space-platform-graveyard",
-      -- starter_pack = event.entity.surface.platform.starter_pack, -- https://forums.factorio.com/120077
-      starter_pack = "space-platform-starter-pack",
+      starter_pack = get_starter_pack_name(event.entity), -- .hub is already nil on the platform
     }
 
+    assert(space_platform)
     space_platform.apply_starter_pack()
   end
 end)
