@@ -11,6 +11,7 @@ Date: ????
     - Cloning deleted the hub, surface still exists so we give it a platform ghost
     - Remove the graveyard platform when deleting the ghost hub
     - Preserve the schedule
+    - Teleport players on that surface to the ghost platform
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 06

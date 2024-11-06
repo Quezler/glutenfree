@@ -95,6 +95,16 @@ script.on_event(defines.events.on_entity_died, function(event)
 
     local new_hub_ghost = copy_hub_as_ghost(old_surface, new_surface)
     storage.deathrattles[script.register_on_object_destroyed(new_hub_ghost)] = {platform = space_platform}
+
+    for _, player in pairs(game.players) do
+      if player.surface == old_surface then -- perhaps also check if their controller is remote first?
+        -- player.teleport(player.position, new_surface)
+        player.set_controller{
+          type = defines.controllers.remote,
+          surface = new_surface
+        }
+      end
+    end
   end
 end)
 
