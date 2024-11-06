@@ -16,23 +16,14 @@ function Handler.on_tick_robots(event)
     if construction_robot.valid then
       local robot_order_queue = construction_robot.robot_order_queue
       local this_order = robot_order_queue[1]
-      local next_order = robot_order_queue[2]
-      -- game.print(serpent.line(this_order))
 
       if this_order and this_order.target then -- target can sometimes be optional
         -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
         -- looks like ->activeNeighbourForcesSet/show-active-forces-around debug is rather generous btw
         assert(construction_robot.teleport(this_order.target.position))
-      else
-        game.print('no order')
-        return
-      end
-
-      game.print(serpent.line(next_order))
-
-      if next_order and next_order.type == defines.robot_order_type.construct and next_order.target then
-        assert(this_order.type == defines.robot_order_type.pickup)
-        Handler.request_platform_animation_for(next_order.target)
+        if this_order.type == defines.robot_order_type.construct then
+          Handler.request_platform_animation_for(this_order.target)
+        end
       end
     else
       storage.construction_robots[unit_number] = nil
