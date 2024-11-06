@@ -13,17 +13,21 @@ end)
 
 function Handler.on_tick_robots(event)
   for unit_number, construction_robot in pairs(storage.construction_robots) do
-    if construction_robot.valid then
-      local robot_order_queue = construction_robot.robot_order_queue
+    local entity = construction_robot.entity
+    if entity.valid then
+      local robot_order_queue = entity.robot_order_queue
       local this_order = robot_order_queue[1]
 
       if this_order and this_order.target then -- target can sometimes be optional
         -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
         -- looks like ->activeNeighbourForcesSet/show-active-forces-around debug is rather generous btw
-        assert(construction_robot.teleport(this_order.target.position))
+        assert(entity.teleport(this_order.target.position))
         if this_order.type == defines.robot_order_type.construct then
           Handler.request_platform_animation_for(this_order.target)
         end
+      elseif construction_robot.teleported_to_starting_position == false then
+        construction_robot.teleported_to_starting_position = true
+        entity.teleport(construction_robot.starting_position)
       end
     else
       storage.construction_robots[unit_number] = nil
@@ -216,6 +220,10 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   assert(construction_robot)
   assert(construction_robot.name == "construction-robot")
 
-  storage.construction_robots[construction_robot.unit_number] = construction_robot
+  storage.construction_robots[construction_robot.unit_number] = {
+    entity = construction_robot,
+    starting_position = construction_robot.position,
+    teleported_to_starting_position = false,
+  }
 end)
 

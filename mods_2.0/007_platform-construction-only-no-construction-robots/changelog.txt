@@ -9,6 +9,7 @@ Date: ????
     - Improve performance by like a quadrillion that way
     - Attempt to optimize the if orders
     - Keep it simple and only check for the current order
+    - Teleport robots once to where they came from when out of tasks
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2024. 11. 04
