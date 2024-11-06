@@ -7,6 +7,7 @@ Date: ????
     - Profile some more
     - Trigger a created event for new construction bots, so we won't need to check every network in existance
     - Improve performance by like a quadrillion that way
+    - Attempt to optimize the if orders
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2024. 11. 04
