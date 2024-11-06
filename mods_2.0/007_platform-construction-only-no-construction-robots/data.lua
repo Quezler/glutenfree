@@ -1,16 +1,15 @@
 local construction_robot = data.raw["construction-robot"]["construction-robot"]
 
 local function turn_construction_robots_invisible()
-  construction_robot.idle = util.empty_sprite()
-  -- construction_robot.idle_with_cargo = util.empty_sprite() -- logistic robot only
-  construction_robot.in_motion = util.empty_sprite()
-  -- construction_robot.in_motion_with_cargo = util.empty_sprite() -- logistic robot only
-  construction_robot.shadow_idle = util.empty_sprite()
-  -- construction_robot.shadow_idle_with_cargo = util.empty_sprite() -- logistic robot only
-  construction_robot.shadow_in_motion = util.empty_sprite()
-  -- construction_robot.shadow_in_motion_with_cargo = util.empty_sprite() -- logistic robot only
-  construction_robot.working = util.empty_sprite()
-  construction_robot.shadow_working = util.empty_sprite()
+  construction_robot.idle = nil
+  construction_robot.in_motion = nil
+  construction_robot.shadow_idle = nil
+  construction_robot.shadow_in_motion = nil
+  construction_robot.working = nil
+  construction_robot.shadow_working = nil
+
+  construction_robot.sparks = nil
+  construction_robot.smoke = nil
 end
 
 turn_construction_robots_invisible()
