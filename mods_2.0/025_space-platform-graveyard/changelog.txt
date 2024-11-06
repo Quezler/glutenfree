@@ -13,6 +13,7 @@ Date: ????
     - Preserve the schedule
     - Teleport players on that surface to the ghost platform
     - Cleanup code
+    - Ask chatgtp for the bounding box
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 06

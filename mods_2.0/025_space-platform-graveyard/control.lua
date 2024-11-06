@@ -3,7 +3,7 @@ script.on_init(function()
 end)
 
 -- local space_platform_max_size = {{-1000000, -200}, {1000000, 1000000}}
-local space_platform_max_size = {{-1000, -1000}, {1000, 1000}}
+-- local space_platform_max_size = {{-1000, -1000}, {1000, 1000}}
 
 -- https://forums.factorio.com/120077
 local function get_starter_pack_name(platform_hub)
@@ -34,6 +34,41 @@ local function copy_hub_as_ghost(old_surface, new_surface)
   return built_entities[1]
 end
 
+-- local function get_area_to_clone(surface)
+--   local min_x = 0
+--   local max_x = 0
+--   local min_y = 0
+--   local max_y = 0
+--   for chunk in some_surface.get_chunks() do
+--     game.player.print("x: " .. chunk.x .. ", y: " .. chunk.y)
+--     game.player.print("area: " .. serpent.line(chunk.area))
+--   end  
+-- end
+
+local function get_bounding_box_for_all_chunks(surface)
+  -- Initialize bounding box coordinates to extreme values
+  local min_x, min_y = math.huge, math.huge
+  local max_x, max_y = -math.huge, -math.huge
+
+  -- Iterate over all chunks on the surface
+  for chunk in surface.get_chunks() do
+      -- Calculate chunk boundaries
+      local chunk_left_top_x = chunk.x * 32
+      local chunk_left_top_y = chunk.y * 32
+      local chunk_right_bottom_x = (chunk.x + 1) * 32
+      local chunk_right_bottom_y = (chunk.y + 1) * 32
+
+      -- Update the min and max boundaries for the encompassing bounding box
+      min_x = math.min(min_x, chunk_left_top_x)
+      max_x = math.max(max_x, chunk_right_bottom_x)
+      min_y = math.min(min_y, chunk_left_top_y)
+      max_y = math.max(max_y, chunk_right_bottom_y)
+  end  
+
+  -- Return the encompassing bounding box
+  return { left_top = { x = min_x, y = min_y }, right_bottom = { x = max_x, y = max_y } }
+end
+
 script.on_event(defines.events.on_entity_died, function(event)
   local platform = event.entity.surface.platform
   assert(platform)
@@ -51,9 +86,11 @@ script.on_event(defines.events.on_entity_died, function(event)
   local old_surface = event.entity.surface
   local new_surface = space_platform.surface
 
+  local area = get_bounding_box_for_all_chunks(event.entity.surface)
+
   old_surface.clone_area{
-    source_area = space_platform_max_size,
-    destination_area = space_platform_max_size,
+    source_area = area,
+    destination_area = area,
 
     destination_surface = new_surface,
     destination_force = event.entity.force,
