@@ -46,6 +46,25 @@ script.on_event(defines.events.on_entity_died, function(event)
 
     assert(space_platform)
     space_platform.apply_starter_pack()
+
+    local old_surface = event.entity.surface
+    local new_surface = space_platform.surface
+
+    old_surface.clone_area{
+      source_area = space_platform_max_size,
+      destination_area = space_platform_max_size,
+      destination_surface = new_surface,
+      destination_force = event.entity.force,
+
+      clone_tiles = true,
+      clone_entities = true,
+      clone_decoratives = true,
+      clear_destination_entities = true,
+      clear_destination_decoratives = true,
+
+      expand_map = true,
+      create_build_effect_smoke = false,
+    }
   end
 end)
 

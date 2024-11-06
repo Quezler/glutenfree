@@ -7,6 +7,7 @@ Date: ????
     - Keep the platform on life support when it dies
     - Create a platform in graveyard orbit
     - Cleanup 〃
+    - Clone the old platform onto the new platform
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 06
