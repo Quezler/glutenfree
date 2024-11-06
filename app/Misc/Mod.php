@@ -60,6 +60,6 @@ class Mod
 
     public function getReadmePrefix()
     {
-        return "[![shield](https://img.shields.io/badge/mod_directory-white?logo=github&label=git)](https://github.com/Quezler/glutenfree/tree/main/mods/". $this->name .")\n\n";
+        return "[![shield](https://img.shields.io/badge/mod's_directory-white?logo=github&label=git)](https://github.com/Quezler/glutenfree/tree/main/mods/". $this->name .")\n\n";
     }
 }
