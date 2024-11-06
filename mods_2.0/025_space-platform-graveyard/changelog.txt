@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Try to see of swapping can cancel deletion
+    - See if on_entity_damaged can intercept the last hp
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 06

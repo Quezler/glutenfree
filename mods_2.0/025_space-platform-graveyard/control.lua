@@ -30,3 +30,9 @@ script.on_event(defines.events.on_entity_died, function(event)
     -- }
   end
 end)
+
+script.on_event(defines.events.on_entity_damaged, function(event)
+  if event.entity.name == "space-platform-hub" then
+    event.entity.health = 1
+  end
+end)
