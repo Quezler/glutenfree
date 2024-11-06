@@ -57,4 +57,9 @@ class Mod
 
         passthru(sprintf("(cd %s && zip -FSr %s %s)", __GLUTENFREE__ . '/build/', "{$dest}.zip", $this->zip_name_without_extension()));
     }
+
+    public function getReadmePrefix()
+    {
+        return "[![shield](https://img.shields.io/badge/mod_directory-white?logo=github&label=git)](https://github.com/Quezler/glutenfree/tree/main/mods/". $this->name .")\n\n";
+    }
 }

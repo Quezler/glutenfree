@@ -94,8 +94,14 @@ class ExpansionMod
         return $response->getBody()->getContents();
     }
 
+    private function getReadmePrefix()
+    {
+        return "[![shield](https://img.shields.io/badge/mod_directory-white?logo=github&label=git)](https://github.com/Quezler/glutenfree/tree/main/mods_2.0/". $this->directory .")\n\n";
+    }
+
     public function editDetails(): ResponseInterface
     {
+        $readme_prefix = $this->getReadmePrefix();
         return $response = (new Client)->post('https://mods.factorio.com/api/v2/mods/edit_details', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $_ENV['FACTORIO_API_KEY'],
@@ -104,7 +110,7 @@ class ExpansionMod
                 'mod' => $this->name,
                 'title' => $this->info()['title'],
                 'summary' => $this->info()['description'],
-                'description' => file_get_contents("{$this->get_pathname()}/README.md"),
+                'description' => $this->getReadmePrefix() . file_get_contents("{$this->get_pathname()}/README.md"),
                 // category
                 // tags
                 // license

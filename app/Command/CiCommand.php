@@ -62,7 +62,8 @@ class CiCommand extends Command
         }
 
         // try to update text
-        $readme_prefix = file_get_contents(__GLUTENFREE__ . '/mods/readme_prefix.txt');
+
+        $notice_for_all_1_x_mods = file_get_contents(__GLUTENFREE__ . '/mods/readme_prefix.txt');
         foreach ($mods as $mod) {
             $io->info($mod->getRelativePathname());
             $mod = new Mod($mod->getRelativePathname());
@@ -76,7 +77,7 @@ class CiCommand extends Command
                         'mod' => $mod->name,
                         'title' => $mod->info()['title'],
                         'summary' => $mod->info()['description'],
-                        'description' => $readme_prefix . $mod->readme(),
+                        'description' => $mod->getReadmePrefix() . $notice_for_all_1_x_mods . $mod->readme(),
                         'homepage' => 'https://discord.gg/ktZNgJcaVA',
                     ]
                 ]);
