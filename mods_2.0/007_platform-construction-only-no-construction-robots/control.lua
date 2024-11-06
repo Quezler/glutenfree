@@ -3,50 +3,38 @@ local flib_bounding_box = require("__flib__.bounding-box")
 local Handler = {}
 
 script.on_init(function()
+  storage.construction_robots = {}
   storage.entities_being_built = {}
 end)
 
 script.on_configuration_changed(function()
-  storage.entities_being_built = storage.entities_being_built or {}
+
 end)
 
 function Handler.on_tick_robots(event)
-  -- local touched = {
-  --   surfaces = 0,
-  --   networks = 0,
-  --   bots = 0,
-  -- }
+  for unit_number, construction_robot in pairs(storage.construction_robots) do
+    if construction_robot.valid then
+      local robot_order_queue = construction_robot.robot_order_queue
+      local robot_order = robot_order_queue[1]
+      -- game.print(serpent.line(robot_order))
 
-  for _, force in pairs(game.forces) do
-    for surface_name, logistic_networks in pairs(force.logistic_networks) do
-      -- touched.surfaces = touched.surfaces + 1
-      for _, logistic_network in ipairs(logistic_networks) do
-        -- touched.networks = touched.networks + 1
-        for _, construction_robot in ipairs(logistic_network.construction_robots) do
-          -- touched.bots = touched.bots + 1
-          local robot_order_queue = construction_robot.robot_order_queue
-          local robot_order = robot_order_queue[1]
-          -- game.print(serpent.line(robot_order))
+      if robot_order and robot_order.target then -- target can sometimes be optional
 
-          if robot_order and robot_order.target then -- target can sometimes be optional
-
-            if robot_order.type == defines.robot_order_type.pickup then
-              local next_order = robot_order_queue[2]
-              if next_order and next_order.type == defines.robot_order_type.construct and next_order.target then
-                Handler.request_platform_animation_for(next_order.target)
-              end
-            end
-
-            -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
-            -- looks like ->activeNeighbourForcesSet/show-active-forces-around debug is rather generous btw
-            assert(construction_robot.teleport(robot_order.target.position))
+        if robot_order.type == defines.robot_order_type.pickup then
+          local next_order = robot_order_queue[2]
+          if next_order and next_order.type == defines.robot_order_type.construct and next_order.target then
+            Handler.request_platform_animation_for(next_order.target)
           end
         end
+
+        -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
+        -- looks like ->activeNeighbourForcesSet/show-active-forces-around debug is rather generous btw
+        assert(construction_robot.teleport(robot_order.target.position))
       end
+    else
+      storage.construction_robots[unit_number] = nil
     end
   end
-
-  -- log('touched: ' .. serpent.line(touched, {sortkeys = false}))
 end
 
 local function get_tilebox(bounding_box)
@@ -223,7 +211,7 @@ function Handler.on_tick_entities_being_built(event)
 end
 
 script.on_event(defines.events.on_tick, function(event)
-  -- Handler.on_tick_robots(event)
+  Handler.on_tick_robots(event)
   Handler.on_tick_entities_being_built(event)
 end)
 
@@ -234,6 +222,6 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   assert(construction_robot)
   assert(construction_robot.name == "construction-robot")
 
-  game.print(construction_robot.unit_number)
+  storage.construction_robots[construction_robot.unit_number] = construction_robot
 end)
 
