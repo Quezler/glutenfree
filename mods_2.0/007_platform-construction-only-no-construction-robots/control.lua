@@ -101,7 +101,19 @@ function Handler.request_platform_animation_for(entity)
     entity = entity,
     entire_animation_done_at = entire_animation_done_at,
 
+    -- by putting a colliding entity in the center of the building site we'll force the construction robot to wait (between that tick and a second)
+    scaffolding_up_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + 17 * TICKS_PER_FRAME,
+    elevator_music = nil,
+
     animations = {},
+  }
+
+  entity_being_built.elevator_music = surface.create_entity{
+    name = "ghost-being-constructed",
+    force = "neutral",
+    position = entity.position,
+    create_build_effect_smoke = false,
+    preserve_ghosts_and_corpses = true,
   }
 
   for _, position in ipairs(tilebox) do
@@ -193,6 +205,10 @@ function Handler.on_tick_entities_being_built(event)
       storage.entities_being_built[_] = nil
       -- game.print("done")
     else
+      if entity_being_built.scaffolding_up_at == event.tick then
+        entity_being_built.elevator_music.destroy()
+      end
+
       for _, animation in ipairs(entity_being_built.animations) do
         local animation_offset = animation.animation_offset_at_tick[event.tick]
         if animation_offset ~= nil then

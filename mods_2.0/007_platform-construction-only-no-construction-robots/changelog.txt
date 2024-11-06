@@ -12,6 +12,7 @@ Date: ????
     - Teleport robots once to where they came from when out of tasks
     - Hide the construction bots from the naked eye
     - Slow down the frames between building
+    - Make construction robots wait until the scaffolding is up
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2024. 11. 04
