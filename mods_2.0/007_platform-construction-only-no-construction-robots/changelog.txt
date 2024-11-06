@@ -5,6 +5,7 @@ Date: ????
     - Pull the robot_order_queue into lua
     - Check for all networks, for all surfaces, for all forces, and profile it
     - Profile some more
+    - Trigger a created event for new construction bots, so we won't need to check every network in existance
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2024. 11. 04

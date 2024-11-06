@@ -37,3 +37,20 @@ make_animation_prototype("front_left", "body")
 
 make_animation_prototype("front_right", "top")
 make_animation_prototype("front_right", "body")
+
+local created_effect = {
+  type = "direct",
+  action_delivery = {
+    type = "instant",
+    source_effects = {
+      {
+        type = "script",
+        effect_id = "construction-robot-created",
+      },
+    }
+  }
+}
+
+local construction_robot = data.raw["construction-robot"]["construction-robot"]
+assert(construction_robot.created_effect == nil)
+construction_robot.created_effect = created_effect

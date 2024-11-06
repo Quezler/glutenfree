@@ -11,19 +11,19 @@ script.on_configuration_changed(function()
 end)
 
 function Handler.on_tick_robots(event)
-  local touched = {
-    surfaces = 0,
-    networks = 0,
-    bots = 0,
-  }
+  -- local touched = {
+  --   surfaces = 0,
+  --   networks = 0,
+  --   bots = 0,
+  -- }
 
   for _, force in pairs(game.forces) do
     for surface_name, logistic_networks in pairs(force.logistic_networks) do
-      touched.surfaces = touched.surfaces + 1
+      -- touched.surfaces = touched.surfaces + 1
       for _, logistic_network in ipairs(logistic_networks) do
-        touched.networks = touched.networks + 1
+        -- touched.networks = touched.networks + 1
         for _, construction_robot in ipairs(logistic_network.construction_robots) do
-          touched.bots = touched.bots + 1
+          -- touched.bots = touched.bots + 1
           local robot_order_queue = construction_robot.robot_order_queue
           local robot_order = robot_order_queue[1]
           -- game.print(serpent.line(robot_order))
@@ -46,7 +46,7 @@ function Handler.on_tick_robots(event)
     end
   end
 
-  log('touched: ' .. serpent.line(touched, {sortkeys = false}))
+  -- log('touched: ' .. serpent.line(touched, {sortkeys = false}))
 end
 
 local function get_tilebox(bounding_box)
@@ -223,6 +223,17 @@ function Handler.on_tick_entities_being_built(event)
 end
 
 script.on_event(defines.events.on_tick, function(event)
-  Handler.on_tick_robots(event)
+  -- Handler.on_tick_robots(event)
   Handler.on_tick_entities_being_built(event)
 end)
+
+script.on_event(defines.events.on_script_trigger_effect, function(event)
+  if event.effect_id ~= "construction-robot-created" then return end
+
+  local construction_robot = event.target_entity
+  assert(construction_robot)
+  assert(construction_robot.name == "construction-robot")
+
+  game.print(construction_robot.unit_number)
+end)
+
