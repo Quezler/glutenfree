@@ -2,7 +2,7 @@ local quality_book = table.deepcopy(data.raw["blueprint-book"]["blueprint-book"]
 
 quality_book.name = "quality-book"
 quality_book.icon = "__quality-upgrade-planner__/graphics/icons/quality-book.png"
-quality_book.hidden_in_factoriopedia = true
+quality_book.hidden = true
 table.insert(quality_book.flags, "only-in-cursor")
 
 data:extend{quality_book}
