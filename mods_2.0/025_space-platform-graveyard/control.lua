@@ -32,7 +32,11 @@ script.on_event(defines.events.on_entity_died, function(event)
 end)
 
 script.on_event(defines.events.on_entity_damaged, function(event)
-  if event.entity.name == "space-platform-hub" then
+  if event.final_health == 0 then
+    game.print("death?")
     event.entity.health = 1
+    -- event.entity.health = 0
   end
-end)
+end, {
+  {filter = "type", type = "space-platform-hub"},
+})
