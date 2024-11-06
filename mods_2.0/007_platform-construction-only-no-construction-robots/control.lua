@@ -187,18 +187,7 @@ function Handler.request_platform_animation_for(entity)
   end
 
   storage.entities_being_built[entity.unit_number] = entity_being_built
-  -- entity.destroy()
 end
-
--- script.on_event(defines.events.on_built_entity, function(event)
---   local entity = event.entity
-
---   if entity.surface.platform then return end
---   if entity.name == "entity-ghost" then return end
---   if entity.name == "tile-ghost" then return end
-
---   Handler.request_platform_animation_for(entity)
--- end)
 
 function Handler.on_tick_entities_being_built(event)
   for _, entity_being_built in pairs(storage.entities_being_built) do
