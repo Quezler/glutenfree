@@ -4,12 +4,29 @@ local function on_created_entity(event)
   entity.direction = defines.direction.north
 end
 
-script.on_init(function(event)
+local function update_force(force)
+  local recipes = force.recipes
+  recipes["wooden-sign-post"].enabled = not recipes["display-panel"].enabled
+end
+
+local function update_forces()
+  for _, force in pairs(game.forces) do
+    update_force(force)
+  end
+end
+
+script.on_init(function()
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered({name = {'display-panel'}})) do
       on_created_entity({entity = entity})
     end
   end
+
+  update_forces()
+end)
+
+script.on_configuration_changed(function()
+  update_forces()
 end)
 
 for _, event in ipairs({
@@ -25,8 +42,7 @@ for _, event in ipairs({
 end
 
 local function on_research_toggled(event)
-  local recipes = event.research.force.recipes
-  recipes["wooden-sign-post"].enabled = not recipes["display-panel"].enabled
+  update_force(event.research.force)
 end
 
 script.on_event(defines.events.on_research_finished, on_research_toggled)
