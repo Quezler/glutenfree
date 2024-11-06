@@ -77,6 +77,7 @@ local FRAMES_BETWEEN_BUILDING = 8 * 2
 local FRAMES_BETWEEN_REMOVING = 4
 
 function Handler.request_platform_animation_for(entity)
+  if entity.name ~= "entity-ghost" then return end
   assert(entity.unit_number)
   if storage.entities_being_built[entity.unit_number] then return end
 
