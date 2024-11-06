@@ -73,7 +73,7 @@ end
 
 local TICKS_PER_FRAME = 2
 local FRAMES_BEFORE_BUILT = 16
-local FRAMES_BETWEEN_BUILDING = 8
+local FRAMES_BETWEEN_BUILDING = 8 * 2
 local FRAMES_BETWEEN_REMOVING = 4
 
 function Handler.request_platform_animation_for(entity)
