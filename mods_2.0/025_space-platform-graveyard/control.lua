@@ -72,6 +72,8 @@ script.on_event(defines.events.on_entity_died, function(event)
     assert(space_platform)
     space_platform.apply_starter_pack()
 
+    space_platform.schedule = platform.schedule
+
     local old_surface = event.entity.surface
     local new_surface = space_platform.surface
 
