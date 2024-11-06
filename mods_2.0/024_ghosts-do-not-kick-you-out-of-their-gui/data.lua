@@ -10,4 +10,5 @@ data:extend{{
 
   minable = {mining_time = 1},
   selectable_in_game = false,
+  hidden = true,
 }}
