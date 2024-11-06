@@ -11,13 +11,19 @@ script.on_configuration_changed(function()
 end)
 
 function Handler.on_tick_robots(event)
-  local bots_touched = 0
+  local touched = {
+    surfaces = 0,
+    networks = 0,
+    bots = 0,
+  }
 
   for _, force in pairs(game.forces) do
-    for _, logistic_networks in pairs(force.logistic_networks) do
+    for surface_name, logistic_networks in pairs(force.logistic_networks) do
+      touched.surfaces = touched.surfaces + 1
       for _, logistic_network in ipairs(logistic_networks) do
+        touched.networks = touched.networks + 1
         for _, construction_robot in ipairs(logistic_network.construction_robots) do
-          bots_touched = bots_touched + 1
+          touched.bots = touched.bots + 1
           local robot_order_queue = construction_robot.robot_order_queue
           local robot_order = robot_order_queue[1]
           -- game.print(serpent.line(robot_order))
@@ -40,7 +46,7 @@ function Handler.on_tick_robots(event)
     end
   end
 
-  log('bots_touched: ' .. bots_touched)
+  log('touched: ' .. serpent.line(touched, {sortkeys = false}))
 end
 
 local function get_tilebox(bounding_box)
