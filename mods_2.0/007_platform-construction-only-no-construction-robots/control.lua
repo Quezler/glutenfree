@@ -11,28 +11,36 @@ script.on_configuration_changed(function()
 end)
 
 function Handler.on_tick_robots(event)
-  local logistic_networks = game.forces["player"].logistic_networks["nauvis"] or {}
+  local bots_touched = 0
 
-  for _, logistic_network in ipairs(logistic_networks) do
-    for _, construction_robot in ipairs(logistic_network.construction_robots) do
-      local robot_order_queue = construction_robot.robot_order_queue
-      local robot_order = robot_order_queue[1]
+  for _, force in pairs(game.forces) do
+    for _, logistic_networks in pairs(force.logistic_networks) do
+      for _, logistic_network in ipairs(logistic_networks) do
+        for _, construction_robot in ipairs(logistic_network.construction_robots) do
+          bots_touched = bots_touched + 1
+          local robot_order_queue = construction_robot.robot_order_queue
+          local robot_order = robot_order_queue[1]
+          -- game.print(serpent.line(robot_order))
 
-      if robot_order and robot_order.target then -- target can sometimes be optional
+          if robot_order and robot_order.target then -- target can sometimes be optional
 
-        if robot_order.type == defines.robot_order_type.pickup then
-          local next_order = robot_order_queue[2]
-          if next_order and next_order.type == defines.robot_order_type.construct and next_order.target then
-            Handler.request_platform_animation_for(next_order.target)
+            if robot_order.type == defines.robot_order_type.pickup then
+              local next_order = robot_order_queue[2]
+              if next_order and next_order.type == defines.robot_order_type.construct and next_order.target then
+                Handler.request_platform_animation_for(next_order.target)
+              end
+            end
+
+            -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
+            -- looks like ->activeNeighbourForcesSet/show-active-forces-around debug is rather generous btw
+            assert(construction_robot.teleport(robot_order.target.position))
           end
         end
-
-        -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
-        -- looks like ->activeNeighbourForcesSet/show-active-forces-around debug is rather generous btw
-        assert(construction_robot.teleport(robot_order.target.position))
       end
     end
   end
+
+  log('bots_touched: ' .. bots_touched)
 end
 
 local function get_tilebox(bounding_box)
