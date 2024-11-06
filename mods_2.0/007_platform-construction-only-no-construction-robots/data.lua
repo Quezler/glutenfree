@@ -2,20 +2,20 @@ local construction_robot = data.raw["construction-robot"]["construction-robot"]
 
 local function turn_construction_robots_invisible()
   construction_robot.idle = util.empty_sprite()
-  -- construction_robot.idle_with_cargo = util.empty_sprite()
+  -- construction_robot.idle_with_cargo = util.empty_sprite() -- logistic robot only
   construction_robot.in_motion = util.empty_sprite()
-  -- construction_robot.in_motion_with_cargo = util.empty_sprite()
+  -- construction_robot.in_motion_with_cargo = util.empty_sprite() -- logistic robot only
   construction_robot.shadow_idle = util.empty_sprite()
-  -- construction_robot.shadow_idle_with_cargo = util.empty_sprite()
+  -- construction_robot.shadow_idle_with_cargo = util.empty_sprite() -- logistic robot only
   construction_robot.shadow_in_motion = util.empty_sprite()
-  -- construction_robot.shadow_in_motion_with_cargo = util.empty_sprite()
+  -- construction_robot.shadow_in_motion_with_cargo = util.empty_sprite() -- logistic robot only
   construction_robot.working = util.empty_sprite()
   construction_robot.shadow_working = util.empty_sprite()
-
-  construction_robot.icon_draw_specification = {scale = 0}
 end
 
 turn_construction_robots_invisible()
+construction_robot.icon_draw_specification = {scale = 0}
+construction_robot.selectable_in_game = false
 
 local space_platform_entity_build_animations = require("__space-age__/graphics/entity/space-platform-build-anim/entity-build-animations")
 
