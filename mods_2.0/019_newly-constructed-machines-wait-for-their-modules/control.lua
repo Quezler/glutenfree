@@ -217,7 +217,7 @@ end)
 -- when this code runs the proxy will already exist and have an insert plan, but it shouldn't have reached on_tick yet.
 -- nevertheless this feels incredibly fragile, but it seems to work well enough for now, lets see what the test of time says.
 function Handler.on_created_entity(event)
-  local entity = event.entity
+  local entity = event.entity or event.destination
   if entity.custom_status and entity.custom_status.label[1] == "entity-status.waiting-for-modules" then
     entity.custom_status = nil
     entity.active = true
