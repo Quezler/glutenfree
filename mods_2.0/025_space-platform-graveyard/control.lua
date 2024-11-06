@@ -8,7 +8,7 @@ local space_platform_max_size = {{-1000, -1000}, {1000, 1000}}
 -- https://forums.factorio.com/120077
 local function get_starter_pack_name(platform_hub)
   if platform_hub.name == "space-platform-hub" then return "space-platform-starter-pack" end
-  error(string.format("no code yet to resolve the starter pack for %s.", platform.hub.name))
+  error(string.format("no code yet to resolve the starter pack for %s.", platform_hub.name))
 end
 
 local function copy_hub_as_ghost(old_surface, new_surface)
@@ -22,7 +22,6 @@ local function copy_hub_as_ghost(old_surface, new_surface)
 
   local blueprint_entities = inventory[1].get_blueprint_entities() or {}
   assert(#blueprint_entities == 1)
-  assert(blueprint_entities[1].name == "space-platform-hub", string.format("unkown space platform hub name %s.", blueprint_entities[1].name))
 
   local built_entities = inventory[1].build_blueprint{
     surface = new_surface,
@@ -31,92 +30,58 @@ local function copy_hub_as_ghost(old_surface, new_surface)
   }
   inventory.destroy()
 
+  assert(#built_entities == 1)
   return built_entities[1]
 end
 
 script.on_event(defines.events.on_entity_died, function(event)
-  if event.entity.name == "space-platform-hub" then
-    -- game.print(event.entity.name)
+  local platform = event.entity.surface.platform
+  assert(platform)
 
-    -- local surface = event.entity.surface
-    -- local force = event.entity.force
-    -- local position = event.entity.position
+  local space_platform = event.entity.force.create_space_platform{
+    name = platform.name,
+    planet = "space-platform-graveyard",
+    starter_pack = get_starter_pack_name(event.entity), -- platform.hub is already nil on the platform
+  }
 
-    -- event.entity.destroy()
-    -- surface.create_entity{
-    --   name = "space-platform-hub",
-    --   force = force,
-    --   position = position,
-    -- }
-    -- surface.platform.cancel_deletion()
+  assert(space_platform)
+  space_platform.apply_starter_pack()
+  space_platform.schedule = platform.schedule
 
-    -- local player = game.players["Quezler"]
+  local old_surface = event.entity.surface
+  local new_surface = space_platform.surface
 
-    -- player.cursor_stack.set_stack({name = "blueprint", count = 1})
-    -- player.cursor_stack.create_blueprint{
-    --   surface = event.entity.surface,
-    --   force = event.entity.force,
-    --   area = space_platform_max_size,
-    --   always_include_tiles = true,
-    -- }
+  old_surface.clone_area{
+    source_area = space_platform_max_size,
+    destination_area = space_platform_max_size,
 
-    local platform = event.entity.surface.platform
-    assert(platform)
+    destination_surface = new_surface,
+    destination_force = event.entity.force,
 
-    local space_platform = event.entity.force.create_space_platform{
-      name = platform.name,
-      planet = "space-platform-graveyard",
-      starter_pack = get_starter_pack_name(event.entity), -- .hub is already nil on the platform
-    }
+    clone_tiles = true,
+    clone_entities = true,
+    clone_decoratives = true,
+    clear_destination_entities = true,
+    clear_destination_decoratives = true,
 
-    assert(space_platform)
-    space_platform.apply_starter_pack()
+    expand_map = true,
+    create_build_effect_smoke = false,
+  }
 
-    space_platform.schedule = platform.schedule
+  local new_hub_ghost = copy_hub_as_ghost(old_surface, new_surface)
+  storage.deathrattles[script.register_on_object_destroyed(new_hub_ghost)] = {platform = space_platform}
 
-    local old_surface = event.entity.surface
-    local new_surface = space_platform.surface
-
-    old_surface.clone_area{
-      source_area = space_platform_max_size,
-      destination_area = space_platform_max_size,
-      destination_surface = new_surface,
-      destination_force = event.entity.force,
-
-      clone_tiles = true,
-      clone_entities = true,
-      clone_decoratives = true,
-      clear_destination_entities = true,
-      clear_destination_decoratives = true,
-
-      expand_map = true,
-      create_build_effect_smoke = false,
-    }
-
-    local new_hub_ghost = copy_hub_as_ghost(old_surface, new_surface)
-    storage.deathrattles[script.register_on_object_destroyed(new_hub_ghost)] = {platform = space_platform}
-
-    for _, player in pairs(game.players) do
-      if player.surface == old_surface then -- perhaps also check if their controller is remote first?
-        -- player.teleport(player.position, new_surface)
-        player.set_controller{
-          type = defines.controllers.remote,
-          surface = new_surface
-        }
-      end
+  for _, player in pairs(game.players) do
+    if player.surface == old_surface and player.controller_type == defines.controllers.remote then
+      player.set_controller{
+        type = defines.controllers.remote,
+        surface = new_surface,
+      }
     end
   end
-end)
-
--- script.on_event(defines.events.on_entity_damaged, function(event)
---   if event.final_health == 0 then
---     game.print("death?")
---     event.entity.health = 1
---     -- event.entity.health = 0
---   end
--- end, {
---   {filter = "type", type = "space-platform-hub"},
--- })
+end, {
+  {filter = "type", type = "space-platform-hub"},
+})
 
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
