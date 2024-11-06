@@ -5,6 +5,7 @@ Date: ????
     - Try to see of swapping can cancel deletion
     - See if on_entity_damaged can intercept the last hp
     - Keep the platform on life support when it dies
+    - Create a platform in graveyard orbit
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 06
