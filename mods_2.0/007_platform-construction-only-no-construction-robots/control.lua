@@ -250,7 +250,7 @@ function Handler.request_platform_animation_for(entity)
       time_to_live = ttl,
       animation_offset = 0,
       animation_speed = 0,
-      render_layer = "higher-object-above",
+      render_layer = entity.ghost_type == "cargo-landing-pad" and "above-inserters" or "higher-object-above",
       visible = false,
     }
 

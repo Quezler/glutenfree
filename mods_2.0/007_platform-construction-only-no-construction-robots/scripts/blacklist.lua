@@ -33,7 +33,6 @@ local blacklisted_types = util.list_to_map({
   "electric-pole",
   "lightning-attractor",
   "agricultural-tower",
-  "cargo-landing-pad",
 })
 
 for _, entity in pairs(prototypes.entity) do
