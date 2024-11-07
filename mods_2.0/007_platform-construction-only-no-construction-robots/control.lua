@@ -73,7 +73,8 @@ local function returned_home_with_milk(construction_robot)
 end
 
 function Handler.on_tick_robots(event)
-  for unit_number, entity in pairs(storage.construction_robots) do
+  for unit_number, construction_robot in pairs(storage.construction_robots) do
+    local entity = construction_robot.entity
     if entity.valid then
       local robot_order_queue = entity.robot_order_queue
       local this_order = robot_order_queue[1]
@@ -85,8 +86,9 @@ function Handler.on_tick_robots(event)
         if this_order.type == defines.robot_order_type.construct then
           Handler.request_platform_animation_for(this_order.target)
         end
-      else
-        if returned_home_with_milk(entity) then
+      elseif this_order == nil then
+        if event.tick - 10 >= construction_robot.born_at and returned_home_with_milk(entity) then
+          log('sent bot '.. entity.unit_number ..' home on ' .. entity.surface.name .. serpent.line(entity.position))
           entity.destroy()
         end
       end
@@ -287,6 +289,9 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   assert(construction_robot)
   assert(construction_robot.name == "construction-robot")
 
-  storage.construction_robots[construction_robot.unit_number] = construction_robot
+  storage.construction_robots[construction_robot.unit_number] = {
+    entity = construction_robot,
+    born_at = event.tick, -- apparently a new robot has no tasks during its first tick, so we won't send them home with milk as a newborn.
+  }
 end)
 
