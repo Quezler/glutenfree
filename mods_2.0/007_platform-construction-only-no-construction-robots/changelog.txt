@@ -10,6 +10,7 @@ Date: ????
     - Confirm both the real and this version wait on frame 16
     - Support the landing pad by rendering some layers higher
     - Hide construction robot quality indicator
+    - Fix an editor assertion
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2024. 11. 07

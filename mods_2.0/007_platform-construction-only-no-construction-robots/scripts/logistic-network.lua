@@ -1,7 +1,7 @@
 local LogisticNetwork = {}
 
 local function remove_all_construction_robot_requests_from_roboport(entity)
-  assert(entity.type == "roboport")
+  if entity.type ~= "roboport" then return true end -- character toggling editor mode?
   local inventory = game.create_inventory(1)
   inventory.insert({name = "blueprint"})
   inventory[1].create_blueprint{
