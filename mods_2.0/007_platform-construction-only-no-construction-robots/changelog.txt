@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
-Date: ????
+Date: 2024. 11. 07
   Info:
     - Undo "teleport when done" logic since it looked janky
     - When a robot is done, try to turn them into an item
