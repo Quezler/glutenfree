@@ -8,7 +8,7 @@ local Handler = {}
 
 script.on_init(function()
   storage.construction_robots = {}
-  storage.entities_being_built = {}
+  storage.lock = {}
 
   storage.networkdata = {}
   storage.deathrattles = {}
@@ -169,7 +169,7 @@ function Handler.request_platform_animation_for(entity)
   if entity.name ~= "entity-ghost" then return end
   if blacklisted_names[entity.ghost_name] then return end
   assert(entity.unit_number)
-  if storage.entities_being_built[entity.unit_number] then return end
+  if storage.lock[entity.unit_number] then return end
 
   local tick = game.tick
   local surface = entity.surface
@@ -188,11 +188,6 @@ function Handler.request_platform_animation_for(entity)
   local remove_scaffold_delay = (largest_manhattan_distance + 4) * FRAMES_BETWEEN_BUILDING
   local entire_animation_done_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME
 
-  local entity_being_built = {
-    entity = entity,
-    entire_animation_done_at = entire_animation_done_at,
-  }
-
   -- by putting a colliding entity in the center of the building site we'll force the construction robot to wait (between that tick and a second)
   local scaffolding_up_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + 17 * TICKS_PER_FRAME
   add_task(scaffolding_up_at, {
@@ -208,31 +203,6 @@ function Handler.request_platform_animation_for(entity)
 
   for _, position in ipairs(tilebox) do
     local piece = get_piece(position.center, entity.position)
-
-    -- not 100% sure if this is a tick too soon, too late, or just right
-    local ttl = 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME
-
-    local top = rendering.draw_animation{
-      target = position.center,
-      surface = surface,
-      animation = "platform_entity_build_animations-" .. piece .. "-top",
-      time_to_live = ttl,
-      animation_offset = 0,
-      animation_speed = 0,
-      render_layer = "higher-object-above",
-      visible = false,
-    }
-
-    local body = rendering.draw_animation{
-      target = position.center,
-      surface = surface,
-      animation = "platform_entity_build_animations-" .. piece .. "-body",
-      time_to_live = ttl,
-      animation_offset = 0,
-      animation_speed = 0,
-      render_layer = is_back_piece(piece) and "lower-object-above-shadow" or "object",
-      visible = false,
-    }
 
     local animations = {top, body}
 
@@ -271,9 +241,34 @@ function Handler.request_platform_animation_for(entity)
     add_task(down_base + 13 * TICKS_PER_FRAME, {name = "offset", offset = 29, animations = animations})
     add_task(down_base + 14 * TICKS_PER_FRAME, {name = "offset", offset = 30, animations = animations})
     add_task(down_base + 15 * TICKS_PER_FRAME, {name = "offset", offset = 31, animations = animations})
+
+    local ttl = down_base - tick + 16 * TICKS_PER_FRAME
+
+    animations[1] = rendering.draw_animation{
+      target = position.center,
+      surface = surface,
+      animation = "platform_entity_build_animations-" .. piece .. "-top",
+      time_to_live = ttl,
+      animation_offset = 0,
+      animation_speed = 0,
+      render_layer = "higher-object-above",
+      visible = false,
+    }
+
+    animations[2] = rendering.draw_animation{
+      target = position.center,
+      surface = surface,
+      animation = "platform_entity_build_animations-" .. piece .. "-body",
+      time_to_live = ttl,
+      animation_offset = 0,
+      animation_speed = 0,
+      render_layer = is_back_piece(piece) and "lower-object-above-shadow" or "object",
+      visible = false,
+    }
   end
 
-  storage.entities_being_built[entity.unit_number] = entity_being_built
+  storage.lock[entity.unit_number] = true
+  add_task(entire_animation_done_at, {name = "unlock", unit_number = entity.unit_number})
 end
 
 local function do_tasks_at_tick(tick)
@@ -288,6 +283,8 @@ local function do_tasks_at_tick(tick)
         task.animations[2].visible = true
       elseif task.name == "destroy" then
         task.entity.destroy()
+      elseif task.name == "unlock" then
+        storage.lock[task.unit_number] = nil
       end
     end
   end
