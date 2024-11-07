@@ -5,6 +5,7 @@ Date: ????
     - Begin conversion to tasks_at tick, starting with the elevator music
     - Queue animation events directly instead of nested/owned
     - Rename lock and recalculate ttl
+    - Remove lock when we stop blocking the ghost
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2024. 11. 07
