@@ -94,8 +94,11 @@ function Handler.on_tick_robots(event)
         end
       elseif this_order == nil and entity.logistic_network then
         if event.tick == construction_robot.born_at then
-          game.print(string.format(print_prefix .. 'removed constriction robot requests in roboports from network #%d on %s.', entity.logistic_network.network_id, entity.surface.name))
-          LogisticNetwork.remove_all_construction_robot_requests_from_roboports(entity.logistic_network)
+          if LogisticNetwork.remove_all_construction_robot_requests_from_roboports(entity.logistic_network) then
+            game.print(string.format(print_prefix .. 'removed construction robot requests in roboports from network #%d on %s.', entity.logistic_network.network_id, entity.surface.name))
+          else
+            log("thought there were roboports with robot requests, there were none. (hand deployed construction robot?)")
+          end
         end
         if returned_home_with_milk(entity) then
           -- log('sent bot '.. entity.unit_number ..' home on ' .. entity.surface.name .. serpent.line(entity.position))

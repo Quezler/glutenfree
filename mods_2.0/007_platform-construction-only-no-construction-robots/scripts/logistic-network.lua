@@ -16,9 +16,10 @@ local function remove_all_construction_robot_requests_from_roboport(entity)
 
   -- error(serpent.block(blueprint_entities[1]))
 
+  local dirty = false
+
   local request_filters = blueprint_entities[1].request_filters
   if request_filters then
-    local dirty = false
 
     for _, section in ipairs(request_filters.sections) do
       for _, filter in ipairs(section.filters or {}) do
@@ -41,17 +42,22 @@ local function remove_all_construction_robot_requests_from_roboport(entity)
   end
 
   inventory.destroy()
+  return dirty
 end
 
 function LogisticNetwork.remove_all_construction_robot_requests_from_roboports(logistic_network)
   assert(logistic_network)
 
+  local dirty = false
+
   local cells = logistic_network.cells
   for _, cell in ipairs(cells) do
-    remove_all_construction_robot_requests_from_roboport(cell.owner)
+    if remove_all_construction_robot_requests_from_roboport(cell.owner) then
+      dirty = true
+    end
   end
 
-  -- error("thought there were roboports with robot requests, there were none.")
+  return dirty
 end
 
 return LogisticNetwork
