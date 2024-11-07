@@ -10,6 +10,7 @@ script.on_init(function()
   storage.entities_being_built = {}
 
   storage.networkdata = {}
+  storage.deathrattles = {}
 end)
 
 script.on_configuration_changed(function()
@@ -32,6 +33,8 @@ local function get_or_create_networkdata(logistic_network)
   }
 
   storage.networkdata[logistic_network.network_id] = networkdata
+  storage.deathrattles[script.register_on_object_destroyed(logistic_network)] = {network_id = logistic_network.network_id}
+
   return networkdata
 end
 
@@ -302,3 +305,11 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   }
 end)
 
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    if deathrattle.network_id then
+      storage.networkdata[deathrattle.network_id] =  nil
+    end
+  end
+end)
