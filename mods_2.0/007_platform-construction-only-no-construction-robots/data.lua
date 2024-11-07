@@ -14,6 +14,7 @@ end
 
 turn_construction_robots_invisible()
 construction_robot.icon_draw_specification = {scale = 0}
+construction_robot.quality_indicator_scale = 0
 construction_robot.selectable_in_game = false
 
 local space_platform_entity_build_animations = require("__space-age__/graphics/entity/space-platform-build-anim/entity-build-animations")
