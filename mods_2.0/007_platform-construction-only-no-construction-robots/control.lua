@@ -1,5 +1,6 @@
 local flib_bounding_box = require("__flib__.bounding-box")
 local LogisticNetwork = require("scripts.logistic-network")
+local blacklisted_names = require("scripts.blacklist")
 
 local print_prefix = '[platform-construction-only-no-construction-robots] '
 
@@ -154,6 +155,7 @@ local FRAMES_BETWEEN_REMOVING = 4
 
 function Handler.request_platform_animation_for(entity)
   if entity.name ~= "entity-ghost" then return end
+  if blacklisted_names[entity.ghost_name] then return end
   assert(entity.unit_number)
   if storage.entities_being_built[entity.unit_number] then return end
 

@@ -15,6 +15,7 @@ Date: ????
     - Ensure the script inventory gets destroyed
     - Prevent deploying a homeless bot crashing
     - Print construction robot request purge only on success
+    - Setup a blacklist of things with problematic bounding boxes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2024. 11. 06
