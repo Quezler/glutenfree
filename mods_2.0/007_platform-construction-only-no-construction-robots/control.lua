@@ -12,8 +12,7 @@ script.on_configuration_changed(function()
 end)
 
 function Handler.on_tick_robots(event)
-  for unit_number, construction_robot in pairs(storage.construction_robots) do
-    local entity = construction_robot.entity
+  for unit_number, entity in pairs(storage.construction_robots) do
     if entity.valid then
       local robot_order_queue = entity.robot_order_queue
       local this_order = robot_order_queue[1]
@@ -25,9 +24,8 @@ function Handler.on_tick_robots(event)
         if this_order.type == defines.robot_order_type.construct then
           Handler.request_platform_animation_for(this_order.target)
         end
-      elseif construction_robot.teleported_to_starting_position == false then
-        construction_robot.teleported_to_starting_position = true
-        entity.teleport(construction_robot.starting_position)
+      else
+        -- construction robot on its way back home
       end
     else
       storage.construction_robots[unit_number] = nil
@@ -226,10 +224,6 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   assert(construction_robot)
   assert(construction_robot.name == "construction-robot")
 
-  storage.construction_robots[construction_robot.unit_number] = {
-    entity = construction_robot,
-    starting_position = construction_robot.position,
-    teleported_to_starting_position = false,
-  }
+  storage.construction_robots[construction_robot.unit_number] = construction_robot
 end)
 
