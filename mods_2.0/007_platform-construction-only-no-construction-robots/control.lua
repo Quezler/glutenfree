@@ -87,7 +87,8 @@ function Handler.on_tick_robots(event)
           Handler.request_platform_animation_for(this_order.target)
         end
       elseif this_order == nil then
-        if event.tick == construction_robot.born_at then
+        local age = event.tick - construction_robot.born_at
+        if age == 0 then
           assert('roboport requested construction robots')
         end
         -- if event.tick == construction_robot.born_at and returned_home_with_milk(entity) then
@@ -95,8 +96,9 @@ function Handler.on_tick_robots(event)
           -- log(event.tick - construction_robot.born_at)
           -- log(event.tick)
           -- log(construction_robot.born_at)
-          log(serpent.line(event.tick))
-          log(serpent.line(construction_robot.born_at))
+          log(age)
+          log(event.tick)
+          log(construction_robot.born_at)
           log(type(event.tick))
           log(type(construction_robot.born_at))
           log('sent bot '.. entity.unit_number ..' home on ' .. entity.surface.name .. serpent.line(entity.position))
