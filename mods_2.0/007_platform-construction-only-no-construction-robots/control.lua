@@ -1,4 +1,7 @@
 local flib_bounding_box = require("__flib__.bounding-box")
+local LogisticNetwork = require("scripts.logistic-network")
+
+local print_prefix = '[platform-construction-only-no-construction-robots] '
 
 local Handler = {}
 
@@ -72,28 +75,6 @@ local function returned_home_with_milk(construction_robot)
   networkdata.last_roboport_with_space_search_failed_search_at = game.tick
 end
 
-function remove_construction_robot_requests_from_all_roboports(logistic_network)
-  assert(logistic_network)
-
-  local cells = logistic_network.cells
-  log(#cells)
-  for _, cell in ipairs(cells) do
-    local entity = cell.owner
-
-    entity.surface.create_entity{
-      name = entity.name,
-      force = entity.force,
-      position = entity.position,
- 
-      raise_built = true,
-      fast_replace = true,
-    }
-    -- log("+1")
-  end
-
-  -- error("thougt there were roboports with robot requests, there were none.")
-end
-
 function Handler.on_tick_robots(event)
   for unit_number, construction_robot in pairs(storage.construction_robots) do
     local entity = construction_robot.entity
@@ -110,11 +91,11 @@ function Handler.on_tick_robots(event)
         end
       elseif this_order == nil then
         if event.tick == construction_robot.born_at then
-          game.print('[platform-construction-only-no-construction-robots] removed robot requests from roboports.')
-          remove_construction_robot_requests_from_all_roboports(entity.logistic_network)
+          game.print(string.format(print_prefix .. 'removed constriction robot requests in roboports from network #%d on %s.', entity.logistic_network.network_id, entity.surface.name))
+          LogisticNetwork.remove_all_construction_robot_requests_from_roboports(entity.logistic_network)
         end
         if returned_home_with_milk(entity) then
-          log('sent bot '.. entity.unit_number ..' home on ' .. entity.surface.name .. serpent.line(entity.position))
+          -- log('sent bot '.. entity.unit_number ..' home on ' .. entity.surface.name .. serpent.line(entity.position))
           entity.destroy()
         end
       end
