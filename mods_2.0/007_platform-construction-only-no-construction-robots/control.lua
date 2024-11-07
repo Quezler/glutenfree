@@ -22,6 +22,7 @@ end)
 
 local function add_task(tick, task)
   assert(tick > game.tick)
+  assert(task.name)
   local tasks_at_tick = storage.tasks_at_tick[tick]
   if tasks_at_tick then
     tasks_at_tick[#tasks_at_tick + 1] = task
@@ -190,8 +191,6 @@ function Handler.request_platform_animation_for(entity)
   local entity_being_built = {
     entity = entity,
     entire_animation_done_at = entire_animation_done_at,
-
-    animations = {},
   }
 
   -- by putting a colliding entity in the center of the building site we'll force the construction robot to wait (between that tick and a second)
@@ -235,75 +234,59 @@ function Handler.request_platform_animation_for(entity)
       visible = false,
     }
 
-    table.insert(entity_being_built.animations, {
-      top = top,
-      body = body,
-      animation_offset_at_tick = {
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  1 * TICKS_PER_FRAME] =  0,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  2 * TICKS_PER_FRAME] =  1,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  3 * TICKS_PER_FRAME] =  2,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  4 * TICKS_PER_FRAME] =  3,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  5 * TICKS_PER_FRAME] =  4,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  6 * TICKS_PER_FRAME] =  5,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  7 * TICKS_PER_FRAME] =  6,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  8 * TICKS_PER_FRAME] =  7,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING +  9 * TICKS_PER_FRAME] =  8,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 10 * TICKS_PER_FRAME] =  9,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 12 * TICKS_PER_FRAME] = 10,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 13 * TICKS_PER_FRAME] = 11,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 14 * TICKS_PER_FRAME] = 12,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 15 * TICKS_PER_FRAME] = 13,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 16 * TICKS_PER_FRAME] = 14,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING + 17 * TICKS_PER_FRAME] = 15,
+    local animations = {top, body}
 
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  1 * TICKS_PER_FRAME] = 16,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  2 * TICKS_PER_FRAME] = 17,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  3 * TICKS_PER_FRAME] = 18,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  4 * TICKS_PER_FRAME] = 19,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  5 * TICKS_PER_FRAME] = 20,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  6 * TICKS_PER_FRAME] = 21,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  7 * TICKS_PER_FRAME] = 22,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  8 * TICKS_PER_FRAME] = 23,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay +  9 * TICKS_PER_FRAME] = 24,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 10 * TICKS_PER_FRAME] = 25,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 12 * TICKS_PER_FRAME] = 26,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 13 * TICKS_PER_FRAME] = 27,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 14 * TICKS_PER_FRAME] = 28,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 15 * TICKS_PER_FRAME] = 29,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 16 * TICKS_PER_FRAME] = 30,
-        [tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 17 * TICKS_PER_FRAME] = 31,
-      }
-    })
+    local up_base = tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING
+    add_task(up_base + 00 * TICKS_PER_FRAME, {name = "unhide", animations = animations})
+    add_task(up_base + 01 * TICKS_PER_FRAME, {name = "offset", offset = 01, animations = animations})
+    add_task(up_base + 02 * TICKS_PER_FRAME, {name = "offset", offset = 02, animations = animations})
+    add_task(up_base + 03 * TICKS_PER_FRAME, {name = "offset", offset = 03, animations = animations})
+    add_task(up_base + 04 * TICKS_PER_FRAME, {name = "offset", offset = 04, animations = animations})
+    add_task(up_base + 05 * TICKS_PER_FRAME, {name = "offset", offset = 05, animations = animations})
+    add_task(up_base + 06 * TICKS_PER_FRAME, {name = "offset", offset = 06, animations = animations})
+    add_task(up_base + 07 * TICKS_PER_FRAME, {name = "offset", offset = 07, animations = animations})
+    add_task(up_base + 08 * TICKS_PER_FRAME, {name = "offset", offset = 08, animations = animations})
+    add_task(up_base + 09 * TICKS_PER_FRAME, {name = "offset", offset = 09, animations = animations})
+    add_task(up_base + 10 * TICKS_PER_FRAME, {name = "offset", offset = 10, animations = animations})
+    add_task(up_base + 11 * TICKS_PER_FRAME, {name = "offset", offset = 11, animations = animations})
+    add_task(up_base + 12 * TICKS_PER_FRAME, {name = "offset", offset = 12, animations = animations})
+    add_task(up_base + 13 * TICKS_PER_FRAME, {name = "offset", offset = 13, animations = animations})
+    add_task(up_base + 14 * TICKS_PER_FRAME, {name = "offset", offset = 14, animations = animations})
+    add_task(up_base + 15 * TICKS_PER_FRAME, {name = "offset", offset = 15, animations = animations})
+
+    local down_base = tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay
+    add_task(down_base + 00 * TICKS_PER_FRAME, {name = "offset", offset = 16, animations = animations})
+    add_task(down_base + 01 * TICKS_PER_FRAME, {name = "offset", offset = 17, animations = animations})
+    add_task(down_base + 02 * TICKS_PER_FRAME, {name = "offset", offset = 18, animations = animations})
+    add_task(down_base + 03 * TICKS_PER_FRAME, {name = "offset", offset = 19, animations = animations})
+    add_task(down_base + 04 * TICKS_PER_FRAME, {name = "offset", offset = 20, animations = animations})
+    add_task(down_base + 05 * TICKS_PER_FRAME, {name = "offset", offset = 21, animations = animations})
+    add_task(down_base + 06 * TICKS_PER_FRAME, {name = "offset", offset = 22, animations = animations})
+    add_task(down_base + 07 * TICKS_PER_FRAME, {name = "offset", offset = 23, animations = animations})
+    add_task(down_base + 08 * TICKS_PER_FRAME, {name = "offset", offset = 24, animations = animations})
+    add_task(down_base + 09 * TICKS_PER_FRAME, {name = "offset", offset = 25, animations = animations})
+    add_task(down_base + 10 * TICKS_PER_FRAME, {name = "offset", offset = 26, animations = animations})
+    add_task(down_base + 11 * TICKS_PER_FRAME, {name = "offset", offset = 27, animations = animations})
+    add_task(down_base + 12 * TICKS_PER_FRAME, {name = "offset", offset = 28, animations = animations})
+    add_task(down_base + 13 * TICKS_PER_FRAME, {name = "offset", offset = 29, animations = animations})
+    add_task(down_base + 14 * TICKS_PER_FRAME, {name = "offset", offset = 30, animations = animations})
+    add_task(down_base + 15 * TICKS_PER_FRAME, {name = "offset", offset = 31, animations = animations})
   end
 
   storage.entities_being_built[entity.unit_number] = entity_being_built
-end
-
-function Handler.on_tick_entities_being_built(event)
-  for _, entity_being_built in pairs(storage.entities_being_built) do
-    if entity_being_built.entire_animation_done_at == event.tick then -- seems to be timed perfectly, well done quez! - quez
-      storage.entities_being_built[_] = nil
-    else
-      for _, animation in ipairs(entity_being_built.animations) do
-        local animation_offset = animation.animation_offset_at_tick[event.tick]
-        if animation_offset ~= nil then
-          if animation_offset == 0 then
-            animation.top.visible = true
-            animation.body.visible = true
-          end
-          animation.top.animation_offset = animation_offset
-          animation.body.animation_offset = animation_offset
-        end
-      end
-    end
-  end
 end
 
 local function do_tasks_at_tick(tick)
   local tasks_at_tick = storage.tasks_at_tick[tick]
   if tasks_at_tick then storage.tasks_at_tick[tick] = nil
     for _, task in ipairs(tasks_at_tick) do
-      if task.name == "destroy" then
+      if task.name == "offset" then
+        task.animations[1].animation_offset = task.offset
+        task.animations[2].animation_offset = task.offset
+      elseif task.name == "unhide" then
+        task.animations[1].visible = true
+        task.animations[2].visible = true
+      elseif task.name == "destroy" then
         task.entity.destroy()
       end
     end
@@ -312,7 +295,6 @@ end
 
 script.on_event(defines.events.on_tick, function(event)
   Handler.on_tick_robots(event)
-  Handler.on_tick_entities_being_built(event)
 
   do_tasks_at_tick(event.tick)
 end)
