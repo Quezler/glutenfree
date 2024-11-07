@@ -92,7 +92,7 @@ function Handler.on_tick_robots(event)
         if this_order.type == defines.robot_order_type.construct then
           Handler.request_platform_animation_for(this_order.target)
         end
-      elseif this_order == nil then
+      elseif this_order == nil and entity.logistic_network then
         if event.tick == construction_robot.born_at then
           game.print(string.format(print_prefix .. 'removed constriction robot requests in roboports from network #%d on %s.', entity.logistic_network.network_id, entity.surface.name))
           LogisticNetwork.remove_all_construction_robot_requests_from_roboports(entity.logistic_network)

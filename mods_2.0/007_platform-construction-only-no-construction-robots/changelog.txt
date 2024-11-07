@@ -13,6 +13,7 @@ Date: ????
     - Prevent construction robots from relocating without a job
     - Cleanup storage.networkdata
     - Ensure the script inventory gets destroyed
+    - Prevent deploying a homeless bot crashing
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2024. 11. 06
