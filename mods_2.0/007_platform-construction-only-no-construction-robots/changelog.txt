@@ -8,6 +8,7 @@ Date: ????
     - Debug why bots going airborne
     - Time to burn this code at the stake for witchcraft
     - Check for age == 0
+    - Notice my mistake thanks to stringweasel
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2024. 11. 06
