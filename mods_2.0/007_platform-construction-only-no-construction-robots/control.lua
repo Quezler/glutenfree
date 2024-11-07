@@ -12,11 +12,23 @@ script.on_init(function()
 
   storage.networkdata = {}
   storage.deathrattles = {}
+
+  storage.tasks_at_tick = {}
 end)
 
 script.on_configuration_changed(function()
   storage.networkdata = {} -- allowed to reset
 end)
+
+local function add_task(tick, task)
+  assert(tick > game.tick)
+  local tasks_at_tick = storage.tasks_at_tick[tick]
+  if tasks_at_tick then
+    tasks_at_tick[#tasks_at_tick + 1] = task
+  else
+    storage.tasks_at_tick[tick] = {task}
+  end
+end
 
 local function get_or_create_networkdata(logistic_network)
   local networkdata = storage.networkdata[logistic_network.network_id]
@@ -179,20 +191,21 @@ function Handler.request_platform_animation_for(entity)
     entity = entity,
     entire_animation_done_at = entire_animation_done_at,
 
-    -- by putting a colliding entity in the center of the building site we'll force the construction robot to wait (between that tick and a second)
-    scaffolding_up_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + 17 * TICKS_PER_FRAME,
-    elevator_music = nil,
-
     animations = {},
   }
 
-  entity_being_built.elevator_music = surface.create_entity{
-    name = "ghost-being-constructed",
-    force = "neutral",
-    position = entity.position,
-    create_build_effect_smoke = false,
-    preserve_ghosts_and_corpses = true,
-  }
+  -- by putting a colliding entity in the center of the building site we'll force the construction robot to wait (between that tick and a second)
+  local scaffolding_up_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + 17 * TICKS_PER_FRAME
+  add_task(scaffolding_up_at, {
+    name = "destroy",
+    entity = surface.create_entity{
+      name = "ghost-being-constructed",
+      force = "neutral",
+      position = entity.position,
+      create_build_effect_smoke = false,
+      preserve_ghosts_and_corpses = true,
+    }
+  })
 
   for _, position in ipairs(tilebox) do
     local piece = get_piece(position.center, entity.position)
@@ -271,10 +284,6 @@ function Handler.on_tick_entities_being_built(event)
     if entity_being_built.entire_animation_done_at == event.tick then -- seems to be timed perfectly, well done quez! - quez
       storage.entities_being_built[_] = nil
     else
-      if entity_being_built.scaffolding_up_at == event.tick then
-        entity_being_built.elevator_music.destroy()
-      end
-
       for _, animation in ipairs(entity_being_built.animations) do
         local animation_offset = animation.animation_offset_at_tick[event.tick]
         if animation_offset ~= nil then
@@ -290,9 +299,22 @@ function Handler.on_tick_entities_being_built(event)
   end
 end
 
+local function do_tasks_at_tick(tick)
+  local tasks_at_tick = storage.tasks_at_tick[tick]
+  if tasks_at_tick then storage.tasks_at_tick[tick] = nil
+    for _, task in ipairs(tasks_at_tick) do
+      if task.name == "destroy" then
+        task.entity.destroy()
+      end
+    end
+  end
+end
+
 script.on_event(defines.events.on_tick, function(event)
   Handler.on_tick_robots(event)
   Handler.on_tick_entities_being_built(event)
+
+  do_tasks_at_tick(event.tick)
 end)
 
 script.on_event(defines.events.on_script_trigger_effect, function(event)
