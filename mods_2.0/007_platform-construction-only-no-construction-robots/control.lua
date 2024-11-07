@@ -186,7 +186,7 @@ function Handler.request_platform_animation_for(entity)
   end
 
   local remove_scaffold_delay = (largest_manhattan_distance + 4) * FRAMES_BETWEEN_BUILDING
-  local entire_animation_done_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME
+  local all_scaffolding_down_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 16 * TICKS_PER_FRAME
 
   -- by putting a colliding entity in the center of the building site we'll force the construction robot to wait (between that tick and a second)
   local all_scaffolding_up_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + 15 * TICKS_PER_FRAME
@@ -267,7 +267,7 @@ function Handler.request_platform_animation_for(entity)
   end
 
   storage.lock[entity.unit_number] = true
-  add_task(entire_animation_done_at, {name = "unlock", unit_number = entity.unit_number})
+  add_task(all_scaffolding_down_at, {name = "unlock", unit_number = entity.unit_number})
 end
 
 local function do_tasks_at_tick(tick)

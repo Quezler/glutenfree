@@ -6,6 +6,7 @@ Date: ????
     - Queue animation events directly instead of nested/owned
     - Rename lock and recalculate ttl
     - Retime scaffolding up
+    - Retime when the entire animation is done
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2024. 11. 07
