@@ -11,6 +11,23 @@ script.on_configuration_changed(function()
 
 end)
 
+local function returned_home_with_milk(construction_robot)
+  local logistic_network = construction_robot.logistic_network
+  if logistic_network == nil then return end
+
+  for _, cell in ipairs(logistic_network.cells) do
+    local entity = cell.owner
+    local inventory = entity.get_inventory(defines.inventory.roboport_robot)
+
+    if inventory then
+      local inserted = inventory.insert({name = construction_robot.name, count = 1, quality = construction_robot.quality})
+      if inserted > 0 then
+        return true
+      end
+    end
+  end
+end
+
 function Handler.on_tick_robots(event)
   for unit_number, entity in pairs(storage.construction_robots) do
     if entity.valid then
@@ -25,7 +42,9 @@ function Handler.on_tick_robots(event)
           Handler.request_platform_animation_for(this_order.target)
         end
       else
-        -- construction robot on its way back home
+        if returned_home_with_milk(entity) then
+          entity.destroy()
+        end
       end
     else
       storage.construction_robots[unit_number] = nil
