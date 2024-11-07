@@ -7,6 +7,7 @@ Date: ????
     - Rename lock and recalculate ttl
     - Retime scaffolding up
     - Retime when the entire animation is done
+    - Confirm both the real and this version wait on frame 16
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2024. 11. 07
