@@ -130,16 +130,23 @@ class ExpansionMod
         return explode('Version: ', $lines[1])[1];
     }
 
-    public function tryAddNewSectionToChangelog()
+    public function mostRecentChangelogEntryHasNoDate(): bool
     {
         $changelog = file_get_contents($changelog_pathname = "{$this->get_pathname()}/changelog.txt");
-
         $lines = explode(PHP_EOL, $changelog);
-        if ($lines[2] == 'Date: ????') return;
+
+        return $lines[2] == 'Date: ????';
+    }
+
+    public function tryAddNewSectionToChangelog()
+    {
+        if ($this->mostRecentChangelogEntryHasNoDate()) return;
 
         $next_version = $this->info()['version'];
-
         if ($next_version == $this->getLastVersionFromChangelog()) {
+            $changelog = file_get_contents($changelog_pathname = "{$this->get_pathname()}/changelog.txt");
+            $lines = explode(PHP_EOL, $changelog);
+
             preg_match('/^Version: (\d+)\.(\d+)\.(\d+)$/', $lines[1], $matches);
             if (count($matches) == 0) throw new \LogicException();
 

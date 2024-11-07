@@ -32,6 +32,8 @@ class BuildModCommand extends Command
         $this->remove_test_build_from_game($mod);
 
         if ($input->getOption('update')) {
+            if ($mod->mostRecentChangelogEntryHasNoDate()) throw new \LogicException('Date: ????');
+
             $dotenv = new Dotenv();
             $dotenv->load(__GLUTENFREE__ . '/.env');
 

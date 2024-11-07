@@ -21,6 +21,7 @@ class PublishModCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $mod = ExpansionMods::findOrFail($input->getArgument('name'));
+        if ($mod->mostRecentChangelogEntryHasNoDate()) throw new \LogicException('Date: ????');
         $mod->build();
 
         $success = $mod->publish(); // "{"success":true,"url":"/api/mods/decider-combinator-output-constant-editor/full"}"
