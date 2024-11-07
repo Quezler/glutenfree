@@ -5,27 +5,71 @@ local Handler = {}
 script.on_init(function()
   storage.construction_robots = {}
   storage.entities_being_built = {}
+
+  storage.networkdata = {}
 end)
 
 script.on_configuration_changed(function()
-
+  storage.networkdata = {} -- allowed to reset
 end)
+
+local function get_or_create_networkdata(logistic_network)
+  local networkdata = storage.networkdata[logistic_network.network_id]
+  if networkdata then
+    assert(networkdata.id == logistic_network.network_id)
+    return networkdata
+  end
+
+  networkdata = {
+    id = logistic_network.network_id,
+    logistic_network = logistic_network,
+
+    last_roboport_with_space = nil,
+    last_roboport_with_space_search_failed_search_at = 0,
+  }
+
+  storage.networkdata[logistic_network.network_id] = networkdata
+  return networkdata
+end
+
+local function give_roboport_item(entity, item)
+  assert(item.count == 1) -- sanity check
+
+  local inventory = entity.get_inventory(defines.inventory.roboport_robot)
+  assert(inventory, entity.name) -- do roboports with no inventory trigger this at all?
+  if inventory == nil then return end
+
+  local inserted = inventory.insert(item)
+  return inserted == 1
+end
 
 local function returned_home_with_milk(construction_robot)
   local logistic_network = construction_robot.logistic_network
   if logistic_network == nil then return end
 
-  for _, cell in ipairs(logistic_network.cells) do
-    local entity = cell.owner
-    local inventory = entity.get_inventory(defines.inventory.roboport_robot)
+  local networkdata = get_or_create_networkdata(logistic_network)
+  local item = {name = construction_robot.name, count = 1, quality = construction_robot.quality} -- todo: this assumes robot & item share their name
 
-    if inventory then
-      local inserted = inventory.insert({name = construction_robot.name, count = 1, quality = construction_robot.quality})
-      if inserted > 0 then
-        return true
-      end
+  local last_roboport_with_space = networkdata.last_roboport_with_space
+  if last_roboport_with_space and last_roboport_with_space.valid then
+    if give_roboport_item(last_roboport_with_space, item) then
+      return true
+    end
+  else
+    networkdata.last_roboport_with_space = nil
+  end
+
+  -- if we tried looking for a roboport with space in the last 5 seconds and failed, don't search now
+  if networkdata.last_roboport_with_space_search_failed_search_at + 300 >= game.tick then return end
+
+  for _, cell in ipairs(logistic_network.cells) do
+    if give_roboport_item(cell.owner, item) then
+      networkdata.last_roboport_with_space = cell.owner
+      return true
     end
   end
+
+  networkdata.last_roboport_with_space_search_failed_search_at = game.tick
 end
 
 function Handler.on_tick_robots(event)

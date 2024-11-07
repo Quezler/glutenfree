@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Undo "teleport when done" logic since it looked janky
     - When a robot is done, try to turn them into an item
+    - Cache which roboport a finished bot can be deposited in
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2024. 11. 06
