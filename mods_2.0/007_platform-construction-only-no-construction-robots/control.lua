@@ -186,6 +186,7 @@ function Handler.request_platform_animation_for(entity)
   end
 
   local remove_scaffold_delay = (largest_manhattan_distance + 4) * FRAMES_BETWEEN_BUILDING
+  local entire_animation_done_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME
 
   -- by putting a colliding entity in the center of the building site we'll force the construction robot to wait (between that tick and a second)
   local scaffolding_up_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + 17 * TICKS_PER_FRAME
@@ -197,13 +198,13 @@ function Handler.request_platform_animation_for(entity)
       position = entity.position,
       create_build_effect_smoke = false,
       preserve_ghosts_and_corpses = true,
-    },
-    unit_number = entity.unit_number,
+    }
   })
 
   for _, position in ipairs(tilebox) do
     local piece = get_piece(position.center, entity.position)
-    local animations = {} -- top & body
+
+    local animations = {top, body}
 
     local up_base = tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING
     add_task(up_base + 00 * TICKS_PER_FRAME, {name = "unhide", animations = animations})
@@ -267,6 +268,7 @@ function Handler.request_platform_animation_for(entity)
   end
 
   storage.lock[entity.unit_number] = true
+  add_task(entire_animation_done_at, {name = "unlock", unit_number = entity.unit_number})
 end
 
 local function do_tasks_at_tick(tick)
@@ -281,6 +283,7 @@ local function do_tasks_at_tick(tick)
         task.animations[2].visible = true
       elseif task.name == "destroy" then
         task.entity.destroy()
+      elseif task.name == "unlock" then
         storage.lock[task.unit_number] = nil
       end
     end
