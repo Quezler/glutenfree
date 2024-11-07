@@ -189,8 +189,8 @@ function Handler.request_platform_animation_for(entity)
   local entire_animation_done_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay + 18 * TICKS_PER_FRAME
 
   -- by putting a colliding entity in the center of the building site we'll force the construction robot to wait (between that tick and a second)
-  local scaffolding_up_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + 17 * TICKS_PER_FRAME
-  add_task(scaffolding_up_at, {
+  local all_scaffolding_up_at = tick + 1 + largest_manhattan_distance * FRAMES_BETWEEN_BUILDING + 15 * TICKS_PER_FRAME
+  add_task(all_scaffolding_up_at, {
     name = "destroy",
     entity = surface.create_entity{
       name = "ghost-being-constructed",
@@ -203,8 +203,7 @@ function Handler.request_platform_animation_for(entity)
 
   for _, position in ipairs(tilebox) do
     local piece = get_piece(position.center, entity.position)
-
-    local animations = {top, body}
+    local animations = {} -- local animations = {} -- top & body
 
     local up_base = tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING
     add_task(up_base + 00 * TICKS_PER_FRAME, {name = "unhide", animations = animations})
