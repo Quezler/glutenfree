@@ -98,11 +98,10 @@ function Handler.on_tick_robots(event)
           if LogisticNetwork.remove_all_construction_robot_requests_from_roboports(entity.logistic_network) then
             game.print(string.format(print_prefix .. 'removed construction robot requests in roboports from network #%d on %s.', entity.logistic_network.network_id, entity.surface.name))
           else
-            log("thought there were roboports with robot requests, there were none. (hand deployed construction robot?)")
+            log("thought there were roboports with robot requests, but there were none. (hand deployed a construction robot?)")
           end
         end
         if construction_robot.inventory.is_empty() and returned_home_with_milk(entity) then
-          -- log('sent bot '.. entity.unit_number ..' home on ' .. entity.surface.name .. serpent.line(entity.position))
           entity.destroy()
         end
       end
@@ -271,7 +270,6 @@ function Handler.on_tick_entities_being_built(event)
   for _, entity_being_built in pairs(storage.entities_being_built) do
     if entity_being_built.entire_animation_done_at == event.tick then -- seems to be timed perfectly, well done quez! - quez
       storage.entities_being_built[_] = nil
-      -- game.print("done")
     else
       if entity_being_built.scaffolding_up_at == event.tick then
         entity_being_built.elevator_music.destroy()
