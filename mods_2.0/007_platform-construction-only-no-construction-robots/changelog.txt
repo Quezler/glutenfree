@@ -12,6 +12,7 @@ Date: ????
     - Attempt to fast replace the roboports to void their requests
     - Prevent construction robots from relocating without a job
     - Cleanup storage.networkdata
+    - Ensure the script inventory gets destroyed
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2024. 11. 06

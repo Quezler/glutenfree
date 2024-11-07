@@ -17,26 +17,28 @@ local function remove_all_construction_robot_requests_from_roboport(entity)
   -- error(serpent.block(blueprint_entities[1]))
 
   local request_filters = blueprint_entities[1].request_filters
-  if request_filters == nil then return end
+  if request_filters then
+    local dirty = false
 
-  local dirty = false
-  for _, section in ipairs(request_filters.sections) do
-    for _, filter in ipairs(section.filters or {}) do
-      if filter.name == "construction-robot" and filter.count > 0 then
-        filter.count = 0
-        section.name = nil
-        dirty = true
+    for _, section in ipairs(request_filters.sections) do
+      for _, filter in ipairs(section.filters or {}) do
+        if filter.name == "construction-robot" and filter.count > 0 then
+          filter.count = 0
+          section.name = nil
+          dirty = true
+        end
       end
     end
-  end
-  if dirty == false then return end
 
-  inventory[1].set_blueprint_entities(blueprint_entities)
-  inventory[1].build_blueprint{
-    surface = entity.surface,
-    force = entity.force,
-    position = entity.position,
-  }
+    if dirty then
+      inventory[1].set_blueprint_entities(blueprint_entities)
+      inventory[1].build_blueprint{
+        surface = entity.surface,
+        force = entity.force,
+        position = entity.position,
+      }
+    end
+  end
 
   inventory.destroy()
 end
