@@ -101,7 +101,7 @@ function Handler.on_tick_robots(event)
             log("thought there were roboports with robot requests, there were none. (hand deployed construction robot?)")
           end
         end
-        if returned_home_with_milk(entity) then
+        if construction_robot.inventory.is_empty() and returned_home_with_milk(entity) then
           -- log('sent bot '.. entity.unit_number ..' home on ' .. entity.surface.name .. serpent.line(entity.position))
           entity.destroy()
         end
@@ -307,6 +307,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   storage.construction_robots[construction_robot.unit_number] = {
     entity = construction_robot,
     born_at = event.tick, -- apparently a new robot has no tasks during its first tick, so we won't send them home with milk as a newborn.
+    inventory = construction_robot.get_inventory(defines.inventory.robot_cargo),
   }
 end)
 

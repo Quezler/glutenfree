@@ -16,6 +16,7 @@ Date: ????
     - Prevent deploying a homeless bot crashing
     - Print construction robot request purge only on success
     - Setup a blacklist of things with problematic bounding boxes
+    - Prevent refunding robots while they still hold cargo
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2024. 11. 06
