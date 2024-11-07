@@ -11,6 +11,7 @@ Date: ????
     - Support the landing pad by rendering some layers higher
     - Hide construction robot quality indicator
     - Fix an editor assertion
+    - Update the description and add a thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2024. 11. 07

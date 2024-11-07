@@ -1,7 +1,7 @@
 {
     "name": "platform-construction-only-no-construction-robots",
     "title": "Platform construction only, no construction robots.",
-    "description": "Construction robots can just place stuff instantly.",
+    "description": "You get the building scaffolds on every surface.",
 
     "version": "0.0.8",
     "author": "Quezler",
