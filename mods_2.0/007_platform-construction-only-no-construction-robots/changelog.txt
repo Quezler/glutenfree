@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Optimize how many tasks are needed (thanks to xorimuth)
     - Get rid of some asserts to squeeze out more performance
+    - Update the readme
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2024. 11. 07
