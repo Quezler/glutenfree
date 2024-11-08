@@ -43,3 +43,6 @@ data:extend{{
   movement_based_position_selection_distance = 1,
   base_position_selection_distance = 1,
 }}
+
+data.raw["item-request-proxy"]["item-request-proxy"].selection_box = {{-1, -1}, {1, 1}}
+data.raw["item-request-proxy"]["item-request-proxy"].collision_box = {{-1, -1}, {1, 1}}
