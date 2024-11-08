@@ -58,6 +58,21 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
         position = entity.position,
       }
 
+      assert(pole)
+      local pole_red   = pole.get_wire_connector(defines.wire_connector_id.circuit_red  , true)
+      local pole_green = pole.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+
+      local radars = entity.surface.find_entities_filtered{
+        type = "radar",
+        force = entity.force,
+      }
+      for _, radar in ipairs(radars) do
+        -- game.print(radar.unit_number)
+
+        radar.get_wire_connector(defines.wire_connector_id.circuit_red  , true).connect_to(pole_red  , false, defines.wire_origin.script)
+        radar.get_wire_connector(defines.wire_connector_id.circuit_green, true).connect_to(pole_green, false, defines.wire_origin.script)
+      end
+
       storage.structs[entity.unit_number] = {
         proxy = entity,
         pole = pole,

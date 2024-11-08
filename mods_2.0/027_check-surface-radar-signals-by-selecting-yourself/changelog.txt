@@ -19,6 +19,7 @@ Date: ????
     - Put the created pole into a struct
     - Key the struct by proxy unit number
     - Make the pole selection box cover the character selection box when running
+    - Connect the pole to all radars, regardless of their power state
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 08
