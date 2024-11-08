@@ -28,17 +28,17 @@ end)
 -- running this does cause it to fire the event, neat
 -- /c game.player.gui.center["csrsbsy-textfield"].ignored_by_interaction = false
 
-script.on_event(defines.events.on_gui_hover, function(event)
-  game.print("on_gui_hover")
-end)
+-- script.on_event(defines.events.on_gui_hover, function(event)
+--   game.print("on_gui_hover")
+-- end)
 
-script.on_event(defines.events.on_gui_leave, function(event)
-  game.print("on_gui_leave")
-end)
+-- script.on_event(defines.events.on_gui_leave, function(event)
+--   game.print("on_gui_leave")
+-- end)
 
-script.on_event(defines.events.on_player_changed_position, function(event)
-  game.print(event.tick)
-end)
+-- script.on_event(defines.events.on_player_changed_position, function(event)
+--   game.print(event.tick)
+-- end)
 
 -- script.on_event(defines.events.on_tick, function(event)
 --   local player = game.get_player("Quezler") --[[@as LuaPlayer]]
