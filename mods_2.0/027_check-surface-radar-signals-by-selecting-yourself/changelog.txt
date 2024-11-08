@@ -6,6 +6,7 @@ Date: ????
     - Try to follow the zoom level
     - Try to predict zoom scaling (too unstable/unpredictable)
     - Purge zoom related code
+    - Stash research
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 08
