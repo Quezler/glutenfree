@@ -49,7 +49,7 @@ commands.add_command('proxy-me', nil, function(event)
   -- {{id = {name = "quality-module-3"}, items = {in_inventory = {{inventory = 4, stack = 0}}}}}
 
   player.surface.create_entity{
-    name = "item-request-proxy",
+    name = mod_prefix .. "item-request-proxy",
     force = player.force,
     position = player.position,
 

@@ -11,6 +11,7 @@ Date: ????
     - Attempt to always have a spidertron over the player
     - Divert attention to the item request proxy
     - Test making a proxy that causes no alerts yet stays alive
+    - Change data.lua to provide our own item request proxy
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 08
