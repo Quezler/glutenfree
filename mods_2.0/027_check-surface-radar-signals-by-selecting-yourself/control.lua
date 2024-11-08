@@ -2,22 +2,30 @@ local mod_prefix = 'csrsbsy-'
 
 script.on_init(function()
   storage.structs = {}
+
+  storage.proxy_for_character = {}
 end)
 
-commands.add_command('proxy-me', nil, function(event)
-  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  player.surface.create_entity{
+local function proxy_me(character)
+  local proxy = character.surface.create_entity{
     name = mod_prefix .. "item-request-proxy",
-    force = player.force,
-    position = player.position,
+    force = character.force,
+    position = character.position,
 
-    target = player.character,
+    target = character,
 
     -- `{inventory = 255, stack = 0}` is not needed apparently to keep the proxy alive,
     -- neat because it stops the missing items alert when outside roboport range.
     modules = {{id = {name = "radar"}, items = {in_inventory = {} }}}
   }
-end)
+
+  storage.proxy_for_character[character.unit_number] = proxy
+end
+
+-- commands.add_command('proxy-me', nil, function(event)
+  -- local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  -- proxy_me(player.character)
+-- end)
 
 local function selected_by_anyone(entity)
   for _, player in ipairs(game.connected_players) do
@@ -84,5 +92,30 @@ end)
 script.on_load(function()
   if next(storage.structs) then
     script.on_event(defines.events.on_tick, on_tick)
+  end
+end)
+
+-- just make sure everyone has one every so often
+script.on_nth_tick(600, function(event)
+  for _, player in ipairs(game.connected_players) do
+    local character = player.character
+    if character then
+      local proxy = storage.proxy_for_character[character.unit_number]
+      if proxy == nil or proxy.valid == false then
+        proxy_me(character)
+      end
+    end
+  end
+end)
+
+-- swapping your armor slot purges the proxy
+script.on_event(defines.events.on_player_armor_inventory_changed, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local character = player.character
+  if character then
+    local proxy = storage.proxy_for_character[character.unit_number]
+    if proxy == nil or proxy.valid == false then
+      proxy_me(character)
+    end
   end
 end)

@@ -23,6 +23,7 @@ Date: ????
     - Test how radars connected to eachother register
     - Limit to the vanilla radars only, to prevent signals mixing
     - Make the pole a higher selection priority to avoid losing it when flying about
+    - Ensure players keep their proxy
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 08
