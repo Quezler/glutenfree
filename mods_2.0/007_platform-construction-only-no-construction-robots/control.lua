@@ -206,40 +206,11 @@ function Handler.request_platform_animation_for(entity)
     local animations = {} -- local animations = {} -- top & body
 
     local up_base = tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING
-    add_task(up_base + 00 * TICKS_PER_FRAME, {name = "unhide", animations = animations})
-    add_task(up_base + 01 * TICKS_PER_FRAME, {name = "offset", offset = 01, animations = animations})
-    add_task(up_base + 02 * TICKS_PER_FRAME, {name = "offset", offset = 02, animations = animations})
-    add_task(up_base + 03 * TICKS_PER_FRAME, {name = "offset", offset = 03, animations = animations})
-    add_task(up_base + 04 * TICKS_PER_FRAME, {name = "offset", offset = 04, animations = animations})
-    add_task(up_base + 05 * TICKS_PER_FRAME, {name = "offset", offset = 05, animations = animations})
-    add_task(up_base + 06 * TICKS_PER_FRAME, {name = "offset", offset = 06, animations = animations})
-    add_task(up_base + 07 * TICKS_PER_FRAME, {name = "offset", offset = 07, animations = animations})
-    add_task(up_base + 08 * TICKS_PER_FRAME, {name = "offset", offset = 08, animations = animations})
-    add_task(up_base + 09 * TICKS_PER_FRAME, {name = "offset", offset = 09, animations = animations})
-    add_task(up_base + 10 * TICKS_PER_FRAME, {name = "offset", offset = 10, animations = animations})
-    add_task(up_base + 11 * TICKS_PER_FRAME, {name = "offset", offset = 11, animations = animations})
-    add_task(up_base + 12 * TICKS_PER_FRAME, {name = "offset", offset = 12, animations = animations})
-    add_task(up_base + 13 * TICKS_PER_FRAME, {name = "offset", offset = 13, animations = animations})
-    add_task(up_base + 14 * TICKS_PER_FRAME, {name = "offset", offset = 14, animations = animations})
-    add_task(up_base + 15 * TICKS_PER_FRAME, {name = "offset", offset = 15, animations = animations})
+    add_task(up_base + 00 * TICKS_PER_FRAME, {name = "start", animations = animations})
+    add_task(up_base + 15 * TICKS_PER_FRAME, {name = "pause", offset = 15, animations = animations})
 
     local down_base = tick + 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay
-    add_task(down_base + 00 * TICKS_PER_FRAME, {name = "offset", offset = 16, animations = animations})
-    add_task(down_base + 01 * TICKS_PER_FRAME, {name = "offset", offset = 17, animations = animations})
-    add_task(down_base + 02 * TICKS_PER_FRAME, {name = "offset", offset = 18, animations = animations})
-    add_task(down_base + 03 * TICKS_PER_FRAME, {name = "offset", offset = 19, animations = animations})
-    add_task(down_base + 04 * TICKS_PER_FRAME, {name = "offset", offset = 20, animations = animations})
-    add_task(down_base + 05 * TICKS_PER_FRAME, {name = "offset", offset = 21, animations = animations})
-    add_task(down_base + 06 * TICKS_PER_FRAME, {name = "offset", offset = 22, animations = animations})
-    add_task(down_base + 07 * TICKS_PER_FRAME, {name = "offset", offset = 23, animations = animations})
-    add_task(down_base + 08 * TICKS_PER_FRAME, {name = "offset", offset = 24, animations = animations})
-    add_task(down_base + 09 * TICKS_PER_FRAME, {name = "offset", offset = 25, animations = animations})
-    add_task(down_base + 10 * TICKS_PER_FRAME, {name = "offset", offset = 26, animations = animations})
-    add_task(down_base + 11 * TICKS_PER_FRAME, {name = "offset", offset = 27, animations = animations})
-    add_task(down_base + 12 * TICKS_PER_FRAME, {name = "offset", offset = 28, animations = animations})
-    add_task(down_base + 13 * TICKS_PER_FRAME, {name = "offset", offset = 29, animations = animations})
-    add_task(down_base + 14 * TICKS_PER_FRAME, {name = "offset", offset = 30, animations = animations})
-    add_task(down_base + 15 * TICKS_PER_FRAME, {name = "offset", offset = 31, animations = animations})
+    add_task(down_base + 00 * TICKS_PER_FRAME, {name = "unpause", offset = 16, animations = animations})
 
     local ttl = down_base - tick + 16 * TICKS_PER_FRAME
 
@@ -274,12 +245,25 @@ local function do_tasks_at_tick(tick)
   local tasks_at_tick = storage.tasks_at_tick[tick]
   if tasks_at_tick then storage.tasks_at_tick[tick] = nil
     for _, task in ipairs(tasks_at_tick) do
-      if task.name == "offset" then
-        task.animations[1].animation_offset = task.offset
-        task.animations[2].animation_offset = task.offset
-      elseif task.name == "unhide" then
+      if task.name == "start" then
+        local offset = -(tick * 0.5) % 32
         task.animations[1].visible = true
         task.animations[2].visible = true
+        task.animations[1].animation_speed = 1
+        task.animations[2].animation_speed = 1
+        task.animations[1].animation_offset = offset
+        task.animations[2].animation_offset = offset
+      elseif task.name == "pause" then
+        task.animations[1].animation_speed = 0
+        task.animations[2].animation_speed = 0
+        task.animations[1].animation_offset = task.offset
+        task.animations[2].animation_offset = task.offset
+      elseif task.name == "unpause" then
+        local offset = -(tick * 0.5) % 32
+        task.animations[1].animation_speed = 1
+        task.animations[2].animation_speed = 1
+        task.animations[1].animation_offset = offset + task.offset
+        task.animations[2].animation_offset = offset + task.offset
       elseif task.name == "destroy" then
         task.entity.destroy()
       elseif task.name == "unlock" then
