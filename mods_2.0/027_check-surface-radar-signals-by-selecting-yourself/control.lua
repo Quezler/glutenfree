@@ -14,7 +14,7 @@ end)
 
 commands.add_command('proxy-me', nil, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  player.surface.create_entity{
+  local proxy = player.surface.create_entity{
     name = mod_prefix .. "item-request-proxy",
     force = player.force,
     position = player.position,
@@ -25,6 +25,7 @@ commands.add_command('proxy-me', nil, function(event)
     -- neat because it stops the missing items alert when outside roboport range.
     modules = {{id = {name = "radar"}, items = {in_inventory = {} }}}
   }
+  -- proxy.minable = false -- would make it ugly
 end)
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
@@ -32,10 +33,10 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   local entity = player.selected
 
   if entity and entity.name == mod_prefix .. "item-request-proxy" then
-    entity.surface.create_entity{
-      name = mod_prefix .. "electric-pole",
-      force = entity.force,
-      position = entity.position,
-    }
+    -- entity.surface.create_entity{
+    --   name = mod_prefix .. "electric-pole",
+    --   force = entity.force,
+    --   position = entity.position,
+    -- }
   end
 end)

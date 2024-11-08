@@ -15,6 +15,7 @@ Date: ????
     - Excelent, bots do not even depart to deliver the radar
     - Cleanup control stage
     - Create an electric pole when hovering your own proxy
+    - Prevent the player from mining the proxy
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 08
