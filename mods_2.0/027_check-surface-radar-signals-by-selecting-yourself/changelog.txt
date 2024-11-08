@@ -7,6 +7,7 @@ Date: ????
     - Try to predict zoom scaling (too unstable/unpredictable)
     - Purge zoom related code
     - Stash research
+    - Ponder about spamming the player changed position event
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 08
