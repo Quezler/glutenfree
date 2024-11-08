@@ -23,4 +23,5 @@ data:extend{{
   selection_priority = (character.selection_priority or 50) - 1,
 
   flags = {"placeable-off-grid", "not-on-map"},
+  collision_mask = {layers = {}},
 }}
