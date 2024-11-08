@@ -26,3 +26,16 @@ commands.add_command('proxy-me', nil, function(event)
     modules = {{id = {name = "radar"}, items = {in_inventory = {} }}}
   }
 end)
+
+script.on_event(defines.events.on_selected_entity_changed, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local entity = player.selected
+
+  if entity and entity.name == mod_prefix .. "item-request-proxy" then
+    entity.surface.create_entity{
+      name = mod_prefix .. "electric-pole",
+      force = entity.force,
+      position = entity.position,
+    }
+  end
+end)
