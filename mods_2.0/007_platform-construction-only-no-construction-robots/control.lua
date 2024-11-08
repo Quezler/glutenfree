@@ -21,8 +21,8 @@ script.on_configuration_changed(function()
 end)
 
 local function add_task(tick, task)
-  assert(tick > game.tick)
-  assert(task.name)
+  -- assert(tick > game.tick)
+  -- assert(task.name)
   local tasks_at_tick = storage.tasks_at_tick[tick]
   if tasks_at_tick then
     tasks_at_tick[#tasks_at_tick + 1] = task
@@ -53,7 +53,7 @@ local function get_or_create_networkdata(logistic_network)
 end
 
 local function give_roboport_item(entity, item)
-  assert(item.count == 1) -- sanity check
+  -- assert(item.count == 1) -- sanity check
 
   local inventory = entity.get_inventory(defines.inventory.roboport_robot)
   assert(inventory, entity.name) -- do roboports with no inventory trigger this at all?
@@ -102,7 +102,7 @@ function Handler.on_tick_robots(event)
       if this_order and this_order.target then -- target can sometimes be optional
         -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
         -- looks like ->activeNeighbourForcesSet/show-active-forces-around debug is rather generous btw
-        assert(entity.teleport(this_order.target.position))
+        entity.teleport(this_order.target.position)
         if this_order.type == defines.robot_order_type.construct then
           Handler.request_platform_animation_for(this_order.target)
         end
@@ -166,9 +166,10 @@ local FRAMES_BETWEEN_BUILDING = 8 * 2
 local FRAMES_BETWEEN_REMOVING = 4
 
 function Handler.request_platform_animation_for(entity)
-  if entity.name ~= "entity-ghost" then return end
+  -- if entity.name ~= "entity-ghost" then return end
   if blacklisted_names[entity.ghost_name] then return end
-  assert(entity.unit_number)
+
+  -- assert(entity.unit_number)
   if storage.lock[entity.unit_number] then return end
 
   local tick = game.tick
@@ -283,8 +284,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   if event.effect_id ~= "construction-robot-created" then return end
 
   local construction_robot = event.target_entity
-  assert(construction_robot)
-  assert(construction_robot.name == "construction-robot")
+  assert(construction_robot and construction_robot.name == "construction-robot")
 
   storage.construction_robots[construction_robot.unit_number] = {
     entity = construction_robot,
