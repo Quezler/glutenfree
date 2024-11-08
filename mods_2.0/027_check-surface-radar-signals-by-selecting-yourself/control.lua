@@ -10,12 +10,22 @@ script.on_nth_tick(60, function(event)
   local textfield = player.gui.center[mod_prefix .. 'textfield']
   if textfield == nil then
     textfield = player.gui.center.add{
-      type = 'textfield',
+      type = 'empty-widget',
       name = mod_prefix .. 'textfield',
-
-      text = 'hello',
     }
   else
-    textfield.text = 'world'
   end
+
+  textfield.style.width = 100
+  textfield.style.height = 200
+  textfield.style.bottom_margin = 150
+  textfield.raise_hover_events = true
+end)
+
+script.on_event(defines.events.on_gui_hover, function(event)
+  game.print("on_gui_hover")
+end)
+
+script.on_event(defines.events.on_gui_leave, function(event)
+  game.print("on_gui_leave")
 end)
