@@ -46,3 +46,4 @@ data:extend{{
 
 data.raw["item-request-proxy"]["item-request-proxy"].selection_box = {{-1, -1}, {1, 1}}
 data.raw["item-request-proxy"]["item-request-proxy"].collision_box = {{-1, -1}, {1, 1}}
+data.raw["item-request-proxy"]["item-request-proxy"].selection_priority = 51

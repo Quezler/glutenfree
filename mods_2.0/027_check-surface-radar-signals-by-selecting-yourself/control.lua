@@ -43,3 +43,18 @@ end)
 -- script.on_event(defines.events.on_tick, function(event)
 --   local player = game.get_player("Quezler") --[[@as LuaPlayer]]
 -- end)
+
+commands.add_command('proxy-me', nil, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  -- {{id = {name = "quality-module-3"}, items = {in_inventory = {{inventory = 4, stack = 0}}}}}
+
+  player.surface.create_entity{
+    name = "item-request-proxy",
+    force = player.force,
+    position = player.position,
+
+    target = player.character,
+    modules = {},
+    removal_plan = {{id = {name = "radar"}, items = {in_inventory = {{inventory = 255, stack = 0}}}}}
+  }
+end)

@@ -10,6 +10,7 @@ Date: ????
     - Ponder about spamming the player changed position event
     - Attempt to always have a spidertron over the player
     - Divert attention to the item request proxy
+    - Test making a proxy that causes no alerts yet stays alive
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 08
