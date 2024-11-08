@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Place an empty frame over the player and listen to hover events
+    - Try to follow the zoom level
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 08

@@ -10,7 +10,8 @@ script.on_nth_tick(60, function(event)
   local textfield = player.gui.center[mod_prefix .. 'textfield']
   if textfield == nil then
     textfield = player.gui.center.add{
-      type = 'empty-widget',
+      -- type = 'empty-widget',
+      type = 'frame',
       name = mod_prefix .. 'textfield',
     }
   else
@@ -28,4 +29,12 @@ end)
 
 script.on_event(defines.events.on_gui_leave, function(event)
   game.print("on_gui_leave")
+end)
+
+script.on_event("csrsbsy-zoom-in", function(event)
+  game.print(string.format("zoomed in @ %d", event.tick))
+end)
+
+script.on_event("csrsbsy-zoom-out", function(event)
+  game.print(string.format("zoomed out @ %d", event.tick))
 end)
