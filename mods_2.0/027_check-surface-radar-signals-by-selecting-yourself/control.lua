@@ -54,7 +54,6 @@ commands.add_command('proxy-me', nil, function(event)
     position = player.position,
 
     target = player.character,
-    modules = {},
-    removal_plan = {{id = {name = "radar"}, items = {in_inventory = {{inventory = 255, stack = 0}}}}}
+    modules = {{id = {name = "radar"}, items = {in_inventory = {{inventory = 255, stack = 0}}}}}
   }
 end)
