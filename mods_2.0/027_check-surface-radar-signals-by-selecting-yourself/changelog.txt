@@ -18,6 +18,7 @@ Date: ????
     - Prevent the player from mining the proxy
     - Put the created pole into a struct
     - Key the struct by proxy unit number
+    - Make the pole selection box cover the character selection box when running
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 08

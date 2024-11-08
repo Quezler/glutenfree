@@ -18,10 +18,15 @@ data:extend{{
   supply_area_distance = 0,
   connection_points = {},
 
-  selection_box = character.selection_box,
+  selection_box = {
+    {character.selection_box[1][1] - 0.5, character.selection_box[1][2] - 0.5},
+    {character.selection_box[2][1] + 0.5, character.selection_box[2][2] + 0.5},
+  },
   collision_box = character.collision_box,
   selection_priority = (character.selection_priority or 50) - 1,
 
   flags = {"placeable-off-grid", "not-on-map"},
   collision_mask = {layers = {}},
 }}
+
+-- error(serpent.block( character.selection_box ))
