@@ -1,7 +1,6 @@
 local mod_prefix = 'csrsbsy-'
 
 script.on_init(function()
-  storage.index = 0
   storage.structs = {}
 end)
 
@@ -35,7 +34,7 @@ local function on_tick(event)
       goto continue
     end
 
-    struct.pole.teleport(struct.proxy.proxy_target.position)
+    struct.pole.teleport(struct.proxy.position)
 
     ::continue::
   end
@@ -50,19 +49,22 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   local entity = player.selected
 
   if entity and entity.name == mod_prefix .. "item-request-proxy" then
-    local pole = entity.surface.create_entity{
-      name = mod_prefix .. "electric-pole",
-      force = entity.force,
-      position = entity.position,
-    }
+    -- when running/lagging you might be able to select the proxy whilst the pole is not aligned
+    -- assert(storage.structs[entity.unit_number] == nil)
+    if storage.structs[entity.unit_number] == nil then
+      local pole = entity.surface.create_entity{
+        name = mod_prefix .. "electric-pole",
+        force = entity.force,
+        position = entity.position,
+      }
 
-    storage.index = storage.index + 1
-    storage.structs[storage.index] = {
-      proxy = entity,
-      pole = pole,
-    }
+      storage.structs[entity.unit_number] = {
+        proxy = entity,
+        pole = pole,
+      }
 
-    script.on_event(defines.events.on_tick, on_tick)
+      script.on_event(defines.events.on_tick, on_tick)
+    end
   end
 end)
 
