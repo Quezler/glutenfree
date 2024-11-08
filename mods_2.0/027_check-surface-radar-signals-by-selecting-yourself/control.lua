@@ -6,7 +6,11 @@ script.on_init(function()
   storage.proxy_for_character = {}
 end)
 
-local function proxy_me(character)
+local function proxy_me(player)
+  local character = player.character
+  if character == nil then return end
+  if storage.proxy_for_character[character.unit_number] and storage.proxy_for_character[character.unit_number].valid then return end
+
   local proxy = character.surface.create_entity{
     name = mod_prefix .. "item-request-proxy",
     force = character.force,
@@ -98,24 +102,12 @@ end)
 -- just make sure everyone has one every so often
 script.on_nth_tick(600, function(event)
   for _, player in ipairs(game.connected_players) do
-    local character = player.character
-    if character then
-      local proxy = storage.proxy_for_character[character.unit_number]
-      if proxy == nil or proxy.valid == false then
-        proxy_me(character)
-      end
-    end
+    proxy_me(player)
   end
 end)
 
 -- swapping your armor slot purges the proxy
 script.on_event(defines.events.on_player_armor_inventory_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  local character = player.character
-  if character then
-    local proxy = storage.proxy_for_character[character.unit_number]
-    if proxy == nil or proxy.valid == false then
-      proxy_me(character)
-    end
-  end
+  proxy_me(player)
 end)
