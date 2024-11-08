@@ -21,7 +21,9 @@ class PublishModCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $mod = ExpansionMods::findOrFail($input->getArgument('name'));
+        if ($mod->majorVersionIsZero()) throw new \LogicException("version is below 1.0.0");
         if ($mod->mostRecentChangelogEntryHasNoDate()) throw new \LogicException('Date: ????');
+        if (! $mod->infoVersionMatchesChangelogVersion()) throw new \LogicException('changelog version does not match info.json');
         $mod->build();
 
         $success = $mod->publish(); // "{"success":true,"url":"/api/mods/decider-combinator-output-constant-editor/full"}"

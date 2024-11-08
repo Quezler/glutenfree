@@ -226,4 +226,17 @@ class ExpansionMod
         $info_json_text = str_replace($search, $replace, $info_json_text);
         file_put_contents($info_json_path, $info_json_text);
     }
+
+    private function getVersionFromChangelog(): string
+    {
+        $changelog = file_get_contents($changelog_pathname = "{$this->get_pathname()}/changelog.txt");
+        $lines = explode(PHP_EOL, $changelog);
+
+        return explode('Version: ', $lines[1])[1];
+    }
+
+    public function infoVersionMatchesChangelogVersion()
+    {
+        return $this->info()['version'] == $this->getVersionFromChangelog();
+    }
 }
