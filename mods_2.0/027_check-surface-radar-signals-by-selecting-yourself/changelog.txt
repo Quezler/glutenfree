@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 11. 08
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2024. 11. 08
   Info:
     - Place an empty frame over the player and listen to hover events
     - Try to follow the zoom level

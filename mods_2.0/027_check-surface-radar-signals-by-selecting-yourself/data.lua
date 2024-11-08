@@ -28,5 +28,3 @@ data:extend{{
   flags = {"placeable-off-grid", "not-on-map"},
   collision_mask = {layers = {}},
 }}
-
--- error(serpent.block( character.selection_box ))
