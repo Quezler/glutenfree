@@ -21,6 +21,7 @@ Date: ????
     - Make the pole selection box cover the character selection box when running
     - Connect the pole to all radars, regardless of their power state
     - Test how radars connected to eachother register
+    - Limit to the vanilla radars only, to prevent signals mixing
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 08

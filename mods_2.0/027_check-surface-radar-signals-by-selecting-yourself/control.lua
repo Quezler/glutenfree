@@ -63,20 +63,12 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
       local pole_green = pole.get_wire_connector(defines.wire_connector_id.circuit_green, true)
 
       local radars = entity.surface.find_entities_filtered{
-        type = "radar",
+        name = "radar",
         force = entity.force,
       }
       for _, radar in ipairs(radars) do
-        -- game.print(radar.unit_number)
-
-        local radar_red   = radar.get_wire_connector(defines.wire_connector_id.circuit_red  , false)
-        local radar_green = radar.get_wire_connector(defines.wire_connector_id.circuit_green, false)
-
-        game.print('red '   .. serpent.line(radar_red  ))
-        game.print('green ' .. serpent.line(radar_green))
-
-        -- radar.get_wire_connector(defines.wire_connector_id.circuit_red  , true).connect_to(pole_red  , false, defines.wire_origin.script)
-        -- radar.get_wire_connector(defines.wire_connector_id.circuit_green, true).connect_to(pole_green, false, defines.wire_origin.script)
+        radar.get_wire_connector(defines.wire_connector_id.circuit_red  , true).connect_to(pole_red  , false, defines.wire_origin.script)
+        radar.get_wire_connector(defines.wire_connector_id.circuit_green, true).connect_to(pole_green, false, defines.wire_origin.script)
       end
 
       storage.structs[entity.unit_number] = {
