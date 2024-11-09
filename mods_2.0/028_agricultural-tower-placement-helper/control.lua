@@ -130,36 +130,39 @@ local colors = {
   red    = {0.9, 0.0, 0.0, 1},
 }
 
+-- todo: generate from prototypes.
 local tile_name_to_color = {
-  ["wetland-yumako"] = colors.yellow,
-  ["natural-yumako-soil"] = colors.green,
+  -- currently plantable for yumako
+  ["natural-yumako-soil"   ] = colors.green,
   ["artificial-yumako-soil"] = colors.green,
   ["overgrowth-yumako-soil"] = colors.green,
 
-  ["wetland-jellynut"] = colors.yellow,
-  ["natural-jellynut-soil"] = colors.green,
+  -- currently plantable for jellynut
+  ["natural-jellynut-soil"   ] = colors.green,
   ["artificial-jellynut-soil"] = colors.green,
   ["overgrowth-jellynut-soil"] = colors.green,
 
+  -- future plantable for yumako
   ["wetland-light-green-slime"] = colors.red,
-  ["wetland-green-slime"] = colors.red,
-  -- ["wetland-yumako"] = colors.red,
-  ["lowland-olive-blubber"] = colors.red,
-  ["lowland-olive-blubber-2"] = colors.red,
-  ["lowland-olive-blubber-3"] = colors.red,
-  ["lowland-brown-blubber"] = colors.red,
-  ["lowland-pale-green"] = colors.red,
+  ["wetland-green-slime"      ] = colors.red,
+  ["wetland-yumako"           ] = colors.yellow, -- artificial soil
+  ["lowland-olive-blubber"    ] = colors.red,
+  ["lowland-olive-blubber-2"  ] = colors.red,
+  ["lowland-olive-blubber-3"  ] = colors.red,
+  ["lowland-brown-blubber"    ] = colors.red,
+  ["lowland-pale-green"       ] = colors.red,
 
+  -- future plantable for jellynut
   ["wetland-pink-tentacle"] = colors.red,
-  ["wetland-red-tentacle"] = colors.red,
-  -- ["wetland-jellynut"] = colors.red,
-  ["lowland-red-vein"] = colors.red,
-  ["lowland-red-vein-2"] = colors.red,
-  ["lowland-red-vein-3"] = colors.red,
-  ["lowland-red-vein-4"] = colors.red,
+  ["wetland-red-tentacle" ] = colors.red,
+  ["wetland-jellynut"     ] = colors.yellow, -- artificial soil
+  ["lowland-red-vein"     ] = colors.red,
+  ["lowland-red-vein-2"   ] = colors.red,
+  ["lowland-red-vein-3"   ] = colors.red,
+  ["lowland-red-vein-4"   ] = colors.red,
   ["lowland-red-vein-dead"] = colors.red,
   ["lowland-red-infection"] = colors.red,
-  ["lowland-cream-red"] = colors.red,
+  ["lowland-cream-red"    ] = colors.red,
 }
 
 local tile_names = {}
@@ -204,10 +207,9 @@ function Handler.tick_player(event)
       name = tile_names,
     }
 
-
     for _, tile in ipairs(tiles) do
       local color = tile_name_to_color[tile.name]
-      game.print(tile.name .. serpent.line(color))
+      -- game.print(tile.name .. serpent.line(color))
 
       if color then
         local tile_key = position_key(tile.position)
@@ -224,32 +226,6 @@ function Handler.tick_player(event)
         }
       end
     end
-
-    -- local ghost_drills = surface.find_entities_filtered{
-    --   area = {left_top, right_bottom},
-    --   ghost_type = "mining-drill",
-    --   force = player.force,
-    -- }
-    -- for _, drill in ipairs(ghost_drills) do
-    --   Handler.add_drill_to_playerdata(drill, playerdata)
-    -- end
-
-    -- local drills = surface.find_entities_filtered{
-    --   area = {left_top, right_bottom},
-    --   type = "mining-drill",
-    --   force = player.force,
-    -- }
-    -- for _, drill in ipairs(drills) do
-    --   Handler.add_drill_to_playerdata(drill, playerdata)
-    -- end
-
-    -- local ores = surface.find_entities_filtered{
-    --   area = {left_top, right_bottom},
-    --   type = "resource",
-    -- }
-    -- for _, ore in ipairs(ores) do
-    --   Handler.add_ore_to_playerdata(ore, playerdata)
-    -- end
 
     ::continue::
   end
