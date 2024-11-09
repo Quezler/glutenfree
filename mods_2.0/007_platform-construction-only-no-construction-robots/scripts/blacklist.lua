@@ -24,7 +24,7 @@ local blacklisted_types = util.list_to_map({
   "elevated-half-diagonal-rail",
 
   "car",
-  "spidertron",
+  "spider-vehicle",
   "locomotive",
   "cargo-wagon",
   "fluid-wagon",
