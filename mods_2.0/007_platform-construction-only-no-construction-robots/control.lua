@@ -92,12 +92,20 @@ local function returned_home_with_milk(construction_robot)
   networkdata.last_roboport_with_space_search_failed_search_at = game.tick
 end
 
+local max_age = 60 * 30
+
 function Handler.on_tick_robots(event)
   for unit_number, construction_robot in pairs(storage.construction_robots) do
     local entity = construction_robot.entity
     if entity.valid then
       local robot_order_queue = entity.robot_order_queue
       local this_order = robot_order_queue[1]
+
+      -- if bots are out of power they can get hyperfixated on wanting to charge,
+      -- pretend they have nothing left to do so they get put back into a roboport.
+      if event.tick - construction_robot.born_at > max_age then
+        this_order = nil
+      end
 
       if this_order and this_order.target then -- target can sometimes be optional
         -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
