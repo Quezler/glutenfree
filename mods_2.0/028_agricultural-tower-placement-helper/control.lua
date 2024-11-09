@@ -1,7 +1,7 @@
 local flib_position = require("__flib__.position")
 local flib_bounding_box = require("__flib__.bounding-box")
 
-local debug_mode = true
+-- local debug_mode = true
 
 local Handler = {}
 
@@ -133,14 +133,39 @@ local colors = {
 local tile_name_to_color = {
   ["wetland-yumako"] = colors.yellow,
   ["natural-yumako-soil"] = colors.green,
-  ["artificial-yumako-soil"] = colors.yellow,
-  ["overgrowth-yumako-soil"] = colors.red,
+  ["artificial-yumako-soil"] = colors.green,
+  ["overgrowth-yumako-soil"] = colors.green,
 
   ["wetland-jellynut"] = colors.yellow,
   ["natural-jellynut-soil"] = colors.green,
-  ["artificial-jellynut-soil"] = colors.yellow,
-  ["overgrowth-jellynut-soil"] = colors.red,
+  ["artificial-jellynut-soil"] = colors.green,
+  ["overgrowth-jellynut-soil"] = colors.green,
+
+  ["wetland-light-green-slime"] = colors.red,
+  ["wetland-green-slime"] = colors.red,
+  -- ["wetland-yumako"] = colors.red,
+  ["lowland-olive-blubber"] = colors.red,
+  ["lowland-olive-blubber-2"] = colors.red,
+  ["lowland-olive-blubber-3"] = colors.red,
+  ["lowland-brown-blubber"] = colors.red,
+  ["lowland-pale-green"] = colors.red,
+
+  ["wetland-pink-tentacle"] = colors.red,
+  ["wetland-red-tentacle"] = colors.red,
+  -- ["wetland-jellynut"] = colors.red,
+  ["lowland-red-vein"] = colors.red,
+  ["lowland-red-vein-2"] = colors.red,
+  ["lowland-red-vein-3"] = colors.red,
+  ["lowland-red-vein-4"] = colors.red,
+  ["lowland-red-vein-dead"] = colors.red,
+  ["lowland-red-infection"] = colors.red,
+  ["lowland-cream-red"] = colors.red,
 }
+
+local tile_names = {}
+for tile_name, color in pairs(tile_name_to_color) do
+  table.insert(tile_names, tile_name)
+end
 
 function Handler.tick_player(event)
   local playerdata = storage.playerdata[event.player_index]
@@ -176,17 +201,7 @@ function Handler.tick_player(event)
 
     local tiles = surface.find_tiles_filtered{
       area = {left_top, right_bottom},
-      name = {
-        'wetland-yumako',
-        'natural-yumako-soil',
-        'artificial-yumako-soil',
-        'overgrowth-yumako-soil',
-
-        'wetland-jellynut',
-        'natural-jellynut-soil',
-        'artificial-jellynut-soil',
-        'overgrowth-jellynut-soil',
-      },
+      name = tile_names,
     }
 
 
