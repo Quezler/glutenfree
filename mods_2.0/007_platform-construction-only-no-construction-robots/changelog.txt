@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
-Date: ????
+Date: 2024. 11. 09
   Info:
     - Fix spidertron not being blacklisted properly
     - Fix the animation accidentally triggering for tiles
