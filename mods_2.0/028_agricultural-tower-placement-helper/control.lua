@@ -165,8 +165,6 @@ local tile_name_to_color = {
   ["lowland-red-vein-dead"] = colors.red,
   ["lowland-red-infection"] = colors.red,
   ["lowland-cream-red"    ] = colors.red,
-
-  -- ["landfill"] = colors.brown,
 }
 
 local tile_names = {}
@@ -213,8 +211,6 @@ function Handler.tick_player(event)
 
     for _, tile in ipairs(tiles) do
       local color = tile_name_to_color[tile.name]
-      -- game.print(tile.name .. serpent.line(color))
-
       if color then
         local tile_key = position_key(tile.position)
         playerdata.tile_render_objects[tile_key] = rendering.draw_circle{
@@ -236,29 +232,3 @@ function Handler.tick_player(event)
 end
 
 script.on_event(defines.events.on_player_changed_position, Handler.tick_player)
-
-function Handler.on_tiles_changed(event)
-  local surface = game.surfaces[event.surface_index]
-
-  for _, tile in ipairs(event.tiles) do
-    local tile_key = position_key(tile.position)
-    for _, playerdata in pairs(storage.playerdata) do
-      local tile_render_object = playerdata.tile_render_objects[tile_key]
-      if tile_render_object then
-        local color = tile_name_to_color[surface.get_tile(tile.position).name]
-        if color then
-          tile_render_object.color = color
-        else
-          -- tile_render_object.color = colors.none
-          game.print(surface.get_tile(tile.position).name)
-        end
-      end
-    end
-  end
-end
-
-script.on_event(defines.events.on_player_built_tile, Handler.on_tiles_changed)
-script.on_event(defines.events.on_robot_built_tile , Handler.on_tiles_changed)
-
-script.on_event(defines.events.on_player_mined_tile, Handler.on_tiles_changed)
-script.on_event(defines.events.on_robot_mined_tile , Handler.on_tiles_changed)

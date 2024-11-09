@@ -6,6 +6,7 @@ Date: ????
     - Cleanup code
     - Fix circle not rendering in the center of the tile
     - Try and figure out how to do landfill
+    - Gonna keep it simple, no updates to the existing renderer, saves precious tile events
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 09
