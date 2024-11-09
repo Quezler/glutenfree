@@ -1,6 +1,7 @@
+local item_sounds = require("__base__.prototypes.item_sounds")
+
 local silo = table.deepcopy(data.raw["rocket-silo"]["rocket-silo"])
 local silo_item = table.deepcopy(data.raw["item"]["rocket-silo"])
-
 
 silo.name = "infinity-rocket-silo"
 silo.heating_energy = nil -- frozen sprites missing (gimp, hue saturation, -60)
