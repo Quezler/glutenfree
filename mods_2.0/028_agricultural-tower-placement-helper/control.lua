@@ -1,7 +1,7 @@
 local flib_position = require("__flib__.position")
 local flib_bounding_box = require("__flib__.bounding-box")
 
--- local debug_mode = true
+local debug_mode = false
 
 local Handler = {}
 
@@ -128,8 +128,6 @@ local colors = {
   green  = {0.0, 0.9, 0.0, 1},
   yellow = {0.9, 0.9, 0.0, 1},
   red    = {0.9, 0.0, 0.0, 1},
-  -- none   = {0.0, 0.0, 0.0, 1},
-  brown = {225/66, 225/40, 225/14, 1},
 }
 
 -- todo: generate from prototypes.
