@@ -32,6 +32,11 @@ local function is_player_holding_drill(player)
   end
 
   if player.cursor_stack.valid_for_read then
+    if player.cursor_stack.is_blueprint then
+      for _, blueprint_entity in ipairs(player.cursor_stack.get_blueprint_entities() or {}) do
+        if is_mining_drill_entity[blueprint_entity.name] then return true end
+      end
+    end
     return is_mining_drill_item[player.cursor_stack.prototype.name]
   end
 end
