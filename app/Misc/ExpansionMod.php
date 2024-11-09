@@ -142,11 +142,11 @@ class ExpansionMod
     {
         if ($this->mostRecentChangelogEntryHasNoDate()) return;
 
+        $changelog = file_get_contents($changelog_pathname = "{$this->get_pathname()}/changelog.txt");
+        $lines = explode(PHP_EOL, $changelog);
+
         $next_version = $this->info()['version'];
         if ($next_version == $this->getLastVersionFromChangelog()) {
-            $changelog = file_get_contents($changelog_pathname = "{$this->get_pathname()}/changelog.txt");
-            $lines = explode(PHP_EOL, $changelog);
-
             preg_match('/^Version: (\d+)\.(\d+)\.(\d+)$/', $lines[1], $matches);
             if (count($matches) == 0) throw new \LogicException();
 
