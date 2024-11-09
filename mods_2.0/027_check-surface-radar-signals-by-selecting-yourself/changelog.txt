@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2024. 11. 09
+  Info:
+    - Test to see if the migration popup can be hidden if its the requested item that changed
+    - Move the crc check from the proxy to the radar barrel item
+    - Cleanup after testing
+---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2024. 11. 09
   Info:
