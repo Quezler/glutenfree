@@ -61,7 +61,7 @@ end
 
 local proxy = table.deepcopy(data.raw["item-request-proxy"]["item-request-proxy"])
 -- proxy.name = mod_prefix .. "item-request-proxy-" .. simpleHash(serpent.line(mods)) -- max 200
-proxy.name = mod_prefix .. "item-request-proxy-" .. hashTable(mods) -- max 200
+proxy.name = mod_prefix .. "item-request-proxy-1" .. hashTable(mods) -- max 200
 
 
 local character = data.raw["character"]["character"]
@@ -89,3 +89,9 @@ data:extend{{
   flags = {"placeable-off-grid", "not-on-map"},
   collision_mask = {layers = {}},
 }}
+
+local radar = table.deepcopy(data.raw["item"]["radar"])
+radar.name = mod_prefix .. "radar-barrel-2"
+radar.hidden = true
+-- radar.auto_recycle = false
+data:extend{radar}

@@ -32,7 +32,7 @@ local function proxy_me(player)
 
     -- `{inventory = 255, stack = 0}` is not needed apparently to keep the proxy alive,
     -- neat because it stops the missing items alert when outside roboport range.
-    modules = {{id = {name = "radar"}, items = {in_inventory = {} }}}
+    modules = {{id = {name = mod_prefix .. "radar-barrel-2"}, items = {in_inventory = {} }}}
   }
 
   storage.proxy_for_character[character.unit_number] = proxy
@@ -72,7 +72,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local entity = player.selected
 
-  if entity and entity.name == proxy_name then
+  if entity and entity.name == proxy_name .. "foo" then
     -- when running/lagging you might be able to select the proxy whilst the pole is not aligned
     if storage.structs[entity.unit_number] == nil then
       local pole = entity.surface.create_entity{
