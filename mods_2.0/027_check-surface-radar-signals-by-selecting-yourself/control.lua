@@ -4,18 +4,26 @@ function str_starts_with(str, prefix)
   return string.sub(str, 1, #prefix) == prefix
 end
 
-local proxy_name = nil
-for _, entity_prototype in pairs(prototypes.entity) do
-  if entity_prototype.type == "item-request-proxy" and str_starts_with(entity_prototype.name, mod_prefix .. "item-request-proxy-") then
-    proxy_name = entity_prototype.name
+local radar_barrel_name = nil
+for _, item_prototype in pairs(prototypes.item) do
+  if str_starts_with(item_prototype.name, mod_prefix .. "radar-barrel-") then
+    radar_barrel_name = item_prototype.name
   end
 end
-assert(proxy_name, "failed to detect our item-request-proxy (different name for each set of mods & versions)")
+assert(radar_barrel_name, "failed to detect our radar barrel item (different name for each set of mods & versions)")
 
 script.on_init(function()
   storage.structs = {}
 
   storage.proxy_for_character = {}
+end)
+
+script.on_configuration_changed(function()
+  for _, proxy in pairs(storage.proxy_for_character) do
+    if proxy.valid == nil or #proxy.item_requests == 0 then
+      proxy.destroy()
+    end
+  end
 end)
 
 local function proxy_me(player)
@@ -24,7 +32,7 @@ local function proxy_me(player)
   if storage.proxy_for_character[character.unit_number] and storage.proxy_for_character[character.unit_number].valid then return end
 
   local proxy = character.surface.create_entity{
-    name = proxy_name,
+    name = mod_prefix .. "item-request-proxy",
     force = character.force,
     position = character.position,
 
@@ -32,7 +40,7 @@ local function proxy_me(player)
 
     -- `{inventory = 255, stack = 0}` is not needed apparently to keep the proxy alive,
     -- neat because it stops the missing items alert when outside roboport range.
-    modules = {{id = {name = mod_prefix .. "radar-barrel-2"}, items = {in_inventory = {} }}}
+    modules = {{id = {name = radar_barrel_name}, items = {in_inventory = {} }}}
   }
 
   storage.proxy_for_character[character.unit_number] = proxy
@@ -72,7 +80,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local entity = player.selected
 
-  if entity and entity.name == proxy_name .. "foo" then
+  if entity and entity.name == mod_prefix .. "item-request-proxy-" then
     -- when running/lagging you might be able to select the proxy whilst the pole is not aligned
     if storage.structs[entity.unit_number] == nil then
       local pole = entity.surface.create_entity{
