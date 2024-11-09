@@ -37,9 +37,12 @@ local function tableToString(tbl)
     return table.concat(elements, ",")
 end
 
-local function hashTable(tbl)
-    local str = tableToString(tbl)
+local function hashString(str)
     return string.format("%08X", crc32(str))
 end
 
-return hashTable
+-- local function hashTable(tbl)
+--     return hashString(tableToString(tbl))
+-- end
+
+return hashString

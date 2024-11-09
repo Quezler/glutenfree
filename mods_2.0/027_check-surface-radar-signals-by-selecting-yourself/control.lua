@@ -80,7 +80,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local entity = player.selected
 
-  if entity and entity.name == mod_prefix .. "item-request-proxy-" then
+  if entity and entity.name == mod_prefix .. "item-request-proxy" then
     -- when running/lagging you might be able to select the proxy whilst the pole is not aligned
     if storage.structs[entity.unit_number] == nil then
       local pole = entity.surface.create_entity{
