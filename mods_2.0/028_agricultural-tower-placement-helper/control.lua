@@ -216,7 +216,7 @@ function Handler.tick_player(event)
         playerdata.tile_render_objects[tile_key] = rendering.draw_circle{
           surface = playerdata.surface_index,
 
-          target = tile.position,
+          target = {tile.position.x + 0.5, tile.position.y + 0.5},
           radius = playerdata.alt_mode and 0.2 or 0.1,
 
           color = color,
