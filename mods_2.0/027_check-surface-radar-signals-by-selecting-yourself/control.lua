@@ -20,7 +20,7 @@ end)
 
 script.on_configuration_changed(function()
   for _, proxy in pairs(storage.proxy_for_character) do
-    if proxy.valid == nil or #proxy.item_requests == 0 then
+    if proxy.valid == false or #proxy.item_requests == 0 then
       proxy.destroy()
     end
   end
