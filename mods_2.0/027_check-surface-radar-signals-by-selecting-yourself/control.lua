@@ -1,5 +1,17 @@
 local mod_prefix = 'csrsbsy-'
 
+function str_starts_with(str, prefix)
+  return string.sub(str, 1, #prefix) == prefix
+end
+
+local proxy_name = nil
+for _, entity_prototype in pairs(prototypes.entity) do
+  if entity_prototype.type == "item-request-proxy" and str_starts_with(entity_prototype.name, mod_prefix .. "item-request-proxy-") then
+    proxy_name = entity_prototype.name
+  end
+end
+assert(proxy_name, "failed to detect our item-request-proxy (different name for each set of mods & versions)")
+
 script.on_init(function()
   storage.structs = {}
 
@@ -12,7 +24,7 @@ local function proxy_me(player)
   if storage.proxy_for_character[character.unit_number] and storage.proxy_for_character[character.unit_number].valid then return end
 
   local proxy = character.surface.create_entity{
-    name = mod_prefix .. "item-request-proxy",
+    name = proxy_name,
     force = character.force,
     position = character.position,
 
@@ -60,7 +72,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local entity = player.selected
 
-  if entity and entity.name == mod_prefix .. "item-request-proxy" then
+  if entity and entity.name == proxy_name then
     -- when running/lagging you might be able to select the proxy whilst the pole is not aligned
     if storage.structs[entity.unit_number] == nil then
       local pole = entity.surface.create_entity{
