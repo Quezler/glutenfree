@@ -19,6 +19,7 @@ Date: ????
     - Decide we are not gonna care about rockets/pods mid-flight when the mod gets added
     - Make the global storage obsolete (neat how i can just make a 360 based on r&d)
     - Setup the thumbnail (technically received is on the right tho)
+    - Make thumbnail more correct
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11
