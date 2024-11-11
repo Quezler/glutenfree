@@ -46,11 +46,12 @@ local function migrate_display_panel_from_version_1(entity)
   if entity.get_circuit_network(defines.wire_connector_id.circuit_red) then return end
   if entity.get_circuit_network(defines.wire_connector_id.circuit_green) then return end
 
-  -- game.print(game.tick .. " ordered")
   entity.order_upgrade{
     target = "sign-post",
     force = entity.force,
   }
+
+  -- now that we have registered the upgrade we'll just trick the mod into thinking the upgrade/replace happened:
 
   entity.surface.create_entity{
     name = "sign-post",
@@ -59,33 +60,8 @@ local function migrate_display_panel_from_version_1(entity)
     create_build_effect_smoke = false,
   }
 
-  -- game.print(game.tick .. " destroyed")
   entity.destroy()
-
-  -- entity.surface.spill_item_stack{
-  --   position = entity.position,
-  --   stack = {name = "sign-post", count = 1},
-  --   force = entity.force,
-  --   allow_belts = false,
-  -- }
 end
-
--- local function force_upgrades()
---   for _, struct in pairs(storage.structs) do
---     local entity = struct.entity
---     entity.surface.create_entity{
---       name = "sign-post",
---       force = entity.force,
---       position = entity.position,
---       create_build_effect_smoke = false,
---       preserve_ghosts_and_corpses = true,
---     }
-
---     entity.destroy()
---   end
-
---   script.on_nth_tick(game.tick, nil)
--- end
 
 script.on_configuration_changed(function(event)
   storage.index = storage.index or 0
@@ -105,15 +81,12 @@ script.on_configuration_changed(function(event)
         end
       end
     end
-
-    -- script.on_nth_tick(game.tick + 1, force_upgrades)
   end
 end)
 
 local function anticipate_upgrade(entity, upgrade_target_name)
   if entity.surface.name == mod_surface_name then return end -- someone inspecting the hidden surface
-  -- if entity.unit_number == 5 then error() end
-  -- game.print(game.tick .. " anticipated " .. entity.unit_number)
+
   storage.index = storage.index + 1
   local backup = entity.clone{
     position = {0.5 + storage.index, -0.5},
@@ -123,14 +96,11 @@ local function anticipate_upgrade(entity, upgrade_target_name)
   }
 
   if storage.structs[entity.unit_number] then
-    -- game.print(game.tick .. " old backup removed")
     storage.structs[entity.unit_number].backup.destroy()
   end
 
   assert(backup)
   assert(backup.valid)
-
-  -- game.print(game.tick .. " cloned")
 
   storage.structs[entity.unit_number] = {
     entity = entity,
@@ -145,7 +115,6 @@ local function anticipate_upgrade(entity, upgrade_target_name)
 end
 
 script.on_event(defines.events.on_marked_for_upgrade, function(event)
-  -- game.print(game.tick .. " marked for upgrade " .. event.entity.unit_number .. event.entity.surface.name)
   anticipate_upgrade(event.entity, event.target.name)
 end, {
   {filter = "name", name = "sign-post"},
@@ -158,8 +127,6 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     local struct_id = assert(deathrattle.struct_id)
     local struct = assert(storage.structs[struct_id])
 
-    -- game.print(game.tick .. " deathrattle")
-    -- game.print(serpent.line(struct))
     local target = struct.surface.find_entity(struct.upgrade_target_name, struct.position)
     if target then
       target.copy_settings(struct.backup)
