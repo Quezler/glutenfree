@@ -17,6 +17,7 @@ Date: ????
     - Neither driver nor passenger work
     - Assert cargo pod created on nauvis ignored
     - Decide we are not gonna care about rockets/pods mid-flight when the mod gets added
+    - Make the global storage obsolete (neat how i can just make a 360 based on r&d)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11

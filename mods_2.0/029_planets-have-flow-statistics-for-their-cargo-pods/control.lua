@@ -7,33 +7,6 @@ for _, space_location in pairs(prototypes.space_location) do
   end
 end
 
-script.on_init(function()
-  -- cargo pods share the same unit number when they transition between surfaces
-  storage.cargo_pods = {}
-  storage.new_cargo_pods = {}
-
-  storage.deathrattles = {}
-end)
-
-script.on_configuration_changed(function()
-
-end)
-
-local function on_tick(event)
-  for _, cargo_pod in ipairs(storage.new_cargo_pods) do
-    Handler.on_cargo_pod_created(cargo_pod)
-  end
-
-  storage.new_cargo_pods = {}
-  script.on_event(defines.events.on_tick, nil)
-end
-
-script.on_load(function()
-  if next(storage.new_cargo_pods) then
-    script.on_event(defines.events.on_tick, on_tick)
-  end
-end)
-
 local function get_flow_surface(planet_name)
   local flow_surface_name = get_flow_surface_name[planet_name]
   assert(flow_surface_name, planet_name .. " is not a planet")
@@ -47,77 +20,35 @@ local function get_flow_surface(planet_name)
   return flow_surface
 end
 
-function Handler.on_cargo_pod_created(entity, abort_if_duplicate)
-  storage.cargo_pods = storage.cargo_pods or {} -- todo: remove
-  local struct = storage.cargo_pods[entity.unit_number]
-  if struct and abort_if_duplicate then return end
-  if struct then -- known cargo pod, just tansitioned to the other surface
+-- script.on_init(function()
 
-    local flow_surface = get_flow_surface(struct.planet_name)
-    local statistics = entity.force.get_item_production_statistics(flow_surface)
+-- end)
 
-    if struct.from_planet then
-      game.print("cargo pod from planet transition to platform")
-      for _, item in ipairs(struct.items) do
-        statistics.on_flow({name = item.name, quality = item.quality}, -item.count)
-      end
-    else
-      game.print("cargo pod from platform transition to planet")
-      for _, item in ipairs(struct.items) do
-        statistics.on_flow({name = item.name, quality = item.quality}, item.count)
-      end
-    end
+-- script.on_configuration_changed(function()
 
-    storage.cargo_pods[entity.unit_number] = nil
-    return
-  end
-
-  local platform = entity.surface.platform
-  if platform then
-    local inventory = entity.get_inventory(defines.inventory.cargo_unit)
-    game.print("cargo pod launched from platform")
-
-    storage.cargo_pods[entity.unit_number] = {
-      entity = entity,
-      planet_name = entity.surface.platform.space_location.name,
-      from_planet = false,
-      items = inventory.get_contents(),
-    }
-  else
-    -- cargo pods likely created underground in a silo
-  end
-  -- game.print(event.entity.unit_number .. event.entity.surface.name .. event.entity.procession_tick)
-
-  -- local inventory = event.entity.get_inventory(defines.inventory.cargo_unit)
-  -- game.print(serpent.line(inventory.get_contents()))
-
-  -- if inventory.is_empty() == false then -- in their first tick their inventory is empty, unless they transition surface
-  --   game.print("cargo pod transitioned to destination surface")
-  -- end
-
-  -- storage.inventory = event.entity.get_inventory(defines.inventory.cargo_unit)
-end
+-- end)
 
 script.on_event(defines.events.on_script_trigger_effect, function(event)
   if event.effect_id ~= "cargo-pod-created" then return end
-  assert(event.target_entity.name == "cargo-pod")
-  assert(event.target_entity.type == "cargo-pod")
+  local entity = event.target_entity --[[@as LuaEntity]]
+  assert(entity.name == "cargo-pod")
+  assert(entity.type == "cargo-pod")
 
-  game.print(string.format("new cargo pod: %d @ %s", event.target_entity.unit_number, event.target_entity.surface.name))
-  table.insert(storage.new_cargo_pods, event.target_entity)
-  script.on_event(defines.events.on_tick, on_tick)
-end)
+  game.print(string.format("new cargo pod: %d @ %s", entity.unit_number, entity.surface.name))
 
-script.on_event(defines.events.on_rocket_launch_ordered, function(event)
-  local cargo_pod = event.rocket.cargo_pod --[[@as LuaEntity]]
-  local inventory = cargo_pod.get_inventory(defines.inventory.cargo_unit) --[[@as LuaInventory]]
-  game.print("launched rocket has: " .. serpent.line( inventory.get_contents() ))
+  -- the inventory is empty when:
+  -- A) the cargo pod got created underground in the silo (exists before rocket launch)
+  -- B) the cargo pod got launched from a platform (trigger fires before inventory insertion)
+  -- C) there is a player traveling in the cargo pod
+  local inventory = event.target_entity.get_inventory(defines.inventory.cargo_unit) --[[@as LuaInventory]]
+  if inventory.is_empty() then return end
 
-  assert(storage.cargo_pods[cargo_pod.unit_number] == nil)
-  storage.cargo_pods[cargo_pod.unit_number] = {
-    entity = cargo_pod,
-    planet_name = event.rocket.surface.planet.name,
-    from_planet = true,
-    items = inventory.get_contents(),
-  }
+  local platform = entity.surface.platform
+  local flow_surface = get_flow_surface(platform and platform.space_location.name or entity.surface.planet.name)
+  local statistics = entity.force.get_item_production_statistics(flow_surface)
+  local multiplier = platform and 1 or -1 -- production = send up, consumption = requesting
+
+  for _, item in ipairs(inventory.get_contents()) do
+    statistics.on_flow({name = item.name, quality = item.quality}, item.count * multiplier)
+  end
 end)
