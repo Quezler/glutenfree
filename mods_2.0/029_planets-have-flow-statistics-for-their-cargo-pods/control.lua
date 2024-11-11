@@ -12,6 +12,19 @@ script.on_init(function()
   storage.cargo_pods = {}
   storage.new_cargo_pods = {}
 
+  storage.deathrattles = {}
+
+  -- for _, surface in pairs(game.surfaces) do
+  --   if get_flow_surface_name[surface.name] then
+  --     for _, entity in pairs(surface.find_entities_filtered({name = {"rocket-silo-rocket"}})) do
+  --       Handler.handle_launched_rocket(entity)
+  --     end
+  --     -- for _, entity in pairs(surface.find_entities_filtered({name = {"cargo-pod"}})) do
+  --     --   Handler.handle_launched_rocket(entity)
+  --     -- end
+  --   end
+  -- end
+
   Handler.adopt_launched_rockets()
 end)
 
@@ -58,11 +71,23 @@ function Handler.on_cargo_pod_created(entity)
   if platform then
     local inventory = entity.get_inventory(defines.inventory.cargo_unit)
     game.print(platform.space_location.name)
-    local flow_surface = get_flow_surface(platform.space_location.name)
-    local statistics = entity.force.get_item_production_statistics(flow_surface)
 
-    for _, item in ipairs(inventory.get_contents()) do
-      statistics.on_flow({name = item.name, quality = item.quality}, -item.count)
+    storage.cargo_pods = storage.cargo_pods or {} -- todo: remove
+    storage.cargo_pods[entity.unit_number] = {
+      entity = entity,
+      items = inventory.get_contents(),
+    }
+  else
+    if storage.cargo_pods[entity.unit_number] then
+      game.print("cargo pod from platform transition to planet")
+
+      local flow_surface = get_flow_surface(entity.surface.planet.name)
+      local statistics = entity.force.get_item_production_statistics(flow_surface)
+      for _, item in ipairs(storage.cargo_pods[entity.unit_number].items) do
+        statistics.on_flow({name = item.name, quality = item.quality}, item.count)
+      end
+
+      storage.cargo_pods[entity.unit_number] = nil
     end
   end
   -- game.print(event.entity.unit_number .. event.entity.surface.name .. event.entity.procession_tick)
