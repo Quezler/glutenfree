@@ -15,12 +15,3 @@ local created_effect = {
 
 assert(cargo_pod.created_effect == nil, "another mod has added a created effect to the cargo pod, guess we'll need to share now.")
 cargo_pod.created_effect = created_effect
-
-data:extend{{
-  type = "custom-input",
-  name = "cargo-pod-production",
-
-  linked_game_control = "production-statistics",
-  key_sequence = "P",
-  action = "lua",
-}}

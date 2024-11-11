@@ -13,18 +13,6 @@ script.on_init(function()
   storage.new_cargo_pods = {}
 
   storage.deathrattles = {}
-
-  for _, surface in pairs(game.surfaces) do
-    if get_flow_surface_name[surface.name] then
-      for _, entity in pairs(surface.find_entities_filtered({name = {"rocket-silo-rocket"}})) do
-        Handler.handle_launched_rocket(entity)
-      end
-      -- the cargo-pod search will find rockets with cargo pods too, but since we did rockets first we can filter them out.
-      for _, entity in pairs(surface.find_entities_filtered({name = {"cargo-pod"}})) do
-        Handler.on_cargo_pod_created(entity, true) -- filtering them out by not assuming they're transitioning surface :)
-      end
-    end
-  end
 end)
 
 script.on_configuration_changed(function()
@@ -120,20 +108,16 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   script.on_event(defines.events.on_tick, on_tick)
 end)
 
-function Handler.handle_launched_rocket(rocket)
-  local cargo_pod = rocket.cargo_pod --[[@as LuaEntity]]
+script.on_event(defines.events.on_rocket_launch_ordered, function(event)
+  local cargo_pod = event.rocket.cargo_pod --[[@as LuaEntity]]
   local inventory = cargo_pod.get_inventory(defines.inventory.cargo_unit) --[[@as LuaInventory]]
   game.print("launched rocket has: " .. serpent.line( inventory.get_contents() ))
 
   assert(storage.cargo_pods[cargo_pod.unit_number] == nil)
   storage.cargo_pods[cargo_pod.unit_number] = {
     entity = cargo_pod,
-    planet_name = rocket.surface.planet.name,
+    planet_name = event.rocket.surface.planet.name,
     from_planet = true,
     items = inventory.get_contents(),
   }
-end
-
-script.on_event(defines.events.on_rocket_launch_ordered, function(event)
-  Handler.handle_launched_rocket(event.rocket)
 end)
