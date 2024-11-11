@@ -14,6 +14,7 @@ Date: ????
     - Refractor
     - Turn on_tick handler conditional
     - Determine planet name when registering the cargo pod
+    - Neither driver nor passenger work
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11

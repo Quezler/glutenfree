@@ -80,6 +80,8 @@ function Handler.on_cargo_pod_created(entity, abort_if_duplicate)
       end
     end
 
+    game.print(serpent.line(entity.get_driver()))
+
     storage.cargo_pods[entity.unit_number] = nil
     return
   end
