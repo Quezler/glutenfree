@@ -6,6 +6,7 @@ Date: ????
     - Hmm
     - Add the item with quality to the flow
     - Localize the surface names
+    - Put the cargo surfaces in the expected order
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11

@@ -27,13 +27,15 @@ end)
 
 local function get_flow_surface(planet_name)
   -- todo: assert space location name is of type planet
-  local flow_surface_name = planet_name .. "-cargo-flow"
+  local flow_surface_name = string.format("cargo-flow-%s-%s", prototypes.space_location[planet_name].order, planet_name)
 
   local flow_surface = game.surfaces[flow_surface_name]
   if flow_surface == nil then
     flow_surface = game.create_surface(flow_surface_name)
     flow_surface.localised_name = {"", string.format("[entity=cargo-pod] [planet=%s] ", planet_name), {"space-location-name." .. planet_name}}
   end
+
+  -- order
 
   return flow_surface
 end
