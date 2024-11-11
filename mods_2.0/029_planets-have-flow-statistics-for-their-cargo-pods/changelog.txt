@@ -8,6 +8,7 @@ Date: ????
     - Localize the surface names
     - Put the cargo surfaces in the expected order
     - Compute flow surface names ahead of time
+    - Detect launching and launched rockets
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11

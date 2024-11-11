@@ -11,6 +11,12 @@ script.on_init(function()
   -- cargo pods share the same unit number when they transition between surfaces
   storage.cargo_pods = {}
   storage.new_cargo_pods = {}
+
+  Handler.adopt_launched_rockets()
+end)
+
+script.on_configuration_changed(function()
+  Handler.adopt_launched_rockets() -- todo: remove
 end)
 
 script.on_event(defines.events.on_tick, function(event)
@@ -78,3 +84,24 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 
   table.insert(storage.new_cargo_pods, event.target_entity)
 end)
+
+function Handler.handle_launched_rocket(rocket)
+  local cargo_pod = rocket.cargo_pod --[[@as LuaEntity]]
+  local inventory = cargo_pod.get_inventory(defines.inventory.cargo_unit) --[[@as LuaInventory]]
+  game.print("launched rocket has: " .. serpent.line( inventory.get_contents() ))
+end
+
+script.on_event(defines.events.on_rocket_launch_ordered, function(event)
+  Handler.handle_launched_rocket(event.rocket)
+end)
+
+-- once during on_init, to catch rockets already in flight
+function Handler.adopt_launched_rockets()
+  for _, surface in pairs(game.surfaces) do
+    if get_flow_surface_name[surface.name] then
+      for _, entity in pairs(surface.find_entities_filtered({name = {"rocket-silo-rocket"}})) do
+        Handler.handle_launched_rocket(entity)
+      end
+    end
+  end
+end
