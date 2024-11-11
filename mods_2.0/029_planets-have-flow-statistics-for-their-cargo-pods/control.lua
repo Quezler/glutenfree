@@ -1,5 +1,12 @@
 local Handler = {}
 
+local get_flow_surface_name = {}
+for _, space_location in pairs(prototypes.space_location) do
+  if space_location.type == "planet" then
+    get_flow_surface_name[space_location.name] = string.format("cargo-flow-%s-%s", space_location.order, space_location)
+  end
+end
+
 script.on_init(function()
   -- cargo pods share the same unit number when they transition between surfaces
   storage.cargo_pods = {}
@@ -27,7 +34,7 @@ end)
 
 local function get_flow_surface(planet_name)
   -- todo: assert space location name is of type planet
-  local flow_surface_name = string.format("cargo-flow-%s-%s", prototypes.space_location[planet_name].order, planet_name)
+  local flow_surface_name = get_flow_surface_name[planet_name]
 
   local flow_surface = game.surfaces[flow_surface_name]
   if flow_surface == nil then
