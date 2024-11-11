@@ -80,8 +80,6 @@ function Handler.on_cargo_pod_created(entity, abort_if_duplicate)
       end
     end
 
-    game.print(serpent.line(entity.get_driver()))
-
     storage.cargo_pods[entity.unit_number] = nil
     return
   end
@@ -127,7 +125,7 @@ function Handler.handle_launched_rocket(rocket)
   local inventory = cargo_pod.get_inventory(defines.inventory.cargo_unit) --[[@as LuaInventory]]
   game.print("launched rocket has: " .. serpent.line( inventory.get_contents() ))
 
-  -- this can already exist, overriding it is likely harmless
+  assert(storage.cargo_pods[cargo_pod.unit_number] == nil)
   storage.cargo_pods[cargo_pod.unit_number] = {
     entity = cargo_pod,
     planet_name = rocket.surface.planet.name,
