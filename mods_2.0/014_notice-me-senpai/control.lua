@@ -53,6 +53,43 @@ script.on_configuration_changed(function()
   rendering.clear("notice-me-senpai")
 end)
 
+local function playerdata_create(player_index)
+  local player = game.get_player(player_index) --[[@as LuaPlayer]]
+
+  storage.playerdata[player_index] = {
+    player_index = player_index,
+    surface_index = player.surface.index,
+
+    rectangles = {},
+    seen_chunks = {},
+
+    ores = {},
+    drills = {},
+
+    green_positions = {}, -- "[x, y]" = true
+    yellow_positions = {}, -- "[x, y]" = true
+
+    ore_render_objects = {},
+    redraw = false,
+
+    alt_mode = player.game_view_settings.show_entity_info,
+  }
+end
+
+local function playerdata_delete(player_index)
+  local playerdata = storage.playerdata[player_index]
+
+  for _, rectangle in pairs(playerdata.rectangles) do
+    rectangle.destroy()
+  end
+
+  for _, ore_render_object in pairs(playerdata.ore_render_objects) do
+    ore_render_object.destroy()
+  end
+
+  storage.playerdata[player_index] = nil
+end
+
 script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   local player = game.get_player(event.player_index)
   assert(player)
@@ -61,36 +98,12 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
 
   if playerdata == nil then
     if is_player_holding_drill(player) then
-      storage.playerdata[player.index] = {
-        player_index = player.index,
-        surface_index = player.surface.index,
-
-        rectangles = {},
-        seen_chunks = {},
-
-        ores = {},
-        drills = {},
-
-        green_positions = {}, -- "[x, y]" = true
-        yellow_positions = {}, -- "[x, y]" = true
-
-        ore_render_objects = {},
-        redraw = false,
-
-        alt_mode = player.game_view_settings.show_entity_info,
-      }
-
+      playerdata_create(player.index)
       Handler.tick_player(event)
     end
   else
     if is_player_holding_drill(player) ~= true then
-      for _, rectangle in pairs(playerdata.rectangles) do
-        rectangle.destroy()
-      end
-      for _, ore_render_object in pairs(playerdata.ore_render_objects) do
-        ore_render_object.destroy()
-      end
-      storage.playerdata[player.index] = nil
+      playerdata_delete(player.index)
     end
   end
 
@@ -228,6 +241,12 @@ function Handler.tick_player(event)
 
   local player = assert(game.get_player(event.player_index))
   local surface = player.surface
+
+  if playerdata.surface_index ~= surface.index then
+    playerdata_delete(event.player_index)
+    playerdata_create(event.player_index)
+    playerdata = storage.playerdata[event.player_index]
+  end
 
   local chunk_position_with_player = flib_position.to_chunk(player.position)
 
