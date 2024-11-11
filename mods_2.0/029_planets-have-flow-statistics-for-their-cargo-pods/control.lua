@@ -34,7 +34,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   assert(entity.name == "cargo-pod")
   assert(entity.type == "cargo-pod")
 
-  game.print(string.format("new cargo pod: %d @ %s", entity.unit_number, entity.surface.name))
+  -- game.print(string.format("new cargo pod: %d @ %s", entity.unit_number, entity.surface.name))
 
   -- the inventory is empty when:
   -- A) the cargo pod got created underground in the silo (exists before rocket launch)

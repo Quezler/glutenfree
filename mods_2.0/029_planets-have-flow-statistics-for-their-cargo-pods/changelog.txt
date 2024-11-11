@@ -20,6 +20,7 @@ Date: ????
     - Make the global storage obsolete (neat how i can just make a 360 based on r&d)
     - Setup the thumbnail (technically received is on the right tho)
     - Make thumbnail more correct
+    - Prepare for mod portal release
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11
