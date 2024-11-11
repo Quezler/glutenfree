@@ -31,23 +31,19 @@ script.on_configuration_changed(function()
 
 end)
 
-script.on_event(defines.events.on_tick, function(event)
+local function on_tick(event)
   for _, cargo_pod in ipairs(storage.new_cargo_pods) do
     Handler.on_cargo_pod_created(cargo_pod)
   end
-  storage.new_cargo_pods = {}
 
-  -- for _, new_cargo_pod in ipairs(storage.new_cargo_pods) do
-  --   storage.cargo_pods[new_cargo_pod.unit_number] = {
-  --     entity = new_cargo_pod,
-  --     inventory = new_cargo_pod.get_inventory(defines.inventory.cargo_unit),
-  --   }
-  -- end
-  -- storage.new_cargo_pods = {}
-  -- if storage.inventory then
-  --   game.print(serpent.line(storage.inventory.get_contents()))
-  --   storage.inventory = nil
-  -- end
+  storage.new_cargo_pods = {}
+  script.on_event(defines.events.on_tick, nil)
+end
+
+script.on_load(function()
+  if next(storage.new_cargo_pods) then
+    script.on_event(defines.events.on_tick, on_tick)
+  end
 end)
 
 local function get_flow_surface(planet_name)
@@ -111,6 +107,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 
   game.print(string.format("new cargo pod: %d @ %s", event.target_entity.unit_number, event.target_entity.surface.name))
   table.insert(storage.new_cargo_pods, event.target_entity)
+  script.on_event(defines.events.on_tick, on_tick)
 end)
 
 function Handler.handle_launched_rocket(rocket)
