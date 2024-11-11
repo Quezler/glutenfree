@@ -64,12 +64,20 @@ function Handler.on_cargo_pod_created(entity, abort_if_duplicate)
   local struct = storage.cargo_pods[entity.unit_number]
   if struct and abort_if_duplicate then return end
   if struct then -- known cargo pod, just tansitioned to the other surface
-    game.print("cargo pod from platform transition to planet")
 
-    local flow_surface = get_flow_surface(entity.surface.planet.name)
+    local flow_surface = get_flow_surface(struct.planet_name)
     local statistics = entity.force.get_item_production_statistics(flow_surface)
-    for _, item in ipairs(storage.cargo_pods[entity.unit_number].items) do
-      statistics.on_flow({name = item.name, quality = item.quality}, item.count)
+
+    if struct.from_planet then
+      game.print("cargo pod from planet transition to platform")
+      for _, item in ipairs(struct.items) do
+        statistics.on_flow({name = item.name, quality = item.quality}, -item.count)
+      end
+    else
+      game.print("cargo pod from platform transition to planet")
+      for _, item in ipairs(struct.items) do
+        statistics.on_flow({name = item.name, quality = item.quality}, item.count)
+      end
     end
 
     storage.cargo_pods[entity.unit_number] = nil
@@ -83,6 +91,8 @@ function Handler.on_cargo_pod_created(entity, abort_if_duplicate)
 
     storage.cargo_pods[entity.unit_number] = {
       entity = entity,
+      planet_name = entity.surface.platform.space_location.name,
+      from_planet = false,
       items = inventory.get_contents(),
     }
   else
@@ -114,6 +124,14 @@ function Handler.handle_launched_rocket(rocket)
   local cargo_pod = rocket.cargo_pod --[[@as LuaEntity]]
   local inventory = cargo_pod.get_inventory(defines.inventory.cargo_unit) --[[@as LuaInventory]]
   game.print("launched rocket has: " .. serpent.line( inventory.get_contents() ))
+
+  -- this can already exist, overriding it is likely harmless
+  storage.cargo_pods[cargo_pod.unit_number] = {
+    entity = cargo_pod,
+    planet_name = rocket.surface.planet.name,
+    from_planet = true,
+    items = inventory.get_contents(),
+  }
 end
 
 script.on_event(defines.events.on_rocket_launch_ordered, function(event)

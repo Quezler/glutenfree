@@ -13,6 +13,7 @@ Date: ????
     - Test hijacking the p key, abandoning since it'll likely break due to latency
     - Refractor
     - Turn on_tick handler conditional
+    - Determine planet name when registering the cargo pod
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11
