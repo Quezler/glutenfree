@@ -67,12 +67,16 @@ local function get_flow_surface(planet_name)
 end
 
 function Handler.on_cargo_pod_created(entity)
+  storage.cargo_pods = storage.cargo_pods or {} -- todo: remove
+  local struct = storage.cargo_pods[entity.unit_number]
+  if struct then -- known cargo pod, just tansitioned to the other surface
+  end
+
   local platform = entity.surface.platform
   if platform then
     local inventory = entity.get_inventory(defines.inventory.cargo_unit)
     game.print(platform.space_location.name)
 
-    storage.cargo_pods = storage.cargo_pods or {} -- todo: remove
     storage.cargo_pods[entity.unit_number] = {
       entity = entity,
       items = inventory.get_contents(),
@@ -86,6 +90,7 @@ function Handler.on_cargo_pod_created(entity)
       for _, item in ipairs(storage.cargo_pods[entity.unit_number].items) do
         statistics.on_flow({name = item.name, quality = item.quality}, item.count)
       end
+      game.players["Quezler"].opened = statistics
 
       storage.cargo_pods[entity.unit_number] = nil
     end
@@ -130,3 +135,7 @@ function Handler.adopt_launched_rockets()
     end
   end
 end
+
+script.on_event("cargo-pod-production", function(event)
+  
+end)
