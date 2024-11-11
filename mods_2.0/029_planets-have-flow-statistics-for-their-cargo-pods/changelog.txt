@@ -5,6 +5,7 @@ Date: ????
     - Check that cargo pods have items in them during their next tick
     - Hmm
     - Add the item with quality to the flow
+    - Localize the surface names
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11

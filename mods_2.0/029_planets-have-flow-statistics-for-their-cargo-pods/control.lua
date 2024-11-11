@@ -32,6 +32,7 @@ local function get_flow_surface(planet_name)
   local flow_surface = game.surfaces[flow_surface_name]
   if flow_surface == nil then
     flow_surface = game.create_surface(flow_surface_name)
+    flow_surface.localised_name = {"", string.format("[entity=cargo-pod] [planet=%s] ", planet_name), {"space-location-name." .. planet_name}}
   end
 
   return flow_surface
