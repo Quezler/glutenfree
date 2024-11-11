@@ -1,9 +1,16 @@
 script.on_init(function()
   -- cargo pods share the same unit number when they transition between surfaces
   storage.cargo_pods = {}
+  storage.new_cargo_pods = {}
 end)
 
 script.on_event(defines.events.on_tick, function(event)
+  for _, new_cargo_pod in ipairs(storage.new_cargo_pods) do
+    storage.cargo_pods[new_cargo_pod.unit_number] = {
+      entity = new_cargo_pod,
+      inventory = new_cargo_pod.get_inventory(defines.inventory.cargo_unit),
+    }
+  end
   if storage.inventory then
     game.print(serpent.line(storage.inventory.get_contents()))
     storage.inventory = nil
@@ -28,5 +35,5 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   assert(event.target_entity.name == "cargo-pod")
   assert(event.target_entity.type == "cargo-pod")
 
-  on_cargo_pod_created({entity = event.target_entity})
+  storage.new_cargo_pods[#storage.new_cargo_pods + 1] = event.target_entity
 end)
