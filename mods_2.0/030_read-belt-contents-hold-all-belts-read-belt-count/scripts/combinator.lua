@@ -26,11 +26,11 @@ local function get_transport_line_backward(next_direction, belt, belts)
 
   local inputs = belt.belt_neighbours.inputs
   if #inputs == 1 then
-    get_transport_line_backward(next_direction, inputs[1], belts)
+    get_transport_line_backward(belt.direction, inputs[1], belts)
   else
     for _, input in ipairs(inputs) do
       if input.direction == next_direction then
-        get_transport_line_backward(next_direction, input, belts)
+        get_transport_line_backward(belt.direction, input, belts)
       end
     end
   end
