@@ -6,9 +6,9 @@
 --   end
 -- end
 
-local function get_next_belt(belt, seen)
-  if seen[assert(belt.unit_number)] then return end
-  seen[belt.unit_number] = true
+local function get_next_belt(belt, belts)
+  if belts[assert(belt.unit_number)] then return end
+  belts[belt.unit_number] = belt
 
   rendering.draw_circle{
     surface = belt.surface,
@@ -19,10 +19,9 @@ local function get_next_belt(belt, seen)
     time_to_live = 30,
   }
 
-  game.print(serpent.line(belt.belt_neighbours))
   local in_front = belt.belt_neighbours.outputs[1]
   if in_front and in_front.type == "transport-belt" then
-    get_next_belt(in_front, seen)
+    get_next_belt(in_front, belts)
   end
 end
 
@@ -32,7 +31,9 @@ script.on_nth_tick(60, function(event)
       game.print("nth 60 delete")
       delete_struct(struct)
     else
-      get_next_belt(struct.belt, {})
+      local belts = {}
+      get_next_belt(struct.belt, belts)
+      game.print(table_size(belts))
     end
   end
 end)
