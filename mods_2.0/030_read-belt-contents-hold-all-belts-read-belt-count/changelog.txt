@@ -9,6 +9,7 @@ Date: ????
     - Skip "has any circuit wires" check whilst the entity is a ghost
     - Test if a ghost can still do .belt_neighbours
     - Rename seen to belts and return it
+    - Try to detect the ending if there are multiple inputs
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12

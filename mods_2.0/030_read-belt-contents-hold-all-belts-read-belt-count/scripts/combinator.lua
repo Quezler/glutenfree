@@ -19,9 +19,12 @@ local function get_next_belt(belt, belts)
     time_to_live = 30,
   }
 
-  local in_front = belt.belt_neighbours.outputs[1]
-  if in_front and in_front.type == "transport-belt" then
-    get_next_belt(in_front, belts)
+  local inputs = belt.belt_neighbours.inputs
+  if #inputs == 1 then
+    local in_front = belt.belt_neighbours.outputs[1]
+    if in_front and in_front.type == "transport-belt" then
+      get_next_belt(in_front, belts)
+    end
   end
 end
 
