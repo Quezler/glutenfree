@@ -119,9 +119,7 @@ local function on_tick_player(player)
       raise_built = true,
     }
   elseif struct ~= nil and enabled == false then
-    struct.combinator.destroy()
-    storage.structs[struct_id] = nil
-    storage.unit_number_to_struct_id[opened.unit_number] = nil
+    Handler.delete_struct(struct)
   end
 
   return true
@@ -221,7 +219,10 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     local unit_number = assert(event.useful_id)
     local struct_id = assert(storage.unit_number_to_struct_id[unit_number])
-    local struct = assert(storage.structs[struct_id])
+    local struct = storage.structs[struct_id]
+    if struct == nil then
+      return game.print("struct already gone?")
+    end
 
     -- in case the entity becomes a ghost or get upgraded, try to adopt that new entity.
     local combinator = struct.combinator
@@ -229,10 +230,25 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if belt then
       attach_belt_to_struct(belt, struct)
     else
-      combinator.destroy()
-      storage.structs[struct_id] = nil
+      Handler.delete_struct(struct)
     end
 
     storage.unit_number_to_struct_id[unit_number] = nil
+  end
+end)
+
+function Handler.delete_struct(struct)
+  struct.combinator.destroy()
+  storage.structs[struct.id] = nil
+
+  -- if struct.belt.valid then storage.unit_number_to_struct_id[struct.belt.unit_number] = nil end
+end
+
+script.on_nth_tick(60, function(event)
+  for struct_id, struct in pairs(storage.structs) do
+    if is_belt_read_holding_all_belts(struct.belt) == false then
+      game.print("nth 60 delete")
+      Handler.delete_struct(struct)
+    end
   end
 end)

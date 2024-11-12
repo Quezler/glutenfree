@@ -17,6 +17,7 @@ Date: ????
     - Refractor struct to be keyed by an index (since it swaps belts)
     - Fix combinator not re-appearing
     - Fix todo
+    - Broken logic rabbit hole
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 12
