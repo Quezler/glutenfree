@@ -57,11 +57,6 @@ script.on_event(defines.events.on_gui_opened, function(event)
       caption = {"gui-control-behavior-modes.read-belt-count"},
       state = enabled,
       enabled = enabled,
-      tags = {
-        surface_index = entity.surface.index,
-        force_index = entity.force.index,
-        position = entity.position,
-      },
     }
 
     local flow2 = inner.add{
@@ -101,15 +96,21 @@ local function is_belt_read_holding_all_belts(entity) -- boolean
   return enabled
 end
 
-local function on_tick_player(player)
+local function player_is_in_belt_gui(player)
   local opened = player.opened
-  if opened == nil then return end
+  if opened == nil then return false end
 
-  if player.opened_gui_type ~= defines.gui_type.entity then return end
-  if entity_is_transport_belt(player.opened) == false then return end
+  if player.opened_gui_type ~= defines.gui_type.entity then return false end
+  if entity_is_transport_belt(player.opened) == false then return false end
+
+  return true
+end
+
+local function on_tick_player(player)
+  if player_is_in_belt_gui(player) == false then return end
   if player.connected == false then return end
 
-  local enabled = is_belt_read_holding_all_belts(opened)
+  local enabled = is_belt_read_holding_all_belts(player.opened)
 
   local playerdata = storage.playerdata[player.index]
   playerdata.gui_checkbox.enabled = enabled
@@ -119,12 +120,12 @@ local function on_tick_player(player)
   -- local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
   -- local struct = storage.structs[struct_id]
   -- if struct == nil and enabled == true then
-    -- opened.surface.create_entity{
-    --   name = "read-belt-contents-hold-all-belts-read-belt-count",
-    --   force = opened.force,
-    --   position = opened.position,
-    --   raise_built = true,
-    -- }
+  --   opened.surface.create_entity{
+  --     name = "read-belt-contents-hold-all-belts-read-belt-count",
+  --     force = opened.force,
+  --     position = opened.position,
+  --     raise_built = true,
+  --   }
   -- elseif struct ~= nil and enabled == false then
   --   Handler.delete_struct(struct)
   -- end
@@ -261,19 +262,23 @@ end)
 
 script.on_event(defines.events.on_gui_checked_state_changed, function(event)
   if event.element.name == gui_checkbox_name then
-    local tags = event.element.tags
-    game.print(serpent.line(event.element.tags))
-    game.print(serpent.line( event.element.state ))
-    if event.element.state then
-      game.surfaces[tags.surface_index].create_entity{
-        name = "read-belt-contents-hold-all-belts-read-belt-count",
-        force = tags.force_index,
-        position = tags.position,
-        raise_built = true,
-      }
-    else
-      -- local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
-      -- local struct = storage.structs[struct_id]
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    if player_is_in_belt_gui(player) then
+      local opened = player.opened --[[@as LuaEntity]]
+      local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
+      local struct = storage.structs[struct_id]
+
+      if event.element.state then
+        opened.surface.create_entity{
+          name = "read-belt-contents-hold-all-belts-read-belt-count",
+          force = opened.force,
+          position = opened.position,
+          raise_built = true,
+        }
+      else
+        Handler.delete_struct(struct)
+      end
+
     end
   end
 end)
