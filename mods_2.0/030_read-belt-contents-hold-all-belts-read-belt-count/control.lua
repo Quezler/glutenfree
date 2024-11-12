@@ -47,6 +47,7 @@ local function reset_read_belt_count_gui(player)
 
   local enabled = false
   local checked = false
+  local signal = {type = "virtual", name = "signal-B"}
 
   if player_is_in_belt_gui(player) then
     local struct_id = storage.unit_number_to_struct_id[player.opened.unit_number]
@@ -56,6 +57,11 @@ local function reset_read_belt_count_gui(player)
 
     if struct then
       checked = true
+
+      local section = struct.combinator_cb.get_section(1)
+      local filter = section.get_slot(1)
+      signal = filter.value or signal
+      -- game.print(serpent.line(signal))
     end
   end
 
@@ -84,7 +90,7 @@ local function reset_read_belt_count_gui(player)
     type = "choose-elem-button",
     name = gui_signal_name,
     elem_type = "signal",
-    signal = {type = "virtual", name = "signal-B"},
+    signal = signal,
     enabled = checked,
   }
 
