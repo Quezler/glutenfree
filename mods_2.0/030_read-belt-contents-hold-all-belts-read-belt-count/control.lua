@@ -6,6 +6,10 @@ local function entity_is_transport_belt(entity)
   return entity.type == "transport-belt" or (entity.type == "entity-ghost" and entity.ghost_type == "transport-belt")
 end
 
+script.on_init(function(event)
+  storage.players_in_belt_gui = {}
+end)
+
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
   if entity and entity_is_transport_belt(entity) then
@@ -62,16 +66,30 @@ script.on_event(defines.events.on_gui_opened, function(event)
       signal = {type = "virtual", name = "signal-B"},
       enabled = enabled,
     }
+
+    storage.players_in_belt_gui[player.index] = {player = player, entity = entity}
+    script.on_event(defines.events.on_tick, Handler.on_tick)
   end
 end)
 
-script.on_event(defines.events.on_tick, function(event)
-  for _, player in ipairs(game.connected_players) do
-    local opened = player.opened
-    if opened and entity_is_transport_belt(opened) then
-      local cb = opened.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
+function Handler.on_tick(event)
+  for player_index, player_and_entity in pairs(storage.players_in_belt_gui) do
+    if player_and_entity.player.valid == false or player_and_entity.entity.valid == false or player_and_entity.player.connected == false then
+      storage.players_in_belt_gui[player_index] = nil
+    else
+      local cb = player_and_entity.entity.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
       game.print(cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold)
     end
+  end
+
+  if next(storage.players_in_belt_gui) == nil then
+    script.on_event(defines.events.on_tick, nil)
+  end
+end
+
+script.on_load(function()
+  if next(storage.players_in_belt_gui) ~= nil then
+    script.on_event(defines.events.on_tick, Handler.on_tick)
   end
 end)
 
