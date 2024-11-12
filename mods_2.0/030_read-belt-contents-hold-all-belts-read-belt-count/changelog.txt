@@ -10,6 +10,7 @@ Date: ????
     - Cleanup nested gui access
     - Create and destroy the combinator based on hold (all belts)
     - Ensure the combinator doesn't exist as a ghost
+    - Add a sanity check that ensures only one combinator can occupy a tile
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 12

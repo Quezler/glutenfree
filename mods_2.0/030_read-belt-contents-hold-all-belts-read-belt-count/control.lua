@@ -158,6 +158,13 @@ function Handler.on_created_entity(event)
 
   entity.destructible = false
 
+  -- sanity check
+  local combinators = entity.surface.find_entities_filtered{
+    position = entity.position,
+    name = "read-belt-contents-hold-all-belts-read-belt-count",
+  }
+  assert(#combinators == 1, "expected 1 combinator but found " .. #combinators)
+
   assert(storage.structs[belt.unit_number] == nil)
   storage.structs[belt.unit_number] = {
     belt = belt,
