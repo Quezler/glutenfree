@@ -6,6 +6,7 @@ Date: ????
     - Give the combinator their default signal
     - Allow the player to set a new signal
     - Read the signal from the struct upon reset
+    - Connect the combinator to the belt
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2024. 11. 12

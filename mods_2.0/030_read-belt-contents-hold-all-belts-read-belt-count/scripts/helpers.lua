@@ -28,6 +28,12 @@ function attach_belt_to_struct(belt, struct)
 
   storage.unit_number_to_struct_id[belt.unit_number] = struct.id
   storage.deathrattles[script.register_on_object_destroyed(belt)] = {}
+
+  if belt.type == "entity-ghost" then return end
+  local red_out = struct.combinator.get_wire_connector(defines.wire_connector_id.circuit_red, false)
+  local green_out = struct.combinator.get_wire_connector(defines.wire_connector_id.circuit_green, false)
+  assert(belt.get_wire_connector(defines.wire_connector_id.circuit_red, true).connect_to(red_out, false))
+  assert(belt.get_wire_connector(defines.wire_connector_id.circuit_green, true).connect_to(green_out, false))
 end
 
 function delete_struct(struct)
