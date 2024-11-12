@@ -24,13 +24,17 @@ local function get_transport_line_backward(next_direction, belt, belts)
   if belts[assert(belt.unit_number)] then return end
   belts[belt.unit_number] = belt
 
+  this_direction = belt.direction
+  if belt.belt_shape == "left" then this_direction = this_direction + 4 end
+  if belt.belt_shape == "right" then this_direction = this_direction - 4 end
+
   local inputs = belt.belt_neighbours.inputs
   if #inputs == 1 then
-    get_transport_line_backward(belt.direction, inputs[1], belts)
+    get_transport_line_backward(this_direction, inputs[1], belts)
   else
     for _, input in ipairs(inputs) do
       if input.direction == next_direction then
-        get_transport_line_backward(belt.direction, input, belts)
+        get_transport_line_backward(this_direction, input, belts)
       end
     end
   end
