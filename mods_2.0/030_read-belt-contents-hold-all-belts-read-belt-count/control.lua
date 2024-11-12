@@ -1,5 +1,7 @@
 local frame_name = "rbchabrbc-frame"
 
+local Handler = {}
+
 local function entity_is_transport_belt(entity)
   return entity.type == "transport-belt" or (entity.type == "entity-ghost" and entity.ghost_type == "transport-belt")
 end
@@ -72,3 +74,42 @@ script.on_event(defines.events.on_tick, function(event)
     end
   end
 end)
+
+function Handler.get_belt_at(surface, position)
+  local belts = surface.find_entities_filtered{
+    position = position,
+    type = "transport-belt",
+    limit = 1,
+  }
+  if belts[1] then return belts[1] end
+
+  local ghosts = surface.find_entities_filtered{
+    position = position,
+    ghost_type = "transport-belt",
+    limit = 1,
+  }
+  if ghosts[1] then return ghosts[1] end
+end
+
+function Handler.on_created_entity(event)
+  local entity = event.entity or event.destination
+
+  local belt = Handler.get_belt_at(entity.surface, entity.position)
+  if belt == nil then entity.destroy() end
+end
+
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.on_space_platform_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+  defines.events.on_entity_cloned,
+}) do
+  script.on_event(event, Handler.on_created_entity, {
+    -- {filter =       "type", type = "transport-belt"},
+    -- {filter = "ghost_type", type = "transport-belt"},
+    {filter =       "name", name = "read-belt-contents-hold-all-belts-read-belt-count"},
+    {filter = "ghost_name", name = "read-belt-contents-hold-all-belts-read-belt-count"},
+  })
+end
