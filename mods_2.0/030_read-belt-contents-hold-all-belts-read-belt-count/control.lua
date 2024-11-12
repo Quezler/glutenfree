@@ -133,16 +133,16 @@ local function on_tick_player(player)
   local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
   local struct = storage.structs[struct_id]
 
-  if enabled == false then
+  if enabled then
+    local playerdata = storage.playerdata[player.index]
+    playerdata.gui_checkbox.enabled = true
+    playerdata.gui_label   .enabled = true
+    playerdata.gui_signal  .enabled = playerdata.gui_checkbox.state
+  else
     reset_read_belt_count_gui(player)
     if struct then
       Handler.delete_struct(struct)
     end
-  else
-    local playerdata = storage.playerdata[player.index]
-    playerdata.gui_checkbox.enabled = enabled
-    playerdata.gui_label   .enabled = enabled
-    playerdata.gui_signal  .enabled = playerdata.gui_checkbox.state
   end
 
   return true

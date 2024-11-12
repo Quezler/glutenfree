@@ -13,6 +13,7 @@ Date: ????
     - Reset signal picker when unchecking the checkbox
     - Setup the correct state during reset & checkbox regardless of on_tick
     - Cleanup
+    - Switch things around
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 12
