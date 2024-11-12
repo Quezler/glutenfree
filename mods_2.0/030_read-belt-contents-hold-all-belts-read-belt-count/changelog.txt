@@ -12,6 +12,7 @@ Date: ????
     - Try to detect the ending if there are multiple inputs
     - Do not blindly step onto a belt with multiple inputs
     - Allow sideloading onto this belt
+    - Change previous to previous_direction to avoid nil
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12

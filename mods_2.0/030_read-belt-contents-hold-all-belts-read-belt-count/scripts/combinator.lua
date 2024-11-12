@@ -6,12 +6,12 @@
 --   end
 -- end
 
-local function get_transport_line(previous, belt, belts)
+local function get_transport_line(previous_direction, belt, belts)
   if belts[assert(belt.unit_number)] then return end
 
   local inputs = belt.belt_neighbours.inputs
   if #inputs ~= 1 then
-    if previous == nil or belt.direction == previous.direction then goto allow end
+    if belt.direction == previous_direction then goto allow end
     return
   end
 
@@ -37,7 +37,7 @@ local function get_transport_line(previous, belt, belts)
 
   local in_front = belt.belt_neighbours.outputs[1]
   if in_front and in_front.type == "transport-belt" then
-    get_transport_line(belt, in_front, belts)
+    get_transport_line(belt.direction, in_front, belts)
   end
 end
 
@@ -48,7 +48,7 @@ script.on_nth_tick(60, function(event)
       delete_struct(struct)
     else
       local belts = {}
-      get_transport_line(nil, struct.belt, belts)
+      get_transport_line(struct.belt.direction, struct.belt, belts)
       -- game.print(table_size(belts))
     end
   end
