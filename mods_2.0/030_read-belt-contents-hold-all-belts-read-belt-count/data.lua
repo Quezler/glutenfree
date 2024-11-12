@@ -1,4 +1,4 @@
-data:extend{{
+local entity = {
   type = "constant-combinator",
   name = "read-belt-contents-hold-all-belts-read-belt-count",
   icon = data.raw["virtual-signal"]["signal-B"].icon,
@@ -16,9 +16,9 @@ data:extend{{
   selectable_in_game = false,
 
   hidden = true,
-}}
+}
 
-data:extend{{
+local item = {
   type = "item",
   name = "read-belt-contents-hold-all-belts-read-belt-count",
   icon = data.raw["virtual-signal"]["signal-B"].icon,
@@ -28,11 +28,13 @@ data:extend{{
   place_result = "read-belt-contents-hold-all-belts-read-belt-count",
 
   hidden = true,
-}}
+}
 
 require("shared")
 
 if debug_mode then
-  data.raw["constant-combinator"]["read-belt-contents-hold-all-belts-read-belt-count"].selectable_in_game = true
-  data.raw["constant-combinator"]["read-belt-contents-hold-all-belts-read-belt-count"].collision_box = {{-0.2, -0.2}, {0.2, 0.2}}
+  entity.selectable_in_game = true
+  entity.collision_box = {{-0.2, -0.2}, {0.2, 0.2}}
 end
+
+data:extend{entity, item}

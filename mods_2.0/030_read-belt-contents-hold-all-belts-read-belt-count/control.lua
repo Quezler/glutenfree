@@ -200,8 +200,6 @@ for _, event in ipairs({
   defines.events.on_entity_cloned,
 }) do
   script.on_event(event, Handler.on_created_entity, {
-    -- {filter =       "type", type = "transport-belt"},
-    -- {filter = "ghost_type", type = "transport-belt"},
     {filter =       "name", name = "read-belt-contents-hold-all-belts-read-belt-count"},
     {filter = "ghost_name", name = "read-belt-contents-hold-all-belts-read-belt-count"},
   })
