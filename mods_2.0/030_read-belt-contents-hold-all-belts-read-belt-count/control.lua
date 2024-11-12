@@ -147,7 +147,14 @@ function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
   local belt = Handler.get_belt_at(entity.surface, entity.position)
-  if belt == nil then entity.destroy() end
+  if belt == nil then
+    return entity.destroy()
+  end
+
+  -- this entity is allowed to be built under a ghost, and to avoid "missing construction materials" we'll just always revive it.
+  if entity.type == "entity-ghost" then
+    return entity.revive{raise_revive = true}
+  end
 
   entity.destructible = false
 
