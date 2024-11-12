@@ -184,7 +184,7 @@ function Handler.on_created_entity(event)
 
   local section = storage.structs[storage.index].combinator_cb.get_section(1)
   local filter = section.get_slot(1)
-  filter.value = {type = "virtual", name = "signal-B", quality = "normal"}
+  filter.value = filter.value or {type = "virtual", name = "signal-B", quality = "normal"}
   filter.min = 0
   section.set_slot(1, filter)
 

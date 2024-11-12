@@ -11,6 +11,7 @@ Date: ????
     - Cleanup to inch closer to a release candidate
     - Actually, just keep the belt in hold all mode when copy pasted
     - Some more cleanup
+    - Fix copy pasting the combinator
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2024. 11. 12

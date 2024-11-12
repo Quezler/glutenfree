@@ -39,8 +39,6 @@ end
 function delete_struct(struct)
   struct.combinator.destroy()
   storage.structs[struct.id] = nil
-
-  -- if struct.belt.valid then storage.unit_number_to_struct_id[struct.belt.unit_number] = nil end
 end
 
 function get_belt_at(surface, position)
