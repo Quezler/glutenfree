@@ -15,6 +15,7 @@ Date: ????
     - Cleanup
     - Switch things around
     - Move some local functions to a helpers file
+    - Move more functions into helpers
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 12

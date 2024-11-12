@@ -29,3 +29,26 @@ function attach_belt_to_struct(belt, struct)
   storage.unit_number_to_struct_id[belt.unit_number] = struct.id
   storage.deathrattles[script.register_on_object_destroyed(belt)] = {}
 end
+
+function delete_struct(struct)
+  struct.combinator.destroy()
+  storage.structs[struct.id] = nil
+
+  -- if struct.belt.valid then storage.unit_number_to_struct_id[struct.belt.unit_number] = nil end
+end
+
+function get_belt_at(surface, position)
+  local belts = surface.find_entities_filtered{
+    position = position,
+    type = "transport-belt",
+    limit = 1,
+  }
+  if belts[1] then return belts[1] end
+
+  local ghosts = surface.find_entities_filtered{
+    position = position,
+    ghost_type = "transport-belt",
+    limit = 1,
+  }
+  if ghosts[1] then return ghosts[1] end
+end

@@ -117,7 +117,7 @@ local function on_tick_player(player)
     playerdata.gui_signal  .enabled = playerdata.gui_checkbox.state
   else
     if struct then
-      Handler.delete_struct(struct)
+      delete_struct(struct)
     end
     reset_read_belt_count_gui(player)
   end
@@ -141,26 +141,10 @@ script.on_load(function()
   end
 end)
 
-function Handler.get_belt_at(surface, position)
-  local belts = surface.find_entities_filtered{
-    position = position,
-    type = "transport-belt",
-    limit = 1,
-  }
-  if belts[1] then return belts[1] end
-
-  local ghosts = surface.find_entities_filtered{
-    position = position,
-    ghost_type = "transport-belt",
-    limit = 1,
-  }
-  if ghosts[1] then return ghosts[1] end
-end
-
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
-  local belt = Handler.get_belt_at(entity.surface, entity.position)
+  local belt = get_belt_at(entity.surface, entity.position)
   if belt == nil then
     return entity.destroy()
   end
@@ -217,11 +201,11 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if struct then
       -- in case the entity becomes a ghost or get upgraded, try to adopt that new entity.
       local combinator = struct.combinator
-      local belt = Handler.get_belt_at(combinator.surface, combinator.position)
+      local belt = get_belt_at(combinator.surface, combinator.position)
       if belt then
         attach_belt_to_struct(belt, struct)
       else
-        Handler.delete_struct(struct)
+        delete_struct(struct)
       end
     end
 
@@ -229,18 +213,11 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   end
 end)
 
-function Handler.delete_struct(struct)
-  struct.combinator.destroy()
-  storage.structs[struct.id] = nil
-
-  -- if struct.belt.valid then storage.unit_number_to_struct_id[struct.belt.unit_number] = nil end
-end
-
 script.on_nth_tick(600, function(event)
   for struct_id, struct in pairs(storage.structs) do
     if is_belt_read_holding_all_belts(struct.belt) == false then
       game.print("nth 60 delete")
-      Handler.delete_struct(struct)
+      delete_struct(struct)
     end
   end
 end)
@@ -266,7 +243,7 @@ script.on_event(defines.events.on_gui_checked_state_changed, function(event)
         playerdata.gui_signal.enabled = true
       else
         assert(struct ~= nil, "found nil but expected struct")
-        Handler.delete_struct(struct)
+        delete_struct(struct)
 
         local playerdata = storage.playerdata[player.index]
         playerdata.gui_signal.enabled = false
