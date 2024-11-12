@@ -7,6 +7,17 @@ local function entity_is_transport_belt(entity)
   return entity.type == "transport-belt" or (entity.type == "entity-ghost" and entity.ghost_type == "transport-belt")
 end
 
+local function player_is_in_belt_gui(player)
+  local opened = player.opened
+  if opened == nil then return false end
+
+  if player.opened_gui_type ~= defines.gui_type.entity then return false end
+  if entity_is_transport_belt(player.opened) == false then return false end
+
+  return true
+end
+
+
 script.on_init(function(event)
   storage.players_in_belt_gui = {}
 
@@ -46,13 +57,20 @@ local function reset_read_belt_count_gui(player)
   }
 
   local enabled = false
+  local checked = false
+
+  -- if player_is_in_belt_gui(player) then
+  --   local struct_id = storage.unit_number_to_struct_id[player.opened.unit_number]
+  --   local struct = storage.structs[struct_id]
+  --   checked = struct ~= nil
+  -- end
 
   playerdata.gui_checkbox = flow1.add{
     type = "checkbox",
     name = gui_checkbox_name,
     style = "caption_checkbox",
     caption = {"gui-control-behavior-modes.read-belt-count"},
-    state = enabled,
+    state = checked,
     enabled = enabled,
   }
 
@@ -72,7 +90,7 @@ local function reset_read_belt_count_gui(player)
     type = "choose-elem-button",
     elem_type = "signal",
     signal = {type = "virtual", name = "signal-B"},
-    enabled = enabled,
+    enabled = checked,
   }
 
   storage.playerdata[player.index] = playerdata
@@ -101,16 +119,6 @@ local function is_belt_read_holding_all_belts(entity) -- boolean
   return enabled
 end
 
-local function player_is_in_belt_gui(player)
-  local opened = player.opened
-  if opened == nil then return false end
-
-  if player.opened_gui_type ~= defines.gui_type.entity then return false end
-  if entity_is_transport_belt(player.opened) == false then return false end
-
-  return true
-end
-
 local function on_tick_player(player)
   if player_is_in_belt_gui(player) == false then return end
   if player.connected == false then return end
@@ -121,7 +129,7 @@ local function on_tick_player(player)
   local playerdata = storage.playerdata[player.index]
   playerdata.gui_checkbox.enabled = enabled
   playerdata.gui_label   .enabled = enabled
-  playerdata.gui_signal  .enabled = enabled
+  playerdata.gui_signal  .enabled = playerdata.gui_checkbox.state
 
   local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
   local struct = storage.structs[struct_id]
