@@ -15,7 +15,7 @@ end
 function is_belt_read_holding_all_belts(entity) -- boolean
   local red = entity.get_circuit_network(defines.wire_connector_id.circuit_red)
   local green = entity.get_circuit_network(defines.wire_connector_id.circuit_green)
-  if (red == nil and green == nil) then return false end
+  if (entity.type ~= "entity-ghost" and red == nil and green == nil) then return false end
 
   local cb = entity.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
   local enabled = cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold
