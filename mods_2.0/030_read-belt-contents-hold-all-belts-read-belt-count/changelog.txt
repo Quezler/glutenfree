@@ -5,6 +5,7 @@ Date: ????
     - Setup the hidden blueprintable entity
     - Prevent the combinator from being placed somewhere without belts
     - Run on_tick conditionally
+    - Improve on_tick readability
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 12

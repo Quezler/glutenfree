@@ -67,19 +67,29 @@ script.on_event(defines.events.on_gui_opened, function(event)
       enabled = enabled,
     }
 
-    storage.players_in_belt_gui[player.index] = {player = player, entity = entity}
+    storage.players_in_belt_gui[player.index] = player
     script.on_event(defines.events.on_tick, Handler.on_tick)
   end
 end)
 
+local function on_tick_player(player)
+  local opened = player.opened
+  if opened == nil then return end
+
+  if player.opened_gui_type ~= defines.gui_type.entity then return end
+  if entity_is_transport_belt(player.opened) == false then return end
+
+  if player.connected == false then return end
+
+  local cb = opened.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
+  game.print(cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold)
+
+  return true
+end
+
 function Handler.on_tick(event)
-  for player_index, player_and_entity in pairs(storage.players_in_belt_gui) do
-    if player_and_entity.player.valid == false or player_and_entity.entity.valid == false or player_and_entity.player.connected == false then
-      storage.players_in_belt_gui[player_index] = nil
-    else
-      local cb = player_and_entity.entity.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
-      game.print(cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold)
-    end
+  for player_index, player in pairs(storage.players_in_belt_gui) do
+    if not on_tick_player(player) then storage.players_in_belt_gui[player_index] = nil end
   end
 
   if next(storage.players_in_belt_gui) == nil then
