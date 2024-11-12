@@ -10,12 +10,8 @@ local function get_transport_line(previous_direction, belt, belts)
   if belts[assert(belt.unit_number)] then return end
 
   local inputs = belt.belt_neighbours.inputs
-  if #inputs ~= 1 then
-    if belt.direction == previous_direction then goto allow end
-    return
-  end
+  if #inputs ~= 1 and belt.direction ~= previous_direction then return end
 
-  ::allow::
   belts[belt.unit_number] = belt
 
   rendering.draw_circle{

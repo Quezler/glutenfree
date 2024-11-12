@@ -13,6 +13,7 @@ Date: ????
     - Do not blindly step onto a belt with multiple inputs
     - Allow sideloading onto this belt
     - Change previous to previous_direction to avoid nil
+    - Avoid the goto raptor
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12
