@@ -10,7 +10,10 @@ script.on_init(function(event)
   storage.players_in_belt_gui = {}
 
   storage.playerdata = {}
+
+  storage.index = 0
   storage.structs = {}
+  storage.unit_number_to_struct_id = {}
 
   storage.deathrattles = {}
 end)
@@ -106,7 +109,7 @@ local function on_tick_player(player)
   playerdata.gui_label   .enabled = enabled
   playerdata.gui_signal  .enabled = enabled
 
-  local struct = storage.structs[opened.unit_number]
+  local struct = storage.structs[storage.unit_number_to_struct_id[opened.unit_number]]
   if struct == nil and enabled == true then
     opened.surface.create_entity{
       name = "read-belt-contents-hold-all-belts-read-belt-count",
@@ -154,6 +157,13 @@ function Handler.get_belt_at(surface, position)
   if ghosts[1] then return ghosts[1] end
 end
 
+local function attach_belt_to_struct(belt, struct)
+  struct.belt = belt
+
+  storage.unit_number_to_struct_id[belt.unit_number] = struct.id
+  storage.deathrattles[script.register_on_object_destroyed(belt)] = {}
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -176,13 +186,16 @@ function Handler.on_created_entity(event)
   }
   assert(#combinators == 1, "expected 1 combinator but found " .. #combinators)
 
-  assert(storage.structs[belt.unit_number] == nil)
-  storage.structs[belt.unit_number] = {
-    belt = belt,
+  -- assert(storage.structs[belt.unit_number] == nil)
+  storage.index = storage.index + 1
+  storage.structs[storage.index] = {
+    id = storage.index,
+
+    belt = nil,
     combinator = entity,
   }
 
-  storage.deathrattles[script.register_on_object_destroyed(belt)] = {}
+  attach_belt_to_struct(belt, storage.structs[storage.index])
 end
 
 for _, event in ipairs({
@@ -204,20 +217,20 @@ end
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    local struct_id = assert(event.useful_id)
+    local unit_number = assert(event.useful_id)
+    local struct_id = assert(storage.unit_number_to_struct_id[unit_number])
     local struct = assert(storage.structs[struct_id])
 
     -- in case the entity becomes a ghost or get upgraded, try to adopt that new entity.
     local combinator = struct.combinator
     local belt = Handler.get_belt_at(combinator.surface, combinator.position)
     if belt then
-      struct.belt = belt
-      storage.deathrattles[script.register_on_object_destroyed(belt)] = {}
-      storage.structs[belt.unit_number] = struct
+      attach_belt_to_struct(belt, struct)
     else
       combinator.destroy()
+      storage.structs[struct_id] = nil
     end
 
-    storage.structs[struct_id] = nil
+    storage.unit_number_to_struct_id[unit_number] = nil
   end
 end)
