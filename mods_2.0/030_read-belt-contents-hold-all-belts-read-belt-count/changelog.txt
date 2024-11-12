@@ -11,6 +11,7 @@ Date: ????
     - Reset the belt count gui when the belt no longer holds all
     - Prevent selecting a control signal until the combinator exists
     - Reset signal picker when unchecking the checkbox
+    - Setup the correct state during reset & checkbox regardless of on_tick
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 12

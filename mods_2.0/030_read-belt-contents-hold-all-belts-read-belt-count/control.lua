@@ -17,6 +17,16 @@ local function player_is_in_belt_gui(player)
   return true
 end
 
+local function is_belt_read_holding_all_belts(entity) -- boolean
+  local red = entity.get_circuit_network(defines.wire_connector_id.circuit_red)
+  local green = entity.get_circuit_network(defines.wire_connector_id.circuit_green)
+  if (red == nil and green == nil) then return false end
+
+  local cb = entity.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
+  local enabled = cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold
+
+  return enabled
+end
 
 script.on_init(function(event)
   storage.players_in_belt_gui = {}
@@ -59,11 +69,16 @@ local function reset_read_belt_count_gui(player)
   local enabled = false
   local checked = false
 
-  -- if player_is_in_belt_gui(player) then
-  --   local struct_id = storage.unit_number_to_struct_id[player.opened.unit_number]
-  --   local struct = storage.structs[struct_id]
-  --   checked = struct ~= nil
-  -- end
+  if player_is_in_belt_gui(player) then
+    local struct_id = storage.unit_number_to_struct_id[player.opened.unit_number]
+    local struct = storage.structs[struct_id]
+
+    enabled = is_belt_read_holding_all_belts(player.opened)
+
+    if struct then
+      checked = true
+    end
+  end
 
   playerdata.gui_checkbox = flow1.add{
     type = "checkbox",
@@ -108,20 +123,9 @@ script.on_event(defines.events.on_gui_opened, function(event)
   end
 end)
 
-local function is_belt_read_holding_all_belts(entity) -- boolean
-  local red = entity.get_circuit_network(defines.wire_connector_id.circuit_red)
-  local green = entity.get_circuit_network(defines.wire_connector_id.circuit_green)
-  if (red == nil and green == nil) then return false end
-
-  local cb = entity.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
-  local enabled = cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold
-
-  return enabled
-end
-
 local function on_tick_player(player)
   if player_is_in_belt_gui(player) == false then return end
-  if player.connected == false then return end
+  if player.connected == true then return end
 
   local opened = player.opened
   local enabled = is_belt_read_holding_all_belts(opened)
@@ -301,6 +305,9 @@ script.on_event(defines.events.on_gui_checked_state_changed, function(event)
           position = opened.position,
           raise_built = true,
         }
+
+        local playerdata = storage.playerdata[player.index]
+        playerdata.gui_signal.enabled = true
       else
         assert(struct ~= nil, "found nil but expected struct")
         Handler.delete_struct(struct)
