@@ -7,6 +7,7 @@ Date: ????
     - Allow the player to set a new signal
     - Read the signal from the struct upon reset
     - Connect the combinator to the belt
+    - Collapse when nothing externally is connected
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2024. 11. 12
