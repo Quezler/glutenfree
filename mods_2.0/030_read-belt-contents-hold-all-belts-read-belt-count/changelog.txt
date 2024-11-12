@@ -15,6 +15,7 @@ Date: ????
     - Change previous to previous_direction to avoid nil
     - Avoid the goto raptor
     - Prepare to walk the transport line backwards
+    - Pull the debug rendering a layer higher
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12
