@@ -304,6 +304,10 @@ script.on_event(defines.events.on_gui_checked_state_changed, function(event)
       else
         assert(struct ~= nil, "found nil but expected struct")
         Handler.delete_struct(struct)
+
+        local playerdata = storage.playerdata[player.index]
+        playerdata.gui_signal.enabled = false
+        playerdata.gui_signal.elem_value = {type = "virtual", name = "signal-B"}
       end
 
     end
