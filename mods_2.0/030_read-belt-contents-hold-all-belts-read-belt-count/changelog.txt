@@ -5,6 +5,7 @@ Date: ????
     - Decouple struct creation/destruction from belt control behaviour
     - Create the combinator through the checkbox
     - Rely on player.opened vs checking for tags
+    - Assert instead of error
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 12
