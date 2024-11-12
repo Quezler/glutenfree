@@ -5,7 +5,7 @@ local gui_signal_name = "rbchabrbc-signal"
 local Handler = {}
 
 require("scripts.helpers")
-require("scripts.combinator")
+local Combinator = require("scripts.combinator")
 
 script.on_init(function(event)
   storage.players_in_belt_gui = {}
@@ -182,13 +182,15 @@ function Handler.on_created_entity(event)
     combinator_cb = entity.get_control_behavior(),
   }
 
-  local section = storage.structs[storage.index].combinator_cb.get_section(1)
+  local struct = storage.structs[storage.index]
+  local section = struct.combinator_cb.get_section(1)
   local filter = section.get_slot(1)
   filter.value = filter.value or {type = "virtual", name = "signal-B", quality = "normal"}
   filter.min = 0
   section.set_slot(1, filter)
 
-  attach_belt_to_struct(belt, storage.structs[storage.index])
+  attach_belt_to_struct(belt, struct)
+  Combinator.tick_struct(struct)
 end
 
 for _, event in ipairs({

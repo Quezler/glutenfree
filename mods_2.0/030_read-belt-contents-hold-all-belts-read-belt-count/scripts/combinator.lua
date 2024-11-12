@@ -1,3 +1,5 @@
+local Combinator = {}
+
 -- this code looks horrid, is probably a bit slow, but hey it works.
 -- here are the requirements in case you want to give improving it a go:
 -- 1) it must match the ingame visualization
@@ -101,21 +103,27 @@ local function get_transport_line(belt, data)
   end
 end
 
-script.on_nth_tick(60, function(event)
-  for struct_id, struct in pairs(storage.structs) do
-    if is_belt_read_holding_all_belts(struct.belt) == false then
-      game.print("nth 60 delete")
-      delete_struct(struct)
-    else
-      local data = {total = 0, belts = {}}
-      get_transport_line(struct.belt, data)
-      -- game.print(table_size(data.belts) .. ' ' .. data.total)
+function Combinator.tick_struct(struct)
+  if is_belt_read_holding_all_belts(struct.belt) == false then
+    -- game.print("nth 60 delete")
+    delete_struct(struct)
+  else
+    local data = {total = 0, belts = {}}
+    get_transport_line(struct.belt, data)
+    -- game.print(table_size(data.belts) .. ' ' .. data.total)
 
-      struct.combinator_cb = struct.combinator_cb or struct.combinator.get_control_behavior() -- todo: remove
-      local section = struct.combinator_cb.get_section(1)
-      local filter = section.get_slot(1)
-      filter.min = data.total
-      section.set_slot(1, filter)
-    end
+    struct.combinator_cb = struct.combinator_cb or struct.combinator.get_control_behavior() -- todo: remove
+    local section = struct.combinator_cb.get_section(1)
+    local filter = section.get_slot(1)
+    filter.min = data.total
+    section.set_slot(1, filter)
+  end
+end
+
+script.on_nth_tick(600, function(event)
+  for struct_id, struct in pairs(storage.structs) do
+    Combinator.tick_struct(struct)
   end
 end)
+
+return Combinator
