@@ -109,18 +109,18 @@ local function on_tick_player(player)
   playerdata.gui_label   .enabled = enabled
   playerdata.gui_signal  .enabled = enabled
 
-  local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
-  local struct = storage.structs[struct_id]
-  if struct == nil and enabled == true then
-    opened.surface.create_entity{
-      name = "read-belt-contents-hold-all-belts-read-belt-count",
-      force = opened.force,
-      position = opened.position,
-      raise_built = true,
-    }
-  elseif struct ~= nil and enabled == false then
-    Handler.delete_struct(struct)
-  end
+  -- local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
+  -- local struct = storage.structs[struct_id]
+  -- if struct == nil and enabled == true then
+  --   opened.surface.create_entity{
+  --     name = "read-belt-contents-hold-all-belts-read-belt-count",
+  --     force = opened.force,
+  --     position = opened.position,
+  --     raise_built = true,
+  --   }
+  -- elseif struct ~= nil and enabled == false then
+  --   Handler.delete_struct(struct)
+  -- end
 
   return true
 end
