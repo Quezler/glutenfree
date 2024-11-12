@@ -19,6 +19,7 @@ local function get_next_belt(belt, seen)
     time_to_live = 30,
   }
 
+  game.print(serpent.line(belt.belt_neighbours))
   local in_front = belt.belt_neighbours.outputs[1]
   if in_front and in_front.type == "transport-belt" then
     get_next_belt(in_front, seen)
