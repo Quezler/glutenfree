@@ -25,8 +25,15 @@ local function get_transport_line_backward(next_direction, belt, belts)
   belts[belt.unit_number] = belt
 
   this_direction = belt.direction
-  if belt.belt_shape == "left" then this_direction = this_direction + 4 end
-  if belt.belt_shape == "right" then this_direction = this_direction - 4 end
+  if belt.type == "transport-belt" then
+    if belt.belt_shape == "left" then this_direction = this_direction + 4 end
+    if belt.belt_shape == "right" then this_direction = this_direction - 4 end
+  elseif belt.type == "underground-belt" then
+    local other_end = belt.neighbours
+    if other_end then
+      get_transport_line_backward(this_direction, other_end, belts)
+    end
+  end
 
   local inputs = belt.belt_neighbours.inputs
   if #inputs == 1 then
