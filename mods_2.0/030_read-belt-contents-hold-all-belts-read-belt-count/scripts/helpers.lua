@@ -17,13 +17,6 @@ function is_belt_read_holding_all_belts(entity) -- boolean
   local green = entity.get_circuit_network(defines.wire_connector_id.circuit_green)
   if (entity.type ~= "entity-ghost" and red == nil and green == nil) then return false end
 
-  -- game.print('red ' .. red.connected_circuit_count)
-  -- game.print('green ' .. red.connected_circuit_count)
-
-  -- when the belt is only connected to the combinator, treat it as "not connected to anything at all"
-  local total_wire_connectors = (red and red.connected_circuit_count or 2) + (green and green.connected_circuit_count or 2)
-  if total_wire_connectors == 4 then return false end
-
   local cb = entity.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
   local enabled = cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold
 
