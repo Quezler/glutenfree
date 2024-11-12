@@ -6,7 +6,11 @@
 --   end
 -- end
 
-local function get_next_belt(belt)
+local function get_next_belt(belt, seen)
+  local seen_key = string.format("x%d,y%d", belt.position.x, belt.position.y)
+  if seen[seen_key] then return end
+  seen[seen_key] = true
+
   rendering.draw_circle{
     surface = belt.surface,
     target = belt.position,
@@ -18,7 +22,7 @@ local function get_next_belt(belt)
 
   local in_front = belt.belt_neighbours.outputs[1]
   if in_front and in_front.type == "transport-belt" then
-    get_next_belt(in_front)
+    get_next_belt(in_front, seen)
   end
 end
 
@@ -28,7 +32,7 @@ script.on_nth_tick(60, function(event)
       game.print("nth 60 delete")
       delete_struct(struct)
     else
-      get_next_belt(struct.belt)
+      get_next_belt(struct.belt, {})
     end
   end
 end)

@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Begin building the combinator logic (in a seperate file)
     - Start walking to the front of the belt
+    - Prevent an infinite loop
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12
