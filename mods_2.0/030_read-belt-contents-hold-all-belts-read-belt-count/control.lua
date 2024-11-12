@@ -10,6 +10,7 @@ script.on_init(function(event)
   storage.players_in_belt_gui = {}
 
   storage.playerdata = {}
+  storage.structs = {}
 end)
 
 script.on_event(defines.events.on_gui_opened, function(event)
@@ -94,6 +95,19 @@ local function on_tick_player(player)
   playerdata.gui_label   .enabled = enabled
   playerdata.gui_signal  .enabled = enabled
 
+  local struct = storage.structs[opened.unit_number]
+  if struct == nil and enabled == true then
+    opened.surface.create_entity{
+      name = "read-belt-contents-hold-all-belts-read-belt-count",
+      force = opened.force,
+      position = opened.position,
+      raise_built = true,
+    }
+  elseif struct ~= nil and enabled == false then
+    struct.combinator.destroy()
+    storage.structs[opened.unit_number] = nil
+  end
+
   return true
 end
 
@@ -134,6 +148,14 @@ function Handler.on_created_entity(event)
 
   local belt = Handler.get_belt_at(entity.surface, entity.position)
   if belt == nil then entity.destroy() end
+
+  entity.destructible = false
+
+  assert(storage.structs[belt.unit_number] == nil)
+  storage.structs[belt.unit_number] = {
+    belt = belt,
+    combinator = entity,
+  }
 end
 
 for _, event in ipairs({

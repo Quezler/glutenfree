@@ -8,6 +8,7 @@ Date: ????
     - Improve on_tick readability
     - Disable the checkbox, label & button whilst not reading all belts
     - Cleanup nested gui access
+    - Create and destroy the combinator based on hold (all belts)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 12
