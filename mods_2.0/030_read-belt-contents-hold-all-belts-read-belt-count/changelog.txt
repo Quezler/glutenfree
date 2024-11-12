@@ -27,6 +27,7 @@ Date: ????
     - Count the total belt pieces
     - Correctly count the underground belts
     - Support linked belts, through input to output side is currently broken
+    - Fix going through the input side of a linked belt
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12

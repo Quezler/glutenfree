@@ -20,17 +20,15 @@ local function get_transport_line_forward(previous_direction, belt, data)
     end
     return
   elseif belt.type == "linked-belt" and belt.linked_belt_type == "input" then
-    game.print("foo")
     local other_end = belt.linked_belt_neighbour
     if other_end then
-      get_transport_line_forward(belt.direction, other_end, data)
+      get_transport_line_forward(other_end.direction, other_end, data)
     end
     return
   end
-  game.print(belt.type)
 
   local in_front = belt.belt_neighbours.outputs[1]
-  if in_front and (in_front.type == "transport-belt" or in_front.type == "underground-belt") then
+  if in_front and (in_front.type == "transport-belt" or in_front.type == "underground-belt" or in_front.type == "linked-belt") then
     get_transport_line_forward(belt.direction, in_front, data)
   end
 end
