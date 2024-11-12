@@ -109,7 +109,8 @@ local function on_tick_player(player)
   playerdata.gui_label   .enabled = enabled
   playerdata.gui_signal  .enabled = enabled
 
-  local struct = storage.structs[storage.unit_number_to_struct_id[opened.unit_number]]
+  local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
+  local struct = storage.structs[struct_id]
   if struct == nil and enabled == true then
     opened.surface.create_entity{
       name = "read-belt-contents-hold-all-belts-read-belt-count",
@@ -119,7 +120,7 @@ local function on_tick_player(player)
     }
   elseif struct ~= nil and enabled == false then
     struct.combinator.destroy()
-    storage.structs[opened.unit_number] = nil
+    storage.structs[struct_id] = nil -- todo: cleanup lingering unit number pointer
   end
 
   return true
