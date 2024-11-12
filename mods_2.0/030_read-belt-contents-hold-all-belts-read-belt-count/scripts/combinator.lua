@@ -1,3 +1,12 @@
+-- this code looks horrid, is probably a bit slow, but hey it works.
+-- here are the requirements in case you want to give improving it a go:
+-- 1) it must match the ingame visualization
+-- 2) there should be a "belt tile count", this includes the underground gap
+-- 3) linked belts just count as 2 (just like 2 belts or 2 back-to-back undergrounds)
+-- 4) we do not care about partial tiles, like the line starting or stopping on a splitter
+-- 5) we only care about transport belts, underground belts, and linked belts
+-- 6) linked belts are low priority, and the 1x1 and 1x2 splitters even less
+
 local function get_underground_distance(a, b)
   -- assume there is either a x or y difference, never both
   return math.abs(a.position.x - b.position.x) + math.abs(a.position.y - b.position.y)
@@ -96,7 +105,7 @@ script.on_nth_tick(60, function(event)
     else
       local data = {total = 0, belts = {}}
       get_transport_line(struct.belt, data)
-      game.print(table_size(data.belts) .. ' ' .. data.total)
+      -- game.print(table_size(data.belts) .. ' ' .. data.total)
     end
   end
 end)
