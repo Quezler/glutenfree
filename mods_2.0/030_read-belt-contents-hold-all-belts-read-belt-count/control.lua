@@ -28,27 +28,33 @@ script.on_event(defines.events.on_gui_opened, function(event)
       type = "flow",
     }
 
+    local enabled = false
+
     flow1.add{
       type = "checkbox",
       style = "caption_checkbox",
       caption = {"gui-control-behavior-modes.read-belt-count"},
-      state = true,
+      state = enabled,
+      enabled = enabled,
     }
 
     local flow2 = inner.add{
       type = "flow",
       style = "player_input_horizontal_flow"
     }
+    flow2.style.top_margin = 4
 
     flow2.add{
       type = "label",
       caption = {"gui-control-behavior-modes-guis.control-signal"},
+      enabled = enabled,
     }
 
     flow2.add{
       type = "choose-elem-button",
       elem_type = "signal",
       signal = {type = "virtual", name = "signal-B"},
+      enabled = enabled,
     }
   end
 end)
