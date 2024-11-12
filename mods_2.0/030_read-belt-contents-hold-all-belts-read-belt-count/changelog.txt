@@ -11,6 +11,7 @@ Date: ????
     - Rename seen to belts and return it
     - Try to detect the ending if there are multiple inputs
     - Do not blindly step onto a belt with multiple inputs
+    - Allow sideloading onto this belt
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12
