@@ -6,6 +6,7 @@ Date: ????
     - Add circuit selector with caption
     - Add a checkbox
     - Replicate photoshopped thumbnail
+    - Align the thumbnail B further from the right edge
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11
