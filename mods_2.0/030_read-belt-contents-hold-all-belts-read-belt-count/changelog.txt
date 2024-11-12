@@ -17,6 +17,7 @@ Date: ????
     - Prepare to walk the transport line backwards
     - Pull the debug rendering a layer higher
     - Follow the single line to the back
+    - Fail at making the input respect the direction
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12

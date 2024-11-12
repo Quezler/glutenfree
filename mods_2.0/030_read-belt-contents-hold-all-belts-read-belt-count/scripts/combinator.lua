@@ -20,20 +20,26 @@ local function get_transport_line_forward(previous_direction, belt, belts)
   end
 end
 
-local function get_transport_line_backward(belt, belts)
+local function get_transport_line_backward(next_direction, belt, belts)
   if belts[assert(belt.unit_number)] then return end
   belts[belt.unit_number] = belt
 
   local inputs = belt.belt_neighbours.inputs
   if #inputs == 1 then
-    get_transport_line_backward(inputs[1], belts)
+    get_transport_line_backward(next_direction, inputs[1], belts)
+  else
+    for _, input in ipairs(inputs) do
+      if input.direction == next_direction then
+        get_transport_line_backward(next_direction, input, belts)
+      end
+    end
   end
 end
 
 local function get_transport_line(belt, belts)
   get_transport_line_forward(belt.direction, belt, belts)
   belts[belt.unit_number] = nil -- allow the starting belt to be ran backwards
-  get_transport_line_backward(belt, belts)
+  get_transport_line_backward(belt.direction, belt, belts)
 
   for _, belt in pairs(belts) do
     rendering.draw_circle{
