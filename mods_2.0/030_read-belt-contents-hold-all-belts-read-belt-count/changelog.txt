@@ -8,6 +8,7 @@ Date: ????
     - Assert instead of error
     - Remove combinator when moving the belt away from read all mode
     - Customize assert
+    - Reset the belt count gui when the belt no longer holds all
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 12

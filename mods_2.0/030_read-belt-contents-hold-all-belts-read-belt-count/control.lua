@@ -19,66 +19,71 @@ script.on_init(function(event)
   storage.deathrattles = {}
 end)
 
+local function reset_read_belt_count_gui(player)
+  local playerdata = {}
+
+  local frame = player.gui.relative[frame_name]
+  if frame then frame.destroy() end
+
+  frame = player.gui.relative.add{
+    type = "frame",
+    name = frame_name,
+    anchor = {
+      gui = defines.relative_gui_type.transport_belt_gui,
+      position = defines.relative_gui_position.right,
+    },
+  }
+  frame.style.top_padding = 8
+
+  local inner = frame.add{
+    type = "frame",
+    style = "inside_shallow_frame_with_padding",
+    direction = "vertical",
+  }
+
+  local flow1 = inner.add{
+    type = "flow",
+  }
+
+  local enabled = false
+
+  playerdata.gui_checkbox = flow1.add{
+    type = "checkbox",
+    name = gui_checkbox_name,
+    style = "caption_checkbox",
+    caption = {"gui-control-behavior-modes.read-belt-count"},
+    state = enabled,
+    enabled = enabled,
+  }
+
+  local flow2 = inner.add{
+    type = "flow",
+    style = "player_input_horizontal_flow"
+  }
+  flow2.style.top_margin = 4
+
+  playerdata.gui_label = flow2.add{
+    type = "label",
+    caption = {"gui-control-behavior-modes-guis.control-signal"},
+    enabled = enabled,
+  }
+
+  playerdata.gui_signal = flow2.add{
+    type = "choose-elem-button",
+    elem_type = "signal",
+    signal = {type = "virtual", name = "signal-B"},
+    enabled = enabled,
+  }
+
+  storage.playerdata[player.index] = playerdata
+end
+
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
   if entity and entity_is_transport_belt(entity) then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    local playerdata = {}
 
-    local frame = player.gui.relative[frame_name]
-    if frame then frame.destroy() end
-
-    frame = player.gui.relative.add{
-      type = "frame",
-      name = frame_name,
-      anchor = {
-        gui = defines.relative_gui_type.transport_belt_gui,
-        position = defines.relative_gui_position.right,
-      },
-    }
-    frame.style.top_padding = 8
-
-    local inner = frame.add{
-      type = "frame",
-      style = "inside_shallow_frame_with_padding",
-      direction = "vertical",
-    }
-
-    local flow1 = inner.add{
-      type = "flow",
-    }
-
-    local enabled = false
-
-    playerdata.gui_checkbox = flow1.add{
-      type = "checkbox",
-      name = gui_checkbox_name,
-      style = "caption_checkbox",
-      caption = {"gui-control-behavior-modes.read-belt-count"},
-      state = enabled,
-      enabled = enabled,
-    }
-
-    local flow2 = inner.add{
-      type = "flow",
-      style = "player_input_horizontal_flow"
-    }
-    flow2.style.top_margin = 4
-
-    playerdata.gui_label = flow2.add{
-      type = "label",
-      caption = {"gui-control-behavior-modes-guis.control-signal"},
-      enabled = enabled,
-    }
-
-    playerdata.gui_signal = flow2.add{
-      type = "choose-elem-button",
-      elem_type = "signal",
-      signal = {type = "virtual", name = "signal-B"},
-      enabled = enabled,
-    }
-
-    storage.playerdata[player.index] = playerdata
+    reset_read_belt_count_gui(player)
 
     storage.players_in_belt_gui[player.index] = player
     script.on_event(defines.events.on_tick, Handler.on_tick)
@@ -121,9 +126,11 @@ local function on_tick_player(player)
   local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
   local struct = storage.structs[struct_id]
 
-  if struct and enabled == false then
-    Handler.delete_struct(struct)
-    playerdata.gui_checkbox.state = false
+  if enabled == false then
+    reset_read_belt_count_gui(player)
+    if struct then
+      Handler.delete_struct(struct)
+    end
   end
 
   -- game.print("setting status to " ..serpent.line(struct ~= nil))
