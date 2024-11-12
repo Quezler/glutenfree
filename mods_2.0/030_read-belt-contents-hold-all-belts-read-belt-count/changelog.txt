@@ -22,6 +22,7 @@ Date: ????
     - Fix the backwards solver
     - Attempt to support backwards underground belts
     - Fix undergrounds
+    - Make forward underground belts function
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12

@@ -14,8 +14,16 @@ local function get_transport_line_forward(previous_direction, belt, belts)
 
   belts[belt.unit_number] = belt
 
+  if belt.type == "underground-belt" and belt.belt_to_ground_type == "input" then
+    local other_end = belt.neighbours
+    if other_end then
+      get_transport_line_forward(belt.direction, other_end, belts)
+    end
+    return
+  end
+
   local in_front = belt.belt_neighbours.outputs[1]
-  if in_front and in_front.type == "transport-belt" then
+  if in_front and (in_front.type == "transport-belt" or in_front.type == "underground-belt") then
     get_transport_line_forward(belt.direction, in_front, belts)
   end
 end
