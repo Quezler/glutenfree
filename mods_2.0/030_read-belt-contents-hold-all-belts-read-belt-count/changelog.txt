@@ -21,6 +21,7 @@ Date: ????
     - Fix it, but tight corners still break it
     - Fix the backwards solver
     - Attempt to support backwards underground belts
+    - Fix undergrounds
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12

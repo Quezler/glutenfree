@@ -28,11 +28,12 @@ local function get_transport_line_backward(next_direction, belt, belts)
   if belt.type == "transport-belt" then
     if belt.belt_shape == "left" then this_direction = this_direction + 4 end
     if belt.belt_shape == "right" then this_direction = this_direction - 4 end
-  elseif belt.type == "underground-belt" then
+  elseif belt.type == "underground-belt" and belt.belt_to_ground_type == "output" then
     local other_end = belt.neighbours
     if other_end then
       get_transport_line_backward(this_direction, other_end, belts)
     end
+    return
   end
 
   local inputs = belt.belt_neighbours.inputs
