@@ -112,7 +112,6 @@ function Combinator.tick_struct(struct)
     get_transport_line(struct.belt, data)
     -- game.print(table_size(data.belts) .. ' ' .. data.total)
 
-    struct.combinator_cb = struct.combinator_cb or struct.combinator.get_control_behavior() -- todo: remove
     local section = struct.combinator_cb.get_section(1)
     local filter = section.get_slot(1)
     filter.min = data.total
