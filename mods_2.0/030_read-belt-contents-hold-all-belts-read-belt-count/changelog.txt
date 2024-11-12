@@ -6,6 +6,7 @@ Date: ????
     - Create the combinator through the checkbox
     - Rely on player.opened vs checking for tags
     - Assert instead of error
+    - Remove combinator when moving the belt away from read all mode
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 12
