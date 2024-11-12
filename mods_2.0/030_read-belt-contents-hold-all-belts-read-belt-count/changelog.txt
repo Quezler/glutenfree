@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Setup the initial gui frame
     - Add circuit selector with caption
+    - Add a checkbox
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11

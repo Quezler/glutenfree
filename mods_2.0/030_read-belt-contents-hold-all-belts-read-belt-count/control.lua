@@ -21,21 +21,34 @@ script.on_event(defines.events.on_gui_opened, function(event)
     local inner = frame.add{
       type = "frame",
       style = "inside_shallow_frame_with_padding",
+      direction = "vertical",
     }
 
     -- inner.style.vertical_align = "center"
 
-    local flow = inner.add{
+    local flow1 = inner.add{
+      type = "flow",
+      -- style = "player_input_horizontal_flow"
+    }
+
+    flow1.add{
+      type = "checkbox",
+      style = "caption_checkbox",
+      caption = {"gui-control-behavior-modes.enable-disable"},
+      state = true,
+    }
+
+    local flow2 = inner.add{
       type = "flow",
       style = "player_input_horizontal_flow"
     }
 
-    flow.add{
+    flow2.add{
       type = "label",
-      caption = {"gui-control-behavior-modes-guis.control-signal"}
+      caption = {"gui-control-behavior-modes-guis.control-signal"},
     }
 
-    flow.add{
+    flow2.add{
       type = "choose-elem-button",
       elem_type = "signal",
       signal = {type = "virtual", name = "signal-B"},
