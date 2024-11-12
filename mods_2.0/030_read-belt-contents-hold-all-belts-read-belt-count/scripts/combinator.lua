@@ -1,11 +1,3 @@
--- local function trace_belt(belt)
---   game.print(serpent.line( belt.belt_neighbours ))
-
---   local in_front = belt.belt_neighbours.output[1]
---   if in_front and in_front.type == "transport-belt" then
---   end
--- end
-
 local function get_transport_line_forward(previous_direction, belt, belts)
   if belts[assert(belt.unit_number)] then return end
 
@@ -61,10 +53,10 @@ local function get_transport_line(belt, belts)
   belts[belt.unit_number] = nil -- allow the starting belt to be ran backwards
   get_transport_line_backward(belt.direction, belt, belts)
 
-  for _, belt in pairs(belts) do
+  for _, found_belt in pairs(belts) do
     rendering.draw_circle{
-      surface = belt.surface,
-      target = belt.position,
+      surface = found_belt.surface,
+      target = found_belt.position,
       radius = 0.1,
       color = {1, 1, 1, 1},
       filled = true,
