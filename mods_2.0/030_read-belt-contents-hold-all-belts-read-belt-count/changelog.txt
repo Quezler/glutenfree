@@ -24,6 +24,7 @@ Date: ????
     - Fix undergrounds
     - Make forward underground belts function
     - Cleanup
+    - Count the total belt pieces
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12
