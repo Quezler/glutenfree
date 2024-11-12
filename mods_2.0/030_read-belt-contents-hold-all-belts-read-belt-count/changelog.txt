@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
-Date: ????
+Date: 2024. 11. 12
   Info:
     - Decouple struct creation/destruction from belt control behaviour
     - Create the combinator through the checkbox
