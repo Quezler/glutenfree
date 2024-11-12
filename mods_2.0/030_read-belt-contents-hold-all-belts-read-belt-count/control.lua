@@ -3,7 +3,8 @@ local gui_checkbox_name = "rbchabrbc-checkbox"
 
 local Handler = {}
 
-require("script.helpers")
+require("scripts.helpers")
+require("scripts.combinator")
 
 script.on_init(function(event)
   storage.players_in_belt_gui = {}
@@ -210,15 +211,6 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     end
 
     storage.unit_number_to_struct_id[unit_number] = nil
-  end
-end)
-
-script.on_nth_tick(600, function(event)
-  for struct_id, struct in pairs(storage.structs) do
-    if is_belt_read_holding_all_belts(struct.belt) == false then
-      game.print("nth 60 delete")
-      delete_struct(struct)
-    end
   end
 end)
 
