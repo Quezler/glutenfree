@@ -6,6 +6,7 @@ Date: ????
     - Prevent the combinator from being placed somewhere without belts
     - Run on_tick conditionally
     - Improve on_tick readability
+    - Disable the checkbox, label & button whilst not reading all belts
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 12

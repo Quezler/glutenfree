@@ -1,4 +1,5 @@
 local frame_name = "rbchabrbc-frame"
+local inner_name = "rbchabrbc-inner"
 
 local Handler = {}
 
@@ -30,6 +31,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
     local inner = frame.add{
       type = "frame",
+      name = inner_name,
       style = "inside_shallow_frame_with_padding",
       direction = "vertical",
     }
@@ -82,7 +84,11 @@ local function on_tick_player(player)
   if player.connected == false then return end
 
   local cb = opened.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
-  game.print(cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold)
+  local enabled = cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold
+
+  player.gui.relative[frame_name][inner_name].children[1].children[1].enabled = enabled
+  player.gui.relative[frame_name][inner_name].children[2].children[1].enabled = enabled
+  player.gui.relative[frame_name][inner_name].children[2].children[2].enabled = enabled
 
   return true
 end
