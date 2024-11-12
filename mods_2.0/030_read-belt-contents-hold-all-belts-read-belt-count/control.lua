@@ -11,12 +11,12 @@ script.on_event(defines.events.on_gui_opened, function(event)
     frame = player.gui.relative.add{
       type = "frame",
       name = frame_name,
-      caption = { "gui-control-behavior-modes.read-belt-count" },
       anchor = {
         gui = defines.relative_gui_type.transport_belt_gui,
         position = defines.relative_gui_position.right,
       },
     }
+    frame.style.top_padding = 8
 
     local inner = frame.add{
       type = "frame",
@@ -24,17 +24,14 @@ script.on_event(defines.events.on_gui_opened, function(event)
       direction = "vertical",
     }
 
-    -- inner.style.vertical_align = "center"
-
     local flow1 = inner.add{
       type = "flow",
-      -- style = "player_input_horizontal_flow"
     }
 
     flow1.add{
       type = "checkbox",
       style = "caption_checkbox",
-      caption = {"gui-control-behavior-modes.enable-disable"},
+      caption = {"gui-control-behavior-modes.read-belt-count"},
       state = true,
     }
 
