@@ -1,5 +1,6 @@
 local frame_name = "rbchabrbc-frame"
 local gui_checkbox_name = "rbchabrbc-checkbox"
+local gui_signal_name = "rbchabrbc-signal"
 
 local Handler = {}
 
@@ -81,6 +82,7 @@ local function reset_read_belt_count_gui(player)
 
   playerdata.gui_signal = flow2.add{
     type = "choose-elem-button",
+    name = gui_signal_name,
     elem_type = "signal",
     signal = {type = "virtual", name = "signal-B"},
     enabled = checked,
@@ -247,6 +249,27 @@ script.on_event(defines.events.on_gui_checked_state_changed, function(event)
         local playerdata = storage.playerdata[player.index]
         playerdata.gui_signal.enabled = false
         playerdata.gui_signal.elem_value = {type = "virtual", name = "signal-B"}
+      end
+
+    end
+  end
+end)
+
+script.on_event(defines.events.on_gui_elem_changed, function(event)
+  if event.element.name == gui_signal_name then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    if player_is_in_belt_gui(player) then
+      local opened = player.opened --[[@as LuaEntity]]
+      local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
+      local struct = storage.structs[struct_id]
+
+      if struct then
+        local section = struct.combinator_cb.get_section(1)
+        local filter = section.get_slot(1)
+        local value = event.element.elem_value
+        value.quality = value.quality or "normal"
+        filter.value = value
+        section.set_slot(1, filter)
       end
 
     end
