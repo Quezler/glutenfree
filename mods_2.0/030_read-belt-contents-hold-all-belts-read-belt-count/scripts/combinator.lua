@@ -1,3 +1,8 @@
+local function get_underground_distance(a, b)
+  -- assume there is either a x or y difference, never both
+  return math.abs(a.position.x - b.position.x) + math.abs(a.position.y - b.position.y)
+end
+
 local function get_transport_line_forward(previous_direction, belt, data)
   if data.belts[assert(belt.unit_number)] then return end
 
@@ -10,6 +15,7 @@ local function get_transport_line_forward(previous_direction, belt, data)
   if belt.type == "underground-belt" and belt.belt_to_ground_type == "input" then
     local other_end = belt.neighbours
     if other_end then
+      data.total = data.total - 1 + get_underground_distance(belt, other_end)
       get_transport_line_forward(belt.direction, other_end, data)
     end
     return
@@ -34,6 +40,7 @@ local function get_transport_line_backward(next_direction, belt, data)
   elseif belt.type == "underground-belt" and belt.belt_to_ground_type == "output" then
     local other_end = belt.neighbours
     if other_end then
+      data.total = data.total - 1 + get_underground_distance(belt, other_end)
       get_transport_line_backward(this_direction, other_end, data)
     end
     return
