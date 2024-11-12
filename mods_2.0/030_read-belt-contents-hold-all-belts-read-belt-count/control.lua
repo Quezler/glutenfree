@@ -11,6 +11,8 @@ script.on_init(function(event)
 
   storage.playerdata = {}
   storage.structs = {}
+
+  storage.deathrattles = {}
 end)
 
 script.on_event(defines.events.on_gui_opened, function(event)
@@ -170,6 +172,8 @@ function Handler.on_created_entity(event)
     belt = belt,
     combinator = entity,
   }
+
+  storage.deathrattles[script.register_on_object_destroyed(belt)] = {}
 end
 
 for _, event in ipairs({
@@ -187,3 +191,14 @@ for _, event in ipairs({
     {filter = "ghost_name", name = "read-belt-contents-hold-all-belts-read-belt-count"},
   })
 end
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    local struct_id = assert(event.useful_id)
+    local struct = assert(storage.structs[struct_id])
+
+    struct.combinator.destroy()
+    storage.structs[struct_id] = nil
+  end
+end)
