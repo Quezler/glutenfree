@@ -279,7 +279,7 @@ script.on_event(defines.events.on_gui_checked_state_changed, function(event)
       local struct = storage.structs[struct_id]
 
       if event.element.state then
-        assert(struct == nil)
+        assert(struct == nil, "found struct but expected nil")
         opened.surface.create_entity{
           name = "read-belt-contents-hold-all-belts-read-belt-count",
           force = opened.force,
@@ -287,7 +287,7 @@ script.on_event(defines.events.on_gui_checked_state_changed, function(event)
           raise_built = true,
         }
       else
-        assert(struct ~= nil)
+        assert(struct ~= nil, "found nil but expected struct")
         Handler.delete_struct(struct)
       end
 
