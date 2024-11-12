@@ -58,3 +58,13 @@ script.on_event(defines.events.on_gui_opened, function(event)
     }
   end
 end)
+
+script.on_event(defines.events.on_tick, function(event)
+  for _, player in ipairs(game.connected_players) do
+    local opened = player.opened
+    if opened and (opened.type == "transport-belt" or (opened.type == "entity-ghost" and opened.ghost_type == "transport-belt")) then
+      local cb = opened.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
+      game.print(cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold)
+    end
+  end
+end)
