@@ -14,6 +14,7 @@ Date: ????
     - Setup the correct state during reset & checkbox regardless of on_tick
     - Cleanup
     - Switch things around
+    - Move some local functions to a helpers file
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 12

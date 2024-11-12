@@ -3,30 +3,7 @@ local gui_checkbox_name = "rbchabrbc-checkbox"
 
 local Handler = {}
 
-local function entity_is_transport_belt(entity)
-  return entity.type == "transport-belt" or (entity.type == "entity-ghost" and entity.ghost_type == "transport-belt")
-end
-
-local function player_is_in_belt_gui(player)
-  local opened = player.opened
-  if opened == nil then return false end
-
-  if player.opened_gui_type ~= defines.gui_type.entity then return false end
-  if entity_is_transport_belt(player.opened) == false then return false end
-
-  return true
-end
-
-local function is_belt_read_holding_all_belts(entity) -- boolean
-  local red = entity.get_circuit_network(defines.wire_connector_id.circuit_red)
-  local green = entity.get_circuit_network(defines.wire_connector_id.circuit_green)
-  if (red == nil and green == nil) then return false end
-
-  local cb = entity.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
-  local enabled = cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold
-
-  return enabled
-end
+require("script.helpers")
 
 script.on_init(function(event)
   storage.players_in_belt_gui = {}
@@ -139,10 +116,10 @@ local function on_tick_player(player)
     playerdata.gui_label   .enabled = true
     playerdata.gui_signal  .enabled = playerdata.gui_checkbox.state
   else
-    reset_read_belt_count_gui(player)
     if struct then
       Handler.delete_struct(struct)
     end
+    reset_read_belt_count_gui(player)
   end
 
   return true
@@ -178,13 +155,6 @@ function Handler.get_belt_at(surface, position)
     limit = 1,
   }
   if ghosts[1] then return ghosts[1] end
-end
-
-local function attach_belt_to_struct(belt, struct)
-  struct.belt = belt
-
-  storage.unit_number_to_struct_id[belt.unit_number] = struct.id
-  storage.deathrattles[script.register_on_object_destroyed(belt)] = {}
 end
 
 function Handler.on_created_entity(event)
