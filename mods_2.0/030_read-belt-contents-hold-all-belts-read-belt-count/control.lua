@@ -1,5 +1,4 @@
 local frame_name = "rbchabrbc-frame"
-local inner_name = "rbchabrbc-inner"
 
 local Handler = {}
 
@@ -9,12 +8,15 @@ end
 
 script.on_init(function(event)
   storage.players_in_belt_gui = {}
+
+  storage.playerdata = {}
 end)
 
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
   if entity and entity_is_transport_belt(entity) then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    local playerdata = {}
 
     local frame = player.gui.relative[frame_name]
     if frame then frame.destroy() end
@@ -31,7 +33,6 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
     local inner = frame.add{
       type = "frame",
-      name = inner_name,
       style = "inside_shallow_frame_with_padding",
       direction = "vertical",
     }
@@ -42,7 +43,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
     local enabled = false
 
-    flow1.add{
+    playerdata.gui_checkbox = flow1.add{
       type = "checkbox",
       style = "caption_checkbox",
       caption = {"gui-control-behavior-modes.read-belt-count"},
@@ -56,18 +57,20 @@ script.on_event(defines.events.on_gui_opened, function(event)
     }
     flow2.style.top_margin = 4
 
-    flow2.add{
+    playerdata.gui_label = flow2.add{
       type = "label",
       caption = {"gui-control-behavior-modes-guis.control-signal"},
       enabled = enabled,
     }
 
-    flow2.add{
+    playerdata.gui_signal = flow2.add{
       type = "choose-elem-button",
       elem_type = "signal",
       signal = {type = "virtual", name = "signal-B"},
       enabled = enabled,
     }
+
+    storage.playerdata[player.index] = playerdata
 
     storage.players_in_belt_gui[player.index] = player
     script.on_event(defines.events.on_tick, Handler.on_tick)
@@ -86,9 +89,10 @@ local function on_tick_player(player)
   local cb = opened.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
   local enabled = cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold
 
-  player.gui.relative[frame_name][inner_name].children[1].children[1].enabled = enabled
-  player.gui.relative[frame_name][inner_name].children[2].children[1].enabled = enabled
-  player.gui.relative[frame_name][inner_name].children[2].children[2].enabled = enabled
+  local playerdata = storage.playerdata[player.index]
+  playerdata.gui_checkbox.enabled = enabled
+  playerdata.gui_label   .enabled = enabled
+  playerdata.gui_signal  .enabled = enabled
 
   return true
 end

@@ -7,6 +7,7 @@ Date: ????
     - Run on_tick conditionally
     - Improve on_tick readability
     - Disable the checkbox, label & button whilst not reading all belts
+    - Cleanup nested gui access
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 12
