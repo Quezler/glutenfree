@@ -207,7 +207,17 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     local struct_id = assert(event.useful_id)
     local struct = assert(storage.structs[struct_id])
 
-    struct.combinator.destroy()
+    -- in case the entity becomes a ghost or get upgraded, try to adopt that new entity.
+    local combinator = struct.combinator
+    local belt = Handler.get_belt_at(combinator.surface, combinator.position)
+    if belt then
+      struct.belt = belt
+      storage.deathrattles[script.register_on_object_destroyed(belt)] = {}
+      storage.structs[belt.unit_number] = struct
+    else
+      combinator.destroy()
+    end
+
     storage.structs[struct_id] = nil
   end
 end)

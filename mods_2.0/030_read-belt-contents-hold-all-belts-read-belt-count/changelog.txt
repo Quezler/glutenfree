@@ -13,6 +13,7 @@ Date: ????
     - Add a sanity check that ensures only one combinator can occupy a tile
     - Remove the combinator when the belt gets destroyed
     - Check for the prescence of any wires at all
+    - As long as a belt exists at the combinator's tile, stay existing
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 12
