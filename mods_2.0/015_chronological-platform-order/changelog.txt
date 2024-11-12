@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
-Date: ????
+Date: 2024. 11. 12
   Info:
     - Comment out "wait till 2.0.13" notice
+    - Fix new platforms not being ordered, and allow my graveyard mod to bypass ordering
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2024. 11. 01

@@ -8,6 +8,9 @@ local function handle_surface(surface)
 
   local platform_name = platform.name
 
+  -- we will allow the space platform graveyard mod to put a surface back in where it died
+  if platform.space_location and platform.space_location.name == "space-platform-graveyard" then return end
+
   local decimal_v2 = string.format("%010d", tonumber(platform.index))
   local prefix = string.format("[color=1,1,1,0.%s][/color]", decimal_v2)
   local detected_prefix = string.sub(platform_name, 1, string.len(prefix))
