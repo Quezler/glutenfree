@@ -244,6 +244,7 @@ script.on_event(defines.events.on_gui_checked_state_changed, function(event)
           force = opened.force,
           position = opened.position,
           raise_built = true,
+          create_build_effect_smoke = false,
         }
 
         local playerdata = storage.playerdata[player.index]

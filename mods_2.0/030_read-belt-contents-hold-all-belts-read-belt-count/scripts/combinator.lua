@@ -79,21 +79,25 @@ local function get_transport_line_backward(next_direction, belt, data)
   end
 end
 
+require("shared")
+
 local function get_transport_line(belt, data)
   get_transport_line_forward(belt.direction, belt, data)
   data.belts[belt.unit_number] = nil -- allow the starting belt to be ran backwards
   data.total = data.total - 1
   get_transport_line_backward(belt.direction, belt, data)
 
-  for _, found_belt in pairs(data.belts) do
-    rendering.draw_circle{
-      surface = found_belt.surface,
-      target = found_belt.position,
-      radius = 0.1,
-      color = {1, 1, 1, 1},
-      filled = true,
-      time_to_live = 30,
-    }
+  if debug_mode then
+    for _, found_belt in pairs(data.belts) do
+      rendering.draw_circle{
+        surface = found_belt.surface,
+        target = found_belt.position,
+        radius = 0.1,
+        color = {1, 1, 1, 1},
+        filled = true,
+        time_to_live = 30,
+      }
+    end
   end
 end
 

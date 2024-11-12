@@ -4,7 +4,7 @@ data:extend{{
   icon = data.raw["virtual-signal"]["signal-B"].icon,
 
   selection_box = {{-0.2, -0.2}, {0.2, 0.2}},
-  collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
+  collision_box = data.raw["transport-belt"]["transport-belt"].collision_box,
   collision_mask = {layers = {}},
 
   activity_led_light_offsets = {{0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -13,7 +13,7 @@ data:extend{{
 
   flags = {"player-creation"},
   selection_priority = 51,
-  selectable_in_game = true, -- todo: false before 1.0.0
+  selectable_in_game = false,
 
   hidden = true,
 }}
@@ -29,3 +29,10 @@ data:extend{{
 
   hidden = true,
 }}
+
+require("shared")
+
+if debug_mode then
+  data.raw["constant-combinator"]["read-belt-contents-hold-all-belts-read-belt-count"].selectable_in_game = true
+  data.raw["constant-combinator"]["read-belt-contents-hold-all-belts-read-belt-count"].collision_box = {{-0.2, -0.2}, {0.2, 0.2}}
+end
