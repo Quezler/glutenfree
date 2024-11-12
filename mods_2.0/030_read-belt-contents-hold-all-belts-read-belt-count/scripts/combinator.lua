@@ -6,8 +6,12 @@
 --   end
 -- end
 
-local function get_next_belt(belt, belts)
+local function get_transport_line(belt, belts)
   if belts[assert(belt.unit_number)] then return end
+
+  local inputs = belt.belt_neighbours.inputs
+  if #inputs ~= 1 then return end
+
   belts[belt.unit_number] = belt
 
   rendering.draw_circle{
@@ -19,12 +23,17 @@ local function get_next_belt(belt, belts)
     time_to_live = 30,
   }
 
-  local inputs = belt.belt_neighbours.inputs
-  if #inputs == 1 then
-    local in_front = belt.belt_neighbours.outputs[1]
-    if in_front and in_front.type == "transport-belt" then
-      get_next_belt(in_front, belts)
-    end
+  -- local inputs = belt.belt_neighbours.inputs
+  -- if #inputs == 1 then
+  --   local in_front = belt.belt_neighbours.outputs[1]
+  --   if in_front and in_front.type == "transport-belt" then
+  --     get_transport_line(in_front, belts)
+  --   end
+  -- end
+
+  local in_front = belt.belt_neighbours.outputs[1]
+  if in_front and in_front.type == "transport-belt" then
+    get_transport_line(in_front, belts)
   end
 end
 
@@ -35,8 +44,8 @@ script.on_nth_tick(60, function(event)
       delete_struct(struct)
     else
       local belts = {}
-      get_next_belt(struct.belt, belts)
-      game.print(table_size(belts))
+      get_transport_line(struct.belt, belts)
+      -- game.print(table_size(belts))
     end
   end
 end)

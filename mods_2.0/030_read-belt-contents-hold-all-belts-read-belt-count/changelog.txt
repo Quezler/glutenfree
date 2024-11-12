@@ -10,6 +10,7 @@ Date: ????
     - Test if a ghost can still do .belt_neighbours
     - Rename seen to belts and return it
     - Try to detect the ending if there are multiple inputs
+    - Do not blindly step onto a belt with multiple inputs
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12
