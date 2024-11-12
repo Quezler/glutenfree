@@ -1,15 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2024. 11. 12
+  Info:
+    - Align the thumbnail B further from the right edge
+    - Start gui off disabled
+    - Check for hold mode when having a belt (ghost) open
+    - Add entity_is_transport_belt(entity)
+---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2024. 11. 12
   Info:
     - Setup the initial gui frame
     - Add circuit selector with caption
     - Add a checkbox
     - Replicate photoshopped thumbnail
     - Align the thumbnail B further from the right edge
-    - Start gui off disabled
-    - Check for hold mode when having a belt (ghost) open
-    - Add entity_is_transport_belt(entity)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11
