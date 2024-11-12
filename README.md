@@ -5,7 +5,7 @@ PHP based CLI for mods.factorio.com
 
 Hello fellow coder, i have had the pleasure of recieving 3 shirts to-date, gonna try and get my 4th this year, but with the repository requiring the `hacktoberfest` topic or pr's manually being assigned `hacktoberfest-accepted` it has become a little trickier.
 
-While giving this repository itself the `hacktoberfest` topic won't directly cause me to receive a shirt, it might help some others to reach their goal.
+While giving this repository itself the `hacktoberfest` topic won't directly cause me to receive a shirt, it might help some others to reach their goal. (rip shirt)
 
 In this repository you will be able (if you so choose) to contribute on factorio mods, above beginner knowledge of factorio modding is recommended.
 
