@@ -7,9 +7,8 @@
 -- end
 
 local function get_next_belt(belt, seen)
-  local seen_key = string.format("x%d,y%d", belt.position.x, belt.position.y)
-  if seen[seen_key] then return end
-  seen[seen_key] = true
+  if seen[assert(belt.unit_number)] then return end
+  seen[belt.unit_number] = true
 
   rendering.draw_circle{
     surface = belt.surface,
