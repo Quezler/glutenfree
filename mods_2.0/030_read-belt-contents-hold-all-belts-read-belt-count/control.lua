@@ -171,6 +171,7 @@ function Handler.on_created_entity(event)
 
     belt = nil,
     combinator = entity,
+    combinator_cb = entity.get_control_behavior(),
   }
 
   attach_belt_to_struct(belt, storage.structs[storage.index])
