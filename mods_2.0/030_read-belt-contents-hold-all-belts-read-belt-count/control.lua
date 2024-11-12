@@ -219,18 +219,17 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     local unit_number = assert(event.useful_id)
     local struct_id = assert(storage.unit_number_to_struct_id[unit_number])
-    local struct = storage.structs[struct_id]
-    if struct == nil then
-      return game.print("struct already gone?")
-    end
 
-    -- in case the entity becomes a ghost or get upgraded, try to adopt that new entity.
-    local combinator = struct.combinator
-    local belt = Handler.get_belt_at(combinator.surface, combinator.position)
-    if belt then
-      attach_belt_to_struct(belt, struct)
-    else
-      Handler.delete_struct(struct)
+    local struct = storage.structs[struct_id]
+    if struct then
+      -- in case the entity becomes a ghost or get upgraded, try to adopt that new entity.
+      local combinator = struct.combinator
+      local belt = Handler.get_belt_at(combinator.surface, combinator.position)
+      if belt then
+        attach_belt_to_struct(belt, struct)
+      else
+        Handler.delete_struct(struct)
+      end
     end
 
     storage.unit_number_to_struct_id[unit_number] = nil
