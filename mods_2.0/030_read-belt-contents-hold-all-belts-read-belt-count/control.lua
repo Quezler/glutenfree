@@ -80,17 +80,26 @@ script.on_event(defines.events.on_gui_opened, function(event)
   end
 end)
 
+local function is_belt_read_holding_all_belts(entity) -- boolean
+  local red = entity.get_circuit_network(defines.wire_connector_id.circuit_red)
+  local green = entity.get_circuit_network(defines.wire_connector_id.circuit_green)
+  if (red == nil and green == nil) then return false end
+
+  local cb = entity.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
+  local enabled = cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold
+
+  return enabled
+end
+
 local function on_tick_player(player)
   local opened = player.opened
   if opened == nil then return end
 
   if player.opened_gui_type ~= defines.gui_type.entity then return end
   if entity_is_transport_belt(player.opened) == false then return end
-
   if player.connected == false then return end
 
-  local cb = opened.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
-  local enabled = cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold
+  local enabled = is_belt_read_holding_all_belts(opened)
 
   local playerdata = storage.playerdata[player.index]
   playerdata.gui_checkbox.enabled = enabled

@@ -12,6 +12,7 @@ Date: ????
     - Ensure the combinator doesn't exist as a ghost
     - Add a sanity check that ensures only one combinator can occupy a tile
     - Remove the combinator when the belt gets destroyed
+    - Check for the prescence of any wires at all
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 12
