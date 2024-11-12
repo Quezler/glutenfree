@@ -120,7 +120,8 @@ local function on_tick_player(player)
     }
   elseif struct ~= nil and enabled == false then
     struct.combinator.destroy()
-    storage.structs[struct_id] = nil -- todo: cleanup lingering unit number pointer
+    storage.structs[struct_id] = nil
+    storage.unit_number_to_struct_id[opened.unit_number] = nil
   end
 
   return true
