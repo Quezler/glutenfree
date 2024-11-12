@@ -1,8 +1,12 @@
 local frame_name = "rbchabrbc-frame"
 
+local function entity_is_transport_belt(entity)
+  return entity.type == "transport-belt" or (entity.type == "entity-ghost" and entity.ghost_type == "transport-belt")
+end
+
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
-  if entity and entity.type == "transport-belt" then
+  if entity and entity_is_transport_belt(entity) then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
     local frame = player.gui.relative[frame_name]
@@ -62,7 +66,7 @@ end)
 script.on_event(defines.events.on_tick, function(event)
   for _, player in ipairs(game.connected_players) do
     local opened = player.opened
-    if opened and (opened.type == "transport-belt" or (opened.type == "entity-ghost" and opened.ghost_type == "transport-belt")) then
+    if opened and entity_is_transport_belt(opened) then
       local cb = opened.get_or_create_control_behavior() --[[@as LuaTransportBeltControlBehavior]]
       game.print(cb.read_contents and cb.read_contents_mode == defines.control_behavior.transport_belt.content_read_mode.entire_belt_hold)
     end

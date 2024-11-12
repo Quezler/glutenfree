@@ -9,6 +9,7 @@ Date: ????
     - Align the thumbnail B further from the right edge
     - Start gui off disabled
     - Check for hold mode when having a belt (ghost) open
+    - Add entity_is_transport_belt(entity)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 11
