@@ -26,6 +26,7 @@ Date: ????
     - Cleanup
     - Count the total belt pieces
     - Correctly count the underground belts
+    - Support linked belts, through input to output side is currently broken
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 12

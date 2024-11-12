@@ -19,7 +19,15 @@ local function get_transport_line_forward(previous_direction, belt, data)
       get_transport_line_forward(belt.direction, other_end, data)
     end
     return
+  elseif belt.type == "linked-belt" and belt.linked_belt_type == "input" then
+    game.print("foo")
+    local other_end = belt.linked_belt_neighbour
+    if other_end then
+      get_transport_line_forward(belt.direction, other_end, data)
+    end
+    return
   end
+  game.print(belt.type)
 
   local in_front = belt.belt_neighbours.outputs[1]
   if in_front and (in_front.type == "transport-belt" or in_front.type == "underground-belt") then
@@ -41,6 +49,12 @@ local function get_transport_line_backward(next_direction, belt, data)
     local other_end = belt.neighbours
     if other_end then
       data.total = data.total - 1 + get_underground_distance(belt, other_end)
+      get_transport_line_backward(this_direction, other_end, data)
+    end
+    return
+  elseif belt.type == "linked-belt" and belt.linked_belt_type == "output" then
+    local other_end = belt.linked_belt_neighbour
+    if other_end then
       get_transport_line_backward(this_direction, other_end, data)
     end
     return
