@@ -174,6 +174,12 @@ function Handler.on_created_entity(event)
     combinator_cb = entity.get_control_behavior(),
   }
 
+  local section = storage.structs[storage.index].combinator_cb.get_section(1)
+  local filter = section.get_slot(1)
+  filter.value = {type = "virtual", name = "signal-B", quality = "normal"}
+  filter.min = 0
+  section.set_slot(1, filter)
+
   attach_belt_to_struct(belt, storage.structs[storage.index])
 end
 
