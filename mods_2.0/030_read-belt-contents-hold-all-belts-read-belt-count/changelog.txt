@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
-Date: ????
+Date: 2024. 11. 12
   Info:
     - Begin building the combinator logic (in a seperate file)
     - Start walking to the front of the belt
