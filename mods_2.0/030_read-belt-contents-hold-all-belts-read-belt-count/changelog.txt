@@ -12,6 +12,7 @@ Date: ????
     - Prevent selecting a control signal until the combinator exists
     - Reset signal picker when unchecking the checkbox
     - Setup the correct state during reset & checkbox regardless of on_tick
+    - Cleanup
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 12

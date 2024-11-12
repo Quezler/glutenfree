@@ -125,15 +125,10 @@ end)
 
 local function on_tick_player(player)
   if player_is_in_belt_gui(player) == false then return end
-  if player.connected == true then return end
+  if player.connected == false then return end
 
   local opened = player.opened
   local enabled = is_belt_read_holding_all_belts(opened)
-
-  local playerdata = storage.playerdata[player.index]
-  playerdata.gui_checkbox.enabled = enabled
-  playerdata.gui_label   .enabled = enabled
-  playerdata.gui_signal  .enabled = playerdata.gui_checkbox.state
 
   local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
   local struct = storage.structs[struct_id]
@@ -143,21 +138,12 @@ local function on_tick_player(player)
     if struct then
       Handler.delete_struct(struct)
     end
+  else
+    local playerdata = storage.playerdata[player.index]
+    playerdata.gui_checkbox.enabled = enabled
+    playerdata.gui_label   .enabled = enabled
+    playerdata.gui_signal  .enabled = playerdata.gui_checkbox.state
   end
-
-  -- game.print("setting status to " ..serpent.line(struct ~= nil))
-  -- playerdata.gui_checkbox.state = struct ~= nil
-
-  -- if struct == nil and enabled == true then
-  --   opened.surface.create_entity{
-  --     name = "read-belt-contents-hold-all-belts-read-belt-count",
-  --     force = opened.force,
-  --     position = opened.position,
-  --     raise_built = true,
-  --   }
-  -- elseif struct ~= nil and enabled == false then
-  --   Handler.delete_struct(struct)
-  -- end
 
   return true
 end
