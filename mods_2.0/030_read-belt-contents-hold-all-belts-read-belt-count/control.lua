@@ -1,4 +1,5 @@
 local frame_name = "rbchabrbc-frame"
+local gui_checkbox_name = "rbchabrbc-checkbox"
 
 local Handler = {}
 
@@ -51,10 +52,16 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
     playerdata.gui_checkbox = flow1.add{
       type = "checkbox",
+      name = gui_checkbox_name,
       style = "caption_checkbox",
       caption = {"gui-control-behavior-modes.read-belt-count"},
       state = enabled,
       enabled = enabled,
+      tags = {
+        surface_index = entity.surface.index,
+        force_index = entity.force.index,
+        position = entity.position,
+      },
     }
 
     local flow2 = inner.add{
@@ -112,12 +119,12 @@ local function on_tick_player(player)
   -- local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
   -- local struct = storage.structs[struct_id]
   -- if struct == nil and enabled == true then
-  --   opened.surface.create_entity{
-  --     name = "read-belt-contents-hold-all-belts-read-belt-count",
-  --     force = opened.force,
-  --     position = opened.position,
-  --     raise_built = true,
-  --   }
+    -- opened.surface.create_entity{
+    --   name = "read-belt-contents-hold-all-belts-read-belt-count",
+    --   force = opened.force,
+    --   position = opened.position,
+    --   raise_built = true,
+    -- }
   -- elseif struct ~= nil and enabled == false then
   --   Handler.delete_struct(struct)
   -- end
@@ -248,6 +255,25 @@ script.on_nth_tick(60, function(event)
     if is_belt_read_holding_all_belts(struct.belt) == false then
       game.print("nth 60 delete")
       Handler.delete_struct(struct)
+    end
+  end
+end)
+
+script.on_event(defines.events.on_gui_checked_state_changed, function(event)
+  if event.element.name == gui_checkbox_name then
+    local tags = event.element.tags
+    game.print(serpent.line(event.element.tags))
+    game.print(serpent.line( event.element.state ))
+    if event.element.state then
+      game.surfaces[tags.surface_index].create_entity{
+        name = "read-belt-contents-hold-all-belts-read-belt-count",
+        force = tags.force_index,
+        position = tags.position,
+        raise_built = true,
+      }
+    else
+      -- local struct_id = storage.unit_number_to_struct_id[opened.unit_number]
+      -- local struct = storage.structs[struct_id]
     end
   end
 end)
