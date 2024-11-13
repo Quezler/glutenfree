@@ -36,6 +36,7 @@ Date: ????
     - Do not tick the always show ones when blurred to remote view
     - Disable `ticked_this_tick` debug
     - Fix deconstruction planner crash
+    - Add thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13
