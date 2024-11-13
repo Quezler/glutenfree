@@ -16,13 +16,17 @@ local function refresh_always_show_and_show_in_chart(struct)
 
   local blueprint_entities = inventory[1].get_blueprint_entities() or {}
   assert(#blueprint_entities == 1)
+  inventory.destroy()
 
   struct.always_show = blueprint_entities[1].always_show == true
   struct.show_in_chart = blueprint_entities[1].show_in_chart == true
-
   -- game.print(serpent.line({always_show = struct.always_show, show_in_chart = struct.show_in_chart}))
 
-  inventory.destroy()
+  local surfacedata = storage.surfacedata[entity.surface.index]
+  surfacedata.struct_ids_to_show_in_chart[struct.id] = struct.show_in_chart and true or nil
+  -- game.print(surfacedata.struct_ids_to_show_in_chart[struct.id])
+  -- game.print(serpent.line(surfacedata))
+  -- game.print('set ' .. entity.surface.index .. entity.surface.name .. serpent.line(surfacedata))
 end
 
 local function refresh_observed_surfaces()
@@ -152,35 +156,41 @@ script.on_event(defines.events.on_tick, function(event)
   -- end
 
   for surface_index, _ in pairs(storage.observed_surfaces) do
-    for struct_id, _ in pairs(storage.surfacedata[surface_index].struct_ids) do
+    local surfacedata = storage.surfacedata[surface_index]
+    -- for struct_id, _ in pairs(surfacedata.struct_ids) do
+    --   tick_display_panel(storage.structs[struct_id], event.tick)
+    -- end
+    -- game.print(serpent.line(surfacedata))
+    -- game.print('get ' .. surface_index .. serpent.line(surfacedata))
+    for struct_id, _ in pairs(surfacedata.struct_ids_to_show_in_chart) do
       tick_display_panel(storage.structs[struct_id], event.tick)
     end
   end
 
-  -- for player_index, active_selection in pairs(storage.active_selections) do
-  --   local player = active_selection.player
-  --   local entity = active_selection.entity
-  --   if player.valid and player.selected == entity and player.connected then
-  --     tick_display_panel(storage.structs[entity.unit_number], event.tick)
-  --   else
-  --     storage.active_selections[player_index] = nil
-  --   end
-  -- end
+  for player_index, active_selection in pairs(storage.active_selections) do
+    local player = active_selection.player
+    local entity = active_selection.entity
+    if player.valid and player.selected == entity and player.connected then
+      -- tick_display_panel(storage.structs[entity.unit_number], event.tick)
+    else
+      storage.active_selections[player_index] = nil
+    end
+  end
 
-  -- storage.active_guis = storage.active_guis or {}
-  -- for player_index, active_gui in pairs(storage.active_guis) do
-  --   local player = active_gui.player
-  --   local entity = active_gui.entity
-  --   local struct = storage.structs[entity.unit_number]
-  --   if player.valid and player.opened == entity and player.connected then
-  --     if storage.alt_mode[player_index] then
-  --     tick_display_panel(struct, event.tick)
-  --     end
-  --   else
-  --     refresh_always_show_and_show_in_chart(struct)
-  --     storage.active_guis[player_index] = nil
-  --   end
-  -- end
+  storage.active_guis = storage.active_guis or {}
+  for player_index, active_gui in pairs(storage.active_guis) do
+    local player = active_gui.player
+    local entity = active_gui.entity
+    local struct = storage.structs[entity.unit_number]
+    if player.valid and player.opened == entity and player.connected then
+      if storage.alt_mode[player_index] then
+      -- tick_display_panel(struct, event.tick)
+      end
+    else
+      refresh_always_show_and_show_in_chart(struct)
+      storage.active_guis[player_index] = nil
+    end
+  end
 end)
 
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
@@ -209,6 +219,7 @@ end)
 function Handler.on_surface_created(event)
   storage.surfacedata[event.surface_index] = {
     struct_ids = {},
+    struct_ids_to_show_in_chart = {},
   }
 end
 
