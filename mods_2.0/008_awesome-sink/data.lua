@@ -85,6 +85,7 @@ local assembler = {
   energy_usage = "1kW",
   energy_source = {type = "void"},
   crafting_speed = 1, -- todo: ask for an interface request that assembling machines can opt out of quality boosts
+  no_ams = true -- This will stop QA from making an AMS machine based on this machine.
 
   selection_priority = 51,
   icon_draw_specification = {scale = 0},
