@@ -3,7 +3,7 @@
     "title": "Awesome sink",
     "description": "Feed items inside and get a higher quality item every X items without random chance.",
 
-    "version": "1.1.4",
+    "version": "1.1.5",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -18,6 +18,8 @@
     "dependencies": [
         "base",
         "space-age",
+
+        "(?) QualityAssurance",
 
         "! upcycler"
     ]
