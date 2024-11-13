@@ -121,7 +121,7 @@ local function tick_display_panel(struct, tick)
   if struct.last_tick == tick then return end
   struct.last_tick = tick
 
-  storage.ticked_this_tick = storage.ticked_this_tick + 1
+  -- storage.ticked_this_tick = storage.ticked_this_tick + 1
 
   local entity = struct.entity
   -- game.print(string.format("@%d ticked display panel #%d", tick, entity.unit_number))
@@ -237,8 +237,8 @@ script.on_event(defines.events.on_tick, function(event)
     end
   end
 
-  game.print('ticked_this_tick: ' .. storage.ticked_this_tick)
-  storage.ticked_this_tick = 0
+  -- game.print('ticked_this_tick: ' .. storage.ticked_this_tick)
+  -- storage.ticked_this_tick = 0
 end)
 
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
