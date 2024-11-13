@@ -6,6 +6,7 @@ Date: ????
     - Update the text of the message
     - Only evaluate a message if the text is nil or number
     - See what would happen if you tried to edit it while the gui is open
+    - Draft up code to support being conditionally selected by players
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13
