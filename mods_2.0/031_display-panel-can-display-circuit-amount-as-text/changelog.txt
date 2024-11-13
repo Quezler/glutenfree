@@ -21,6 +21,7 @@ Date: ????
     - Move the surface populator to a handler too
     - Convert storage.structs_on_surface to storage.surfacedata
     - Update structs that show in chart every tick
+    - Cleanup comments
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13

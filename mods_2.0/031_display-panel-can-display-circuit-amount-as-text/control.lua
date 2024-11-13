@@ -24,9 +24,6 @@ local function refresh_always_show_and_show_in_chart(struct)
 
   local surfacedata = storage.surfacedata[entity.surface.index]
   surfacedata.struct_ids_to_show_in_chart[struct.id] = struct.show_in_chart and true or nil
-  -- game.print(surfacedata.struct_ids_to_show_in_chart[struct.id])
-  -- game.print(serpent.line(surfacedata))
-  -- game.print('set ' .. entity.surface.index .. entity.surface.name .. serpent.line(surfacedata))
 end
 
 local function refresh_observed_surfaces()
@@ -160,8 +157,6 @@ script.on_event(defines.events.on_tick, function(event)
     -- for struct_id, _ in pairs(surfacedata.struct_ids) do
     --   tick_display_panel(storage.structs[struct_id], event.tick)
     -- end
-    -- game.print(serpent.line(surfacedata))
-    -- game.print('get ' .. surface_index .. serpent.line(surfacedata))
     for struct_id, _ in pairs(surfacedata.struct_ids_to_show_in_chart) do
       tick_display_panel(storage.structs[struct_id], event.tick)
     end
