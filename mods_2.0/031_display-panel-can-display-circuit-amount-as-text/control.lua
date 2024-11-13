@@ -179,10 +179,14 @@ script.on_event(defines.events.on_tick, function(event)
       tick_display_panel(storage.structs[struct_id], event.tick)
     end
 
+    -- are there any players on this surface with alt mode on?
     local alt_mode_players = storage.surface_to_alt_mode_players[surface_index]
     if alt_mode_players then
       for struct_id, _ in pairs(surfacedata.struct_ids) do
-        tick_display_panel(storage.structs[struct_id], event.tick)
+        local struct = storage.structs[struct_id]
+        if struct.always_show then
+          tick_display_panel(struct, event.tick)
+        end
       end
     end
   end
