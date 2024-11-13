@@ -20,12 +20,20 @@ local function refresh_always_show_and_show_in_chart(struct)
   struct.always_show = blueprint_entities[1].always_show == true
   struct.show_in_chart = blueprint_entities[1].show_in_chart == true
 
-  game.print(serpent.line({always_show = struct.always_show, show_in_chart = struct.show_in_chart}))
+  -- game.print(serpent.line({always_show = struct.always_show, show_in_chart = struct.show_in_chart}))
 
   inventory.destroy()
 end
 
-function Handler.on_init(event)
+local function get_alt_mode(player_index)
+  if storage.alt_mode[player_index] == nil then
+    storage.alt_mode[player_index] = game.get_player(player_index).game_view_settings.show_entity_info
+  end
+
+  return storage.alt_mode[player_index]
+end
+
+function Handler.on_init()
   storage.structs = {}
 
   for _, surface in pairs(game.surfaces) do
@@ -36,6 +44,12 @@ function Handler.on_init(event)
 
   storage.active_selections = {}
   storage.active_guis = {}
+
+  storage.alt_mode = {}
+end
+
+function Handler.on_configuration_changed()
+  storage.alt_mode = storage.alt_mode or {}
 end
 
 function Handler.on_created_entity(event)
@@ -62,7 +76,7 @@ local function tick_display_panel(struct, tick)
   struct.last_tick = tick
 
   local entity = struct.entity
-  -- game.print(string.format("@%d ticked display panel #%d", tick, entity.unit_number))
+  game.print(string.format("@%d ticked display panel #%d", tick, entity.unit_number))
 
   local cb = entity.get_control_behavior()
   if cb == nil then return end -- entity never had a wire connected yet
@@ -80,6 +94,7 @@ local function tick_display_panel(struct, tick)
 end
 
 script.on_init(Handler.on_init)
+script.on_configuration_changed(Handler.on_configuration_changed)
 
 for _, event in ipairs({
   defines.events.on_built_entity,
@@ -139,10 +154,13 @@ script.on_event(defines.events.on_tick, function(event)
   for player_index, active_gui in pairs(storage.active_guis) do
     local player = active_gui.player
     local entity = active_gui.entity
+    local struct = storage.structs[entity.unit_number]
     if player.valid and player.opened == entity and player.connected then
-      tick_display_panel(storage.structs[entity.unit_number], event.tick)
+      if struct.always_show and get_alt_mode(player_index) then
+      tick_display_panel(struct, event.tick)
+      end
     else
-      refresh_always_show_and_show_in_chart(storage.structs[entity.unit_number])
+      refresh_always_show_and_show_in_chart(struct)
       storage.active_guis[player_index] = nil
     end
   end
@@ -153,4 +171,8 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
   if entity.type == "display-panel" then
     refresh_always_show_and_show_in_chart(storage.structs[entity.unit_number])
   end
+end)
+
+script.on_event(defines.events.on_player_toggled_alt_mode, function(event)
+  storage.alt_mode[event.player_index] = event.alt_mode
 end)
