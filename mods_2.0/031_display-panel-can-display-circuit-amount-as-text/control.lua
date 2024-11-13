@@ -34,6 +34,17 @@ local function refresh_observed_surfaces()
   end
 end
 
+local function refresh_surface_to_alt_mode_players()
+  storage.surface_to_alt_mode_players = {}
+
+  for _, player in ipairs(game.connected_players) do
+    if storage.alt_mode[player.index] then
+      storage.surface_to_alt_mode_players[player.surface.index] = storage.surface_to_alt_mode_players[player.surface.index] or {}
+      storage.surface_to_alt_mode_players[player.surface.index][player.index] = player
+    end
+  end
+end
+
 function Handler.on_init()
   storage.structs = {}
   storage.surfacedata = {}
@@ -56,6 +67,9 @@ function Handler.on_init()
 
   storage.observed_surfaces = {}
   refresh_observed_surfaces()
+
+  storage.surface_to_alt_mode_players = {} -- surface_index nil if no players
+  refresh_surface_to_alt_mode_players()
 end
 
 function Handler.on_configuration_changed()
@@ -164,6 +178,13 @@ script.on_event(defines.events.on_tick, function(event)
     for struct_id, _ in pairs(surfacedata.struct_ids_to_show_in_chart) do
       tick_display_panel(storage.structs[struct_id], event.tick)
     end
+
+    local alt_mode_players = storage.surface_to_alt_mode_players[surface_index]
+    if alt_mode_players then
+      for struct_id, _ in pairs(surfacedata.struct_ids) do
+        tick_display_panel(storage.structs[struct_id], event.tick)
+      end
+    end
   end
 
   for player_index, active_selection in pairs(storage.active_selections) do
@@ -201,18 +222,22 @@ end)
 
 script.on_event(defines.events.on_player_toggled_alt_mode, function(event)
   storage.alt_mode[event.player_index] = event.alt_mode
+  refresh_surface_to_alt_mode_players()
 end)
 
 script.on_event(defines.events.on_player_changed_surface, function(event)
   refresh_observed_surfaces()
+  refresh_surface_to_alt_mode_players()
 end)
 
 script.on_event(defines.events.on_player_joined_game, function(event)
   refresh_observed_surfaces()
+  refresh_surface_to_alt_mode_players()
 end)
 
 script.on_event(defines.events.on_player_left_game, function(event)
   refresh_observed_surfaces()
+  refresh_surface_to_alt_mode_players()
 end)
 
 function Handler.on_surface_created(event)

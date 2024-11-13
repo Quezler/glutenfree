@@ -24,6 +24,7 @@ Date: ????
     - Cleanup comments
     - Cleanup the struct when the display panel deathrattles
     - Tick the display panels when selected/opened again
+    - Track which players are viewing a surface with alt mode
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13
