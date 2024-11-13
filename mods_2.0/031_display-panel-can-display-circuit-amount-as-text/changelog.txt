@@ -9,6 +9,7 @@ Date: ????
     - Draft up code to support being conditionally selected by players
     - Change how i deal with selected structs
     - Constantly update while a player has the gui open
+    - Cache always_show and show_in_chart
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13

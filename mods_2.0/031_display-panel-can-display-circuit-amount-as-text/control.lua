@@ -3,6 +3,28 @@ local circuit_green = defines.wire_connector_id.circuit_green
 
 local Handler = {}
 
+local function refresh_always_show_and_show_in_chart(struct)
+  local entity = struct.entity
+  local inventory = game.create_inventory(1)
+
+  inventory.insert({name = "blueprint"})
+  inventory[1].create_blueprint{
+    surface = entity.surface,
+    force = entity.force,
+    area = entity.bounding_box,
+  }
+
+  local blueprint_entities = inventory[1].get_blueprint_entities() or {}
+  assert(#blueprint_entities == 1)
+
+  struct.always_show = blueprint_entities[1].always_show == true
+  struct.show_in_chart = blueprint_entities[1].show_in_chart == true
+
+  game.print(serpent.line({always_show = struct.always_show, show_in_chart = struct.show_in_chart}))
+
+  inventory.destroy()
+end
+
 function Handler.on_init(event)
   storage.structs = {}
 
@@ -24,7 +46,11 @@ function Handler.on_created_entity(event)
     entity = entity,
 
     last_tick = 0,
+    always_show = false,
+    show_in_chart = false,
   }
+
+  refresh_always_show_and_show_in_chart(storage.structs[entity.unit_number])
 end
 
 local function is_nil_or_number(string)
@@ -36,7 +62,7 @@ local function tick_display_panel(struct, tick)
   struct.last_tick = tick
 
   local entity = struct.entity
-  game.print(string.format("@%d ticked display panel #%d", tick, entity.unit_number))
+  -- game.print(string.format("@%d ticked display panel #%d", tick, entity.unit_number))
 
   local cb = entity.get_control_behavior()
   if cb == nil then return end -- entity never had a wire connected yet
@@ -105,6 +131,7 @@ script.on_event(defines.events.on_tick, function(event)
     if player.valid and player.selected == entity and player.connected then
       tick_display_panel(storage.structs[entity.unit_number], event.tick)
     else
+      refresh_always_show_and_show_in_chart(storage.structs[entity.unit_number])
       storage.active_selections[player_index] = nil
     end
   end
@@ -116,7 +143,15 @@ script.on_event(defines.events.on_tick, function(event)
     if player.valid and player.opened == entity and player.connected then
       tick_display_panel(storage.structs[entity.unit_number], event.tick)
     else
+      refresh_always_show_and_show_in_chart(storage.structs[entity.unit_number])
       storage.active_guis[player_index] = nil
     end
+  end
+end)
+
+script.on_event(defines.events.on_entity_settings_pasted, function(event)
+  local entity = event.destination
+  if entity.type == "display-panel" then
+    refresh_always_show_and_show_in_chart(storage.structs[entity.unit_number])
   end
 end)
