@@ -50,6 +50,7 @@ function Handler.on_init()
   storage.surfacedata = {}
   storage.deathrattles = {}
 
+  storage.alt_mode = {}
   for _, player in pairs(game.players) do
     Handler.on_player_created({player_index = player.index})
   end
@@ -63,7 +64,6 @@ function Handler.on_init()
 
   storage.active_selections = {}
   storage.active_guis = {}
-  storage.alt_mode = {}
 
   storage.observed_surfaces = {}
   refresh_observed_surfaces()
@@ -106,7 +106,7 @@ local function tick_display_panel(struct, tick)
   struct.last_tick = tick
 
   local entity = struct.entity
-  game.print(string.format("@%d ticked display panel #%d", tick, entity.unit_number))
+  -- game.print(string.format("@%d ticked display panel #%d", tick, entity.unit_number))
 
   local cb = entity.get_control_behavior()
   if cb == nil then return end -- entity never had a wire connected yet

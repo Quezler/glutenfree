@@ -27,6 +27,7 @@ Date: ????
     - Track which players are viewing a surface with alt mode
     - Only update surface wide display panels in always_show mode
     - Document performance
+    - Fix adding this mod to worlds with existing display panels
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13
