@@ -8,6 +8,7 @@ Date: ????
     - See what would happen if you tried to edit it while the gui is open
     - Draft up code to support being conditionally selected by players
     - Change how i deal with selected structs
+    - Constantly update while a player has the gui open
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13

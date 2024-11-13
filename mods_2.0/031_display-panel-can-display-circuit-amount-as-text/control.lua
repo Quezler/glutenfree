@@ -13,6 +13,7 @@ function Handler.on_init(event)
   end
 
   storage.active_selections = {}
+  storage.active_guis = {}
 end
 
 function Handler.on_created_entity(event)
@@ -79,12 +80,25 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   end
 end)
 
+script.on_event(defines.events.on_gui_opened, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local entity = event.entity
+  if entity and entity.type == "display-panel" then
+    storage.active_guis[player.index] = {
+      player = player,
+      entity = entity,
+    }
+    tick_display_panel(storage.structs[entity.unit_number], event.tick)
+  end
+end)
+
 script.on_event(defines.events.on_tick, function(event)
   -- for _, struct in pairs(storage.structs) do
   --   if struct.entity.valid then
   --     tick_display_panel(struct, event.tick)
   --   end
   -- end
+
   for player_index, active_selection in pairs(storage.active_selections) do
     local player = active_selection.player
     local entity = active_selection.entity
@@ -92,6 +106,17 @@ script.on_event(defines.events.on_tick, function(event)
       tick_display_panel(storage.structs[entity.unit_number], event.tick)
     else
       storage.active_selections[player_index] = nil
+    end
+  end
+
+  storage.active_guis = storage.active_guis or {}
+  for player_index, active_gui in pairs(storage.active_guis) do
+    local player = active_gui.player
+    local entity = active_gui.entity
+    if player.valid and player.opened == entity and player.connected then
+      tick_display_panel(storage.structs[entity.unit_number], event.tick)
+    else
+      storage.active_guis[player_index] = nil
     end
   end
 end)
