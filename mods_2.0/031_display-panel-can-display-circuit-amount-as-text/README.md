@@ -7,3 +7,5 @@ This mod will update display panels every tick to match the value of the signal,
 - display panels without wires are checked way less often since it is very unlikely the mod will have to do stuff
 
 So for performance, try to avoid putting too many messages into a single display panel & do not spam map "show in chart"
+
+And of course with many of my quality of life mods i hope wube sees value in them and adds them to the game itself, but for now: enjoy!
