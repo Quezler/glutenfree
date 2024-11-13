@@ -156,7 +156,7 @@ script.on_event(defines.events.on_tick, function(event)
     local entity = active_gui.entity
     local struct = storage.structs[entity.unit_number]
     if player.valid and player.opened == entity and player.connected then
-      if struct.always_show and get_alt_mode(player_index) then
+      if get_alt_mode(player_index) then
       tick_display_panel(struct, event.tick)
       end
     else
