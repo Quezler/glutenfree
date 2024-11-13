@@ -33,6 +33,14 @@ local function get_alt_mode(player_index)
   return storage.alt_mode[player_index]
 end
 
+local function refresh_observed_surfaces()
+  storage.observed_surfaces = {}
+
+  for _, player in ipairs(game.connected_players) do
+    storage.observed_surfaces[player.surface.index] = true
+  end
+end
+
 function Handler.on_init()
   storage.structs = {}
 
@@ -46,10 +54,14 @@ function Handler.on_init()
   storage.active_guis = {}
 
   storage.alt_mode = {}
+  -- storage.observed_surfaces = {}
+  refresh_observed_surfaces()
 end
 
 function Handler.on_configuration_changed()
   storage.alt_mode = storage.alt_mode or {}
+  -- storage.observed_surfaces = storage.observed_surfaces or {}
+  refresh_observed_surfaces()
 end
 
 function Handler.on_created_entity(event)
@@ -175,4 +187,16 @@ end)
 
 script.on_event(defines.events.on_player_toggled_alt_mode, function(event)
   storage.alt_mode[event.player_index] = event.alt_mode
+end)
+
+script.on_event(defines.events.on_player_changed_surface, function(event)
+  refresh_observed_surfaces()
+end)
+
+script.on_event(defines.events.on_player_joined_game, function(event)
+  refresh_observed_surfaces()
+end)
+
+script.on_event(defines.events.on_player_left_game, function(event)
+  refresh_observed_surfaces()
 end)

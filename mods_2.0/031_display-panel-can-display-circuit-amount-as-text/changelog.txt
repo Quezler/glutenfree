@@ -13,6 +13,7 @@ Date: ????
     - Doesn't really make sense to check upon selection end
     - Do not update when the gui is open and no one has alt mode on
     - Ignore cached always_show while you have the gui open
+    - Keep track of which surfaces have players looking at them
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13
