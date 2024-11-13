@@ -170,7 +170,7 @@ script.on_event(defines.events.on_tick, function(event)
     local player = active_selection.player
     local entity = active_selection.entity
     if player.valid and player.selected == entity and player.connected then
-      -- tick_display_panel(storage.structs[entity.unit_number], event.tick)
+      tick_display_panel(storage.structs[entity.unit_number], event.tick)
     else
       storage.active_selections[player_index] = nil
     end
@@ -182,9 +182,9 @@ script.on_event(defines.events.on_tick, function(event)
     local entity = active_gui.entity
     local struct = storage.structs[entity.unit_number]
     if player.valid and player.opened == entity and player.connected then
-      if storage.alt_mode[player_index] then
-      -- tick_display_panel(struct, event.tick)
-      end
+      -- if storage.alt_mode[player_index] then
+      tick_display_panel(struct, event.tick)
+      -- end
     else
       refresh_always_show_and_show_in_chart(struct)
       storage.active_guis[player_index] = nil
