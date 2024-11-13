@@ -19,6 +19,7 @@ Date: ????
     - Make it clear storage.observed_surfaces exists, even though it gets reset on the next line
     - Ensure storage.alt_mode is always populated with booleans
     - Move the surface populator to a handler too
+    - Convert storage.structs_on_surface to storage.surfacedata
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13

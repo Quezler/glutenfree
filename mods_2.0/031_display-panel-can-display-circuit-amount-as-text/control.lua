@@ -35,7 +35,7 @@ end
 
 function Handler.on_init()
   storage.structs = {}
-  storage.structs_on_surface = {}
+  storage.surfacedata = {}
 
   for _, player in pairs(game.players) do
     Handler.on_player_created({player_index = player.index})
@@ -73,7 +73,7 @@ function Handler.on_created_entity(event)
     show_in_chart = false,
   }
 
-  storage.structs_on_surface[entity.surface.index][struct_id] = true
+  storage.surfacedata[entity.surface.index].struct_ids[struct_id] = true
 
   refresh_always_show_and_show_in_chart(storage.structs[struct_id])
 end
@@ -152,7 +152,7 @@ script.on_event(defines.events.on_tick, function(event)
   -- end
 
   for surface_index, _ in pairs(storage.observed_surfaces) do
-    for struct_id, _ in pairs(storage.structs_on_surface[surface_index]) do
+    for struct_id, _ in pairs(storage.surfacedata[surface_index].struct_ids) do
       tick_display_panel(storage.structs[struct_id], event.tick)
     end
   end
@@ -207,13 +207,15 @@ script.on_event(defines.events.on_player_left_game, function(event)
 end)
 
 function Handler.on_surface_created(event)
-  storage.structs_on_surface[event.surface_index] = {}
+  storage.surfacedata[event.surface_index] = {
+    struct_ids = {},
+  }
 end
 
 script.on_event(defines.events.on_surface_created, Handler.on_surface_created)
 
 script.on_event(defines.events.on_surface_deleted, function(event)
-  storage.structs_on_surface[event.surface_index] = nil
+  storage.surfacedata[event.surface_index] = nil
 end)
 
 function Handler.on_player_created(event)
