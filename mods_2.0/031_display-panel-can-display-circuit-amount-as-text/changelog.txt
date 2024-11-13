@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Test reading messages
     - Update the text of the message
+    - Only evaluate a message if the text is nil or number
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13

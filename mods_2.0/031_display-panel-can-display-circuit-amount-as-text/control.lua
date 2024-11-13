@@ -21,6 +21,10 @@ function Handler.on_created_entity(event)
   }
 end
 
+local function is_nil_or_number(string)
+  return string == nil or tonumber(string, 10) ~= nil
+end
+
 local function tick_display_panel(entity)
   local struct = storage.structs[entity.unit_number]
   assert(struct)
@@ -29,18 +33,16 @@ local function tick_display_panel(entity)
 
   local cb = entity.get_control_behavior()
   if cb == nil then return end -- entity never had a wire connected yet
-  game.print(serpent.line(cb)) -- fulfilled is never present
-
-  -- local signals = entity.get_signals(defines.wire_connector_id.circuit_red, defines.wire_connector_id.circuit_green) or {}
 
   for i, message in ipairs(cb.messages) do
-    game.print(serpent.line(message))
-    if message.condition and message.condition.first_signal then
-      message.text = entity.get_signal(message.condition.first_signal, circuit_red, circuit_green)
-    else
-      message.text = ""
+    if is_nil_or_number(message.text) then
+      if message.condition and message.condition.first_signal then
+        message.text = entity.get_signal(message.condition.first_signal, circuit_red, circuit_green)
+      else
+        message.text = ""
+      end
+      cb.set_message(i, message)
     end
-    cb.set_message(i, message)
   end
 end
 
