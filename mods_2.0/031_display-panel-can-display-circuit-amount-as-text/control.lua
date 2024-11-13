@@ -55,6 +55,7 @@ function Handler.on_init()
     Handler.on_player_created({player_index = player.index})
   end
 
+  storage.ticked_this_tick = 0
   for _, surface in pairs(game.surfaces) do
     Handler.on_surface_created({surface_index = surface.index})
     for _, entity in pairs(surface.find_entities_filtered{type = "display-panel"}) do
@@ -104,6 +105,8 @@ end
 local function tick_display_panel(struct, tick)
   if struct.last_tick == tick then return end
   struct.last_tick = tick
+
+  storage.ticked_this_tick = storage.ticked_this_tick + 1
 
   local entity = struct.entity
   -- game.print(string.format("@%d ticked display panel #%d", tick, entity.unit_number))
@@ -164,17 +167,9 @@ script.on_event(defines.events.on_gui_opened, function(event)
 end)
 
 script.on_event(defines.events.on_tick, function(event)
-  -- for _, struct in pairs(storage.structs) do
-  --   if struct.entity.valid then
-  --     tick_display_panel(struct, event.tick)
-  --   end
-  -- end
-
   for surface_index, _ in pairs(storage.observed_surfaces) do
     local surfacedata = storage.surfacedata[surface_index]
-    -- for struct_id, _ in pairs(surfacedata.struct_ids) do
-    --   tick_display_panel(storage.structs[struct_id], event.tick)
-    -- end
+
     for struct_id, _ in pairs(surfacedata.struct_ids_to_show_in_chart) do
       tick_display_panel(storage.structs[struct_id], event.tick)
     end
@@ -215,6 +210,9 @@ script.on_event(defines.events.on_tick, function(event)
       storage.active_guis[player_index] = nil
     end
   end
+
+  game.print('ticked_this_tick: ' .. storage.ticked_this_tick)
+  storage.ticked_this_tick = 0
 end)
 
 script.on_event(defines.events.on_entity_settings_pasted, function(event)

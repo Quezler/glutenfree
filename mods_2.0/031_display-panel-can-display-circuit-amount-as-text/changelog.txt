@@ -28,6 +28,7 @@ Date: ????
     - Only update surface wide display panels in always_show mode
     - Document performance
     - Fix adding this mod to worlds with existing display panels
+    - Measure how many structs actually got ticked
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13
