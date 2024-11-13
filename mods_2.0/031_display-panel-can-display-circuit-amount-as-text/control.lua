@@ -1,6 +1,8 @@
 local circuit_red = defines.wire_connector_id.circuit_red
 local circuit_green = defines.wire_connector_id.circuit_green
 
+require("util")
+
 local Handler = {}
 
 local function refresh_always_show_and_show_in_chart(struct)
@@ -41,6 +43,15 @@ local function refresh_surface_to_alt_mode_players()
     if storage.alt_mode[player.index] then
       storage.surface_to_alt_mode_players[player.surface.index] = storage.surface_to_alt_mode_players[player.surface.index] or {}
       storage.surface_to_alt_mode_players[player.surface.index][player.index] = player
+    end
+  end
+end
+
+local function alt_player_is_nearby(alt_mode_players, position)
+  for player_index, player in pairs(alt_mode_players) do
+    -- game.print(util.distance(position, player.position))
+    if 120 > util.distance(position, player.position) then -- 120 is just beyond my screen when i fully zoom out
+      return true
     end
   end
 end
@@ -189,7 +200,7 @@ script.on_event(defines.events.on_tick, function(event)
     if alt_mode_players then
       for struct_id, _ in pairs(surfacedata.struct_ids) do
         local struct = storage.structs[struct_id]
-        if struct.always_show and event.tick >= struct.do_not_auto_tick_until then
+        if struct.always_show and event.tick >= struct.do_not_auto_tick_until and alt_player_is_nearby(alt_mode_players, struct.entity.position) then
           tick_display_panel(struct, event.tick)
         end
       end

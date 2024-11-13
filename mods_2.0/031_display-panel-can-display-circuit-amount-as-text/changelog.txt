@@ -32,6 +32,7 @@ Date: ????
     - Do not tick for 10 seconds if it had no wires
     - Skip updating structs without wires
     - Awaken display panels when you touch them
+    - Only tick always show display panels when there is a player nearby
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13
