@@ -203,6 +203,7 @@ script.on_event(defines.events.on_tick, function(event)
       tick_display_panel(storage.structs[entity.unit_number], event.tick)
     else
       storage.active_selections[player_index] = nil
+      storage.structs[entity.unit_number].do_not_auto_tick_until = 0
     end
   end
 
@@ -218,6 +219,7 @@ script.on_event(defines.events.on_tick, function(event)
     else
       refresh_always_show_and_show_in_chart(struct)
       storage.active_guis[player_index] = nil
+      struct.do_not_auto_tick_until = 0
     end
   end
 
