@@ -25,14 +25,6 @@ local function refresh_always_show_and_show_in_chart(struct)
   inventory.destroy()
 end
 
-local function get_alt_mode(player_index)
-  if storage.alt_mode[player_index] == nil then
-    storage.alt_mode[player_index] = game.get_player(player_index).game_view_settings.show_entity_info
-  end
-
-  return storage.alt_mode[player_index]
-end
-
 local function refresh_observed_surfaces()
   storage.observed_surfaces = {}
 
@@ -44,6 +36,10 @@ end
 function Handler.on_init()
   storage.structs = {}
   storage.structs_on_surface = {}
+
+  for _, player in pairs(game.players) do
+    Handler.on_player_created({player_index = player.index})
+  end
 
   for _, surface in pairs(game.surfaces) do
     storage.structs_on_surface[surface.index] = {}
@@ -177,7 +173,7 @@ script.on_event(defines.events.on_tick, function(event)
   --   local entity = active_gui.entity
   --   local struct = storage.structs[entity.unit_number]
   --   if player.valid and player.opened == entity and player.connected then
-  --     if get_alt_mode(player_index) then
+  --     if storage.alt_mode[player_index] then
   --     tick_display_panel(struct, event.tick)
   --     end
   --   else
@@ -217,3 +213,9 @@ end)
 script.on_event(defines.events.on_surface_deleted, function(event)
   storage.structs_on_surface[event.surface_index] = nil
 end)
+
+function Handler.on_player_created(event)
+  storage.alt_mode[event.player_index] = game.get_player(event.player_index).game_view_settings.show_entity_info
+end
+
+script.on_event(defines.events.on_player_created, on_player_created)
