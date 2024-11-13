@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Test reading messages
+    - Update the text of the message
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13

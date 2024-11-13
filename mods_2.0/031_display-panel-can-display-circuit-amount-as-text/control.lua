@@ -1,3 +1,6 @@
+local circuit_red = defines.wire_connector_id.circuit_red
+local circuit_green = defines.wire_connector_id.circuit_green
+
 local Handler = {}
 
 function Handler.on_init(event)
@@ -28,8 +31,16 @@ local function tick_display_panel(entity)
   if cb == nil then return end -- entity never had a wire connected yet
   game.print(serpent.line(cb)) -- fulfilled is never present
 
+  -- local signals = entity.get_signals(defines.wire_connector_id.circuit_red, defines.wire_connector_id.circuit_green) or {}
+
   for i, message in ipairs(cb.messages) do
     game.print(serpent.line(message))
+    if message.condition and message.condition.first_signal then
+      message.text = entity.get_signal(message.condition.first_signal, circuit_red, circuit_green)
+    else
+      message.text = ""
+    end
+    cb.set_message(i, message)
   end
 end
 
