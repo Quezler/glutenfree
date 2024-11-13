@@ -16,6 +16,7 @@ Date: ????
     - Keep track of which surfaces have players looking at them
     - Only tick structs on observed surfaces
     - Drop compatibility with earlier development versions of this mod
+    - Make it clear storage.observed_surfaces exists, even though it gets reset on the next line
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13

@@ -56,6 +56,7 @@ function Handler.on_init()
   storage.active_guis = {}
   storage.alt_mode = {}
 
+  storage.observed_surfaces = {}
   refresh_observed_surfaces()
 end
 
