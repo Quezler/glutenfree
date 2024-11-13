@@ -43,8 +43,10 @@ end
 
 function Handler.on_init()
   storage.structs = {}
+  storage.structs_on_surface = {}
 
   for _, surface in pairs(game.surfaces) do
+    storage.structs_on_surface[surface.index] = {}
     for _, entity in pairs(surface.find_entities_filtered{type = "display-panel"}) do
       Handler.on_created_entity({entity = entity})
     end
@@ -62,12 +64,14 @@ function Handler.on_configuration_changed()
   storage.alt_mode = storage.alt_mode or {}
   -- storage.observed_surfaces = storage.observed_surfaces or {}
   refresh_observed_surfaces()
+  storage.structs_on_surface = storage.structs_on_surface or {}
 end
 
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
-  storage.structs[entity.unit_number] = {
+  local struct_id = entity.unit_number
+  storage.structs[struct_id] = {
     id = entity.unit_number,
     entity = entity,
 
@@ -76,7 +80,9 @@ function Handler.on_created_entity(event)
     show_in_chart = false,
   }
 
-  refresh_always_show_and_show_in_chart(storage.structs[entity.unit_number])
+  storage.structs_on_surface[entity.surface.index][struct_id] = true
+
+  refresh_always_show_and_show_in_chart(storage.structs[struct_id])
 end
 
 local function is_nil_or_number(string)
@@ -152,30 +158,36 @@ script.on_event(defines.events.on_tick, function(event)
   --   end
   -- end
 
-  for player_index, active_selection in pairs(storage.active_selections) do
-    local player = active_selection.player
-    local entity = active_selection.entity
-    if player.valid and player.selected == entity and player.connected then
-      tick_display_panel(storage.structs[entity.unit_number], event.tick)
-    else
-      storage.active_selections[player_index] = nil
+  for surface_index, _ in pairs(storage.observed_surfaces) do
+    for struct_id, _ in pairs(storage.structs_on_surface[surface_index]) do
+      tick_display_panel(storage.structs[struct_id], event.tick)
     end
   end
 
-  storage.active_guis = storage.active_guis or {}
-  for player_index, active_gui in pairs(storage.active_guis) do
-    local player = active_gui.player
-    local entity = active_gui.entity
-    local struct = storage.structs[entity.unit_number]
-    if player.valid and player.opened == entity and player.connected then
-      if get_alt_mode(player_index) then
-      tick_display_panel(struct, event.tick)
-      end
-    else
-      refresh_always_show_and_show_in_chart(struct)
-      storage.active_guis[player_index] = nil
-    end
-  end
+  -- for player_index, active_selection in pairs(storage.active_selections) do
+  --   local player = active_selection.player
+  --   local entity = active_selection.entity
+  --   if player.valid and player.selected == entity and player.connected then
+  --     tick_display_panel(storage.structs[entity.unit_number], event.tick)
+  --   else
+  --     storage.active_selections[player_index] = nil
+  --   end
+  -- end
+
+  -- storage.active_guis = storage.active_guis or {}
+  -- for player_index, active_gui in pairs(storage.active_guis) do
+  --   local player = active_gui.player
+  --   local entity = active_gui.entity
+  --   local struct = storage.structs[entity.unit_number]
+  --   if player.valid and player.opened == entity and player.connected then
+  --     if get_alt_mode(player_index) then
+  --     tick_display_panel(struct, event.tick)
+  --     end
+  --   else
+  --     refresh_always_show_and_show_in_chart(struct)
+  --     storage.active_guis[player_index] = nil
+  --   end
+  -- end
 end)
 
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
@@ -199,4 +211,12 @@ end)
 
 script.on_event(defines.events.on_player_left_game, function(event)
   refresh_observed_surfaces()
+end)
+
+script.on_event(defines.events.on_surface_created, function(event)
+  storage.structs_on_surface[event.surface_index] = {}
+end)
+
+script.on_event(defines.events.on_surface_deleted, function(event)
+  storage.structs_on_surface[event.surface_index] = nil
 end)
