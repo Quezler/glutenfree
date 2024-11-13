@@ -7,6 +7,8 @@ local Handler = {}
 
 local function refresh_always_show_and_show_in_chart(struct)
   local entity = struct.entity
+  if entity.to_be_deconstructed() then return end
+
   local inventory = game.create_inventory(1)
 
   inventory.insert({name = "blueprint"})
