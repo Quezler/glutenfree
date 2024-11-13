@@ -12,7 +12,7 @@ function Handler.on_init(event)
     end
   end
 
-  storage.selected_struct_ids = {}
+  storage.active_selections = {}
 end
 
 function Handler.on_created_entity(event)
@@ -22,7 +22,7 @@ function Handler.on_created_entity(event)
     id = entity.unit_number,
     entity = entity,
 
-    selected_by = nil,
+    last_tick = 0,
   }
 end
 
@@ -30,9 +30,12 @@ local function is_nil_or_number(string)
   return string == nil or tonumber(string, 10) ~= nil
 end
 
-local function tick_display_panel(struct)
+local function tick_display_panel(struct, tick)
+  if struct.last_tick == tick then return end
+  struct.last_tick = tick
+
   local entity = struct.entity
-  game.print(string.format("@%d ticked display panel #%d", game.tick, entity.unit_number))
+  game.print(string.format("@%d ticked display panel #%d", tick, entity.unit_number))
 
   local cb = entity.get_control_behavior()
   if cb == nil then return end -- entity never had a wire connected yet
@@ -64,23 +67,31 @@ for _, event in ipairs({
   })
 end
 
-local function mark_struct_as_selected(struct, player)
-  storage.selected_struct_ids[struct.id] = true
-  struct.selected_by = player
-end
-
 script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local entity = player.selected
   if entity and entity.type == "display-panel" then
-    tick_display_panel(storage.structs[entity.unit_number])
+    storage.active_selections[player.index] = {
+      player = player,
+      entity = entity,
+    }
+    tick_display_panel(storage.structs[entity.unit_number], event.tick)
   end
 end)
 
 script.on_event(defines.events.on_tick, function(event)
-  for _, struct in pairs(storage.structs) do
-    if struct.entity.valid then
-      tick_display_panel(struct)
+  -- for _, struct in pairs(storage.structs) do
+  --   if struct.entity.valid then
+  --     tick_display_panel(struct, event.tick)
+  --   end
+  -- end
+  for player_index, active_selection in pairs(storage.active_selections) do
+    local player = active_selection.player
+    local entity = active_selection.entity
+    if player.valid and player.selected == entity and player.connected then
+      tick_display_panel(storage.structs[entity.unit_number], event.tick)
+    else
+      storage.active_selections[player_index] = nil
     end
   end
 end)
