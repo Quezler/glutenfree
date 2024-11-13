@@ -50,8 +50,11 @@ end
 local function alt_player_is_nearby(alt_mode_players, position)
   for player_index, player in pairs(alt_mode_players) do
     -- game.print(util.distance(position, player.position))
-    if 120 > util.distance(position, player.position) then -- 120 is just beyond my screen when i fully zoom out
-      return true
+    -- game.print(player.render_mode)
+      if player.render_mode == defines.render_mode.game then
+      if 120 > util.distance(position, player.position) then -- 120 is just beyond my screen when i fully zoom out
+        return true
+      end
     end
   end
 end
