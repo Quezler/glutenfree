@@ -23,6 +23,14 @@ local function tick_display_panel(entity)
   assert(struct)
 
   game.print(string.format("@%d ticked display panel #%d", game.tick, entity.unit_number))
+
+  local cb = entity.get_control_behavior()
+  if cb == nil then return end -- entity never had a wire connected yet
+  game.print(serpent.line(cb)) -- fulfilled is never present
+
+  for i, message in ipairs(cb.messages) do
+    game.print(serpent.line(message))
+  end
 end
 
 script.on_init(Handler.on_init)
