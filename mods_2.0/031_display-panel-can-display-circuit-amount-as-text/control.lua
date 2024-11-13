@@ -68,3 +68,11 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     tick_display_panel(entity)
   end
 end)
+
+script.on_event(defines.events.on_tick, function(event)
+  for _, struct in pairs(storage.structs) do
+    if struct.entity.valid then
+      tick_display_panel(struct.entity)
+    end
+  end
+end)
