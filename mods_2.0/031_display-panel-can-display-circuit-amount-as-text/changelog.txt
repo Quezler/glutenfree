@@ -18,6 +18,7 @@ Date: ????
     - Drop compatibility with earlier development versions of this mod
     - Make it clear storage.observed_surfaces exists, even though it gets reset on the next line
     - Ensure storage.alt_mode is always populated with booleans
+    - Move the surface populator to a handler too
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13

@@ -42,7 +42,7 @@ function Handler.on_init()
   end
 
   for _, surface in pairs(game.surfaces) do
-    storage.structs_on_surface[surface.index] = {}
+    Handler.on_surface_created({surface_index = surface.index})
     for _, entity in pairs(surface.find_entities_filtered{type = "display-panel"}) do
       Handler.on_created_entity({entity = entity})
     end
@@ -206,9 +206,11 @@ script.on_event(defines.events.on_player_left_game, function(event)
   refresh_observed_surfaces()
 end)
 
-script.on_event(defines.events.on_surface_created, function(event)
+function Handler.on_surface_created(event)
   storage.structs_on_surface[event.surface_index] = {}
-end)
+end
+
+script.on_event(defines.events.on_surface_created, Handler.on_surface_created)
 
 script.on_event(defines.events.on_surface_deleted, function(event)
   storage.structs_on_surface[event.surface_index] = nil
