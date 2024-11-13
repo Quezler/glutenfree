@@ -30,6 +30,7 @@ Date: ????
     - Fix adding this mod to worlds with existing display panels
     - Measure how many structs actually got ticked
     - Do not tick for 10 seconds if it had no wires
+    - Skip updating structs without wires
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13

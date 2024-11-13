@@ -88,7 +88,7 @@ function Handler.on_created_entity(event)
     last_tick = 0,
     always_show = false,
     show_in_chart = false,
-    last_without_wires_at = 0,
+    do_not_auto_tick_until = 0,
 
     surface_index = entity.surface.index,
   }
@@ -113,7 +113,7 @@ local function tick_display_panel(struct, tick)
   -- game.print(string.format("@%d ticked display panel #%d", tick, entity.unit_number))
 
   local cb = entity.get_control_behavior()
-  if cb == nil then struct.last_without_wires_at = tick return end -- entity never had a wire connected yet
+  if cb == nil then struct.do_not_auto_tick_until = tick + 60 * 60 return end -- entity never had a wire connected yet
 
   for i, message in ipairs(cb.messages) do
     if is_nil_or_number(message.text) then
@@ -129,7 +129,7 @@ local function tick_display_panel(struct, tick)
   local red = entity.get_circuit_network(defines.wire_connector_id.circuit_red)
   local green = entity.get_circuit_network(defines.wire_connector_id.circuit_green)
   if (red == nil and green == nil) then
-    struct.last_without_wires_at = tick
+    struct.do_not_auto_tick_until = tick + 60 * 10
   end
 end
 
@@ -178,7 +178,10 @@ script.on_event(defines.events.on_tick, function(event)
     local surfacedata = storage.surfacedata[surface_index]
 
     for struct_id, _ in pairs(surfacedata.struct_ids_to_show_in_chart) do
-      tick_display_panel(storage.structs[struct_id], event.tick)
+      local struct = storage.structs[struct_id]
+      if event.tick >= struct.do_not_auto_tick_until then
+        tick_display_panel(storage.structs[struct_id], event.tick)
+      end
     end
 
     -- are there any players on this surface with alt mode on?
@@ -186,8 +189,7 @@ script.on_event(defines.events.on_tick, function(event)
     if alt_mode_players then
       for struct_id, _ in pairs(surfacedata.struct_ids) do
         local struct = storage.structs[struct_id]
-        game.print((struct.last_without_wires_at or 0))
-        if struct.always_show and event.tick - 600 > (struct.last_without_wires_at or 0) then
+        if struct.always_show and event.tick >= struct.do_not_auto_tick_until then
           tick_display_panel(struct, event.tick)
         end
       end
