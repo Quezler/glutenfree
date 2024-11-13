@@ -131,7 +131,6 @@ script.on_event(defines.events.on_tick, function(event)
     if player.valid and player.selected == entity and player.connected then
       tick_display_panel(storage.structs[entity.unit_number], event.tick)
     else
-      refresh_always_show_and_show_in_chart(storage.structs[entity.unit_number])
       storage.active_selections[player_index] = nil
     end
   end
