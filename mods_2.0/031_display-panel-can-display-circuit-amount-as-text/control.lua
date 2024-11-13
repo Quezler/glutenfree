@@ -37,6 +37,7 @@ end
 function Handler.on_init()
   storage.structs = {}
   storage.surfacedata = {}
+  storage.deathrattles = {}
 
   for _, player in pairs(game.players) do
     Handler.on_player_created({player_index = player.index})
@@ -72,9 +73,12 @@ function Handler.on_created_entity(event)
     last_tick = 0,
     always_show = false,
     show_in_chart = false,
+
+    surface_index = entity.surface.index,
   }
 
   storage.surfacedata[entity.surface.index].struct_ids[struct_id] = true
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = struct_id
 
   refresh_always_show_and_show_in_chart(storage.structs[struct_id])
 end
@@ -229,3 +233,15 @@ function Handler.on_player_created(event)
 end
 
 script.on_event(defines.events.on_player_created, on_player_created)
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    local struct_id = assert(deathrattle)
+    local struct = assert(storage.structs[struct_id])
+
+    storage.structs[struct_id] = nil
+    storage.surfacedata[struct.surface_index].struct_ids[struct_id] = nil
+    storage.surfacedata[struct.surface_index].struct_ids_to_show_in_chart[struct_id] = nil
+  end
+end)

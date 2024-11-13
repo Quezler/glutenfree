@@ -22,6 +22,7 @@ Date: ????
     - Convert storage.structs_on_surface to storage.surfacedata
     - Update structs that show in chart every tick
     - Cleanup comments
+    - Cleanup the struct when the display panel deathrattles
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 13
