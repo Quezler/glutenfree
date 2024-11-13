@@ -54,17 +54,13 @@ function Handler.on_init()
 
   storage.active_selections = {}
   storage.active_guis = {}
-
   storage.alt_mode = {}
-  -- storage.observed_surfaces = {}
+
   refresh_observed_surfaces()
 end
 
 function Handler.on_configuration_changed()
-  storage.alt_mode = storage.alt_mode or {}
-  -- storage.observed_surfaces = storage.observed_surfaces or {}
-  refresh_observed_surfaces()
-  storage.structs_on_surface = storage.structs_on_surface or {}
+  --
 end
 
 function Handler.on_created_entity(event)
