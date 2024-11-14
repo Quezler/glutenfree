@@ -48,10 +48,10 @@ local function get_human_calendar_date()
   return year, month, day
 end
 
-commands.add_command("mods", nil, function(command)
-  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
-
-  local main_frame = player.gui.screen.add{
+local function open_for_player(player)
+  local main_frame = player.gui.screen[mod_prefix .. "main-frame"]
+  if main_frame then main_frame.destroy() end
+  main_frame = player.gui.screen.add{
     type = "frame",
     name = mod_prefix .. "main-frame",
     style = "invisible_frame",
@@ -93,7 +93,7 @@ commands.add_command("mods", nil, function(command)
 
   frame.add{
     type = "label",
-    caption = string.format("Hello! even though I have [font=default-bold]%d[/font] mods I suck at guis, if you're a fellow [font=default-bold]modder[/font] with [font=default-bold]gui[/font] knowledge, [font=default-bold]help[/font] is very much welcome.", #my_mods)
+    caption = string.format("Hello! even though i have [font=default-bold]%d[/font] mods i suck at guis, if you're a fellow [font=default-bold]modder[/font] with [font=default-bold]gui[/font] knowledge, [font=default-bold]help[/font] is very much welcome.", #my_mods)
   }
 
   frame.add{
@@ -204,7 +204,7 @@ commands.add_command("mods", nil, function(command)
 
   main_frame.force_auto_center()
   player.opened = main_frame
-end)
+end
 
 local function get_parent_with_action_tag(element, action_tag)
   if element.tags and element.tags.action == action_tag then return element end
@@ -233,5 +233,12 @@ end)
 script.on_event(defines.events.on_gui_closed, function(event)
   if event.element and event.element.name == mod_prefix .. "main-frame" then
     event.element.destroy()
+  end
+end)
+
+script.on_event(defines.events.on_lua_shortcut, function(event)
+  if event.prototype_name == mod_prefix .. "shotcut" then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    open_for_player(player)
   end
 end)

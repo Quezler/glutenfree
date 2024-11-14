@@ -10,3 +10,15 @@ data:extend{{
 
   flags = {"icon"},
 }}
+
+data:extend{{
+  type = "shortcut",
+  name = mod_prefix .. "shotcut",
+
+  icon = "__newsletter-for-mods-made-by-quezler__/graphics/crater.png",
+  icon_size = 24,
+  small_icon = "__newsletter-for-mods-made-by-quezler__/graphics/crater.png",
+  small_icon_size = 24,
+
+  action = "lua",
+}}
