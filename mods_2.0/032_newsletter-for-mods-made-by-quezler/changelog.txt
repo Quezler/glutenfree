@@ -30,6 +30,7 @@ Date: ????
     - Minor cleanup
     - Display factorio version and mod release date
     - Mark deprecated mods
+    - Add an install/installed button
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01

@@ -151,16 +151,34 @@ commands.add_command("mods", nil, function(command)
     -- }
 
     local line_1 = row.add{
+      type = "flow",
+      -- ignored_by_interaction = true,
+    }
+
+    local line_1_a = line_1.add{
       type = "label",
       caption = mod.title,
       style = "caption_label",
-      ignored_by_interaction = true,
+      -- ignored_by_interaction = true,
+    }
+
+    local line_1_b = line_1.add{
+      type = "empty-widget",
+      -- ignored_by_interaction = true,
+    }
+    line_1_b.style.horizontally_stretchable = true
+
+    local line_1_c = line_1.add{
+      type = "button",
+      caption = script.active_mods[mod.name] and "installed" or "install",
+      enabled = script.active_mods[mod.name] == nil,
+      ignored_by_interaction = script.active_mods[mod.name] ~= nil,
     }
 
     local line_2 = row.add{
       type = "label",
       caption = "[font=default-small]" .. mod.summary .. "[/font]",
-      ignored_by_interaction = true,
+      -- ignored_by_interaction = true,
     }
 
     local date = string.sub(mod.created_at, 1, 10)
@@ -169,7 +187,7 @@ commands.add_command("mods", nil, function(command)
     local line_3 = row.add{
       type = "label",
       caption = string.format("[font=default-tiny-bold]%s[/font] [font=default-bold]%s[/font] [font=default-tiny-bold]%s[/font]", mod.latest_release.info_json.factorio_version, date, mod.category),
-      ignored_by_interaction = true,
+      -- ignored_by_interaction = true,
     }
 
     if mod.deprecated then
@@ -182,6 +200,7 @@ commands.add_command("mods", nil, function(command)
 end)
 
 script.on_event(defines.events.on_gui_click, function(event)
+  game.print(event.tick)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
   if event.element.tags.action == mod_prefix .. "show-url-for-mod" then
