@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 11. 14
+  Info:
+    - Undeprecated the mod
+---------------------------------------------------------------------------------------------------
 Version: 0.0.4
-Date: ????
+Date: 2024. 11. 14
   Info:
     - Create a gui to house my mods
     - Poor attempt at putting them all in a table
@@ -45,7 +50,7 @@ Date: ????
     - Allow disabling the goal/objective via per-user settings
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: 2024. 11. 01
+Date: 2024. 11. 14
   Info:
     - Strip out space exploration compatibility
     - Replace ' with "
@@ -59,7 +64,7 @@ Date: 2024. 11. 01
     - Move database into the scripts folder
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: 2024. 11. 01
+Date: 2024. 11. 14
   Info:
     - Ported to 2.0
 ---------------------------------------------------------------------------------------------------
