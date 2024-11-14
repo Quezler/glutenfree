@@ -33,20 +33,28 @@ class NewsletterCommand extends Command
         $json2 = str_replace("'", "\'", $json2);
         file_put_contents("$database_prefix.lua", "return helpers.json_to_table('". $json2 ."')");
 
-//        $changelog = json_decode(file_get_contents('https://mods.factorio.com/api/mods/newsletter-for-mods-made-by-quezler/full'), true)['changelog'];
         $mod = ExpansionMods::findOrFail("newsletter-for-mods-made-by-quezler");
+
+        $checksum = md5_file("{$mod->get_pathname()}/control.lua") . '.' . md5_file("$database_prefix.lua");
+        $changelog = json_decode(file_get_contents('https://mods.factorio.com/api/mods/newsletter-for-mods-made-by-quezler/full'), true)['changelog'];
+        dump($changelog);
+
+        $old_checksum_line = explode(PHP_EOL, $changelog)[4];
+        $new_checksum_line = '    - Checksum: ' . $checksum;
+        dump([$old_checksum_line, $new_checksum_line]);
+        if ($new_checksum_line == $old_checksum_line) {
+            return Command::SUCCESS;
+        }
 
         $next_version = date('1Y.1md.1Hi');
         $mod->setInfoJsonVersion($next_version);
-
-        $checksum = md5_file("{$mod->get_pathname()}/control.lua") . '.' . md5_file("$database_prefix.lua");
 
         $changelog_lines = array_merge([
             '---------------------------------------------------------------------------------------------------',
             "Version: {$next_version}",
             'Date: ' . date('Y. m. d'),
             '  Info:',
-            '    - Checksum: ' . $checksum,
+            $new_checksum_line,
         ], explode(PHP_EOL, file_get_contents($mod->get_changelog_txt_pathname())));
         file_put_contents($mod->get_changelog_txt_pathname(), implode(PHP_EOL, $changelog_lines));
 
