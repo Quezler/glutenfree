@@ -86,7 +86,7 @@ commands.add_command("mods", nil, function(command)
 
   table.sort(my_mods, sort_newest_first)
 
-  for _, mod in ipairs(my_mods) do
+  for i, mod in ipairs(my_mods) do
     -- local row = lua_table.add{
     --   type = "button",
     --   -- name = mod_prefix .. "row-button-mod",
@@ -108,6 +108,14 @@ commands.add_command("mods", nil, function(command)
     --   type = "flow",
     --   direction = "vertical",
     -- }
+
+    -- row.add{
+    --   type = "label",
+    --   caption = "#00" .. i,
+    --   style = "semibold_label",
+    --   ignored_by_interaction = true,
+    -- }
+
 
     row.add{
       type = "label",
