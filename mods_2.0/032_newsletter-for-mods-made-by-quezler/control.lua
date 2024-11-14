@@ -72,6 +72,10 @@ script.on_event(defines.events.on_gui_hover, function(event)
   end
 end)
 
+local function sort_newest_first(mod_a, mod_b)
+  return mod_a.created_at > mod_b.created_at
+end
+
 commands.add_command("mods", nil, function(command)
   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
 
@@ -97,17 +101,19 @@ commands.add_command("mods", nil, function(command)
   scroll.style.width = 500
   scroll.style.height = 700
 
-  local table = scroll.add{
+  local lua_table = scroll.add{
     type = "table",
     style = "table_with_selection",
     column_count = 1,
   }
-  table.style.left_cell_padding = 4
-  table.style.right_cell_padding = 4
+  lua_table.style.left_cell_padding = 4
+  lua_table.style.right_cell_padding = 4
+
+  table.sort(my_mods, sort_newest_first)
 
   for _, mod in ipairs(my_mods) do
-    local row = table.add{
-      type = "sprite-button",
+    local row = lua_table.add{
+      type = "button",
     }
     row.style.width = 460
     -- row.style.left_padding = 20
@@ -124,7 +130,7 @@ commands.add_command("mods", nil, function(command)
 
     row_flow.add{
       type = "label",
-      caption = mod.name,
+      caption = mod.title,
     }
   end
 

@@ -8,6 +8,7 @@ Date: ????
     - Use an actual table
     - More tinkering with styles
     - Well sprite buttons just look horid when stretchd
+    - Sort mods newest first
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
