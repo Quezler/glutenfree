@@ -75,6 +75,7 @@ class NewsletterCommand extends Command
                 unset($release["sha1"]);
                 unset($release["released_at"]);
                 unset($release["version"]);
+                unset($release["info_json"]["dependencies"]);
             }
             $mod["latest_release"] = end($mod["releases"]);
             unset($mod["releases"]); // bloated
@@ -87,6 +88,10 @@ class NewsletterCommand extends Command
             unset($mod["owner"]); // always me
 
             unset($mod["carbon"]); // added by ModPortal::get_my_mods_full()
+
+            if ($mod["name"] == "newsletter-for-mods-made-by-quezler") {
+                $mod["updated_at"] = $mod["created_at"];
+            }
         }
     }
 }
