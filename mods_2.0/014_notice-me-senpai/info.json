@@ -3,7 +3,7 @@
     "title": "Notice me senpai",
     "description": "Highlights resources with no drill on them yet when holding a miner.",
 
-    "version": "1.0.5",
+    "version": "1.0.6",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,6 +16,8 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
+        "~ newsletter-for-mods-made-by-quezler",
+
         "flib"
     ]
 }

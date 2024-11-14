@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
-Date: ????
+Date: 2024. 11. 14
   Info:
     - Explain a bit more about the mod (and then undeprecate it for real)
+    - Require the presence of newsletter-for-mods-made-by-quezler
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2024. 11. 14

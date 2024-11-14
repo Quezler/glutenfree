@@ -3,7 +3,7 @@
     "title": "CTRL + click modules into ghost as character",
     "description": "Remove view can do it, so why not you?",
 
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,5 +16,6 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
+        "~ newsletter-for-mods-made-by-quezler"
     ]
 }

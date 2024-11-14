@@ -3,7 +3,7 @@
     "title": "Alchemical combinator",
     "description": "Transmutes signals into other signals, effectively a signal upgrade planner.",
 
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,6 +16,8 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
+        "~ newsletter-for-mods-made-by-quezler",
+
         "base",
         "? space-age"
     ]

@@ -3,7 +3,7 @@
     "title": "Ghosts do not kick you out of their gui",
     "description": "Construction robots will wait with placing the entity until you're done configuring it.",
 
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,5 +16,6 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
+        "~ newsletter-for-mods-made-by-quezler"
     ]
 }

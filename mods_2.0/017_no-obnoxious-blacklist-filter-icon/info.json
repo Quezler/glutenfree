@@ -3,7 +3,7 @@
     "title": "No obnoxious blacklist filter icon",
     "description": "That red thing blaring in your face is just so annoying.",
 
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,5 +16,6 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
+        "~ newsletter-for-mods-made-by-quezler"
     ]
 }

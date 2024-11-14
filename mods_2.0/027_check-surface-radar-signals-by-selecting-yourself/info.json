@@ -3,7 +3,7 @@
     "title": "Check surface radar signals by selecting yourself",
     "description": "Are you using the surface's radar signals as a sort of todo list? now you can check it yourself.",
 
-    "version": "1.0.3",
+    "version": "1.0.4",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,6 +16,8 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
+        "~ newsletter-for-mods-made-by-quezler",
+
         "base"
     ]
 }

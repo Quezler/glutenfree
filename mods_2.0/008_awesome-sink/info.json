@@ -3,7 +3,7 @@
     "title": "Awesome sink",
     "description": "Feed items inside and get a higher quality item every X items without random chance.",
 
-    "version": "1.1.6",
+    "version": "1.1.7",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,6 +16,8 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
+        "~ newsletter-for-mods-made-by-quezler",
+
         "base",
         "space-age",
 
