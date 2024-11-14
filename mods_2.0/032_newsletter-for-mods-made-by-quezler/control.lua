@@ -172,6 +172,12 @@ commands.add_command("mods", nil, function(command)
       ignored_by_interaction = script.active_mods[mod.name] ~= nil,
     }
 
+    if mod.latest_release.info_json.factorio_version ~= "2.0" then
+      line_1_c.caption = "not yet ported"
+      line_1_c.enabled = false
+      line_1_c.ignored_by_interaction = true
+    end
+
     local line_2 = row.add{
       type = "label",
       caption = "[font=default-small]" .. mod.summary .. "[/font]",
