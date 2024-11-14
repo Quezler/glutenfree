@@ -219,7 +219,9 @@ script.on_event(defines.events.on_tick, function(event)
       tick_display_panel(storage.structs[entity.unit_number], event.tick)
     else
       storage.active_selections[player_index] = nil
-      storage.structs[entity.unit_number].do_not_auto_tick_until = 0
+      if entity.valid then
+        storage.structs[entity.unit_number].do_not_auto_tick_until = 0
+      end
     end
   end
 
