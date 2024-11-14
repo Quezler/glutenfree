@@ -160,6 +160,12 @@ commands.add_command("mods", nil, function(command)
       style = "caption_label",
     }
 
+    -- local notification = line_1.add{
+    --   type = "sprite",
+    --   sprite = "utility/notification",
+    --   -- style = "se_zonelist_row_cell_type_notification"
+    -- }
+
     local line_1_b = line_1.add{
       type = "empty-widget",
     }

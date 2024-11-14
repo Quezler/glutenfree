@@ -36,6 +36,7 @@ Date: ????
     - Throw in some colors
     - Hi hello
     - Move the compatibility color to the factorio version number
+    - Test a notification icon
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
