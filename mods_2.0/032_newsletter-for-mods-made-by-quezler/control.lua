@@ -93,7 +93,7 @@ commands.add_command("mods", nil, function(command)
 
   frame.add{
     type = "label",
-    caption = string.format("Hi! even though i have [font=default-bold]%d[/font] mods i suck at guis, if you're a fellow [font=default-bold]modder[/font] with [font=default-bold]gui[/font] knowledge, [font=default-bold]help[/font] is very much welcome.", #my_mods)
+    caption = string.format("Hello! even though I have [font=default-bold]%d[/font] mods I suck at guis, if you're a fellow [font=default-bold]modder[/font] with [font=default-bold]gui[/font] knowledge, [font=default-bold]help[/font] is very much welcome.", #my_mods)
   }
 
   frame.add{
