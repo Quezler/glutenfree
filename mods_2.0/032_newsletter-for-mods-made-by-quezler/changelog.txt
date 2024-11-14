@@ -38,6 +38,7 @@ Date: ????
     - Move the compatibility color to the factorio version number
     - Test a notification icon
     - Add shortcut button
+    - Bother players that joined a server with checking the shortcut
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01

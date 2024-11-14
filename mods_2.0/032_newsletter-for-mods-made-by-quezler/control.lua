@@ -3,6 +3,24 @@ local my_mods = require("scripts.database") --[[@as table]]
 local mod_prefix = "newsletter-for-mods-made-by-quezler-"
 local rich_text_crater = string.format("[img=%s]", mod_prefix .. "crater")
 
+local goal_text = rich_text_crater .. " Use the shortcut with this icon."
+
+script.on_init(function()
+  storage.playerdata = {}
+
+  for _, player in pairs(game.players) do
+    storage.playerdata[player.index] = {}
+  end
+end)
+
+script.on_event(defines.events.on_player_created, function(event)
+  storage.playerdata[event.player_index] = {}
+end)
+
+script.on_event(defines.events.on_player_removed, function(event)
+  storage.playerdata[event.player_index] = nil
+end)
+
 local function close_textfield(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local textfield_frame = player.gui.screen[mod_prefix .. "main-frame"]
@@ -10,14 +28,6 @@ local function close_textfield(event)
 
   textfield_frame.destroy()
 end
-
-script.on_event(defines.events.on_gui_hover, function(event)
-  if event.element.name == mod_prefix .. "goal-label" then
-    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    player.set_goal_description("")
-    event.element.destroy()
-  end
-end)
 
 local function sort_newest_first(mod_a, mod_b)
   return mod_a.created_at > mod_b.created_at
@@ -49,6 +59,13 @@ local function get_human_calendar_date()
 end
 
 local function open_for_player(player)
+  local playerdata = storage.playerdata[player.index]
+  playerdata.opened_once = true
+
+  if player.get_goal_description() == goal_text then
+    player.set_goal_description("")
+  end
+
   local main_frame = player.gui.screen[mod_prefix .. "main-frame"]
   if main_frame then main_frame.destroy() end
   main_frame = player.gui.screen.add{
@@ -240,5 +257,17 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
   if event.prototype_name == mod_prefix .. "shotcut" then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     open_for_player(player)
+  end
+end)
+
+-- script.on_event(defines.events.on_player_toggled_alt_mode, function(event)
+script.on_event(defines.events.on_player_joined_game, function(event)
+  local playerdata = storage.playerdata[event.player_index]
+
+  if not playerdata.opened_once then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    if player.get_goal_description() == "" then
+      player.set_goal_description(goal_text)
+    end
   end
 end)
