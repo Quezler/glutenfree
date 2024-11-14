@@ -13,6 +13,7 @@ Date: ????
     - Make the mod url copy paste field part of the frame
     - Leave a sad comment
     - Close the entire frame by walking around (i do not understand escape)
+    - Remove old prototype code
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
