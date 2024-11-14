@@ -152,19 +152,16 @@ commands.add_command("mods", nil, function(command)
 
     local line_1 = row.add{
       type = "flow",
-      -- ignored_by_interaction = true,
     }
 
     local line_1_a = line_1.add{
       type = "label",
       caption = mod.title,
       style = "caption_label",
-      -- ignored_by_interaction = true,
     }
 
     local line_1_b = line_1.add{
       type = "empty-widget",
-      -- ignored_by_interaction = true,
     }
     line_1_b.style.horizontally_stretchable = true
 
@@ -178,7 +175,6 @@ commands.add_command("mods", nil, function(command)
     local line_2 = row.add{
       type = "label",
       caption = "[font=default-small]" .. mod.summary .. "[/font]",
-      -- ignored_by_interaction = true,
     }
 
     local date = string.sub(mod.created_at, 1, 10)
@@ -187,7 +183,6 @@ commands.add_command("mods", nil, function(command)
     local line_3 = row.add{
       type = "label",
       caption = string.format("[font=default-tiny-bold]%s[/font] [font=default-bold]%s[/font] [font=default-tiny-bold]%s[/font]", mod.latest_release.info_json.factorio_version, date, mod.category),
-      -- ignored_by_interaction = true,
     }
 
     if mod.deprecated then
@@ -199,12 +194,19 @@ commands.add_command("mods", nil, function(command)
   player.opened = main_frame
 end)
 
+local function get_parent_with_action_tag(element, action_tag)
+  if element.tags and element.tags.action == action_tag then return element end
+
+  if element.parent then return get_parent_with_action_tag(element.parent, action_tag) end
+end
+
 script.on_event(defines.events.on_gui_click, function(event)
-  game.print(event.tick)
+  -- game.print(event.tick)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
-  if event.element.tags.action == mod_prefix .. "show-url-for-mod" then
-    local mod_url = "https://mods.factorio.com/mod/" .. event.element.tags.mod_name
+  local parent_with_action_tag = get_parent_with_action_tag(event.element, mod_prefix .. "show-url-for-mod")
+  if parent_with_action_tag then
+    local mod_url = "https://mods.factorio.com/mod/" .. parent_with_action_tag.tags.mod_name
 
     local textfield = player.gui.screen[mod_prefix .. "main-frame"][mod_prefix .. "textfield-frame"][mod_prefix .. "textfield"]
 
