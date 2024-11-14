@@ -260,8 +260,9 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
   end
 end)
 
--- script.on_event(defines.events.on_player_toggled_alt_mode, function(event)
-script.on_event(defines.events.on_player_joined_game, function(event)
+script.on_event(defines.events.on_player_toggled_alt_mode, function(event)
+  if game.is_multiplayer() == false then return end
+
   local playerdata = storage.playerdata[event.player_index]
 
   if not playerdata.opened_once then
