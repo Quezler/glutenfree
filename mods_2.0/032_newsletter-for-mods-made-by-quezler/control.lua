@@ -3,7 +3,7 @@ local my_mods = require("scripts.database") --[[@as table]]
 local mod_prefix = "newsletter-for-mods-made-by-quezler-"
 local rich_text_crater = string.format("[img=%s]", mod_prefix .. "crater")
 
-local goal_text = rich_text_crater .. " Use the shortcut with this icon."
+local goal_text = rich_text_crater .. " Use the shortcut with this icon once."
 
 script.on_init(function()
   storage.playerdata = {}
