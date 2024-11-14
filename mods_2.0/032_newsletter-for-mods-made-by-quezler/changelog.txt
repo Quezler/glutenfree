@@ -1,0 +1,20 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2024. 02. 01
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2024. 02. 01
+  Info:
+    - Stash proof of concept
+    - Swap the sprite tags out for the all-in-one icon flag
+    - Create a textarea when you click the link
+    - Close the textfield when you click somewhere else
+    - Prevent multiple textboxes from existing
+    - Use an arrow instead of a :
+    - Destroy the textfield when you input (e.g. wasd walk)
+    - mod_prefix ..
+    - Shorten it to leftclick
+    - Cleanup
+    - Stash comments (2024. 03. 15)

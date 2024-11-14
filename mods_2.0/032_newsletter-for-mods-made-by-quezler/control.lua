@@ -4,13 +4,16 @@ end
 
 local mod_prefix = 'newsletter-for-mods-made-by-quezler-'
 
+-- [gps=0,0,https://mods.factorio.com/mod/newsletter-for-mods-made-by-quezler] [gps=0,0,nauvis] [gps=0,0,nauviz]
 script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
-  if starts_with(event.surface, 'https://mods.factorio.com/mod/') == false then return end
+  -- game.print("gps tag clicked!")
+  -- if starts_with(event.surface, 'https://mods.factorio.com/mod/') == false then return end
+  local mod_url = "https://mods.factorio.com/mod/newsletter-for-mods-made-by-quezler"
 
-  local player = game.get_player(event.player_index)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
   -- space exploration blurts this out if the surface does not exist or isn't a zone, so we just hijack that translation string
-  if game.active_mods['space-exploration'] == nil then
+  if script.active_mods['space-exploration'] == nil then
     player.print({"space-exploration.gps_invalid"})
   end
 
@@ -20,10 +23,10 @@ script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
       type = 'textfield',
       name = mod_prefix .. 'textfield',
 
-      text = event.surface,
+      text = mod_url,
     }
   else
-    textfield.text = event.surface
+    textfield.text = mod_url
   end
 
   textfield.focus()
@@ -36,7 +39,7 @@ script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
 end)
 
 local function close_textfield(event)
-  local player = game.get_player(event.player_index)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local textfield = player.gui.center[mod_prefix .. 'textfield']
   if textfield == nil then return end
 
