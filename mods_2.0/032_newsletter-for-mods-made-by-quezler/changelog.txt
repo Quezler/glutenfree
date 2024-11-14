@@ -3,6 +3,7 @@ Version: 0.0.4
 Date: ????
   Info:
     - Create a gui to house my mods
+    - Poor attempt at putting them all in a table
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01

@@ -1,4 +1,4 @@
-local my_mods = require("scripts.database")
+local my_mods = require("scripts.database") --[[@as table]]
 
 local function starts_with(str, start)
   return str:sub(1, #start) == start
@@ -87,4 +87,23 @@ commands.add_command("mods", nil, function(command)
     style = "inside_shallow_frame_with_padding",
     direction = "vertical",
   }
+
+  for _, mod in ipairs(my_mods) do
+    local row = inner.add{
+      type = "button",
+    }
+
+    local row_flow = row.add{
+      type = "flow",
+      name = "row_flow",
+      direction = "horizontal",
+      ignored_by_interaction = true
+    }
+
+    row_flow.add{
+      type = "label",
+      caption = mod.name,
+    }
+  end
+
 end)
