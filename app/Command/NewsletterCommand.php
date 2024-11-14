@@ -53,7 +53,7 @@ class NewsletterCommand extends Command
 //            $mod["latest_release"] = end($mod["releases"]);
             unset($mod["releases"]); // bloated
             unset($mod["score"]); // outdated
-            unset($mod["downloads"]); // outdated
+            unset($mod["downloads_count"]); // outdated
 
             unset($mod["homepage"]); // always discord
             unset($mod["source_url"]); // always github
