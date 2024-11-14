@@ -107,32 +107,24 @@ commands.add_command("mods", nil, function(command)
       direction = "vertical",
     }
     row.style.padding = 6
-
     row.style.width = 708
-    -- row.style.height = 55
-    -- row.style.left_padding = 20
-    -- row.style.right_padding = 20
-    -- row.style.top_padding = 20
-    -- row.style.bottom_padding = 20
     row.tags = {
       action = mod_prefix .. "show-url-for-mod",
       mod_name = mod.name,
     }
 
-    local row_flow = row.add{
-      type = "flow",
-      -- name = "row_flow",
-      direction = "vertical",
-      ignored_by_interaction = true
-    }
+    -- local row_flow = row.add{
+    --   type = "flow",
+    --   direction = "vertical",
+    -- }
 
-    row_flow.add{
+    row.add{
       type = "label",
       caption = mod.title,
       style = "caption_label",
     }
 
-    row_flow.add{
+    row.add{
       type = "label",
       caption = "[font=default-small]" .. mod.summary .. "[/font]",
     }
