@@ -6,16 +6,17 @@ use App\Misc\ExpansionMods;
 use App\Misc\ModPortal;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewsletterCommand extends Command
+class SendNewsletterCommand extends Command
 {
-    protected static $defaultName = 'newsletter';
+    protected static $defaultName = 'send:newsletter';
 
     protected function configure(): void
     {
-        //
+        $this->addOption('ci');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -57,6 +58,11 @@ class NewsletterCommand extends Command
             $new_checksum_line,
         ], explode(PHP_EOL, file_get_contents($mod->get_changelog_txt_pathname())));
         file_put_contents($mod->get_changelog_txt_pathname(), implode(PHP_EOL, $changelog_lines));
+
+        if ($input->getOption('ci')) {
+            $command = $this->getApplication()->find('build:mod');
+            $command->run(new ArrayInput(['name' => $mod->name, 'update' => true]), $output);
+        }
 
         return Command::SUCCESS;
     }

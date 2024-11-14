@@ -22,7 +22,6 @@ $application->add(new \App\Command\UpdateCommand());
 $application->add(new \App\Command\CiCommand());
 $application->add(new \App\Command\ChangelogCommand());
 $application->add(new \App\Command\WebhookCommand());
-$application->add(new \App\Command\NewsletterCommand());
 
 // 2.0
 $application->add(new \App\Command\MakeModCommand());
@@ -36,5 +35,6 @@ $application->add(new \App\Command\LeaderboardModsCommand());
 
 // all
 $application->add(new \App\Command\DiscussionNoticeCommand());
+$application->add(new \App\Command\SendNewsletterCommand());
 
 $application->run();
