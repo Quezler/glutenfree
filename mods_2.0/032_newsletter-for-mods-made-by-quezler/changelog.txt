@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Strip out space exploration compatibility
+    - Replace ' with "
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 02. 01
