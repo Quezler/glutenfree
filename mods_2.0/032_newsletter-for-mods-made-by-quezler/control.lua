@@ -49,7 +49,7 @@ end)
 
 local function close_textfield(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  local textfield_frame = player.gui.screen[mod_prefix .. "textfield-frame"]
+  local textfield_frame = player.gui.screen[mod_prefix .. "main-frame"]
   if textfield_frame == nil then return end
 
   textfield_frame.destroy()
@@ -102,9 +102,9 @@ commands.add_command("mods", nil, function(command)
   local textfield = textfield_frame.add{
     type = "textfield",
     name = mod_prefix .. "textfield",
-
-    enabled = false,
   }
+
+  textfield.focus()
 
   textfield.style.width = 750 -- fits "https://mods.factorio.com/mod/wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww" (49 max length, w max width)
   textfield.style.horizontal_align = "center"
