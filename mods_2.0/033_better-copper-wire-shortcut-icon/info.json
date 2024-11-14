@@ -3,7 +3,7 @@
     "title": "Better copper wire shortcut icon",
     "description": "Gives the spinlaunch pool noodle some end caps and a copper tint.",
 
-    "version": "0.0.1",
+    "version": "1.0.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,6 +16,6 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
-        "base >= 2.0.17"
+        "base >= 2.0.18"
     ]
 }
