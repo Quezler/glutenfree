@@ -49,8 +49,10 @@ class NewsletterCommand extends Command
                 unset($release["download_url"]);
                 unset($release["file_name"]);
                 unset($release["sha1"]);
+                unset($release["released_at"]);
+                unset($release["version"]);
             }
-//            $mod["latest_release"] = end($mod["releases"]);
+            $mod["latest_release"] = end($mod["releases"]);
             unset($mod["releases"]); // bloated
             unset($mod["score"]); // outdated
             unset($mod["downloads_count"]); // outdated
