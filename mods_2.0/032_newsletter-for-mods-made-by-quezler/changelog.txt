@@ -17,6 +17,7 @@ Date: ????
     - Include the mod descriptions
     - Give the table some margin top & bottom
     - Change away from the button
+    - Put more spacing between the table rows
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01

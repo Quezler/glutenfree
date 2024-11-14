@@ -90,6 +90,9 @@ commands.add_command("mods", nil, function(command)
   lua_table.style.top_margin = 4
   lua_table.style.bottom_margin = 4
 
+  lua_table.style.vertical_spacing = 8
+  lua_table.style.horizontal_spacing = 8
+
   table.sort(my_mods, sort_newest_first)
 
   for _, mod in ipairs(my_mods) do
