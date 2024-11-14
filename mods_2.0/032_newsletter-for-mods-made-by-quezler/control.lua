@@ -74,7 +74,6 @@ commands.add_command("mods", nil, function(command)
     direction = "vertical",
   }
   frame.drag_target = main_frame
-  -- frame.style.width = 500
 
   textfield_frame = main_frame.add{
     type = "frame",
@@ -127,11 +126,6 @@ commands.add_command("mods", nil, function(command)
   table.sort(my_mods, sort_newest_first)
 
   for i, mod in ipairs(my_mods) do
-    -- local row = lua_table.add{
-    --   type = "button",
-    --   -- name = mod_prefix .. "row-button-mod",
-    -- }
-
     local row = lua_table.add{
       type = "frame",
       style = "inside_shallow_frame_with_padding",
@@ -155,7 +149,6 @@ commands.add_command("mods", nil, function(command)
     --   style = "semibold_label",
     --   ignored_by_interaction = true,
     -- }
-
 
     row.add{
       type = "label",
