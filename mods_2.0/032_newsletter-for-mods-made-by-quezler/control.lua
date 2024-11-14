@@ -95,24 +95,31 @@ commands.add_command("mods", nil, function(command)
     horizontal_scroll_policy = "never",
   }
   scroll.style.width = 500
+  scroll.style.height = 700
 
   local table = scroll.add{
     type = "table",
     style = "table_with_selection",
     column_count = 1,
   }
+  table.style.left_cell_padding = 4
+  table.style.right_cell_padding = 4
 
   for _, mod in ipairs(my_mods) do
-    -- local row = scroll.add{
-    --   type = "button",
-    -- }
+    local row = table.add{
+      type = "button",
+    }
+    row.style.natural_width = 460
+    -- row.style.left_padding = 20
+    -- row.style.right_padding = 20
+    -- row.style.top_padding = 20
+    -- row.style.bottom_padding = 20
 
-    -- local row_flow = row.add{
-    local row_flow = table.add{
+    local row_flow = row.add{
       type = "flow",
       -- name = "row_flow",
       direction = "horizontal",
-      -- ignored_by_interaction = true
+      ignored_by_interaction = true
     }
 
     row_flow.add{
