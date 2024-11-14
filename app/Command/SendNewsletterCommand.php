@@ -61,7 +61,7 @@ class SendNewsletterCommand extends Command
 
         if ($input->getOption('ci')) {
             $command = $this->getApplication()->find('build:mod');
-            $command->run(new ArrayInput(['name' => $mod->name, 'update' => true]), $output);
+            $command->run(new ArrayInput(['name' => $mod->name, '--update' => true]), $output);
         }
 
         return Command::SUCCESS;
