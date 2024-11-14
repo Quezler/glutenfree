@@ -82,11 +82,13 @@ commands.add_command("mods", nil, function(command)
 
   local lua_table = scroll.add{
     type = "table",
-    style = "table_with_selection",
+    -- style = "table_with_selection",
     column_count = 1,
   }
   lua_table.style.left_cell_padding = 4
   lua_table.style.right_cell_padding = 4
+  lua_table.style.top_margin = 4
+  lua_table.style.bottom_margin = 4
 
   table.sort(my_mods, sort_newest_first)
 

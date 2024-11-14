@@ -15,6 +15,7 @@ Date: ????
     - Close the entire frame by walking around (i do not understand escape)
     - Remove old prototype code
     - Include the mod descriptions
+    - Give the table some margin top & bottom
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
