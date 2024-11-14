@@ -7,6 +7,7 @@ Date: ????
     - Play around with the objectives window
     - Clear the goal description when hovered
     - Begin generation of the newsletter database
+    - Allow chatgtp a chance at doing the conversion
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 02. 01
