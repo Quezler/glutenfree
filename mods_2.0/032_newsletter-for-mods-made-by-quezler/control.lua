@@ -77,7 +77,7 @@ commands.add_command("mods", nil, function(command)
     vertical_scroll_policy = "auto-and-reserve-space",
     horizontal_scroll_policy = "never",
   }
-  scroll.style.width = 500
+  scroll.style.width = 738
   scroll.style.height = 700
 
   local lua_table = scroll.add{
@@ -95,7 +95,8 @@ commands.add_command("mods", nil, function(command)
       type = "button",
       -- name = mod_prefix .. "row-button-mod",
     }
-    row.style.width = 460
+    row.style.width = 708
+    row.style.height = 55
     -- row.style.left_padding = 20
     -- row.style.right_padding = 20
     -- row.style.top_padding = 20
@@ -108,13 +109,19 @@ commands.add_command("mods", nil, function(command)
     local row_flow = row.add{
       type = "flow",
       -- name = "row_flow",
-      direction = "horizontal",
+      direction = "vertical",
       ignored_by_interaction = true
     }
 
     row_flow.add{
       type = "label",
       caption = mod.title,
+      style = "caption_label",
+    }
+
+    row_flow.add{
+      type = "label",
+      caption = "[font=default-small]" .. mod.summary .. "[/font]",
     }
   end
 

@@ -14,6 +14,7 @@ Date: ????
     - Leave a sad comment
     - Close the entire frame by walking around (i do not understand escape)
     - Remove old prototype code
+    - Include the mod descriptions
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
