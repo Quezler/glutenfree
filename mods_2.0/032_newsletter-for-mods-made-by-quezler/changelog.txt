@@ -6,6 +6,7 @@ Date: ????
     - Replace ' with "
     - Play around with the objectives window
     - Clear the goal description when hovered
+    - Begin generation of the newsletter database
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 02. 01
