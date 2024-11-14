@@ -173,12 +173,6 @@ commands.add_command("mods", nil, function(command)
       ignored_by_interaction = script.active_mods[mod.name] ~= nil,
     }
 
-    if mod.latest_release.info_json.factorio_version ~= "2.0" then
-      line_1_c.caption = "[color=red]not yet ported[/color]"
-      line_1_c.enabled = false
-      line_1_c.ignored_by_interaction = true
-    end
-
     local line_2 = row.add{
       type = "label",
       caption = "[font=default-small]" .. mod.summary .. "[/font]",
@@ -187,9 +181,14 @@ commands.add_command("mods", nil, function(command)
     local date = string.sub(mod.created_at, 1, 10)
     date = string.gsub(date, "%-", ". ")
 
+    local version_color = "red"
+    version_color = mod.latest_release.info_json.factorio_version == "1.1" and "orange" or version_color
+    version_color = mod.latest_release.info_json.factorio_version == "2.0" and "green" or version_color
+    local version_string = string.format("[font=default-tiny-bold][color=%s]%s[/color][/font]", version_color, mod.latest_release.info_json.factorio_version)
+
     local line_3 = row.add{
       type = "label",
-      caption = string.format("[font=default-tiny-bold]%s[/font] [font=default-bold]%s[/font] [font=default-tiny-bold]%s[/font]", mod.latest_release.info_json.factorio_version, date, mod.category),
+      caption = string.format("%s [font=default-bold]%s[/font] [font=default-tiny-bold]%s[/font]", version_string, date, mod.category),
     }
 
     if mod.deprecated then

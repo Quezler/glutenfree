@@ -35,6 +35,7 @@ Date: ????
     - Add a "not yet ported" status
     - Throw in some colors
     - Hi hello
+    - Move the compatibility color to the factorio version number
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
