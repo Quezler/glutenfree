@@ -150,14 +150,14 @@ commands.add_command("mods", nil, function(command)
     --   ignored_by_interaction = true,
     -- }
 
-    row.add{
+    local line_1 = row.add{
       type = "label",
       caption = mod.title,
       style = "caption_label",
       ignored_by_interaction = true,
     }
 
-    row.add{
+    local line_2 = row.add{
       type = "label",
       caption = "[font=default-small]" .. mod.summary .. "[/font]",
       ignored_by_interaction = true,
@@ -166,11 +166,15 @@ commands.add_command("mods", nil, function(command)
     local date = string.sub(mod.created_at, 1, 10)
     date = string.gsub(date, "%-", ". ")
 
-    row.add{
+    local line_3 = row.add{
       type = "label",
-      caption = string.format("[font=default-tiny-bold]%s[/font] [font=default-bold]%s[/font]", mod.latest_release.info_json.factorio_version, date),
+      caption = string.format("[font=default-tiny-bold]%s[/font] [font=default-bold]%s[/font] [font=default-tiny-bold]%s[/font]", mod.latest_release.info_json.factorio_version, date, mod.category),
       ignored_by_interaction = true,
     }
+
+    if mod.deprecated then
+      line_3.caption = line_3.caption .. " [font=default-bold](deprecated)[/font]"
+    end
   end
 
   main_frame.force_auto_center()
