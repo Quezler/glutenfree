@@ -25,7 +25,7 @@ class NewsletterCommand extends Command
 //            dump($mod);
         }
 
-        $database_prefix = __GLUTENFREE__ . '/mods_2.0/032_newsletter-for-mods-made-by-quezler/database';
+        $database_prefix = __GLUTENFREE__ . '/mods_2.0/032_newsletter-for-mods-made-by-quezler/scripts/database';
         $json1 = json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents("$database_prefix.json", $json1);
 

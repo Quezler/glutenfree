@@ -11,6 +11,7 @@ Date: ????
     - Attempt to leverage helpers.json_to_table
     - Pack all my mod info in a 100 kb lua file
     - Pack it within 57 kb
+    - Move database into the scripts folder
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 02. 01
