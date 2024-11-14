@@ -79,7 +79,7 @@ commands.add_command("mods", nil, function(command)
     type = "frame",
     caption = {"", rich_text_crater, " ", "Quezler's mods"},
   }
-  frame.style.width = 500
+  -- frame.style.width = 500
   frame.force_auto_center()
 
   local inner = frame.add{
@@ -88,8 +88,15 @@ commands.add_command("mods", nil, function(command)
     direction = "vertical",
   }
 
+  local scroll = inner.add{
+    type = "scroll-pane",
+    vertical_scroll_policy = "auto-and-reserve-space",
+    horizontal_scroll_policy = "never",
+  }
+  scroll.style.width = 500
+
   for _, mod in ipairs(my_mods) do
-    local row = inner.add{
+    local row = scroll.add{
       type = "button",
     }
 
