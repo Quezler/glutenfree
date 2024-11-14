@@ -261,13 +261,11 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
 end)
 
 script.on_event(defines.events.on_player_toggled_alt_mode, function(event)
-  if game.is_multiplayer() == false then return end
-
   local playerdata = storage.playerdata[event.player_index]
 
   if not playerdata.opened_once then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    if player.get_goal_description() == "" then
+    if player.get_goal_description() == "" and settings.get_player_settings(event.player_index)[mod_prefix .. "hijack-goal"].value then
       player.set_goal_description(goal_text)
     end
   end

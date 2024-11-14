@@ -42,6 +42,7 @@ Date: ????
     - Switch it to toggling alt mode while playing multiplayer
     - Specify you only need to click the shortcut once
     - Prepare readme for release
+    - Allow disabling the goal/objective via per-user settings
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
