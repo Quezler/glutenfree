@@ -5,6 +5,7 @@ local function starts_with(str, start)
 end
 
 local mod_prefix = "newsletter-for-mods-made-by-quezler-"
+local rich_text_crater = string.format("[img=%s]", mod_prefix .. "crater")
 
 -- [gps=0,0,https://mods.factorio.com/mod/newsletter-for-mods-made-by-quezler] [gps=0,0,nauvis] [gps=0,0,nauviz]
 script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
@@ -69,4 +70,21 @@ script.on_event(defines.events.on_gui_hover, function(event)
     player.set_goal_description("")
     event.element.destroy()
   end
+end)
+
+commands.add_command("mods", nil, function(command)
+  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+
+  local frame = player.gui.screen.add{
+    type = "frame",
+    caption = {"", rich_text_crater, " ", "Quezler's mods"},
+  }
+  frame.style.width = 500
+  frame.force_auto_center()
+
+  local inner = frame.add{
+    type = "frame",
+    style = "inside_shallow_frame_with_padding",
+    direction = "vertical",
+  }
 end)
