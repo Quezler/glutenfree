@@ -26,6 +26,7 @@ Date: ????
     - Disable the textarea by default again
     - List when the mod was last updated
     - Also extract the year
+    - Add a notice for modders and players
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01

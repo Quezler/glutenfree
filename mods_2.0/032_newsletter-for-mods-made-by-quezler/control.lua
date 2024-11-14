@@ -71,6 +71,7 @@ commands.add_command("mods", nil, function(command)
       " ",
       day .. get_ordinal_suffix(tonumber(day)) .. "[/color][/font]"
     },
+    direction = "vertical",
   }
   frame.drag_target = main_frame
   -- frame.style.width = 500
@@ -85,19 +86,21 @@ commands.add_command("mods", nil, function(command)
     type = "textfield",
     name = mod_prefix .. "textfield",
 
-    -- text = "https://mods.factorio.com/mod/newsletter-for-mods-made-by-quezler",
     enabled = false,
   }
 
   textfield.style.width = 750 -- fits "https://mods.factorio.com/mod/wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww" (49 max length, w max width)
   textfield.style.horizontal_align = "center"
-  -- textfield.style.disabled_font_color = {1, 1, 1}
 
-  -- local inner = frame.add{
-  --   type = "frame",
-  --   style = "inside_shallow_frame_with_padding",
-  --   direction = "vertical",
-  -- }
+  frame.add{
+    type = "label",
+    caption = string.format("Hi! even though i have [font=default-bold]%d[/font] mods i suck at guis, if you're a fellow [font=default-bold]modder[/font] with [font=default-bold]gui[/font] knowledge, [font=default-bold]help[/font] is very much welcome.", #my_mods)
+  }
+
+  frame.add{
+    type = "label",
+    caption = string.format("And well [font=default-bold]if you are a player[/font] here's a list of my mods, just [font=default-bold]click[/font] one and then [font=default-bold]copy[/font] the url into a [font=default-bold]browser[/font]. (grey is not disabled)")
+  }
 
   -- local scroll = inner.add{
   local scroll = frame.add{
