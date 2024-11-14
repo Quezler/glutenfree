@@ -79,12 +79,34 @@ end
 commands.add_command("mods", nil, function(command)
   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
 
-  local frame = player.gui.screen.add{
+  local main_frame = player.gui.screen.add{
+    type = "frame",
+    name = mod_prefix .. "main-frame",
+    style = "invisible_frame",
+    direction = "vertical",
+  }
+
+  local frame = main_frame.add{
     type = "frame",
     caption = {"", rich_text_crater, " ", "Quezler's mods"},
   }
   -- frame.style.width = 500
-  frame.force_auto_center()
+
+  textfield_frame = main_frame.add{
+    type = "frame",
+    name = mod_prefix .. "textfield-frame",
+  }
+  textfield_frame.style.padding = 2
+
+  local textfield = textfield_frame.add{
+    type = "textfield",
+    name = mod_prefix .. "textfield",
+
+    enabled = false,
+  }
+
+  textfield.style.width = 750 -- fits "https://mods.factorio.com/mod/wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww" (49 max length, w max width)
+  textfield.style.horizontal_align = "center"
 
   -- local inner = frame.add{
   --   type = "frame",
@@ -139,6 +161,7 @@ commands.add_command("mods", nil, function(command)
     }
   end
 
+  main_frame.force_auto_center()
 end)
 
 script.on_event(defines.events.on_gui_click, function(event)
@@ -148,27 +171,12 @@ script.on_event(defines.events.on_gui_click, function(event)
   if event.element.tags.action == mod_prefix .. "show-url-for-mod" then
     local mod_url = "https://mods.factorio.com/mod/" .. event.element.tags.mod_name
 
-    local textfield_frame = player.gui.screen[mod_prefix .. "textfield-frame"]
-    if textfield_frame then textfield_frame.destroy() end
+    local textfield = player.gui.screen[mod_prefix .. "main-frame"][mod_prefix .. "textfield-frame"][mod_prefix .. "textfield"]
 
-    textfield_frame = player.gui.screen.add{
-      type = "frame",
-      name = mod_prefix .. "textfield-frame",
-    }
-    textfield_frame.force_auto_center()
-    textfield_frame.style.padding = 2
-
-    local textfield = textfield_frame.add{
-      type = "textfield",
-      name = mod_prefix .. "textfield",
-
-      text = mod_url,
-    }
+    textfield.text = mod_url
+    textfield.enabled = true
 
     textfield.focus()
     textfield.select_all()
-
-    textfield.style.width = 750 -- fits "https://mods.factorio.com/mod/wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww" (49 max length, w max width)
-    textfield.style.horizontal_align = "center"
   end
 end)
