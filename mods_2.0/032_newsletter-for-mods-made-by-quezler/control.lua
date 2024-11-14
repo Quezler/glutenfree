@@ -93,12 +93,20 @@ commands.add_command("mods", nil, function(command)
   table.sort(my_mods, sort_newest_first)
 
   for _, mod in ipairs(my_mods) do
+    -- local row = lua_table.add{
+    --   type = "button",
+    --   -- name = mod_prefix .. "row-button-mod",
+    -- }
+
     local row = lua_table.add{
-      type = "button",
-      -- name = mod_prefix .. "row-button-mod",
+      type = "frame",
+      style = "inside_shallow_frame_with_padding",
+      direction = "vertical",
     }
+    row.style.padding = 6
+
     row.style.width = 708
-    row.style.height = 55
+    -- row.style.height = 55
     -- row.style.left_padding = 20
     -- row.style.right_padding = 20
     -- row.style.top_padding = 20

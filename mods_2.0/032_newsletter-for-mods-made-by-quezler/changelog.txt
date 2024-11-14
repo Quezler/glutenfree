@@ -16,6 +16,7 @@ Date: ????
     - Remove old prototype code
     - Include the mod descriptions
     - Give the table some margin top & bottom
+    - Change away from the button
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
