@@ -167,13 +167,14 @@ commands.add_command("mods", nil, function(command)
 
     local line_1_c = line_1.add{
       type = "button",
+      -- caption = script.active_mods[mod.name] and "[color=green]installed[/color]" or "install",
       caption = script.active_mods[mod.name] and "installed" or "install",
       enabled = script.active_mods[mod.name] == nil,
       ignored_by_interaction = script.active_mods[mod.name] ~= nil,
     }
 
     if mod.latest_release.info_json.factorio_version ~= "2.0" then
-      line_1_c.caption = "not yet ported"
+      line_1_c.caption = "[color=red]not yet ported[/color]"
       line_1_c.enabled = false
       line_1_c.ignored_by_interaction = true
     end

@@ -33,6 +33,7 @@ Date: ????
     - Add an install/installed button
     - Remove the need for some ignored_by_interactions
     - Add a "not yet ported" status
+    - Throw in some colors
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
