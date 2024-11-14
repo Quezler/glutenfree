@@ -107,9 +107,9 @@ commands.add_command("mods", nil, function(command)
 
   for _, mod in ipairs(my_mods) do
     local row = table.add{
-      type = "button",
+      type = "sprite-button",
     }
-    row.style.natural_width = 460
+    row.style.width = 460
     -- row.style.left_padding = 20
     -- row.style.right_padding = 20
     -- row.style.top_padding = 20

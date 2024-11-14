@@ -7,6 +7,7 @@ Date: ????
     - Add a scroll bar
     - Use an actual table
     - More tinkering with styles
+    - Well sprite buttons just look horid when stretchd
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
