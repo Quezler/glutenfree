@@ -28,6 +28,7 @@ Date: ????
     - Also extract the year
     - Add a notice for modders and players
     - Minor cleanup
+    - Display factorio version and mod release date
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01

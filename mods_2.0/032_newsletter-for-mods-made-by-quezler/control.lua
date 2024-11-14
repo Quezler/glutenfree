@@ -162,6 +162,15 @@ commands.add_command("mods", nil, function(command)
       caption = "[font=default-small]" .. mod.summary .. "[/font]",
       ignored_by_interaction = true,
     }
+
+    local date = string.sub(mod.created_at, 1, 10)
+    date = string.gsub(date, "%-", ". ")
+
+    row.add{
+      type = "label",
+      caption = string.format("[font=default-tiny-bold]%s[/font] [font=default-bold]%s[/font]", mod.latest_release.info_json.factorio_version, date),
+      ignored_by_interaction = true,
+    }
   end
 
   main_frame.force_auto_center()
