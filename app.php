@@ -32,6 +32,7 @@ $application->add(new \App\Command\TestModCommand());
 $application->add(new \App\Command\GitPostCommitCommand());
 $application->add(new \App\Command\PortModCommand());
 $application->add(new \App\Command\LeaderboardModsCommand());
+$application->add(new \App\Command\OnceNewsletterCommand());
 
 // all
 $application->add(new \App\Command\DiscussionNoticeCommand());
