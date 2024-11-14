@@ -10,6 +10,8 @@ local mod_prefix = "newsletter-for-mods-made-by-quezler-"
 script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
+  log(serpent.block(my_mods))
+
   if true then
     player.set_goal_description(string.format("[img=%s] Quezler released a new mod!", mod_prefix .. "crater"))
     player.gui.goal.add{

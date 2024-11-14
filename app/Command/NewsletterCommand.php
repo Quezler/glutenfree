@@ -42,18 +42,25 @@ class NewsletterCommand extends Command
         foreach ($results as &$mod) {
             unset($mod["changelog"]); // big
 
+            unset($mod["thumbnail"]); // no embedded images
+            unset($mod["images"]); // no embedded images
+
             foreach ($mod["releases"] as &$release) {
                 unset($release["download_url"]);
                 unset($release["file_name"]);
                 unset($release["sha1"]);
             }
-            $mod["latest_release"] = end($mod["releases"]);
+//            $mod["latest_release"] = end($mod["releases"]);
             unset($mod["releases"]); // bloated
             unset($mod["score"]); // outdated
             unset($mod["downloads"]); // outdated
 
-            unset($mod["homepage"]);
-            unset($mod["source_url"]);
+            unset($mod["homepage"]); // always discord
+            unset($mod["source_url"]); // always github
+            unset($mod["github_path"]); // always github
+            unset($mod["owner"]); // always me
+
+            unset($mod["carbon"]); // added by ModPortal::get_my_mods_full()
         }
     }
 }
