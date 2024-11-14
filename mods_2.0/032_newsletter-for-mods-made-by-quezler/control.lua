@@ -49,10 +49,10 @@ end)
 
 local function close_textfield(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  local textfield = player.gui.center[mod_prefix .. "textfield"]
-  if textfield == nil then return end
+  local textfield_frame = player.gui.screen[mod_prefix .. "textfield-frame"]
+  if textfield_frame == nil then return end
 
-  textfield.destroy()
+  textfield_frame.destroy()
 end
 
 script.on_event(mod_prefix .. "leftclick", close_textfield)
@@ -114,12 +114,17 @@ commands.add_command("mods", nil, function(command)
   for _, mod in ipairs(my_mods) do
     local row = lua_table.add{
       type = "button",
+      -- name = mod_prefix .. "row-button-mod",
     }
     row.style.width = 460
     -- row.style.left_padding = 20
     -- row.style.right_padding = 20
     -- row.style.top_padding = 20
     -- row.style.bottom_padding = 20
+    row.tags = {
+      action = mod_prefix .. "show-url-for-mod",
+      mod_name = mod.name,
+    }
 
     local row_flow = row.add{
       type = "flow",
@@ -134,4 +139,36 @@ commands.add_command("mods", nil, function(command)
     }
   end
 
+end)
+
+script.on_event(defines.events.on_gui_click, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+
+  -- if event.element.name == mod_prefix .. "row-button-mod" then
+  if event.element.tags.action == mod_prefix .. "show-url-for-mod" then
+    local mod_url = "https://mods.factorio.com/mod/" .. event.element.tags.mod_name
+
+    local textfield_frame = player.gui.screen[mod_prefix .. "textfield-frame"]
+    if textfield_frame then textfield_frame.destroy() end
+
+    textfield_frame = player.gui.screen.add{
+      type = "frame",
+      name = mod_prefix .. "textfield-frame",
+    }
+    textfield_frame.force_auto_center()
+    textfield_frame.style.padding = 2
+
+    local textfield = textfield_frame.add{
+      type = "textfield",
+      name = mod_prefix .. "textfield",
+
+      text = mod_url,
+    }
+
+    textfield.focus()
+    textfield.select_all()
+
+    textfield.style.width = 750 -- fits "https://mods.factorio.com/mod/wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww" (49 max length, w max width)
+    textfield.style.horizontal_align = "center"
+  end
 end)

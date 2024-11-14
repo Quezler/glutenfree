@@ -9,6 +9,7 @@ Date: ????
     - More tinkering with styles
     - Well sprite buttons just look horid when stretchd
     - Sort mods newest first
+    - Open a textfield with the mod's url on click
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
