@@ -41,6 +41,7 @@ Date: ????
     - Bother players that joined a server with checking the shortcut
     - Switch it to toggling alt mode while playing multiplayer
     - Specify you only need to click the shortcut once
+    - Prepare readme for release
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
