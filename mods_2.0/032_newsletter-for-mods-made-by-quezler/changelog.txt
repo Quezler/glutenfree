@@ -8,6 +8,7 @@ Date: ????
     - Clear the goal description when hovered
     - Begin generation of the newsletter database
     - Allow chatgtp a chance at doing the conversion
+    - Attempt to leverage helpers.json_to_table
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 02. 01
