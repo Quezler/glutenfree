@@ -24,9 +24,12 @@ class NewsletterCommand extends Command
             dump($mod);
         }
 
-        $database_pathname = __GLUTENFREE__ . '/mods_2.0/032_newsletter-for-mods-made-by-quezler/database.lua';
-        $json = json_encode($results, JSON_UNESCAPED_SLASHES);
-        file_put_contents($database_pathname, "return helpers.json_to_table('". $json ."')");
+        $database_prefix = __GLUTENFREE__ . '/mods_2.0/032_newsletter-for-mods-made-by-quezler/database';
+        $json1 = json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        file_put_contents("$database_prefix.json", $json1);
+
+        $json2 = json_encode($results, JSON_UNESCAPED_SLASHES);
+        file_put_contents("$database_prefix.lua", "return helpers.json_to_table('". $json2 ."')");
         
         return Command::SUCCESS;
     }
