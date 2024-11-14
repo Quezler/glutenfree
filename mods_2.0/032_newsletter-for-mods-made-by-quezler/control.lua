@@ -82,29 +82,37 @@ commands.add_command("mods", nil, function(command)
   -- frame.style.width = 500
   frame.force_auto_center()
 
-  local inner = frame.add{
-    type = "frame",
-    style = "inside_shallow_frame_with_padding",
-    direction = "vertical",
-  }
+  -- local inner = frame.add{
+  --   type = "frame",
+  --   style = "inside_shallow_frame_with_padding",
+  --   direction = "vertical",
+  -- }
 
-  local scroll = inner.add{
+  -- local scroll = inner.add{
+  local scroll = frame.add{
     type = "scroll-pane",
     vertical_scroll_policy = "auto-and-reserve-space",
     horizontal_scroll_policy = "never",
   }
   scroll.style.width = 500
 
-  for _, mod in ipairs(my_mods) do
-    local row = scroll.add{
-      type = "button",
-    }
+  local table = scroll.add{
+    type = "table",
+    style = "table_with_selection",
+    column_count = 1,
+  }
 
-    local row_flow = row.add{
+  for _, mod in ipairs(my_mods) do
+    -- local row = scroll.add{
+    --   type = "button",
+    -- }
+
+    -- local row_flow = row.add{
+    local row_flow = table.add{
       type = "flow",
-      name = "row_flow",
+      -- name = "row_flow",
       direction = "horizontal",
-      ignored_by_interaction = true
+      -- ignored_by_interaction = true
     }
 
     row_flow.add{
