@@ -49,12 +49,14 @@ commands.add_command("mods", nil, function(command)
   local textfield = textfield_frame.add{
     type = "textfield",
     name = mod_prefix .. "textfield",
-  }
 
-  textfield.focus()
+    -- text = "https://mods.factorio.com/mod/newsletter-for-mods-made-by-quezler",
+    enabled = false,
+  }
 
   textfield.style.width = 750 -- fits "https://mods.factorio.com/mod/wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww" (49 max length, w max width)
   textfield.style.horizontal_align = "center"
+  -- textfield.style.disabled_font_color = {1, 1, 1}
 
   -- local inner = frame.add{
   --   type = "frame",
