@@ -61,20 +61,6 @@ class NewsletterCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function get_latest_release($mod)
-    {
-        if ($mod["name"] == "newsletter-for-mods-made-by-quezler") {
-            foreach ($mod["releases"] as $i => $release) {
-                if (strlen($release["version"]) == 17) {
-                    dd($mod["releases"]);
-                    return $mod["releases"][$i - 1];
-                }
-            }
-        }
-
-        return end($mod["releases"]);
-    }
-
     private function strip_undesired_information_from_mods(&$results): void
     {
         foreach ($results as &$mod) {
@@ -87,15 +73,10 @@ class NewsletterCommand extends Command
                 unset($release["download_url"]);
                 unset($release["file_name"]);
                 unset($release["sha1"]);
+                unset($release["released_at"]);
+                unset($release["version"]);
             }
-            $mod["latest_release"] = $this->get_latest_release($mod);
-            unset($mod["latest_release"]["version"]);
-
-            if ($mod["name"] == "newsletter-for-mods-made-by-quezler") {
-                $mod["updated_at"] = $mod["latest_release"]["released_at"];
-            }
-            unset($mod["latest_release"]["released_at"]);
-//            unset($mod["latest_release"]["info_json"]["dependencies"]);
+            $mod["latest_release"] = end($mod["releases"]);
             unset($mod["releases"]); // bloated
             unset($mod["score"]); // outdated
             unset($mod["downloads_count"]); // outdated
