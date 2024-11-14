@@ -41,6 +41,7 @@ class CiCommand extends Command
 
         // try to update zip
         foreach ($mods as $mod) {
+            continue; // block updating pre 2.0 mods
             $io->info($mod->getRelativePathname());
             $mod = new Mod($mod->getRelativePathname());
             $mod->build();
