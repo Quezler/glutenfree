@@ -6,11 +6,14 @@ local mod_prefix = "newsletter-for-mods-made-by-quezler-"
 
 -- [gps=0,0,https://mods.factorio.com/mod/newsletter-for-mods-made-by-quezler] [gps=0,0,nauvis] [gps=0,0,nauviz]
 script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
-  -- game.print("gps tag clicked!")
-  -- if starts_with(event.surface, "https://mods.factorio.com/mod/") == false then return end
-  local mod_url = "https://mods.factorio.com/mod/newsletter-for-mods-made-by-quezler"
-
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+
+  if true then
+    player.set_goal_description(string.format("[img=%s] Quezler released a new mod!", mod_prefix .. "crater"))
+    return
+  end
+
+  local mod_url = "https://mods.factorio.com/mod/newsletter-for-mods-made-by-quezler"
 
   local textfield = player.gui.center[mod_prefix .. "textfield"]
   if textfield == nil then

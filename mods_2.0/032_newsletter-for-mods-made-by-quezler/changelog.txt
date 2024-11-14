@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Strip out space exploration compatibility
     - Replace ' with "
+    - Play around with the objectives window
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 02. 01
