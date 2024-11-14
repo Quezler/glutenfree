@@ -41,10 +41,11 @@ local function get_human_calendar_date()
   local version = script.active_mods["newsletter-for-mods-made-by-quezler"]
   if string.len(version) ~= 7 then version = "12024.11114.11645" end
 
+  local year = string.sub(version, 2, 5)
   local month = string.sub(version, 9, 10)
   local day = string.sub(version, 10, 11)
 
-  return month, day
+  return year, month, day
 end
 
 commands.add_command("mods", nil, function(command)
@@ -57,7 +58,7 @@ commands.add_command("mods", nil, function(command)
     direction = "vertical",
   }
 
-  local month, day, suffix = get_human_calendar_date()
+  local year, month, day = get_human_calendar_date()
 
   local frame = main_frame.add{
     type = "frame",
