@@ -10,6 +10,12 @@ script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
 
   if true then
     player.set_goal_description(string.format("[img=%s] Quezler released a new mod!", mod_prefix .. "crater"))
+    player.gui.goal.add{
+      type = "label",
+      name = mod_prefix .. "goal-label",
+      caption = "click here to view his list of mods.",
+      raise_hover_events = true,
+    }
     return
   end
 
@@ -50,5 +56,13 @@ script.on_event(mod_prefix .. "leftclick", close_textfield)
 script.on_event(defines.events.on_gui_text_changed, function(event)
   if event.element.name == mod_prefix .. "textfield" then
     close_textfield(event)
+  end
+end)
+
+script.on_event(defines.events.on_gui_hover, function(event)
+  if event.element.name == mod_prefix .. "goal-label" then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    player.set_goal_description("")
+    event.element.destroy()
   end
 end)
