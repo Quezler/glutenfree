@@ -19,6 +19,7 @@ Date: ????
     - Change away from the button
     - Put more spacing between the table rows
     - Code cleanup
+    - Ignore interaction within the row
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01

@@ -122,11 +122,13 @@ commands.add_command("mods", nil, function(command)
       type = "label",
       caption = mod.title,
       style = "caption_label",
+      ignored_by_interaction = true,
     }
 
     row.add{
       type = "label",
       caption = "[font=default-small]" .. mod.summary .. "[/font]",
+      ignored_by_interaction = true,
     }
   end
 
