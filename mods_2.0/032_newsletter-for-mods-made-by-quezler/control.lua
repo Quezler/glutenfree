@@ -12,11 +12,6 @@ script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
 
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
-  -- space exploration blurts this out if the surface does not exist or isn't a zone, so we just hijack that translation string
-  if script.active_mods['space-exploration'] == nil then
-    player.print({"space-exploration.gps_invalid"})
-  end
-
   local textfield = player.gui.center[mod_prefix .. 'textfield']
   if textfield == nil then
     textfield = player.gui.center.add{
