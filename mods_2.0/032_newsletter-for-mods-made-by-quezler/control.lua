@@ -79,6 +79,7 @@ end
 commands.add_command("mods", nil, function(command)
   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
 
+  -- this invisible frame prevents you from dragging it around, but i need it to make the textfield look attached to the bottom :(
   local main_frame = player.gui.screen.add{
     type = "frame",
     name = mod_prefix .. "main-frame",
