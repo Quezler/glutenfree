@@ -11,15 +11,6 @@ local function close_textfield(event)
   textfield_frame.destroy()
 end
 
-script.on_event(mod_prefix .. "leftclick", close_textfield)
-
--- so that walking with WASD makes you close the textfield as well
-script.on_event(defines.events.on_gui_text_changed, function(event)
-  if event.element.name == mod_prefix .. "textfield" then
-    close_textfield(event)
-  end
-end)
-
 script.on_event(defines.events.on_gui_hover, function(event)
   if event.element.name == mod_prefix .. "goal-label" then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
@@ -133,6 +124,7 @@ commands.add_command("mods", nil, function(command)
   end
 
   main_frame.force_auto_center()
+  player.opened = main_frame
 end)
 
 script.on_event(defines.events.on_gui_click, function(event)
@@ -148,5 +140,11 @@ script.on_event(defines.events.on_gui_click, function(event)
 
     textfield.focus()
     textfield.select_all()
+  end
+end)
+
+script.on_event(defines.events.on_gui_closed, function(event)
+  if event.element and event.element.name == mod_prefix .. "main-frame" then
+    event.element.destroy()
   end
 end)

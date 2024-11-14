@@ -20,6 +20,7 @@ Date: ????
     - Put more spacing between the table rows
     - Code cleanup
     - Ignore interaction within the row
+    - Close the gui properly (https://discord.com/channels/139677590393716737/1217401074877599745/1306633334088011857)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 01
