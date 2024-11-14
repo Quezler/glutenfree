@@ -19,5 +19,3 @@ data:extend{
     linked_game_control = "open-gui",
   },
 }
-
-require("database")
