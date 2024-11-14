@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Misc\ExpansionMods;
 use App\Misc\ModPortal;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Command\Command;
@@ -21,9 +22,7 @@ class NewsletterCommand extends Command
     {
         $results = ModPortal::get_my_mods_full()['results'];
         $this->strip_undesired_information_from_mods($results);
-        foreach ($results as $mod) {
-//            dump($mod);
-        }
+        dump($results);
 
         $database_prefix = __GLUTENFREE__ . '/mods_2.0/032_newsletter-for-mods-made-by-quezler/scripts/database';
         $json1 = json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -34,10 +33,27 @@ class NewsletterCommand extends Command
         $json2 = str_replace("'", "\'", $json2);
         file_put_contents("$database_prefix.lua", "return helpers.json_to_table('". $json2 ."')");
 
+//        $changelog = json_decode(file_get_contents('https://mods.factorio.com/api/mods/newsletter-for-mods-made-by-quezler/full'), true)['changelog'];
+        $mod = ExpansionMods::findOrFail("newsletter-for-mods-made-by-quezler");
+
+        $next_version = date('1Y.1md.1Hi');
+        $mod->setInfoJsonVersion($next_version);
+
+        $checksum = md5_file("{$mod->get_pathname()}/control.lua") . '.' . md5_file("$database_prefix.lua");
+
+        $changelog_lines = array_merge([
+            '---------------------------------------------------------------------------------------------------',
+            "Version: {$next_version}",
+            'Date: ' . date('Y. m. d'),
+            '  Info:',
+            '    - Checksum: ' . $checksum,
+        ], explode(PHP_EOL, file_get_contents($mod->get_changelog_txt_pathname())));
+        file_put_contents($mod->get_changelog_txt_pathname(), implode(PHP_EOL, $changelog_lines));
+
         return Command::SUCCESS;
     }
 
-    private function strip_undesired_information_from_mods(&$results)
+    private function strip_undesired_information_from_mods(&$results): void
     {
         foreach ($results as &$mod) {
             unset($mod["changelog"]); // big

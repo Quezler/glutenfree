@@ -17,14 +17,24 @@ class ExpansionMod
         $this->name = $name;
     }
 
-    public function get_pathname()
+    public function get_pathname(): string
     {
         return __GLUTENFREE__ . '/mods_2.0/' . $this->directory;
     }
 
+    public function get_info_json_pathname(): string
+    {
+        return "{$this->get_pathname()}/info.json";
+    }
+
+    public function get_changelog_txt_pathname(): string
+    {
+        return "{$this->get_pathname()}/changelog.txt";
+    }
+
     public function info(): array
     {
-        return json_decode(file_get_contents("{$this->get_pathname()}/info.json"), true);
+        return json_decode(file_get_contents($this->get_info_json_pathname()), true);
     }
 
     // creates a versioned folder and a zip
