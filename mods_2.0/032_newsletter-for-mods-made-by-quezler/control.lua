@@ -23,6 +23,30 @@ local function sort_newest_first(mod_a, mod_b)
   return mod_a.created_at > mod_b.created_at
 end
 
+function get_ordinal_suffix(number)
+  local suffix = "th"
+
+  if     number % 10 == 1 then
+      suffix = "st"
+  elseif number % 10 == 2 then
+      suffix = "nd"
+  elseif number % 10 == 3 then
+      suffix = "rd"
+  end
+
+  return suffix
+end
+
+local function get_human_calendar_date()
+  local version = script.active_mods["newsletter-for-mods-made-by-quezler"]
+  if string.len(version) ~= 7 then version = "12024.11114.11645" end
+
+  local month = string.sub(version, 9, 10)
+  local day = string.sub(version, 10, 11)
+
+  return month, day
+end
+
 commands.add_command("mods", nil, function(command)
   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
 
@@ -33,9 +57,19 @@ commands.add_command("mods", nil, function(command)
     direction = "vertical",
   }
 
+  local month, day, suffix = get_human_calendar_date()
+
   local frame = main_frame.add{
     type = "frame",
-    caption = {"", rich_text_crater, " ", "Quezler's mods"},
+    caption = {"",
+      rich_text_crater,
+      " ",
+      "Quezler's mods [font=default-tiny-bold][color=white]as of",
+      " ",
+      {"newsletter-for-mods-made-by-quezler.month-" .. month},
+      " ",
+      day .. get_ordinal_suffix(tonumber(day)) .. "[/color][/font]"
+    },
   }
   frame.drag_target = main_frame
   -- frame.style.width = 500
