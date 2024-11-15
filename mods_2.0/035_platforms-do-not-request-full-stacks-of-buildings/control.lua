@@ -31,7 +31,8 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local struct = storage.structs[entity.unit_number]
   if struct == nil then return end
 
-  local contents = entity.get_inventory(defines.inventory.cargo_unit).get_contents()
+  local inventory = entity.get_inventory(defines.inventory.cargo_unit) --[[@as LuaInventory]]
+  local contents = inventory.get_contents()
   assert(#contents == 1)
   local item = contents[1]
 
@@ -42,5 +43,17 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local filter = section_get_filter_for_item(section, item)
   if filter == nil then return end -- when this pod transitioned surfaces there wasn't even a construction request with 0
 
+  local drop_down = item.count - filter.min
+  if 0 >= drop_down then return end -- the platform actually needed this entire stack (and possibly more)
+
   game.print(string.format("'%s' delivered %s × %d but '%s' only requested %d", platform.space_location.name, item.name, item.count, platform.name, filter.min))
+
+  if struct.silo.valid then
+    local silo_trash = struct.silo.get_inventory(defines.inventory.rocket_silo_trash)
+    local inserted = silo_trash.insert({name = item.name, quality = item.quality, count = drop_down})
+    if inserted > 0 then
+      local removed = inventory.remove({name = item.name, quality = item.quality, count = inserted})
+      assert(removed == inserted)
+    end
+  end
 end)
