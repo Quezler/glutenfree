@@ -1,5 +1,7 @@
 local Handler = {}
 
+local setting_name_uninstalled = "planets-have-flow-statistics-for-their-cargo-pods--uninstalled"
+
 local get_flow_surface_name = {}
 for _, space_location in pairs(prototypes.space_location) do
   if space_location.type == "planet" then
@@ -20,19 +22,21 @@ local function get_flow_surface(planet_name)
   return flow_surface
 end
 
--- script.on_init(function()
+script.on_init(function()
+  storage.uninstalled = settings.global[setting_name_uninstalled].value
+end)
 
--- end)
-
--- script.on_configuration_changed(function()
-
--- end)
+script.on_configuration_changed(function()
+  storage.uninstalled = settings.global[setting_name_uninstalled].value
+end)
 
 script.on_event(defines.events.on_script_trigger_effect, function(event)
   if event.effect_id ~= "cargo-pod-created" then return end
   local entity = event.target_entity --[[@as LuaEntity]]
   assert(entity.name == "cargo-pod")
   assert(entity.type == "cargo-pod")
+
+  if storage.uninstalled then return end
 
   -- game.print(string.format("new cargo pod: %d @ %s", entity.unit_number, entity.surface.name))
 
@@ -50,5 +54,20 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 
   for _, item in ipairs(inventory.get_contents()) do
     statistics.on_flow({name = item.name, quality = item.quality}, item.count * multiplier)
+  end
+end)
+
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+  if event.setting_type == "runtime-global" then
+    if event.setting == setting_name_uninstalled then
+      storage.uninstalled = settings.global[setting_name_uninstalled].value
+      if storage.uninstalled then
+        for surface_name, flow_surface_name in pairs(get_flow_surface_name) do
+          if game.surfaces[flow_surface_name] then
+            game.delete_surface(flow_surface_name)
+          end
+        end
+      end
+    end
   end
 end)

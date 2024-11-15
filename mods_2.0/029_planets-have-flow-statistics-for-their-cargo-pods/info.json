@@ -3,7 +3,7 @@
     "title": "Planets have flow statistics for their cargo pods",
     "description": "You get a new production statistics tab for the cargo that the planet has sent to orbit, as well as received from a platform.",
 
-    "version": "1.0.3",
+    "version": "1.1.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
