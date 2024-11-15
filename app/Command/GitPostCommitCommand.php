@@ -11,6 +11,8 @@ class GitPostCommitCommand extends Command
 {
     protected static $defaultName = 'git:post-commit';
 
+    public static int $amends = 0;
+
     protected function configure(): void
     {
         //
@@ -33,7 +35,8 @@ class GitPostCommitCommand extends Command
             }
         }
 
-        passthru('git commit --amend --no-edit');
+        if (self::$amends > 0)
+            passthru('git commit --amend --no-edit');
 
         return Command::SUCCESS;
     }

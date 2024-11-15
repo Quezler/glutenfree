@@ -2,6 +2,7 @@
 
 namespace App\Misc;
 
+use App\Command\GitPostCommitCommand;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
@@ -194,6 +195,7 @@ class ExpansionMod
                 passthru("git add {$changelog_pathname}");
 //                passthru('git commit --amend --no-edit');
 
+                GitPostCommitCommand::$amends++;
                 return;
             }
 
