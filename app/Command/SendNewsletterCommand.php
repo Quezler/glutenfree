@@ -98,6 +98,11 @@ class SendNewsletterCommand extends Command
             if ($mod["name"] == "newsletter-for-mods-made-by-quezler") {
                 $mod["updated_at"] = $mod["created_at"];
             }
+
+            // to avoid a new newsletter for every update,
+            // maybe for when we check dependencies someday,
+            // but that'd just be in latest release.
+            unset($mod["updated_at"]);
         }
     }
 }
