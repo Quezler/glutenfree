@@ -4,7 +4,7 @@ function table_first(table)
   end
 end
 
-local ConcreteRoboport = require('scripts.concrete-roboport')
+local ConcreteRoboport = require("scripts.concrete-roboport")
 
 --
 
@@ -26,7 +26,7 @@ local events = {
   [defines.events.on_robot_built_tile]     = ConcreteRoboport.on_built_tile,
   -- [defines.events.script_raised_set_tiles] = ConcreteRoboport.on_built_tile,
 
-  [defines.events.on_entity_destroyed] = ConcreteRoboport.on_entity_destroyed,
+  [defines.events.on_object_destroyed] = ConcreteRoboport.on_object_destroyed,
 }
 
 for event, handler in pairs(events) do

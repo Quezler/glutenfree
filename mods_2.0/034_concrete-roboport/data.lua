@@ -1,28 +1,28 @@
 local concrete_roboport_tile = {
-  type = 'roboport',
-  name = 'concrete-roboport-tile',
+  type = "roboport",
+  name = "concrete-roboport-tile",
 
   base = util.empty_sprite(),
   base_animation = util.empty_sprite(),
   base_patch = util.empty_sprite(),
 
-  charge_approach_distance = data.raw['roboport']['roboport'].charge_approach_distance,
-  charging_energy = data.raw['roboport']['roboport'].charging_energy,
+  charge_approach_distance = data.raw["roboport"]["roboport"].charge_approach_distance,
+  charging_energy = data.raw["roboport"]["roboport"].charging_energy,
 
   construction_radius = 0,
 
   door_animation_up = util.empty_sprite(),
   door_animation_down = util.empty_sprite(),
 
-  energy_source = {type = 'void'},
-  energy_usage = data.raw['roboport']['roboport'].energy_usage,
+  energy_source = {type = "void"},
+  energy_usage = data.raw["roboport"]["roboport"].energy_usage,
 
   logistics_radius = 0.5,
   logistics_connection_distance = 0.5,
 
   material_slots_count = 0,
 
-  recharge_minimum = data.raw['roboport']['roboport'].recharge_minimum,
+  recharge_minimum = data.raw["roboport"]["roboport"].recharge_minimum,
   recharging_animation = util.empty_sprite(),
 
   request_to_open_door_timeout = 0,
@@ -30,10 +30,11 @@ local concrete_roboport_tile = {
 
   spawn_and_station_height = 0,
 
-  collision_mask = {},
-  flags = {'not-on-map'},
+  collision_mask = {layers = {}},
+  flags = {"not-on-map"},
 
-  collision_box = {{-0.5, -0.5}, {0.5, 0.5}}
+  collision_box = {{-0.5, -0.5}, {0.5, 0.5}},
+  hidden = true,
 }
 
 -- debug mode
@@ -49,10 +50,10 @@ end
 
 data:extend({concrete_roboport_tile})
 
--- data.raw['roboport']['roboport'].logistics_connection_distance = data.raw['roboport']['roboport'].logistics_radius
--- data.raw['roboport']['roboport'].logistics_radius = data.raw['roboport']['roboport'].logistics_radius / 2
--- data.raw['roboport']['roboport'].connection_mode = "logistics_connection_distance"
--- data.raw['roboport']['roboport'].connection_mode = "logistics_radius"
+-- data.raw["roboport"]["roboport"].logistics_connection_distance = data.raw["roboport"]["roboport"].logistics_radius
+-- data.raw["roboport"]["roboport"].logistics_radius = data.raw["roboport"]["roboport"].logistics_radius / 2
+-- data.raw["roboport"]["roboport"].connection_mode = "logistics_connection_distance"
+-- data.raw["roboport"]["roboport"].connection_mode = "logistics_radius"
 
 -- Currently roboports connect when their `logistics_connection_distance` squares touch.
 
@@ -68,6 +69,6 @@ require("prototypes.item")
 require("prototypes.recipe")
 require("prototypes.technology")
 
-data.raw['roboport']['concrete-roboport'].logistics_radius = 2
-data.raw['roboport']['concrete-roboport'].logistics_connection_distance = 2
-data.raw['roboport']['concrete-roboport'].construction_radius = 0
+data.raw["roboport"]["concrete-roboport"].logistics_radius = 2
+data.raw["roboport"]["concrete-roboport"].logistics_connection_distance = 2
+data.raw["roboport"]["concrete-roboport"].construction_radius = 0

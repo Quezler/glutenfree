@@ -1,0 +1,36 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2024. 11. 15
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2023. 06. 08
+  Info:
+    - Prevent a blinking network
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2023. 06. 07
+  Info:
+    - Track adding and removing roboports seperately
+    - Destroy tiles when the last roboport gets removed
+    - Set unknown as debug sprite
+    - Goto continue
+    - Move network destroyer into its own function
+    - Remove roboport from previous network when adding
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2023. 06. 06
+  Info:
+    - House each network inside a surface table
+    - Fix roboport claiming too much area around itself
+    - Stash abandoned new tile detection code
+    - Make network creation independent of roboport(s)
+    - Store all the roboports on those tiles
+    - Track the removal of roboports
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2023. 03. 23
+  Info:
+    - Pull concrete roboport project into source control
+    - Support diagonally connected tiles
