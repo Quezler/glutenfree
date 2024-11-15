@@ -49,7 +49,7 @@ end
 
 local function get_human_calendar_date()
   local version = script.active_mods["newsletter-for-mods-made-by-quezler"]
-  if string.len(version) ~= 7 then version = "12024.11114.11645" end
+  if string.len(version) ~= 17 then version = "12024.11114.11645" end
 
   local year = string.sub(version, 2, 5)
   local month = string.sub(version, 9, 10)
