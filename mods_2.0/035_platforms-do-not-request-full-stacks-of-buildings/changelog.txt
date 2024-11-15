@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2024. 11. 15
   Info:
     - Cleanup code
     - Return the oversupply back to the silo it came from

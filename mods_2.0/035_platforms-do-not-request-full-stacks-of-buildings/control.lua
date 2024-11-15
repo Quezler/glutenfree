@@ -61,8 +61,9 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
       local can_fit_in_rocket = 1 * tons / prototypes.item[item.name].weight
       local parts_to_refund = rocket_parts_required / can_fit_in_rocket * removed
 
-      log(string.format("%d items were put back in the silo, as well as %d / %d * %d = %d rocket parts", removed, rocket_parts_required, can_fit_in_rocket, removed, parts_to_refund))
+      log(string.format("%d items were put back in the silo, as well as %d / %d * %d = %f rocket parts", removed, rocket_parts_required, can_fit_in_rocket, removed, parts_to_refund))
 
+      parts_to_refund = math.floor(parts_to_refund)
       local old_rocket_parts = struct.silo.rocket_parts
       struct.silo.rocket_parts = old_rocket_parts + parts_to_refund
       assert(struct.silo.rocket_parts == old_rocket_parts + parts_to_refund)
