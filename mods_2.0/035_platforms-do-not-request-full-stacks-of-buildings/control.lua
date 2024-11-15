@@ -18,8 +18,7 @@ end)
 
 local function section_get_filter_for_item(section, item)
   for _, filter in ipairs(section.filters) do
-    if filter.value == nil then error(serpent.block(section.filters)) end
-    if filter.value.name == item.name and filter.value.quality == item.quality then
+    if filter.value and filter.value.name == item.name and filter.value.quality == item.quality then
       return filter
     end
   end
