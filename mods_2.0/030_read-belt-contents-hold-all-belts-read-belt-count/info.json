@@ -3,7 +3,7 @@
     "title": "Read belt contents, hold (all belts), read belt length",
     "description": "Sometimes you wish to keep the belt a certain percentage full of items, with this mod you can read the belt length.",
 
-    "version": "1.0.2",
+    "version": "1.0.3",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,7 +16,7 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
-        "~ newsletter-for-mods-made-by-quezler",
+        "? newsletter-for-mods-made-by-quezler",
 
         "base",
         "? space-age"

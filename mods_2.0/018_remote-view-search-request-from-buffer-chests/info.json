@@ -3,7 +3,7 @@
     "title": "Remote view search 'request from buffer chests'",
     "description": "Shows you which requester chests are requesting from buffers, just search for \"request\".",
 
-    "version": "1.0.2",
+    "version": "1.0.3",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,6 +16,6 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
-        "~ newsletter-for-mods-made-by-quezler"
+        "? newsletter-for-mods-made-by-quezler"
     ]
 }

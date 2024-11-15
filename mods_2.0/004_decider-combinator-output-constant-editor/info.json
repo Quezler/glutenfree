@@ -3,7 +3,7 @@
     "title": "Decider combinator output constant editor",
     "description": "Allows you to change the 1 to any number by pressing the I key over the icon.",
 
-    "version": "1.0.7",
+    "version": "1.0.8",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,7 +16,7 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
-        "~ newsletter-for-mods-made-by-quezler",
+        "? newsletter-for-mods-made-by-quezler",
 
         "base"
     ]

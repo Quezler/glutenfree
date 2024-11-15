@@ -47,7 +47,7 @@ class OnceNewsletterCommand extends Command
 //            // stage 3
 //            $changelog = file_get_contents($mod->get_changelog_txt_pathname());
 //            $lines = explode(PHP_EOL, $changelog);
-//            $lines[2] = 'Date: 2024. 11. 14';
+//            $lines[2] = 'Date: 2024. 11. 15';
 //            file_put_contents($mod->get_changelog_txt_pathname(), implode(PHP_EOL, $lines));
 
 //            // stage 4

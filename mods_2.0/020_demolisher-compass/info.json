@@ -3,7 +3,7 @@
     "title": "Demolisher compass",
     "description": "When you enter the territory of a demolisher, you'll see which direction the owner is in.",
 
-    "version": "1.0.4",
+    "version": "1.0.5",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -16,7 +16,7 @@
     "expansion_shaders_required": false,
 
     "dependencies": [
-        "~ newsletter-for-mods-made-by-quezler",
+        "? newsletter-for-mods-made-by-quezler",
 
         "base",
         "space-age",
