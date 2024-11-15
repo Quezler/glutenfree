@@ -1,3 +1,5 @@
+require("util")
+
 script.on_init(function()
   storage.structs = {}
 end)
@@ -54,6 +56,23 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
     if inserted > 0 then
       local removed = inventory.remove({name = item.name, quality = item.quality, count = inserted})
       assert(removed == inserted)
+
+      -- game.print('weight: ' .. prototypes.item[item.name].weight)
+      -- game.print('removed: ' .. removed)
+
+      -- local rocket_parts_required = prototypes.entity[struct.silo.name].rocket_parts_required
+      -- game.print('rocket_parts_required: ' .. rocket_parts_required)
+
+      local rocket_fullness = 1 * tons / prototypes.item[item.name].weight * removed
+      local rocket_parts_required = prototypes.entity[struct.silo.name].rocket_parts_required
+      -- game.print(string.format("%f", rocket_fullness))
+      -- game.print(string.format("%f", rocket_fullness / 100 * rocket_parts_required))
+      local parts_to_refund = math.floor(rocket_fullness / 100 * rocket_parts_required)
+      game.print('parts_to_refund: ' .. parts_to_refund)
+
+      local old_rocket_parts = struct.silo.rocket_parts
+      struct.silo.rocket_parts = old_rocket_parts + parts_to_refund
+      assert(struct.silo.rocket_parts == old_rocket_parts + parts_to_refund)
     end
   end
 end)
