@@ -59,7 +59,7 @@ class MakeModCommand extends Command
     "expansion_shaders_required": false,
 
     "dependencies": [
-        "~ newsletter-for-mods-made-by-quezler",
+        "? newsletter-for-mods-made-by-quezler",
 
         "? base",
         "? space-age"

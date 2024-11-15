@@ -192,7 +192,7 @@ class ExpansionMod
                 file_put_contents($changelog_pathname, implode(PHP_EOL, $lines));
 
                 passthru("git add {$changelog_pathname}");
-                passthru('git commit --amend --no-edit');
+//                passthru('git commit --amend --no-edit');
 
                 return;
             }

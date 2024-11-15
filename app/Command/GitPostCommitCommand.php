@@ -33,6 +33,8 @@ class GitPostCommitCommand extends Command
             }
         }
 
+        passthru('git commit --amend --no-edit');
+
         return Command::SUCCESS;
     }
 
