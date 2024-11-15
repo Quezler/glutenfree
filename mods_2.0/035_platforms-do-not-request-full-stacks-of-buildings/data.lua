@@ -1,5 +1,3 @@
-if mods["planets-have-flow-statistics-for-their-cargo-pods"] then return end
-
 local cargo_pod = data.raw["cargo-pod"]["cargo-pod"]
 
 local created_effect = {

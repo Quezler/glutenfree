@@ -1,3 +1,5 @@
+if mods["platforms-do-not-request-full-stacks-of-buildings"] then return end
+
 local cargo_pod = data.raw["cargo-pod"]["cargo-pod"]
 
 local created_effect = {
