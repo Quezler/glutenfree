@@ -63,16 +63,25 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
       -- local rocket_parts_required = prototypes.entity[struct.silo.name].rocket_parts_required
       -- game.print('rocket_parts_required: ' .. rocket_parts_required)
 
-      local rocket_fullness = 1 * tons / prototypes.item[item.name].weight * removed
+      -- local rocket_fullness = 1 * tons / prototypes.item[item.name].weight * removed
       local rocket_parts_required = prototypes.entity[struct.silo.name].rocket_parts_required
       -- game.print(string.format("%f", rocket_fullness))
       -- game.print(string.format("%f", rocket_fullness / 100 * rocket_parts_required))
-      local parts_to_refund = math.floor(rocket_fullness / 100 * rocket_parts_required)
+      -- local parts_to_refund = math.floor(rocket_fullness / 100 * rocket_parts_required)
+      -- game.print('parts_to_refund: ' .. parts_to_refund)
+
+      local can_fit_in_rocket = 1 * tons / prototypes.item[item.name].weight
+      game.print('can fit in rocket: ' .. can_fit_in_rocket)
+
+      local parts_to_refund = rocket_parts_required / can_fit_in_rocket * removed
       game.print('parts_to_refund: ' .. parts_to_refund)
 
       local old_rocket_parts = struct.silo.rocket_parts
       struct.silo.rocket_parts = old_rocket_parts + parts_to_refund
       assert(struct.silo.rocket_parts == old_rocket_parts + parts_to_refund)
+    
+      -- game.print('can fit in rocket: ' .. 1 * tons / prototypes.item[item.name].weight)
+      -- game.print('rocket_fullness: ' .. rocket_fullness)
     end
   end
 end)
