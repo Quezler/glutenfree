@@ -8,6 +8,7 @@ proxy.selection_box = character.selection_box
 proxy.collision_box = character.collision_box
 proxy.selection_priority = (character.selection_priority or 50) - 1
 proxy.minable.mining_time = 1000000
+proxy.hidden = true
 
 data:extend{proxy}
 
@@ -27,10 +28,10 @@ data:extend{{
 
   flags = {"placeable-off-grid", "not-on-map"},
   collision_mask = {layers = {}},
+  hidden = true
 }}
 
 local radar = table.deepcopy(data.raw["item"]["radar"])
-radar.name = mod_prefix .. "radar-barrel"
+radar.name = mod_prefix .. "radar-barrel" -- radar.auto_recycle = false
 radar.hidden = true
--- radar.auto_recycle = false
 data:extend{radar}
