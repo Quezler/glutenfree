@@ -6,6 +6,7 @@ Date: ????
     - Return the oversupply back to the silo it came from
     - Attempt to work out the refund math
     - Work out the refund math
+    - Cleanup the old math and the log's
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 15

@@ -48,7 +48,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local drop_down = item.count - filter.min
   if 0 >= drop_down then return end -- the platform actually needed this entire stack (and possibly more)
 
-  game.print(string.format("'%s' delivered %s × %d but '%s' only requested %d", platform.space_location.name, item.name, item.count, platform.name, filter.min))
+  log(string.format("'%s' delivered %s × %d but '%s' only requested %d", platform.space_location.name, item.name, item.count, platform.name, filter.min))
 
   if struct.silo.valid then
     local silo_trash = struct.silo.get_inventory(defines.inventory.rocket_silo_trash)
@@ -57,31 +57,26 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
       local removed = inventory.remove({name = item.name, quality = item.quality, count = inserted})
       assert(removed == inserted)
 
-      -- game.print('weight: ' .. prototypes.item[item.name].weight)
-      -- game.print('removed: ' .. removed)
-
-      -- local rocket_parts_required = prototypes.entity[struct.silo.name].rocket_parts_required
-      -- game.print('rocket_parts_required: ' .. rocket_parts_required)
-
-      -- local rocket_fullness = 1 * tons / prototypes.item[item.name].weight * removed
       local rocket_parts_required = prototypes.entity[struct.silo.name].rocket_parts_required
-      -- game.print(string.format("%f", rocket_fullness))
-      -- game.print(string.format("%f", rocket_fullness / 100 * rocket_parts_required))
-      -- local parts_to_refund = math.floor(rocket_fullness / 100 * rocket_parts_required)
-      -- game.print('parts_to_refund: ' .. parts_to_refund)
-
       local can_fit_in_rocket = 1 * tons / prototypes.item[item.name].weight
-      game.print('can fit in rocket: ' .. can_fit_in_rocket)
-
       local parts_to_refund = rocket_parts_required / can_fit_in_rocket * removed
-      game.print('parts_to_refund: ' .. parts_to_refund)
+
+      log(string.format("%d items were put back in the silo, as well as %d / %d * %d = %d rocket parts", removed, rocket_parts_required, can_fit_in_rocket, removed, parts_to_refund))
 
       local old_rocket_parts = struct.silo.rocket_parts
       struct.silo.rocket_parts = old_rocket_parts + parts_to_refund
       assert(struct.silo.rocket_parts == old_rocket_parts + parts_to_refund)
-    
-      -- game.print('can fit in rocket: ' .. 1 * tons / prototypes.item[item.name].weight)
-      -- game.print('rocket_fullness: ' .. rocket_fullness)
+    end
+  else
+    log(string.format("0 items were put back in the silo, are the trash slots full?"))
+  end
+end)
+
+-- script.on_event(defines.events.on_tick, function(event) -- confirmed with on_tick that it doesn't delete the struct before the cargo pod transitions surface
+script.on_nth_tick(60 * 60 * 10, function(event)
+  for struct_id, struct in pairs(storage.structs) do
+    if struct.cargo_pod.valid == false or struct.silo == false then
+      storage.structs[struct_id] = nil
     end
   end
 end)
