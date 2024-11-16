@@ -97,7 +97,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
       local old_rocket_parts = struct.silo.rocket_parts
       local new_rocket_parts = old_rocket_parts + parts_to_refund
       struct.silo.rocket_parts = new_rocket_parts
-      assert(struct.silo.rocket_parts == new_rocket_parts or struct.silo.rocket_parts == new_rocket_parts + rocket_parts_required, string.format("changed %d to %d but it stayed at %d.", old_rocket_parts, new_rocket_parts, struct.silo.rocket_parts))
+      assert(struct.silo.rocket_parts == new_rocket_parts or struct.silo.rocket_parts + rocket_parts_required == new_rocket_parts, string.format("changed %d to %d but it read as %d.", old_rocket_parts, new_rocket_parts, struct.silo.rocket_parts))
     end
   else
     log(string.format("0 items were put back in the silo, are the trash slots full?"))
