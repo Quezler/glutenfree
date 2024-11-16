@@ -2,6 +2,8 @@ local flib_bounding_box = require("__flib__.bounding-box")
 local LogisticNetwork = require("scripts.logistic-network")
 local blacklisted_names = require("scripts.blacklist")
 
+local UtilityConstants = require("utility-constants")
+
 local print_prefix = '[platform-construction-only-no-construction-robots] '
 
 local Handler = {}
@@ -168,6 +170,16 @@ local function get_manhattan_distance(position, center)
   return math.abs(delta_x) + math.abs(delta_y)
 end
 
+local function get_build_sound_path(selection_box)
+  local area = (selection_box.right_bottom.x - selection_box.left_top.x) * (selection_box.right_bottom.y - selection_box.left_top.y)
+
+  if area < UtilityConstants.small_area_size  then return "utility/build_animated_small"  end
+  if area < UtilityConstants.medium_area_size then return "utility/build_animated_medium" end
+  if area < UtilityConstants.large_area_size  then return "utility/build_animated_large"  end
+
+  return "utility/build_animated_huge"
+end
+
 local TICKS_PER_FRAME = 2
 local FRAMES_BEFORE_BUILT = 16
 local FRAMES_BETWEEN_BUILDING = 8 * 2
@@ -182,6 +194,11 @@ function Handler.request_platform_animation_for(entity)
 
   local tick = game.tick
   local surface = entity.surface
+
+  surface.play_sound{
+    path = get_build_sound_path(entity.selection_box),
+    position = entity.position,
+  }
 
   local tilebox = get_tilebox(entity.bounding_box)
   local largest_manhattan_distance = 0
