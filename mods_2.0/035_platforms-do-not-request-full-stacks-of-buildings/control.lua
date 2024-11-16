@@ -28,6 +28,10 @@ local function section_get_filter_for_item(section, item)
   end
 end
 
+local function section_is_requests_for_construction(section)
+  return section.type == defines.logistic_section_type.request_missing_materials_controlled
+end
+
 -- you can have a construction request for 0 foundation + a normal one for 50+,
 -- if we only look at "oh construction doesn't need this anymore" the rocket will remain in a supply loop,
 -- so we'll have to check if any of the other sections are requesting something we've also recently built.
@@ -38,7 +42,8 @@ local function get_minimum_request_count_for_this_item(planet_name, sections, it
     if section.active then
       for _, filter in ipairs(section.filters) do
         if filter_matches_item(filter, item) then
-          if filter.import_from.name == planet_name then
+          -- note that whilst construction requests have an import_from, the game ignores it for building
+          if filter.import_from.name == planet_name or section_is_requests_for_construction(section) then
             min = min + filter.min * section.multiplier
           end
         end
@@ -65,7 +70,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 
   local platform = entity.surface.platform --[[@as LuaSpacePlatform]]
   local sections = platform.hub.get_logistic_sections().sections
-  if sections[1].type ~= defines.logistic_section_type.request_missing_materials_controlled then return end -- construction checkbox is off
+  if section_is_requests_for_construction(sections[1]) == false then return end -- construction checkbox is off
 
   local filter = section_get_filter_for_item(sections[1], item)
   if filter == nil then return end -- when this pod transitioned surfaces there wasn't even a construction request with 0
