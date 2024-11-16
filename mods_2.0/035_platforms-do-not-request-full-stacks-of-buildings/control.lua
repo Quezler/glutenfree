@@ -16,12 +16,37 @@ script.on_event(defines.events.on_rocket_launch_ordered, function(event)
   }
 end)
 
+local function filter_matches_item(filter, item)
+  return filter.value and filter.value.name == item.name and filter.value.quality == item.quality
+end
+
 local function section_get_filter_for_item(section, item)
   for _, filter in ipairs(section.filters) do
-    if filter.value and filter.value.name == item.name and filter.value.quality == item.quality then
+    if filter_matches_item(filter, item) then
       return filter
     end
   end
+end
+
+-- you can have a construction request for 0 foundation + a normal one for 50+,
+-- if we only look at "oh construction doesn't need this anymore" the rocket will remain in a supply loop,
+-- so we'll have to check if any of the other sections are requesting something we've also recently built.
+local function get_minimum_request_count_for_this_item(planet_name, sections, item)
+  local min = 0
+
+  for _, section in ipairs(sections) do
+    if section.active then
+      for _, filter in ipairs(section.filters) do
+        if filter_matches_item(filter, item) then
+          if filter.import_from.name == planet_name then
+            min = min + filter.min * section.multiplier
+          end
+        end
+      end
+    end
+  end
+
+  return min
 end
 
 script.on_event(defines.events.on_script_trigger_effect, function(event)
@@ -39,13 +64,13 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local item = contents[1]
 
   local platform = entity.surface.platform --[[@as LuaSpacePlatform]]
-  local section = platform.hub.get_logistic_sections().sections[1]
-  if section.type ~= defines.logistic_section_type.request_missing_materials_controlled then return end -- construction checkbox is off
+  local sections = platform.hub.get_logistic_sections().sections
+  if sections[1].type ~= defines.logistic_section_type.request_missing_materials_controlled then return end -- construction checkbox is off
 
-  local filter = section_get_filter_for_item(section, item)
+  local filter = section_get_filter_for_item(sections[1], item)
   if filter == nil then return end -- when this pod transitioned surfaces there wasn't even a construction request with 0
 
-  local drop_down = item.count - filter.min
+  local drop_down = item.count - get_minimum_request_count_for_this_item(platform.space_location.name, sections, item)
   if 0 >= drop_down then return end -- the platform actually needed this entire stack (and possibly more)
 
   log(string.format("'%s' delivered %s × %d but '%s' only requested %d", platform.space_location.name, item.name, item.count, platform.name, filter.min))
