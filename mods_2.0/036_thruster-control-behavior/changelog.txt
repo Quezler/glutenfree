@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
-Date: ????
+Date: 2024. 11. 17
   Info:
     - Fix crash when deathrattling an offering after the thruster got removed
+    - Fix manual control being broken by code added later
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2024. 11. 17

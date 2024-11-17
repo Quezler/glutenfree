@@ -263,7 +263,7 @@ function Handler.on_power_switch_touched(entity)
     set_thruster_state(struct.thruster, entity.power_switch_state)
   else
     inserter_cb.circuit_condition = nil
-    set_thruster_state(struct.thruster, true)
+    set_thruster_state(struct.thruster, struct.power_switch.power_switch_state)
   end
 
   get_or_create_inserter_offering(struct)
@@ -345,10 +345,10 @@ script.on_event(defines.events.on_gui_click, function(event)
 end)
 
 -- debug only "heavy mode"
-script.on_event(defines.events.on_tick, function(event)
--- script.on_nth_tick(600, function(event)
-  for struct_id, struct in pairs(storage.structs) do
-    assert(struct.thruster.valid)
-    assert(struct.power_switch.valid)
-  end
-end)
+-- script.on_event(defines.events.on_tick, function(event)
+-- -- script.on_nth_tick(600, function(event)
+--   for struct_id, struct in pairs(storage.structs) do
+--     assert(struct.thruster.valid)
+--     assert(struct.power_switch.valid)
+--   end
+-- end)
