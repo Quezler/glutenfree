@@ -259,6 +259,8 @@ function Handler.on_power_switch_touched(entity)
   local struct = storage.structs[struct_id]
   assert(struct)
 
+  if struct.thruster.valid == false then return end
+
   local inserter_cb = struct.inserter.get_control_behavior()
   local power_switch_cb = struct.power_switch.get_control_behavior()
 
