@@ -6,6 +6,7 @@ Date: ????
     - Prevent the gui horizontally stretching when a circuit/logistics panel was open
     - Setup the hidden surface as a planet
     - Attempt to set lava tiles to dispose of the picked up item (fails because tiles get reset)
+    - Setup burner inserters on the hidden surface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 17

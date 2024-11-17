@@ -4,12 +4,6 @@ local Handler = {}
 
 local function create_struct()
   storage.index = storage.index + 1
-
-  local mod_surface = game.surfaces["thruster-control-behavior"]
-  mod_surface.set_tiles{
-    tiles = {name = "lava-hot", position = {storage.index, 0}}
-  }
-
   storage.structs[storage.index] = {
     id = storage.index,
 
@@ -19,7 +13,8 @@ local function create_struct()
     thruster = nil,
     power_switch = nil,
 
-    inserter = inserter,
+    inserter = nil,
+    inserter_offering = nil,
   }
   return storage.structs[storage.index]
 end
@@ -61,8 +56,6 @@ function Handler.on_init()
 
   local mod_surface = game.planets["thruster-control-behavior"].create_surface()
   mod_surface.generate_with_lab_tiles = true
-  mod_surface.map_gen_settings.width = 0
-  mod_surface.map_gen_settings.height = 0
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{name = "thruster"}) do
@@ -104,6 +97,23 @@ local function on_created_thruster(entity)
   struct.position = entity.position
   struct_set_thruster(struct, entity)
   struct_set_power_switch(struct, power_switch)
+
+  if struct.inserter == nil then
+    local mod_surface = game.surfaces["thruster-control-behavior"]
+    struct.inserter = mod_surface.create_entity{
+      name = "burner-inserter",
+      force = "neutral",
+      position = {-0.5 + struct.id, -1.5},
+    }
+
+    local inserter_red   = struct.inserter.get_wire_connector(defines.wire_connector_id.circuit_red  , true)
+    local inserter_green = struct.inserter.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+    assert(power_switch.get_wire_connector(defines.wire_connector_id.circuit_red  , true).connect_to(inserter_red  , false))
+    assert(power_switch.get_wire_connector(defines.wire_connector_id.circuit_green, true).connect_to(inserter_green, false))
+
+    local inserter_cb = struct.inserter.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
+    inserter_cb.circuit_enable_disable = true
+  end
 
   Handler.on_power_switch_touched(power_switch)
 end
@@ -166,6 +176,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
           struct.power_switch.destructible = false
         end
       else
+        struct.inserter.destroy()
         struct.power_switch.destroy()
         storage.structs[struct.id] = nil
       end
@@ -193,6 +204,13 @@ function Handler.on_power_switch_touched(entity)
       label = {"entity-status.disabled-by-control-behavior"},
     }
   end
+
+  local inserter_cb = struct.inserter.get_control_behavior()
+  local power_switch_cb = struct.power_switch.get_control_behavior()
+
+  inserter_cb.circuit_condition = power_switch_cb.circuit_condition
+  
+  game.print(serpent.line( struct.power_switch.get_or_create_control_behavior().circuit_condition ))
 end
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
