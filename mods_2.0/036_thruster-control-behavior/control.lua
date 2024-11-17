@@ -12,19 +12,9 @@ local function create_struct()
 
     thruster = nil,
     power_switch = nil,
-
-    -- associated_entities = {},
   }
   return storage.structs[storage.index]
 end
-
--- local function associate_entity_with_struct(entity, struct)
---   assert(entity.unit_number)
---   assert(struct.id)
-
---   storage.unit_number_to_struct_id[entity.unit_number] = struct.id
---   struct.associated_entities[entity.unit_number] = entity
--- end
 
 local function struct_set_thruster(struct, thruster)
   struct.thruster = thruster
@@ -71,6 +61,7 @@ local function on_created_thruster(entity)
       }
       power_switch.destructible = false
     end
+    power_switch.power_switch_state = true
   end
 
   local struct = create_struct()

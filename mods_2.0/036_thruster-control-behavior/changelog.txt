@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Setup the thumbnail
     - Some sanity checks before i continue
+    - New thruster control behaviors default to on
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 17
