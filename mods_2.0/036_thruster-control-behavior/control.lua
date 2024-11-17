@@ -31,6 +31,10 @@ local function struct_set_thruster(struct, thruster)
   storage.deathrattles[script.register_on_object_destroyed(thruster)] = {type = "thruster", struct_id = struct.id}
 end
 
+local function get_control_behavior_position(thruster)
+  return {thruster.position.x - 1.5, thruster.position.y - 1.0}
+end
+
 function Handler.on_init()
   storage.index = 0
   storage.structs = {}
@@ -48,7 +52,7 @@ end
 script.on_init(Handler.on_init)
 
 local function on_created_thruster(entity)
-  local power_switch_position = {entity.position.x - 1.5, entity.position.y - 1.0}
+  local power_switch_position = get_control_behavior_position(entity)
   local power_switch = surface_find_entity_or_ghost(entity.surface, power_switch_position, "thruster-control-behavior")
   if power_switch == nil then
     power_switch = entity.surface.create_entity{
@@ -70,6 +74,9 @@ end
 local function on_created_thruster_control_behavior(entity)
   local thruster = surface_find_entity_or_ghost(entity.surface, entity.position, "thruster")
   if thruster == nil then return entity.destroy() end
+
+  local cb_position = get_control_behavior_position(thruster)
+  if entity.position.x ~= cb_position[1] or entity.position.y ~= cb_position[2] then return entity.destroy() end
 end
 
 
