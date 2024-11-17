@@ -142,8 +142,7 @@ local function on_created_thruster(entity)
 
   local struct_id = storage.unit_number_to_struct_id[power_switch.unit_number]
   local struct = struct_id and assert(storage.structs[struct_id]) or create_struct()
-  -- game.print(game.tick)
-  -- local struct = create_struct()
+
   struct.surface = entity.surface
   struct.position = entity.position
   struct_set_thruster(struct, entity)
@@ -228,19 +227,16 @@ script.on_event(defines.events.on_object_destroyed, function(event)
         end
       else
         struct.inserter.destroy()
+        struct.inserter_offering.destroy()
         struct.power_switch.destroy()
         storage.structs[struct.id] = nil
       end
     end
 
     if deathrattle.type == "offering" then
-      game.print("offering reset at " .. event.tick)
+      -- game.print("offering reset at " .. event.tick)
       local struct = assert(storage.structs[deathrattle.struct_id])
-      -- get_or_create_inserter_offering(struct)
       struct.inserter.held_stack.clear()
-      struct.inserter.active = false
-
-      -- set_thruster_state(struct.thruster, not struct.thruster.active)
       Handler.on_power_switch_touched(struct.power_switch)
     end
 
@@ -267,11 +263,10 @@ function Handler.on_power_switch_touched(entity)
   else
     inserter_cb.circuit_condition = nil
   end
-  struct.inserter.active = true
 
   get_or_create_inserter_offering(struct)
 
-  game.print(serpent.line( struct.power_switch.get_or_create_control_behavior().circuit_condition ))
+  -- game.print(serpent.line( struct.power_switch.get_or_create_control_behavior().circuit_condition ))
 end
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
@@ -348,10 +343,10 @@ script.on_event(defines.events.on_gui_click, function(event)
 end)
 
 -- debug only "heavy mode"
-script.on_event(defines.events.on_tick, function(event)
--- script.on_nth_tick(600, function(event)
-  for struct_id, struct in pairs(storage.structs) do
-    assert(struct.thruster.valid)
-    assert(struct.power_switch.valid)
-  end
-end)
+-- script.on_event(defines.events.on_tick, function(event)
+-- -- script.on_nth_tick(600, function(event)
+--   for struct_id, struct in pairs(storage.structs) do
+--     assert(struct.thruster.valid)
+--     assert(struct.power_switch.valid)
+--   end
+-- end)
