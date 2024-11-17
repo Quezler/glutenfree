@@ -203,6 +203,13 @@ for _, event in ipairs({
   })
 end
 
+local function destroy_struct(struct)
+  struct.inserter.destroy()
+  struct.inserter_offering.destroy()
+  struct.power_switch.destroy()
+  storage.structs[struct.id] = nil
+end
+
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
@@ -210,6 +217,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 
     if deathrattle.type == "thruster" then
       local struct = assert(storage.structs[deathrattle.struct_id])
+      if struct.surface.valid == false then return destroy_struct(struct) end
       local new_thruster = surface_find_entity_or_ghost(struct.surface, struct.position, "thruster")
       if new_thruster then
         struct_set_thruster(struct, new_thruster)
@@ -226,10 +234,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
           struct.power_switch.destructible = false
         end
       else
-        struct.inserter.destroy()
-        struct.inserter_offering.destroy()
-        struct.power_switch.destroy()
-        storage.structs[struct.id] = nil
+        destroy_struct(struct)
       end
     end
 
