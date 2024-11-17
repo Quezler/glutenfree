@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2024. 11. 17
   Info:
     - Update circuit connector
     - Give the control behavior a texture
