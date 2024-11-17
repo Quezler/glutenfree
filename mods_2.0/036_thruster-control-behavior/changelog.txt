@@ -6,6 +6,7 @@ Date: ????
     - Give the control behavior a texture
     - Fix circuit connector being drawn under the engine
     - Align the circuit connections with the sprite
+    - Just listen to all the events in case of editor/character building
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 17
