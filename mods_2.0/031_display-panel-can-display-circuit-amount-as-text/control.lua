@@ -90,7 +90,11 @@ function Handler.on_init()
 end
 
 function Handler.on_configuration_changed()
-  --
+  for _, surface in pairs(game.surfaces) do
+    if storage.surfacedata[surface.index] == nil then
+      Handler.on_surface_created({surface_index = surface.index})
+    end
+  end
 end
 
 function Handler.on_created_entity(event)
