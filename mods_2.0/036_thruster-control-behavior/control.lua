@@ -129,8 +129,6 @@ end
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    -- game.print(serpent.line(deathrattle))
-    -- local struct = assert(storage.structs[deathrattle.struct_id])
     storage.unit_number_to_struct_id[event.useful_id] = nil
 
     if deathrattle.type == "thruster" then
@@ -209,7 +207,6 @@ end)
 -- debug only "heavy mode"
 script.on_event(defines.events.on_tick, function(event)
 -- script.on_nth_tick(600, function(event)
-  game.print(table_size(storage.structs))
   for struct_id, struct in pairs(storage.structs) do
     assert(struct.thruster.valid)
     assert(struct.power_switch.valid)

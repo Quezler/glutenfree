@@ -8,6 +8,7 @@ Date: ????
     - Set the thruster status based on the power switch state
     - Remove a race condition assert and hope its fine
     - Debug consistency issues
+    - Cleanup consistency debugging
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 17
