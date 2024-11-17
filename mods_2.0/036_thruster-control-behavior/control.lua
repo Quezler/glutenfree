@@ -4,6 +4,12 @@ local Handler = {}
 
 local function create_struct()
   storage.index = storage.index + 1
+
+  local mod_surface = game.surfaces["thruster-control-behavior"]
+  mod_surface.set_tiles{
+    tiles = {name = "lava-hot", position = {storage.index, 0}}
+  }
+
   storage.structs[storage.index] = {
     id = storage.index,
 
@@ -12,6 +18,8 @@ local function create_struct()
 
     thruster = nil,
     power_switch = nil,
+
+    inserter = inserter,
   }
   return storage.structs[storage.index]
 end
@@ -53,6 +61,8 @@ function Handler.on_init()
 
   local mod_surface = game.planets["thruster-control-behavior"].create_surface()
   mod_surface.generate_with_lab_tiles = true
+  mod_surface.map_gen_settings.width = 0
+  mod_surface.map_gen_settings.height = 0
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{name = "thruster"}) do
