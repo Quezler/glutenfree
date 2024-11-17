@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 11. 17
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
 Version: 0.0.4
-Date: ????
+Date: 2024. 11. 17
   Info:
     - Support copying thrusters onto thrusters
     - Prevent the gui horizontally stretching when a circuit/logistics panel was open
