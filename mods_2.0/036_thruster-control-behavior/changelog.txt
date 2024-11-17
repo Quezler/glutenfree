@@ -9,6 +9,7 @@ Date: ????
     - Just listen to all the events in case of editor/character building
     - Remove the connector when the thruster dies
     - Support adopting an upgraded/ghost thruster
+    - Fix thruster control behavior finder using the wrong position
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 17

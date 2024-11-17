@@ -50,12 +50,13 @@ script.on_init(Handler.on_init)
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
-  local power_switch = surface_find_entity_or_ghost(entity.surface, entity.position, "thruster-control-behavior")
+  local power_switch_position = {entity.position.x - 1.5, entity.position.y - 1.0}
+  local power_switch = surface_find_entity_or_ghost(entity.surface, power_switch_position, "thruster-control-behavior")
   if power_switch == nil then
     power_switch = entity.surface.create_entity{
       name = "thruster-control-behavior",
       force = entity.force,
-      position = {entity.position.x - 1.5, entity.position.y - 1.0},
+      position = power_switch_position,
     }
     power_switch.destructible = false
   end
