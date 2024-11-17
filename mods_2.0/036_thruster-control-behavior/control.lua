@@ -14,7 +14,7 @@ local function create_struct()
     power_switch = nil,
 
     inserter = nil,
-    inserter_offering = nil,
+    inserter_offering = {valid = false},
   }
   return storage.structs[storage.index]
 end
@@ -46,6 +46,32 @@ end
 local function get_entity_name(entity)
   return entity.type == "entity-ghost" and entity.ghost_name or entity.name
 end
+
+local function get_or_create_inserter_offering(struct)
+  if not struct.inserter_offering.valid then
+    struct.inserter_offering = game.surfaces["thruster-control-behavior"].create_entity{
+      name = "item-on-ground",
+      force = "neutral",
+      position = {-0.5 + struct.id, -2.5},
+      stack = {name = "wood"},
+    }
+    storage.deathrattles[script.register_on_object_destroyed(struct.inserter_offering)] = {type = "offering", struct_id = struct.id}
+  end
+end
+
+local function set_thruster_state(thruster, active)
+  if active == true then
+    thruster.active = true
+    thruster.custom_status = nil
+  else
+    thruster.active = false
+    thruster.custom_status = {
+      diode = defines.entity_status_diode.red,
+      label = {"entity-status.disabled-by-control-behavior"},
+    }
+  end
+end
+
 
 function Handler.on_init()
   storage.index = 0
@@ -188,6 +214,15 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       end
     end
 
+    if deathrattle.type == "offering" then
+      game.print("offering reset at " .. event.tick)
+      local struct = assert(storage.structs[deathrattle.struct_id])
+      get_or_create_inserter_offering(struct)
+      struct.inserter.held_stack.clear()
+
+      set_thruster_state(struct.thruster, not struct.thruster.active)
+    end
+
   end
 end)
 
@@ -200,22 +235,15 @@ function Handler.on_power_switch_touched(entity)
   local struct = storage.structs[struct_id]
   assert(struct)
 
-  if entity.power_switch_state == true then
-    struct.thruster.active = true
-    struct.thruster.custom_status = nil
-  else
-    struct.thruster.active = false
-    struct.thruster.custom_status = {
-      diode = defines.entity_status_diode.red,
-      label = {"entity-status.disabled-by-control-behavior"},
-    }
-  end
+  set_thruster_state(struct.thruster, entity.power_switch_state)
 
   local inserter_cb = struct.inserter.get_control_behavior()
   local power_switch_cb = struct.power_switch.get_control_behavior()
 
   -- match the circuit condition of the power switch with the inserter, but if the checkbox is off: clear the inserter condition
   inserter_cb.circuit_condition = power_switch_cb.circuit_enable_disable and power_switch_cb.circuit_condition or nil
+
+  get_or_create_inserter_offering(struct)
 
   game.print(serpent.line( struct.power_switch.get_or_create_control_behavior().circuit_condition ))
 end

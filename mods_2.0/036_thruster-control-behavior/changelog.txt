@@ -8,6 +8,7 @@ Date: ????
     - Attempt to set lava tiles to dispose of the picked up item (fails because tiles get reset)
     - Setup burner inserters on the hidden surface
     - Switch the burner inserter to a powered inserter
+    - Create the offering, and toggle the thruster when it is taken
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 17
