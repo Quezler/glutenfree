@@ -9,6 +9,7 @@ Date: ????
     - Remove a race condition assert and hope its fine
     - Debug consistency issues
     - Cleanup consistency debugging
+    - Add fake confirm button to convey settings do not apply until the gui closes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 17

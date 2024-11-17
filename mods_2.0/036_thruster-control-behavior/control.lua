@@ -204,6 +204,48 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
   end
 end)
 
+script.on_event(defines.events.on_gui_opened, function(event)
+  local entity = event.entity
+  if entity and entity.name == "thruster-control-behavior" then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+
+    local footer = player.gui.relative["thruster-control-behavior-footer"]
+    if footer then footer.destroy() end
+
+    footer = player.gui.relative.add{
+      type = "frame",
+      name = "thruster-control-behavior-footer",
+      anchor = {
+        gui = defines.relative_gui_type.power_switch_gui,
+        position = defines.relative_gui_position.bottom,
+        name = "thruster-control-behavior",
+      }
+    }
+    footer.style.horizontally_stretchable = true
+    footer.style.horizontal_align = "right"
+    footer.style.padding = 4
+
+    local piston = footer.add{
+      type = "flow",
+    }
+    piston.style.horizontally_stretchable = true
+
+    local button = footer.add{
+      type = "sprite-button",
+      name = "thruster-control-behavior-confirm",
+      sprite = "utility/confirm_slot",
+      style = "item_and_count_select_confirm",
+    }
+  end
+end)
+
+script.on_event(defines.events.on_gui_click, function(event)
+  if event.element.name == "thruster-control-behavior-confirm" then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    player.opened = nil
+  end
+end)
+
 -- debug only "heavy mode"
 script.on_event(defines.events.on_tick, function(event)
 -- script.on_nth_tick(600, function(event)
