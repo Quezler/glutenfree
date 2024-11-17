@@ -51,6 +51,9 @@ function Handler.on_init()
 
   storage.unit_number_to_struct_id = {}
 
+  local mod_surface = game.planets["thruster-control-behavior"].create_surface()
+  mod_surface.generate_with_lab_tiles = true
+
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{name = "thruster"}) do
       Handler.on_created_entity({entity = entity})
@@ -184,7 +187,7 @@ end
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  local entity = player.selected
+  local entity = event.last_entity
 
   if entity and get_entity_name(entity) == "thruster-control-behavior" then
     Handler.on_power_switch_touched(entity)

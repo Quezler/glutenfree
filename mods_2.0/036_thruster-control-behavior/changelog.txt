@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Support copying thrusters onto thrusters
     - Prevent the gui horizontally stretching when a circuit/logistics panel was open
+    - Setup the hidden surface as a planet
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 17

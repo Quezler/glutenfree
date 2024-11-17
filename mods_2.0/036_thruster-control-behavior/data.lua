@@ -87,3 +87,14 @@ data:extend{power_switch, power_switch_item}
 local thruster = data.raw["thruster"]["thruster"]
 thruster.additional_pastable_entities = thruster.additional_pastable_entities or {}
 table.insert(thruster.additional_pastable_entities, "thruster")
+
+data:extend{{
+  type = "planet",
+  name = "thruster-control-behavior",
+  icon = "__thruster-control-behavior__/graphics/icons/thruster-control-behavior.png",
+
+  distance = 0,
+  orientation = 0,
+
+  hidden = true,
+}}
