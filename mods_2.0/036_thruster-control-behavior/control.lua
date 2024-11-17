@@ -55,11 +55,20 @@ local function on_created_thruster(entity)
   local power_switch_position = get_control_behavior_position(entity)
   local power_switch = surface_find_entity_or_ghost(entity.surface, power_switch_position, "thruster-control-behavior")
   if power_switch == nil then
-    power_switch = entity.surface.create_entity{
-      name = "thruster-control-behavior",
-      force = entity.force,
-      position = power_switch_position,
-    }
+    if entity.type == "entity-ghost" then
+      power_switch = entity.surface.create_entity{
+        name = "entity-ghost",
+        ghost_name = "thruster-control-behavior",
+        force = entity.force,
+        position = power_switch_position,
+      }
+    else
+      power_switch = entity.surface.create_entity{
+        name = "thruster-control-behavior",
+        force = entity.force,
+        position = power_switch_position,
+      }
+    end
     power_switch.destructible = false
   end
 
@@ -77,6 +86,8 @@ local function on_created_thruster_control_behavior(entity)
 
   local cb_position = get_control_behavior_position(thruster)
   if entity.position.x ~= cb_position[1] or entity.position.y ~= cb_position[2] then return entity.destroy() end
+
+  assert(entity.quality.name == "normal") -- why would you even place a higher quality circuit connector manually?
 end
 
 
