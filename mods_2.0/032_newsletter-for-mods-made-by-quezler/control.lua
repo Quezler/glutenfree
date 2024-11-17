@@ -140,6 +140,7 @@ local function open_for_player(player)
   lua_table.style.vertical_spacing = 8
   lua_table.style.horizontal_spacing = 8
 
+  local my_mods_total = #my_mods
   table.sort(my_mods, sort_newest_first)
 
   for i, mod in ipairs(my_mods) do
@@ -209,7 +210,12 @@ local function open_for_player(player)
     version_color = mod.latest_release.info_json.factorio_version == "2.0" and "green" or version_color
     local version_string = string.format("[font=default-tiny-bold][color=%s]%s[/color][/font]", version_color, mod.latest_release.info_json.factorio_version)
 
-    local line_3 = row.add{
+    local line_3_flow = row.add{
+      type = "flow",
+      direction = "horizontal",
+    }
+
+    local line_3 = line_3_flow.add{
       type = "label",
       caption = string.format("%s [font=default-bold]%s[/font] [font=default-tiny-bold]%s[/font]", version_string, date, mod.category),
     }
@@ -217,6 +223,16 @@ local function open_for_player(player)
     if mod.deprecated then
       line_3.caption = line_3.caption .. " [font=default-bold](deprecated)[/font]"
     end
+
+    local line_3_flow_stretch = line_3_flow.add{
+      type = "empty-widget",
+    }
+    line_3_flow_stretch.style.horizontally_stretchable = true
+
+    local th = line_3_flow.add{
+      type = "label",
+      caption = string.format("[font=default-tiny-bold]#%d%s mod[/font]", my_mods_total - i + 1, get_ordinal_suffix(my_mods_total - i + 1)),
+    }
   end
 
   main_frame.force_auto_center()
