@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Update circuit connector
+    - Give the control behavior a texture
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 17

@@ -44,6 +44,22 @@ local power_switch = {
     }
   },
 
+  power_on_animation =
+  {
+    layers = {
+      {
+        filename = "__thruster-control-behavior__/graphics/entity/thruster-control-behavior.png",
+        animation_speed = 1,
+        line_length = 0,
+        width = 12,
+        height = 21,
+        frame_count = 1,
+        shift = util.by_pixel(-0, 0),
+        scale = 0.5
+      },
+    }
+  },
+
   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
   collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
   collision_mask = {layers = {}},
