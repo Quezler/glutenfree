@@ -9,6 +9,7 @@ Date: ????
     - Setup burner inserters on the hidden surface
     - Switch the burner inserter to a powered inserter
     - Create the offering, and toggle the thruster when it is taken
+    - Attempt to invert the condition
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 17

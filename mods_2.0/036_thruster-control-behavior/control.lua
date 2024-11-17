@@ -72,6 +72,25 @@ local function set_thruster_state(thruster, active)
   end
 end
 
+local function invert_condition(condition)
+  if condition.comparator == "=" then
+    condition.comparator = "≠"
+  elseif condition.comparator == "≠" then
+    condition.comparator = "="
+  elseif condition.comparator == ">" then
+    condition.comparator = "≤"
+  elseif condition.comparator == "≤" then
+    condition.comparator = ">"
+  elseif condition.comparator == "<" then
+    condition.comparator = "≥"
+  elseif condition.comparator == "≥" then
+    condition.comparator = "<"
+  else
+    error(serpent.block(condition))
+  end
+
+  return condition
+end
 
 function Handler.on_init()
   storage.index = 0
@@ -241,7 +260,11 @@ function Handler.on_power_switch_touched(entity)
   local power_switch_cb = struct.power_switch.get_control_behavior()
 
   -- match the circuit condition of the power switch with the inserter, but if the checkbox is off: clear the inserter condition
-  inserter_cb.circuit_condition = power_switch_cb.circuit_enable_disable and power_switch_cb.circuit_condition or nil
+  if power_switch_cb.circuit_enable_disable then
+    inserter_cb.circuit_condition = entity.power_switch_state and invert_condition(power_switch_cb.circuit_condition) or power_switch_cb.circuit_condition
+  else
+    inserter_cb.circuit_condition = nil
+  end
 
   get_or_create_inserter_offering(struct)
 
