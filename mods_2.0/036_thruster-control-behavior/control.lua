@@ -127,8 +127,6 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     local struct = assert(storage.structs[deathrattle.struct_id])
-    assert(struct.power_switch.valid)
-
     storage.unit_number_to_struct_id[event.useful_id] = nil
 
     if deathrattle.type == "thruster" then
