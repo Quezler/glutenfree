@@ -12,8 +12,8 @@ local power_switch = {
   {
     shadow =
     {
-      red   = util.by_pixel(-9, -4),    -- a guess
-      green = util.by_pixel(-9, -4 - 4) -- a guess
+      red   = util.by_pixel(-9,  1),    -- a guess
+      green = util.by_pixel(-9,  1 - 4) -- a guess
     },
     wire =
     {
