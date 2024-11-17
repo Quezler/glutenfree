@@ -62,15 +62,14 @@ local function on_created_thruster(entity)
         force = entity.force,
         position = power_switch_position,
       }
-      power_switch.minable = false
     else
       power_switch = entity.surface.create_entity{
         name = "thruster-control-behavior",
         force = entity.force,
         position = power_switch_position,
       }
-      power_switch.destructible = false
     end
+    power_switch.destructible = false
   end
 
   local struct = create_struct()
@@ -130,7 +129,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
           struct.power_switch.destructible = true
           assert(struct.power_switch.die())
           struct.power_switch = surface_find_entity_or_ghost(struct.surface, get_control_behavior_position(new_thruster), "thruster-control-behavior")
-          struct.power_switch.minable = false
+          struct.power_switch.destructible = false
         elseif new_thruster.type ~= "entity-ghost" and struct.power_switch.type == "entity-ghost" then
           struct.power_switch.destructible = true
           local _, new_power_switch = struct.power_switch.revive{}
