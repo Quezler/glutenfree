@@ -129,7 +129,11 @@ script.on_event(defines.events.on_object_destroyed, function(event)
           struct.power_switch.destructible = true
           assert(struct.power_switch.die())
           struct.power_switch = surface_find_entity_or_ghost(struct.surface, get_control_behavior_position(new_thruster), "thruster-control-behavior")
-          assert(struct.power_switch.type == "entity-ghost")
+        elseif new_thruster.type ~= "entity-ghost" and struct.power_switch.type == "entity-ghost" then
+          struct.power_switch.destructible = true
+          local _, new_power_switch = struct.power_switch.revive{}
+          struct.power_switch = assert(new_power_switch)
+          struct.power_switch.destructible = false
         end
       else
         struct.power_switch.destroy()
