@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Setup the thumbnail
+    - Some sanity checks before i continue
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 17
