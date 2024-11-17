@@ -15,6 +15,7 @@ Date: ????
     - If the thruster is a ghost, make a ghost connector
     - When the thruster dies, kill the connector
     - And when a thruster gets revived, revive the control behavior too
+    - Prevent the user from mining the connector ghost
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 17
