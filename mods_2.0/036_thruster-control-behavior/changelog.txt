@@ -13,6 +13,7 @@ Date: ????
     - Prevent control behavior ghosts existing without a thruster
     - Allow the control behavior to only exist at its exact thruster offset
     - If the thruster is a ghost, make a ghost connector
+    - When the thruster dies, kill the connector
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 17
