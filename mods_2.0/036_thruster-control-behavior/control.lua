@@ -40,6 +40,10 @@ local function get_control_behavior_position(thruster)
   return {thruster.position.x - 1.5, thruster.position.y - 1.0}
 end
 
+local function get_entity_name(entity)
+  return entity.type == "entity-ghost" and entity.ghost_name or entity.name
+end
+
 function Handler.on_init()
   storage.index = 0
   storage.structs = {}
@@ -104,7 +108,7 @@ end
 
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
-  local entity_name = entity.type == "entity-ghost" and entity.ghost_name or entity.name
+  local entity_name = get_entity_name(entity)
 
   if entity_name == "thruster" then return on_created_thruster(entity) end
   if entity_name == "thruster-control-behavior" then return on_created_thruster_control_behavior(entity) end
@@ -182,7 +186,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local entity = player.selected
 
-  if entity and (entity.type == "entity-ghost" and entity.ghost_name or entity.name) == "thruster-control-behavior" then
+  if entity and get_entity_name(entity) == "thruster-control-behavior" then
     Handler.on_power_switch_touched(entity)
   end
 end)
@@ -191,7 +195,7 @@ script.on_event(defines.events.on_gui_closed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local entity = event.entity
 
-  if entity and (entity.type == "entity-ghost" and entity.ghost_name or entity.name) == "thruster-control-behavior" then
+  if entity and get_entity_name(entity) == "thruster-control-behavior" then
     Handler.on_power_switch_touched(entity)
   end
 end)
@@ -199,8 +203,13 @@ end)
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
   local entity = event.destination
 
-  if entity and (entity.type == "entity-ghost" and entity.ghost_name or entity.name) == "thruster-control-behavior" then
+  if get_entity_name(entity) == "thruster-control-behavior" then
     Handler.on_power_switch_touched(entity)
+  elseif get_entity_name(entity) == "thruster" and get_entity_name(event.source) == "thruster" then
+    -- support copying thruster onto truster too, so players are not required to always copy the control behavior
+    local old_power_switch = storage.structs[storage.unit_number_to_struct_id[event.source.unit_number]].power_switch
+    local new_power_switch = storage.structs[storage.unit_number_to_struct_id[entity.unit_number]].power_switch
+    new_power_switch.copy_settings(old_power_switch, event.player_index)
   end
 end)
 

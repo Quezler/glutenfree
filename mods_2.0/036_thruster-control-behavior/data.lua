@@ -83,3 +83,7 @@ local power_switch_item = {
 }
 
 data:extend{power_switch, power_switch_item}
+
+local thruster = data.raw["thruster"]["thruster"]
+thruster.additional_pastable_entities = thruster.additional_pastable_entities or {}
+table.insert(thruster.additional_pastable_entities, "thruster")
