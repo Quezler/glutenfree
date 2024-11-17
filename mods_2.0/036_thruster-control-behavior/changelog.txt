@@ -7,6 +7,7 @@ Date: ????
     - New thruster control behaviors default to on
     - Set the thruster status based on the power switch state
     - Remove a race condition assert and hope its fine
+    - Debug consistency issues
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 17

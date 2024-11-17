@@ -79,7 +79,10 @@ local function on_created_thruster(entity)
     power_switch.power_switch_state = true
   end
 
-  local struct = create_struct()
+  local struct_id = storage.unit_number_to_struct_id[power_switch.unit_number]
+  local struct = struct_id and assert(storage.structs[struct_id]) or create_struct()
+  -- game.print(game.tick)
+  -- local struct = create_struct()
   struct.surface = entity.surface
   struct.position = entity.position
   struct_set_thruster(struct, entity)
@@ -126,10 +129,12 @@ end
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    local struct = assert(storage.structs[deathrattle.struct_id])
+    -- game.print(serpent.line(deathrattle))
+    -- local struct = assert(storage.structs[deathrattle.struct_id])
     storage.unit_number_to_struct_id[event.useful_id] = nil
 
     if deathrattle.type == "thruster" then
+      local struct = assert(storage.structs[deathrattle.struct_id])
       local new_thruster = surface_find_entity_or_ghost(struct.surface, struct.position, "thruster")
       if new_thruster then
         struct_set_thruster(struct, new_thruster)
@@ -198,5 +203,15 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
 
   if entity and (entity.type == "entity-ghost" and entity.ghost_name or entity.name) == "thruster-control-behavior" then
     Handler.on_power_switch_touched(entity)
+  end
+end)
+
+-- debug only "heavy mode"
+script.on_event(defines.events.on_tick, function(event)
+-- script.on_nth_tick(600, function(event)
+  game.print(table_size(storage.structs))
+  for struct_id, struct in pairs(storage.structs) do
+    assert(struct.thruster.valid)
+    assert(struct.power_switch.valid)
   end
 end)
