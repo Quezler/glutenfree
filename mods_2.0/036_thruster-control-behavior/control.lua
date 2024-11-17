@@ -47,9 +47,7 @@ end
 
 script.on_init(Handler.on_init)
 
-function Handler.on_created_entity(event)
-  local entity = event.entity or event.destination
-
+local function on_created_thruster(entity)
   local power_switch_position = {entity.position.x - 1.5, entity.position.y - 1.0}
   local power_switch = surface_find_entity_or_ghost(entity.surface, power_switch_position, "thruster-control-behavior")
   if power_switch == nil then
@@ -69,6 +67,20 @@ function Handler.on_created_entity(event)
   struct.power_switch = power_switch
 end
 
+local function on_created_thruster_control_behavior(entity)
+  local thruster = surface_find_entity_or_ghost(entity.surface, entity.position, "thruster")
+  if thruster == nil then return entity.destroy() end
+end
+
+
+function Handler.on_created_entity(event)
+  local entity = event.entity or event.destination
+  local entity_name = entity.type == "entity-ghost" and entity.ghost_name or entity.name
+
+  if entity_name == "thruster" then return on_created_thruster(entity) end
+  if entity_name == "thruster-control-behavior" then return on_created_thruster_control_behavior(entity) end
+end
+
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
@@ -80,6 +92,8 @@ for _, event in ipairs({
   script.on_event(event, Handler.on_created_entity, {
     {filter = "name"      , name = "thruster"},
     {filter = "ghost_name", name = "thruster"},
+    {filter = "name"      , name = "thruster-control-behavior"},
+    {filter = "ghost_name", name = "thruster-control-behavior"},
   })
 end
 
