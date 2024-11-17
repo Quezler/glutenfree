@@ -238,6 +238,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       local struct = assert(storage.structs[deathrattle.struct_id])
       -- get_or_create_inserter_offering(struct)
       struct.inserter.held_stack.clear()
+      struct.inserter.active = false
 
       -- set_thruster_state(struct.thruster, not struct.thruster.active)
       Handler.on_power_switch_touched(struct.power_switch)
@@ -266,6 +267,7 @@ function Handler.on_power_switch_touched(entity)
   else
     inserter_cb.circuit_condition = nil
   end
+  struct.inserter.active = true
 
   get_or_create_inserter_offering(struct)
 

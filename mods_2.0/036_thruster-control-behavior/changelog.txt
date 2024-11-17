@@ -11,6 +11,7 @@ Date: ????
     - Create the offering, and toggle the thruster when it is taken
     - Attempt to invert the condition
     - Try to prevent the offering from happening twice
+    - Well this does jack shit it seems
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 17
