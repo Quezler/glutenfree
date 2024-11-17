@@ -4,6 +4,7 @@ local power_switch = {
   icon = "__thruster-control-behavior__/graphics/icons/thruster-control-behavior.png",
 
   overlay_start_delay = 0,
+  wire_max_distance = default_circuit_wire_max_distance,
 
   circuit_wire_connection_point =
   {
