@@ -7,16 +7,36 @@ local function create_struct()
   storage.structs[storage.index] = {
     id = storage.index,
 
+    surface = nil,
+    position = nil,
+
     thruster = nil,
     power_switch = nil,
+
+    -- associated_entities = {},
   }
   return storage.structs[storage.index]
+end
+
+-- local function associate_entity_with_struct(entity, struct)
+--   assert(entity.unit_number)
+--   assert(struct.id)
+
+--   storage.unit_number_to_struct_id[entity.unit_number] = struct.id
+--   struct.associated_entities[entity.unit_number] = entity
+-- end
+
+local function struct_set_thruster(struct, thruster)
+  struct.thruster = thruster
+  storage.deathrattles[script.register_on_object_destroyed(thruster)] = {type = "thruster", struct_id = struct.id}
 end
 
 function Handler.on_init()
   storage.index = 0
   storage.structs = {}
   storage.deathrattles = {}
+
+  -- storage.unit_number_to_struct_id = {}
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{name = "thruster"}) do
@@ -41,10 +61,11 @@ function Handler.on_created_entity(event)
   end
 
   local struct = create_struct()
-  struct.thruster = entity
-  struct.power_switch = power_switch
+  struct.surface = entity.surface
+  struct.position = entity.position
+  struct_set_thruster(struct, entity)
 
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = {type = "thruster", struct_id = struct.id}
+  struct.power_switch = power_switch
 end
 
 for _, event in ipairs({
@@ -67,8 +88,13 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     local struct = assert(storage.structs[deathrattle.struct_id])
 
     if deathrattle.type == "thruster" then
-      struct.power_switch.destroy()
-      storage.structs[struct.id] = nil
+      local new_thruster = surface_find_entity_or_ghost(struct.surface, struct.position, "thruster")
+      if new_thruster then
+        struct_set_thruster(struct, new_thruster)
+      else
+        struct.power_switch.destroy()
+        storage.structs[struct.id] = nil
+      end
     end
   end
 end)
