@@ -252,16 +252,16 @@ function Handler.on_power_switch_touched(entity)
   local struct = storage.structs[struct_id]
   assert(struct)
 
-  set_thruster_state(struct.thruster, entity.power_switch_state)
-
   local inserter_cb = struct.inserter.get_control_behavior()
   local power_switch_cb = struct.power_switch.get_control_behavior()
 
   -- match the circuit condition of the power switch with the inserter, but if the checkbox is off: clear the inserter condition
   if power_switch_cb.circuit_enable_disable then
     inserter_cb.circuit_condition = entity.power_switch_state and invert_condition(power_switch_cb.circuit_condition) or power_switch_cb.circuit_condition
+    set_thruster_state(struct.thruster, entity.power_switch_state)
   else
     inserter_cb.circuit_condition = nil
+    set_thruster_state(struct.thruster, true)
   end
 
   get_or_create_inserter_offering(struct)

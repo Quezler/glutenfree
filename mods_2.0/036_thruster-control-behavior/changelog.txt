@@ -13,6 +13,7 @@ Date: ????
     - Try to prevent the offering from happening twice
     - Well this does jack shit it seems
     - Final code sweep pre-launch
+    - Fix thruster staying offline when disabeling the checkbox
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 17
