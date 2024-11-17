@@ -56,6 +56,12 @@ function Handler.on_init()
 
   local mod_surface = game.planets["thruster-control-behavior"].create_surface()
   mod_surface.generate_with_lab_tiles = true
+  mod_surface.create_global_electric_network()
+  mod_surface.create_entity{
+    name = "electric-energy-interface",
+    force = "neutral",
+    position = {-1, -1},
+  }
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{name = "thruster"}) do
@@ -101,7 +107,7 @@ local function on_created_thruster(entity)
   if struct.inserter == nil then
     local mod_surface = game.surfaces["thruster-control-behavior"]
     struct.inserter = mod_surface.create_entity{
-      name = "burner-inserter",
+      name = "inserter",
       force = "neutral",
       position = {-0.5 + struct.id, -1.5},
     }
@@ -208,8 +214,9 @@ function Handler.on_power_switch_touched(entity)
   local inserter_cb = struct.inserter.get_control_behavior()
   local power_switch_cb = struct.power_switch.get_control_behavior()
 
-  inserter_cb.circuit_condition = power_switch_cb.circuit_condition
-  
+  -- match the circuit condition of the power switch with the inserter, but if the checkbox is off: clear the inserter condition
+  inserter_cb.circuit_condition = power_switch_cb.circuit_enable_disable and power_switch_cb.circuit_condition or nil
+
   game.print(serpent.line( struct.power_switch.get_or_create_control_behavior().circuit_condition ))
 end
 

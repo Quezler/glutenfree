@@ -7,6 +7,7 @@ Date: ????
     - Setup the hidden surface as a planet
     - Attempt to set lava tiles to dispose of the picked up item (fails because tiles get reset)
     - Setup burner inserters on the hidden surface
+    - Switch the burner inserter to a powered inserter
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 17
