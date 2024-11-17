@@ -235,9 +235,11 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 
     if deathrattle.type == "offering" then
       -- game.print("offering reset at " .. event.tick)
-      local struct = assert(storage.structs[deathrattle.struct_id])
-      struct.inserter.held_stack.clear()
-      Handler.on_power_switch_touched(struct.power_switch)
+      local struct = storage.structs[deathrattle.struct_id]
+      if struct then
+        struct.inserter.held_stack.clear()
+        Handler.on_power_switch_touched(struct.power_switch)
+      end
     end
 
   end
@@ -343,10 +345,10 @@ script.on_event(defines.events.on_gui_click, function(event)
 end)
 
 -- debug only "heavy mode"
--- script.on_event(defines.events.on_tick, function(event)
--- -- script.on_nth_tick(600, function(event)
---   for struct_id, struct in pairs(storage.structs) do
---     assert(struct.thruster.valid)
---     assert(struct.power_switch.valid)
---   end
--- end)
+script.on_event(defines.events.on_tick, function(event)
+-- script.on_nth_tick(600, function(event)
+  for struct_id, struct in pairs(storage.structs) do
+    assert(struct.thruster.valid)
+    assert(struct.power_switch.valid)
+  end
+end)
