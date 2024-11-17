@@ -12,13 +12,13 @@ local power_switch = {
   {
     shadow =
     {
-      red   = util.by_pixel(-14, 34+3),
-      green = util.by_pixel(-22, 34+3)
+      red   = util.by_pixel(-9, -4),    -- a guess
+      green = util.by_pixel(-9, -4 - 4) -- a guess
     },
     wire =
     {
-      red =   util.by_pixel(-17, 26+3),
-      green = util.by_pixel(-24, 26+3)
+      red   = util.by_pixel(-9, -1),
+      green = util.by_pixel(-9, -1 - 4)
     }
   },
 
@@ -82,15 +82,4 @@ local power_switch_item = {
   hidden = true,
 }
 
--- local power_switch_sprite = {
---   type = "sprite",
---   name = "thruster-control-behavior",
-
---   filename = "__thruster-control-behavior__/graphics/entity/thruster-control-behavior.png",
---   width = 12,
---   height = 21,
---   scale = 0.4,
--- }
-
--- data:extend{power_switch, power_switch_item, power_switch_sprite}
 data:extend{power_switch, power_switch_item}
