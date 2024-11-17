@@ -3,6 +3,7 @@ Version: 0.0.4
 Date: ????
   Info:
     - Support copying thrusters onto thrusters
+    - Prevent the gui horizontally stretching when a circuit/logistics panel was open
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 17

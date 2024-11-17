@@ -230,7 +230,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
         name = "thruster-control-behavior",
       }
     }
-    footer.style.horizontally_stretchable = true
+    footer.style.width = 448
     footer.style.horizontal_align = "right"
     footer.style.padding = 4
 
