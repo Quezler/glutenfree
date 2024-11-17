@@ -236,10 +236,11 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if deathrattle.type == "offering" then
       game.print("offering reset at " .. event.tick)
       local struct = assert(storage.structs[deathrattle.struct_id])
-      get_or_create_inserter_offering(struct)
+      -- get_or_create_inserter_offering(struct)
       struct.inserter.held_stack.clear()
 
-      set_thruster_state(struct.thruster, not struct.thruster.active)
+      -- set_thruster_state(struct.thruster, not struct.thruster.active)
+      Handler.on_power_switch_touched(struct.power_switch)
     end
 
   end
