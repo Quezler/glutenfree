@@ -1,3 +1,5 @@
+require("util")
+
 local power_switch = {
   type = "power-switch",
   name = "thruster-control-behavior",
@@ -54,8 +56,8 @@ local power_switch = {
         width = 12,
         height = 21,
         frame_count = 1,
-        shift = util.by_pixel(-0, 0),
-        scale = 0.5
+        shift = util.by_pixel(-9, -3),
+        scale = 0.4
       },
     }
   },
@@ -80,4 +82,15 @@ local power_switch_item = {
   hidden = true,
 }
 
+-- local power_switch_sprite = {
+--   type = "sprite",
+--   name = "thruster-control-behavior",
+
+--   filename = "__thruster-control-behavior__/graphics/entity/thruster-control-behavior.png",
+--   width = 12,
+--   height = 21,
+--   scale = 0.4,
+-- }
+
+-- data:extend{power_switch, power_switch_item, power_switch_sprite}
 data:extend{power_switch, power_switch_item}

@@ -1,3 +1,5 @@
+-- require("util")
+
 local Handler = {}
 
 function Handler.on_init()
@@ -22,6 +24,13 @@ function Handler.on_created_entity(event)
   }
 
   power_switch.destructible = false
+
+  -- rendering.draw_sprite{
+  --   sprite = "thruster-control-behavior",
+  --   surface = entity.surface,
+  --   target = {entity = power_switch, offset = util.by_pixel(-10, -3)},
+  --   render_layer = "higher-object-under",
+  -- }
 end
 
 for _, event in ipairs({

@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Update circuit connector
     - Give the control behavior a texture
+    - Fix circuit connector being drawn under the engine
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 17
