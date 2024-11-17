@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: ????
+Date: 2024. 11. 17
   Info:
     - Setup the thumbnail
     - Some sanity checks before i continue
