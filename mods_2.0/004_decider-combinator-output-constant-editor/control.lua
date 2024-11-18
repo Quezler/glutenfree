@@ -43,7 +43,7 @@ script.on_event("decider-combinator-output-constant-editor-i", function(event)
       position = defines.relative_gui_position.bottom,
     },
   }
-  frame.style.padding = 2
+  frame.style.padding = 8
   frame.style.horizontally_stretchable = true
 
   local textfield = frame.add{
@@ -54,7 +54,6 @@ script.on_event("decider-combinator-output-constant-editor-i", function(event)
   }
   textfield.style.horizontally_stretchable = true
   textfield.style.maximal_width = 10000
-  textfield.style.margin = 6
 
   textfield.text = "" .. (output.constant or 1)
   textfield.focus()
