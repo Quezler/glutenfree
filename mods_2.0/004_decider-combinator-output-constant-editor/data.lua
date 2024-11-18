@@ -1,8 +1,8 @@
 data:extend({
   {
-    type = 'custom-input',
-    name = 'dcoce-i',
-    key_sequence = 'I',
+    type = "custom-input",
+    name = "decider-combinator-output-constant-editor-i",
+    key_sequence = "I",
     include_selected_prototype = true,
   }
 })
