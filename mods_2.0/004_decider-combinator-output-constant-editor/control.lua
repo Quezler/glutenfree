@@ -32,6 +32,7 @@ local function ensure_frame_exists(player)
   textfield.style.horizontally_stretchable = true
   textfield.style.maximal_width = 10000
   textfield.enabled = false
+  textfield.lose_focus_on_confirm = true
 end
 
 script.on_event("decider-combinator-output-constant-editor-i", function(event)

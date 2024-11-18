@@ -12,6 +12,7 @@ Date: ????
     - It just looks best without the button
     - Silly margins and paddings
     - Always keep the frame visible
+    - Lose textarea focus upon enter
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 11. 15
