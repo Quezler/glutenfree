@@ -8,6 +8,7 @@ Date: ????
     - Change I to [i] in the description
     - Fix crash when editing a removed output
     - Add a button to showcase the currently selected option
+    - Make the button look a tad better without looking out of place
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 11. 15

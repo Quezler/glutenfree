@@ -43,15 +43,15 @@ script.on_event("decider-combinator-output-constant-editor-i", function(event)
       position = defines.relative_gui_position.bottom,
     },
   }
-  frame.style.padding = 6
+  frame.style.padding = 2
   frame.style.horizontally_stretchable = true
 
   local button = frame.add{
     type = "choose-elem-button",
     elem_type = "signal",
   }
-  button.style.height = 28
-  button.style.width = 28
+  button.style.height = 40
+  button.style.width = 40
 
   local textfield = frame.add{
     type = "textfield",
@@ -61,9 +61,9 @@ script.on_event("decider-combinator-output-constant-editor-i", function(event)
   }
   textfield.style.horizontally_stretchable = true
   textfield.style.maximal_width = 10000
-  -- textfield.style.margin = 6
+  textfield.style.margin = 6
   -- textfield.style.left_padding = 6
-  textfield.style.left_margin = 6
+  textfield.style.left_margin = 4
   -- textfield.style.vertically_stretchable = true
 
   textfield.text = "" .. (output.constant or 1)
