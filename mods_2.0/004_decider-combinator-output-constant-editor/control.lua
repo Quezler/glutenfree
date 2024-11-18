@@ -22,12 +22,6 @@ script.on_event('dcoce-i', function(event)
 
   local outputs = opened.get_control_behavior().parameters.outputs
 
-  -- game.print('blep')
-  -- game.print(serpent.block(opened.get_control_behavior().parameters.outputs))
-
-  -- game.print(event.tick)
-  -- game.print(serpent.block(event.selected_prototype))
-
   local index, output = find_output(event.selected_prototype, outputs)
   if index == nil then
     return player.create_local_flying_text{
@@ -36,12 +30,6 @@ script.on_event('dcoce-i', function(event)
     }
   end
 
-  -- player.gui.screen.add{
-    -- type = 'textfield',
-    -- numeric = true,
-  -- }
-
-  -- game.print(serpent.block(output))
   local textfield_frame = player.gui.relative['dcoce-textfield']
   if textfield_frame then textfield_frame.destroy() end
 
@@ -53,7 +41,7 @@ script.on_event('dcoce-i', function(event)
       position = defines.relative_gui_position.bottom,
     },
   }
-  textfield_frame.style.padding = 2
+  textfield_frame.style.padding = 8
   textfield_frame.style.horizontally_stretchable = true
 
   local textfield = textfield_frame.add{
@@ -61,12 +49,6 @@ script.on_event('dcoce-i', function(event)
     numeric = true,
     allow_negative = true,
   }
-
-  -- output.constant = 10
-  -- opened.get_control_behavior().set_output(index, output)
-
-  -- textfield.style.width = 884
-  -- textfield.style.top_margin = 10
   textfield.style.horizontally_stretchable = true
   textfield.style.maximal_width = 10000
 
@@ -74,11 +56,8 @@ script.on_event('dcoce-i', function(event)
   textfield.focus()
 
   storage.playerdata[player.index] = {
-    -- entity = opened,
     selected_prototype = event.selected_prototype,
   }
-
-  -- game.print(index)
 end)
 
 script.on_event(defines.events.on_gui_text_changed, function(event)

@@ -3,6 +3,7 @@ Version: 1.0.9
 Date: ????
   Info:
     - Attach the frame nicely to the bottom
+    - Code cleanup
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 11. 15
