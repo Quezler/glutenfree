@@ -98,3 +98,13 @@ data:extend{{
 
   hidden = true,
 }}
+
+data:extend({
+  {
+    type = "custom-input",
+    name = "thruster-control-behavior-open-gui",
+    key_sequence = "mouse-button-1",
+    linked_game_control = "open-gui",
+    include_selected_prototype = true,
+  }
+})

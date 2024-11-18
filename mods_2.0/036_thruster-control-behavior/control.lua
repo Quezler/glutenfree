@@ -296,6 +296,10 @@ script.on_event(defines.events.on_gui_closed, function(event)
   end
 end)
 
+local function get_power_switch_from_thruster(thruster)
+  return storage.structs[storage.unit_number_to_struct_id[thruster.unit_number]].power_switch
+end
+
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
   local entity = event.destination
 
@@ -303,8 +307,8 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     Handler.on_power_switch_touched(entity)
   elseif get_entity_name(entity) == "thruster" and get_entity_name(event.source) == "thruster" then
     -- support copying thruster onto truster too, so players are not required to always copy the control behavior
-    local old_power_switch = storage.structs[storage.unit_number_to_struct_id[event.source.unit_number]].power_switch
-    local new_power_switch = storage.structs[storage.unit_number_to_struct_id[entity.unit_number]].power_switch
+    local old_power_switch = get_power_switch_from_thruster(event.source)
+    local new_power_switch = get_power_switch_from_thruster(entity)
     new_power_switch.copy_settings(old_power_switch, event.player_index)
   end
 end)
@@ -348,6 +352,17 @@ script.on_event(defines.events.on_gui_click, function(event)
   if event.element.name == "thruster-control-behavior-confirm" then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     player.opened = nil
+  end
+end)
+
+script.on_event("thruster-control-behavior-open-gui", function(event)
+  if event.selected_prototype and event.selected_prototype.base_type == "entity" and event.selected_prototype.name == "thruster" then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    -- local thruster = player.surface.find_entity("thruster", event.cursor_position)
+    thruster = player.selected
+    if thruster and thruster.name == "thruster" then
+      player.opened = get_power_switch_from_thruster(thruster)
+    end
   end
 end)
 
