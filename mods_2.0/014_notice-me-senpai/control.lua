@@ -164,8 +164,14 @@ function Handler.add_ore_to_playerdata(ore, playerdata)
   local tile_right_bottom = {tile_left_top.x + 1, tile_left_top.y + 1}
   local tile_key = position_key(tile_left_top)
 
+  -- crude oil has a 3x3 hitbox and can thus already be discovered by a neighbouring chunk,
+  -- to prevent the ore_render_object being overwritten and thus being unable to be destroyed we bail.
+  if playerdata.ores[tile_key] then return end
+
+  -- assert(playerdata.ores[tile_key] == nil)
   playerdata.ores[tile_key] = ore
 
+  -- assert(playerdata.ore_render_objects[tile_key] == nil)
   playerdata.ore_render_objects[tile_key] = rendering.draw_circle{
     surface = playerdata.surface_index,
 
