@@ -364,6 +364,7 @@ script.on_event("thruster-control-behavior-open-gui", function(event)
     if thruster and thruster.name == "thruster" then
       local power_switch = get_power_switch_from_thruster(thruster)
       log(power_switch)
+      log(player.opened)
       player.opened = power_switch
     end
   end

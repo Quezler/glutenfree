@@ -3,7 +3,7 @@
     "title": "Thruster control behavior",
     "description": "Allows you to enable/disable thrusters with circuits, as well as toggle them by hand.",
 
-    "version": "1.0.5",
+    "version": "1.0.6",
     "author": "Quezler",
     "factorio_version": "2.0",
 
