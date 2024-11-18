@@ -12,7 +12,7 @@ function AlchemicalCombinator.reread(struct)
   assert(struct)
 
   struct.conditions = {}
-  for _, condition in ipairs(struct.alchemical_combinator.get_control_behavior().parameters.conditions) do
+  for _, condition in ipairs(struct.alchemical_combinator.get_control_behavior().parameters.conditions or {}) do
     -- filter out any player configured special signals (or accidentally copied everything from -active)
     if condition.first_signal and condition.first_signal.type == "virtual" then goto continue end
     table.insert(struct.conditions, {
