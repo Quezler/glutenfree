@@ -6,6 +6,7 @@ Date: ????
     - Code cleanup
     - Use the mod name as a prefix and replace some quotes
     - Change I to [i] in the description
+    - Fix crash when editing a removed output
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 11. 15

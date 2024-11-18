@@ -78,7 +78,7 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
   local outputs = opened.get_control_behavior().parameters.outputs
   local index, output = find_output(playerdata.selected_prototype, outputs)
   if index == nil then
-    player.gui.relative[mod_prefix .. "textfield"].destroy()
+    player.gui.relative[mod_prefix .. "frame"].destroy()
     storage.playerdata[player.index] = nil
     return player.create_local_flying_text{
       text = "some dingus removed the output you are editing.",
