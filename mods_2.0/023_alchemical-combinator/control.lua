@@ -306,6 +306,7 @@ function Handler.tick_active_struct(struct)
   else
     local signals = struct.alchemical_combinator.get_signals(defines.wire_connector_id.combinator_output_red, defines.wire_connector_id.combinator_output_green)
     local parameters = struct.alchemical_combinator.get_control_behavior().parameters
+    parameters.conditions = parameters.conditions or {}
 
     -- trick the -active combinator into enabeling its outside side
     table.insert(parameters.conditions, {
