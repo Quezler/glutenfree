@@ -13,6 +13,7 @@ Date: ????
     - Silly margins and paddings
     - Always keep the frame visible
     - Lose textarea focus upon enter
+    - Add brackets around the stomtrooper i too
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 11. 15

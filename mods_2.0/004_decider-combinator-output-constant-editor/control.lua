@@ -44,7 +44,7 @@ script.on_event("decider-combinator-output-constant-editor-i", function(event)
 
   if event.selected_prototype == nil then
     return player.create_local_flying_text{
-      text = "press i over one of the output icons.",
+      text = "press [i] over one of the output icons.",
       create_at_cursor = true,
     }
   end
@@ -54,7 +54,7 @@ script.on_event("decider-combinator-output-constant-editor-i", function(event)
   local index, output = find_output(event.selected_prototype, outputs)
   if index == nil then
     return player.create_local_flying_text{
-      text = "press i over one of the OUTPUT icons.",
+      text = "press [i] over one of the OUTPUT icons.",
       create_at_cursor = true,
     }
   end
