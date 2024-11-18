@@ -7,6 +7,7 @@ Date: ????
     - Use the mod name as a prefix and replace some quotes
     - Change I to [i] in the description
     - Fix crash when editing a removed output
+    - Add a button to showcase the currently selected option
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 11. 15
