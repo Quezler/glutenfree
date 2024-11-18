@@ -11,6 +11,7 @@ Date: ????
     - Make the button look a tad better without looking out of place
     - It just looks best without the button
     - Silly margins and paddings
+    - Always keep the frame visible
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 11. 15

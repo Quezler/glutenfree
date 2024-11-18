@@ -8,6 +8,32 @@ local function find_output(selected_prototype, outputs)
   end
 end
 
+local function ensure_frame_exists(player)
+  local frame = player.gui.relative[mod_prefix .. "frame"]
+  if frame then return end
+
+  frame = player.gui.relative.add{
+    type = "frame",
+    name = mod_prefix .. "frame",
+    anchor = {
+      gui = defines.relative_gui_type.decider_combinator_gui,
+      position = defines.relative_gui_position.bottom,
+    },
+  }
+  frame.style.padding = 8
+  frame.style.horizontally_stretchable = true
+
+  local textfield = frame.add{
+    type = "textfield",
+    name = mod_prefix .. "textfield",
+    numeric = true,
+    allow_negative = true,
+  }
+  textfield.style.horizontally_stretchable = true
+  textfield.style.maximal_width = 10000
+  textfield.enabled = false
+end
+
 script.on_event("decider-combinator-output-constant-editor-i", function(event)
   local player = assert(game.get_player(event.player_index))
   local opened = player.opened
@@ -32,36 +58,21 @@ script.on_event("decider-combinator-output-constant-editor-i", function(event)
     }
   end
 
-  local frame = player.gui.relative[mod_prefix .. "frame"]
-  if frame then frame.destroy() end
+  ensure_frame_exists(player)
 
-  frame = player.gui.relative.add{
-    type = "frame",
-    name = mod_prefix .. "frame",
-    anchor = {
-      gui = defines.relative_gui_type.decider_combinator_gui,
-      position = defines.relative_gui_position.bottom,
-    },
-  }
-  frame.style.padding = 8
-  frame.style.horizontally_stretchable = true
-
-  local textfield = frame.add{
-    type = "textfield",
-    name = mod_prefix .. "textfield",
-    numeric = true,
-    allow_negative = true,
-  }
-  textfield.style.horizontally_stretchable = true
-  textfield.style.maximal_width = 10000
-
+  local textfield = player.gui.relative[mod_prefix .. "frame"][mod_prefix .. "textfield"]
+  textfield.enabled = true
   textfield.text = "" .. (output.constant or 1)
   textfield.focus()
-
-  storage.playerdata[player.index] = {
-    selected_prototype = event.selected_prototype,
-  }
+  textfield.tags = {selected_prototype = event.selected_prototype}
 end)
+
+local function disable_textfield(player)
+  local textfield = player.gui.relative[mod_prefix .. "frame"][mod_prefix .. "textfield"]
+  textfield.enabled = false
+  textfield.text = ""
+  textfield.tags = {}
+end
 
 script.on_event(defines.events.on_gui_text_changed, function(event)
   if event.element.name ~= mod_prefix .. "textfield" then return end
@@ -69,21 +80,13 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
   local player = assert(game.get_player(event.player_index))
   local opened = player.opened
   if not (opened and opened.type == "decider-combinator") then
-    game.print("latency issue, decider combinator already removed.")
-    return
+    return disable_textfield(player) -- latency race condition
   end
 
-  local playerdata = storage.playerdata[player.index]
-
   local outputs = opened.get_control_behavior().parameters.outputs
-  local index, output = find_output(playerdata.selected_prototype, outputs)
+  local index, output = find_output(event.element.tags.selected_prototype, outputs)
   if index == nil then
-    player.gui.relative[mod_prefix .. "frame"].destroy()
-    storage.playerdata[player.index] = nil
-    return player.create_local_flying_text{
-      text = "some dingus removed the output you are editing.",
-      create_at_cursor = true,
-    }
+    return disable_textfield(player) -- the output you were editing is gone
   end
 
   local number = tonumber(event.element.text) or 0
@@ -102,25 +105,29 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
   opened.get_control_behavior().set_output(index, output)
 end)
 
+script.on_event(defines.events.on_gui_opened, function(event)
+  if event.entity and event.entity.type == "decider-combinator" then
+    local player = assert(game.get_player(event.player_index))
+    ensure_frame_exists(player)
+  end
+end)
+
 script.on_event(defines.events.on_gui_closed, function(event)
   if event.entity and event.entity.type == "decider-combinator" then
     local player = assert(game.get_player(event.player_index))
-
-    local textfield = player.gui.relative[mod_prefix .. "textfield"]
-    if textfield then
-      textfield.destroy()
-      storage.playerdata[player.index] = nil
-    end
+    disable_textfield(player)
   end
 end)
 
 script.on_init(function()
-  storage.playerdata = {}
+  -- storage.playerdata = {}
 end)
 
 script.on_configuration_changed(function()
+  storage.playerdata = nil
   for _, player in pairs(game.players) do
-    if player.gui.relative["dcoce-textfield"] then player.gui.relative["dcoce-textfield"].destroy() end
+    if player.gui.relative[    "dcoce-textfield"] then player.gui.relative[    "dcoce-textfield"].destroy() end
+    if player.gui.relative[mod_prefix .. "frame"] then player.gui.relative[mod_prefix .. "frame"].destroy() end
   end
 end)
 
