@@ -108,3 +108,19 @@ data:extend({
     include_selected_prototype = true,
   }
 })
+
+power_switch.led_on = {
+  filename = "__thruster-control-behavior__/graphics/entity/thruster-bckg-vent-green.png",
+  width = 29,
+  height = 29,
+  scale = 0.5,
+  shift = util.by_pixel(87.75, -32.75),
+}
+
+power_switch.led_off = {
+  filename = "__thruster-control-behavior__/graphics/entity/thruster-bckg-vent-red.png",
+  width = 29,
+  height = 29,
+  scale = 0.5,
+  shift = util.by_pixel(87.75, -32.75),
+}
