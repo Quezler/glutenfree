@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.4
-Date: ????
+Date: 2024. 11. 18
   Info:
     - Support opening thruster control behavior by clicking a thruster
     - Tint the vent red/green depending on the state
