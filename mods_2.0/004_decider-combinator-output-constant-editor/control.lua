@@ -42,24 +42,33 @@ script.on_event('dcoce-i', function(event)
   -- }
 
   -- game.print(serpent.block(output))
+  local textfield_frame = player.gui.relative['dcoce-textfield']
+  if textfield_frame then textfield_frame.destroy() end
 
-  local textfield = player.gui.relative['dcoce-textfield'] or player.gui.relative.add{
-    type = 'textfield',
+  textfield_frame = player.gui.relative.add{
+    type = "frame",
     name = 'dcoce-textfield',
-    numeric = true,
-    allow_negative = true,
     anchor = {
       gui = defines.relative_gui_type.decider_combinator_gui,
       position = defines.relative_gui_position.bottom,
     },
   }
+  textfield_frame.style.padding = 2
+  textfield_frame.style.horizontally_stretchable = true
+
+  local textfield = textfield_frame.add{
+    type = 'textfield',
+    numeric = true,
+    allow_negative = true,
+  }
 
   -- output.constant = 10
   -- opened.get_control_behavior().set_output(index, output)
 
-  textfield.style.width = 884
-  textfield.style.top_margin = 10
-  -- textfield.style.horizontally_squashable = true
+  -- textfield.style.width = 884
+  -- textfield.style.top_margin = 10
+  textfield.style.horizontally_stretchable = true
+  textfield.style.maximal_width = 10000
 
   textfield.text = '' .. (output.constant or 1)
   textfield.focus()
