@@ -356,19 +356,11 @@ script.on_event(defines.events.on_gui_click, function(event)
 end)
 
 script.on_event("thruster-control-behavior-open-gui", function(event)
-  if event.selected_prototype and event.selected_prototype.base_type == "entity" and event.selected_prototype.name == "thruster" then
-    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    -- local thruster = player.surface.find_entity("thruster", event.cursor_position)
-    thruster = player.selected
-    log(thruster)
-    if thruster and thruster.name == "thruster" then
-      local power_switch = get_power_switch_from_thruster(thruster)
-      log(power_switch)
-      log(player.opened)
-      if player.opened ~= power_switch then
-        player.opened = power_switch
-      end
-    end
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local selected = player.selected
+  if selected and get_entity_name(selected) == "thruster" then
+    local power_switch = get_power_switch_from_thruster(selected)
+    player.opened = power_switch
   end
 end)
 
