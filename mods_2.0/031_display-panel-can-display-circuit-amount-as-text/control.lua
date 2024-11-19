@@ -209,7 +209,7 @@ script.on_event(defines.events.on_tick, function(event)
     if alt_mode_players then
       for struct_id, _ in pairs(surfacedata.struct_ids) do
         local struct = storage.structs[struct_id]
-        if struct.always_show and event.tick >= struct.do_not_auto_tick_until and alt_player_is_nearby(alt_mode_players, struct.entity.position) then
+        if struct.always_show and event.tick >= struct.do_not_auto_tick_until and struct.entity.valid and alt_player_is_nearby(alt_mode_players, struct.entity.position) then
           tick_display_panel(struct, event.tick)
         end
       end
