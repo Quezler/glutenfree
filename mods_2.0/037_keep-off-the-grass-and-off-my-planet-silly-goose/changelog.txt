@@ -17,6 +17,7 @@ Date: ????
     - Cleanup failed headers
     - Shuffle some margins around
     - Actually toggle with the dropdown
+    - Prevent player from remote viewing a surface they are blacklisted on
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19

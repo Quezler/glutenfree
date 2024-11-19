@@ -160,3 +160,19 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
     try_to_toggle_blacklist_player_from(player.index, event.element.tags.surface_index)
   end
 end)
+
+script.on_event(defines.events.on_player_changed_surface, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local blacklisted = get_or_create_surfacedata(player.surface.index).blacklisted_players[player.index] == true
+  -- game.print(serpent.line(blacklisted))
+  if not blacklisted then return end
+
+  if player.controller_type == defines.controllers.remote then
+    player.teleport(player.character.position, player.character.surface)
+    -- player.set_controller{
+    --   type = defines.controllers.character,
+    --   character = player.character,
+    --   surface = player.character.surface,
+    -- }
+  end
+end)
