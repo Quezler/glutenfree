@@ -19,12 +19,24 @@ local function open_for_player(player)
     horizontal_scroll_policy = "never",
   }
   scroll_pane.style.minimal_width = 500
+  scroll_pane.style.maximal_height = 700
 
-  local label_1 = scroll_pane.add{
-    type = "label",
-    style = "caption_label",
-    caption = "surfaces will go here.",
+
+  local gui_table = scroll_pane.add{
+    type = "table",
+    -- style = "table_with_selection",
+    column_count = 1,
   }
+
+  for _, surface in pairs(game.surfaces) do
+    local editor_style_surface_name = surface.name
+    if surface.platform then editor_style_surface_name = string.format("%s (%s)", editor_style_surface_name, surface.platform.name) end
+    if surface.planet then editor_style_surface_name = string.format("%s ([planet=%s] %s)", editor_style_surface_name, surface.planet.name, surface.planet.name) end
+    gui_table.add{
+      type = "label",
+      caption = editor_style_surface_name,
+    }
+  end
 
   player.opened = frame
   frame.force_auto_center()

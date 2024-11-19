@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Allow toggling the groundskeeper shortcut
+    - List all the surfaces
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19
