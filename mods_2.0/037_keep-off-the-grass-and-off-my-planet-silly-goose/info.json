@@ -1,0 +1,21 @@
+{
+    "name": "keep-off-the-grass-and-off-my-planet-silly-goose",
+    "title": "Keep off the grass and off my planet silly goose",
+    "description": "Admins can prevent players from interacting with certain surfaces.",
+
+    "version": "0.0.1",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler"
+    ]
+}
