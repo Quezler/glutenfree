@@ -67,13 +67,14 @@ local function open_for_player(player)
       type = "label",
       caption = editor_style_surface_name,
     }
-    gui_surface_name.style.margin = 4
     if is_surface_hidden_for(surface, player) then gui_surface_name.style = "grey_label" end
+    gui_surface_name.style.margin = 4
 
     local piston = gui_table.add{
       type = "flow",
     }
     piston.style.horizontally_stretchable = true
+    piston.style.left_padding = 4
 
     local surfacedata = storage.surfacedata[surface.index]
     if surfacedata then
@@ -82,7 +83,6 @@ local function open_for_player(player)
           type = "label",
           caption = game.get_player(player_index).name,
         }
-        gui_player_name.style.margin = 4
       end
     end
 
