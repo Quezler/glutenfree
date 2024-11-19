@@ -105,7 +105,7 @@ class ExpansionMod
         return $response->getBody()->getContents();
     }
 
-    private function getReadmePrefix()
+    public function getReadmePrefix()
     {
         return "[![shield](https://img.shields.io/badge/mod's_directory-white?logo=github&label=git)](https://github.com/Quezler/glutenfree/tree/main/mods_2.0/". $this->directory .")\n\n";
     }

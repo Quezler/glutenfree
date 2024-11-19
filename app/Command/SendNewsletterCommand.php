@@ -22,6 +22,7 @@ class SendNewsletterCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $results = ModPortal::get_my_mods_full()['results'];
+        $this->update_faq($results);
         $this->strip_undesired_information_from_mods($results);
         dump($results);
 
@@ -104,5 +105,26 @@ class SendNewsletterCommand extends Command
             // but that'd just be in latest release.
             unset($mod["updated_at"]);
         }
+    }
+
+    private function update_faq($results)
+    {
+        $lines = [];
+
+        foreach (array_reverse($results) as $result) {
+            $lines[] = "";
+            $lines[] = $result["summary"];
+            $lines[] = "[![](https://mods.factorio.com/opengraph/mod/{$result["name"]}.png)](https://mods.factorio.com/mod/{$result["name"]})";
+        }
+
+        return $response = (new Client)->post('https://mods.factorio.com/api/v2/mods/edit_details', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $_ENV['FACTORIO_API_KEY'],
+            ],
+            'form_params' => [
+                'mod' => 'newsletter-for-mods-made-by-quezler',
+                'faq' => implode(PHP_EOL, $lines),
+            ]
+        ]);
     }
 }
