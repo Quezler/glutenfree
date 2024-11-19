@@ -22,4 +22,5 @@ data:extend{{
   small_icon_size = 180,
 
   action = "lua",
+  toggleable = true,
 }}
