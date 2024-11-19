@@ -40,6 +40,7 @@ local function open_for_player(player)
 
   for _, surface in pairs(game.surfaces) do
     local editor_style_surface_name = surface.name
+    if surface.localised_name then editor_style_surface_name = {"", editor_style_surface_name, " (", surface.localised_name, ")"} end
     if surface.platform then editor_style_surface_name = string.format("%s (%s)", editor_style_surface_name, surface.platform.name) end
     if surface.planet then editor_style_surface_name = string.format("%s ([planet=%s] %s)", editor_style_surface_name, surface.planet.name, surface.planet.name) end
     local gui_surface_name = gui_table.add{

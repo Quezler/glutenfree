@@ -6,6 +6,7 @@ Date: ????
     - List all the surfaces
     - Turn force based hidden surfaces grey
     - Grey out surfaces of hidden planets too
+    - Support localised surface names
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19
