@@ -2,10 +2,18 @@ local Handler = {}
 
 local setting_name_uninstalled = "planets-have-flow-statistics-for-their-cargo-pods--uninstalled"
 
+-- mistakenly .name was forgotten so you'd see a lot of `[LuaSpaceLocationPrototype: nauvis (planet)]` stuff
+local get_old_flow_surface_name = {}
+for _, space_location in pairs(prototypes.space_location) do
+  if space_location.type == "planet" then
+    get_old_flow_surface_name[space_location.name] = string.format("cargo-flow-%s-%s", space_location.order, space_location)
+  end
+end
+
 local get_flow_surface_name = {}
 for _, space_location in pairs(prototypes.space_location) do
   if space_location.type == "planet" then
-    get_flow_surface_name[space_location.name] = string.format("cargo-flow-%s-%s", space_location.order, space_location)
+    get_flow_surface_name[space_location.name] = string.format("cargo-flow-%s-%s", space_location.order, space_location.name)
   end
 end
 
@@ -28,6 +36,19 @@ end)
 
 script.on_configuration_changed(function()
   storage.uninstalled = settings.global[setting_name_uninstalled].value
+
+  -- for _, surface in pairs(game.surfaces) do
+  --   if get_old_flow_surface_name[surface.name] then
+  --     surface.name = get_flow_surface_name[surface.name]
+  --   end
+  -- end
+
+  for surface_name, old_flow_surface_name in pairs(get_old_flow_surface_name) do
+    local surface = game.surfaces[old_flow_surface_name]
+    if surface then
+      surface.name = get_flow_surface_name[surface_name]
+    end
+  end
 end)
 
 script.on_event(defines.events.on_script_trigger_effect, function(event)
