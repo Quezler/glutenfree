@@ -270,7 +270,7 @@ script.on_event(defines.events.on_gui_closed, function(event)
 end)
 
 script.on_event(defines.events.on_lua_shortcut, function(event)
-  if event.prototype_name == mod_prefix .. "shotcut" then
+  if event.prototype_name == mod_prefix .. "shortcut" then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     open_for_player(player)
   end

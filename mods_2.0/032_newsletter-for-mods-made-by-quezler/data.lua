@@ -13,7 +13,7 @@ data:extend{{
 
 data:extend{{
   type = "shortcut",
-  name = mod_prefix .. "shotcut",
+  name = mod_prefix .. "shortcut",
 
   icon = "__newsletter-for-mods-made-by-quezler__/graphics/crater.png",
   icon_size = 24,
