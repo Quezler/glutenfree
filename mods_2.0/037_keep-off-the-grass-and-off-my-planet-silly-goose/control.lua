@@ -163,11 +163,37 @@ end)
 
 script.on_event(defines.events.on_player_changed_surface, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  local blacklisted = get_or_create_surfacedata(player.surface.index).blacklisted_players[player.index] == true
+  local surfacedata = get_or_create_surfacedata(player.surface.index)
+  local blacklisted = surfacedata.blacklisted_players[player.index] == true
   if not blacklisted then return end
 
   if player.controller_type == defines.controllers.remote then
     -- teleporting a player to themselves just yoinks them out of remote view and even keeps them in their vehicles.
+    player.print("returning you to your body on " .. player.character.surface.name)
     player.teleport(player.character.position, player.character.surface)
+    return
+  end
+
+  if player.controller_type == defines.controllers.character then
+    -- game.print("character on " .. player.surface.name .. player.surface.index)
+    -- game.print(serpent.line(blacklisted))
+    -- game.print(serpent.line(storage))
+    -- local old_character = player.character --[[@as LuaEntity]]
+    -- local new_character = game.surfaces["nauvis"].create_entity{
+    --   name = old_character.name,
+    --   force = old_character.force,
+    --   position = {0, 0},
+    -- }
+    -- player.character = new_character
+    -- old_character.die()
+    local old_character = player.character --[[@as LuaEntity]]
+    local new_character = player.character.surface.create_entity{
+      name = old_character.name,
+      force = old_character.force,
+      position = old_character.position,
+    }
+    player.character = new_character
+    player.teleport({0, 0}, "nauvis")
+    old_character.die()
   end
 end)

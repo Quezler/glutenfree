@@ -19,6 +19,7 @@ Date: ????
     - Actually toggle with the dropdown
     - Prevent player from remote viewing a surface they are blacklisted on
     - Cleanup remote view canceling code
+    - Stash debugging how dying should work
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19
