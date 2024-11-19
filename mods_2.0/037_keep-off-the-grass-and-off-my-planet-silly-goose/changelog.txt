@@ -5,6 +5,7 @@ Date: ????
     - Allow toggling the groundskeeper shortcut
     - List all the surfaces
     - Turn force based hidden surfaces grey
+    - Grey out surfaces of hidden planets too
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19

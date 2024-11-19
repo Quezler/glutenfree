@@ -1,5 +1,15 @@
 local mod_prefix = "keep-off-the-grass-and-off-my-planet-silly-goose-"
 
+local function is_surface_hidden_for(surface, player)
+  if surface.planet then
+    if prototypes.space_location[surface.planet.name].hidden then
+      return true
+    end
+  end
+
+  return player.force.get_surface_hidden(surface)
+end
+
 local function open_for_player(player)
   local frame = player.gui.screen[mod_prefix .. "frame"]
   if frame then frame.destroy() end
@@ -36,7 +46,7 @@ local function open_for_player(player)
       type = "label",
       caption = editor_style_surface_name,
     }
-    if player.force.get_surface_hidden(surface) then gui_surface_name.style = "grey_label" end
+    if is_surface_hidden_for(surface, player) then gui_surface_name.style = "grey_label" end
   end
 
   player.opened = frame
