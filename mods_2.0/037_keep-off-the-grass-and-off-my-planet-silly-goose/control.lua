@@ -10,6 +10,42 @@ local function is_surface_hidden_for(surface, player)
   return player.force.get_surface_hidden(surface)
 end
 
+local function get_or_create_surfacedata(surface_index)
+  local surfacedata = storage.surfacedata[surface_index]
+  if surfacedata == nil then
+    surfacedata = {
+      blacklisted_players = {}
+    }
+    storage.surfacedata[surface_index] = surfacedata
+  end
+  return surfacedata
+end
+
+local function check_if_player_is_allowed_to_be_here(player)
+  if player.connected == false then return end
+  local surfacedata = get_or_create_surfacedata(player.surface.index)
+  local blacklisted = surfacedata.blacklisted_players[player.index] == true
+  if not blacklisted then return end
+
+  if player.controller_type == defines.controllers.remote then
+    -- teleporting a player to themselves just yoinks them out of remote view and even keeps them in their vehicles.
+    -- player.print("returning you to your body on " .. player.character.surface.name)
+    player.teleport(player.character.position, player.character.surface)
+    check_if_player_is_allowed_to_be_here(player)
+  elseif player.controller_type == defines.controllers.character then
+    local old_character = player.character --[[@as LuaEntity]]
+    local new_character = player.character.surface.create_entity{
+      name = old_character.name,
+      force = old_character.force,
+      position = old_character.position,
+    }
+    player.character = new_character
+    player.teleport({0, 0}, "nauvis")
+    old_character.die()
+    -- player.print("respawning you with a new body on " .. player.character.surface.name)
+  end
+end
+
 script.on_init(function()
   storage.surfacedata = {}
 end)
@@ -127,17 +163,6 @@ local function update_groundskeeper_gui_for_everyone()
   end
 end
 
-local function get_or_create_surfacedata(surface_index)
-  local surfacedata = storage.surfacedata[surface_index]
-  if surfacedata == nil then
-    surfacedata = {
-      blacklisted_players = {}
-    }
-    storage.surfacedata[surface_index] = surfacedata
-  end
-  return surfacedata
-end
-
 local function try_to_toggle_blacklist_player_from(player_index, surface_index)
   assert(player_index)
   assert(surface_index)
@@ -148,6 +173,7 @@ local function try_to_toggle_blacklist_player_from(player_index, surface_index)
       surfacedata.blacklisted_players[player_index] = nil
     else
       surfacedata.blacklisted_players[player_index] = true
+      check_if_player_is_allowed_to_be_here(game.get_player(player_index))
     end
     update_groundskeeper_gui_for_everyone()
   end
@@ -161,31 +187,12 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
   end
 end)
 
-local function check_if_player_is_allowed_to_be_here(player)
-  local surfacedata = get_or_create_surfacedata(player.surface.index)
-  local blacklisted = surfacedata.blacklisted_players[player.index] == true
-  if not blacklisted then return end
-
-  if player.controller_type == defines.controllers.remote then
-    -- teleporting a player to themselves just yoinks them out of remote view and even keeps them in their vehicles.
-    player.print("returning you to your body on " .. player.character.surface.name)
-    player.teleport(player.character.position, player.character.surface)
-    check_if_player_is_allowed_to_be_here(player)
-  elseif player.controller_type == defines.controllers.character then
-    local old_character = player.character --[[@as LuaEntity]]
-    local new_character = player.character.surface.create_entity{
-      name = old_character.name,
-      force = old_character.force,
-      position = old_character.position,
-    }
-    player.character = new_character
-    player.teleport({0, 0}, "nauvis")
-    old_character.die()
-    player.print("respawning you with a new body on " .. player.character.surface.name)
-  end
-end
-
 script.on_event(defines.events.on_player_changed_surface, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  check_if_player_is_allowed_to_be_here(player)
+end)
+
+script.on_event(defines.events.on_player_joined_game, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   check_if_player_is_allowed_to_be_here(player)
 end)
