@@ -16,6 +16,7 @@ Date: ????
     - Attempt and fail to add headers
     - Cleanup failed headers
     - Shuffle some margins around
+    - Actually toggle with the dropdown
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19

@@ -138,12 +138,17 @@ local function get_or_create_surfacedata(surface_index)
   return surfacedata
 end
 
-local function try_to_blacklist_player_from(player_index, surface_index)
+local function try_to_toggle_blacklist_player_from(player_index, surface_index)
   assert(player_index)
   assert(surface_index)
 
   if game.surfaces[surface_index] and game.get_player(player_index) then
-    get_or_create_surfacedata(surface_index).blacklisted_players[player_index] = true
+    local surfacedata = get_or_create_surfacedata(surface_index)
+    if surfacedata.blacklisted_players[player_index] then
+      surfacedata.blacklisted_players[player_index] = nil
+    else
+      surfacedata.blacklisted_players[player_index] = true
+    end
     update_groundskeeper_gui_for_everyone()
   end
 end
@@ -152,6 +157,6 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
   if event.element.tags.action == mod_prefix .. "blacklist-player" then
     local player_name = event.element.items[event.element.selected_index]
     local player = game.get_player(player_name)
-    try_to_blacklist_player_from(player.index, event.element.tags.surface_index)
+    try_to_toggle_blacklist_player_from(player.index, event.element.tags.surface_index)
   end
 end)
