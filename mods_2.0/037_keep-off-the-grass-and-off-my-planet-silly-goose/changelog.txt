@@ -10,6 +10,7 @@ Date: ????
     - Add player dropdown
     - Move player dropdown to the right
     - Resolve selected player
+    - Prepare storage
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19

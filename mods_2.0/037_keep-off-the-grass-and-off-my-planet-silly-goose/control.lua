@@ -10,6 +10,20 @@ local function is_surface_hidden_for(surface, player)
   return player.force.get_surface_hidden(surface)
 end
 
+script.on_init(function()
+  storage.surfacedata = {}
+end)
+
+script.on_event(defines.events.on_surface_deleted, function(event)
+  storage.surfacedata[event.surface_index] = nil
+end)
+
+script.on_event(defines.events.on_player_removed, function(event)
+  for surface_index, surfacedata in pairs(storage.surfacedata) do
+    surfacedata.blacklisted_players[event.player_index] = nil
+  end
+end)
+
 local function open_for_player(player)
   local frame = player.gui.screen[mod_prefix .. "frame"]
   if frame then frame.destroy() end
