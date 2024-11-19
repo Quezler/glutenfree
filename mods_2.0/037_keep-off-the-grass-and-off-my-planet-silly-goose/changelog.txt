@@ -24,6 +24,7 @@ Date: ????
     - Make blacklist changes take effect immediately
     - Explain that trespassers will die
     - Only enable the dropdown for admins
+    - Make the respawn surface configurable
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19

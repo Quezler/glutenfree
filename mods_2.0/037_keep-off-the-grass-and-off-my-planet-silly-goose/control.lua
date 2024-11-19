@@ -40,7 +40,9 @@ local function check_if_player_is_allowed_to_be_here(player)
       position = old_character.position,
     }
     player.character = new_character
-    player.teleport({0, 0}, "nauvis")
+    local respawn_surface = game.surfaces[settings.global[mod_prefix .. "respawn-surface"].value]
+    if respawn_surface == nil then respawn_surface = "nauvis" end
+    player.teleport({0, 0}, respawn_surface)
     old_character.die()
     -- player.print("respawning you with a new body on " .. player.character.surface.name)
   end
