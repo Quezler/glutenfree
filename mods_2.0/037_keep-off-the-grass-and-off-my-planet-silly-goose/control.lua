@@ -62,6 +62,9 @@ local function open_for_player(player)
     end
     gui_table.add{
       type = "drop-down",
+      -- name = mod_prefix .. "drop-down",
+      -- tags = {surface_index = surface.index},
+      tags = {action = mod_prefix .. "blacklist-player", surface_index = surface.index},
       items = player_names,
       selected_index = 1,
     }
@@ -89,5 +92,14 @@ script.on_event(defines.events.on_gui_closed, function(event)
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     player.gui.screen[mod_prefix .. "frame"].destroy()
     player.set_shortcut_toggled(mod_prefix .. "shortcut", false)
+  end
+end)
+
+script.on_event(defines.events.on_gui_selection_state_changed, function(event)
+  -- if event.element.name == mod_prefix .. "drop-down" then
+  if event.element.tags.action == mod_prefix .. "blacklist-player" then
+    local player_name = event.element.items[event.element.selected_index]
+    local player = game.players[player_name]
+    game.print(player.name)
   end
 end)

@@ -9,6 +9,7 @@ Date: ????
     - Support localised surface names
     - Add player dropdown
     - Move player dropdown to the right
+    - Resolve selected player
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19
