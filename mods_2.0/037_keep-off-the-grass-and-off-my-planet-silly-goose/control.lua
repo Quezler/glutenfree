@@ -54,6 +54,11 @@ local function open_for_player(player)
     draw_horizontal_lines = true,
   }
 
+  local player_names = {"select a player"}
+  for _, player in pairs(game.players) do
+    table.insert(player_names, player.name)
+  end
+
   for _, surface in pairs(game.surfaces) do
     local editor_style_surface_name = surface.name
     if surface.localised_name then editor_style_surface_name = {"", editor_style_surface_name, " (", surface.localised_name, ")"} end
@@ -63,6 +68,7 @@ local function open_for_player(player)
       type = "label",
       caption = editor_style_surface_name,
     }
+    gui_surface_name.style.margin = 4
     if is_surface_hidden_for(surface, player) then gui_surface_name.style = "grey_label" end
 
     local piston = gui_table.add{
@@ -70,10 +76,18 @@ local function open_for_player(player)
     }
     piston.style.horizontally_stretchable = true
 
-    local player_names = {"select a player"}
-    for _, player in pairs(game.players) do
-      table.insert(player_names, player.name)
+    local surfacedata = storage.surfacedata[surface.index]
+    if surfacedata then
+      for player_index, _ in pairs(surfacedata.blacklisted_players) do
+        local gui_player_name = piston.add{
+          type = "label",
+          style = "caption_label",
+          caption = game.get_player(player_index).name,
+        }
+        gui_player_name.style.margin = 4
+      end
     end
+
     gui_table.add{
       type = "drop-down",
       tags = {action = mod_prefix .. "blacklist-player", surface_index = surface.index},
@@ -121,6 +135,7 @@ local function get_or_create_surfacedata(surface_index)
     surfacedata = {
       blacklisted_players = {}
     }
+    storage.surfacedata[surface_index] = surfacedata
   end
   return surfacedata
 end
@@ -129,7 +144,7 @@ local function try_to_blacklist_player_from(player_index, surface_index)
   assert(player_index)
   assert(surface_index)
 
-  if game.surfaces[surface_index] and game.players[player_index] then
+  if game.surfaces[surface_index] and game.get_player(player_index) then
     get_or_create_surfacedata(surface_index).blacklisted_players[player_index] = true
     update_groundskeeper_gui_for_everyone()
   end
@@ -138,7 +153,7 @@ end
 script.on_event(defines.events.on_gui_selection_state_changed, function(event)
   if event.element.tags.action == mod_prefix .. "blacklist-player" then
     local player_name = event.element.items[event.element.selected_index]
-    local player = game.players[player_name]
+    local player = game.get_player(player_name)
     try_to_blacklist_player_from(player.index, event.element.tags.surface_index)
   end
 end)
