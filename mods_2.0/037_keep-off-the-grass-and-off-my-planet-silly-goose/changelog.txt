@@ -18,6 +18,7 @@ Date: ????
     - Shuffle some margins around
     - Actually toggle with the dropdown
     - Prevent player from remote viewing a surface they are blacklisted on
+    - Cleanup remote view canceling code
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19

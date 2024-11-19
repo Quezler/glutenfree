@@ -164,15 +164,10 @@ end)
 script.on_event(defines.events.on_player_changed_surface, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local blacklisted = get_or_create_surfacedata(player.surface.index).blacklisted_players[player.index] == true
-  -- game.print(serpent.line(blacklisted))
   if not blacklisted then return end
 
   if player.controller_type == defines.controllers.remote then
+    -- teleporting a player to themselves just yoinks them out of remote view and even keeps them in their vehicles.
     player.teleport(player.character.position, player.character.surface)
-    -- player.set_controller{
-    --   type = defines.controllers.character,
-    --   character = player.character,
-    --   surface = player.character.surface,
-    -- }
   end
 end)
