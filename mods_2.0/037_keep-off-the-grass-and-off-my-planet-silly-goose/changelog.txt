@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Allow toggling the groundskeeper shortcut
     - List all the surfaces
+    - Turn force based hidden surfaces grey
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19

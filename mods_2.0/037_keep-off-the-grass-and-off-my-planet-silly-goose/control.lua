@@ -18,7 +18,7 @@ local function open_for_player(player)
     vertical_scroll_policy = "auto-and-reserve-space",
     horizontal_scroll_policy = "never",
   }
-  scroll_pane.style.minimal_width = 500
+  scroll_pane.style.minimal_width = 1000
   scroll_pane.style.maximal_height = 700
 
 
@@ -32,10 +32,11 @@ local function open_for_player(player)
     local editor_style_surface_name = surface.name
     if surface.platform then editor_style_surface_name = string.format("%s (%s)", editor_style_surface_name, surface.platform.name) end
     if surface.planet then editor_style_surface_name = string.format("%s ([planet=%s] %s)", editor_style_surface_name, surface.planet.name, surface.planet.name) end
-    gui_table.add{
+    local gui_surface_name = gui_table.add{
       type = "label",
       caption = editor_style_surface_name,
     }
+    if player.force.get_surface_hidden(surface) then gui_surface_name.style = "grey_label" end
   end
 
   player.opened = frame
