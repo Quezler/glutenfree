@@ -3,3 +3,4 @@ For when you are playing multiplayer with friends and that one guy just cannot s
 Ideally this mod sets permissions on you like Space Exploration's remote view did, but in this initial version it'll just prevent you from viewing the surface entirely.
 
 Players that were on a surface or are landing on one will just die and respawn on nauvis without any of their stuff, they should have stayed away.
+(the respawn location is configurable in case some mod adds more surfaces, but it'll still be shared amongst all forces so look out for that)
