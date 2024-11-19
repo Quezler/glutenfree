@@ -35,7 +35,9 @@ local function open_for_player(player)
   local gui_table = scroll_pane.add{
     type = "table",
     -- style = "table_with_selection",
-    column_count = 1,
+    column_count = 2,
+    draw_vertical_lines = true,
+    draw_horizontal_lines = true,
   }
 
   for _, surface in pairs(game.surfaces) do
@@ -48,6 +50,16 @@ local function open_for_player(player)
       caption = editor_style_surface_name,
     }
     if is_surface_hidden_for(surface, player) then gui_surface_name.style = "grey_label" end
+
+    local player_names = {"select a player"}
+    for _, player in pairs(game.players) do
+      table.insert(player_names, player.name)
+    end
+    gui_table.add{
+      type = "drop-down",
+      items = player_names,
+      selected_index = 1,
+    }
   end
 
   player.opened = frame
