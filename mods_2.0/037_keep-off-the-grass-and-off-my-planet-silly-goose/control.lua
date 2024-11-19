@@ -48,13 +48,35 @@ local function open_for_player(player)
 
   local gui_table = scroll_pane.add{
     type = "table",
-    -- style = "table_with_selection",
     column_count = 3,
     draw_vertical_lines = true,
     draw_horizontal_lines = true,
+    -- draw_horizontal_line_after_headers = true,
   }
 
-  local player_names = {"select a player"}
+  -- local header_1 = gui_table.add{
+  --   type = "label",
+  --   caption = "[font=default-bold]surface[/font]",
+  -- }
+
+  -- local header_2 = gui_table.add{
+  --   type = "label",
+  --   caption = "[font=default-bold]blacklisted players[/font]",
+  -- }
+
+  -- local header_3 = gui_table.add{
+  --   type = "label",
+  --   caption = "[font=default-bold]actions[/font]",
+  -- }
+
+  -- header_1.style.maximal_width = 10000
+  -- header_2.style.maximal_width = 10000
+  -- header_3.style.maximal_width = 10000
+  -- header_1.style.horizontal_align = "center"
+  -- header_2.style.horizontal_align = "center"
+  -- header_3.style.horizontal_align = "center"
+
+  local player_names = {"toggle player"}
   for _, player in pairs(game.players) do
     table.insert(player_names, player.name)
   end
@@ -81,7 +103,6 @@ local function open_for_player(player)
       for player_index, _ in pairs(surfacedata.blacklisted_players) do
         local gui_player_name = piston.add{
           type = "label",
-          style = "caption_label",
           caption = game.get_player(player_index).name,
         }
         gui_player_name.style.margin = 4

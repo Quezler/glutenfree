@@ -13,6 +13,7 @@ Date: ????
     - Prepare storage
     - Add blacklisted players to surfacedata
     - List players banned from a surface
+    - Attempt and fail to add headers
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19
