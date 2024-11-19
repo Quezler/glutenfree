@@ -127,6 +127,7 @@ local function open_for_player(player)
       tags = {action = mod_prefix .. "blacklist-player", surface_index = surface.index},
       items = player_names,
       selected_index = 1,
+      enabled = player.admin,
     }
   end
 
@@ -181,6 +182,8 @@ end
 
 script.on_event(defines.events.on_gui_selection_state_changed, function(event)
   if event.element.tags.action == mod_prefix .. "blacklist-player" then
+    local admin = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    if admin.admin == false then return end
     local player_name = event.element.items[event.element.selected_index]
     local player = game.get_player(player_name)
     try_to_toggle_blacklist_player_from(player.index, event.element.tags.surface_index)
