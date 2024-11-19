@@ -76,8 +76,6 @@ local function open_for_player(player)
     end
     gui_table.add{
       type = "drop-down",
-      -- name = mod_prefix .. "drop-down",
-      -- tags = {surface_index = surface.index},
       tags = {action = mod_prefix .. "blacklist-player", surface_index = surface.index},
       items = player_names,
       selected_index = 1,
@@ -109,11 +107,38 @@ script.on_event(defines.events.on_gui_closed, function(event)
   end
 end)
 
+local function update_groundskeeper_gui_for_everyone()
+  for _, player in pairs(game.players) do
+    if player.gui.screen[mod_prefix .. "frame"] then
+      open_for_player(player)
+    end
+  end
+end
+
+local function get_or_create_surfacedata(surface_index)
+  local surfacedata = storage.surfacedata[surface_index]
+  if surfacedata == nil then
+    surfacedata = {
+      blacklisted_players = {}
+    }
+  end
+  return surfacedata
+end
+
+local function try_to_blacklist_player_from(player_index, surface_index)
+  assert(player_index)
+  assert(surface_index)
+
+  if game.surfaces[surface_index] and game.players[player_index] then
+    get_or_create_surfacedata(surface_index).blacklisted_players[player_index] = true
+    update_groundskeeper_gui_for_everyone()
+  end
+end
+
 script.on_event(defines.events.on_gui_selection_state_changed, function(event)
-  -- if event.element.name == mod_prefix .. "drop-down" then
   if event.element.tags.action == mod_prefix .. "blacklist-player" then
     local player_name = event.element.items[event.element.selected_index]
     local player = game.players[player_name]
-    game.print(player.name)
+    try_to_blacklist_player_from(player.index, event.element.tags.surface_index)
   end
 end)

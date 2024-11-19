@@ -11,6 +11,7 @@ Date: ????
     - Move player dropdown to the right
     - Resolve selected player
     - Prepare storage
+    - Add blacklisted players to surfacedata
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19
