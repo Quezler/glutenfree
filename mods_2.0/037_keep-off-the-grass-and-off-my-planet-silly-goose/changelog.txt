@@ -22,6 +22,7 @@ Date: ????
     - Stash debugging how dying should work
     - Fix returning to body not forcing a respawn if you were on a blacklisted surface
     - Make blacklist changes take effect immediately
+    - Explain that trespassers will die
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19
