@@ -35,7 +35,7 @@ local function open_for_player(player)
   local gui_table = scroll_pane.add{
     type = "table",
     -- style = "table_with_selection",
-    column_count = 2,
+    column_count = 3,
     draw_vertical_lines = true,
     draw_horizontal_lines = true,
   }
@@ -50,6 +50,11 @@ local function open_for_player(player)
       caption = editor_style_surface_name,
     }
     if is_surface_hidden_for(surface, player) then gui_surface_name.style = "grey_label" end
+
+    local piston = gui_table.add{
+      type = "flow",
+    }
+    piston.style.horizontally_stretchable = true
 
     local player_names = {"select a player"}
     for _, player in pairs(game.players) do

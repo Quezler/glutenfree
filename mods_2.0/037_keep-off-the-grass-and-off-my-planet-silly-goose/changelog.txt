@@ -8,6 +8,7 @@ Date: ????
     - Grey out surfaces of hidden planets too
     - Support localised surface names
     - Add player dropdown
+    - Move player dropdown to the right
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 19
