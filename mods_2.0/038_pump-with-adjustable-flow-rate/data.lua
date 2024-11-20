@@ -49,7 +49,7 @@ local pump_fluid = {
   name = "pump-with-adjustable-flow-rate",
   icon = data.raw["virtual-signal"]["signal-F"].icon,
 
-  default_temperature = 0,
+  default_temperature = -1,
   max_temperature = 1200,
 
   base_color = {r=146, g=098, b=053},
@@ -62,20 +62,8 @@ local pump_fluid = {
 pump.energy_source = {
   type = "fluid",
   fluid_box = {
-    volume = 1000000,
+    volume = 100,
     pipe_connections = {},
-    -- production_type = "input",
-    -- pipe_picture = assembler2pipepictures(),
-    -- pipe_covers = pipecoverspictures(),
-    -- base_area = 1,
-    -- height = 2,
-    -- base_level = -1,
-    -- pipe_connections =
-    -- {
-    --   {position = {-6,  0}},
-    --   {position = { 6,  0}},
-    --   {position = { 0,  6}},
-    -- },
     filter = pump_fluid.name,
   }
 }

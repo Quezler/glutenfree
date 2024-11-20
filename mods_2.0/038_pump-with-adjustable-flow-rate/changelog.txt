@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Butcher in an icon
     - Add the signal fluid
+    - Fill the pump with free fluid on place
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 20
