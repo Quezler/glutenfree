@@ -20,7 +20,7 @@ script.on_init(function()
 end)
 
 local function reset_offering(struct)
-  game.print('resetting offering @ ' .. game.tick)
+  -- game.print('resetting offering @ ' .. game.tick)
   struct.inserter_offering = game.surfaces[mod_surface_name].create_entity{
     name = "item-on-ground",
     force = "neutral",
