@@ -35,12 +35,16 @@ local function ensure_frame_exists(player)
   textfield.lose_focus_on_confirm = true
 end
 
+local function get_entity_type(entity)
+  return entity.type == "entity-ghost" and entity.ghost_type or entity.type
+end
+
 script.on_event("decider-combinator-output-constant-editor-i", function(event)
   local player = assert(game.get_player(event.player_index))
   local opened = player.opened
 
   if opened == nil then return end
-  if opened.type ~= "decider-combinator" then return end
+  if get_entity_type(opened) ~= "decider-combinator" then return end
 
   if event.selected_prototype == nil then
     return player.create_local_flying_text{
@@ -82,7 +86,7 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
 
   local player = assert(game.get_player(event.player_index))
   local opened = player.opened
-  if not (opened and opened.type == "decider-combinator") then
+  if not (opened and get_entity_type(opened) == "decider-combinator") then
     return disable_textfield(player) -- latency race condition
   end
 
@@ -109,14 +113,14 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
 end)
 
 script.on_event(defines.events.on_gui_opened, function(event)
-  if event.entity and event.entity.type == "decider-combinator" then
+  if event.entity and get_entity_type(event.entity) == "decider-combinator" then
     local player = assert(game.get_player(event.player_index))
     ensure_frame_exists(player)
   end
 end)
 
 script.on_event(defines.events.on_gui_closed, function(event)
-  if event.entity and event.entity.type == "decider-combinator" then
+  if event.entity and get_entity_type(event.entity) == "decider-combinator" then
     local player = assert(game.get_player(event.player_index))
     disable_textfield(player)
   end
