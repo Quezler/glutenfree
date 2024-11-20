@@ -9,6 +9,7 @@ Date: ????
     - Begin storing pumps in struct
     - Setup the deathrattles, inserter, offering & circuit condition logic
     - Update the circuit condition and fluid temperature
+    - Combine several struct update functions into one
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 20

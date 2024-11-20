@@ -19,18 +19,6 @@ script.on_init(function()
   }
 end)
 
-local function refuel_struct(struct)
-  struct.pump.fluidbox[2] = {
-    name = "pump-with-adjustable-flow-rate",
-    amount = 100,
-    temperature = struct.speed,
-  }
-end
-
-local function copy_speed_from_circuits(struct)
-  struct.speed = struct.inserter.get_signal({type = "virtual", name = "signal-F"}, circuit_red, circuit_green)
-end
-
 local function reset_offering(struct)
   game.print('resetting offering @ ' .. game.tick)
   struct.inserter_offering = game.surfaces[mod_surface_name].create_entity{
@@ -73,6 +61,17 @@ local function get_next_circuit_condition(struct)
   end
 end
 
+local function tick_struct(struct)
+  struct.speed = struct.inserter.get_signal({type = "virtual", name = "signal-F"}, circuit_red, circuit_green)
+  struct.inserter_cb.circuit_condition = get_next_circuit_condition(struct)
+
+  struct.pump.fluidbox[2] = {
+    name = "pump-with-adjustable-flow-rate",
+    amount = 100,
+    temperature = struct.speed,
+  }
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -96,9 +95,6 @@ function Handler.on_created_entity(event)
     position = {-0.5 + struct.x_offset, -1.5},
   }
 
-  refuel_struct(struct)
-  reset_offering(struct)
-
   local inserter_red   = struct.inserter.get_wire_connector(defines.wire_connector_id.circuit_red  , true)
   local inserter_green = struct.inserter.get_wire_connector(defines.wire_connector_id.circuit_green, true)
   assert(entity.get_wire_connector(defines.wire_connector_id.circuit_red  , true).connect_to(inserter_red  , false))
@@ -106,7 +102,9 @@ function Handler.on_created_entity(event)
 
   struct.inserter_cb = struct.inserter.get_control_behavior() --[[@as LuaInserterControlBehavior]]
   struct.inserter_cb.circuit_enable_disable = true
-  struct.inserter_cb.circuit_condition = get_next_circuit_condition(struct)
+
+  tick_struct(struct)
+  reset_offering(struct)
 end
 
 for _, event in ipairs({
@@ -130,9 +128,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 
     if deathrattle.type == "offering" then
       struct.inserter.held_stack.clear()
-      copy_speed_from_circuits(struct)
-      refuel_struct(struct)
-      struct.inserter_cb.circuit_condition = get_next_circuit_condition(struct)
+      tick_struct(struct)
       reset_offering(struct)
     elseif deathrattle.type == "pump" then
       struct.inserter.destroy()
@@ -142,5 +138,12 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       error(serpent.block(deathrattle))
     end
 
+  end
+end)
+
+-- every hour minutes we'll refuel all the pumps, pumps running on full the entire time without circuit changes will be around 13 of 100
+script.on_nth_tick(60 * 60 * 10 * 6, function(event)
+  for _, struct in pairs(storage.structs) do
+    tick_struct(struct)
   end
 end)
