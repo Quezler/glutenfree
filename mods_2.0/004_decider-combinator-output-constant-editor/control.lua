@@ -69,7 +69,9 @@ script.on_event("decider-combinator-output-constant-editor-i", function(event)
 end)
 
 local function disable_textfield(player)
-  local textfield = player.gui.relative[mod_prefix .. "frame"][mod_prefix .. "textfield"]
+  local frame = player.gui.relative[mod_prefix .. "frame"]
+  if frame == nil then return end -- on configuration changed fired whilst the gui was open?
+  local textfield = frame[mod_prefix .. "textfield"]
   textfield.enabled = false
   textfield.text = ""
   textfield.tags = {}
