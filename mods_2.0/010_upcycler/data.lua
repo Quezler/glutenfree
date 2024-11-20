@@ -132,3 +132,14 @@ data:extend{upcycler_input}
 
 table.insert(upcycler_entity.flags, "no-automated-item-insertion")
 table.insert(upcycler_entity.flags, "no-automated-item-removal")
+
+data:extend{{
+  type = "planet",
+  name = "upcycler",
+  icon = upcycler_entity.icon,
+
+  distance = 0,
+  orientation = 0,
+
+  hidden = true,
+}}
