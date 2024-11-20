@@ -153,3 +153,14 @@ shop.surface_conditions = {
     min = 1
   }
 }
+
+data:extend{{
+  type = "planet",
+  name = "awesome-sink",
+  icon = sink.icon,
+
+  distance = 0,
+  orientation = 0,
+
+  hidden = true,
+}}

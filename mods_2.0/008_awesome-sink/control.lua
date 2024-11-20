@@ -12,19 +12,23 @@ script.on_init(function ()
 
   storage.assembler_to_arithmetic_map = {}
 
-  local mod_surface = game.surfaces[mod_surface_name]
-  if mod_surface then
-    for _, entity in ipairs(mod_surface.find_entities_filtered{}) do
-      entity.destroy()
-    end
-  end
-  if mod_surface == nil then
-    mod_surface = game.create_surface(mod_surface_name)
-    mod_surface.generate_with_lab_tiles = true
-  end
+  local mod_surface = game.planets[mod_surface_name].create_surface()
+  mod_surface.generate_with_lab_tiles = true
+  mod_surface.create_global_electric_network()
+  mod_surface.create_entity{
+    name = "electric-energy-interface",
+    force = "neutral",
+    position = {-1, -1},
+  }
 
   for _, surface in pairs(game.surfaces) do
     Handler.on_surface_created({surface_index = surface.index})
+  end
+end)
+
+script.on_configuration_changed(function()
+  if game.planets[mod_surface_name].surface == nil then
+    game.planets[mod_surface_name].associate_surface(game.surfaces[mod_surface_name])
   end
 end)
 

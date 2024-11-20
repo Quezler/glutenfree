@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2024. 11. 20
+  Info:
+    - Hide the awesome sink surface from remote view, and delete said surface when the mod gets removed
+---------------------------------------------------------------------------------------------------
 Version: 1.1.8
 Date: 2024. 11. 15
   Info:
