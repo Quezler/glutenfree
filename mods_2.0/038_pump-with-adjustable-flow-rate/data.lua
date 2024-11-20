@@ -32,3 +32,14 @@ for i, effect in ipairs(technology.effects) do
 end
 
 data:extend{pump, pump_item, pump_recipe, pump_recipe}
+
+local icons = {
+  {icon = "__base__/graphics/icons/pump.png"},
+  {icon = "__core__/graphics/icons/technology/effect-constant/effect-constant-speed.png", scale = -0.5},
+}
+
+pump.icon = nil
+pump.icons = icons
+
+pump_item.icon = nil
+pump_item.icons = icons
