@@ -1,6 +1,8 @@
 local Handler = {}
 
 local mod_surface_name = "pump-with-adjustable-flow-rate"
+local circuit_red = defines.wire_connector_id.circuit_red
+local circuit_green = defines.wire_connector_id.circuit_green
 
 script.on_init(function()
   storage.x_offset = 0
@@ -23,6 +25,10 @@ local function refuel_struct(struct)
     amount = 100,
     temperature = struct.speed,
   }
+end
+
+local function copy_speed_from_circuits(struct)
+  struct.speed = struct.inserter.get_signal({type = "virtual", name = "signal-F"}, circuit_red, circuit_green)
 end
 
 local function reset_offering(struct)
@@ -98,9 +104,9 @@ function Handler.on_created_entity(event)
   assert(entity.get_wire_connector(defines.wire_connector_id.circuit_red  , true).connect_to(inserter_red  , false))
   assert(entity.get_wire_connector(defines.wire_connector_id.circuit_green, true).connect_to(inserter_green, false))
 
-  local inserter_cb = struct.inserter.get_control_behavior() --[[@as LuaInserterControlBehavior]]
-  inserter_cb.circuit_enable_disable = true
-  inserter_cb.circuit_condition = get_next_circuit_condition(struct)
+  struct.inserter_cb = struct.inserter.get_control_behavior() --[[@as LuaInserterControlBehavior]]
+  struct.inserter_cb.circuit_enable_disable = true
+  struct.inserter_cb.circuit_condition = get_next_circuit_condition(struct)
 end
 
 for _, event in ipairs({
@@ -124,6 +130,9 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 
     if deathrattle.type == "offering" then
       struct.inserter.held_stack.clear()
+      copy_speed_from_circuits(struct)
+      refuel_struct(struct)
+      struct.inserter_cb.circuit_condition = get_next_circuit_condition(struct)
       reset_offering(struct)
     elseif deathrattle.type == "pump" then
       struct.inserter.destroy()

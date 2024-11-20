@@ -8,6 +8,7 @@ Date: ????
     - Setup the hidden surface
     - Begin storing pumps in struct
     - Setup the deathrattles, inserter, offering & circuit condition logic
+    - Update the circuit condition and fluid temperature
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 20
