@@ -43,3 +43,41 @@ pump.icons = icons
 
 pump_item.icon = nil
 pump_item.icons = icons
+
+local pump_fluid = {
+  type = "fluid",
+  name = "pump-with-adjustable-flow-rate",
+  icon = data.raw["virtual-signal"]["signal-F"].icon,
+
+  default_temperature = 0,
+  max_temperature = 1200,
+
+  base_color = {r=146, g=098, b=053},
+  flow_color = {r=146, g=098, b=053},
+
+  auto_barrel = false,
+  hidden = true
+}
+
+pump.energy_source = {
+  type = "fluid",
+  fluid_box = {
+    volume = 1000000,
+    pipe_connections = {},
+    -- production_type = "input",
+    -- pipe_picture = assembler2pipepictures(),
+    -- pipe_covers = pipecoverspictures(),
+    -- base_area = 1,
+    -- height = 2,
+    -- base_level = -1,
+    -- pipe_connections =
+    -- {
+    --   {position = {-6,  0}},
+    --   {position = { 6,  0}},
+    --   {position = { 0,  6}},
+    -- },
+    filter = pump_fluid.name,
+  }
+}
+
+data:extend{pump_fluid}
