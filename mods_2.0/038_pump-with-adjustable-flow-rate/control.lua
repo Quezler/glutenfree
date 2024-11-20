@@ -3,6 +3,8 @@ local Handler = {}
 local mod_surface_name = "pump-with-adjustable-flow-rate"
 
 script.on_init(function()
+  storage.structs = {}
+
   local mod_surface = game.planets[mod_surface_name].create_surface()
   mod_surface.generate_with_lab_tiles = true
   mod_surface.create_global_electric_network()
@@ -13,6 +15,14 @@ script.on_init(function()
   }
 end)
 
+function refuel_struct(struct)
+  struct.pump.fluidbox[2] = {
+    name = "pump-with-adjustable-flow-rate",
+    amount = 100,
+    temperature = struct.speed,
+  }
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -20,11 +30,20 @@ function Handler.on_created_entity(event)
   assert(filter)
   assert(filter.name == "pump-with-adjustable-flow-rate")
 
-  entity.fluidbox[2] = {
-    name = "pump-with-adjustable-flow-rate",
-    amount = 100,
-    temperature = 600,
+  local struct = {id = entity.unit_number}
+  storage.structs[struct.id] = struct
+
+  local mod_surface = game.surfaces[mod_surface_name]
+
+  struct.pump = entity
+  struct.speed = 0
+  struct.inserter = mod_surface.create_entity{
+    name = "inserter",
+    force = "neutral",
+    position = {-0.5 + struct.id, -1.5},
   }
+
+  refuel_struct(struct)
 end
 
 for _, event in ipairs({

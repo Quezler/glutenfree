@@ -6,6 +6,7 @@ Date: ????
     - Add the signal fluid
     - Fill the pump with free fluid on place
     - Setup the hidden surface
+    - Begin storing pumps in struct
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 20
