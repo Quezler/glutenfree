@@ -3,7 +3,9 @@ local Handler = {}
 local mod_surface_name = "pump-with-adjustable-flow-rate"
 
 script.on_init(function()
+  storage.x_offset = 0
   storage.structs = {}
+  storage.deathrattles = {}
 
   local mod_surface = game.planets[mod_surface_name].create_surface()
   mod_surface.generate_with_lab_tiles = true
@@ -15,12 +17,54 @@ script.on_init(function()
   }
 end)
 
-function refuel_struct(struct)
+local function refuel_struct(struct)
   struct.pump.fluidbox[2] = {
     name = "pump-with-adjustable-flow-rate",
     amount = 100,
     temperature = struct.speed,
   }
+end
+
+local function reset_offering(struct)
+  game.print('resetting offering @ ' .. game.tick)
+  struct.inserter_offering = game.surfaces[mod_surface_name].create_entity{
+    name = "item-on-ground",
+    force = "neutral",
+    position = {-0.5 + struct.x_offset, -2.5},
+    stack = {name = "wood"},
+  }
+  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_offering)] = {type = "offering", struct_id = struct.id}
+end
+
+local function get_next_circuit_condition(struct)
+  if struct.speed <= 0 then
+    return {
+      comparator = ">",
+      constant = 0,
+      first_signal = {
+        name = "signal-F",
+        type = "virtual"
+      }
+    }
+  elseif struct.speed >= 1200 then
+    return {
+      comparator = "<",
+      constant = 1200,
+      first_signal = {
+        name = "signal-F",
+        type = "virtual"
+      }
+    }
+  else
+    return {
+      comparator = "!=",
+      constant = struct.speed,
+      first_signal = {
+        name = "signal-F",
+        type = "virtual"
+      }
+    }
+  end
 end
 
 function Handler.on_created_entity(event)
@@ -32,6 +76,9 @@ function Handler.on_created_entity(event)
 
   local struct = {id = entity.unit_number}
   storage.structs[struct.id] = struct
+  storage.x_offset = storage.x_offset + 1
+  struct.x_offset = storage.x_offset
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {type = "pump", struct_id = struct.id}
 
   local mod_surface = game.surfaces[mod_surface_name]
 
@@ -40,10 +87,20 @@ function Handler.on_created_entity(event)
   struct.inserter = mod_surface.create_entity{
     name = "inserter",
     force = "neutral",
-    position = {-0.5 + struct.id, -1.5},
+    position = {-0.5 + struct.x_offset, -1.5},
   }
 
   refuel_struct(struct)
+  reset_offering(struct)
+
+  local inserter_red   = struct.inserter.get_wire_connector(defines.wire_connector_id.circuit_red  , true)
+  local inserter_green = struct.inserter.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+  assert(entity.get_wire_connector(defines.wire_connector_id.circuit_red  , true).connect_to(inserter_red  , false))
+  assert(entity.get_wire_connector(defines.wire_connector_id.circuit_green, true).connect_to(inserter_green, false))
+
+  local inserter_cb = struct.inserter.get_control_behavior() --[[@as LuaInserterControlBehavior]]
+  inserter_cb.circuit_enable_disable = true
+  inserter_cb.circuit_condition = get_next_circuit_condition(struct)
 end
 
 for _, event in ipairs({
@@ -58,3 +115,23 @@ for _, event in ipairs({
     {filter = "name", name = "pump-with-adjustable-flow-rate"},
   })
 end
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    local struct = storage.structs[deathrattle.struct_id]
+    if struct == nil then return end
+
+    if deathrattle.type == "offering" then
+      struct.inserter.held_stack.clear()
+      reset_offering(struct)
+    elseif deathrattle.type == "pump" then
+      struct.inserter.destroy()
+      struct.inserter_offering.destroy()
+      storage.structs[struct.id] = nil
+    else
+      error(serpent.block(deathrattle))
+    end
+
+  end
+end)

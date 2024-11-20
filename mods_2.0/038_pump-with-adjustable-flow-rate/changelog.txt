@@ -7,6 +7,7 @@ Date: ????
     - Fill the pump with free fluid on place
     - Setup the hidden surface
     - Begin storing pumps in struct
+    - Setup the deathrattles, inserter, offering & circuit condition logic
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 20
