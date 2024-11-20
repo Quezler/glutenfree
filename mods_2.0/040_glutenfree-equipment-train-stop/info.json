@@ -2,11 +2,17 @@
     "name": "glutenfree-equipment-train-stop",
     "title": "Equipment train stop",
     "description": "Update the equipment grid of your trains by driving past it.",
-    "version": "1.1.2",
+
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
+
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
         "base",
-        "flib"
+        "flib",
+
+        "? kry-vehicle-grids"
     ]
 }

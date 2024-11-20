@@ -1,0 +1,78 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024. 11. 20
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2024. 09. 15
+  Info:
+    - Fix combat mechanics overhaul from messing with landmine collision layers
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2024. 02. 29
+  Info:
+    - Update icon & lock recipe behind rail stop's research
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2024. 02. 02
+  Info:
+    - No longer require logistic network coverage, template chest can be filled with inserters or construction bots instead
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2024. 02. 02
+  Info:
+    - Fix previous version preventing new equipment train stops from being placed
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2024. 01. 28
+  Info:
+    - Optimize events by filtering on the c++ side
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2023. 06. 23
+  Info:
+    - Add German translation for equipment-train-stop (#13)
+    - Bump version
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2023. 06. 16
+  Info:
+    - Fix crash but lower performance (uncached atm)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2023. 06. 16
+  Info:
+    - Compatibility for mods with mismatching item names
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2023. 05. 07
+  Info:
+    - Fix the mod only working for trains on nauvis
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2023. 05. 02
+  Info:
+    - Renamed the mod
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022. 10. 01
+  Info:
+    - Improve code readability
+    - Prepare to compare equipment grid with a template
+    - Use custom station recipe/item/entity for equipment
+    - Retrieve template from the template chest
+    - Determine if the grids match, or require updating
+    - Remove the tripwire and the templates upon removal
+    - Spill template chest upon deathrattle
+    - Remove the entry once the station deathrattles
+    - Reformat the equipment grid based on the template
+    - Avoid landmine harvesting
+    - Write initial readme
+    - Prepare for release
+    - File 1.0.0 changelog under 1.0.1 due to reasons
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2022. 10. 01
+  Info:
+    - Detect individual roling stock passing by the stop

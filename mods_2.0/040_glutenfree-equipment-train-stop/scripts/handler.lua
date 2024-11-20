@@ -1,21 +1,21 @@
-local mod_prefix = 'glutenfree-equipment-train-stop-'
+local mod_prefix = "glutenfree-equipment-train-stop-"
 
-local equipmentgrid = require('scripts.equipmentgrid')
-local LTN = require('scripts.ltn')
+local EquipmentGrid = require("scripts.equipmentgrid")
+local LTN = require("scripts.ltn")
 
 --
 
 local handler = {}
 
 function handler.init()
-  global.landmines = {}
+  storage.landmines = {}
 
-  global.entries = {}
+  storage.entries = {}
 
-  global.tripwires_to_replace = {}
+  storage.tripwires_to_replace = {}
 
-  global.deathrattles = {}
-  global.deathrattle_to_entry = {}
+  storage.deathrattles = {}
+  storage.deathrattle_to_entry = {}
 end
 
 function handler.on_configuration_changed()
@@ -23,7 +23,7 @@ function handler.on_configuration_changed()
 end
 
 function handler.on_created_entity(event)
-  local entity = event.created_entity or event.entity or event.destination
+  local entity = event.entity or event.destination
 
   handler.register_train_stop(entity)
 end
@@ -44,8 +44,8 @@ function handler.register_train_stop(entity)
   end
 
   local template_container = entity.surface.create_entity({
-    name = mod_prefix .. 'template-container',
-    position = LTN.multiblock_position_for(entity, 'combinator'),
+    name = mod_prefix .. "template-container",
+    position = LTN.multiblock_position_for(entity, "combinator"),
     force = entity.force,
   })
   template_container.destructible = false
@@ -56,38 +56,38 @@ function handler.register_train_stop(entity)
     connected_rail_position = connected_rail_position,
     template_container = template_container,
 
-    station_registration_number = script.register_on_entity_destroyed(entity)
+    station_registration_number = script.register_on_object_destroyed(entity)
   }
-  global.entries[entry.unit_number] = entry
-  global.deathrattles[entry.station_registration_number] = {template_container} -- 1 = template container
-  global.deathrattle_to_entry[entry.station_registration_number] = entry.unit_number
+  storage.entries[entry.unit_number] = entry
+  storage.deathrattles[entry.station_registration_number] = {template_container} -- 1 = template container
+  storage.deathrattle_to_entry[entry.station_registration_number] = entry.unit_number
 
-  global.tripwires_to_replace[entity.unit_number] = true
+  storage.tripwires_to_replace[entity.unit_number] = true
 end
 
 function handler.replace_tripwire(entity) -- station
-  local entry = global.entries[entity.unit_number]
+  local entry = storage.entries[entity.unit_number]
 
   local landmine = entity.surface.create_entity({
-    name = mod_prefix .. 'tripwire',
-    force = 'neutral',
+    name = mod_prefix .. "tripwire",
+    force = "neutral",
     position = entry.connected_rail_position,
   })
 
   -- listen to when a train collides with the tripwire
-  global.landmines[script.register_on_entity_destroyed(landmine)] = entity.unit_number
+  storage.landmines[script.register_on_object_destroyed(landmine)] = entity.unit_number
 
   -- remote the tripwire if the train stop ends up being removed
-  global.deathrattles[entry.station_registration_number][2] = landmine -- 2 = tripwire
+  storage.deathrattles[entry.station_registration_number][2] = landmine -- 2 = tripwire
 end
 
-function handler.on_entity_destroyed(event)
-  local deathrattle = global.deathrattles[event.registration_number]
+function handler.on_object_destroyed(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then
     for _, entity in ipairs(deathrattle) do
 
       if entity.valid then
-        if entity.name == mod_prefix .. 'template-container' then
+        if entity.name == mod_prefix .. "template-container" then
           local inventory = entity.get_inventory(defines.inventory.chest)
           for slot = 1, #inventory do
             local stack = inventory[slot]
@@ -100,19 +100,19 @@ function handler.on_entity_destroyed(event)
     end
 
     -- remove entry from the global table if this registration number refered to the station
-    local entry = global.entries[global.deathrattle_to_entry[event.registration_number]]
-    if entry then global.entries[entry.unit_number] = nil end
-  
-    global.deathrattles[event.registration_number] = nil
+    local entry = storage.entries[storage.deathrattle_to_entry[event.registration_number]]
+    if entry then storage.entries[entry.unit_number] = nil end
+
+    storage.deathrattles[event.registration_number] = nil
     return
   end
 
-  local unit_number = global.landmines[event.registration_number]
+  local unit_number = storage.landmines[event.registration_number]
   if not unit_number then return end
 
-  global.landmines[event.registration_number] = nil
+  storage.landmines[event.registration_number] = nil
 
-  local entry = global.entries[unit_number]
+  local entry = storage.entries[unit_number]
   if not entry then return end
 
   -- search center of tripwire + bounding box (.4) + safety margin (.1) 
@@ -121,36 +121,36 @@ function handler.on_entity_destroyed(event)
     {entry.connected_rail_position.x - 0.5, entry.connected_rail_position.y - 0.5},
     {entry.connected_rail_position.x + 0.5, entry.connected_rail_position.y + 0.5},
     },
-    type = {'locomotive', 'cargo-wagon', 'fluid-wagon', 'artillery-wagon'} -- all rolling stock
+    type = {"locomotive", "cargo-wagon", "fluid-wagon", "artillery-wagon"} -- all rolling stock
   })
 
   -- try to update any cairage present
   for _, entity in ipairs(entities) do
-    -- game.print(_ .. ' ' .. entity.name)
-    equipmentgrid.tick_rolling_stock(entry, entity)
+    -- game.print(_ .. " " .. entity.name)
+    EquipmentGrid.tick_rolling_stock(entry, entity)
   end
 
-  global.tripwires_to_replace[entry.unit_number] = true
+  storage.tripwires_to_replace[entry.unit_number] = true
 end
 
 -- try to replace the tripwire each tick until it is able (aka: the cairage having passed)
 function handler.on_tick()
-  for unit_number, _ in pairs(global.tripwires_to_replace) do
-    global.tripwires_to_replace[unit_number] = nil
+  for unit_number, _ in pairs(storage.tripwires_to_replace) do
+    storage.tripwires_to_replace[unit_number] = nil
 
-    local entry = global.entries[unit_number]
+    local entry = storage.entries[unit_number]
     if entry and entry.train_stop.valid then -- todo: delete if not valid?
 
       local can_place_entity = entry.train_stop.surface.can_place_entity({
-        name = mod_prefix .. 'tripwire',
+        name = mod_prefix .. "tripwire",
         position = entry.connected_rail_position,
-        force = 'neutral',
+        force = "neutral",
       })
 
       if can_place_entity then
         handler.replace_tripwire(entry.train_stop)
       else
-        global.tripwires_to_replace[unit_number] = true -- try again next tick
+        storage.tripwires_to_replace[unit_number] = true -- try again next tick
       end
 
     end

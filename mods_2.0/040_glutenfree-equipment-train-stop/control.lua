@@ -1,9 +1,9 @@
-local handler = require('scripts.handler')
+local Handler = require("scripts.handler")
 
 --
 
 local function init()
-  handler.init()
+  Handler.init()
 end
 
 local function load()
@@ -20,7 +20,7 @@ script.on_load(function()
 end)
 
 script.on_configuration_changed(function(event)
-  handler.on_configuration_changed()
+  Handler.on_configuration_changed()
 end)
 
 --
@@ -28,18 +28,19 @@ end)
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
+  defines.events.on_space_platform_built_entity,
   defines.events.script_raised_built,
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, handler.on_created_entity, {
-    {filter = 'name', name = 'glutenfree-equipment-train-stop-station'},
+  script.on_event(event, Handler.on_created_entity, {
+    {filter = "name", name = "glutenfree-equipment-train-stop-station"},
   })
 end
 
 local events = {
-  [defines.events.on_entity_destroyed] = handler.on_entity_destroyed,
-  [defines.events.on_tick] = handler.on_tick, -- todo: only have this handler active while global.tripwires_to_replace is not empty
+  [defines.events.on_object_destroyed] = Handler.on_object_destroyed,
+  [defines.events.on_tick] = Handler.on_tick, -- todo: only have this handler active while global.tripwires_to_replace is not empty
 }
 
 for event, handler in pairs(events) do
