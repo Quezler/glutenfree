@@ -1,5 +1,18 @@
 local Handler = {}
 
+local mod_surface_name = "pump-with-adjustable-flow-rate"
+
+script.on_init(function()
+  local mod_surface = game.planets[mod_surface_name].create_surface()
+  mod_surface.generate_with_lab_tiles = true
+  mod_surface.create_global_electric_network()
+  mod_surface.create_entity{
+    name = "electric-energy-interface",
+    force = "neutral",
+    position = {-1, -1},
+  }
+end)
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 

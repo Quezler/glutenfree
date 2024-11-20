@@ -69,3 +69,14 @@ pump.energy_source = {
 }
 
 data:extend{pump_fluid}
+
+data:extend{{
+  type = "planet",
+  name = "pump-with-adjustable-flow-rate",
+  icons = icons,
+
+  distance = 0,
+  orientation = 0,
+
+  hidden = true,
+}}

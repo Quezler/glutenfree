@@ -5,6 +5,7 @@ Date: ????
     - Butcher in an icon
     - Add the signal fluid
     - Fill the pump with free fluid on place
+    - Setup the hidden surface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 20
