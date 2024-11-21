@@ -108,20 +108,30 @@ for length = 2, 6 do
       scale = 0.25,
       shift = {8, -8}
     })
-    local reactor = {
-      type = "reactor",
-      name = string.format("underground-heat-pipe-reactor-%s-%s", axis, length),
-      localised_name = {"entity-name.underground-heat-pipe-reactor-axis-length", axis, zero_padded_length_string},
+    local heat_pipe_long = {
+      type = "heat-pipe",
+      name = string.format("underground-heat-pipe-long-%s-%s", axis, length),
+      localised_name = {"entity-name.underground-heat-pipe-long-axis-length", axis, zero_padded_length_string},
       icons = icons,
       heat_buffer = table.deepcopy(heat_pipe_entity.heat_buffer),
       collision_box = {{-0.2 - offset.x, -0.2 - offset.y}, {0.2 + offset.x, 0.2 + offset.y}},
       selection_box = {{-0.4 - offset.x, -0.4 - offset.y}, {0.4 + offset.x, 0.4 + offset.y}},
-      energy_source = {type = "void"},
-      consumption = "60W",
       collision_mask = {layers = {}},
       hidden = true,
     }
 
-    data:extend{reactor}
+    if offset.x > 0 then
+      heat_pipe_long.heat_buffer.connections = {
+        {position = {- offset.x, 0}, direction = defines.direction.west},
+        {position = {  offset.x, 0}, direction = defines.direction.east},
+      }
+    else
+      heat_pipe_long.heat_buffer.connections = {
+        {position = {0, - offset.y}, direction = defines.direction.north},
+        {position = {0,   offset.y}, direction = defines.direction.south},
+      }
+    end
+
+    data:extend{heat_pipe_long}
   end
 end

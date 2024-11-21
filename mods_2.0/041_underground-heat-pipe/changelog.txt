@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.2
+Version: 0.0.3
 Date: ????
+  Info:
+    - Set the heat connection points and change type
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2024. 11. 21
   Info:
     - Reuse the underground belt sprite for the smaller end points
     - Extent and minable fix
