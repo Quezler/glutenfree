@@ -91,9 +91,9 @@ yellow_uhp.pictures.east.x  = 192 * 3
 data:extend{yellow_uhp, yellow_uhp_item, yellow_uhp_recipe}
 
 for length = 2, 6 do
-  local half_length = length / 2
+  local range = (length - 1) / 2 -- as in, half of the diameter, minus the center or something.
   -- right = vertical, left = horizontal
-  for axis, offset in pairs({horizontal = {x = half_length, y = 0}, vertical = {x = 0, y = half_length}}) do
+  for axis, offset in pairs({horizontal = {x = range, y = 0}, vertical = {x = 0, y = range}}) do
     local reactor = {
       type = "reactor",
       name = string.format("underground-heat-pipe-reactor-%s-%s", axis, length),
@@ -102,6 +102,7 @@ for length = 2, 6 do
       selection_box = {{-0.4 - offset.x, -0.4 - offset.y}, {0.4 + offset.x, 0.4 + offset.y}},
       energy_source = {type = "void"},
       consumption = "60W",
+      collision_mask = {layers = {}}
     }
 
     data:extend{reactor}
