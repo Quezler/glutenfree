@@ -1,9 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.3
-Date: ????
-  Info:
-    - Set the heat connection points and change type
----------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 21
   Info:
@@ -13,6 +8,7 @@ Date: 2024. 11. 21
     - Fix reactor length and mask
     - Localize the internal entity
     - Add some virtual signals to the internal icons (not that anyone will see them)
+    - Set the heat connection points and change type
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 21
