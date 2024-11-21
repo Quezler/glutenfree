@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Reuse the underground belt sprite for the smaller end points
     - Extent and minable fix
+    - Setup the initial directional reactors
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 21

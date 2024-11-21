@@ -1,4 +1,5 @@
 local heat_pipe_item = data.raw["item"]["heat-pipe"]
+local heat_pipe_entity = data.raw["heat-pipe"]["heat-pipe"]
 
 local yellow_underground_belt = table.deepcopy(data.raw["underground-belt"]["underground-belt"])
 
@@ -27,6 +28,9 @@ local yellow_uhp = {
   },
   collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+
+  health = yellow_underground_belt.health,
+  resistances = yellow_underground_belt.resistances,
 }
 
 local yellow_uhp_item = {
@@ -85,3 +89,21 @@ yellow_uhp.pictures.north.x = 192 * 2
 yellow_uhp.pictures.east.x  = 192 * 3
 
 data:extend{yellow_uhp, yellow_uhp_item, yellow_uhp_recipe}
+
+for length = 2, 6 do
+  local half_length = length / 2
+  -- right = vertical, left = horizontal
+  for axis, offset in pairs({horizontal = {x = half_length, y = 0}, vertical = {x = 0, y = half_length}}) do
+    local reactor = {
+      type = "reactor",
+      name = string.format("underground-heat-pipe-reactor-%s-%s", axis, length),
+      heat_buffer = table.deepcopy(heat_pipe_entity.heat_buffer),
+      collision_box = {{-0.2 - offset.x, -0.2 - offset.y}, {0.2 + offset.x, 0.2 + offset.y}},
+      selection_box = {{-0.4 - offset.x, -0.4 - offset.y}, {0.4 + offset.x, 0.4 + offset.y}},
+      energy_source = {type = "void"},
+      consumption = "60W",
+    }
+
+    data:extend{reactor}
+  end
+end
