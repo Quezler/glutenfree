@@ -7,6 +7,7 @@ Date: ????
     - Setup the initial directional reactors
     - Fix reactor length and mask
     - Localize the internal entity
+    - Add some virtual signals to the internal icons (not that anyone will see them)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 21

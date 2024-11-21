@@ -94,16 +94,32 @@ for length = 2, 6 do
   local range = (length - 1) / 2 -- as in, half of the diameter, minus the center or something.
   -- right = vertical, left = horizontal
   for axis, offset in pairs({horizontal = {x = range, y = 0}, vertical = {x = 0, y = range}}) do
+    local icons = table.deepcopy(yellow_uhp.icons)
+    table.insert(icons, {
+      icon = "__base__/graphics/icons/signal/signal_" .. axis:sub(1, 1) .. ".png",
+      icon_size = 64,
+      scale = 0.25,
+      shift = {-8, -8}
+    })
+    local zero_padded_length_string = string.format("%02d", length)
+    table.insert(icons, {
+      icon = "__base__/graphics/icons/signal/signal_" .. zero_padded_length_string:sub(-1) .. ".png",
+      icon_size = 64,
+      scale = 0.25,
+      shift = {8, -8}
+    })
     local reactor = {
       type = "reactor",
       name = string.format("underground-heat-pipe-reactor-%s-%s", axis, length),
-      localised_name = {"entity-name.underground-heat-pipe-reactor-axis-length", axis, tostring(length)},
+      localised_name = {"entity-name.underground-heat-pipe-reactor-axis-length", axis, zero_padded_length_string},
+      icons = icons,
       heat_buffer = table.deepcopy(heat_pipe_entity.heat_buffer),
       collision_box = {{-0.2 - offset.x, -0.2 - offset.y}, {0.2 + offset.x, 0.2 + offset.y}},
       selection_box = {{-0.4 - offset.x, -0.4 - offset.y}, {0.4 + offset.x, 0.4 + offset.y}},
       energy_source = {type = "void"},
       consumption = "60W",
-      collision_mask = {layers = {}}
+      collision_mask = {layers = {}},
+      hidden = true,
     }
 
     data:extend{reactor}
