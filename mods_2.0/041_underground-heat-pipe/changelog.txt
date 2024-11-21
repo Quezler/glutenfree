@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: ????
+Date: 2024. 11. 21
   Info:
     - Calculate which heatpipe length is required to link the two
     - Data tweaks
