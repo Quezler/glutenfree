@@ -10,6 +10,7 @@ Date: ????
     - Make the connectors show capped off initially
     - Make sure the capped ones do not creep through the textuere
     - Oh just great, some side by side heat pipes are connecting even when there are no connections
+    - Ponder whether i should continue using 1 heat pipe (endpoint freezing)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 21
