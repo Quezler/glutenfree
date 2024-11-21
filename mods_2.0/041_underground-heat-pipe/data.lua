@@ -77,17 +77,17 @@ end
 
 local direction_out = table.deepcopy(yellow_underground_belt.structure.direction_out.sheet)
 direction_out.scale = 0.25
-yellow_uhp.pictures = {
-  north = table.deepcopy(direction_out),
-  south = table.deepcopy(direction_out),
-  west  = table.deepcopy(direction_out),
-  east  = table.deepcopy(direction_out),
-}
+-- yellow_uhp.pictures = {
+--   north = table.deepcopy(direction_out),
+--   south = table.deepcopy(direction_out),
+--   west  = table.deepcopy(direction_out),
+--   east  = table.deepcopy(direction_out),
+-- }
 
-yellow_uhp.pictures.south.x = 192 * 0
-yellow_uhp.pictures.west.x  = 192 * 1
-yellow_uhp.pictures.north.x = 192 * 2
-yellow_uhp.pictures.east.x  = 192 * 3
+-- yellow_uhp.pictures.south.x = 192 * 0
+-- yellow_uhp.pictures.west.x  = 192 * 1
+-- yellow_uhp.pictures.north.x = 192 * 2
+-- yellow_uhp.pictures.east.x  = 192 * 3
 
 data:extend{yellow_uhp, yellow_uhp_item, yellow_uhp_recipe}
 
@@ -128,10 +128,10 @@ for length = 2, 6 do
     assert(#heat_pipe_long.connection_sprites.ending_right == 1)
     assert(#heat_pipe_long.connection_sprites.ending_left == 1)
 
-    heat_pipe_long.connection_sprites.ending_up   [1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-up-1-cap-only.png"
-    heat_pipe_long.connection_sprites.ending_down [1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-down-1-cap-only.png"
-    heat_pipe_long.connection_sprites.ending_left [1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-left-1-cap-only.png"
-    heat_pipe_long.connection_sprites.ending_right[1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-right-1-cap-only.png"
+    -- heat_pipe_long.connection_sprites.ending_up   [1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-up-1-cap-only.png"
+    -- heat_pipe_long.connection_sprites.ending_down [1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-down-1-cap-only.png"
+    -- heat_pipe_long.connection_sprites.ending_left [1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-left-1-cap-only.png"
+    -- heat_pipe_long.connection_sprites.ending_right[1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-right-1-cap-only.png"
 
     if offset.x > 0 then
       heat_pipe_long.heat_buffer.connections = {

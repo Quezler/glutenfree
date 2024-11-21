@@ -9,6 +9,7 @@ Date: ????
     - Prevent the center from showing a sprite
     - Make the connectors show capped off initially
     - Make sure the capped ones do not creep through the textuere
+    - Oh just great, some side by side heat pipes are connecting even when there are no connections
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 21
