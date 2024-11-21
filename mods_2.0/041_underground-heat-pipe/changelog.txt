@@ -8,6 +8,7 @@ Date: ????
     - Shift the heat pipe endings to the far ends
     - Prevent the center from showing a sprite
     - Make the connectors show capped off initially
+    - Make sure the capped ones do not creep through the textuere
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 21

@@ -128,6 +128,11 @@ for length = 2, 6 do
     assert(#heat_pipe_long.connection_sprites.ending_right == 1)
     assert(#heat_pipe_long.connection_sprites.ending_left == 1)
 
+    heat_pipe_long.connection_sprites.ending_up   [1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-up-1-cap-only.png"
+    heat_pipe_long.connection_sprites.ending_down [1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-down-1-cap-only.png"
+    heat_pipe_long.connection_sprites.ending_left [1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-left-1-cap-only.png"
+    heat_pipe_long.connection_sprites.ending_right[1].filename = "__underground-heat-pipe__/graphics/entity/underground-heat-pipe/heat-pipe-ending-right-1-cap-only.png"
+
     if offset.x > 0 then
       heat_pipe_long.heat_buffer.connections = {
         {position = {- offset.x, 0}, direction = defines.direction.west},
