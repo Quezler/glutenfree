@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Reuse the underground belt sprite for the smaller end points
+    - Extent and minable fix
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 21

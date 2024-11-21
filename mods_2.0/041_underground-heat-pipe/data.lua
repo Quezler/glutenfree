@@ -23,7 +23,7 @@ local yellow_uhp = {
       }
     },
     hide_connection_info = true,
-    max_pipeline_extent = yellow_underground_belt.max_distance,
+    max_pipeline_extent = yellow_underground_belt.max_distance + 1,
   },
   collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
@@ -42,6 +42,9 @@ local yellow_uhp_item = {
   place_result = yellow_uhp.name,
   stack_size = 10,
 }
+
+yellow_uhp.minable = table.deepcopy(yellow_underground_belt.minable)
+yellow_uhp.minable.result = yellow_uhp_item.name
 
 local yellow_uhp_recipe = {
   type = "recipe",
