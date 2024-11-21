@@ -121,16 +121,26 @@ for length = 2, 6 do
       hidden = true,
     }
 
+    heat_pipe_long.connection_sprites = table.deepcopy(heat_pipe_entity.connection_sprites)
+    assert(#heat_pipe_long.connection_sprites.ending_up == 1)
+    assert(#heat_pipe_long.connection_sprites.ending_down == 1)
+    assert(#heat_pipe_long.connection_sprites.ending_right == 1)
+    assert(#heat_pipe_long.connection_sprites.ending_left == 1)
+
     if offset.x > 0 then
       heat_pipe_long.heat_buffer.connections = {
         {position = {- offset.x, 0}, direction = defines.direction.west},
         {position = {  offset.x, 0}, direction = defines.direction.east},
       }
+      heat_pipe_long.connection_sprites.ending_left [1].shift = {-offset.x, 0}
+      heat_pipe_long.connection_sprites.ending_right[1].shift = { offset.x, 0}
     else
       heat_pipe_long.heat_buffer.connections = {
         {position = {0, - offset.y}, direction = defines.direction.north},
         {position = {0,   offset.y}, direction = defines.direction.south},
       }
+      heat_pipe_long.connection_sprites.ending_up  [1].shift = {0, -offset.y}
+      heat_pipe_long.connection_sprites.ending_down[1].shift = {0,  offset.y}
     end
 
     data:extend{heat_pipe_long}

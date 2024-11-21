@@ -5,6 +5,7 @@ Date: ????
     - Calculate which heatpipe length is required to link the two
     - Data tweaks
     - Place the long heat pipe between the undergrounds
+    - Shift the heat pipe endings to the far ends
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 21
