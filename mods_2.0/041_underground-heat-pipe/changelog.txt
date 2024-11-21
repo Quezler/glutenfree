@@ -6,6 +6,7 @@ Date: ????
     - Extent and minable fix
     - Setup the initial directional reactors
     - Fix reactor length and mask
+    - Localize the internal entity
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 21

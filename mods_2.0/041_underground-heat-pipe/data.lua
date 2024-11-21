@@ -97,6 +97,7 @@ for length = 2, 6 do
     local reactor = {
       type = "reactor",
       name = string.format("underground-heat-pipe-reactor-%s-%s", axis, length),
+      localised_name = {"entity-name.underground-heat-pipe-reactor-axis-length", axis, tostring(length)},
       heat_buffer = table.deepcopy(heat_pipe_entity.heat_buffer),
       collision_box = {{-0.2 - offset.x, -0.2 - offset.y}, {0.2 + offset.x, 0.2 + offset.y}},
       selection_box = {{-0.4 - offset.x, -0.4 - offset.y}, {0.4 + offset.x, 0.4 + offset.y}},
