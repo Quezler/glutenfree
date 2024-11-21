@@ -110,7 +110,7 @@ for length = 2, 6 do
     })
     local heat_pipe_long = {
       type = "heat-pipe",
-      name = string.format("underground-heat-pipe-long-%s-%s", axis, length),
+      name = string.format("underground-heat-pipe-long-%s-%s", axis, zero_padded_length_string),
       localised_name = {"entity-name.underground-heat-pipe-long-axis-length", axis, zero_padded_length_string},
       icons = icons,
       heat_buffer = table.deepcopy(heat_pipe_entity.heat_buffer),
