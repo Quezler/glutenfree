@@ -22,7 +22,8 @@ local yellow_uhp = {
         connection_category = "underground-heat-pipe",
       }
     },
-    hide_connection_info = true
+    hide_connection_info = true,
+    max_pipeline_extent = yellow_underground_belt.max_distance,
   },
   collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
@@ -39,7 +40,7 @@ local yellow_uhp_item = {
   pick_sound = yellow_underground_belt.pick_sound,
   drop_sound = yellow_underground_belt.drop_sound,
   place_result = yellow_uhp.name,
-  stack_size = 50
+  stack_size = 10,
 }
 
 local yellow_uhp_recipe = {
@@ -65,5 +66,19 @@ for i, effect in ipairs(technology.effects) do
     break
   end
 end
+
+local direction_out = table.deepcopy(yellow_underground_belt.structure.direction_out.sheet)
+direction_out.scale = 0.25
+yellow_uhp.pictures = {
+  north = table.deepcopy(direction_out),
+  south = table.deepcopy(direction_out),
+  west  = table.deepcopy(direction_out),
+  east  = table.deepcopy(direction_out),
+}
+
+yellow_uhp.pictures.south.x = 192 * 0
+yellow_uhp.pictures.west.x  = 192 * 1
+yellow_uhp.pictures.north.x = 192 * 2
+yellow_uhp.pictures.east.x  = 192 * 3
 
 data:extend{yellow_uhp, yellow_uhp_item, yellow_uhp_recipe}
