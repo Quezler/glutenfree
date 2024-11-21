@@ -7,6 +7,7 @@ Date: ????
     - Place the long heat pipe between the undergrounds
     - Shift the heat pipe endings to the far ends
     - Prevent the center from showing a sprite
+    - Make the connectors show capped off initially
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 21

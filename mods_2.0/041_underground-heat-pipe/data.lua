@@ -31,6 +31,7 @@ local yellow_uhp = {
 
   max_health = yellow_underground_belt.max_health,
   resistances = yellow_underground_belt.resistances,
+  flags = {"player-creation"},
 }
 
 local yellow_uhp_item = {
@@ -132,22 +133,32 @@ for length = 2, 6 do
         {position = {- offset.x, 0}, direction = defines.direction.west},
         {position = {  offset.x, 0}, direction = defines.direction.east},
       }
+
+      heat_pipe_long.connection_sprites.ending_left [1].shift = { offset.x, 0}
+      heat_pipe_long.connection_sprites.ending_right[1].shift = {-offset.x, 0}
+      heat_pipe_long.connection_sprites.straight_horizontal = {layers = {
+        table.deepcopy(heat_pipe_long.connection_sprites.ending_left [1]),
+        table.deepcopy(heat_pipe_long.connection_sprites.ending_right[1]),
+      }}
+
       heat_pipe_long.connection_sprites.ending_left [1].shift = {-offset.x, 0}
       heat_pipe_long.connection_sprites.ending_right[1].shift = { offset.x, 0}
-      heat_pipe_long.connection_sprites.straight_horizontal = {
-        layers = {heat_pipe_long.connection_sprites.ending_left[1], heat_pipe_long.connection_sprites.ending_right[1]}
-      }
       heat_pipe_long.connection_sprites.single = heat_pipe_long.connection_sprites.straight_horizontal
     else
       heat_pipe_long.heat_buffer.connections = {
         {position = {0, - offset.y}, direction = defines.direction.north},
         {position = {0,   offset.y}, direction = defines.direction.south},
       }
+
+      heat_pipe_long.connection_sprites.ending_up  [1].shift = {0,  offset.y}
+      heat_pipe_long.connection_sprites.ending_down[1].shift = {0, -offset.y}
+      heat_pipe_long.connection_sprites.straight_vertical = {layers = {
+        table.deepcopy(heat_pipe_long.connection_sprites.ending_up  [1]),
+        table.deepcopy(heat_pipe_long.connection_sprites.ending_down[1]),
+      }}
+
       heat_pipe_long.connection_sprites.ending_up  [1].shift = {0, -offset.y}
       heat_pipe_long.connection_sprites.ending_down[1].shift = {0,  offset.y}
-      heat_pipe_long.connection_sprites.straight_vertical = {
-        layers = {heat_pipe_long.connection_sprites.ending_up[1], heat_pipe_long.connection_sprites.ending_down[1]}
-      }
       heat_pipe_long.connection_sprites.single = heat_pipe_long.connection_sprites.straight_vertical
     end
 
