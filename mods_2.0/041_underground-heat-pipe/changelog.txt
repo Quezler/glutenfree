@@ -6,6 +6,7 @@ Date: ????
     - Data tweaks
     - Place the long heat pipe between the undergrounds
     - Shift the heat pipe endings to the far ends
+    - Prevent the center from showing a sprite
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 21

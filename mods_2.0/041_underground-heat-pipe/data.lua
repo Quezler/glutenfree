@@ -134,6 +134,10 @@ for length = 2, 6 do
       }
       heat_pipe_long.connection_sprites.ending_left [1].shift = {-offset.x, 0}
       heat_pipe_long.connection_sprites.ending_right[1].shift = { offset.x, 0}
+      heat_pipe_long.connection_sprites.straight_horizontal = {
+        layers = {heat_pipe_long.connection_sprites.ending_left[1], heat_pipe_long.connection_sprites.ending_right[1]}
+      }
+      heat_pipe_long.connection_sprites.single = heat_pipe_long.connection_sprites.straight_horizontal
     else
       heat_pipe_long.heat_buffer.connections = {
         {position = {0, - offset.y}, direction = defines.direction.north},
@@ -141,6 +145,10 @@ for length = 2, 6 do
       }
       heat_pipe_long.connection_sprites.ending_up  [1].shift = {0, -offset.y}
       heat_pipe_long.connection_sprites.ending_down[1].shift = {0,  offset.y}
+      heat_pipe_long.connection_sprites.straight_vertical = {
+        layers = {heat_pipe_long.connection_sprites.ending_up[1], heat_pipe_long.connection_sprites.ending_down[1]}
+      }
+      heat_pipe_long.connection_sprites.single = heat_pipe_long.connection_sprites.straight_vertical
     end
 
     data:extend{heat_pipe_long}
