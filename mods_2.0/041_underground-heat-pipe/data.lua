@@ -29,7 +29,7 @@ local yellow_uhp = {
   collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 
-  health = yellow_underground_belt.health,
+  max_health = yellow_underground_belt.max_health,
   resistances = yellow_underground_belt.resistances,
 }
 
@@ -117,6 +117,7 @@ for length = 2, 6 do
       collision_box = {{-0.2 - offset.x, -0.2 - offset.y}, {0.2 + offset.x, 0.2 + offset.y}},
       selection_box = {{-0.4 - offset.x, -0.4 - offset.y}, {0.4 + offset.x, 0.4 + offset.y}},
       collision_mask = {layers = {}},
+      selection_priority = 49,
       hidden = true,
     }
 
