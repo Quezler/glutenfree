@@ -22,6 +22,11 @@ local direction_to_name = {
   [defines.direction.west] = "west",
 }
 
+script.on_init(function()
+  storage.structs = {}
+  storage.deathrattles = {}
+end)
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -35,11 +40,20 @@ function Handler.on_created_entity(event)
   --   position = get_position_between(entity, other)
   -- }
 
-  entity.surface.create_entity{
+  local underground_heat_pipe_direction = entity.surface.create_entity{
     name = string.format("underground-heat-pipe-%s", direction_to_name[entity.direction]),
     force = entity.force,
     position = entity.position,
   }
+  underground_heat_pipe_direction.destructible = false
+
+  storage.structs[entity.unit_number] = {
+    id = entity.unit_number,
+    pipe_to_ground = entity,
+    underground_heat_pipe_direction = underground_heat_pipe_direction,
+  }
+
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {type = "pipe-to-ground", struct_id = entity.unit_number}
 end
 
 for _, event in ipairs({
@@ -54,3 +68,19 @@ for _, event in ipairs({
     {filter = "name", name = "underground-heat-pipe"},
   })
 end
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    local struct = storage.structs[deathrattle.struct_id]
+    -- if struct == nil then return end
+
+    if deathrattle.type == "pipe-to-ground" then
+      struct.underground_heat_pipe_direction.destroy()
+      storage.structs[struct.id] = nil
+    else
+      error(serpent.block(deathrattle))
+    end
+
+  end
+end)

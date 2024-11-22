@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Begin giving disconnected undergrounds a heat pipe
     - Draw the disconnected sprite in its default state
+    - Remove the directional heat pipe upon pipe to ground removal
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 21
