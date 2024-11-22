@@ -89,6 +89,18 @@ local function position_equals_position(a, b)
   return a.x == b.x and a.y == b.y
 end
 
+-- local function pairs_yeet_valid_false(t, callback)
+--   for k, v in pairs(t) do
+--     if v.valid then
+--       if callback(k, v) then
+--         return
+--       end
+--     else
+--       t[k] = nil
+--     end
+--   end
+-- end
+
 --
 
 local function inflate_surfacedata()
@@ -243,6 +255,11 @@ script.on_event(defines.events.on_object_destroyed, function(event)
             end
           end
         end
+
+        -- pairs_yeet_valid_false(surfacedata.directional_heat_pipes, function(unit_number, directional_heat_pipe)
+        
+        -- end)
+
       end
       struct.underground_heat_pipe_direction.destroy()
       storage.structs[struct.id] = nil
