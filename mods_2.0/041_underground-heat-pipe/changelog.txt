@@ -8,6 +8,7 @@ Date: ????
     - Well rip, normal heat pipes are still visually connecting
     - Prevent connections in unauthorized directions
     - Allow the underground heat pipe to be rotated
+    - Same pipe prototypes always visually connect, checkerboard alternate them
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 21

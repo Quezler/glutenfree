@@ -40,8 +40,10 @@ function Handler.on_created_entity(event)
   --   position = get_position_between(entity, other)
   -- }
 
+  local modulo = (entity.position.x + entity.position.y) % 2
+
   local underground_heat_pipe_direction = entity.surface.create_entity{
-    name = string.format("underground-heat-pipe-%s", direction_to_name[entity.direction]),
+    name = string.format("underground-heat-pipe-%s-%s", direction_to_name[entity.direction], modulo == 0 and "even" or "odd"),
     force = entity.force,
     position = entity.position,
   }
