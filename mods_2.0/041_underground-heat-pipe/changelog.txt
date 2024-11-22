@@ -10,6 +10,7 @@ Date: ????
     - Detect when something with heat pipes gets placed over an underpass
     - Initial test or refreshing the entities after something gets placed in between
     - Create a new underpass struct when bringing them to front
+    - Setup surfacedata
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 22

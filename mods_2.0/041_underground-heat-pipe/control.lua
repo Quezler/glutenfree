@@ -1,3 +1,10 @@
+-- local function on_event(event, handler)
+--   assert(event)
+--   assert(handler)
+
+--   script.on_event(event, handler)
+-- end
+
 local Handler = {}
 
 local direction_to_axis = {
@@ -78,11 +85,37 @@ local function struct_set_mode(struct, mode)
   struct.underground_heat_pipe_direction = new_underground_heat_pipe_direction
 end
 
+local function inflate_surfacedata()
+  for _, surface in pairs(game.surfaces) do
+    if storage.surfacedata[surface.index] == nil then
+      ---@diagnostic disable-next-line: param-type-mismatch, missing-fields
+      script.get_event_handler(defines.events.on_surface_created){surface_index = surface.index}
+    end
+  end
+end
+
 script.on_init(function()
   storage.structs = {}
   storage.deathrattles = {}
 
   storage.underpasses = {}
+
+  storage.surfacedata = {}
+  inflate_surfacedata()
+end)
+
+script.on_configuration_changed(function()
+  inflate_surfacedata()
+end)
+
+script.on_event(defines.events.on_surface_created, function(event)
+  storage.surfacedata[event.surface_index] = {
+
+  }
+end)
+
+script.on_event(defines.events.on_surface_deleted, function(event)
+  storage.surfacedata[event.surface_index] = nil
 end)
 
 -- when you place an entity with heat connections in between two undergrounds the new entity will connect to the inside of the underground,
