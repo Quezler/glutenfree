@@ -10,6 +10,7 @@ Date: ????
     - Allow the underground heat pipe to be rotated
     - Same pipe prototypes always visually connect, checkerboard alternate them
     - Preserve heat when rotating
+    - Fast rotate does not preserve temperature
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 21
