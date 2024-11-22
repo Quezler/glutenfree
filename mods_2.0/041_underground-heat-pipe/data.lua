@@ -93,8 +93,8 @@ yellow_uhp.pictures.east.x  = 192 * 3
 
 data:extend{yellow_uhp, yellow_uhp_item, yellow_uhp_recipe}
 
-for length = 3, 6 do
-  local range = (length - 3) / 2 -- as in, half of the diameter, minus the center or something.
+for length = 2, 6 do
+  local range = (length - 1) / 2 -- as in, half of the diameter, minus the center or something.
   -- right = vertical, left = horizontal
   for axis, offset in pairs({horizontal = {x = range, y = 0}, vertical = {x = 0, y = range}}) do
     local icons = table.deepcopy(yellow_uhp.icons)
@@ -104,7 +104,7 @@ for length = 3, 6 do
       scale = 0.25,
       shift = {-8, -8}
     })
-    local zero_padded_length_string = string.format("%02d", length - 2)
+    local zero_padded_length_string = string.format("%02d", length)
     table.insert(icons, {
       icon = "__base__/graphics/icons/signal/signal_" .. zero_padded_length_string:sub(-1) .. ".png",
       icon_size = 64,
@@ -122,7 +122,7 @@ for length = 3, 6 do
       collision_mask = {layers = {}},
       selection_priority = 49,
       hidden = true,
-      flags = {"placeable-off-grid", "not-on-map"},
+      flags = {"not-on-map"},
     }
 
     if offset.x > 0 then
