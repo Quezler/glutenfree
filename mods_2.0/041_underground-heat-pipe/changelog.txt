@@ -7,6 +7,7 @@ Date: ????
     - Figure out how to connect the textures without going through hell
     - Apparently heat pipes are 1-1, even though they will still try to connect
     - Revert the last 4 commits
+    - Detect when something with heat pipes gets placed over an underpass
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 22

@@ -14,6 +14,21 @@ local direction_to_name = {
   [defines.direction.west] = "west",
 }
 
+local pipe_to_ground_names = {
+  ["underground-heat-pipe"] = true,
+}
+
+local function string_stars_with(str, prefix)
+  return string.sub(str, 1, #prefix) == prefix
+end
+
+local underground_heat_pipe_long_names = {}
+for _, entity in pairs(prototypes.entity) do
+  if entity.type == "heat-pipe" and string_stars_with(entity.name, "underground-heat-pipe-") then
+    underground_heat_pipe_long_names[entity.name] = entity.name
+  end
+end
+
 local function get_tile_gap_size(a, b)
   return math.abs(a.position.x - b.position.x) + math.abs(a.position.y - b.position.y) - 1
 end
@@ -57,8 +72,20 @@ script.on_init(function()
   storage.deathrattles = {}
 end)
 
+function Handler.on_entity_with_heat_buffer_created(entity)
+  local underground_heat_pipe_long_list = entity.surface.find_entities_filtered{
+    area = entity.bounding_box,
+    name = underground_heat_pipe_long_names,
+  }
+  game.print(#underground_heat_pipe_long_list)
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
+
+  if pipe_to_ground_names[entity.name] == nil then
+    return Handler.on_entity_with_heat_buffer_created(entity)
+  end
 
   local even_or_odd_string = get_even_or_odd_position(event.entity) == 0 and "even" or "odd"
 
@@ -100,6 +127,15 @@ function Handler.on_created_entity(event)
   struct_set_mode(storage.structs[other.unit_number], "duo")
 end
 
+local filters = {
+  {filter = "name", name = "underground-heat-pipe"},
+
+  {filter = "name", name = "heat-pipe"},
+  {filter = "name", name = "nuclear-reactor"},
+  {filter = "name", name = "heating-tower"},
+  {filter = "name", name = "heat-exchanger"},
+}
+
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
@@ -108,9 +144,7 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, Handler.on_created_entity, {
-    {filter = "name", name = "underground-heat-pipe"},
-  })
+  script.on_event(event, Handler.on_created_entity, filters)
 end
 
 script.on_event(defines.events.on_object_destroyed, function(event)
@@ -128,10 +162,6 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 
   end
 end)
-
-local pipe_to_ground_names = {
-  ["underground-heat-pipe"] = true,
-}
 
 script.on_event(defines.events.on_player_rotated_entity, function(event)
   local entity = event.entity
