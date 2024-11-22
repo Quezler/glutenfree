@@ -12,6 +12,7 @@ Date: ????
     - Preserve heat when rotating
     - Fast rotate does not preserve temperature
     - Delete the old heat pipe after the new one to prevent blinking
+    - Change the horizontal and vertical to sit between the undergrounds
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 21

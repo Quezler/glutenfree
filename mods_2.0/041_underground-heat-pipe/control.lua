@@ -1,7 +1,7 @@
 local Handler = {}
 
-local function get_tile_distance_inclusive(a, b)
-  return math.abs(a.position.x - b.position.x) + math.abs(a.position.y - b.position.y) + 1
+local function get_tile_gap_size(a, b)
+  return math.abs(a.position.x - b.position.x) + math.abs(a.position.y - b.position.y) - 1
 end
 
 local function get_position_between(a, b)
@@ -30,16 +30,6 @@ end)
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
-  -- local other = entity.neighbours[1][1]
-  -- if other == nil then return end
-
-  -- local zero_padded_length_string = string.format("%02d", get_tile_distance_inclusive(entity, other))
-  -- entity.surface.create_entity{
-  --   name = string.format("underground-heat-pipe-long-%s-%s", direction_to_axis[entity.direction], zero_padded_length_string),
-  --   force = entity.force,
-  --   position = get_position_between(entity, other)
-  -- }
-
   local modulo = (entity.position.x + entity.position.y) % 2
 
   local underground_heat_pipe_direction = entity.surface.create_entity{
@@ -50,7 +40,7 @@ function Handler.on_created_entity(event)
   }
   underground_heat_pipe_direction.destructible = false
   underground_heat_pipe_direction.temperature = storage.structs[entity.unit_number] and storage.structs[entity.unit_number].temperature or 15
-  game.print("get " .. underground_heat_pipe_direction.temperature)
+  -- game.print("get " .. underground_heat_pipe_direction.temperature)
 
   storage.structs[entity.unit_number] = {
     id = entity.unit_number,
@@ -60,6 +50,21 @@ function Handler.on_created_entity(event)
   }
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {type = "pipe-to-ground", struct_id = entity.unit_number}
+
+  --
+
+  local other = entity.neighbours[1][1]
+  if other == nil then return end
+
+  local tile_gap_size = get_tile_gap_size(entity, other)
+  if tile_gap_size > 0 then
+    local zero_padded_length_string = string.format("%02d", tile_gap_size)
+    entity.surface.create_entity{
+      name = string.format("underground-heat-pipe-long-%s-%s", direction_to_axis[entity.direction], zero_padded_length_string),
+      force = entity.force,
+      position = get_position_between(entity, other)
+    }
+  end
 end
 
 for _, event in ipairs({
