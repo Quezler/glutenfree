@@ -63,7 +63,7 @@ function Handler.on_created_entity(event)
   local even_or_odd_string = get_even_or_odd_position(event.entity) == 0 and "even" or "odd"
 
   local underground_heat_pipe_direction = entity.surface.create_entity{
-    name = string.format("underground-heat-pipe-%s-%s-%s", direction_to_name[entity.direction], "single", even_or_odd_string),
+    name = string.format("underground-heat-pipe-%s-%s", direction_to_name[entity.direction], even_or_odd_string),
     force = entity.force,
     position = entity.position,
     fast_replace = true,
@@ -93,9 +93,6 @@ function Handler.on_created_entity(event)
     force = entity.force,
     position = get_position_between(entity, other)
   }
-
-  storage.structs[entity.unit_number].underground_heat_pipe_direction.destroy()
-  storage.structs[other.unit_number].underground_heat_pipe_direction.destroy()
 end
 
 for _, event in ipairs({
@@ -127,18 +124,18 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   end
 end)
 
--- local pipe_to_ground_names = {
---   ["underground-heat-pipe"] = true,
--- }
+local pipe_to_ground_names = {
+  ["underground-heat-pipe"] = true,
+}
 
--- script.on_event(defines.events.on_player_rotated_entity, function(event)
---   local entity = event.entity
---   if pipe_to_ground_names[entity.name] then
---     local struct = storage.structs[entity.unit_number]
---     struct.temperature = struct.underground_heat_pipe_direction.temperature
---     -- game.print("set " .. struct.temperature)
---     local old = struct.underground_heat_pipe_direction
---     Handler.on_created_entity(event)
---     old.destroy()
---   end
--- end)
+script.on_event(defines.events.on_player_rotated_entity, function(event)
+  local entity = event.entity
+  if pipe_to_ground_names[entity.name] then
+    local struct = storage.structs[entity.unit_number]
+    struct.temperature = struct.underground_heat_pipe_direction.temperature
+    -- game.print("set " .. struct.temperature)
+    local old = struct.underground_heat_pipe_direction
+    Handler.on_created_entity(event)
+    old.destroy()
+  end
+end)
