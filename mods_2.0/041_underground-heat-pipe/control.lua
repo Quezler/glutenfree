@@ -84,3 +84,16 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 
   end
 end)
+
+local pipe_to_ground_names = {
+  ["underground-heat-pipe"] = true,
+}
+
+script.on_event(defines.events.on_player_rotated_entity, function(event)
+  local entity = event.entity
+  if pipe_to_ground_names[entity.name] then
+    local struct = storage.structs[entity.unit_number]
+    struct.underground_heat_pipe_direction.destroy()
+    Handler.on_created_entity(event)
+  end
+end)

@@ -7,6 +7,7 @@ Date: ????
     - Remove the directional heat pipe upon pipe to ground removal
     - Well rip, normal heat pipes are still visually connecting
     - Prevent connections in unauthorized directions
+    - Allow the underground heat pipe to be rotated
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 21
