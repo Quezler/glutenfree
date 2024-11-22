@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Revert 06e0299, connecting shall replace both end caps
     - Get rid of the single/duo
+    - Figure out how to connect the textures without going through hell
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 22
