@@ -94,25 +94,8 @@ function Handler.on_created_entity(event)
     position = get_position_between(entity, other)
   }
 
-  -- whilst heat pipes can form one to many connections, visually it prefers connecting to the most recent heatpipe,
-  -- and therefore since our "long" pipe has no textures we need to recreate both endpoints so they gain texture priority.
-
-  underground_heat_pipe_direction.destroy()
-  entity.surface.create_entity{
-    name = string.format("underground-heat-pipe-%s-%s", direction_to_name[entity.direction], even_or_odd_string),
-    force = entity.force,
-    position = entity.position,
-    fast_replace = true,
-  }
-
-  local other_underground_heat_pipe_direction = storage.structs[other.unit_number].underground_heat_pipe_direction
-  entity.surface.create_entity{
-    name = other_underground_heat_pipe_direction.name,
-    force = other_underground_heat_pipe_direction.force,
-    position = other_underground_heat_pipe_direction.position,
-    fast_replace = true,
-  }
-  other_underground_heat_pipe_direction.destroy()
+  storage.structs[entity.unit_number].underground_heat_pipe_direction.destroy()
+  storage.structs[other.unit_number].underground_heat_pipe_direction.destroy()
 end
 
 for _, event in ipairs({
