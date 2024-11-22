@@ -154,7 +154,7 @@ for _, direction_name in ipairs({"north", "east", "south", "west"}) do
     icons = icons,
     heat_buffer = table.deepcopy(heat_pipe_entity.heat_buffer),
     collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
-    selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
+    selection_box = {{-0.2, -0.2}, {0.2, 0.2}},
     collision_mask = {layers = {}},
     selection_priority = 51,
     hidden = true,
@@ -178,6 +178,10 @@ for _, direction_name in ipairs({"north", "east", "south", "west"}) do
   heat_pipe_direction.connection_sprites.ending_right = template_on
   heat_pipe_direction.connection_sprites.ending_up    = template_on
   heat_pipe_direction.connection_sprites.ending_down  = template_on
+
+  heat_pipe_direction.heat_buffer.connections = {
+    {position = {0, 0}, direction = defines.direction[direction_name]},
+  }
 
   data:extend{heat_pipe_direction}
 end
