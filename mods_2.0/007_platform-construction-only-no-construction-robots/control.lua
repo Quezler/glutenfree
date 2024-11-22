@@ -1,5 +1,4 @@
 local flib_bounding_box = require("__flib__.bounding-box")
-local LogisticNetwork = require("scripts.logistic-network")
 local blacklisted_names = require("scripts.blacklist")
 
 local UtilityConstants = require("utility-constants")
@@ -12,14 +11,17 @@ script.on_init(function()
   storage.construction_robots = {}
   storage.lock = {}
 
-  storage.networkdata = {}
   storage.deathrattles = {}
 
   storage.tasks_at_tick = {}
 end)
 
 script.on_configuration_changed(function()
-  storage.networkdata = {} -- allowed to reset
+  for unit_number, construction_robot in pairs(storage.construction_robots) do
+    if construction_robot.valid == nil then
+      construction_robot = construction_robot.entity
+    end
+  end
 end)
 
 local function add_task(tick, task)
@@ -33,99 +35,15 @@ local function add_task(tick, task)
   end
 end
 
-local function get_or_create_networkdata(logistic_network)
-  local networkdata = storage.networkdata[logistic_network.network_id]
-  if networkdata then
-    assert(networkdata.id == logistic_network.network_id)
-    return networkdata
-  end
-
-  networkdata = {
-    id = logistic_network.network_id,
-    logistic_network = logistic_network,
-
-    last_roboport_with_space = nil,
-    last_roboport_with_space_search_failed_search_at = 0,
-  }
-
-  storage.networkdata[logistic_network.network_id] = networkdata
-  storage.deathrattles[script.register_on_object_destroyed(logistic_network)] = {network_id = logistic_network.network_id}
-
-  return networkdata
-end
-
-local function give_roboport_item(entity, item)
-  -- assert(item.count == 1) -- sanity check
-
-  local inventory = entity.get_inventory(defines.inventory.roboport_robot)
-  assert(inventory, entity.name) -- do roboports with no inventory trigger this at all?
-  if inventory == nil then return end
-
-  local inserted = inventory.insert(item)
-  return inserted == 1
-end
-
-local function returned_home_with_milk(construction_robot)
-  local logistic_network = construction_robot.logistic_network
-  if logistic_network == nil then return end
-
-  local networkdata = get_or_create_networkdata(logistic_network)
-  local item = {name = construction_robot.name, count = 1, quality = construction_robot.quality} -- todo: this assumes robot & item share their name
-
-  local last_roboport_with_space = networkdata.last_roboport_with_space
-  if last_roboport_with_space and last_roboport_with_space.valid then
-    if give_roboport_item(last_roboport_with_space, item) then
-      return true
-    end
-  else
-    networkdata.last_roboport_with_space = nil
-  end
-
-  -- if we tried looking for a roboport with space in the last 5 seconds and failed, don't search now
-  if networkdata.last_roboport_with_space_search_failed_search_at + 300 >= game.tick then return end
-
-  for _, cell in ipairs(logistic_network.cells) do
-    if give_roboport_item(cell.owner, item) then
-      networkdata.last_roboport_with_space = cell.owner
-      return true
-    end
-  end
-
-  networkdata.last_roboport_with_space_search_failed_search_at = game.tick
-end
-
-local max_age = 60 * 30
-
 function Handler.on_tick_robots(event)
-  for unit_number, construction_robot in pairs(storage.construction_robots) do
-    local entity = construction_robot.entity
+  for unit_number, entity in pairs(storage.construction_robots) do
     if entity.valid then
       local robot_order_queue = entity.robot_order_queue
       local this_order = robot_order_queue[1]
 
-      -- if bots are out of power they can get hyperfixated on wanting to charge,
-      -- pretend they have nothing left to do so they get put back into a roboport.
-      if event.tick - construction_robot.born_at > max_age then
-        this_order = nil
-      end
-
       if this_order and this_order.target then -- target can sometimes be optional
-        -- todo: construction robots sleep when there is no enemy around, pr or spawn invisible biters?
-        -- looks like ->activeNeighbourForcesSet/show-active-forces-around debug is rather generous btw
-        entity.teleport(this_order.target.position)
         if this_order.type == defines.robot_order_type.construct then
           Handler.request_platform_animation_for(this_order.target)
-        end
-      elseif this_order == nil and entity.logistic_network then
-        if event.tick == construction_robot.born_at then
-          if LogisticNetwork.remove_all_construction_robot_requests_from_roboports(entity.logistic_network) then
-            game.print(string.format(print_prefix .. 'removed construction robot requests in roboports from network #%d on %s.', entity.logistic_network.network_id, entity.surface.name))
-          else
-            log("thought there were roboports with robot requests, but there were none. (hand deployed a construction robot?)")
-          end
-        end
-        if construction_robot.inventory.is_empty() and returned_home_with_milk(entity) then
-          entity.destroy()
         end
       end
     else
@@ -311,11 +229,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local construction_robot = event.target_entity
   assert(construction_robot and construction_robot.name == "construction-robot")
 
-  storage.construction_robots[construction_robot.unit_number] = {
-    entity = construction_robot,
-    born_at = event.tick, -- apparently a new robot has no tasks during its first tick, so we won't send them home with milk as a newborn.
-    inventory = construction_robot.get_inventory(defines.inventory.robot_cargo),
-  }
+  storage.construction_robots[construction_robot.unit_number] = construction_robot
 end)
 
 script.on_event(defines.events.on_object_destroyed, function(event)

@@ -70,3 +70,7 @@ data:extend{{
   selectable_in_game = false,
   hidden = true,
 }}
+
+construction_robot.speed = 10
+construction_robot.energy_per_move = nil
+construction_robot.energy_per_tick = nil
