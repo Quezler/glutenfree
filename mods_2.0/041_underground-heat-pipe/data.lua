@@ -185,10 +185,17 @@ for _, direction_name in ipairs({"north", "east", "south", "west"}) do
 
       heat_pipe_direction.connection_sprites = table.deepcopy(heat_pipe_entity.connection_sprites)
       heat_pipe_direction.connection_sprites.single = template_off
+      heat_pipe_direction.connection_sprites.ending_left  = template_off
+      heat_pipe_direction.connection_sprites.ending_right = template_off
+      heat_pipe_direction.connection_sprites.ending_up    = template_off
+      heat_pipe_direction.connection_sprites.ending_down  = template_off
       if direction_name == "west"  then heat_pipe_direction.connection_sprites.ending_left  = template_on end
       if direction_name == "east"  then heat_pipe_direction.connection_sprites.ending_right = template_on end
       if direction_name == "north" then heat_pipe_direction.connection_sprites.ending_up    = template_on end
       if direction_name == "south" then heat_pipe_direction.connection_sprites.ending_down  = template_on end
+
+      heat_pipe_direction.connection_sprites.straight_horizontal = template_on
+      heat_pipe_direction.connection_sprites.straight_vertical   = template_on
 
       if mode == "single" then
         heat_pipe_direction.heat_buffer.connections = {

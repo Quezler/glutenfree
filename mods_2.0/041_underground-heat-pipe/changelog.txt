@@ -16,6 +16,7 @@ Date: ????
     - Prepare the mode that can connect to what's behind
     - Switch structs from single to dual mode when connected
     - Only set the ending sprite for the current direction
+    - Get the visuals to behave how i want
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 21
