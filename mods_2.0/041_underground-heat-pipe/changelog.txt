@@ -6,6 +6,7 @@ Date: ????
     - Get rid of the single/duo
     - Figure out how to connect the textures without going through hell
     - Apparently heat pipes are 1-1, even though they will still try to connect
+    - Revert the last 4 commits
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 22
