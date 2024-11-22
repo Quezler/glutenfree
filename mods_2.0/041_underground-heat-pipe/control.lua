@@ -15,17 +15,30 @@ local direction_to_axis = {
   [defines.direction.west] = "horizontal",
 }
 
+local direction_to_name = {
+  [defines.direction.north] = "north",
+  [defines.direction.south] = "south",
+  [defines.direction.east] = "east",
+  [defines.direction.west] = "west",
+}
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
-  local other = entity.neighbours[1][1]
-  if other == nil then return end
+  -- local other = entity.neighbours[1][1]
+  -- if other == nil then return end
 
-  local zero_padded_length_string = string.format("%02d", get_tile_distance_inclusive(entity, other))
+  -- local zero_padded_length_string = string.format("%02d", get_tile_distance_inclusive(entity, other))
+  -- entity.surface.create_entity{
+  --   name = string.format("underground-heat-pipe-long-%s-%s", direction_to_axis[entity.direction], zero_padded_length_string),
+  --   force = entity.force,
+  --   position = get_position_between(entity, other)
+  -- }
+
   entity.surface.create_entity{
-    name = string.format("underground-heat-pipe-long-%s-%s", direction_to_axis[entity.direction], zero_padded_length_string),
+    name = string.format("underground-heat-pipe-%s", direction_to_name[entity.direction]),
     force = entity.force,
-    position = get_position_between(entity, other)
+    position = entity.position,
   }
 end
 

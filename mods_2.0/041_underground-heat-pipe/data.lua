@@ -137,3 +137,30 @@ for length = 2, 6 do
     data:extend{heat_pipe_long}
   end
 end
+
+for _, direction in ipairs({"north", "east", "south", "west"}) do
+  local icons = table.deepcopy(yellow_uhp.icons)
+  table.insert(icons, {
+    icon = "__base__/graphics/icons/signal/signal_" .. direction:sub(1, 1) .. ".png",
+    icon_size = 64,
+    scale = 0.25,
+    shift = {-8, -8}
+  })
+
+  local heat_pipe_direction = {
+    type = "heat-pipe",
+    name = string.format("underground-heat-pipe-%s", direction),
+    localised_name = {"entity-name.underground-heat-pipe-direction", direction},
+    icons = icons,
+    heat_buffer = table.deepcopy(heat_pipe_entity.heat_buffer),
+    collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
+    selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
+    collision_mask = {layers = {}},
+    selection_priority = 49,
+    hidden = true,
+  }
+
+  heat_pipe_direction.connection_sprites = table.deepcopy(heat_pipe_entity.connection_sprites)
+
+  data:extend{heat_pipe_direction}
+end
