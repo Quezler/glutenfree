@@ -85,6 +85,12 @@ local function struct_set_mode(struct, mode)
   struct.underground_heat_pipe_direction = new_underground_heat_pipe_direction
 end
 
+local function position_equals_position(a, b)
+  return a.x == b.x and a.y == b.y
+end
+
+--
+
 local function inflate_surfacedata()
   for _, surface in pairs(game.surfaces) do
     if storage.surfacedata[surface.index] == nil then
@@ -110,7 +116,7 @@ end)
 
 script.on_event(defines.events.on_surface_created, function(event)
   storage.surfacedata[event.surface_index] = {
-
+    directional_heat_pipes = {},
   }
 end)
 
@@ -160,14 +166,18 @@ function Handler.on_created_entity(event)
   underground_heat_pipe_direction.temperature = storage.structs[entity.unit_number] and storage.structs[entity.unit_number].temperature or 15
   -- game.print("get " .. underground_heat_pipe_direction.temperature)
 
-  storage.structs[entity.unit_number] = {
-    id = entity.unit_number,
-    temperature = 15,
-    pipe_to_ground = entity,
-    underground_heat_pipe_direction = underground_heat_pipe_direction,
-  }
+  -- storage.structs[entity.unit_number] = {
+  --   id = entity.unit_number,
+  --   temperature = 15,
+  --   pipe_to_ground = entity,
+  --   underground_heat_pipe_direction = underground_heat_pipe_direction,
+  -- }
 
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = {type = "pipe-to-ground", struct_id = entity.unit_number}
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {
+    type = "pipe-to-ground",
+    surface = entity.surface,
+    position = entity.position,
+  }
 
   --
 
@@ -222,6 +232,18 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     -- if struct == nil then return end
 
     if deathrattle.type == "pipe-to-ground" then
+      local surfacedata = storage.surfacedata[deathrattle.surface.index]
+      if surfacedata then
+        for unit_number, directional_heat_pipe in pairs(surfacedata.directional_heat_pipes) do
+          if not directional_heat_pipe.valid then
+            surfacedata.directional_heat_pipes[unit_number] = nil
+          else
+            if position_equals_position(directional_heat_pipe.position, deathrattle.position) then
+              directional_heat_pipe.destroy()
+            end
+          end
+        end
+      end
       struct.underground_heat_pipe_direction.destroy()
       storage.structs[struct.id] = nil
     else
