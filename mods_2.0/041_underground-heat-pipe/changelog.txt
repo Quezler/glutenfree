@@ -8,6 +8,7 @@ Date: ????
     - Apparently heat pipes are 1-1, even though they will still try to connect
     - Revert the last 4 commits
     - Detect when something with heat pipes gets placed over an underpass
+    - Initial test or refreshing the entities after something gets placed in between
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 22

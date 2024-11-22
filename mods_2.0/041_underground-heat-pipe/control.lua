@@ -22,10 +22,10 @@ local function string_stars_with(str, prefix)
   return string.sub(str, 1, #prefix) == prefix
 end
 
-local underground_heat_pipe_long_names = {}
+local underpass_names = {}
 for _, entity in pairs(prototypes.entity) do
   if entity.type == "heat-pipe" and string_stars_with(entity.name, "underground-heat-pipe-") then
-    underground_heat_pipe_long_names[entity.name] = entity.name
+    underpass_names[entity.name] = entity.name
   end
 end
 
@@ -39,6 +39,17 @@ end
 
 local function get_even_or_odd_position(entity) -- 0 = even, 1 = odd
   return (entity.position.x + entity.position.y) % 2
+end
+
+local function bring_heatpipe_to_front(old_entity)
+  local new_entity = old_entity.surface.create_entity{
+    name = old_entity.name,
+    force = old_entity.force,
+    position = old_entity.position
+  }
+  new_entity.temperature = old_entity.temperature
+  old_entity.destroy()
+  return new_entity
 end
 
 local other_mode = {
@@ -70,14 +81,24 @@ end
 script.on_init(function()
   storage.structs = {}
   storage.deathrattles = {}
+
+  storage.underpasses = {}
 end)
 
+-- when you place an entity with heat connections in between two undergrounds the new entity will connect to the inside of the underground,
+-- which ofc is not good since it messes up heat transmission abilities as well as the textures, so we got to trigger those to place anew.
 function Handler.on_entity_with_heat_buffer_created(entity)
-  local underground_heat_pipe_long_list = entity.surface.find_entities_filtered{
+  local underpasses = entity.surface.find_entities_filtered{
     area = entity.bounding_box,
-    name = underground_heat_pipe_long_names,
+    name = underpass_names,
   }
-  game.print(#underground_heat_pipe_long_list)
+
+  for _, underpass in ipairs(underpasses) do
+    local struct = storage.underpasses[underpass.unit_number]
+    bring_heatpipe_to_front(struct.underpass)
+    bring_heatpipe_to_front(struct.source)
+    bring_heatpipe_to_front(struct.destination)
+  end
 end
 
 function Handler.on_created_entity(event)
@@ -113,18 +134,25 @@ function Handler.on_created_entity(event)
   local other = entity.neighbours[1][1]
   if other == nil then return end
 
+  struct_set_mode(storage.structs[entity.unit_number], "duo")
+  struct_set_mode(storage.structs[other.unit_number], "duo")
+
   local tile_gap_size = get_tile_gap_size(entity, other)
   if tile_gap_size > 0 then
     local zero_padded_length_string = string.format("%02d", tile_gap_size)
-    entity.surface.create_entity{
+    local underpass = entity.surface.create_entity{
       name = string.format("underground-heat-pipe-long-%s-%s", direction_to_axis[entity.direction], zero_padded_length_string),
       force = entity.force,
       position = get_position_between(entity, other)
     }
-  end
 
-  struct_set_mode(storage.structs[entity.unit_number], "duo")
-  struct_set_mode(storage.structs[other.unit_number], "duo")
+    storage.underpasses[underpass.unit_number] = {
+      id = underpass.unit_number,
+      source = storage.structs[entity.unit_number].underground_heat_pipe_direction,
+      underpass = underpass,
+      destination = storage.structs[other.unit_number].underground_heat_pipe_direction,
+    }
+  end
 end
 
 local filters = {
