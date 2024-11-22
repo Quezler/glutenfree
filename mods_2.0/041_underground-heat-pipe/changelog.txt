@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
-Date: ????
+Date: 2024. 11. 22
   Info:
     - Revert 06e0299, connecting shall replace both end caps
     - Get rid of the single/duo
