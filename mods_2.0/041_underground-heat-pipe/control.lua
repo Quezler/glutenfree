@@ -48,13 +48,14 @@ local function get_even_or_odd_position(entity) -- 0 = even, 1 = odd
   return (entity.position.x + entity.position.y) % 2
 end
 
-local function bring_heatpipe_to_front(old_entity)
+local function bring_heatpipe_to_front(old_entity, new_name)
   local new_entity = old_entity.surface.create_entity{
-    name = old_entity.name,
+    name = new_name and new_name or old_entity.name,
     force = old_entity.force,
     position = old_entity.position
   }
   new_entity.temperature = old_entity.temperature
+  new_entity.destructible = false
   old_entity.destroy()
   return new_entity
 end
@@ -89,17 +90,15 @@ local function position_equals_position(a, b)
   return a.x == b.x and a.y == b.y
 end
 
--- local function pairs_yeet_valid_false(t, callback)
---   for k, v in pairs(t) do
---     if v.valid then
---       if callback(k, v) then
---         return
---       end
---     else
---       t[k] = nil
---     end
---   end
--- end
+local function nil_invalid_entities(t)
+  for k, entity in pairs(t) do
+    if entity.valid == false then
+      t[k] = nil
+    end
+  end
+
+  return t
+end
 
 --
 
@@ -248,13 +247,9 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if deathrattle.type == "pipe-to-ground" then
       local surfacedata = storage.surfacedata[deathrattle.surface.index]
       if surfacedata then
-        for unit_number, directional_heat_pipe in pairs(surfacedata.directional_heat_pipes) do
-          if not directional_heat_pipe.valid then
-            surfacedata.directional_heat_pipes[unit_number] = nil
-          else
-            if position_equals_position(directional_heat_pipe.position, deathrattle.position) then
-              directional_heat_pipe.destroy()
-            end
+        for unit_number, directional_heat_pipe in pairs(nil_invalid_entities(surfacedata.directional_heat_pipes)) do
+          if position_equals_position(directional_heat_pipe.position, deathrattle.position) then
+            directional_heat_pipe.destroy()
           end
         end
 
@@ -275,11 +270,20 @@ end)
 script.on_event(defines.events.on_player_rotated_entity, function(event)
   local entity = event.entity
   if pipe_to_ground_names[entity.name] then
-    local struct = storage.structs[entity.unit_number]
-    struct.temperature = struct.underground_heat_pipe_direction.temperature
-    -- game.print("set " .. struct.temperature)
-    local old = struct.underground_heat_pipe_direction
-    Handler.on_created_entity(event)
-    old.destroy()
+    local surfacedata = storage.surfacedata[entity.surface.index]
+
+    log("foo")
+    for unit_number, directional_heat_pipe in pairs(nil_invalid_entities(surfacedata.directional_heat_pipes)) do
+      log("bar")
+      if position_equals_position(directional_heat_pipe.position, entity.position) then
+        local even_or_odd_string = get_even_or_odd_position(directional_heat_pipe) == 0 and "even" or "odd"
+        local direction_name = direction_to_name[entity.direction]
+        local mode = #directional_heat_pipe.prototype.heat_buffer_prototype.connections == 1 and "single" or "duo"
+
+        local new_name = string.format("underground-heat-pipe-%s-%s-%s", direction_name, mode, even_or_odd_string)
+        local new_entity = bring_heatpipe_to_front(directional_heat_pipe, new_name)
+        surfacedata.directional_heat_pipes[new_entity.unit_number] = new_entity
+      end
+    end
   end
 end)
