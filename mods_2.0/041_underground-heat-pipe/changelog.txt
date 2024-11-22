@@ -16,6 +16,7 @@ Date: ????
     - Begin transition from struct to surfacedata (since entities switch unit numbers a lot)
     - Attempt to fix the rotation handler
     - Hmm this causes an infinite loop too
+    - Fix the infinite loop
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 22

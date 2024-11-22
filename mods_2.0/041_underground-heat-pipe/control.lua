@@ -247,8 +247,8 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if deathrattle.type == "pipe-to-ground" then
       local surfacedata = storage.surfacedata[deathrattle.surface.index]
       if surfacedata then
-        for unit_number, directional_heat_pipe in pairs(surfacedata.directional_heat_pipes) do
-          if directional_heat_pipe.valid and position_equals_position(directional_heat_pipe.position, deathrattle.position) then
+        for unit_number, directional_heat_pipe in pairs(nil_invalid_entities(surfacedata.directional_heat_pipes)) do
+          if position_equals_position(directional_heat_pipe.position, deathrattle.position) then
             directional_heat_pipe.destroy()
           end
         end
@@ -272,9 +272,9 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
   if pipe_to_ground_names[entity.name] then
     local surfacedata = storage.surfacedata[entity.surface.index]
 
-    log("foo")
+    local new_directional_heat_pipes = {}
+
     for unit_number, directional_heat_pipe in pairs(nil_invalid_entities(surfacedata.directional_heat_pipes)) do
-      log("bar")
       if position_equals_position(directional_heat_pipe.position, entity.position) then
         local even_or_odd_string = get_even_or_odd_position(directional_heat_pipe) == 0 and "even" or "odd"
         local direction_name = direction_to_name[entity.direction]
@@ -282,8 +282,12 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
 
         local new_name = string.format("underground-heat-pipe-%s-%s-%s", direction_name, mode, even_or_odd_string)
         local new_entity = bring_heatpipe_to_front(directional_heat_pipe, new_name)
-        surfacedata.directional_heat_pipes[new_entity.unit_number] = new_entity
+        new_directional_heat_pipes[new_entity.unit_number] = new_entity
       end
+    end
+
+    for unit_number, new_directional_heat_pipe in pairs(new_directional_heat_pipes) do
+      surfacedata.directional_heat_pipes[unit_number] = new_directional_heat_pipe
     end
   end
 end)
