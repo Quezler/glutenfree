@@ -1,13 +1,5 @@
 local Handler = {}
 
-local function get_tile_gap_size(a, b)
-  return math.abs(a.position.x - b.position.x) + math.abs(a.position.y - b.position.y) - 1
-end
-
-local function get_position_between(a, b)
-  return {x = (a.position.x + b.position.x) / 2, y = (a.position.y + b.position.y) / 2}
-end
-
 local direction_to_axis = {
   [defines.direction.north] = "vertical",
   [defines.direction.south] = "vertical",
@@ -22,6 +14,44 @@ local direction_to_name = {
   [defines.direction.west] = "west",
 }
 
+local function get_tile_gap_size(a, b)
+  return math.abs(a.position.x - b.position.x) + math.abs(a.position.y - b.position.y) - 1
+end
+
+local function get_position_between(a, b)
+  return {x = (a.position.x + b.position.x) / 2, y = (a.position.y + b.position.y) / 2}
+end
+
+local function get_even_or_odd_position(entity) -- 0 = even, 1 = odd
+  return (entity.position.x + entity.position.y) % 2
+end
+
+local other_mode = {
+  single = "duo",
+  duo = "single",
+}
+
+local function struct_set_mode(struct, mode)
+  local entity = struct.pipe_to_ground
+  local even_or_odd_string = get_even_or_odd_position(entity) == 0 and "even" or "odd"
+  local direction_name = direction_to_name[struct.pipe_to_ground.direction]
+  local old_name = string.format("underground-heat-pipe-%s-%s-%s", direction_name, other_mode[mode], even_or_odd_string)
+  local new_name = string.format("underground-heat-pipe-%s-%s-%s", direction_name,            mode , even_or_odd_string)
+
+  local old_underground_heat_pipe_direction = struct.underground_heat_pipe_direction
+  local new_underground_heat_pipe_direction = entity.surface.create_entity{
+    name = new_name,
+    force = entity.force,
+    position = entity.position,
+    fast_replace = true,
+  }
+
+  assert(old_underground_heat_pipe_direction.name == old_name, string.format("%s ~= %s", old_underground_heat_pipe_direction.name, old_name))
+  new_underground_heat_pipe_direction.temperature = old_underground_heat_pipe_direction.temperature
+  old_underground_heat_pipe_direction.destroy()
+  struct.underground_heat_pipe_direction = new_underground_heat_pipe_direction
+end
+
 script.on_init(function()
   storage.structs = {}
   storage.deathrattles = {}
@@ -30,10 +60,10 @@ end)
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
-  local modulo = (entity.position.x + entity.position.y) % 2
+  local even_or_odd_string = get_even_or_odd_position(event.entity) == 0 and "even" or "odd"
 
   local underground_heat_pipe_direction = entity.surface.create_entity{
-    name = string.format("underground-heat-pipe-%s-%s-%s", direction_to_name[entity.direction], "single", modulo == 0 and "even" or "odd"),
+    name = string.format("underground-heat-pipe-%s-%s-%s", direction_to_name[entity.direction], "single", even_or_odd_string),
     force = entity.force,
     position = entity.position,
     fast_replace = true,
@@ -65,6 +95,9 @@ function Handler.on_created_entity(event)
       position = get_position_between(entity, other)
     }
   end
+
+  struct_set_mode(storage.structs[entity.unit_number], "duo")
+  struct_set_mode(storage.structs[other.unit_number], "duo")
 end
 
 for _, event in ipairs({

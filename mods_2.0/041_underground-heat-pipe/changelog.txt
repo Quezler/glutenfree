@@ -14,6 +14,7 @@ Date: ????
     - Delete the old heat pipe after the new one to prevent blinking
     - Change the horizontal and vertical to sit between the undergrounds
     - Prepare the mode that can connect to what's behind
+    - Switch structs from single to dual mode when connected
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 21
