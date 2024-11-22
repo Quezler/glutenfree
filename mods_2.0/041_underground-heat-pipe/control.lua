@@ -191,13 +191,15 @@ function Handler.on_created_entity(event)
     position = entity.position,
   }
 
+  storage.surfacedata[entity.surface.index].directional_heat_pipes[underground_heat_pipe_direction.unit_number] = underground_heat_pipe_direction
+
   --
 
   local other = entity.neighbours[1][1]
   if other == nil then return end
 
-  struct_set_mode(storage.structs[entity.unit_number], "duo")
-  struct_set_mode(storage.structs[other.unit_number], "duo")
+  -- struct_set_mode(storage.structs[entity.unit_number], "duo")
+  -- struct_set_mode(storage.structs[other.unit_number], "duo")
 
   local tile_gap_size = get_tile_gap_size(entity, other)
   if tile_gap_size > 0 then
@@ -208,12 +210,12 @@ function Handler.on_created_entity(event)
       position = get_position_between(entity, other)
     }
 
-    storage.underpasses[underpass.unit_number] = {
-      id = underpass.unit_number,
-      underpass = underpass,
-      source = storage.structs[entity.unit_number].underground_heat_pipe_direction,
-      destination = storage.structs[other.unit_number].underground_heat_pipe_direction,
-    }
+    -- storage.underpasses[underpass.unit_number] = {
+    --   id = underpass.unit_number,
+    --   underpass = underpass,
+    --   source = storage.structs[entity.unit_number].underground_heat_pipe_direction,
+    --   destination = storage.structs[other.unit_number].underground_heat_pipe_direction,
+    -- }
   end
 end
 
@@ -240,7 +242,7 @@ end
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    local struct = storage.structs[deathrattle.struct_id]
+    -- local struct = storage.structs[deathrattle.struct_id]
     -- if struct == nil then return end
 
     if deathrattle.type == "pipe-to-ground" then
@@ -257,12 +259,12 @@ script.on_event(defines.events.on_object_destroyed, function(event)
         end
 
         -- pairs_yeet_valid_false(surfacedata.directional_heat_pipes, function(unit_number, directional_heat_pipe)
-        
+ 
         -- end)
 
       end
-      struct.underground_heat_pipe_direction.destroy()
-      storage.structs[struct.id] = nil
+      -- struct.underground_heat_pipe_direction.destroy()
+      -- storage.structs[struct.id] = nil
     else
       error(serpent.block(deathrattle))
     end

@@ -13,6 +13,7 @@ Date: ????
     - Setup surfacedata
     - Flush brain buffer
     - Try to write a custom iterator
+    - Begin transition from struct to surfacedata (since entities switch unit numbers a lot)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 22
