@@ -138,10 +138,10 @@ for length = 2, 6 do
   end
 end
 
-for _, direction in ipairs({"north", "east", "south", "west"}) do
+for _, direction_name in ipairs({"north", "east", "south", "west"}) do
   local icons = table.deepcopy(yellow_uhp.icons)
   table.insert(icons, {
-    icon = "__base__/graphics/icons/signal/signal_" .. direction:sub(1, 1) .. ".png",
+    icon = "__base__/graphics/icons/signal/signal_" .. direction_name:sub(1, 1) .. ".png",
     icon_size = 64,
     scale = 0.25,
     shift = {-8, -8}
@@ -149,8 +149,8 @@ for _, direction in ipairs({"north", "east", "south", "west"}) do
 
   local heat_pipe_direction = {
     type = "heat-pipe",
-    name = string.format("underground-heat-pipe-%s", direction),
-    localised_name = {"entity-name.underground-heat-pipe-direction", direction},
+    name = string.format("underground-heat-pipe-%s", direction_name),
+    localised_name = {"entity-name.underground-heat-pipe-direction", direction_name},
     icons = icons,
     heat_buffer = table.deepcopy(heat_pipe_entity.heat_buffer),
     collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
@@ -160,7 +160,17 @@ for _, direction in ipairs({"north", "east", "south", "west"}) do
     hidden = true,
   }
 
+  local template = {
+    filename = "__base__/graphics/entity/heat-pipe/heat-pipe-straight-vertical-single.png",
+    height = 64,
+    priority = "extra-high",
+    scale = 0.5,
+    width = 64
+  }
+  template.filename = string.format("__underground-heat-pipe__/graphics/entity/underground-heat-pipe/underground-heat-pipe-%s-disconnected.png", direction_name)
+
   heat_pipe_direction.connection_sprites = table.deepcopy(heat_pipe_entity.connection_sprites)
+  heat_pipe_direction.connection_sprites.single = template
 
   data:extend{heat_pipe_direction}
 end
