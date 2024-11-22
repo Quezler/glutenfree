@@ -95,9 +95,16 @@ function Handler.on_entity_with_heat_buffer_created(entity)
 
   for _, underpass in ipairs(underpasses) do
     local struct = storage.underpasses[underpass.unit_number]
-    bring_heatpipe_to_front(struct.underpass)
-    bring_heatpipe_to_front(struct.source)
-    bring_heatpipe_to_front(struct.destination)
+    local new_underpass = bring_heatpipe_to_front(struct.underpass)
+    local new_source = bring_heatpipe_to_front(struct.source)
+    local new_destination = bring_heatpipe_to_front(struct.destination)
+    storage.underpasses[struct.id] = nil
+    storage.underpasses[new_underpass.unit_number] = {
+      id = new_underpass.unit_number,
+      underpass = new_underpass,
+      source = new_source,
+      destination = new_destination,
+    }
   end
 end
 
@@ -148,8 +155,8 @@ function Handler.on_created_entity(event)
 
     storage.underpasses[underpass.unit_number] = {
       id = underpass.unit_number,
-      source = storage.structs[entity.unit_number].underground_heat_pipe_direction,
       underpass = underpass,
+      source = storage.structs[entity.unit_number].underground_heat_pipe_direction,
       destination = storage.structs[other.unit_number].underground_heat_pipe_direction,
     }
   end
