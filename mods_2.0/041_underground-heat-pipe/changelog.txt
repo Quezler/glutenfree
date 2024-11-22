@@ -17,6 +17,7 @@ Date: ????
     - Attempt to fix the rotation handler
     - Hmm this causes an infinite loop too
     - Fix the infinite loop
+    - Prevent identical overpasses from stacking
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 22

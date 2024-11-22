@@ -203,10 +203,13 @@ function Handler.on_created_entity(event)
   local tile_gap_size = get_tile_gap_size(entity, other)
   if tile_gap_size > 0 then
     local zero_padded_length_string = string.format("%02d", tile_gap_size)
+    local underpass_position = get_position_between(entity, other)
+    local underpass_name = string.format("underground-heat-pipe-long-%s-%s", direction_to_axis[entity.direction], zero_padded_length_string)
+    assert(entity.surface.find_entity(underpass_name, underpass_position) == nil)
     local underpass = entity.surface.create_entity{
-      name = string.format("underground-heat-pipe-long-%s-%s", direction_to_axis[entity.direction], zero_padded_length_string),
+      name = underpass_name,
       force = entity.force,
-      position = get_position_between(entity, other)
+      position = underpass_position,
     }
 
     -- storage.underpasses[underpass.unit_number] = {
