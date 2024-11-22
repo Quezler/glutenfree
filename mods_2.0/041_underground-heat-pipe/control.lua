@@ -247,8 +247,8 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if deathrattle.type == "pipe-to-ground" then
       local surfacedata = storage.surfacedata[deathrattle.surface.index]
       if surfacedata then
-        for unit_number, directional_heat_pipe in pairs(nil_invalid_entities(surfacedata.directional_heat_pipes)) do
-          if position_equals_position(directional_heat_pipe.position, deathrattle.position) then
+        for unit_number, directional_heat_pipe in pairs(surfacedata.directional_heat_pipes) do
+          if directional_heat_pipe.valid and position_equals_position(directional_heat_pipe.position, deathrattle.position) then
             directional_heat_pipe.destroy()
           end
         end
