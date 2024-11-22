@@ -156,21 +156,28 @@ for _, direction_name in ipairs({"north", "east", "south", "west"}) do
     collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
     selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
     collision_mask = {layers = {}},
-    selection_priority = 49,
+    selection_priority = 51,
     hidden = true,
   }
 
-  local template = {
+  local template_off = {
     filename = "__base__/graphics/entity/heat-pipe/heat-pipe-straight-vertical-single.png",
     height = 64,
     priority = "extra-high",
     scale = 0.5,
     width = 64
   }
-  template.filename = string.format("__underground-heat-pipe__/graphics/entity/underground-heat-pipe/underground-heat-pipe-%s-disconnected.png", direction_name)
+  template_off.filename = string.format("__underground-heat-pipe__/graphics/entity/underground-heat-pipe/underground-heat-pipe-%s-disconnected.png", direction_name)
+
+  local template_on = table.deepcopy(template_off)
+  template_on.filename = string.format("__underground-heat-pipe__/graphics/entity/underground-heat-pipe/underground-heat-pipe-%s-connected.png", direction_name)
 
   heat_pipe_direction.connection_sprites = table.deepcopy(heat_pipe_entity.connection_sprites)
-  heat_pipe_direction.connection_sprites.single = template
+  heat_pipe_direction.connection_sprites.single = template_off
+  heat_pipe_direction.connection_sprites.ending_left  = template_on
+  heat_pipe_direction.connection_sprites.ending_right = template_on
+  heat_pipe_direction.connection_sprites.ending_up    = template_on
+  heat_pipe_direction.connection_sprites.ending_down  = template_on
 
   data:extend{heat_pipe_direction}
 end
