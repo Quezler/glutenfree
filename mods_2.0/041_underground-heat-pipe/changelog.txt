@@ -11,6 +11,7 @@ Date: ????
     - Same pipe prototypes always visually connect, checkerboard alternate them
     - Preserve heat when rotating
     - Fast rotate does not preserve temperature
+    - Delete the old heat pipe after the new one to prevent blinking
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 21

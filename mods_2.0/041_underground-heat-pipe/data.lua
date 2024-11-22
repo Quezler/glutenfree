@@ -163,8 +163,7 @@ for _, direction_name in ipairs({"north", "east", "south", "west"}) do
       collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
       selection_box = {{-0.2, -0.2}, {0.2, 0.2}},
       collision_mask = {layers = {}},
-      fast_replaceable_group = "underground-heat-pipe-direction",
-      selection_priority = 51,
+      selection_priority = 52,
       hidden = true,
     }
 
