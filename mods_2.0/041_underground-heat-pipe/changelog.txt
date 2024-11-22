@@ -9,6 +9,7 @@ Date: ????
     - Prevent connections in unauthorized directions
     - Allow the underground heat pipe to be rotated
     - Same pipe prototypes always visually connect, checkerboard alternate them
+    - Preserve heat when rotating
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 21

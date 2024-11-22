@@ -48,9 +48,12 @@ function Handler.on_created_entity(event)
     position = entity.position,
   }
   underground_heat_pipe_direction.destructible = false
+  underground_heat_pipe_direction.temperature = storage.structs[entity.unit_number] and storage.structs[entity.unit_number].temperature or 15
+  game.print("get " .. underground_heat_pipe_direction.temperature)
 
   storage.structs[entity.unit_number] = {
     id = entity.unit_number,
+    temperature = 15,
     pipe_to_ground = entity,
     underground_heat_pipe_direction = underground_heat_pipe_direction,
   }
@@ -95,6 +98,8 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
   local entity = event.entity
   if pipe_to_ground_names[entity.name] then
     local struct = storage.structs[entity.unit_number]
+    struct.temperature = struct.underground_heat_pipe_direction.temperature
+    game.print("set " .. struct.temperature)
     struct.underground_heat_pipe_direction.destroy()
     Handler.on_created_entity(event)
   end
