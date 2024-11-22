@@ -33,7 +33,7 @@ function Handler.on_created_entity(event)
   local modulo = (entity.position.x + entity.position.y) % 2
 
   local underground_heat_pipe_direction = entity.surface.create_entity{
-    name = string.format("underground-heat-pipe-%s-%s", direction_to_name[entity.direction], modulo == 0 and "even" or "odd"),
+    name = string.format("underground-heat-pipe-%s-%s-%s", direction_to_name[entity.direction], "single", modulo == 0 and "even" or "odd"),
     force = entity.force,
     position = entity.position,
     fast_replace = true,
@@ -105,7 +105,7 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
   if pipe_to_ground_names[entity.name] then
     local struct = storage.structs[entity.unit_number]
     struct.temperature = struct.underground_heat_pipe_direction.temperature
-    game.print("set " .. struct.temperature)
+    -- game.print("set " .. struct.temperature)
     local old = struct.underground_heat_pipe_direction
     Handler.on_created_entity(event)
     old.destroy()
