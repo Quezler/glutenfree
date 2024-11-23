@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
-Date: ????
+Date: 2024. 11. 23
   Info:
     - Begin storing pipes to ground in surfacedata
     - Make new struct constructor prettier
