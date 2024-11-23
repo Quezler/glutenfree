@@ -159,10 +159,10 @@ function Handler.on_entity_with_heat_buffer_created(entity)
   end
 end
 
-local function new_struct(table, key)
-  local struct = {id = key}
-  assert(table[key] == nil)
-  table[key] = struct
+local function new_struct(table, struct)
+  assert(struct.id, serpent.block(struct))
+  assert(table[struct.id] == nil)
+  table[struct.id] = struct
   return struct
 end
 
@@ -174,15 +174,14 @@ function Handler.on_created_entity(event)
   end
 
   local surfacedata = storage.surfacedata[entity.surface.index]
-  local struct = new_struct(surfacedata.pipe_to_grounds, util.positiontostr(entity.position))
-  struct = {
-    id = struct.id,
+  local struct = new_struct(surfacedata.pipe_to_grounds, {
+    id = util.positiontostr(entity.position),
     entity = entity,
     position = entity.position,
     direction = entity.direction,
     even_or_odd = get_even_or_odd_position(event.entity) == 0 and "even" or "odd",
     mode = "single",
-  }
+  })
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {
     type = "pipe-to-ground",
