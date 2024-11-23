@@ -178,31 +178,33 @@ function UndergroundHeatPipe.make(config)
           hidden = true,
         }
 
-        local template_off = {
-          filename = "__base__/graphics/entity/heat-pipe/heat-pipe-straight-vertical-single.png",
-          height = 64,
-          priority = "extra-high",
-          scale = 0.5,
-          width = 64
-        }
-        template_off.filename = string.format("__underground-heat-pipe__/graphics/entity/underground-heat-pipe/underground-heat-pipe-%s-disconnected.png", direction_name)
+        for _, spriteconfig in ipairs({{key = "connection_sprites", prefix = ""}, {key = "heat_glow_sprites", prefix = "heated-"}}) do
+          local template_off = {
+            filename = "__base__/graphics/entity/heat-pipe/heat-pipe-straight-vertical-single.png",
+            height = 64,
+            priority = "extra-high",
+            scale = 0.5,
+            width = 64
+          }
+          template_off.filename = string.format("__underground-heat-pipe__/graphics/entity/underground-heat-pipe/%sunderground-heat-pipe-%s-disconnected.png", spriteconfig.prefix, direction_name)
 
-        local template_on = table.deepcopy(template_off)
-        template_on.filename = string.format("__underground-heat-pipe__/graphics/entity/underground-heat-pipe/underground-heat-pipe-%s-connected.png", direction_name)
+          local template_on = table.deepcopy(template_off)
+          template_on.filename = string.format("__underground-heat-pipe__/graphics/entity/underground-heat-pipe/%sunderground-heat-pipe-%s-connected.png", spriteconfig.prefix, direction_name)
 
-        heat_pipe_direction.connection_sprites = table.deepcopy(heat_pipe_entity.connection_sprites)
-        heat_pipe_direction.connection_sprites.single = template_off
-        heat_pipe_direction.connection_sprites.ending_left  = template_off
-        heat_pipe_direction.connection_sprites.ending_right = template_off
-        heat_pipe_direction.connection_sprites.ending_up    = template_off
-        heat_pipe_direction.connection_sprites.ending_down  = template_off
-        if direction_name == "west"  then heat_pipe_direction.connection_sprites.ending_left  = template_on end
-        if direction_name == "east"  then heat_pipe_direction.connection_sprites.ending_right = template_on end
-        if direction_name == "north" then heat_pipe_direction.connection_sprites.ending_up    = template_on end
-        if direction_name == "south" then heat_pipe_direction.connection_sprites.ending_down  = template_on end
+          heat_pipe_direction[spriteconfig.key] = table.deepcopy(heat_pipe_entity[spriteconfig.key])
+          heat_pipe_direction[spriteconfig.key].single = template_off
+          heat_pipe_direction[spriteconfig.key].ending_left  = template_off
+          heat_pipe_direction[spriteconfig.key].ending_right = template_off
+          heat_pipe_direction[spriteconfig.key].ending_up    = template_off
+          heat_pipe_direction[spriteconfig.key].ending_down  = template_off
+          if direction_name == "west"  then heat_pipe_direction[spriteconfig.key].ending_left  = template_on end
+          if direction_name == "east"  then heat_pipe_direction[spriteconfig.key].ending_right = template_on end
+          if direction_name == "north" then heat_pipe_direction[spriteconfig.key].ending_up    = template_on end
+          if direction_name == "south" then heat_pipe_direction[spriteconfig.key].ending_down  = template_on end
 
-        heat_pipe_direction.connection_sprites.straight_horizontal = template_on
-        heat_pipe_direction.connection_sprites.straight_vertical   = template_on
+          heat_pipe_direction[spriteconfig.key].straight_horizontal = template_on
+          heat_pipe_direction[spriteconfig.key].straight_vertical   = template_on
+        end
 
         if mode == "single" then
           heat_pipe_direction.heat_buffer.connections = {

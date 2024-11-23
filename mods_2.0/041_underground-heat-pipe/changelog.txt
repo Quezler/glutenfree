@@ -3,6 +3,7 @@ Version: 1.0.1
 Date: ????
   Info:
     - Fix 1 gap horizontal underground heat pipes not working
+    - Add the missing heated sprites
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2024. 11. 21
