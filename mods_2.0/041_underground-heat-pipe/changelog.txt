@@ -15,6 +15,7 @@ Date: ????
     - Fix replacing/upgrading colliding with the old struct
     - Fix deathrattles on a surface being deleted
     - Create the underpass again
+    - Fix the entity order fixer
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 22

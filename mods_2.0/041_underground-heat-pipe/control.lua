@@ -58,6 +58,10 @@ local function bring_heatpipe_to_front(old_entity, new_name)
   }
   new_entity.temperature = old_entity.temperature
   new_entity.destructible = false
+
+  local surfacedata = storage.surfacedata[old_entity.surface.index]
+  surfacedata.directional_heat_pipes[util.positiontostr(old_entity.position)] = new_entity
+
   old_entity.destroy()
   return new_entity
 end
@@ -179,17 +183,19 @@ function Handler.on_entity_with_heat_buffer_created(entity)
     name = underpass_names,
   }
 
+  local surfacedata = storage.surfacedata[entity.surface.index]
+
   for _, underpass in ipairs(underpasses) do
     local struct = storage.underpasses[underpass.unit_number]
     local new_underpass = bring_heatpipe_to_front(struct.underpass)
-    local new_source = bring_heatpipe_to_front(struct.source)
-    local new_destination = bring_heatpipe_to_front(struct.destination)
+    bring_heatpipe_to_front(surfacedata.directional_heat_pipes[util.positiontostr(struct.source_position)])
+    bring_heatpipe_to_front(surfacedata.directional_heat_pipes[util.positiontostr(struct.destination_position)])
     storage.underpasses[struct.id] = nil
     storage.underpasses[new_underpass.unit_number] = {
       id = new_underpass.unit_number,
       underpass = new_underpass,
-      source = new_source,
-      destination = new_destination,
+      source_position = struct.source_position,
+      destination_position = struct.destination_position,
     }
   end
 end
@@ -242,6 +248,11 @@ local function pipe_to_ground_to_struct(pipe_to_ground)
   return surfacedata.pipe_to_grounds[util.positiontostr(pipe_to_ground.position)]
 end
 
+local function pipe_to_ground_to_directional_heatpipe(pipe_to_ground)
+  local surfacedata = storage.surfacedata[pipe_to_ground.surface.index]
+  return surfacedata.directional_heat_pipes[util.positiontostr(pipe_to_ground.position)]
+end
+
 function Handler.check_for_neighbours(pipe_to_ground_struct)
   local entity = pipe_to_ground_struct.entity
   local other = pipe_to_ground_struct.entity.neighbours[1][1]
@@ -275,6 +286,11 @@ function Handler.check_for_neighbours(pipe_to_ground_struct)
         source_position = entity.position,
         destination_position = other.position,
       }
+
+      local surfacedata = storage.surfacedata[entity.surface.index]
+
+      bring_heatpipe_to_front(pipe_to_ground_to_directional_heatpipe(entity))
+      bring_heatpipe_to_front(pipe_to_ground_to_directional_heatpipe(other))
     end
   end
 end
