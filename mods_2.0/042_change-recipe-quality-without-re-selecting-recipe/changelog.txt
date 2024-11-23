@@ -5,6 +5,7 @@ Date: ????
     - Fix typo and prevent changing fluid only recipes
     - Dump inventory where art tho?
     - Try to be clever
+    - Just spill and not care about space platforms
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 23

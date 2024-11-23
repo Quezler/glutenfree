@@ -23,16 +23,17 @@ for _, recipe in pairs(prototypes.recipe) do
 end
 
 local function assembler_set_recipe_and_quality(assembler, recipe, quality)
-  local clone = assembler.clone{
-    position = assembler.position,
-    surface = assembler.surface,
-    force = assembler.force,
-    create_build_effect_smoke = false
-  }
+  local items = assembler.set_recipe(recipe, quality)
+  if items[1] == nil then return end
 
-  clone.set_recipe(recipe, quality)
-  assembler.copy_settings(clone)
-  clone.destroy()
+  for _, item in ipairs(items) do
+    assembler.surface.spill_item_stack{
+      position = assembler.position,
+      stack = item,
+      force = assembler.force,
+      allow_belts = false,
+    }
+  end
 end
 
 local function try_change_quality(assembler, increment_quality)
