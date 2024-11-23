@@ -65,26 +65,26 @@ local other_mode = {
   duo = "single",
 }
 
-local function struct_set_mode(struct, mode)
-  local entity = struct.pipe_to_ground
-  local even_or_odd_string = get_even_or_odd_position(entity) == 0 and "even" or "odd"
-  local direction_name = direction_to_name[struct.pipe_to_ground.direction]
-  local old_name = string.format("underground-heat-pipe-%s-%s-%s", direction_name, other_mode[mode], even_or_odd_string)
-  local new_name = string.format("underground-heat-pipe-%s-%s-%s", direction_name,            mode , even_or_odd_string)
+-- local function struct_set_mode(struct, mode)
+--   local entity = struct.pipe_to_ground
+--   local even_or_odd_string = get_even_or_odd_position(entity) == 0 and "even" or "odd"
+--   local direction_name = direction_to_name[struct.pipe_to_ground.direction]
+--   local old_name = string.format("underground-heat-pipe-%s-%s-%s", direction_name, other_mode[mode], even_or_odd_string)
+--   local new_name = string.format("underground-heat-pipe-%s-%s-%s", direction_name,            mode , even_or_odd_string)
 
-  local old_underground_heat_pipe_direction = struct.underground_heat_pipe_direction
-  local new_underground_heat_pipe_direction = entity.surface.create_entity{
-    name = new_name,
-    force = entity.force,
-    position = entity.position,
-    fast_replace = true,
-  }
+--   local old_underground_heat_pipe_direction = struct.underground_heat_pipe_direction
+--   local new_underground_heat_pipe_direction = entity.surface.create_entity{
+--     name = new_name,
+--     force = entity.force,
+--     position = entity.position,
+--     fast_replace = true,
+--   }
 
-  assert(old_underground_heat_pipe_direction.name == old_name, string.format("%s ~= %s", old_underground_heat_pipe_direction.name, old_name))
-  new_underground_heat_pipe_direction.temperature = old_underground_heat_pipe_direction.temperature
-  old_underground_heat_pipe_direction.destroy()
-  struct.underground_heat_pipe_direction = new_underground_heat_pipe_direction
-end
+--   assert(old_underground_heat_pipe_direction.name == old_name, string.format("%s ~= %s", old_underground_heat_pipe_direction.name, old_name))
+--   new_underground_heat_pipe_direction.temperature = old_underground_heat_pipe_direction.temperature
+--   old_underground_heat_pipe_direction.destroy()
+--   struct.underground_heat_pipe_direction = new_underground_heat_pipe_direction
+-- end
 
 local function position_equals_position(a, b)
   return a.x == b.x and a.y == b.y
@@ -127,6 +127,7 @@ end)
 
 script.on_event(defines.events.on_surface_created, function(event)
   storage.surfacedata[event.surface_index] = {
+    pipe_to_grounds = {},
     directional_heat_pipes = {},
   }
 end)
@@ -158,6 +159,13 @@ function Handler.on_entity_with_heat_buffer_created(entity)
   end
 end
 
+local function new_struct(table, key)
+  local struct = {id = key}
+  assert(table[key] == nil)
+  table[key] = struct
+  return struct
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -165,7 +173,23 @@ function Handler.on_created_entity(event)
     return Handler.on_entity_with_heat_buffer_created(entity)
   end
 
-  local even_or_odd_string = get_even_or_odd_position(event.entity) == 0 and "even" or "odd"
+  local surfacedata = storage.surfacedata[entity.surface.index]
+  local struct = new_struct(surfacedata.pipe_to_grounds, util.positiontostr(entity.position))
+  struct = {
+    id = struct.id,
+    entity = entity,
+    position = entity.position,
+    direction = entity.direction,
+    even_or_odd = get_even_or_odd_position(event.entity) == 0 and "even" or "odd",
+    mode = "single",
+  }
+
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {
+    type = "pipe-to-ground",
+    surface = entity.surface,
+    position = entity.position,
+  }
+
 
   local underground_heat_pipe_direction = entity.surface.create_entity{
     name = string.format("underground-heat-pipe-%s-%s-%s", direction_to_name[entity.direction], "single", even_or_odd_string),
@@ -184,11 +208,6 @@ function Handler.on_created_entity(event)
   --   underground_heat_pipe_direction = underground_heat_pipe_direction,
   -- }
 
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = {
-    type = "pipe-to-ground",
-    surface = entity.surface,
-    position = entity.position,
-  }
 
   storage.surfacedata[entity.surface.index].directional_heat_pipes[underground_heat_pipe_direction.unit_number] = underground_heat_pipe_direction
 
