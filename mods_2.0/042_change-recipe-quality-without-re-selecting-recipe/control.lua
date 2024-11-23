@@ -55,6 +55,10 @@ local function try_change_quality(assembler, increment_quality)
   end
 end
 
+local function entity_is_assembling_machine(entity)
+  return entity.type == "entity-ghost" and entity.ghost_type or entity.type
+end
+
 local function on_custom_input(event)
   local prototype = event.selected_prototype
   if prototype == nil then return end
@@ -63,7 +67,7 @@ local function on_custom_input(event)
 
   if prototype.derived_type == "recipe" then
     local opened = player.opened
-    if opened and player.opened_gui_type == defines.gui_type.entity and opened.type == "assembling-machine" then
+    if opened and player.opened_gui_type == defines.gui_type.entity and entity_is_assembling_machine(opened) then
       local recipe = opened.get_recipe()
       if recipe and recipe.name == prototype.name then
         try_change_quality(opened, event.input_name == mod_prefix .. "cycle-quality-up")
@@ -73,7 +77,17 @@ local function on_custom_input(event)
 
   if prototype.derived_type == "assembling-machine" then
     local selected = player.selected
-    if selected and selected.type == "assembling-machine" then
+    if selected and entity_is_assembling_machine(selected) then
+      local recipe = selected.get_recipe()
+      if recipe then
+        try_change_quality(selected, event.input_name == mod_prefix .. "cycle-quality-up")
+      end
+    end
+  end
+
+  if prototype.derived_type == "entity-ghost" then
+    local selected = player.selected
+    if selected and entity_is_assembling_machine(selected) then
       local recipe = selected.get_recipe()
       if recipe then
         try_change_quality(selected, event.input_name == mod_prefix .. "cycle-quality-up")
