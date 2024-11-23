@@ -3,7 +3,7 @@
     "title": "Change recipe quality without re-selecting recipe",
     "description": "You can alt + scroll over the set recipe in the gui or when selecting the assembler to change the recipe quality.",
 
-    "version": "0.0.1",
+    "version": "1.0.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 

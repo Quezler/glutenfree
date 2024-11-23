@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 11. 23
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2024. 11. 23
   Info:
     - Fix typo and prevent changing fluid only recipes
     - Dump inventory where art tho?
