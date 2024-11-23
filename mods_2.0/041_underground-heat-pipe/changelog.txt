@@ -7,6 +7,7 @@ Date: ????
     - Attempt to centralize creating and updating the directional heat pipes
     - Pull surface and force out of the struct
     - Strip even/odd from the localized name since it just got me confused with single/duo
+    - Dis & re connect the single/duo when rotating
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 22
