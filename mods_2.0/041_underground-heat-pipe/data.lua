@@ -165,9 +165,10 @@ for _, direction_name in ipairs({"north", "east", "south", "west"}) do
         icons = icons,
         heat_buffer = table.deepcopy(heat_pipe_entity.heat_buffer),
         collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
-        selection_box = {{-0.2, -0.2}, {0.2, 0.2}},
+        selection_box = {{-0.1, -0.1}, {0.1, 0.1}},
         collision_mask = {layers = {}},
         selection_priority = 51,
+        -- selectable_in_game = false, -- todo: uncomment
         hidden = true,
       }
 
