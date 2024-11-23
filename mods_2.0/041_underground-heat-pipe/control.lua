@@ -93,6 +93,7 @@ function Handler.pipe_to_ground_struct_set_mode(struct, mode)
   struct.mode = mode
 
   -- game.print(struct.entity.unit_number)
+  -- game.print(util.positiontostr(struct.entity.position))
 
   Handler.pipe_to_ground_struct_recreate_directional_heatpipe(struct)
 end
@@ -114,8 +115,10 @@ function Handler.pipe_to_ground_struct_recreate_directional_heatpipe(struct)
   if old_directional_heatpipe then
     new_directional_heatpipe.temperature = old_directional_heatpipe.temperature
     old_directional_heatpipe.destroy()
+    surfacedata.directional_heat_pipes[key] = nil
   end
 
+  assert(surfacedata.directional_heat_pipes[key] == nil)
   surfacedata.directional_heat_pipes[key] = new_directional_heatpipe
   return new_directional_heatpipe
 end

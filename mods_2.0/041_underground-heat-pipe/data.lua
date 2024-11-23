@@ -161,7 +161,7 @@ for _, direction_name in ipairs({"north", "east", "south", "west"}) do
       local heat_pipe_direction = {
         type = "heat-pipe",
         name = string.format("underground-heat-pipe-%s-%s-%s", direction_name, mode, even_or_odd),
-        localised_name = {"entity-name.underground-heat-pipe-direction-mode-modulo", direction_name, mode, even_or_odd},
+        localised_name = {"entity-name.underground-heat-pipe-direction-mode", direction_name, mode},
         icons = icons,
         heat_buffer = table.deepcopy(heat_pipe_entity.heat_buffer),
         collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
