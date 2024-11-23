@@ -209,8 +209,16 @@ function Handler.on_created_entity(event)
   end
 
   local surfacedata = storage.surfacedata[entity.surface.index]
+  local struct_id = util.positiontostr(entity.position)
+
+  -- was a new rotation built over this or did the quality change?
+  local old_struct = surfacedata.pipe_to_grounds[struct_id]
+  if old_struct then
+    surfacedata.pipe_to_grounds[struct_id] = nil
+  end
+  
   local struct = new_struct(surfacedata.pipe_to_grounds, {
-    id = util.positiontostr(entity.position),
+    id = struct_id,
     entity = entity,
     position = entity.position,
     direction = entity.direction,
@@ -306,10 +314,12 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if deathrattle.type == "pipe-to-ground" then
       local surfacedata = storage.surfacedata[deathrattle.surface.index]
       local key = util.positiontostr(deathrattle.position)
-      local directional_heat_pipe = surfacedata.directional_heat_pipes[key]
-      directional_heat_pipe.destroy()
-      surfacedata.directional_heat_pipes[key] = nil
-      surfacedata.pipe_to_grounds[key] = nil
+      if surfacedata.pipe_to_grounds[key].entity.valid == false then -- skip if the position key already got reused for a valid entity
+        local directional_heat_pipe = surfacedata.directional_heat_pipes[key]
+        directional_heat_pipe.destroy()
+        surfacedata.directional_heat_pipes[key] = nil
+        surfacedata.pipe_to_grounds[key] = nil
+        end
     else
       error(serpent.block(deathrattle))
     end
