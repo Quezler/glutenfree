@@ -92,20 +92,22 @@ function Handler.pipe_to_ground_struct_set_mode(struct, mode)
   assert(struct.mode == other_mode[mode])
   struct.mode = mode
 
+  -- game.print(struct.entity.unit_number)
+
   Handler.pipe_to_ground_struct_recreate_directional_heatpipe(struct)
 end
 
 function Handler.pipe_to_ground_struct_recreate_directional_heatpipe(struct)
-  local surfacedata = storage.surfacedata[struct.surface.index]
+  local surfacedata = storage.surfacedata[struct.entity.surface.index]
 
   local key = struct.id -- "[x, y]"
   local old_directional_heatpipe = surfacedata.directional_heat_pipes[key]
 
   local name = string.format("underground-heat-pipe-%s-%s-%s", direction_to_name[struct.direction], struct.mode, struct.even_or_odd)
-  local new_directional_heatpipe = struct.surface.create_entity{
+  local new_directional_heatpipe = struct.entity.surface.create_entity{
     name = name,
-    force = struct.force,
-    position = struct.position,
+    force = struct.entity.force,
+    position = struct.entity.position,
   }
   new_directional_heatpipe.destructible = false
 
@@ -209,8 +211,6 @@ function Handler.on_created_entity(event)
   local struct = new_struct(surfacedata.pipe_to_grounds, {
     id = util.positiontostr(entity.position),
     entity = entity,
-    force = entity.force,
-    surface = entity.surface,
     position = entity.position,
     direction = entity.direction,
     even_or_odd = get_even_or_odd_position(event.entity) == 0 and "even" or "odd",

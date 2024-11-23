@@ -5,6 +5,7 @@ Date: ????
     - Begin storing pipes to ground in surfacedata
     - Make new struct constructor prettier
     - Attempt to centralize creating and updating the directional heat pipes
+    - Pull surface and force out of the struct
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 22
