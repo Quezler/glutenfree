@@ -25,6 +25,9 @@ local direction_to_name = {
 
 local pipe_to_ground_names = {
   ["underground-heat-pipe"] = true,
+  ["fast-underground-heat-pipe"] = true,
+  ["express-underground-heat-pipe"] = true,
+  ["turbo-underground-heat-pipe"] = true,
 }
 
 local function string_stars_with(str, prefix)
@@ -33,7 +36,7 @@ end
 
 local underpass_names = {}
 for _, entity in pairs(prototypes.entity) do
-  if entity.type == "heat-pipe" and string_stars_with(entity.name, "underground-heat-pipe-") then
+  if entity.type == "heat-pipe" and string_stars_with(entity.name, "underground-heat-pipe-long-") then
     underpass_names[entity.name] = entity.name
   end
 end
@@ -71,27 +74,6 @@ local other_mode = {
   duo = "single",
 }
 
--- local function struct_set_mode(struct, mode)
---   local entity = struct.pipe_to_ground
---   local even_or_odd_string = get_even_or_odd_position(entity) == 0 and "even" or "odd"
---   local direction_name = direction_to_name[struct.pipe_to_ground.direction]
---   local old_name = string.format("underground-heat-pipe-%s-%s-%s", direction_name, other_mode[mode], even_or_odd_string)
---   local new_name = string.format("underground-heat-pipe-%s-%s-%s", direction_name,            mode , even_or_odd_string)
-
---   local old_underground_heat_pipe_direction = struct.underground_heat_pipe_direction
---   local new_underground_heat_pipe_direction = entity.surface.create_entity{
---     name = new_name,
---     force = entity.force,
---     position = entity.position,
---     fast_replace = true,
---   }
-
---   assert(old_underground_heat_pipe_direction.name == old_name, string.format("%s ~= %s", old_underground_heat_pipe_direction.name, old_name))
---   new_underground_heat_pipe_direction.temperature = old_underground_heat_pipe_direction.temperature
---   old_underground_heat_pipe_direction.destroy()
---   struct.underground_heat_pipe_direction = new_underground_heat_pipe_direction
--- end
-
 function Handler.pipe_to_ground_struct_set_mode(struct, mode)
   assert(struct.mode == other_mode[mode])
   struct.mode = mode
@@ -108,7 +90,7 @@ function Handler.pipe_to_ground_struct_recreate_directional_heatpipe(struct)
   local key = struct.id -- "[x, y]"
   local old_directional_heatpipe = surfacedata.directional_heat_pipes[key]
 
-  local name = string.format("underground-heat-pipe-%s-%s-%s", direction_to_name[struct.direction], struct.mode, struct.even_or_odd)
+  local name = string.format(struct.entity.name .. "-%s-%s-%s", direction_to_name[struct.direction], struct.mode, struct.even_or_odd)
   local new_directional_heatpipe = struct.entity.surface.create_entity{
     name = name,
     force = struct.entity.force,
@@ -326,6 +308,9 @@ end
 
 local filters = {
   {filter = "name", name = "underground-heat-pipe"},
+  {filter = "name", name = "fast-underground-heat-pipe"},
+  {filter = "name", name = "express-underground-heat-pipe"},
+  {filter = "name", name = "turbo-underground-heat-pipe"},
 
   {filter = "name", name = "heat-pipe"},
   {filter = "name", name = "nuclear-reactor"},
