@@ -396,3 +396,4 @@ end
 
 script.on_event(defines.events.on_research_finished, Handler.update_one_force_recipe_visibility)
 script.on_event(defines.events.on_research_reversed, Handler.update_one_force_recipe_visibility)
+script.on_event(defines.events.on_technology_effects_reset, Handler.update_one_force_recipe_visibility)
