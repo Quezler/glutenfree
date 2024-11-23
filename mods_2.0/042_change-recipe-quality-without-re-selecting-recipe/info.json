@@ -1,0 +1,21 @@
+{
+    "name": "change-recipe-quality-without-re-selecting-recipe",
+    "title": "Change recipe quality without re-selecting recipe",
+    "description": "You can alt + scroll over the set recipe in the gui or when selecting the assembler to change the recipe quality.",
+
+    "version": "0.0.1",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": true,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler"
+    ]
+}
