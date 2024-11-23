@@ -317,6 +317,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       local directional_heat_pipe = surfacedata.directional_heat_pipes[key]
       directional_heat_pipe.destroy()
       surfacedata.directional_heat_pipes[key] = nil
+      surfacedata.pipe_to_grounds[key] = nil
     else
       error(serpent.block(deathrattle))
     end
