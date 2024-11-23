@@ -13,7 +13,7 @@ data:extend({
   {
     type = "custom-input", key_sequence = "",
     name = mod_prefix .. "cycle-quality-down",
-    linked_game_control = "cycle-quality-up",
+    linked_game_control = "cycle-quality-down",
     include_selected_prototype = true,
   }
 })

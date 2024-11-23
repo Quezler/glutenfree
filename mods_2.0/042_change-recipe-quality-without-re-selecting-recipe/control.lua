@@ -11,16 +11,29 @@ for _, quality in pairs(prototypes.quality) do
   end
 end
 
+local recipe_has_item_ingredients = {}
+for _, recipe in pairs(prototypes.recipe) do
+  for _, ingredient in ipairs(recipe.ingredients) do
+    if ingredient.type == "item" then
+      recipe_has_item_ingredients[recipe.name] = true
+      goto continue
+    end
+  end
+  ::continue::
+end
+
 local function try_change_quality(assembler, increment_quality)
   local recipe_prototype, quality_prototype = assembler.get_recipe()
+  if not recipe_has_item_ingredients[recipe_prototype.name] then return end
+
   if increment_quality then
     if next_quality[quality_prototype.name] then
-      game.print(string.format("changing from %s to %s.", quality_prototype.name, next_quality[quality_prototype.name]))
+      -- game.print(string.format("changing from %s to %s.", quality_prototype.name, next_quality[quality_prototype.name]))
       assembler.set_recipe(recipe_prototype, next_quality[quality_prototype.name])
     end
   else
     if previous_quality[quality_prototype.name] then
-      game.print(string.format("changing from %s to %s.", quality_prototype.name, previous_quality[quality_prototype.name]))
+      -- game.print(string.format("changing from %s to %s.", quality_prototype.name, previous_quality[quality_prototype.name]))
       assembler.set_recipe(recipe_prototype, previous_quality[quality_prototype.name])
     end
   end
@@ -37,7 +50,6 @@ local function on_custom_input(event)
     if opened and player.opened_gui_type == defines.gui_type.entity and opened.type == "assembling-machine" then
       local recipe = opened.get_recipe()
       if recipe and recipe.name == prototype.name then
-        -- game.print(event.tick .. event.input_name)
         try_change_quality(opened, event.input_name == mod_prefix .. "cycle-quality-up")
       end
     end
@@ -48,13 +60,12 @@ local function on_custom_input(event)
     if selected and selected.type == "assembling-machine" then
       local recipe = selected.get_recipe()
       if recipe then
-        -- game.print(event.tick .. event.input_name)
         try_change_quality(selected, event.input_name == mod_prefix .. "cycle-quality-up")
       end
     end
   end
 
-  game.print(serpent.line(event))
+  -- game.print(serpent.line(event))
 end
 
 script.on_event(mod_prefix .. "cycle-quality-up", on_custom_input)
