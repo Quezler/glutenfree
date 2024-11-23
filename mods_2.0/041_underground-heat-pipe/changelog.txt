@@ -14,6 +14,7 @@ Date: ????
     - Each struct only sets its own mode
     - Fix replacing/upgrading colliding with the old struct
     - Fix deathrattles on a surface being deleted
+    - Create the underpass again
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 22

@@ -258,25 +258,25 @@ function Handler.check_for_neighbours(pipe_to_ground_struct)
 
   local tile_gap_size = get_tile_gap_size(entity, other)
   if tile_gap_size > 0 then
-    -- local zero_padded_length_string = string.format("%02d", tile_gap_size)
-    -- local underpass_position = get_position_between(entity, other)
-    -- local underpass_name = string.format("underground-heat-pipe-long-%s-%s", direction_to_axis[entity.direction], zero_padded_length_string)
-    -- assert(entity.surface.find_entity(underpass_name, underpass_position) == nil)
-    -- local underpass = entity.surface.create_entity{
-    --   name = underpass_name,
-    --   force = entity.force,
-    --   position = underpass_position,
-    -- }
+    local zero_padded_length_string = string.format("%02d", tile_gap_size)
+    local underpass_position = get_position_between(entity, other)
+    local underpass_name = string.format("underground-heat-pipe-long-%s-%s", direction_to_axis[entity.direction], zero_padded_length_string)
+    local underpass_exists = entity.surface.find_entity(underpass_name, underpass_position) ~= nil
+    if not underpass_exists then
+      local underpass = entity.surface.create_entity{
+        name = underpass_name,
+        force = entity.force,
+        position = underpass_position,
+      }
 
-    -- storage.underpasses[underpass.unit_number] = {
-    --   id = underpass.unit_number,
-    --   underpass = underpass,
-    --   source = storage.structs[entity.unit_number].underground_heat_pipe_direction,
-    --   destination = storage.structs[other.unit_number].underground_heat_pipe_direction,
-    -- }
+      storage.underpasses[underpass.unit_number] = {
+        id = underpass.unit_number,
+        underpass = underpass,
+        source_position = entity.position,
+        destination_position = other.position,
+      }
+    end
   end
-
-  
 end
 
 -- will get a bit nuts once you have thousands of them on a surface and spam blueprints containing several, but who'd be that crazy?
