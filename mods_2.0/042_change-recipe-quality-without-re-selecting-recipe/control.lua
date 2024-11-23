@@ -23,17 +23,16 @@ for _, recipe in pairs(prototypes.recipe) do
 end
 
 local function assembler_set_recipe_and_quality(assembler, recipe, quality)
-  local item_count_with_quality_array = assembler.set_recipe(recipe, quality)
-  if item_count_with_quality_array[1] == nil then return end
+  local clone = assembler.clone{
+    position = assembler.position,
+    surface = assembler.surface,
+    force = assembler.force,
+    create_build_effect_smoke = false
+  }
 
-  local trash = assembler.get_inventory(defines.inventory.assembling_machine_dump)
-  if trash == nil then trash = assembler.get_inventory(defines.inventory.character_trash) end -- 8
-  -- game.print(trash)
-  for _, item_count_with_quality in ipairs(item_count_with_quality_array) do
-    game.print(serpent.line(item_count_with_quality))
-    local inserted = trash.insert(item_count_with_quality)
-    assert(inserted == item_count_with_quality.count, string.format("inserted only %d of %d.", inserted, item_count_with_quality.count))
-  end
+  clone.set_recipe(recipe, quality)
+  assembler.copy_settings(clone)
+  clone.destroy()
 end
 
 local function try_change_quality(assembler, increment_quality)

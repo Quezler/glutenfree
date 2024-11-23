@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Fix typo and prevent changing fluid only recipes
     - Dump inventory where art tho?
+    - Try to be clever
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 23
