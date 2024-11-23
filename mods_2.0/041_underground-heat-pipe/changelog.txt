@@ -8,6 +8,7 @@ Date: ????
     - Pull surface and force out of the struct
     - Strip even/odd from the localized name since it just got me confused with single/duo
     - Dis & re connect the single/duo when rotating
+    - Switch deathrattle to position based lookup
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 22

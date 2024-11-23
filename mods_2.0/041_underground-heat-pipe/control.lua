@@ -216,7 +216,7 @@ function Handler.on_created_entity(event)
     direction = entity.direction,
     even_or_odd = get_even_or_odd_position(event.entity) == 0 and "even" or "odd",
     mode = "single",
-    last_neighbour = nil, -- "pipe-to-ground" entity
+    last_neighbour = nil, -- "pipe-to-ground" entity -- todo: this shound be a position
   })
 
   new_struct(storage.deathrattles, {
@@ -310,25 +310,13 @@ end
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    -- local struct = storage.structs[deathrattle.struct_id]
-    -- if struct == nil then return end
 
     if deathrattle.type == "pipe-to-ground" then
       local surfacedata = storage.surfacedata[deathrattle.surface.index]
-      if surfacedata then
-        for unit_number, directional_heat_pipe in pairs(nil_invalid_entities(surfacedata.directional_heat_pipes)) do
-          if position_equals_position(directional_heat_pipe.position, deathrattle.position) then
-            directional_heat_pipe.destroy()
-          end
-        end
-
-        -- pairs_yeet_valid_false(surfacedata.directional_heat_pipes, function(unit_number, directional_heat_pipe)
- 
-        -- end)
-
-      end
-      -- struct.underground_heat_pipe_direction.destroy()
-      -- storage.structs[struct.id] = nil
+      local key = util.positiontostr(deathrattle.position)
+      local directional_heat_pipe = surfacedata.directional_heat_pipes[key]
+      directional_heat_pipe.destroy()
+      surfacedata.directional_heat_pipes[key] = nil
     else
       error(serpent.block(deathrattle))
     end
