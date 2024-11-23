@@ -151,11 +151,7 @@ local function inflate_surfacedata()
 end
 
 script.on_init(function()
-  storage.structs = {}
   storage.deathrattles = {}
-
-  storage.underpasses = {}
-
   storage.surfacedata = {}
   inflate_surfacedata()
 end)
@@ -166,6 +162,7 @@ end)
 
 script.on_event(defines.events.on_surface_created, function(event)
   storage.surfacedata[event.surface_index] = {
+    underpasses = {},
     pipe_to_grounds = {},
     directional_heat_pipes = {},
   }
@@ -186,12 +183,12 @@ function Handler.on_entity_with_heat_buffer_created(entity)
   local surfacedata = storage.surfacedata[entity.surface.index]
 
   for _, underpass in ipairs(underpasses) do
-    local struct = storage.underpasses[underpass.unit_number]
+    local struct = surfacedata.underpasses[underpass.unit_number]
     local new_underpass = bring_heatpipe_to_front(struct.underpass)
     bring_heatpipe_to_front(surfacedata.directional_heat_pipes[util.positiontostr(struct.source_position)])
     bring_heatpipe_to_front(surfacedata.directional_heat_pipes[util.positiontostr(struct.destination_position)])
-    storage.underpasses[struct.id] = nil
-    storage.underpasses[new_underpass.unit_number] = {
+    surfacedata.underpasses[struct.id] = nil
+    surfacedata.underpasses[new_underpass.unit_number] = {
       id = new_underpass.unit_number,
       underpass = new_underpass,
       source_position = struct.source_position,
@@ -222,7 +219,7 @@ function Handler.on_created_entity(event)
   if old_struct then
     surfacedata.pipe_to_grounds[struct_id] = nil
   end
-  
+
   local struct = new_struct(surfacedata.pipe_to_grounds, {
     id = struct_id,
     entity = entity,
@@ -280,14 +277,14 @@ function Handler.check_for_neighbours(pipe_to_ground_struct)
         position = underpass_position,
       }
 
-      storage.underpasses[underpass.unit_number] = {
+      local surfacedata = storage.surfacedata[entity.surface.index]
+
+      surfacedata.underpasses[underpass.unit_number] = {
         id = underpass.unit_number,
         underpass = underpass,
         source_position = entity.position,
         destination_position = other.position,
       }
-
-      local surfacedata = storage.surfacedata[entity.surface.index]
 
       bring_heatpipe_to_front(pipe_to_ground_to_directional_heatpipe(entity))
       bring_heatpipe_to_front(pipe_to_ground_to_directional_heatpipe(other))
