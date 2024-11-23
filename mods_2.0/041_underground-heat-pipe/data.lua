@@ -120,6 +120,7 @@ for length = 3, 6 do
       collision_box = {{-0.2 - offset.x, -0.2 - offset.y}, {0.2 + offset.x, 0.2 + offset.y}},
       selection_box = {{-0.4 - offset.x, -0.4 - offset.y}, {0.4 + offset.x, 0.4 + offset.y}},
       collision_mask = {layers = {}},
+      selectable_in_game = false,
       selection_priority = 49,
       hidden = true,
       flags = {"placeable-off-grid", "not-on-map"},
@@ -168,7 +169,7 @@ for _, direction_name in ipairs({"north", "east", "south", "west"}) do
         selection_box = {{-0.1, -0.1}, {0.1, 0.1}},
         collision_mask = {layers = {}},
         selection_priority = 51,
-        -- selectable_in_game = false, -- todo: uncomment
+        selectable_in_game = false,
         hidden = true,
       }
 
