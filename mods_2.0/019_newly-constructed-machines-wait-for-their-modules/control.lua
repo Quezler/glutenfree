@@ -129,6 +129,7 @@ end)
 
 local skip_active_true_check = {
   [defines.entity_status.frozen] = true,
+--[defines.entity_status.recipe_is_parameter] = true,
   [defines.entity_status.recipe_not_researched] = true,
   [defines.entity_status.disabled_by_control_behavior] = true,
 }
@@ -161,7 +162,11 @@ function Handler.on_tick(event)
 
       -- if an entity is frozen their .active reads as false
       if not skip_active_true_check[entity.status] then
-        assert(entity.active == true, "expected entity.active to be true. " .. entity_debug_information(entity))
+        if entity.type == "assembling-machine" and entity.get_recipe() and entity.get_recipe().prototype.is_parameter then
+          -- await defines.entity_status.recipe_is_parameter, possibly in 2.0.22?
+          else
+          assert(entity.active == true, "expected entity.active to be true. " .. entity_debug_information(entity))
+        end
       end
       -- but we'll still have to set .active to false or it'll start crafting when it becomes unfrozen,
       -- fortunatently a lua'd .active doesn't get reset when the entity unfreezes, so it keeps waiting.
