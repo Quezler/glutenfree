@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Finally support several tiers (that do not connect obviously)
     - Put the underground heat pipes in their own subgroup
+    - Toggle the underground heat pipe recipes based on underground availability
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2024. 11. 23

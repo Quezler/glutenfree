@@ -78,17 +78,6 @@ function UndergroundHeatPipe.make(config)
     results = {{type="item", name=uhp_item.name, amount=2}}
   }
 
-  local technology = data.raw["technology"]["nuclear-power"]
-  for i, effect in ipairs(technology.effects) do
-    if effect.type == "unlock-recipe" and effect.recipe == "heat-pipe" then
-      table.insert(technology.effects, i + 1, {
-        type = "unlock-recipe",
-        recipe = uhp_recipe.name,
-      })
-      break
-    end
-  end
-
   local direction_out = table.deepcopy(underground_belt.structure.direction_out.sheet)
   direction_out.scale = 0.25
   uhp.pictures = {

@@ -136,10 +136,12 @@ script.on_init(function()
   storage.deathrattles = {}
   storage.surfacedata = {}
   inflate_surfacedata()
+  Handler.update_all_force_recipe_visibility()
 end)
 
 script.on_configuration_changed(function()
   inflate_surfacedata()
+  Handler.update_all_force_recipe_visibility()
 end)
 
 script.on_event(defines.events.on_surface_created, function(event)
@@ -366,3 +368,31 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
     Handler.validate_all_underpasses(surfacedata)
   end
 end)
+
+local pipe_to_ground_to_underground_belt_map = {
+  ["underground-heat-pipe"] = "underground-belt",
+  ["fast-underground-heat-pipe"] = "fast-underground-belt",
+  ["express-underground-heat-pipe"] = "express-underground-belt",
+  ["turbo-underground-heat-pipe"] = "turbo-underground-belt",
+}
+
+function Handler.update_one_force_recipe_visibility(event)
+  local force = event.force or event.research.force
+
+  local heat_pipe_enabled = force.recipes["heat-pipe"].enabled
+
+  for pipe_to_ground_name, underground_belt_name in pairs(pipe_to_ground_to_underground_belt_map) do
+    if force.recipes[pipe_to_ground_name] then
+      force.recipes[pipe_to_ground_name].enabled = heat_pipe_enabled and force.recipes[underground_belt_name].enabled
+    end
+  end
+end
+
+function Handler.update_all_force_recipe_visibility()
+  for _, force in pairs(game.forces) do
+    Handler.update_one_force_recipe_visibility({force = force})
+  end
+end
+
+script.on_event(defines.events.on_research_finished, Handler.update_one_force_recipe_visibility)
+script.on_event(defines.events.on_research_reversed, Handler.update_one_force_recipe_visibility)
