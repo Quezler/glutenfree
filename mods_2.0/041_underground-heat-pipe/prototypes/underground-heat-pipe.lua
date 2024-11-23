@@ -128,7 +128,9 @@ function UndergroundHeatPipe.make(config)
         flags = {"not-on-map"},
       }
 
-      if offset.x > 0 then
+      -- heat_pipe_long.connection_sprites = table.deepcopy(heat_pipe_entity.connection_sprites)
+
+      if axis == "horizontal" then
         heat_pipe_long.heat_buffer.connections = {
           {position = {- offset.x, 0}, direction = defines.direction.west},
           {position = {  offset.x, 0}, direction = defines.direction.east},
