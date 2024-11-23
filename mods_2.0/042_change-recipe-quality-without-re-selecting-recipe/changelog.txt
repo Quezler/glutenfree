@@ -8,6 +8,7 @@ Date: ????
     - Just spill and not care about space platforms
     - Add initial thumbnail
     - Add stuff to thumbnail
+    - Block not yet unlocked qualities
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 23

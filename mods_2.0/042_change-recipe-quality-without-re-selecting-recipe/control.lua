@@ -23,6 +23,8 @@ for _, recipe in pairs(prototypes.recipe) do
 end
 
 local function assembler_set_recipe_and_quality(assembler, recipe, quality)
+  if assembler.force.is_quality_unlocked(quality) == false then return end
+
   local items = assembler.set_recipe(recipe, quality)
   if items[1] == nil then return end
 
