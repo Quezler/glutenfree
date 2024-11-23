@@ -5,6 +5,8 @@
 --   script.on_event(event, handler)
 -- end
 
+require("util")
+
 local Handler = {}
 
 local direction_to_axis = {
@@ -85,6 +87,36 @@ local other_mode = {
 --   old_underground_heat_pipe_direction.destroy()
 --   struct.underground_heat_pipe_direction = new_underground_heat_pipe_direction
 -- end
+
+function Handler.pipe_to_ground_struct_set_mode(struct, mode)
+  assert(struct.mode == other_mode[mode])
+  struct.mode = mode
+
+  Handler.pipe_to_ground_struct_recreate_directional_heatpipe(struct)
+end
+
+function Handler.pipe_to_ground_struct_recreate_directional_heatpipe(struct)
+  local surfacedata = storage.surfacedata[struct.surface.index]
+
+  local key = struct.id -- "[x, y]"
+  local old_directional_heatpipe = surfacedata.directional_heat_pipes[key]
+
+  local name = string.format("underground-heat-pipe-%s-%s-%s", direction_to_name[struct.direction], struct.mode, struct.even_or_odd)
+  local new_directional_heatpipe = struct.surface.create_entity{
+    name = name,
+    force = struct.force,
+    position = struct.position,
+  }
+  new_directional_heatpipe.destructible = false
+
+  if old_directional_heatpipe then
+    new_directional_heatpipe.temperature = old_directional_heatpipe.temperature
+    old_directional_heatpipe.destroy()
+  end
+
+  surfacedata.directional_heat_pipes[key] = new_directional_heatpipe
+  return new_directional_heatpipe
+end
 
 local function position_equals_position(a, b)
   return a.x == b.x and a.y == b.y
@@ -177,58 +209,52 @@ function Handler.on_created_entity(event)
   local struct = new_struct(surfacedata.pipe_to_grounds, {
     id = util.positiontostr(entity.position),
     entity = entity,
+    force = entity.force,
+    surface = entity.surface,
     position = entity.position,
     direction = entity.direction,
     even_or_odd = get_even_or_odd_position(event.entity) == 0 and "even" or "odd",
     mode = "single",
   })
 
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = {
+  new_struct(storage.deathrattles, {
+    id = script.register_on_object_destroyed(entity),
     type = "pipe-to-ground",
     surface = entity.surface,
     position = entity.position,
-  }
+  })
 
+  Handler.pipe_to_ground_struct_recreate_directional_heatpipe(struct)
+  Handler.check_for_neighbours(struct)
+end
 
-  local underground_heat_pipe_direction = entity.surface.create_entity{
-    name = string.format("underground-heat-pipe-%s-%s-%s", direction_to_name[entity.direction], "single", even_or_odd_string),
-    force = entity.force,
-    position = entity.position,
-    fast_replace = true,
-  }
-  underground_heat_pipe_direction.destructible = false
-  underground_heat_pipe_direction.temperature = storage.structs[entity.unit_number] and storage.structs[entity.unit_number].temperature or 15
-  -- game.print("get " .. underground_heat_pipe_direction.temperature)
+local function pipe_to_ground_to_struct(pipe_to_ground)
+  local surfacedata = storage.surfacedata[pipe_to_ground.surface.index]
+  return surfacedata.pipe_to_grounds[util.positiontostr(pipe_to_ground.position)]
+end
 
-  -- storage.structs[entity.unit_number] = {
-  --   id = entity.unit_number,
-  --   temperature = 15,
-  --   pipe_to_ground = entity,
-  --   underground_heat_pipe_direction = underground_heat_pipe_direction,
-  -- }
+function Handler.check_for_neighbours(pipe_to_ground_struct)
+  local entity = pipe_to_ground_struct.entity
+  local other = pipe_to_ground_struct.entity.neighbours[1][1]
+  if other == nil then
+    -- switch this and last known other to single?
+    return
+  end
 
-
-  storage.surfacedata[entity.surface.index].directional_heat_pipes[underground_heat_pipe_direction.unit_number] = underground_heat_pipe_direction
-
-  --
-
-  local other = entity.neighbours[1][1]
-  if other == nil then return end
-
-  -- struct_set_mode(storage.structs[entity.unit_number], "duo")
-  -- struct_set_mode(storage.structs[other.unit_number], "duo")
+  Handler.pipe_to_ground_struct_set_mode(pipe_to_ground_to_struct(entity), "duo")
+  Handler.pipe_to_ground_struct_set_mode(pipe_to_ground_to_struct(other ), "duo")
 
   local tile_gap_size = get_tile_gap_size(entity, other)
   if tile_gap_size > 0 then
-    local zero_padded_length_string = string.format("%02d", tile_gap_size)
-    local underpass_position = get_position_between(entity, other)
-    local underpass_name = string.format("underground-heat-pipe-long-%s-%s", direction_to_axis[entity.direction], zero_padded_length_string)
-    assert(entity.surface.find_entity(underpass_name, underpass_position) == nil)
-    local underpass = entity.surface.create_entity{
-      name = underpass_name,
-      force = entity.force,
-      position = underpass_position,
-    }
+    -- local zero_padded_length_string = string.format("%02d", tile_gap_size)
+    -- local underpass_position = get_position_between(entity, other)
+    -- local underpass_name = string.format("underground-heat-pipe-long-%s-%s", direction_to_axis[entity.direction], zero_padded_length_string)
+    -- assert(entity.surface.find_entity(underpass_name, underpass_position) == nil)
+    -- local underpass = entity.surface.create_entity{
+    --   name = underpass_name,
+    --   force = entity.force,
+    --   position = underpass_position,
+    -- }
 
     -- storage.underpasses[underpass.unit_number] = {
     --   id = underpass.unit_number,
@@ -237,6 +263,8 @@ function Handler.on_created_entity(event)
     --   destination = storage.structs[other.unit_number].underground_heat_pipe_direction,
     -- }
   end
+
+  
 end
 
 local filters = {
