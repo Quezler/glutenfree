@@ -370,10 +370,10 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
 end)
 
 local pipe_to_ground_to_underground_belt_map = {
-  ["underground-heat-pipe"] = "underground-belt",
-  ["fast-underground-heat-pipe"] = "fast-underground-belt",
+          ["underground-heat-pipe"] =         "underground-belt",
+     ["fast-underground-heat-pipe"] =    "fast-underground-belt",
   ["express-underground-heat-pipe"] = "express-underground-belt",
-  ["turbo-underground-heat-pipe"] = "turbo-underground-belt",
+    ["turbo-underground-heat-pipe"] =   "turbo-underground-belt",
 }
 
 function Handler.update_one_force_recipe_visibility(event)

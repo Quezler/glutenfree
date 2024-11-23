@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 11. 21
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
 Version: 0.0.7
-Date: ????
+Date: 2024. 11. 23
   Info:
     - Finally support several tiers (that do not connect obviously)
     - Put the underground heat pipes in their own subgroup

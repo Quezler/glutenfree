@@ -1,9 +1,9 @@
 {
     "name": "underground-heat-pipe",
     "title": "Underground heat pipe",
-    "description": "It probably has something to do with the title.",
+    "description": "Not enough space above ground? underground has free real estate.",
 
-    "version": "0.0.6",
+    "version": "1.0.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -18,7 +18,7 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "? base",
+        "base",
         "? space-age"
     ]
 }
