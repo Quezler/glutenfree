@@ -358,6 +358,9 @@ script.on_event(defines.events.on_object_destroyed, function(event)
           surfacedata.directional_heat_pipes[key] = nil
           surfacedata.pipe_to_grounds[key] = nil
         end
+
+        Handler.update_mode_for_all_pipe_to_grounds(surfacedata)
+        Handler.validate_all_underpasses(surfacedata)
       end
     else
       error(serpent.block(deathrattle))

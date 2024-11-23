@@ -18,6 +18,7 @@ Date: ????
     - Fix the entity order fixer
     - Move underpasses into surfacedata
     - Remove underpasses that are no longer valid
+    - Update modes and validate underpasses on any pipe to ground deathrattle
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 22
