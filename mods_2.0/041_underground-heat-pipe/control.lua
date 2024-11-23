@@ -279,6 +279,7 @@ function Handler.check_for_neighbours(pipe_to_ground_struct)
   
 end
 
+-- will get a bit nuts once you have thousands of them on a surface and spam blueprints containing several, but who'd be that crazy?
 function Handler.update_mode_for_all_pipe_to_grounds(surfacedata)
   for _, pipe_to_ground_struct in pairs(surfacedata.pipe_to_grounds) do
     if pipe_to_ground_struct.entity.valid then
@@ -312,14 +313,16 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   if deathrattle then storage.deathrattles[event.registration_number] = nil
 
     if deathrattle.type == "pipe-to-ground" then
-      local surfacedata = storage.surfacedata[deathrattle.surface.index]
-      local key = util.positiontostr(deathrattle.position)
-      if surfacedata.pipe_to_grounds[key].entity.valid == false then -- skip if the position key already got reused for a valid entity
-        local directional_heat_pipe = surfacedata.directional_heat_pipes[key]
-        directional_heat_pipe.destroy()
-        surfacedata.directional_heat_pipes[key] = nil
-        surfacedata.pipe_to_grounds[key] = nil
+      if deathrattle.surface.valid then
+        local surfacedata = storage.surfacedata[deathrattle.surface.index]
+        local key = util.positiontostr(deathrattle.position)
+        if surfacedata.pipe_to_grounds[key].entity.valid == false then -- skip if the position key already got reused for a valid entity
+          local directional_heat_pipe = surfacedata.directional_heat_pipes[key]
+          directional_heat_pipe.destroy()
+          surfacedata.directional_heat_pipes[key] = nil
+          surfacedata.pipe_to_grounds[key] = nil
         end
+      end
     else
       error(serpent.block(deathrattle))
     end
