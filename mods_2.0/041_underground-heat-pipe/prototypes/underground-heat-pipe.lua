@@ -178,8 +178,6 @@ function UndergroundHeatPipe.make(config)
           hidden = true,
         }
 
-        -- error(serpent.block( heat_pipe_entity.heat_glow_sprites.ending_left ))
-
         for _, spriteconfig in ipairs({{key = "connection_sprites", prefix = ""}, {key = "heat_glow_sprites", prefix = "heated-"}}) do
           local template_off = {
             filename = "__base__/graphics/entity/heat-pipe/heat-pipe-straight-vertical-single.png",
@@ -208,12 +206,10 @@ function UndergroundHeatPipe.make(config)
           heat_pipe_direction[spriteconfig.key].straight_vertical   = template_on
 
           if spriteconfig.key == "heat_glow_sprites" then
-            -- local new_heat_glow_sprites = {}
             for k, v in pairs(heat_pipe_direction.heat_glow_sprites) do
               if v.filename then
                 local layer_1 = v
                 layer_1.tint = {0.5, 0.4, 0.3, 0.5}
-                -- log(serpent.block(layer_1))
                 local layer_2 = table.deepcopy(layer_1)
                 layer_2.tint = {1, 1, 1, 1}
                 layer_2.draw_as_light = true
@@ -225,9 +221,6 @@ function UndergroundHeatPipe.make(config)
                 }
               end
             end
-            -- heat_pipe_direction.heat_glow_sprites = new_heat_glow_sprites
-
-            log(serpent.block( heat_pipe_direction.heat_glow_sprites ))
           end
         end
 
