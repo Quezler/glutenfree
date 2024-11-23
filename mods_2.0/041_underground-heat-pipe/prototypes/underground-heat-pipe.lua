@@ -5,6 +5,15 @@ local UndergroundHeatPipe = {}
 local heat_pipe_item = data.raw["item"]["heat-pipe"]
 local heat_pipe_entity = data.raw["heat-pipe"]["heat-pipe"]
 
+local subgroup = {
+  type = "item-subgroup",
+  name = "underground-heat-pipe",
+  group = "production",
+  order = "b-2",
+}
+
+data:extend{subgroup}
+
 function UndergroundHeatPipe.make(config)
   local underground_belt = table.deepcopy(data.raw["underground-belt"][config.prefix .. "underground-belt"])
 
@@ -43,9 +52,9 @@ function UndergroundHeatPipe.make(config)
     type = "item",
     name = config.prefix .. "underground-heat-pipe",
     icons = uhp.icons,
-    subgroup = "energy",
+    subgroup = subgroup.name,
     color_hint = data.raw["item"][config.prefix .. "underground-belt"].color_hint,
-    order = "f[nuclear-energy]-b[" .. config.prefix .. "underground-heat-pipe]",
+    order = string.format("a[underground-heat-pipe]-%s[%s]", config.order, config.prefix .. "underground-heat-pipe"),
     inventory_move_sound = underground_belt.inventory_move_sound,
     pick_sound = underground_belt.pick_sound,
     drop_sound = underground_belt.drop_sound,
@@ -63,7 +72,7 @@ function UndergroundHeatPipe.make(config)
     energy_required = 1,
     ingredients =
     {
-      {type = "item", name = "heat-pipe", amount = underground_belt.max_distance},
+      {type = "item", name = "heat-pipe", amount = underground_belt.max_distance + 1},
       {type = "item", name = config.prefix .. "underground-belt", amount = 2}
     },
     results = {{type="item", name=uhp_item.name, amount=2}}
