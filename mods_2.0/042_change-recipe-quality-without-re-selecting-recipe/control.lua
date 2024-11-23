@@ -22,6 +22,20 @@ for _, recipe in pairs(prototypes.recipe) do
   ::continue::
 end
 
+local function assembler_set_recipe_and_quality(assembler, recipe, quality)
+  local item_count_with_quality_array = assembler.set_recipe(recipe, quality)
+  if item_count_with_quality_array[1] == nil then return end
+
+  local trash = assembler.get_inventory(defines.inventory.assembling_machine_dump)
+  if trash == nil then trash = assembler.get_inventory(defines.inventory.character_trash) end -- 8
+  -- game.print(trash)
+  for _, item_count_with_quality in ipairs(item_count_with_quality_array) do
+    game.print(serpent.line(item_count_with_quality))
+    local inserted = trash.insert(item_count_with_quality)
+    assert(inserted == item_count_with_quality.count, string.format("inserted only %d of %d.", inserted, item_count_with_quality.count))
+  end
+end
+
 local function try_change_quality(assembler, increment_quality)
   local recipe_prototype, quality_prototype = assembler.get_recipe()
   if not recipe_has_item_ingredients[recipe_prototype.name] then return end
@@ -29,12 +43,12 @@ local function try_change_quality(assembler, increment_quality)
   if increment_quality then
     if next_quality[quality_prototype.name] then
       -- game.print(string.format("changing from %s to %s.", quality_prototype.name, next_quality[quality_prototype.name]))
-      assembler.set_recipe(recipe_prototype, next_quality[quality_prototype.name])
+      assembler_set_recipe_and_quality(assembler, recipe_prototype, next_quality[quality_prototype.name])
     end
   else
     if previous_quality[quality_prototype.name] then
       -- game.print(string.format("changing from %s to %s.", quality_prototype.name, previous_quality[quality_prototype.name]))
-      assembler.set_recipe(recipe_prototype, previous_quality[quality_prototype.name])
+      assembler_set_recipe_and_quality(assembler, recipe_prototype, previous_quality[quality_prototype.name])
     end
   end
 end

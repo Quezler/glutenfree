@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Fix typo and prevent changing fluid only recipes
+    - Dump inventory where art tho?
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 23
