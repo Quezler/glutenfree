@@ -11,6 +11,7 @@ Date: ????
     - Switch deathrattle to position based lookup
     - Delete the struct of removed pipe to grounds
     - Decrease the selection box of the directional heatpipe
+    - Each struct only sets its own mode
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 22

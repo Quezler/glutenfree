@@ -216,7 +216,6 @@ function Handler.on_created_entity(event)
     direction = entity.direction,
     even_or_odd = get_even_or_odd_position(event.entity) == 0 and "even" or "odd",
     mode = "single",
-    last_neighbour = nil, -- "pipe-to-ground" entity -- todo: this shound be a position
   })
 
   new_struct(storage.deathrattles, {
@@ -227,7 +226,7 @@ function Handler.on_created_entity(event)
   })
 
   Handler.pipe_to_ground_struct_recreate_directional_heatpipe(struct)
-  Handler.check_for_neighbours(struct)
+  Handler.update_mode_for_all_pipe_to_grounds(surfacedata)
 end
 
 local function pipe_to_ground_to_struct(pipe_to_ground)
@@ -239,30 +238,15 @@ function Handler.check_for_neighbours(pipe_to_ground_struct)
   local entity = pipe_to_ground_struct.entity
   local other = pipe_to_ground_struct.entity.neighbours[1][1]
   if other == nil then
-    -- switch this and last known other to single?
-
-    if pipe_to_ground_struct.last_neighbour then
+    if pipe_to_ground_struct.mode == "duo" then
       Handler.pipe_to_ground_struct_set_mode(pipe_to_ground_struct, "single")
-      if pipe_to_ground_struct.last_neighbour.valid then
-        local other_pipe_to_ground_struct = pipe_to_ground_to_struct(pipe_to_ground_struct.last_neighbour)
-        Handler.pipe_to_ground_struct_set_mode(other_pipe_to_ground_struct, "single")
-        other_pipe_to_ground_struct.last_neighbour = nil
-      end
-      pipe_to_ground_struct.last_neighbour = nil
     end
-
-    -- todo: if both the old and new situation are valid connections, force the previous other to reconsider
-
     return
+  else
+    if pipe_to_ground_struct.mode == "single" then
+      Handler.pipe_to_ground_struct_set_mode(pipe_to_ground_struct, "duo")
+    end
   end
-
-  local other_pipe_to_ground_struct = pipe_to_ground_to_struct(other)
-
-  pipe_to_ground_struct.last_neighbour = other
-  other_pipe_to_ground_struct.last_neighbour = entity
-
-  Handler.pipe_to_ground_struct_set_mode(      pipe_to_ground_struct, "duo")
-  Handler.pipe_to_ground_struct_set_mode(other_pipe_to_ground_struct, "duo")
 
   local tile_gap_size = get_tile_gap_size(entity, other)
   if tile_gap_size > 0 then
@@ -285,6 +269,14 @@ function Handler.check_for_neighbours(pipe_to_ground_struct)
   end
 
   
+end
+
+function Handler.update_mode_for_all_pipe_to_grounds(surfacedata)
+  for _, pipe_to_ground_struct in pairs(surfacedata.pipe_to_grounds) do
+    if pipe_to_ground_struct.entity.valid then
+      Handler.check_for_neighbours(pipe_to_ground_struct)
+    end
+  end
 end
 
 local filters = {
@@ -333,6 +325,6 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
 
     pipe_to_ground_struct.direction = entity.direction
     Handler.pipe_to_ground_struct_recreate_directional_heatpipe(pipe_to_ground_struct)
-    Handler.check_for_neighbours(pipe_to_ground_struct)
+    Handler.update_mode_for_all_pipe_to_grounds(surfacedata)
   end
 end)
