@@ -7,6 +7,7 @@ Date: ????
     - Try to be clever
     - Just spill and not care about space platforms
     - Add initial thumbnail
+    - Add stuff to thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 23
