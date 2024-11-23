@@ -17,6 +17,7 @@ Date: ????
     - Create the underpass again
     - Fix the entity order fixer
     - Move underpasses into surfacedata
+    - Remove underpasses that are no longer valid
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 22

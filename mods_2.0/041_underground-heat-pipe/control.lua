@@ -192,7 +192,9 @@ function Handler.on_entity_with_heat_buffer_created(entity)
       id = new_underpass.unit_number,
       underpass = new_underpass,
       source_position = struct.source_position,
+      source_direction = struct.source_direction,
       destination_position = struct.destination_position,
+      destination_direction = struct.destination_direction,
     }
   end
 end
@@ -238,6 +240,7 @@ function Handler.on_created_entity(event)
 
   Handler.pipe_to_ground_struct_recreate_directional_heatpipe(struct)
   Handler.update_mode_for_all_pipe_to_grounds(surfacedata)
+  Handler.validate_all_underpasses(surfacedata)
 end
 
 local function pipe_to_ground_to_struct(pipe_to_ground)
@@ -283,7 +286,9 @@ function Handler.check_for_neighbours(pipe_to_ground_struct)
         id = underpass.unit_number,
         underpass = underpass,
         source_position = entity.position,
+        source_direction = entity.direction,
         destination_position = other.position,
+        destination_direction = other.direction,
       }
 
       bring_heatpipe_to_front(pipe_to_ground_to_directional_heatpipe(entity))
@@ -298,6 +303,24 @@ function Handler.update_mode_for_all_pipe_to_grounds(surfacedata)
     if pipe_to_ground_struct.entity.valid then
       Handler.check_for_neighbours(pipe_to_ground_struct)
     end
+  end
+end
+
+function Handler.validate_all_underpasses(surfacedata)
+  for underpass_id, underpass in pairs(surfacedata.underpasses) do
+    local      source_pipe_to_ground = surfacedata.pipe_to_grounds[util.positiontostr(underpass.source_position)]
+    local destination_pipe_to_ground = surfacedata.pipe_to_grounds[util.positiontostr(underpass.destination_position)]
+
+    if source_pipe_to_ground and destination_pipe_to_ground then
+      if source_pipe_to_ground.direction == underpass.source_direction and destination_pipe_to_ground.direction == underpass.destination_direction then
+        goto continue
+      end
+    end
+
+    underpass.underpass.destroy()
+    surfacedata.underpasses[underpass_id] = nil
+
+    ::continue::
   end
 end
 
@@ -352,5 +375,6 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
     pipe_to_ground_struct.direction = entity.direction
     Handler.pipe_to_ground_struct_recreate_directional_heatpipe(pipe_to_ground_struct)
     Handler.update_mode_for_all_pipe_to_grounds(surfacedata)
+    Handler.validate_all_underpasses(surfacedata)
   end
 end)
