@@ -176,6 +176,7 @@ local function on_created_thruster_control_behavior(entity)
   if entity.position.x ~= cb_position[1] or entity.position.y ~= cb_position[2] then return entity.destroy() end
 
   assert(entity.quality.name == "normal") -- why would you even place a higher quality circuit connector manually?
+  if entity.type == "entity-ghost" then entity.minable = false end
 end
 
 

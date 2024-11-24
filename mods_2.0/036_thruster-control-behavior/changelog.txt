@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
-Date: ????
+Date: 2024. 11. 24
   Info:
     - Use player.selected instead of include_selected_prototype
+    - Fix crash when trying to mine the control ghost if the thruster wasn't "created first"
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.7
 Date: 2024. 11. 18
