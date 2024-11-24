@@ -70,6 +70,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 
   local platform = entity.surface.platform --[[@as LuaSpacePlatform]]
   local sections = platform.hub.get_logistic_sections().sections
+  if sections[1] == nil then return end -- construction checkbox is off, and there are no other sections at all
   if section_is_requests_for_construction(sections[1]) == false then return end -- construction checkbox is off
 
   local filter = section_get_filter_for_item(sections[1], item)
