@@ -1,7 +1,15 @@
 require("util")
 
+local setting_name_debug_logging = "platforms-do-not-request-full-stacks-of-buildings--enable-debug-logging"
+
 script.on_init(function()
   storage.structs = {}
+
+  storage.debug_logging = settings.global[setting_name_debug_logging].value
+end)
+
+script.on_configuration_changed(function()
+  storage.debug_logging = settings.global[setting_name_debug_logging].value
 end)
 
 script.on_event(defines.events.on_rocket_launch_ordered, function(event)
@@ -79,7 +87,9 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local drop_down = item.count - get_minimum_request_count_for_this_item(platform.space_location.name, sections, item)
   if 0 >= drop_down then return end -- the platform actually needed this entire stack (and possibly more)
 
-  log(string.format("'%s' delivered %s × %d but '%s' only requested %d", platform.space_location.name, item.name, item.count, platform.name, filter.min))
+  if storage.debug_logging then
+    log(string.format("'%s' delivered %s × %d but '%s' only requested %d", platform.space_location.name, item.name, item.count, platform.name, filter.min))
+  end
 
   if struct.silo.valid then
     local silo_trash = struct.silo.get_inventory(defines.inventory.rocket_silo_trash)
@@ -92,7 +102,9 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
       local can_fit_in_rocket = 1 * tons / prototypes.item[item.name].weight
       local parts_to_refund = rocket_parts_required / can_fit_in_rocket * removed
 
-      log(string.format("%d items were put back in the silo, as well as %d / %d * %d = %f rocket parts", removed, rocket_parts_required, can_fit_in_rocket, removed, parts_to_refund))
+      if storage.debug_logging then
+        log(string.format("%d items were put back in the silo, as well as %d / %d * %d = %f rocket parts", removed, rocket_parts_required, can_fit_in_rocket, removed, parts_to_refund))
+      end
 
       parts_to_refund = math.floor(parts_to_refund)
       local old_rocket_parts = struct.silo.rocket_parts
@@ -101,7 +113,9 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
       assert(struct.silo.rocket_parts == new_rocket_parts or struct.silo.rocket_parts + rocket_parts_required == new_rocket_parts, string.format("changed %d to %d but it read as %d.", old_rocket_parts, new_rocket_parts, struct.silo.rocket_parts))
     end
   else
-    log(string.format("0 items were put back in the silo, are the trash slots full?"))
+    if storage.debug_logging then
+      log(string.format("0 items were put back in the silo, are the trash slots full?"))
+    end
   end
 end)
 
@@ -110,6 +124,14 @@ script.on_nth_tick(60 * 60 * 10, function(event)
   for struct_id, struct in pairs(storage.structs) do
     if struct.cargo_pod.valid == false or struct.silo == false then
       storage.structs[struct_id] = nil
+    end
+  end
+end)
+
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+  if event.setting_type == "runtime-global" then
+    if event.setting == setting_name_debug_logging then
+      storage.debug_logging = settings.global[setting_name_debug_logging].value
     end
   end
 end)
