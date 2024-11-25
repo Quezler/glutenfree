@@ -27,7 +27,7 @@ function Update.get_missing_items_for(target)
     return {{name = "cliff-explosives", count = 1}}
   end
 
-  game.print("[fulgoran-construction-hub] entity %s (%s) is in the queue with no clear task, someone cancel an upgrade?", target_name, target.type)
+  game.print(string.format("[fulgoran-construction-hub] entity %s (%s) is in the queue with no clear task, someone cancel an upgrade?", target_name, target.type))
 end
 
 -- shouldn't be too expensive, generally if you have missing stuff its a lot of the same, so name lookup is fine.

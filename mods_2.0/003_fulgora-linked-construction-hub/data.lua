@@ -9,6 +9,7 @@ entity.selection_box = market.selection_box
 entity.collision_box = market.collision_box
 
 entity.icon = '__fulgora-linked-construction-hub__/graphics/icons/fulgoran-construction-hub.png'
+entity.icons = nil -- aai containers
 entity.animation = table.deepcopy(market.picture)
 entity.animation.filename = '__fulgora-linked-construction-hub__/graphics/entity/fulgoran-construction-hub.png'
 
