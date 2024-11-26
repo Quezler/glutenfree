@@ -287,6 +287,8 @@ script.on_event(defines.events.on_surface_created, Handler.on_surface_created)
 
 script.on_event(defines.events.on_surface_deleted, function(event)
   storage.surfacedata[event.surface_index] = nil
+  storage.observed_surfaces[event.surface_index] = nil
+  storage.surface_to_alt_mode_players[event.surface_index] = nil
 end)
 
 function Handler.on_player_created(event)
