@@ -64,6 +64,7 @@ local function on_custom_input(event)
   if prototype == nil then return end
 
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  if player.is_cursor_empty() == false then return end
 
   if prototype.derived_type == "recipe" then
     local opened = player.opened
