@@ -7,8 +7,6 @@ local recipe_category = {
   name = "quality-holmium-solution",
 }
 
--- data.raw["recipe"]["holmium-solution"].category = recipe_category.name
-
 data:extend{recipe_category}
 
 holmium_solution_recipe.localised_name = {"fluid-name." .. holmium_solution_recipe.name}
@@ -23,9 +21,14 @@ for _, quality in pairs(data.raw["quality"]) do
   data:extend{quality_holmium_solution_recipe}
 
   local entity = Entity.new_holmium_chemical_plant(quality)
-  entity.fixed_recipe = quality_holmium_solution_recipe.name
+  entity.fixed_recipe = quality.name ~= "quality-unknown" and quality_holmium_solution_recipe.name or nil
   entity.fixed_quality = quality.name
   entity.crafting_categories = {recipe_category.name}
-  entity.hidden = true
+  entity.hidden = quality.name ~= "quality-unknown" and true or false
   data:extend{entity}
 end
+
+data.raw["recipe"]["holmium-solution"].hidden = true
+data.raw["assembling-machine"]["quality-unknown-holmium-chemical-plant"].placeable_by = {item = "holmium-chemical-plant", count = 1}
+-- local visible_recipe = table.deepcopy(holmium_solution_recipe)
+-- data:extend{visible_recipe}
