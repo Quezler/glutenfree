@@ -90,8 +90,8 @@ for _, fluid_box in ipairs(holmium_chemical_plant.fluid_boxes) do
     fluid_box.filter = "water"
   end
   -- if fluid_box.production_type == "output" then
-  --   fluid_box.filter = "holmium-solution"
-  --   fluid_box.draw_only_when_connected = false
+  --   fluid_box.pipe_covers = nil
+  --   fluid_box.pipe_covers_frozen = nil
   -- end
 end
 
