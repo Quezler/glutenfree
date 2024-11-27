@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Begin conversion to per-quality chemical plants
+    - Give the tiered chemical plants an icon
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 26

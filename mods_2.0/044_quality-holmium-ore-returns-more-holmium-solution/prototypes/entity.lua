@@ -1,10 +1,17 @@
 return {
-  new_holmium_chemical_plant = function(quality_name)
+  new_holmium_chemical_plant = function(quality)
     local holmium_chemical_plant = table.deepcopy(data.raw["assembling-machine"]["chemical-plant"])
-    holmium_chemical_plant.name = quality_name .. "-holmium-chemical-plant"
+    holmium_chemical_plant.name = quality.name .. "-holmium-chemical-plant"
     holmium_chemical_plant.localised_name = {"entity-name.holmium-chemical-plant"}
 
-    holmium_chemical_plant.icon = "__quality-holmium-ore-returns-more-holmium-solution__/graphics/icons/holmium-chemical-plant.png"
+    holmium_chemical_plant.icons = {
+      {icon = "__quality-holmium-ore-returns-more-holmium-solution__/graphics/icons/holmium-chemical-plant.png"},
+    }
+    -- quality unknown has no icon
+    if quality.icon then table.insert(holmium_chemical_plant.icons, {icon = quality.icon, scale = 0.25, shift = {-8, 8}}) end
+
+    holmium_chemical_plant.order = "[holmium-chemical-plant]-" .. quality.order
+
     holmium_chemical_plant.minable.result = "holmium-chemical-plant" -- for the item there is just one prototype
 
     holmium_chemical_plant.graphics_set.animation = make_4way_animation_from_spritesheet({layers =
