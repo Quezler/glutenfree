@@ -29,6 +29,7 @@ for _, quality in pairs(data.raw["quality"]) do
     entity.fixed_quality = quality.name
     entity.crafting_categories = {recipe_category.name}
     entity.hidden = quality.name ~= "normal" and true or false
+    entity.placeable_by = {item = "holmium-chemical-plant", count = 1}
     data:extend{entity}
   end
 end

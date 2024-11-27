@@ -36,7 +36,8 @@ return {
       }
     }})
 
-    holmium_chemical_plant.fast_replaceable_group = "holmium-chemical-plant"
+    holmium_chemical_plant.fast_replaceable_group = nil
+    holmium_chemical_plant.fast_replaceable_group = holmium_chemical_plant.name
 
     return holmium_chemical_plant
   end

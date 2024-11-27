@@ -7,10 +7,13 @@ end
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
+  local new_name = get_holmium_chemical_plant_entity_name(entity.quality.name)
+  if entity.name == new_name then return end
+
   game.print(string.format("%s got placed with %s quality.", entity.name, entity.quality.name))
 
   local new_entity = entity.surface.create_entity{
-    name = get_holmium_chemical_plant_entity_name(entity.quality.name),
+    name = new_name,
     force = entity.force,
     position = entity.position,
     direction = entity.direction,
