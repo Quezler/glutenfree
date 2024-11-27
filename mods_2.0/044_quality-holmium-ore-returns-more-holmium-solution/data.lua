@@ -85,42 +85,26 @@ data:extend{
 
 -- log(serpent.block(holmium_chemical_plant.fluid_boxes))
 
-for _, fluid_box in ipairs(holmium_chemical_plant.fluid_boxes) do
-  if fluid_box.production_type == "input" then
-    fluid_box.filter = "water"
-  end
-  if fluid_box.production_type == "output" then
-    fluid_box.filter = "holmium-solution"
-    -- fluid_box.production_type = "none"
-    fluid_box.production_type = "input"
-    -- fluid_box.pipe_covers = nil
-    -- fluid_box.pipe_covers_frozen = nil
-  end
-  -- fluid_box.hide_connection_info = true
-  -- for _, connection in ipairs(fluid_box.pipe_connections) do
-    -- connection.connection_category = "holmium-chemical-plant." .. tostring(math.random(1, 1000000))
-  -- end
-end
-
 local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
+
+local quality_normal = data.raw["quality"]["normal"]
 
 local holmium_solution_item = {
   type = "item",
   name = "holmium-solution",
-  localised_name = {"fluid-name." .. holmium_solution_fluid.name},
-  icon = holmium_solution_fluid.icon,
-  stack_size = 100,
+  localised_name = {"", {"fluid-name." .. holmium_solution_fluid.name}, " ", "multiplier"},
+  icons = {
+    {draw_background = false, icon = "__core__/graphics/empty.png"},
+    {icon = quality_normal.icon, scale = 0.2, shift = {-10, 10}},
+  },
+  stack_size = 1,
   flags = {"only-in-cursor"},
   weight = 1 * tons + 1,
   hidden = true,
 }
 data:extend{holmium_solution_item}
 
-quality_holmium_solution_recipe.results = {{type = "item", name="holmium-solution", amount = 100}}
-
-quality_holmium_solution_recipe.ingredients =
-{
-  {type = "item", name = "holmium-ore", amount = 2},
-  {type = "item", name = "stone", amount = 1},
-  {type = "fluid", name="water", amount = 10, fluidbox_index = 1}
+quality_holmium_solution_recipe.results = {
+  {type = "item", name="holmium-solution", amount = 100},
+  {type = "fluid", name="holmium-solution", amount = 100},
 }
