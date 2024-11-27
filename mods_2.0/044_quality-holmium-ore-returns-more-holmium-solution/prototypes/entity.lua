@@ -36,6 +36,8 @@ return {
       }
     }})
 
+    holmium_chemical_plant.fast_replaceable_group = "holmium-chemical-plant"
+
     return holmium_chemical_plant
   end
 }

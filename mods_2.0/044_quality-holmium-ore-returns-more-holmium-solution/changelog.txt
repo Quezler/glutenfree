@@ -10,6 +10,7 @@ Date: ????
     - Fix normal quality giving 0 fluid
     - Fix math order
     - Begin work on control scripting
+    - Try to swap entity with the right quality
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 26
