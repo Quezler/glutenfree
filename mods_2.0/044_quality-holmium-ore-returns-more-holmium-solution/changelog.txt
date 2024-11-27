@@ -8,6 +8,7 @@ Date: ????
     - Just use 100 of the item directly
     - Abandon output fluidbox
     - Ponder about hiding the inactive covers
+    - What if i define both outputs?
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 26
