@@ -7,6 +7,7 @@ Date: ????
     - Nah just keep it inside
     - Make the arrow not collide with the alt mode sprite
     - Update info.json
+    - Update readme
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 26
