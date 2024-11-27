@@ -92,13 +92,14 @@ for _, fluid_box in ipairs(holmium_chemical_plant.fluid_boxes) do
   if fluid_box.production_type == "output" then
     fluid_box.filter = "holmium-solution"
     -- fluid_box.production_type = "none"
-    -- fluid_box.production_type = "input"
+    fluid_box.production_type = "input"
     -- fluid_box.pipe_covers = nil
     -- fluid_box.pipe_covers_frozen = nil
   end
-  for _, connection in ipairs(fluid_box.pipe_connections) do
-    connection.connection_category = "holmium-chemical-plant." .. tostring(math.random(1, 1000000))
-  end
+  -- fluid_box.hide_connection_info = true
+  -- for _, connection in ipairs(fluid_box.pipe_connections) do
+    -- connection.connection_category = "holmium-chemical-plant." .. tostring(math.random(1, 1000000))
+  -- end
 end
 
 local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
@@ -116,3 +117,10 @@ local holmium_solution_item = {
 data:extend{holmium_solution_item}
 
 quality_holmium_solution_recipe.results = {{type = "item", name="holmium-solution", amount = 100}}
+
+quality_holmium_solution_recipe.ingredients =
+{
+  {type = "item", name = "holmium-ore", amount = 2},
+  {type = "item", name = "stone", amount = 1},
+  {type = "fluid", name="water", amount = 10, fluidbox_index = 1}
+}

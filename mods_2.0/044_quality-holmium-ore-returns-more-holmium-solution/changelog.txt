@@ -12,6 +12,7 @@ Date: ????
     - Crafting machine fluidboxes must be input or output types.
     - Aaaand this overrides everything too
     - Hmm what if i split up into two entities somehow
+    - Hmm this also does not work nicely
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 26
