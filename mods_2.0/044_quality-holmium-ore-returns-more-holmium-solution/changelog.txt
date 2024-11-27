@@ -14,6 +14,7 @@ Date: ????
     - Hmm what if i split up into two entities somehow
     - Hmm this also does not work nicely
     - Just add an invisible item that looks like a quality thing
+    - Use the item product as the multiplier signaller
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 26

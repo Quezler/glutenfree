@@ -53,9 +53,6 @@ quality_holmium_solution_recipe.localised_name = {"fluid-name." .. holmium_solut
 quality_holmium_solution_recipe.category = holmium_chemistry_category.name
 holmium_chemical_plant.crafting_categories = {holmium_chemistry_category.name}
 
--- holmium_chemical_plant.fixed_recipe = quality_holmium_solution_recipe.name
--- holmium_chemical_plant.fixed_quality = "normal"
-
 local holmium_chemical_plant_recipe = {
   type = "recipe",
   name = holmium_chemical_plant_item.name,
@@ -87,24 +84,26 @@ data:extend{
 
 local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
 
-local quality_normal = data.raw["quality"]["normal"]
-
 local holmium_solution_item = {
   type = "item",
   name = "holmium-solution",
-  localised_name = {"", {"fluid-name." .. holmium_solution_fluid.name}, " ", "multiplier"},
-  icons = {
-    {draw_background = false, icon = "__core__/graphics/empty.png"},
-    {icon = quality_normal.icon, scale = 0.2, shift = {-10, 10}},
-  },
+  localised_name = {"", {"fluid-name." .. holmium_solution_fluid.name}, " ", "quality multiplier"},
+  localised_description = {"", "[font=default-bold]",
+    "[img=quality/normal] × 1\n",
+    "[img=quality/uncommon] × 4\n",
+    "[img=quality/rare] × 16\n",
+    "[img=quality/epic] × 64\n",
+    "[img=quality/legendary] × 256",
+  "[/font]"},
+  icon = "__core__/graphics/empty.png",
   stack_size = 1,
   flags = {"only-in-cursor"},
-  weight = 1 * tons + 1,
+  weight = 1 * tons,
   hidden = true,
 }
 data:extend{holmium_solution_item}
 
 quality_holmium_solution_recipe.results = {
-  {type = "item", name="holmium-solution", amount = 100},
+  {type = "item", name="holmium-solution", amount = 1},
   {type = "fluid", name="holmium-solution", amount = 100},
 }
