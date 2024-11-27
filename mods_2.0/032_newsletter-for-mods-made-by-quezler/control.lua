@@ -52,7 +52,7 @@ local function get_human_calendar_date()
   if string.len(version) ~= 17 then version = "12024.11114.11645" end
 
   local year = string.sub(version, 2, 5)
-  local month = string.sub(version, 9, 10)
+  local month = string.sub(version, 6, 9)
   local day = string.sub(version, 10, 11)
 
   return year, month, day
