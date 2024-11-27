@@ -17,6 +17,7 @@ Date: ????
     - Use the item product as the multiplier signaller
     - Make the item spawnable so it lists no rocket capacity
     - Throw the fluid and the recipe productivity together as an icon
+    - Drop the fluid name from the quality modifier thing
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 26
