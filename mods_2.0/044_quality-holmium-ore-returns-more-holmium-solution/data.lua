@@ -89,9 +89,10 @@ for _, fluid_box in ipairs(holmium_chemical_plant.fluid_boxes) do
   if fluid_box.production_type == "input" then
     fluid_box.filter = "water"
   end
-  if fluid_box.production_type == "output" then
-    fluid_box.filter = "holmium-solution"
-  end
+  -- if fluid_box.production_type == "output" then
+  --   fluid_box.filter = "holmium-solution"
+  --   fluid_box.draw_only_when_connected = false
+  -- end
 end
 
 local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
