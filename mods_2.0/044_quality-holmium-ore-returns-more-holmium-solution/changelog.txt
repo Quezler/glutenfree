@@ -9,6 +9,7 @@ Date: ????
     - Hide the quality icon for the normal tier
     - Fix normal quality giving 0 fluid
     - Fix math order
+    - Begin work on control scripting
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 26
