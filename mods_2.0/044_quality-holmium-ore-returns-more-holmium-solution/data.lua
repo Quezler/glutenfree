@@ -112,11 +112,11 @@ quality_holmium_solution_recipe.results = {
   {type = "fluid", name="holmium-solution", amount = 100},
 }
 
-holmium_chemical_plant.vector_to_place_result = {0, 0.75}
+holmium_chemical_plant.vector_to_place_result = {0, 1.25}
 
 local linked_chest = table.deepcopy(data.raw["linked-container"]["linked-chest"])
 linked_chest.name = "holmium-chemical-plant-chest"
-linked_chest.collision_box = {{-0.2, -0.2}, {0.2, 0.2}}
+linked_chest.collision_box = {{-0.25, -0.25}, {0.25, 0.25}}
 linked_chest.collision_mask = {layers = {}}
 linked_chest.picture = util.empty_sprite()
 linked_chest.inventory_size = 1
