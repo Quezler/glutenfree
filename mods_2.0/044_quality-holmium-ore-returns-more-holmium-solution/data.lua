@@ -59,8 +59,8 @@ quality_holmium_solution_recipe.icons = {
   {icon = data.raw["virtual-signal"]["signal-any-quality"].icon, scale = 0.25, shift = {-8, 8}},
 }
 
-holmium_chemical_plant.fixed_recipe = quality_holmium_solution_recipe.name
-holmium_chemical_plant.fixed_quality = "normal"
+-- holmium_chemical_plant.fixed_recipe = quality_holmium_solution_recipe.name
+-- holmium_chemical_plant.fixed_quality = "normal"
 
 local holmium_chemical_plant_recipe = {
   type = "recipe",
@@ -88,3 +88,14 @@ data:extend{
   holmium_chemistry_category,
   quality_holmium_solution_recipe,
 }
+
+-- log(serpent.block(holmium_chemical_plant.fluid_boxes))
+
+for _, fluid_box in ipairs(holmium_chemical_plant.fluid_boxes) do
+  if fluid_box.production_type == "input" then
+    fluid_box.filter = "water"
+  end
+  if fluid_box.production_type == "output" then
+    fluid_box.filter = "holmium-solution"
+  end
+end
