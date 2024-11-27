@@ -15,7 +15,7 @@ function Handler.on_created_entity(event)
   local linked_chest_a = entity.surface.create_entity{
     name = "holmium-chemical-plant-chest",
     force = entity.force,
-    position = util.moveposition({entity.position.x, entity.position.y}, entity.direction, -1),
+    position = util.moveposition({entity.position.x, entity.position.y}, entity.direction, -2),
   }
   linked_chest_a.destructible = false
 end
