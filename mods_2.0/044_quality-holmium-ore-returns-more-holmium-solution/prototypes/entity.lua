@@ -8,8 +8,7 @@ return {
     holmium_chemical_plant.icons = {
       {icon = "__quality-holmium-ore-returns-more-holmium-solution__/graphics/icons/holmium-chemical-plant.png"},
     }
-    -- quality unknown has no icon
-    if quality.icon then table.insert(holmium_chemical_plant.icons, {icon = quality.icon, scale = 0.25, shift = {-8, 8}}) end
+    if quality.name ~= "normal" then table.insert(holmium_chemical_plant.icons, {icon = quality.icon, scale = 0.25, shift = {-8, 8}}) end
 
     holmium_chemical_plant.order = "[holmium-chemical-plant]-" .. quality.order
 

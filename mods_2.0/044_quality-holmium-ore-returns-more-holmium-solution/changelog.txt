@@ -6,6 +6,7 @@ Date: ????
     - Give the tiered chemical plants an icon
     - Shuffle around how holmium solution is shown
     - Step away from using unknown quality
+    - Hide the quality icon for the normal tier
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 26
