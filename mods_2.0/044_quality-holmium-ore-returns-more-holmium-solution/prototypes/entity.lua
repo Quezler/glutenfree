@@ -1,7 +1,8 @@
 return {
   new_holmium_chemical_plant = function(quality)
     local holmium_chemical_plant = table.deepcopy(data.raw["assembling-machine"]["chemical-plant"])
-    holmium_chemical_plant.name = quality.name .. "-holmium-chemical-plant"
+    -- holmium_chemical_plant.name = quality.name .. "-holmium-chemical-plant"
+    holmium_chemical_plant.name = string.format("%sholmium-chemical-plant", quality.name ~= "normal" and quality.name .. "-" or "")
     holmium_chemical_plant.localised_name = {"entity-name.holmium-chemical-plant"}
 
     holmium_chemical_plant.icons = {

@@ -1,7 +1,7 @@
 local holmium_chemical_plant_item = table.deepcopy(data.raw["item"]["chemical-plant"])
 
 holmium_chemical_plant_item.name = "holmium-chemical-plant"
-holmium_chemical_plant_item.place_result = "quality-unknown-holmium-chemical-plant"
+holmium_chemical_plant_item.place_result = "holmium-chemical-plant"
 holmium_chemical_plant_item.icon = "__quality-holmium-ore-returns-more-holmium-solution__/graphics/icons/holmium-chemical-plant.png"
 
 local holmium_solution_recipe = data.raw["recipe"]["holmium-solution"]

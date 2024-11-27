@@ -5,6 +5,7 @@ Date: ????
     - Begin conversion to per-quality chemical plants
     - Give the tiered chemical plants an icon
     - Shuffle around how holmium solution is shown
+    - Step away from using unknown quality
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 26
