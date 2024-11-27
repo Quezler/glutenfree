@@ -9,6 +9,7 @@ Date: ????
     - Abandon output fluidbox
     - Ponder about hiding the inactive covers
     - What if i define both outputs?
+    - Crafting machine fluidboxes must be input or output types.
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 26
