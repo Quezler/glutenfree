@@ -1,8 +1,10 @@
 local mod_prefix = "decider-combinator-output-constant-editor-"
 
 local function find_output(selected_prototype, outputs)
+  -- game.print(serpent.block(selected_prototype))
+  -- game.print(serpent.block(outputs))
   for i, output in ipairs(outputs or {}) do
-    if output.signal and output.signal.name == selected_prototype.name then
+    if output.signal and output.signal.name == selected_prototype.name and (output.signal.quality or "normal") == selected_prototype.quality then
       return i, output
     end
   end
