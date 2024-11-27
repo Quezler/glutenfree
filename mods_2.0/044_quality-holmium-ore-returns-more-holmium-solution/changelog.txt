@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Pretend holmium solution takes any quality
     - Try to pre-filter the fluidboxes
+    - Try to use a dummy holmium solution item
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 26

@@ -40,6 +40,7 @@ local holmium_chemistry_category = {
 local holmium_solution_recipe = data.raw["recipe"]["holmium-solution"]
 local holmium_processing = data.raw["technology"]["holmium-processing"]
 
+-- swap the two recipes, causing machines already crafting it when the mod was installed to receive that red circle stripe thing.
 for _, effect in ipairs(holmium_processing.effects) do
   if effect.type == "unlock-recipe" and effect.recipe == "holmium-solution" then
     effect.recipe = "quality-holmium-solution"
@@ -50,14 +51,7 @@ local quality_holmium_solution_recipe = table.deepcopy(holmium_solution_recipe)
 quality_holmium_solution_recipe.name = "quality-holmium-solution"
 quality_holmium_solution_recipe.localised_name = {"fluid-name." .. holmium_solution_recipe.name}
 quality_holmium_solution_recipe.category = holmium_chemistry_category.name
-
 holmium_chemical_plant.crafting_categories = {holmium_chemistry_category.name}
-
-quality_holmium_solution_recipe.icon = nil
-quality_holmium_solution_recipe.icons = {
-  {icon = data.raw["fluid"]["holmium-solution"].icon},
-  {icon = data.raw["virtual-signal"]["signal-any-quality"].icon, scale = 0.25, shift = {-8, 8}},
-}
 
 -- holmium_chemical_plant.fixed_recipe = quality_holmium_solution_recipe.name
 -- holmium_chemical_plant.fixed_quality = "normal"
@@ -99,3 +93,16 @@ for _, fluid_box in ipairs(holmium_chemical_plant.fluid_boxes) do
     fluid_box.filter = "holmium-solution"
   end
 end
+
+local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
+
+local holmium_solution_item = {
+  type = "item",
+  name = "holmium-solution",
+  icon = holmium_solution_fluid.icon,
+  stack_size = 1,
+  hidden = true,
+}
+data:extend{holmium_solution_item}
+
+quality_holmium_solution_recipe.results = {{type = "item", name="holmium-solution", amount = 100}}
