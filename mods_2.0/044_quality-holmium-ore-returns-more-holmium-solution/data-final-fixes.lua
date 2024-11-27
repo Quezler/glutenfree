@@ -19,8 +19,8 @@ for _, quality in pairs(data.raw["quality"]) do
     -- quality_holmium_solution_recipe.name = string.format("%squality-holmium-solution", quality.name ~= "normal" and quality.name .. "-" or "")
     -- log(quality_holmium_solution_recipe.name)
     assert(#quality_holmium_solution_recipe.results == 1)
-    quality_holmium_solution_recipe.results[1].amount = quality_holmium_solution_recipe.results[1].amount * quality.level + 1
-    -- log(serpent.block(quality_holmium_solution_recipe))
+    quality_holmium_solution_recipe.results[1].amount = quality_holmium_solution_recipe.results[1].amount * (quality.level + 1)
+    -- log(serpent.block(quality_holmium_solution_recipe.results))
     quality_holmium_solution_recipe.hidden = true
     data:extend{quality_holmium_solution_recipe}
 
