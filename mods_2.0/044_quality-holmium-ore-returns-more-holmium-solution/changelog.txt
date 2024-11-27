@@ -20,6 +20,7 @@ Date: ????
     - Drop the fluid name from the quality modifier thing
     - Generate the quality bonus list
     - Test to see if i can add fluid to the output fluidbox
+    - Setup a linked chest within the chemical plant
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 26

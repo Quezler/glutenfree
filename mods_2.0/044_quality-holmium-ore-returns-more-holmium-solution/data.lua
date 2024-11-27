@@ -82,7 +82,7 @@ data:extend{
 
 -- log(serpent.block(holmium_chemical_plant.fluid_boxes))
 
-holmium_chemical_plant.fluid_boxes[4].pipe_connections[1].flow_direction = "input"
+-- holmium_chemical_plant.fluid_boxes[4].pipe_connections[1].flow_direction = "input"
 
 local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
 
@@ -111,3 +111,18 @@ quality_holmium_solution_recipe.results = {
   {type = "item", name="holmium-solution-quality-based-productivity", amount = 1, ignored_by_stats = 1},
   {type = "fluid", name="holmium-solution", amount = 100},
 }
+
+holmium_chemical_plant.vector_to_place_result = {0, 1}
+
+local linked_chest = table.deepcopy(data.raw["linked-container"]["linked-chest"])
+linked_chest.name = "holmium-chemical-plant-chest"
+linked_chest.collision_box = {{-0.2, -0.2}, {0.2, 0.2}}
+linked_chest.collision_mask = {layers = {}}
+linked_chest.picture = util.empty_sprite()
+linked_chest.inventory_size = 1
+linked_chest.inventory_type = "normal"
+linked_chest.gui_mode = "none"
+linked_chest.selection_priority = 51
+-- linked_chest.selectable_in_game = false
+
+data:extend{linked_chest}
