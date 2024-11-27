@@ -16,6 +16,7 @@ Date: ????
     - Just add an invisible item that looks like a quality thing
     - Use the item product as the multiplier signaller
     - Make the item spawnable so it lists no rocket capacity
+    - Throw the fluid and the recipe productivity together as an icon
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 26

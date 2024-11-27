@@ -86,7 +86,7 @@ local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
 
 local holmium_solution_item = {
   type = "item",
-  name = "holmium-solution-quality-multiplier",
+  name = "holmium-solution-quality-based-productivity",
   localised_description = {"", "[font=default-bold]",
     "[img=quality/normal] × 1\n",
     "[img=quality/uncommon] × 4\n",
@@ -94,7 +94,10 @@ local holmium_solution_item = {
     "[img=quality/epic] × 64\n",
     "[img=quality/legendary] × 256",
   "[/font]"},
-  icon = "__core__/graphics/empty.png",
+  icons = {
+    {draw_background = true, icon = holmium_solution_fluid.icon, scale = 0.375},
+    {icon = "__core__/graphics/icons/technology/effect-constant/effect-constant-recipe-productivity.png"}
+  },
   stack_size = 1,
   flags = {"only-in-cursor", "not-stackable", "spawnable"},
   hidden = true,
@@ -102,6 +105,6 @@ local holmium_solution_item = {
 data:extend{holmium_solution_item}
 
 quality_holmium_solution_recipe.results = {
-  {type = "item", name="holmium-solution-quality-multiplier", amount = 1, ignored_by_stats = 1},
+  {type = "item", name="holmium-solution-quality-based-productivity", amount = 1, ignored_by_stats = 1},
   {type = "fluid", name="holmium-solution", amount = 100},
 }
