@@ -8,6 +8,7 @@ Date: ????
     - Make the arrow not collide with the alt mode sprite
     - Update info.json
     - Update readme
+    - Setup the hidden surface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 26

@@ -7,6 +7,19 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   end
 end)
 
+local mod_surface_name = "holmium-chemical-plant"
+
+script.on_init(function()
+  local mod_surface = game.planets[mod_surface_name].create_surface()
+  mod_surface.generate_with_lab_tiles = true
+  mod_surface.create_global_electric_network()
+  mod_surface.create_entity{
+    name = "electric-energy-interface",
+    force = "neutral",
+    position = {-1, -1},
+  }
+end)
+
 local Handler = {}
 
 function Handler.on_created_entity(event)

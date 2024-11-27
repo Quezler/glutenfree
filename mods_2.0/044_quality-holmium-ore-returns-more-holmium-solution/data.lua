@@ -127,3 +127,14 @@ linked_chest.selection_priority = 51
 linked_chest.selectable_in_game = false
 
 data:extend{linked_chest}
+
+data:extend{{
+  type = "planet",
+  name = "holmium-chemical-plant",
+  icon = holmium_chemical_plant.icon,
+
+  distance = 0,
+  orientation = 0,
+
+  hidden = true,
+}}
