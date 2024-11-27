@@ -22,6 +22,7 @@ Date: ????
     - Test to see if i can add fluid to the output fluidbox
     - Setup a linked chest within the chemical plant
     - Place the linked chest outside so the arrow is flush
+    - Nah just keep it inside
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 26
