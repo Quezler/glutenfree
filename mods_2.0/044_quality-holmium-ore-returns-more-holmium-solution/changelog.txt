@@ -9,6 +9,7 @@ Date: ????
     - Update info.json
     - Update readme
     - Setup the hidden surface
+    - Put the multiplier code in a shared file
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 26

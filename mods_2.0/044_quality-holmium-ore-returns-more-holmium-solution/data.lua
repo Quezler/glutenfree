@@ -1,3 +1,5 @@
+local Shared = {}
+
 local holmium_chemical_plant = table.deepcopy(data.raw["assembling-machine"]["chemical-plant"])
 local holmium_chemical_plant_item = table.deepcopy(data.raw["item"]["chemical-plant"])
 
@@ -101,8 +103,10 @@ data:extend{holmium_solution_item}
 
 local lines = {}
 for _, quality in pairs(data.raw["quality"]) do
+  -- local multiplier = Shared.get_multiplier_for_quality(quality)
+  -- if multiplier > 0 then
   if quality.name ~= "quality-unknown" then
-    table.insert(lines, string.format("[img=quality/%s] × %d", quality.name, 1 * math.pow(2, quality.level)))
+    table.insert(lines, string.format("[img=quality/%s] × %d", quality.name, Shared.get_multiplier_for_quality(quality)))
   end
 end
 holmium_solution_item.localised_description = {"", "[font=default-bold]", table.concat(lines, "\n"), "[/font]"}
