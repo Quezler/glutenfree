@@ -82,6 +82,8 @@ data:extend{
 
 -- log(serpent.block(holmium_chemical_plant.fluid_boxes))
 
+holmium_chemical_plant.fluid_boxes[4].pipe_connections[1].flow_direction = "input"
+
 local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
 
 local holmium_solution_item = {
