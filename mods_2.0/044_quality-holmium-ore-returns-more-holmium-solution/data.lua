@@ -99,8 +99,11 @@ local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
 local holmium_solution_item = {
   type = "item",
   name = "holmium-solution",
+  localised_name = {"fluid-name." .. holmium_solution_fluid.name},
   icon = holmium_solution_fluid.icon,
-  stack_size = 1,
+  stack_size = 100,
+  flags = {"only-in-cursor"},
+  weight = 1 * tons + 1,
   hidden = true,
 }
 data:extend{holmium_solution_item}
