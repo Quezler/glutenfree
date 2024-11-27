@@ -87,13 +87,6 @@ local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
 local holmium_solution_item = {
   type = "item",
   name = "holmium-solution-quality-based-productivity",
-  localised_description = {"", "[font=default-bold]",
-    "[img=quality/normal] × 1\n",
-    "[img=quality/uncommon] × 4\n",
-    "[img=quality/rare] × 16\n",
-    "[img=quality/epic] × 64\n",
-    "[img=quality/legendary] × 256",
-  "[/font]"},
   icons = {
     {draw_background = true, icon = holmium_solution_fluid.icon, scale = 0.375},
     {icon = "__core__/graphics/icons/technology/effect-constant/effect-constant-recipe-productivity.png"}
@@ -103,6 +96,14 @@ local holmium_solution_item = {
   hidden = true,
 }
 data:extend{holmium_solution_item}
+
+local lines = {}
+for _, quality in pairs(data.raw["quality"]) do
+  if quality.name ~= "quality-unknown" then
+    table.insert(lines, string.format("[img=quality/%s] × %d", quality.name, 1 * math.pow(2, quality.level)))
+  end
+end
+holmium_solution_item.localised_description = {"", "[font=default-bold]", table.concat(lines, "\n"), "[/font]"}
 
 quality_holmium_solution_recipe.results = {
   {type = "item", name="holmium-solution-quality-based-productivity", amount = 1, ignored_by_stats = 1},
