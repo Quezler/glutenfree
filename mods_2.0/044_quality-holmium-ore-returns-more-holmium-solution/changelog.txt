@@ -14,6 +14,7 @@ Date: ????
     - Setup the redeeming prototypes
     - Add the assembling machine to the struct
     - Nightly
+    - Link the fluidboxes together
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 28

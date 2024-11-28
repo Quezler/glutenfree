@@ -96,6 +96,7 @@ function Handler.on_created_entity(event)
     old_struct.holmium_chemical_plant = entity
     storage.deathrattles[old_struct.registration_number] = {type = "holmium-chemical-plant", struct_id = old_struct.id}
     Handler.on_player_rotated_or_flipped_entity({entity = entity})
+    Handler.on_holmium_chemical_plant_changed_quality(old_struct)
     return
   end
 
@@ -323,6 +324,8 @@ function Handler.on_created_entity(event)
   }
   struct.assembler.destructible = false
   struct.inserter_3.drop_target = struct.assembler
+
+  Handler.on_holmium_chemical_plant_changed_quality(struct)
 end
 
 for _, event in ipairs({
@@ -336,6 +339,11 @@ for _, event in ipairs({
   script.on_event(event, Handler.on_created_entity, {
     {filter = "name", name = "holmium-chemical-plant"},
   })
+end
+
+function Handler.on_holmium_chemical_plant_changed_quality(struct)
+  struct.holmium_chemical_plant.fluidbox.add_linked_connection(3, struct.assembler, 1)
+  struct.holmium_chemical_plant.fluidbox.add_linked_connection(4, struct.assembler, 2)
 end
 
 function Handler.on_player_rotated_or_flipped_entity(event)
