@@ -1,5 +1,3 @@
-local Shared = require("shared")
-
 local holmium_chemical_plant = table.deepcopy(data.raw["assembling-machine"]["chemical-plant"])
 local holmium_chemical_plant_item = table.deepcopy(data.raw["item"]["chemical-plant"])
 
@@ -91,6 +89,7 @@ local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
 local holmium_solution_item = {
   type = "item",
   name = "holmium-solution-quality-based-productivity",
+  localised_description = nil, -- set in data-final-fixes.lua
   icons = {
     {draw_background = true, icon = holmium_solution_fluid.icon, scale = 0.375},
     {icon = "__core__/graphics/icons/technology/effect-constant/effect-constant-recipe-productivity.png"}
@@ -100,14 +99,6 @@ local holmium_solution_item = {
   hidden = true,
 }
 data:extend{holmium_solution_item}
-
-local lines = {}
-for _, quality in pairs(data.raw["quality"]) do
-  if not quality.hidden then
-    table.insert(lines, string.format("[img=quality/%s] × %d", quality.name, Shared.get_multiplier_for_quality(quality)))
-  end
-end
-holmium_solution_item.localised_description = {"", "[font=default-bold]", table.concat(lines, "\n"), "[/font]"}
 
 quality_holmium_solution_recipe.results = {
   {type = "item", name="holmium-solution-quality-based-productivity", amount = 1, ignored_by_stats = 1},
