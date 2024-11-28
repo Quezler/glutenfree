@@ -73,6 +73,7 @@ function Handler.on_created_entity(event)
 
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
+    registration_number = script.register_on_object_destroyed(entity),
     holmium_chemical_plant = entity,
 
     linked_chest_a = nil,
@@ -85,6 +86,8 @@ function Handler.on_created_entity(event)
     arithmetic_2 = nil,
     arithmetic_3 = nil,
   })
+
+  storage.deathrattles[struct.registration_number] = {type = "holmium-chemical-plant", struct_id = struct.id}
 
   struct.linked_chest_a = entity.surface.create_entity{
     name = "holmium-chemical-plant-linked-chest",
@@ -297,3 +300,25 @@ end
 
 script.on_event(defines.events.on_player_rotated_entity, Handler.on_player_rotated_or_flipped_entity)
 script.on_event(defines.events.on_player_flipped_entity, Handler.on_player_rotated_or_flipped_entity)
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+
+    if deathrattle.type == "holmium-chemical-plant" then
+      local struct = assert(storage.structs[deathrattle.struct_id])
+      struct.linked_chest_a.destroy()
+      struct.linked_chest_b.destroy()
+      struct.inserter_1.destroy()
+      struct.infinity_chest_1.destroy()
+      struct.inserter_2.destroy()
+      struct.linked_chest_c.destroy()
+      struct.arithmetic_1.destroy()
+      struct.arithmetic_2.destroy()
+      struct.arithmetic_3.destroy()
+    else
+      error(serpent.block(deathrattle))
+    end
+
+  end
+end)
