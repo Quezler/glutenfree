@@ -349,8 +349,8 @@ function Handler.on_player_rotated_or_flipped_entity(event)
 
   struct.inserter_3.direction = util.oppositedirection(entity.direction)
   struct.inserter_3.pickup_target = struct.linked_chest_a
-  struct.inserter_3.drop_target = struct.assembler
   struct.assembler.teleport(Handler.get_assembling_machine_position(struct.holmium_chemical_plant))
+  struct.inserter_3.drop_target = struct.assembler
 end
 
 script.on_event(defines.events.on_player_rotated_entity, Handler.on_player_rotated_or_flipped_entity)
@@ -373,6 +373,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       struct.arithmetic_3.destroy()
       struct.inserter_3.destroy()
       struct.assembler.destroy()
+      storage.structs[deathrattle.struct_id] = nil
     else
       error(serpent.block(deathrattle))
     end
