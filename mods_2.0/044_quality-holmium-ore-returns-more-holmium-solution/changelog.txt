@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
-Date: ????
+Date: 2024. 11. 28
   Info:
     - Setup a linked chest within the chemical plant
     - Place the linked chest outside so the arrow is flush
@@ -21,7 +21,7 @@ Date: ????
     - Move localizing with quality to final fixes (normal was still hidden)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: 2024. 11. 26
+Date: 2024. 11. 27
   Info:
     - Pretend holmium solution takes any quality
     - Try to pre-filter the fluidboxes
@@ -43,7 +43,7 @@ Date: 2024. 11. 26
     - Test to see if i can add fluid to the output fluidbox
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: 2024. 11. 26
+Date: 2024. 11. 27
   Info:
     - Begin conversion to per-quality chemical plants
     - Give the tiered chemical plants an icon
