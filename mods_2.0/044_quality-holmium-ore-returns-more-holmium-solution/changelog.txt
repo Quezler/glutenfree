@@ -17,6 +17,7 @@ Date: ????
     - Make the second inserter only active if there are enough points
     - Swap coin with our own coupon
     - Disable player placed inserters from interacting with hidden inventory entities
+    - Add "linked" to the holmium chemical plant chest name
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 26

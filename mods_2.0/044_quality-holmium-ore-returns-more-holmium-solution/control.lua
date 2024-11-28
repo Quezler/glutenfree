@@ -59,7 +59,7 @@ function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
   local linked_chest_a = entity.surface.create_entity{
-    name = "holmium-chemical-plant-chest",
+    name = "holmium-chemical-plant-linked-chest",
     force = "neutral",
     position = util.moveposition({entity.position.x, entity.position.y}, entity.direction, -1),
   }
@@ -68,7 +68,7 @@ function Handler.on_created_entity(event)
   entity.drop_target = linked_chest_a
 
   local linked_chest_b = game.surfaces[mod_surface_name].create_entity{
-    name = "holmium-chemical-plant-chest",
+    name = "holmium-chemical-plant-linked-chest",
     force = "neutral",
     position = {0.5 + storage.x_offset, -0.5},
   }
@@ -131,7 +131,7 @@ function Handler.on_created_entity(event)
   }
 
   local linked_chest_c = game.surfaces[mod_surface_name].create_entity{
-    name = "holmium-chemical-plant-chest",
+    name = "holmium-chemical-plant-linked-chest",
     force = "neutral",
     position = {0.5 + storage.x_offset, -4.5},
   }
