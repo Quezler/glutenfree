@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 11. 28
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
 Version: 0.0.5
-Date: ????
+Date: 2024. 11. 28
   Info:
     - Begin conversion to structs and deathrattles
     - Support rotating and flipping
