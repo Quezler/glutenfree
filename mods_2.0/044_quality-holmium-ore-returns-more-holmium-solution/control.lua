@@ -68,13 +68,39 @@ function Handler.get_linked_chest_position(holmium_chemical_plant)
   return util.moveposition({holmium_chemical_plant.position.x, holmium_chemical_plant.position.y}, holmium_chemical_plant.direction, -1)
 end
 
+function Handler.find_preexisting_struct(surface, position)
+  for _, struct in pairs(storage.structs) do
+    if struct.surface.index == surface.index then
+      if struct.position.x == position.x and struct.position.y == position.y then
+        return struct
+      end
+    end
+  end
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
+
+  local old_struct = Handler.find_preexisting_struct(event.entity.surface, event.entity.position)
+  if old_struct then
+    storage.deathrattles[old_struct.registration_number] = nil
+    storage.structs[old_struct.id] = nil
+    old_struct.id = entity.unit_number
+    storage.structs[old_struct.id] = old_struct
+    old_struct.registration_number = script.register_on_object_destroyed(entity)
+    old_struct.holmium_chemical_plant = entity
+    storage.deathrattles[old_struct.registration_number] = {type = "holmium-chemical-plant", struct_id = old_struct.id}
+    Handler.on_player_rotated_or_flipped_entity({entity = entity})
+    return
+  end
 
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
     registration_number = script.register_on_object_destroyed(entity),
     holmium_chemical_plant = entity,
+
+    surface = entity.surface,
+    position = entity.position,
 
     linked_chest_a = nil,
     linked_chest_b = nil,
