@@ -64,11 +64,16 @@ function Handler.update_constant_combinator()
   end
 end
 
+function Handler.get_linked_chest_position(holmium_chemical_plant)
+  return util.moveposition({holmium_chemical_plant.position.x, holmium_chemical_plant.position.y}, holmium_chemical_plant.direction, -1)
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
+    holmium_chemical_plant = entity,
 
     linked_chest_a = nil,
     linked_chest_b = nil,
@@ -84,7 +89,7 @@ function Handler.on_created_entity(event)
   struct.linked_chest_a = entity.surface.create_entity{
     name = "holmium-chemical-plant-linked-chest",
     force = "neutral",
-    position = util.moveposition({entity.position.x, entity.position.y}, entity.direction, -1),
+    position = Handler.get_linked_chest_position(entity),
   }
   struct.linked_chest_a.destructible = false
   struct.linked_chest_a.link_id = storage.x_offset
@@ -279,3 +284,16 @@ for _, event in ipairs({
     {filter = "name", name = "holmium-chemical-plant"},
   })
 end
+
+function Handler.on_player_rotated_or_flipped_entity(event)
+  local entity = event.entity
+
+  if entity.name ~= "holmium-chemical-plant" then return end
+  local struct = assert(storage.structs[entity.unit_number])
+
+  struct.linked_chest_a.teleport(Handler.get_linked_chest_position(struct.holmium_chemical_plant))
+  struct.holmium_chemical_plant.drop_target = struct.linked_chest_a
+end
+
+script.on_event(defines.events.on_player_rotated_entity, Handler.on_player_rotated_or_flipped_entity)
+script.on_event(defines.events.on_player_flipped_entity, Handler.on_player_rotated_or_flipped_entity)
