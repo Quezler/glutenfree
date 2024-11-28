@@ -15,6 +15,7 @@ Date: ????
     - Move everything around so there is enough sensible room
     - Setup the other two required arithmetic combinators
     - Make the second inserter only active if there are enough points
+    - Swap coin with our own coupon
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 26

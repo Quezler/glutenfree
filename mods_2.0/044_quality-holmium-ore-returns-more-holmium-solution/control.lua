@@ -10,6 +10,7 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
 end)
 
 local mod_surface_name = "holmium-chemical-plant"
+local coin_item_name = "coupon-for-holmium-solution"
 
 local Handler = {}
 
@@ -83,7 +84,7 @@ function Handler.on_created_entity(event)
   inserter_1.inserter_filter_mode = "blacklist"
   inserter_1.set_filter(1, {
     comparator = "=",
-    name = "coin", -- todo
+    name = coin_item_name,
     quality = "normal"
   })
 
@@ -102,12 +103,12 @@ function Handler.on_created_entity(event)
       count = 1,
       index = 1,
       mode = "at-least",
-      name = "coin" -- todo: holmium solution coupon
+      name = coin_item_name,
     }
   }
 
   local inserter_2 = game.surfaces[mod_surface_name].create_entity{
-    name = "stack-inserter",
+    name = "fast-inserter",
     force = "neutral",
     position = {0.5 + storage.x_offset, -3.5},
     direction = defines.direction.south,
@@ -122,7 +123,7 @@ function Handler.on_created_entity(event)
       comparator = "<",
       constant = 0,
       first_signal = {
-        name = "coin"
+        name = coin_item_name
       }
     -- }
   }
@@ -154,7 +155,7 @@ function Handler.on_created_entity(event)
     },
     operation = "*",
     output_signal = {
-      name = "coin"
+      name = coin_item_name
     },
     second_signal = {
       name = "signal-each",
@@ -183,7 +184,7 @@ function Handler.on_created_entity(event)
   arithmetic_2_cb = arithmetic_2.get_control_behavior() --[[@as LuaArithmeticCombinatorControlBehavior]]
   arithmetic_2_cb.parameters = {
     first_signal = {
-      name = "coin"
+      name = coin_item_name
     },
     first_signal_networks = {
       green = true,
@@ -191,7 +192,7 @@ function Handler.on_created_entity(event)
     },
     operation = "*",
     output_signal = {
-      name = "coin"
+      name = coin_item_name
     },
     second_constant = -1,
     second_signal_networks = {
@@ -214,7 +215,7 @@ function Handler.on_created_entity(event)
   arithmetic_3_cb = arithmetic_3.get_control_behavior() --[[@as LuaArithmeticCombinatorControlBehavior]]
   arithmetic_3_cb.parameters = {
     first_signal = {
-      name = "coin"
+      name = coin_item_name
     },
     first_signal_networks = {
       green = true,
@@ -222,7 +223,7 @@ function Handler.on_created_entity(event)
     },
     operation = "+",
     output_signal = {
-      name = "coin"
+      name = coin_item_name
     },
     second_constant = 0,
     second_signal_networks = {

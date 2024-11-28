@@ -140,3 +140,17 @@ data:extend{{
 
   hidden = true,
 }}
+
+data:extend{{
+  type = "item",
+  name = "coupon-for-holmium-solution",
+
+  icons = {
+    {icon = data.raw["item"]["coin"].icon},
+    {icon = holmium_solution_fluid.icon, scale = 0.375}
+  },
+  stack_size = 10,
+  flags = {"only-in-cursor"},
+
+  hidden = true,
+}}
