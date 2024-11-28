@@ -154,6 +154,7 @@ function Handler.on_created_entity(event)
     quality = "normal"
   })
   struct.inserter_1.pickup_target = struct.linked_chest_b
+  struct.inserter_1.inserter_stack_size_override = 1
 
   struct.inserter_1_cb = struct.inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
   struct.inserter_1_cb.circuit_read_hand_contents = true
@@ -192,6 +193,7 @@ function Handler.on_created_entity(event)
       name = coin_item_name
     }
   }
+  struct.inserter_2.inserter_stack_size_override = 1
 
   struct.linked_chest_c = game.surfaces[mod_surface_name].create_entity{
     name = "holmium-chemical-plant-linked-chest",

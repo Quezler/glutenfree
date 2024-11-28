@@ -17,6 +17,7 @@ Date: ????
     - Link the fluidboxes together
     - Cleanup the fluidboxes
     - Speed up the redeeming recipe
+    - Get the coupons to the assembler quicker
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 28

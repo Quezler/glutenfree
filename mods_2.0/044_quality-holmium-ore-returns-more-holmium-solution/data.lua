@@ -154,10 +154,11 @@ local inserter = {
   type = "inserter",
   name = "holmium-chemical-plant-inserter",
 
-  extension_speed = fast_inserter.extension_speed * 5,
-  rotation_speed  = fast_inserter.rotation_speed  * 5,
+  extension_speed = fast_inserter.extension_speed * 10,
+  rotation_speed  = fast_inserter.rotation_speed  * 10,
   insert_position = fast_inserter.insert_position,
   pickup_position = fast_inserter.pickup_position,
+  stack_size_bonus = 10,
 
   selection_box = fast_inserter.selection_box,
   collision_box = fast_inserter.collision_box,
