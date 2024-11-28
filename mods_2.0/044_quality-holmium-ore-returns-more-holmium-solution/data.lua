@@ -154,3 +154,7 @@ data:extend{{
 
   hidden = true,
 }}
+
+table.insert(holmium_chemical_plant.flags, "no-automated-item-removal")
+table.insert(linked_chest.flags, "no-automated-item-removal")
+table.insert(linked_chest.flags, "no-automated-item-insertion")

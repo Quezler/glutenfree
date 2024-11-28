@@ -65,6 +65,7 @@ function Handler.on_created_entity(event)
   }
   linked_chest_a.destructible = false
   linked_chest_a.link_id = storage.x_offset
+  entity.drop_target = linked_chest_a
 
   local linked_chest_b = game.surfaces[mod_surface_name].create_entity{
     name = "holmium-chemical-plant-chest",
@@ -87,6 +88,7 @@ function Handler.on_created_entity(event)
     name = coin_item_name,
     quality = "normal"
   })
+  inserter_1.pickup_target = linked_chest_b
 
   local inserter_1_cb = inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
   inserter_1_cb.circuit_read_hand_contents = true
@@ -134,6 +136,7 @@ function Handler.on_created_entity(event)
     position = {0.5 + storage.x_offset, -4.5},
   }
   linked_chest_c.link_id = storage.x_offset
+  inserter_2.drop_target = linked_chest_c
 
   -- takes in the quality signal and determines the multiplier amount
   local arithmetic_1 = game.surfaces[mod_surface_name].create_entity{

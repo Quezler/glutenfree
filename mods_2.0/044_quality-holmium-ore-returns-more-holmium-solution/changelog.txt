@@ -16,6 +16,7 @@ Date: ????
     - Setup the other two required arithmetic combinators
     - Make the second inserter only active if there are enough points
     - Swap coin with our own coupon
+    - Disable player placed inserters from interacting with hidden inventory entities
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 26
