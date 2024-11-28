@@ -111,6 +111,7 @@ function Handler.on_created_entity(event)
     arithmetic_1 = nil,
     arithmetic_2 = nil,
     arithmetic_3 = nil,
+    inserter_3 = nil,
   })
 
   storage.deathrattles[struct.registration_number] = {type = "holmium-chemical-plant", struct_id = struct.id}
@@ -299,6 +300,14 @@ function Handler.on_created_entity(event)
   assert(arithmetic_3_red_out.connect_to(struct.inserter_2.get_wire_connector(defines.wire_connector_id.circuit_red, false)))
 
   storage.x_offset = storage.x_offset + 1
+
+  struct.inserter_3 = entity.surface.create_entity{
+    name = "fast-inserter",
+    force = "neutral",
+    position = entity.position,
+    direction = util.oppositedirection(entity.direction),
+  }
+  struct.inserter_3.pickup_target = struct.linked_chest_a
 end
 
 for _, event in ipairs({
@@ -322,6 +331,9 @@ function Handler.on_player_rotated_or_flipped_entity(event)
 
   struct.linked_chest_a.teleport(Handler.get_linked_chest_position(struct.holmium_chemical_plant))
   struct.holmium_chemical_plant.drop_target = struct.linked_chest_a
+
+  struct.inserter_3.direction = util.oppositedirection(entity.direction)
+  struct.inserter_3.pickup_target = struct.linked_chest_a
 end
 
 script.on_event(defines.events.on_player_rotated_entity, Handler.on_player_rotated_or_flipped_entity)
@@ -342,6 +354,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       struct.arithmetic_1.destroy()
       struct.arithmetic_2.destroy()
       struct.arithmetic_3.destroy()
+      struct.inserter_3.destroy()
     else
       error(serpent.block(deathrattle))
     end

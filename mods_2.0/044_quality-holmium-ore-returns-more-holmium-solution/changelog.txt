@@ -8,6 +8,7 @@ Date: ????
     - Morecolour
     - Setup the deathrattle
     - Add some very ugly struct ownership swapping code
+    - Create inserter 3
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 28
