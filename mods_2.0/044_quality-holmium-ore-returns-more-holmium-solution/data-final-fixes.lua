@@ -49,6 +49,7 @@ recipe.hide_from_player_crafting = true
 recipe.hide_from_signal_gui = true
 recipe.category = crafting_category.name
 recipe.enabled = true
+recipe.energy_required = 0.1
 assert(#recipe.results == 1)
 
 assembler.fixed_recipe = recipe.name
