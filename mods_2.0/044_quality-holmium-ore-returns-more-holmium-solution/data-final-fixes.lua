@@ -47,6 +47,7 @@ recipe.name = "holmium-chemical-plant-assembling-machine"
 recipe.ingredients = {{type = "item", name = "coupon-for-holmium-solution", amount = 1}}
 recipe.hide_from_player_crafting = true
 recipe.hide_from_signal_gui = true
+recipe.hidden = true
 recipe.category = crafting_category.name
 recipe.enabled = true
 recipe.energy_required = 0.1

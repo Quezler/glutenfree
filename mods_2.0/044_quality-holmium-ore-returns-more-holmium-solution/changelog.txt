@@ -3,6 +3,7 @@ Version: 1.0.2
 Date: ????
   Info:
     - Hide the invisible inserter from factoriopedia
+    - Hide the holmium fluid with the quality icon from factoriopedia
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2024. 11. 28
