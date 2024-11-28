@@ -133,7 +133,7 @@ function Handler.on_created_entity(event)
   struct.linked_chest_b.link_id = storage.x_offset
 
   struct.inserter_1 = game.surfaces[mod_surface_name].create_entity{
-    name = "fast-inserter",
+    name = "holmium-chemical-plant-inserter",
     force = "neutral",
     position = {0.5 + storage.x_offset, -1.5},
     direction = defines.direction.south,
@@ -168,7 +168,7 @@ function Handler.on_created_entity(event)
   }
 
   struct.inserter_2 = game.surfaces[mod_surface_name].create_entity{
-    name = "fast-inserter",
+    name = "holmium-chemical-plant-inserter",
     force = "neutral",
     position = {0.5 + storage.x_offset, -3.5},
     direction = defines.direction.south,
@@ -302,11 +302,12 @@ function Handler.on_created_entity(event)
   storage.x_offset = storage.x_offset + 1
 
   struct.inserter_3 = entity.surface.create_entity{
-    name = "fast-inserter",
+    name = "holmium-chemical-plant-inserter",
     force = "neutral",
     position = entity.position,
     direction = util.oppositedirection(entity.direction),
   }
+  struct.inserter_3.destructible = false
   struct.inserter_3.pickup_target = struct.linked_chest_a
 end
 

@@ -117,7 +117,7 @@ linked_chest.inventory_type = "normal"
 linked_chest.gui_mode = "none"
 linked_chest.flags = {"not-on-map", "hide-alt-info"}
 linked_chest.selection_priority = 51
--- linked_chest.selectable_in_game = false
+linked_chest.selectable_in_game = false
 
 data:extend{linked_chest}
 
@@ -149,3 +149,27 @@ data:extend{{
 table.insert(holmium_chemical_plant.flags, "no-automated-item-removal")
 table.insert(linked_chest.flags, "no-automated-item-removal")
 table.insert(linked_chest.flags, "no-automated-item-insertion")
+
+local fast_inserter = table.deepcopy(data.raw["inserter"]["fast-inserter"])
+local inserter = {
+  type = "inserter",
+  name = "holmium-chemical-plant-inserter",
+
+  extension_speed = fast_inserter.extension_speed * 5,
+  rotation_speed  = fast_inserter.rotation_speed  * 5,
+  insert_position = fast_inserter.insert_position,
+  pickup_position = fast_inserter.pickup_position,
+
+  selection_box = fast_inserter.selection_box,
+  collision_box = fast_inserter.collision_box,
+  collision_mask = {layers = {}},
+  selection_priority = 51,
+  selectable_in_game = false,
+  flags = {"not-on-map"},
+  energy_source = {type = "void"},
+  draw_inserter_arrow = false,
+  filter_count = 1,
+  draw_held_item = false,
+  circuit_wire_max_distance = 9,
+}
+data:extend{inserter}
