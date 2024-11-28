@@ -18,29 +18,11 @@ end
 
 local mod_surface_name = "sign-post"
 
-local function validate_mod_surface()
-  local mod_surface = game.surfaces[mod_surface_name]
-  if mod_surface == nil then
-    mod_surface = game.create_surface(mod_surface_name)
-    mod_surface.generate_with_lab_tiles = true
-  end
-
-  for _, force in pairs(game.forces) do
-    force.set_surface_hidden(mod_surface_name, true)
-  end
-end
-
-script.on_event(defines.events.on_force_created, function(event)
-  event.force.set_surface_hidden(mod_surface_name, true)
-end)
-
 script.on_init(function(event)
-  storage.index = 0
-  storage.structs = {}
-  storage.deathrattles = {}
-  validate_mod_surface()
+  -- storage.index = 0
+  -- storage.structs = {}
+  -- storage.deathrattles = {}
 end)
-
 
 local function migrate_display_panel_from_version_1(entity)
   if entity.get_circuit_network(defines.wire_connector_id.circuit_red) then return end
@@ -64,10 +46,11 @@ local function migrate_display_panel_from_version_1(entity)
 end
 
 script.on_configuration_changed(function(event)
-  storage.index = storage.index or 0
-  storage.structs = storage.structs or {}
-  storage.deathrattles = storage.deathrattles or {}
-  validate_mod_surface()
+  storage.index = nil
+  storage.structs = nil
+  storage.deathrattles = nil
+
+  if game.surfaces[mod_surface_name] then game.delete_surface(mod_surface_name) end
 
   local mod_change_data = event.mod_changes["sign-post"]
   if mod_change_data and mod_change_data.old_version and (mod_change_data.old_version == "1.0.1" or mod_change_data.old_version == "1.0.0") then
@@ -81,88 +64,5 @@ script.on_configuration_changed(function(event)
         end
       end
     end
-  end
-end)
-
-local function anticipate_upgrade(entity, upgrade_target_name)
-  if entity.surface.name == mod_surface_name then return end -- someone inspecting the hidden surface
-
-  storage.index = storage.index + 1
-  local backup = entity.clone{
-    position = {0.5 + storage.index, -0.5},
-    surface = game.surfaces[mod_surface_name],
-    force = entity.force,
-    create_build_effect_smoke = false,
-  }
-
-  if storage.structs[entity.unit_number] then
-    storage.structs[entity.unit_number].backup.destroy()
-  end
-
-  assert(backup)
-  assert(backup.valid)
-
-  storage.structs[entity.unit_number] = {
-    entity = entity,
-    surface = entity.surface,
-    position = entity.position,
-
-    backup = backup,
-    upgrade_target_name = upgrade_target_name,
-  }
-
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct_id = entity.unit_number}
-end
-
-script.on_event(defines.events.on_marked_for_upgrade, function(event)
-  anticipate_upgrade(event.entity, event.target.name)
-end, {
-  {filter = "name", name = "sign-post"},
-  {filter = "name", name = "display-panel"},
-})
-
-script.on_event(defines.events.on_object_destroyed, function(event)
-  local deathrattle = storage.deathrattles[event.registration_number]
-  if deathrattle then storage.deathrattles[event.registration_number] = nil
-    local struct_id = assert(deathrattle.struct_id)
-    local struct = assert(storage.structs[struct_id])
-
-    local target = struct.surface.find_entity(struct.upgrade_target_name, struct.position)
-    if target then
-      target.copy_settings(struct.backup)
-    end
-
-    struct.backup.destroy()
-    storage.structs[struct_id] = nil
-  end
-end)
-
-local opposite = {
-  ["sign-post"] = "display-panel",
-  ["display-panel"] = "sign-post",
-}
-
-script.on_event(defines.events.on_selected_entity_changed, function(event)
-  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  local entity = player.selected
-
-  if entity and opposite[entity.name] then
-    anticipate_upgrade(entity, opposite[entity.name])
-  end
-end)
-
-script.on_event(defines.events.on_gui_closed, function(event)
-  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  local entity = event.entity
-
-  if entity and opposite[entity.name] then
-    anticipate_upgrade(entity, opposite[entity.name])
-  end
-end)
-
-script.on_event(defines.events.on_entity_settings_pasted, function(event)
-  local entity = event.destination
-  if opposite[entity.name] then
-    anticipate_upgrade(entity, opposite[entity.name])
   end
 end)
