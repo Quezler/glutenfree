@@ -304,7 +304,10 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     local struct = assert(storage.structs[struct_id])
 
     storage.structs[struct_id] = nil
-    storage.surfacedata[struct.surface_index].struct_ids[struct_id] = nil
-    storage.surfacedata[struct.surface_index].struct_ids_to_show_in_chart[struct_id] = nil
+    local surfacedata = storage.surfacedata[struct.surface_index]
+    if surfacedata then
+      surfacedata.struct_ids[struct_id] = nil
+      surfacedata.struct_ids_to_show_in_chart[struct_id] = nil
+    end
   end
 end)
