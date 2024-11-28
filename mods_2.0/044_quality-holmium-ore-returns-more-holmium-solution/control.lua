@@ -29,7 +29,7 @@ script.on_init(function()
   storage.constant_combinator = mod_surface.create_entity{
     name = "constant-combinator",
     force = "neutral",
-    position = {-2.5, -0.5},
+    position = {-0.5, -5.5},
     direction = defines.direction.south,
   }
 
@@ -63,32 +63,67 @@ function Handler.on_created_entity(event)
     position = util.moveposition({entity.position.x, entity.position.y}, entity.direction, -1),
   }
   linked_chest_a.destructible = false
+  linked_chest_a.link_id = storage.x_offset
 
   local linked_chest_b = game.surfaces[mod_surface_name].create_entity{
     name = "holmium-chemical-plant-chest",
     force = "neutral",
-    position = {0.5 + storage.x_offset, 1.5},
+    position = {0.5 + storage.x_offset, -0.5},
   }
-
-  linked_chest_a.link_id = storage.x_offset
   linked_chest_b.link_id = storage.x_offset
 
   local inserter_1 = game.surfaces[mod_surface_name].create_entity{
     name = "fast-inserter",
     force = "neutral",
-    position = {0.5 + storage.x_offset, 0.5},
+    position = {0.5 + storage.x_offset, -1.5},
     direction = defines.direction.south,
   }
   assert(inserter_1)
+  inserter_1.use_filters = true
+  inserter_1.inserter_filter_mode = "blacklist"
+  inserter_1.set_filter(1, {
+    comparator = "=",
+    name = "coin", -- todo
+    quality = "normal"
+  })
 
   local inserter_1_cb = inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
   inserter_1_cb.circuit_read_hand_contents = true
   inserter_1_cb.circuit_hand_read_mode = defines.control_behavior.inserter.hand_read_mode.pulse
 
+  local infinity_chest_1 = game.surfaces[mod_surface_name].create_entity{
+    name = "infinity-chest",
+    force = "neutral",
+    position = {0.5 + storage.x_offset, -2.5},
+  }
+  infinity_chest_1.infinity_container_filters = {
+    {
+      count = 1,
+      index = 1,
+      mode = "at-least",
+      name = "coin" -- todo: holmium solution coupon
+    }
+  }
+
+  local inserter_2 = game.surfaces[mod_surface_name].create_entity{
+    name = "fast-inserter",
+    force = "neutral",
+    position = {0.5 + storage.x_offset, -3.5},
+    direction = defines.direction.south,
+  }
+  assert(inserter_2)
+
+  local linked_chest_c = game.surfaces[mod_surface_name].create_entity{
+    name = "holmium-chemical-plant-chest",
+    force = "neutral",
+    position = {0.5 + storage.x_offset, -4.5},
+  }
+  linked_chest_c.link_id = storage.x_offset
+
   local arithmetic_1 = game.surfaces[mod_surface_name].create_entity{
     name = "arithmetic-combinator",
     force = "neutral",
-    position = {0.5 + storage.x_offset, -1.0},
+    position = {0.5 + storage.x_offset, -6.0},
     direction = defines.direction.north,
   }
   assert(arithmetic_1)
@@ -121,20 +156,6 @@ function Handler.on_created_entity(event)
 
   assert(green_in.connect_to(storage.constant_combinator.get_wire_connector(defines.wire_connector_id.circuit_green, false), false))
   assert(red_in.connect_to(inserter_1.get_wire_connector(defines.wire_connector_id.circuit_red, false), false))
-
-  local infinity_chest_1 = game.surfaces[mod_surface_name].create_entity{
-    name = "infinity-chest",
-    force = "neutral",
-    position = {0.5 + storage.x_offset, -2.5},
-  }
-  infinity_chest_1.infinity_container_filters = {
-    {
-      count = 1,
-      index = 1,
-      mode = "at-least",
-      name = "coin" -- todo: holmium solution coupon
-    }
-  }
 
   storage.x_offset = storage.x_offset + 1
 end
