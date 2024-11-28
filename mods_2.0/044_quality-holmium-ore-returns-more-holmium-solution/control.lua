@@ -107,12 +107,25 @@ function Handler.on_created_entity(event)
   }
 
   local inserter_2 = game.surfaces[mod_surface_name].create_entity{
-    name = "fast-inserter",
+    name = "stack-inserter",
     force = "neutral",
     position = {0.5 + storage.x_offset, -3.5},
     direction = defines.direction.south,
   }
   assert(inserter_2)
+  local inserter_2_cb = inserter_2.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
+  inserter_2_cb.circuit_read_hand_contents = true
+  inserter_2_cb.circuit_hand_read_mode = defines.control_behavior.inserter.hand_read_mode.pulse
+  inserter_2_cb.circuit_enable_disable = true
+  inserter_2_cb.circuit_condition = {
+    -- condition = {
+      comparator = "<",
+      constant = 0,
+      first_signal = {
+        name = "coin"
+      }
+    -- }
+  }
 
   local linked_chest_c = game.surfaces[mod_surface_name].create_entity{
     name = "holmium-chemical-plant-chest",
@@ -221,6 +234,9 @@ function Handler.on_created_entity(event)
   local arithmetic_3_red_in = arithmetic_3.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
   assert(arithmetic_3_red_in.connect_to(arithmetic_2.get_wire_connector(defines.wire_connector_id.combinator_output_red, false)))
   assert(arithmetic_3_red_in.connect_to(arithmetic_3.get_wire_connector(defines.wire_connector_id.combinator_output_red, false)))
+
+  local arithmetic_3_red_out = arithmetic_3.get_wire_connector(defines.wire_connector_id.combinator_output_red, false)
+  assert(arithmetic_3_red_out.connect_to(inserter_2.get_wire_connector(defines.wire_connector_id.circuit_red, false)))
 
   storage.x_offset = storage.x_offset + 1
 end
