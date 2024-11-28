@@ -15,6 +15,7 @@ Date: ????
     - Add the assembling machine to the struct
     - Nightly
     - Link the fluidboxes together
+    - Cleanup the fluidboxes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 28

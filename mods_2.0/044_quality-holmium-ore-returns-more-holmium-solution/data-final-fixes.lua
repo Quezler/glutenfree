@@ -24,11 +24,13 @@ local assembler = {
     {
       production_type = "output",
       volume = 1,
-      pipe_connections = {
-        { flow_direction = "output", direction = defines.direction.south, position = {0, 0}, connection_type = "linked", linked_connection_id = 1 },
-        { flow_direction = "output", direction = defines.direction.south, position = {0, 0}, connection_type = "linked", linked_connection_id = 2 },
-      },
-    }
+      pipe_connections = {{ flow_direction = "output", connection_type = "linked", linked_connection_id = 1 }},
+    },
+    {
+      production_type = "output",
+      volume = 1,
+      pipe_connections = {{ flow_direction = "output", connection_type = "linked", linked_connection_id = 2 }},
+    },
   },
   energy_usage = "1W",
   energy_source = {type = "void"},

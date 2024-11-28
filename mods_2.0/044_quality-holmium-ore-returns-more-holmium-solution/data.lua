@@ -80,23 +80,8 @@ data:extend{
   quality_holmium_solution_recipe,
 }
 
-
--- for i, fluid_box in ipairs(holmium_chemical_plant.fluid_boxes) do
---   if fluid_box.production_type == "input" then
---     fluid_box.filter = "water"
---   end
---   if fluid_box.production_type == "output" then
---     fluid_box.pipe_connections[1].connection_type = "linked"
---     fluid_box.pipe_connections[1].linked_connection_id = i
---   end
--- end
-
-table.insert(holmium_chemical_plant.fluid_boxes[3].pipe_connections, { flow_direction = "input", direction = defines.direction.south, position = {0, 0}, connection_type = "linked", linked_connection_id = 3 })
-table.insert(holmium_chemical_plant.fluid_boxes[4].pipe_connections, { flow_direction = "input", direction = defines.direction.south, position = {0, 0}, connection_type = "linked", linked_connection_id = 4 })
-
--- log(serpent.block(holmium_chemical_plant.fluid_boxes))
-
--- holmium_chemical_plant.fluid_boxes[4].pipe_connections[1].flow_direction = "input"
+table.insert(holmium_chemical_plant.fluid_boxes[3].pipe_connections, { flow_direction = "input", connection_type = "linked", linked_connection_id = 3 })
+table.insert(holmium_chemical_plant.fluid_boxes[4].pipe_connections, { flow_direction = "input", connection_type = "linked", linked_connection_id = 4 })
 
 local holmium_solution_fluid = data.raw["fluid"]["holmium-solution"]
 
