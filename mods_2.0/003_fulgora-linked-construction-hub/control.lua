@@ -18,6 +18,12 @@ function Handler.on_init()
 end
 
 function Handler.on_configuration_changed()
+  for _, surface in pairs(game.surfaces) do
+    if storage.surfacedata[surface.index] == nil then
+      ---@diagnostic disable-next-line: param-type-mismatch, missing-fields
+      script.get_event_handler(defines.events.on_surface_created){surface_index = surface.index}
+    end
+  end
 end
 
 script.on_init(Handler.on_init)
