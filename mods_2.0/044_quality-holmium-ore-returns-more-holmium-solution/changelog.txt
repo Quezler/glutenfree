@@ -12,6 +12,7 @@ Date: ????
     - Setup our own invisible and faster inserter
     - Block cloning for now
     - Setup the redeeming prototypes
+    - Add the assembling machine to the struct
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 28

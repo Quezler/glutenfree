@@ -68,6 +68,10 @@ function Handler.get_linked_chest_position(holmium_chemical_plant)
   return util.moveposition({holmium_chemical_plant.position.x, holmium_chemical_plant.position.y}, holmium_chemical_plant.direction, -1)
 end
 
+function Handler.get_assembling_machine_position(holmium_chemical_plant)
+  return util.moveposition({holmium_chemical_plant.position.x, holmium_chemical_plant.position.y}, holmium_chemical_plant.direction,  1)
+end
+
 function Handler.find_preexisting_struct(surface, position)
   for _, struct in pairs(storage.structs) do
     if struct.surface.index == surface.index then
@@ -113,6 +117,7 @@ function Handler.on_created_entity(event)
     arithmetic_2 = nil,
     arithmetic_3 = nil,
     inserter_3 = nil,
+    assembler = nil,
   })
 
   storage.deathrattles[struct.registration_number] = {type = "holmium-chemical-plant", struct_id = struct.id}
@@ -310,6 +315,14 @@ function Handler.on_created_entity(event)
   }
   struct.inserter_3.destructible = false
   struct.inserter_3.pickup_target = struct.linked_chest_a
+
+  struct.assembler = entity.surface.create_entity{
+    name = "holmium-chemical-plant-assembling-machine",
+    force = entity.force, -- for production statistics
+    position = Handler.get_assembling_machine_position(entity),
+  }
+  struct.assembler.destructible = false
+  struct.inserter_3.drop_target = struct.assembler
 end
 
 for _, event in ipairs({
@@ -336,6 +349,8 @@ function Handler.on_player_rotated_or_flipped_entity(event)
 
   struct.inserter_3.direction = util.oppositedirection(entity.direction)
   struct.inserter_3.pickup_target = struct.linked_chest_a
+  struct.inserter_3.drop_target = struct.assembler
+  struct.assembler.teleport(Handler.get_assembling_machine_position(struct.holmium_chemical_plant))
 end
 
 script.on_event(defines.events.on_player_rotated_entity, Handler.on_player_rotated_or_flipped_entity)
@@ -357,6 +372,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       struct.arithmetic_2.destroy()
       struct.arithmetic_3.destroy()
       struct.inserter_3.destroy()
+      struct.assembler.destroy()
     else
       error(serpent.block(deathrattle))
     end
