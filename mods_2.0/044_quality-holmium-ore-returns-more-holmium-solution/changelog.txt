@@ -10,6 +10,7 @@ Date: ????
     - Add some very ugly struct ownership swapping code
     - Create inserter 3
     - Setup our own invisible and faster inserter
+    - Block cloning for now
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 28

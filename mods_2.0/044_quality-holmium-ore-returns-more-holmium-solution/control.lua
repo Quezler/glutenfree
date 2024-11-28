@@ -80,6 +80,7 @@ end
 
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
+  if event.destination then error("yeah, don't do that yet.") end
 
   local old_struct = Handler.find_preexisting_struct(event.entity.surface, event.entity.position)
   if old_struct then
