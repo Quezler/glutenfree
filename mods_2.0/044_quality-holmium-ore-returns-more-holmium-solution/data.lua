@@ -1,4 +1,4 @@
-local Shared = {}
+local Shared = require("shared")
 
 local holmium_chemical_plant = table.deepcopy(data.raw["assembling-machine"]["chemical-plant"])
 local holmium_chemical_plant_item = table.deepcopy(data.raw["item"]["chemical-plant"])
@@ -103,9 +103,7 @@ data:extend{holmium_solution_item}
 
 local lines = {}
 for _, quality in pairs(data.raw["quality"]) do
-  -- local multiplier = Shared.get_multiplier_for_quality(quality)
-  -- if multiplier > 0 then
-  if quality.name ~= "quality-unknown" then
+  if not quality.hidden then
     table.insert(lines, string.format("[img=quality/%s] × %d", quality.name, Shared.get_multiplier_for_quality(quality)))
   end
 end
@@ -128,7 +126,7 @@ linked_chest.inventory_type = "normal"
 linked_chest.gui_mode = "none"
 linked_chest.flags = {"not-on-map", "hide-alt-info"}
 linked_chest.selection_priority = 51
-linked_chest.selectable_in_game = false
+-- linked_chest.selectable_in_game = false
 
 data:extend{linked_chest}
 

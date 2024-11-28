@@ -10,6 +10,7 @@ Date: ????
     - Update readme
     - Setup the hidden surface
     - Put the multiplier code in a shared file
+    - Setup the combinator that maps how much each quality is worth
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 26
