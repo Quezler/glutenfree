@@ -13,6 +13,7 @@ Date: ????
     - Setup the combinator that maps how much each quality is worth
     - Setup initial hidden entity positions
     - Move everything around so there is enough sensible room
+    - Setup the other two required arithmetic combinators
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 11. 26

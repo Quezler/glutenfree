@@ -96,6 +96,7 @@ function Handler.on_created_entity(event)
     force = "neutral",
     position = {0.5 + storage.x_offset, -2.5},
   }
+  infinity_chest_1.remove_unfiltered_items = true
   infinity_chest_1.infinity_container_filters = {
     {
       count = 1,
@@ -120,6 +121,7 @@ function Handler.on_created_entity(event)
   }
   linked_chest_c.link_id = storage.x_offset
 
+  -- takes in the quality signal and determines the multiplier amount
   local arithmetic_1 = game.surfaces[mod_surface_name].create_entity{
     name = "arithmetic-combinator",
     force = "neutral",
@@ -156,6 +158,69 @@ function Handler.on_created_entity(event)
 
   assert(green_in.connect_to(storage.constant_combinator.get_wire_connector(defines.wire_connector_id.circuit_green, false), false))
   assert(red_in.connect_to(inserter_1.get_wire_connector(defines.wire_connector_id.circuit_red, false), false))
+
+  -- turns the multiplier signal negative, so the inserter's posive pulse can subtract from it
+  local arithmetic_2 = game.surfaces[mod_surface_name].create_entity{
+    name = "arithmetic-combinator",
+    force = "neutral",
+    position = {0.5 + storage.x_offset, -8.0},
+    direction = defines.direction.north,
+  }
+  assert(arithmetic_2)
+  arithmetic_2_cb = arithmetic_2.get_control_behavior() --[[@as LuaArithmeticCombinatorControlBehavior]]
+  arithmetic_2_cb.parameters = {
+    first_signal = {
+      name = "coin"
+    },
+    first_signal_networks = {
+      green = true,
+      red = true
+    },
+    operation = "*",
+    output_signal = {
+      name = "coin"
+    },
+    second_constant = -1,
+    second_signal_networks = {
+      green = true,
+      red = true
+    }
+  }
+
+  local arithmetic_2_red_in = arithmetic_2.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
+  assert(arithmetic_2_red_in.connect_to(arithmetic_1.get_wire_connector(defines.wire_connector_id.combinator_output_red, false)))
+
+  -- memory cell
+  local arithmetic_3 = game.surfaces[mod_surface_name].create_entity{
+    name = "arithmetic-combinator",
+    force = "neutral",
+    position = {0.5 + storage.x_offset, -10.0},
+    direction = defines.direction.north,
+  }
+  assert(arithmetic_3)
+  arithmetic_3_cb = arithmetic_3.get_control_behavior() --[[@as LuaArithmeticCombinatorControlBehavior]]
+  arithmetic_3_cb.parameters = {
+    first_signal = {
+      name = "coin"
+    },
+    first_signal_networks = {
+      green = true,
+      red = true
+    },
+    operation = "+",
+    output_signal = {
+      name = "coin"
+    },
+    second_constant = 0,
+    second_signal_networks = {
+      green = true,
+      red = true
+    }
+  }
+
+  local arithmetic_3_red_in = arithmetic_3.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
+  assert(arithmetic_3_red_in.connect_to(arithmetic_2.get_wire_connector(defines.wire_connector_id.combinator_output_red, false)))
+  assert(arithmetic_3_red_in.connect_to(arithmetic_3.get_wire_connector(defines.wire_connector_id.combinator_output_red, false)))
 
   storage.x_offset = storage.x_offset + 1
 end
