@@ -11,6 +11,7 @@ Date: ????
     - Create inserter 3
     - Setup our own invisible and faster inserter
     - Block cloning for now
+    - Setup the redeeming prototypes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 28
