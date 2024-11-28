@@ -100,7 +100,7 @@ local holmium_solution_item = {
 data:extend{holmium_solution_item}
 
 quality_holmium_solution_recipe.results = {
-  {type = "item", name="holmium-solution-quality-based-productivity", amount = 1, ignored_by_stats = 1},
+  {type = "item", name="holmium-solution-quality-based-productivity", amount = 1},
   {type = "fluid", name="holmium-solution", amount = 100},
 }
 

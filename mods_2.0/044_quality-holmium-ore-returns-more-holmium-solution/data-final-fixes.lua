@@ -44,7 +44,7 @@ local assembler = {
 
 local recipe = table.deepcopy(data.raw["recipe"]["holmium-solution"])
 recipe.name = "holmium-chemical-plant-assembling-machine"
-recipe.ingredients = {{type = "item", name = "coupon-for-holmium-solution", amount = 1, ignored_by_stats = 1}}
+recipe.ingredients = {{type = "item", name = "coupon-for-holmium-solution", amount = 1}}
 recipe.hide_from_player_crafting = true
 recipe.hide_from_signal_gui = true
 recipe.category = crafting_category.name
