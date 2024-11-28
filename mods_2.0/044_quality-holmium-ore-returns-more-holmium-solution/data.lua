@@ -171,6 +171,7 @@ local inserter = {
   filter_count = 1,
   draw_held_item = false,
   circuit_wire_max_distance = 9,
+  hidden = true,
 }
 data:extend{inserter}
 
