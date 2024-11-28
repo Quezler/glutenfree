@@ -59,10 +59,84 @@ function Handler.on_created_entity(event)
 
   local linked_chest_a = entity.surface.create_entity{
     name = "holmium-chemical-plant-chest",
-    force = entity.force,
+    force = "neutral",
     position = util.moveposition({entity.position.x, entity.position.y}, entity.direction, -1),
   }
   linked_chest_a.destructible = false
+
+  local linked_chest_b = game.surfaces[mod_surface_name].create_entity{
+    name = "holmium-chemical-plant-chest",
+    force = "neutral",
+    position = {0.5 + storage.x_offset, 1.5},
+  }
+
+  linked_chest_a.link_id = storage.x_offset
+  linked_chest_b.link_id = storage.x_offset
+
+  local inserter_1 = game.surfaces[mod_surface_name].create_entity{
+    name = "fast-inserter",
+    force = "neutral",
+    position = {0.5 + storage.x_offset, 0.5},
+    direction = defines.direction.south,
+  }
+  assert(inserter_1)
+
+  local inserter_1_cb = inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
+  inserter_1_cb.circuit_read_hand_contents = true
+  inserter_1_cb.circuit_hand_read_mode = defines.control_behavior.inserter.hand_read_mode.pulse
+
+  local arithmetic_1 = game.surfaces[mod_surface_name].create_entity{
+    name = "arithmetic-combinator",
+    force = "neutral",
+    position = {0.5 + storage.x_offset, -1.0},
+    direction = defines.direction.north,
+  }
+  assert(arithmetic_1)
+  arithmetic_1_cb = arithmetic_1.get_control_behavior() --[[@as LuaArithmeticCombinatorControlBehavior]]
+  arithmetic_1_cb.parameters = {
+    first_signal = {
+      name = "signal-each",
+      type = "virtual"
+    },
+    first_signal_networks = {
+      green = false,
+      red = true
+    },
+    operation = "*",
+    output_signal = {
+      name = "coin"
+    },
+    second_signal = {
+      name = "signal-each",
+      type = "virtual"
+    },
+    second_signal_networks = {
+      green = true,
+      red = false
+    }
+  }
+
+  local green_in = arithmetic_1.get_wire_connector(defines.wire_connector_id.combinator_input_green, false)
+  local red_in = arithmetic_1.get_wire_connector(defines.wire_connector_id.combinator_input_red, false)
+
+  assert(green_in.connect_to(storage.constant_combinator.get_wire_connector(defines.wire_connector_id.circuit_green, false), false))
+  assert(red_in.connect_to(inserter_1.get_wire_connector(defines.wire_connector_id.circuit_red, false), false))
+
+  local infinity_chest_1 = game.surfaces[mod_surface_name].create_entity{
+    name = "infinity-chest",
+    force = "neutral",
+    position = {0.5 + storage.x_offset, -2.5},
+  }
+  infinity_chest_1.infinity_container_filters = {
+    {
+      count = 1,
+      index = 1,
+      mode = "at-least",
+      name = "coin" -- todo: holmium solution coupon
+    }
+  }
+
+  storage.x_offset = storage.x_offset + 1
 end
 
 for _, event in ipairs({
