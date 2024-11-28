@@ -5,3 +5,5 @@ Using some trickery to make it both user friendly and stable this mod gives you 
 Normal gives you nothing extra, uncommon × 2, rare × 4, epic × 8, and legendary × 32 `(1 * 2 ^ level)`  
 
 Quality modules can be used inside this machine just fine, it'll count towards the output as usual.
+
+What's that orange arrow and the white selection box? Well my friend that is the price you have to pay for this mod being so convenient.
