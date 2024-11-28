@@ -18,6 +18,7 @@ Date: ????
     - Cleanup the fluidboxes
     - Speed up the redeeming recipe
     - Get the coupons to the assembler quicker
+    - Prevent the linked fluid filter icon from leaking out under the recipe icon
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 28

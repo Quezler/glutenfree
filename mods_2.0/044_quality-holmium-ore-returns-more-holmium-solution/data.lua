@@ -173,3 +173,5 @@ local inserter = {
   circuit_wire_max_distance = 9,
 }
 data:extend{inserter}
+
+holmium_chemical_plant.icon_draw_specification.shift[2] = -0.2

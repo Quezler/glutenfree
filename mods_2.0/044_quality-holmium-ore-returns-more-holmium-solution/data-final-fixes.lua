@@ -37,7 +37,7 @@ local assembler = {
   crafting_speed = 10,
   hidden = true,
   selection_priority = 51,
-  -- selectable_in_game = false,
+  selectable_in_game = false,
   crafting_categories = {crafting_category.name},
   flags = {"not-on-map", "hide-alt-info"},
 }
