@@ -5,6 +5,7 @@ Date: ????
     - Begin conversion to structs and deathrattles
     - Support rotating and flipping
     - Explain weird alt mode
+    - Morecolour
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024. 11. 28
