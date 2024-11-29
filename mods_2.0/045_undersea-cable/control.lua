@@ -59,9 +59,12 @@ local function position_to_connect(position_a, position_b)
   local x = (position_a.x + position_b.x) / 2
   local y = (position_a.y + position_b.y) / 2
 
-  local position_c = {x + 0.5, y + 0.5}
+  local x_diff = (position_a.x - position_b.x) / 2
+  local y_diff = (position_a.y - position_b.y) / 2
+
+  local position_c = {x + x_diff, y + y_diff}
   if taken[util.positiontostr(position_c)] then
-    position_c = {x - 0.5, y - 0.5}
+    position_c = {x - x_diff, y - y_diff}
   end
 
   return position_c
