@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2024. 11. 29
   Info:
     - Setup thumbnail and locale
     - Fork the offshore pump
