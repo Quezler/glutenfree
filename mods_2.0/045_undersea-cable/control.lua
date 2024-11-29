@@ -51,13 +51,18 @@ local function positions_are_adjacent(position_a, position_b)
 end
 
 local function position_to_connect(position_a, position_b)
-  -- return {(position_a.x + position_b.x) / 2, (position_a.y + position_b.x) / 2}
-  -- return {math.floor((position_a.x + position_b.x) / 2), math.floor((position_a.y + position_b.y) / 2)}
-  -- return {(position_a.x + position_b.x + 1) / 2, (position_a.y + position_b.y - 1) / 2}
-  local x = (position_a.x + position_b.x) / 2
-  local y = (position_a.y + position_b.y) / 2
-  -- return {x + (position_a.y - position_b.y) / 2, y + (position_a.x - position_b.x) / 2}
-  return {x + 0.5, y + 0.5}
+  local x_mid = (position_a.x + position_b.x) / 2
+  local y_mid = (position_a.y + position_b.y) / 2
+
+  -- Ensure the midpoint does not match position_a or position_b
+  if x_mid == position_a.x then
+      x_mid = x_mid + 0.5 * (position_b.x > position_a.x and 1 or -1)
+  end
+  if y_mid == position_a.y then
+      y_mid = y_mid + 0.5 * (position_b.y > position_a.y and 1 or -1)
+  end
+
+  return {x = x_mid + 0.5, y = y_mid + 0.5}
 end
 
 script.on_event(defines.events.on_script_path_request_finished, function(event)
