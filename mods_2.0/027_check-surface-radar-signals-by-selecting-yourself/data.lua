@@ -9,6 +9,7 @@ proxy.collision_box = character.collision_box
 proxy.selection_priority = (character.selection_priority or 50) - 1
 proxy.minable.mining_time = 1000000
 proxy.hidden = true
+proxy.hidden_in_factoriopedia = true
 
 data:extend{proxy}
 
@@ -33,5 +34,6 @@ data:extend{{
 
 local radar = table.deepcopy(data.raw["item"]["radar"])
 radar.name = mod_prefix .. "radar-barrel" -- radar.auto_recycle = false
+radar.place_result = nil
 radar.hidden = true
 data:extend{radar}

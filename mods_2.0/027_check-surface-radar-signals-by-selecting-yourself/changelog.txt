@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.6
-Date: ????
+Date: 2024. 11. 29
   Info:
     - Flag internal prototypes as hidden
+    - Hide proxy from factoriopedia and unbreak regular radar ghosts/pipetting
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.5
 Date: 2024. 11. 15
