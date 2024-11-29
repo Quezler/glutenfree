@@ -23,7 +23,8 @@ function Handler.on_created_entity(event)
     start = util.moveposition({storage.side_a.position.x, storage.side_a.position.y}, storage.side_a.direction, 2),
     goal = util.moveposition({storage.side_b.position.x, storage.side_b.position.y}, storage.side_b.direction, 2),
     force = "neutral",
-    pathfind_flags = {low_priority = true, no_break = true}
+    pathfind_flags = {low_priority = true, no_break = true, prefer_straight_paths = true},
+    -- path_resolution_modifier = 2,
   }
 
   game.print(uint .. " " .. event.tick)
@@ -49,4 +50,13 @@ end
 script.on_event(defines.events.on_script_path_request_finished, function(event)
   assert(event.try_again_later == false)
   game.print(serpent.block(event))
+
+  local surface = game.surfaces["fulgora"]
+  for _, waypoint in ipairs(event.path or {}) do
+    surface.create_entity{
+      name = "undersea-cable",
+      force = "neutral",
+      position = waypoint.position,
+    }
+  end
 end)
