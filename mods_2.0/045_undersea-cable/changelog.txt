@@ -5,6 +5,7 @@ Date: ????
     - Setup thumbnail and locale
     - Fork the offshore pump
     - Allow building tiles over the undersea cable
+    - Dip my toes into pathfinding
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 29
