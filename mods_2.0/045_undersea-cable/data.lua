@@ -4,7 +4,8 @@ entity.icon = "__undersea-cable__/graphics/icons/undersea-cable.png"
 entity.collision_mask = {layers={ground_tile=true, is_lower_object = true}}
 entity.heat_buffer.connections = nil
 entity.protected_from_tile_building = false
-entity.selectable_in_game = false
+-- entity.selectable_in_game = false
+table.insert(entity.flags, "placeable-off-grid")
 
 for _, connection_sprite in pairs(entity.connection_sprites) do
   for j, sheet in pairs(connection_sprite) do

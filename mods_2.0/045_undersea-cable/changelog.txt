@@ -8,6 +8,7 @@ Date: ????
     - Dip my toes into pathfinding
     - Get a positive pathfinder result
     - Place the heat pipes down
+    - Try to deal with diagonal gaps
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 29

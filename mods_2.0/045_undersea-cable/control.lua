@@ -18,12 +18,12 @@ function Handler.on_created_entity(event)
   storage.side_b = entity
 
   local uint = entity.surface.request_path{
-    bounding_box = {{-0.25, -0.25}, {0.25, 0.25}},
+    bounding_box = {{-1.5, -1.5}, {1.5, 1.5}},
     collision_mask = {layers={ground_tile=true, is_lower_object=true}},
-    start = util.moveposition({storage.side_a.position.x, storage.side_a.position.y}, storage.side_a.direction, 2),
-    goal = util.moveposition({storage.side_b.position.x, storage.side_b.position.y}, storage.side_b.direction, 2),
+    start = util.moveposition({storage.side_a.position.x, storage.side_a.position.y}, storage.side_a.direction, 3),
+    goal = util.moveposition({storage.side_b.position.x, storage.side_b.position.y}, storage.side_b.direction, 3),
     force = "neutral",
-    pathfind_flags = {low_priority = true, no_break = true, prefer_straight_paths = true},
+    pathfind_flags = {low_priority = true, no_break = true},
     -- path_resolution_modifier = 2,
   }
 
@@ -47,16 +47,38 @@ for _, event in ipairs({
   })
 end
 
+local function positions_are_adjacent(position_a, position_b)
+  return position_a.x == position_b.x or position_a.y == position_b.y
+end
+
+local function position_to_connect(position_a, position_b)
+  -- return {(position_a.x + position_b.x) / 2, (position_a.y + position_b.x) / 2}
+  -- return {math.floor((position_a.x + position_b.x) / 2), math.floor((position_a.y + position_b.y) / 2)}
+
+  return {(position_a.x + position_b.x + 1) / 2, (position_a.y + position_b.y - 1) / 2}
+end
+
 script.on_event(defines.events.on_script_path_request_finished, function(event)
   assert(event.try_again_later == false)
   game.print(serpent.block(event))
 
   local surface = game.surfaces["fulgora"]
+  local last_waypoint = nil
   for _, waypoint in ipairs(event.path or {}) do
     surface.create_entity{
       name = "undersea-cable",
       force = "neutral",
       position = waypoint.position,
     }
+
+    if last_waypoint and positions_are_adjacent(waypoint.position, last_waypoint.position) == false then
+      surface.create_entity{
+        name = "undersea-cable",
+        force = "neutral",
+        position = position_to_connect(waypoint.position, last_waypoint.position),
+      }
+    end
+
+    last_waypoint = waypoint
   end
 end)
