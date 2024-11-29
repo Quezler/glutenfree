@@ -51,18 +51,28 @@ local function positions_are_adjacent(position_a, position_b)
 end
 
 local function position_to_connect(position_a, position_b)
-  local x_mid = (position_a.x + position_b.x) / 2
-  local y_mid = (position_a.y + position_b.y) / 2
+    -- Calculate initial midpoint
+    local x_mid = (position_a.x + position_b.x) / 2
+    local y_mid = (position_a.y + position_b.y) / 2
 
-  -- Ensure the midpoint does not match position_a or position_b
-  if x_mid == position_a.x then
-      x_mid = x_mid + 0.5 * (position_b.x > position_a.x and 1 or -1)
-  end
-  if y_mid == position_a.y then
-      y_mid = y_mid + 0.5 * (position_b.y > position_a.y and 1 or -1)
-  end
+    -- Check if midpoint overlaps with position_a or position_b
+    if x_mid == position_a.x and y_mid == position_a.y then
+        x_mid = x_mid + 0.5 * (position_b.x > position_a.x and 1 or -1)
+        y_mid = y_mid + 0.5 * (position_b.y > position_a.y and 1 or -1)
+    elseif x_mid == position_b.x and y_mid == position_b.y then
+        x_mid = x_mid + 0.5 * (position_a.x > position_b.x and 1 or -1)
+        y_mid = y_mid + 0.5 * (position_a.y > position_b.y and 1 or -1)
+    end
 
-  return {x = x_mid + 0.5, y = y_mid + 0.5}
+    -- Always offset slightly to avoid overlaps caused by rounding
+    if math.floor(x_mid) == x_mid then
+        x_mid = x_mid + 0.25
+    end
+    if math.floor(y_mid) == y_mid then
+        y_mid = y_mid + 0.25
+    end
+
+    return {x = x_mid, y = y_mid}
 end
 
 script.on_event(defines.events.on_script_path_request_finished, function(event)

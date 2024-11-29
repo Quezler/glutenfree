@@ -12,6 +12,7 @@ Date: ????
     - Attempt to improve diagonal connectivity
     - Still fail to get it right for all directions
     - Automated attempt 1
+    - Even more broken attempt
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 29
