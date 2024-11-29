@@ -4,39 +4,6 @@ Date: ????
   Info:
     - Switch to player placeable entities
     - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
-    - Rebrand as undersea data cable
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29
