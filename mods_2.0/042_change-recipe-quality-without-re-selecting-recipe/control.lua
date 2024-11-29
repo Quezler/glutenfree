@@ -56,7 +56,7 @@ local function try_change_quality(assembler, increment_quality)
 end
 
 local function entity_is_assembling_machine(entity)
-  return entity.type == "entity-ghost" and entity.ghost_type or entity.type
+  return (entity.type == "entity-ghost" and entity.ghost_type or entity.type) == "assembling-machine"
 end
 
 local function on_custom_input(event)
