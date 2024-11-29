@@ -53,21 +53,24 @@ end
 local function position_to_connect(position_a, position_b)
   local result = {x = position_a.x, y = position_a.y}
 
-  -- Move in x direction first if the x coordinates are different
+  -- Try to move along the x-axis if positions are different
   if position_a.x ~= position_b.x then
     result.x = position_a.x + (position_b.x > position_a.x and 1 or -1)
-  -- Else, move in y direction if the y coordinates are different
-  elseif position_a.y ~= position_b.y then
+  end
+
+  -- If still on top of position_b, adjust y-axis
+  if result.x == position_b.x and result.y == position_b.y then
     result.y = position_a.y + (position_b.y > position_a.y and 1 or -1)
   end
 
-  -- If this results in overlapping with position_b, adjust the other axis
+  -- Try to move along the y-axis if the y values are different
+  if position_a.y ~= position_b.y then
+    result.y = position_a.y + (position_b.y > position_a.y and 1 or -1)
+  end
+
+  -- If still on top of position_b after adjusting y, adjust x-axis
   if result.x == position_b.x and result.y == position_b.y then
-    if position_a.x == position_b.x then
-      result.y = result.y + (position_b.y > position_a.y and 1 or -1)
-    elseif position_a.y == position_b.y then
-      result.x = result.x + (position_b.x > position_a.x and 1 or -1)
-    end
+    result.x = position_a.x + (position_b.x > position_a.x and 1 or -1)
   end
 
   return result
