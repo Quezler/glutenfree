@@ -51,23 +51,22 @@ local function positions_are_adjacent(position_a, position_b)
 end
 
 local function position_to_connect(position_a, position_b)
-  local taken = {
-    [util.positiontostr(position_a)] = true,
-    [util.positiontostr(position_b)] = true,
-  }
+  -- Initialize the result as position_a
+  local result = {x = position_a.x, y = position_a.y}
 
-  local x = (position_a.x + position_b.x) / 2
-  local y = (position_a.y + position_b.y) / 2
-
-  local x_diff = (position_a.x - position_b.x) / 2
-  local y_diff = (position_a.y - position_b.y) / 2
-
-  local position_c = {x + x_diff, y + y_diff}
-  if taken[util.positiontostr(position_c)] then
-    position_c = {x - x_diff, y - y_diff}
+  -- Handle horizontal or vertical alignment first
+  if position_a.x ~= position_b.x then
+    result.x = position_a.x + (position_b.x > position_a.x and 1 or -1)
+  elseif position_a.y ~= position_b.y then
+    result.y = position_a.y + (position_b.y > position_a.y and 1 or -1)
   end
 
-  return position_c
+  -- If still diagonal (both x and y changed), adjust further
+  if position_a.x ~= position_b.x and position_a.y ~= position_b.y then
+    result.y = position_a.y + (position_b.y > position_a.y and 1 or -1)
+  end
+
+  return result
 end
 
 script.on_event(defines.events.on_script_path_request_finished, function(event)
