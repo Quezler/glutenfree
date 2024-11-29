@@ -53,11 +53,20 @@ end
 local function position_to_connect(position_a, position_b)
   local result = {x = position_a.x, y = position_a.y}
 
-  -- Adjust x or y to make the result adjacent to position_b
+  -- Adjust to move closer to position_b
   if position_a.x ~= position_b.x then
     result.x = position_a.x + (position_b.x > position_a.x and 1 or -1)
   elseif position_a.y ~= position_b.y then
     result.y = position_a.y + (position_b.y > position_a.y and 1 or -1)
+  end
+
+  -- If the result overlaps with position_b, adjust the other axis
+  if result.x == position_b.x and result.y == position_b.y then
+    if position_a.y ~= position_b.y then
+      result.y = position_a.y + (position_b.y > position_a.y and 1 or -1)
+    else
+      result.x = position_a.x + (position_b.x > position_a.x and 1 or -1)
+    end
   end
 
   return result

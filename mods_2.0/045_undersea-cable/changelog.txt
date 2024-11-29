@@ -19,6 +19,7 @@ Date: ????
     - Fall back to some hand written stuff
     - I feel like i am onto something
     - This finally appears to work (but not for extreme distances)
+    - Also broken
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 29
