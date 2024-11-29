@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Setup thumbnail and locale
     - Fork the offshore pump
+    - Allow building tiles over the undersea cable
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 29

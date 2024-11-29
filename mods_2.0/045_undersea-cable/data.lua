@@ -3,6 +3,7 @@ entity.name = "undersea-cable"
 entity.icon = "__undersea-cable__/graphics/icons/undersea-cable.png"
 entity.collision_mask = {layers={ground_tile=true}}
 entity.heat_buffer.connections = nil
+entity.protected_from_tile_building = false
 
 for _, connection_sprite in pairs(entity.connection_sprites) do
   for j, sheet in pairs(connection_sprite) do
