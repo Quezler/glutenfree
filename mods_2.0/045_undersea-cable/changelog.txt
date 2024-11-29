@@ -9,6 +9,7 @@ Date: ????
     - Get a positive pathfinder result
     - Place the heat pipes down
     - Try to deal with diagonal gaps
+    - Attempt to improve diagonal connectivity
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 29

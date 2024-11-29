@@ -18,13 +18,12 @@ function Handler.on_created_entity(event)
   storage.side_b = entity
 
   local uint = entity.surface.request_path{
-    bounding_box = {{-1.5, -1.5}, {1.5, 1.5}},
+    bounding_box = {{-1, -1}, {1, 1}},
     collision_mask = {layers={ground_tile=true, is_lower_object=true}},
     start = util.moveposition({storage.side_a.position.x, storage.side_a.position.y}, storage.side_a.direction, 3),
     goal = util.moveposition({storage.side_b.position.x, storage.side_b.position.y}, storage.side_b.direction, 3),
     force = "neutral",
     pathfind_flags = {low_priority = true, no_break = true},
-    -- path_resolution_modifier = 2,
   }
 
   game.print(uint .. " " .. event.tick)
@@ -54,8 +53,10 @@ end
 local function position_to_connect(position_a, position_b)
   -- return {(position_a.x + position_b.x) / 2, (position_a.y + position_b.x) / 2}
   -- return {math.floor((position_a.x + position_b.x) / 2), math.floor((position_a.y + position_b.y) / 2)}
-
-  return {(position_a.x + position_b.x + 1) / 2, (position_a.y + position_b.y - 1) / 2}
+  -- return {(position_a.x + position_b.x + 1) / 2, (position_a.y + position_b.y - 1) / 2}
+  local x = (position_a.x + position_b.x) / 2
+  local y = (position_a.y + position_b.y) / 2
+  return {x + 0.5, y + 0.5}
 end
 
 script.on_event(defines.events.on_script_path_request_finished, function(event)
