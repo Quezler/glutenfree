@@ -1,5 +1,6 @@
 local entity = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])
 entity.name = "undersea-cable"
+entity.icon = "__undersea-cable__/graphics/icons/undersea-cable.png"
 entity.collision_mask = {layers = {}}
 entity.heat_buffer.connections = nil
 
