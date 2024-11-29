@@ -51,9 +51,9 @@ local function positions_are_adjacent(position_a, position_b)
 end
 
 local function position_to_connect(position_a, position_b)
-  local x = (position_a.x + position_b.x) / 2
-  local y = (position_a.y + position_b.y) / 2
-  return {x + 0.5, y + 0.5}
+  local x_offset = position_a.x > position_b.x and 1 or 0
+  local y_offset = position_a.x < position_b.x and 1 or 0
+  return {position_a.x - x_offset, position_a.y - x_offset}
 end
 
 script.on_event(defines.events.on_script_path_request_finished, function(event)

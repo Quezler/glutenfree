@@ -17,6 +17,7 @@ Date: ????
     - Also does not work
     - Nothing bloody works
     - Fall back to some hand written stuff
+    - I feel like i am onto something
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2024. 11. 29
