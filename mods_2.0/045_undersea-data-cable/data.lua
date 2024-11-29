@@ -1,6 +1,6 @@
 local entity = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])
-entity.name = "undersea-cable"
-entity.icon = "__undersea-cable__/graphics/icons/undersea-cable.png"
+entity.name = "undersea-data-cable"
+entity.icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable.png"
 entity.collision_mask = {layers={ground_tile=true, is_lower_object = true}}
 entity.heat_buffer.connections = nil
 -- entity.selectable_in_game = false
@@ -13,13 +13,13 @@ for _, connection_sprite in pairs(entity.connection_sprites) do
 end
 
 local item = table.deepcopy(data.raw["item"]["heat-pipe"])
-item.name = "undersea-cable"
-item.icon = "__undersea-cable__/graphics/icons/undersea-cable.png"
+item.name = "undersea-data-cable"
+item.icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable.png"
 item.place_result = entity.name
 entity.minable.result = item.name
 
 local recipe = table.deepcopy(data.raw["recipe"]["heat-pipe"])
-recipe.name = "undersea-cable"
+recipe.name = "undersea-data-cable"
 recipe.results[1].name = item.name
 recipe.results[1].amount = 10
 recipe.enabled = true

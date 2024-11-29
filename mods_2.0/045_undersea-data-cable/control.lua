@@ -21,6 +21,6 @@ for _, event in ipairs({
   defines.events.on_entity_cloned,
 }) do
   script.on_event(event, Handler.on_created_entity, {
-    {filter = "name", name = "undersea-cable"},
+    {filter = "name", name = "undersea-data-cable"},
   })
 end

@@ -1,6 +1,6 @@
 {
-    "name": "undersea-cable",
-    "title": "Undersea cable",
+    "name": "undersea-data-cable",
+    "title": "Undersea data cable",
     "description": "Undersea data cables for your red and green circuit signals.",
 
     "version": "0.0.2",
