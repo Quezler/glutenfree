@@ -13,6 +13,7 @@ Date: ????
     - Hide quality indicator (why would you even build them with quality?)
     - Floor the heat pipe position to a tile position
     - Force the chunks to generate and _then_ call set_tile
+    - Run a bunch of surface tile setting tests
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29

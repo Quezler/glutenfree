@@ -41,8 +41,8 @@ function Handler.on_created_entity(event)
 
   -- if a player visits the hidden surface then the chunks start actually generating, and overriding any already set tiles,
   -- so we request that chunk to generate and then force the game or the current set tile is very likely to get overwritten.
-  storage.surface.request_to_generate_chunks(position, 0)
-  storage.surface.force_generate_chunk_requests()
+  -- storage.surface.request_to_generate_chunks(position, 0)
+  -- storage.surface.force_generate_chunk_requests()
 
   -- game.print(event.tick)
 
@@ -55,14 +55,13 @@ function Handler.on_created_entity(event)
   --   remove_colliding_decoratives = false,
   -- }
 
+  -- game.print(storage.surface.get_tile(position).name)
   storage.surface.set_tiles(
     {
       {position = position, name = "concrete"},
-    },
-    false,
-    false,
-    false
+    }
   )
+  game.print(storage.surface.get_tile(position).name)
 end
 
 for _, event in ipairs({
@@ -77,3 +76,21 @@ for _, event in ipairs({
     {filter = "name", name = "undersea-data-cable"},
   })
 end
+
+-- *new 50x50 world*
+-- /c game.create_surface("lab")
+-- /c game.surfaces["lab"].generate_with_lab_tiles = true
+-- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- luatile invalid
+-- /c game.surfaces["lab"].request_to_generate_chunks({0, 0}, 0)
+-- /c game.surfaces["lab"].force_generate_chunk_requests()
+-- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- lab dark 1
+-- /c game.surfaces["lab"].set_tiles({{position = {0, 0}, name = "concrete"}})
+-- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- concrete
+-- /c game.player.teleport({0, 0}, "lab")
+-- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- concrete
+
+-- *new 50x50 world*
+-- /c game.create_surface("lab").generate_with_lab_tiles = true
+-- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- luatile invalid
+-- /c game.surfaces["lab"].request_to_generate_chunks({0, 0}, 0) game.surfaces["lab"].force_generate_chunk_requests() game.surfaces["lab"].set_tiles({{position = {0, 0}, name = "concrete"}})
+-- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- lab dark 1
