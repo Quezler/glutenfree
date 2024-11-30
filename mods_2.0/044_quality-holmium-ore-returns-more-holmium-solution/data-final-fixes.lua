@@ -1,16 +1,29 @@
 local Shared = require("shared")
 
+-- https://chatgpt.com/share/674af254-ffc4-8007-b2a9-7d003ed5d5e5
+function splitStringByLength(input, length)
+  local result = {}
+  for i = 1, #input, length do
+      table.insert(result, input:sub(i, i + length - 1))
+  end
+  return result
+end
+
 local localised_description = {"", "[font=default-bold]"}
 data.raw["item"]["holmium-solution-quality-based-productivity"].localised_description = localised_description
 
+local lines = {}
 for _, quality in pairs(data.raw["quality"]) do
   if not quality.hidden then
-    table.insert(localised_description, string.format("[img=quality/%s] × %d", quality.name, Shared.get_multiplier_for_quality(quality)))
-    table.insert(localised_description, "\n")
+    table.insert(lines, string.format("[img=quality/%s] × %d", quality.name, Shared.get_multiplier_for_quality(quality)))
   end
 end
+local lines_concat = table.concat(lines, "\n")
+for _, substring in ipairs(splitStringByLength(lines_concat, 200)) do -- possibly problematic if it gets split at exactly in between \n?
+  table.insert(localised_description, substring)
+end
 
-localised_description[#localised_description] = "[/font]" -- replace the last \n with the font terminator
+table.insert(localised_description, "[/font]")
 
 
 local crafting_category = {
