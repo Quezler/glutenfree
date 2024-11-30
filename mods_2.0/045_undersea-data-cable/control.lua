@@ -1,9 +1,12 @@
 require("util")
 
+local mod_surface_name = "undersea-data-cable"
+
 local Handler = {}
 
 script.on_init(function()
-  --
+  local mod_surface = game.planets[mod_surface_name].create_surface()
+  mod_surface.generate_with_lab_tiles = true
 end)
 
 function Handler.on_created_entity(event)

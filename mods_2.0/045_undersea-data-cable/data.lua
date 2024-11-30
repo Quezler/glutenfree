@@ -30,3 +30,14 @@ table.insert(data.raw["planet"]["fulgora"].lightning_properties.exemption_rules,
   type = "id",
   string = entity.name,
 })
+
+data:extend{{
+  type = "planet",
+  name = "undersea-data-cable",
+  icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable.png",
+
+  distance = 0,
+  orientation = 0,
+
+  hidden = true,
+}}
