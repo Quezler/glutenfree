@@ -11,6 +11,7 @@ Date: ????
     - Deploy the first instance of new surfacedata tracking code
     - Test surface.set_tiles
     - Hide quality indicator (why would you even build them with quality?)
+    - Floor the heat pipe position to a tile position
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29

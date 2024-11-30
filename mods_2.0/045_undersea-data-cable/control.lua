@@ -36,6 +36,9 @@ script.on_event(defines.events.on_surface_deleted, refresh_surfacedata)
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
+  local position = {x = entity.position.x - 0.5, y = entity.position.y - 0.5} -- floors the position to tile position
+  game.print(serpent.line(position))
+
   -- game.print(event.tick)
 
   -- storage.surface.set_tiles{
@@ -49,7 +52,7 @@ function Handler.on_created_entity(event)
 
   storage.surface.set_tiles(
     {
-      {position = entity.position, name = "concrete"},
+      {position = position, name = "concrete"},
     },
     false,
     false,
