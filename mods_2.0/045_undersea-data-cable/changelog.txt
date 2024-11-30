@@ -10,6 +10,7 @@ Date: ????
     - Abandon the idea of non labtile surfaces (i just do not understand them)
     - Deploy the first instance of new surfacedata tracking code
     - Test surface.set_tiles
+    - Hide quality indicator (why would you even build them with quality?)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29
