@@ -6,6 +6,7 @@ Date: ????
     - Rebrand as undersea data cable
     - Setup hidden surface i plan to reuse
     - Try and fail with custom worldgen
+    - Why do i keep trying what keeps failing
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29

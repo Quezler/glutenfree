@@ -39,31 +39,35 @@ data:extend{{
   distance = 0,
   orientation = 0,
 
-  -- map_gen_settings = {
-  --   autoplace_settings = {
-  --     tile =
-  --     {
-  --       treat_missing_as_default = false,
-  --       settings =
-  --       {
-  --         ["tutorial-grid"] = {}
-  --       }
-  --     },
-  --     entity =
-  --     {
-  --       treat_missing_as_default = false
-  --     },
-  --     decorative =
-  --     {
-  --       treat_missing_as_default = false
-  --     }
-  --   },
-  --   -- autoplace_controls = {
-  --   --   ["tutorial-grid"] = {
-  --   --     {probability_expression = 1}
-  --   --   }
-  --   -- }
-  -- },
+  map_gen_settings = {
+    autoplace_settings = {
+      tile =
+      {
+        treat_missing_as_default = false,
+        settings =
+        {
+          ["water"] = {
+            frequency = 1,
+            size = 1,
+            richness = 1,
+          }
+        }
+      },
+      entity =
+      {
+        treat_missing_as_default = false
+      },
+      decorative =
+      {
+        treat_missing_as_default = false
+      }
+    },
+    -- autoplace_controls = {
+    --   ["tutorial-grid"] = {
+    --     {probability_expression = 1}
+    --   }
+    -- }
+  },
 
   hidden = true,
 }}
