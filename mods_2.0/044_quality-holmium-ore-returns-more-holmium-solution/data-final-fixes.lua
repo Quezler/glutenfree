@@ -1,12 +1,17 @@
 local Shared = require("shared")
 
-local lines = {}
+local localised_description = {"", "[font=default-bold]"}
+data.raw["item"]["holmium-solution-quality-based-productivity"].localised_description = localised_description
+
 for _, quality in pairs(data.raw["quality"]) do
   if not quality.hidden then
-    table.insert(lines, string.format("[img=quality/%s] × %d", quality.name, Shared.get_multiplier_for_quality(quality)))
+    table.insert(localised_description, string.format("[img=quality/%s] × %d", quality.name, Shared.get_multiplier_for_quality(quality)))
+    table.insert(localised_description, "\n")
   end
 end
-data.raw["item"]["holmium-solution-quality-based-productivity"].localised_description = {"", "[font=default-bold]", table.concat(lines, "\n"), "[/font]"}
+
+localised_description[#localised_description] = "[/font]" -- replace the last \n with the font terminator
+
 
 local crafting_category = {
   type = "recipe-category",

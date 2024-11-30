@@ -20,6 +20,8 @@
 
         "base",
         "quality",
-        "space-age"
+        "space-age",
+
+        "(?) Additional-Qualities"
     ]
 }
