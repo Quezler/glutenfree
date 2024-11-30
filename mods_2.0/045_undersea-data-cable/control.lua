@@ -1,7 +1,5 @@
 require("util")
 
-local mod_surface_name = "undersea-data-cable"
-
 local Handler = {}
 
 local function refresh_surfacedata()
@@ -24,8 +22,8 @@ script.on_init(function()
   storage.surfacedata = {}
   refresh_surfacedata()
 
-  local mod_surface = game.planets[mod_surface_name].create_surface()
-  mod_surface.generate_with_lab_tiles = true
+  storage.surface = game.planets["undersea-data-cable"].create_surface()
+  storage.surface.generate_with_lab_tiles = true
 end)
 
 script.on_configuration_changed(function()
@@ -38,7 +36,25 @@ script.on_event(defines.events.on_surface_deleted, refresh_surfacedata)
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
-  game.print(event.tick)
+  -- game.print(event.tick)
+
+  -- storage.surface.set_tiles{
+  --   tiles = {
+  --     {position = entity.position, name = "concrete"},
+  --   },
+  --   correct_tiles = false,
+  --   remove_colliding_entities = false,
+  --   remove_colliding_decoratives = false,
+  -- }
+
+  storage.surface.set_tiles(
+    {
+      {position = entity.position, name = "concrete"},
+    },
+    false,
+    false,
+    false
+  )
 end
 
 for _, event in ipairs({
