@@ -14,6 +14,7 @@ local function refresh_surfacedata()
   for _, surface in pairs(game.surfaces) do
     storage.surfacedata[surface.index] = storage.surfacedata[surface.index] or {
       surface = surface,
+      tiles = {},
     }
   end
 end
@@ -24,6 +25,8 @@ script.on_init(function()
 
   storage.surface = game.planets["undersea-data-cable"].create_surface()
   storage.surface.generate_with_lab_tiles = true
+
+  storage.last_surface = nil
 end)
 
 script.on_configuration_changed(function()
@@ -33,11 +36,20 @@ end)
 script.on_event(defines.events.on_surface_created, refresh_surfacedata)
 script.on_event(defines.events.on_surface_deleted, refresh_surfacedata)
 
+function Handler.undo_surface()
+end
+
+function Handler.redo_surface(surface_index)
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
   local position = {x = math.floor(entity.position.x), y = math.floor(entity.position.y)}
+  local position_str = util.positiontostr(position)
   game.print(serpent.line(position))
+
+  storage.surfacedata[entity.surface_index].tiles[position_str] = position
 
   -- if a player visits the hidden surface then the chunks start actually generating, and overriding any already set tiles,
   -- so we request that chunk to generate and then force the game or the current set tile is very likely to get overwritten.
