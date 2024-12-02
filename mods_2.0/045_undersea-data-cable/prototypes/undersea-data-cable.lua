@@ -4,7 +4,6 @@ entity.icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable.png"
 entity.collision_mask = {layers={ground_tile=true, is_lower_object=true}}
 entity.heat_buffer.connections = nil -- still visually connects, but we do not want it to transmit heat
 entity.quality_indicator_scale = 0
--- entity.selection_box = {{-0.25, -0.25}, {0.25, 0.25}}
 
 for _, connection_sprite in pairs(entity.connection_sprites) do
   for j, sheet in pairs(connection_sprite) do
