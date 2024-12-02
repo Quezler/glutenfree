@@ -43,18 +43,30 @@ end)
 script.on_event(defines.events.on_surface_created, refresh_surfacedata)
 script.on_event(defines.events.on_surface_deleted, refresh_surfacedata)
 
+local function disconnect_from_other_interfaces(interface)
+  for _, color in ipairs({"red", "green"}) do
+    local wire_connector = interface[color]
+    for _, connection in ipairs(wire_connector.real_connections) do
+      if connection.target.owner.name == "undersea-data-cable-interface" then
+        wire_connector.disconnect_from(connection.target, connection.origin)
+      end
+    end
+  end
+end
+
 function Handler.recalculate_networks_now(surfacedata)
   surfacedata.tile_to_network = {}
   surfacedata.next_network_id = 0
 
   for _, interface in pairs(surfacedata.interfaces) do
-    local position_str = util.positiontostr({x = math.floor(interface.position.x), y = math.floor(interface.position.y)})
-    local network_here = surfacedata.tile_to_network[position_str]
+    disconnect_from_other_interfaces(interface)
+    local position_str = util.positiontostr({x = math.floor(interface.entity.position.x), y = math.floor(interface.entity.position.y)})
+    local network_here = surfacedata.tile_to_network[interface.position_str]
     if network_here then
       interface.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", network_here)
     else
       surfacedata.next_network_id = surfacedata.next_network_id + 1
-      local tile_positions = storage.surface.get_connected_tiles(interface.position, {"concrete"}, false)
+      local tile_positions = storage.surface.get_connected_tiles(interface.entity.position, {"concrete"}, false)
       for _, tile_position in ipairs(tile_positions) do
         surfacedata.tile_to_network[util.positiontostr(tile_position)] = surfacedata.next_network_id
       end
@@ -162,7 +174,11 @@ function Handler.on_created_entity(event)
     heat_pipe.destructible = false -- the pipe under the interface we control by script
 
     entity.backer_name = "[font=default-tiny-bold]network ?[/font]"
-    surfacedata.interfaces[entity.unit_number] = entity
+    surfacedata.interfaces[entity.unit_number] = {
+      entity = entity,
+      red = entity.get_wire_connector(defines.wire_connector_id.circuit_red),
+      green = entity.get_wire_connector(defines.wire_connector_id.circuit_green),
+    }
   end
 
   new_struct(storage.deathrattles, {

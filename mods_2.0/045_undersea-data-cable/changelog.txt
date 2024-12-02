@@ -36,6 +36,7 @@ Date: ????
     - Recalculate networks after deathratttle
     - Bundle network recalculation effects for the next on_tick
     - Fix crash when using editor mode instant deconstruction
+    - Write disconnection code prior to connection code
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29
