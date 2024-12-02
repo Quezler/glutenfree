@@ -210,7 +210,8 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     elseif deathrattle.type == "undersea-data-cable-interface" then
       local surfacedata = storage.surfacedata[deathrattle.surface_index]
       surfacedata.interfaces[event.useful_id] = nil
-      surfacedata.surface.find_entity("undersea-data-cable", deathrattle.position).destroy()
+      local immortal_snail = surfacedata.surface.find_entity("undersea-data-cable", deathrattle.position)
+      if immortal_snail then immortal_snail.destroy() end
       Handler.surfacedata_sub_tile(surfacedata, deathrattle.position)
       Handler.recalculate_networks(surfacedata)
     else
