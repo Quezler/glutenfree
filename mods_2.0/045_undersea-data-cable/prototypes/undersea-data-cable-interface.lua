@@ -81,3 +81,10 @@ entity.circuit_connector = circuit_connector_definitions.create_single
   universal_connector_template,
   { variation = 7, main_offset = util.by_pixel(4, 2), shadow_offset = util.by_pixel(4, 2), show_shadow = true }
 )
+
+if data.raw["planet"]["fulgora"] then
+  table.insert(data.raw["planet"]["fulgora"].lightning_properties.exemption_rules, {
+    type = "id",
+    string = entity.name,
+  })
+end

@@ -34,7 +34,9 @@ local recipe = {
 
 data:extend{entity, item, recipe}
 
-table.insert(data.raw["planet"]["fulgora"].lightning_properties.exemption_rules, {
-  type = "id",
-  string = entity.name,
-})
+if data.raw["planet"]["fulgora"] then
+  table.insert(data.raw["planet"]["fulgora"].lightning_properties.exemption_rules, {
+    type = "id",
+    string = entity.name,
+  })
+end

@@ -10,6 +10,7 @@ Date: ????
     - Update recipes and technology effects
     - Fix crash when deleting surface
     - Make the subgroup vanilla proof
+    - Allow fulgora to be optional
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 12. 02
