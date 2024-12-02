@@ -54,6 +54,8 @@ local function disconnect_from_other_interfaces(interface)
   end
 end
 
+-- i suppose if the surface got deleted within 0-1 ticks this could crash,
+-- but i am kinda curious to see if i'll ever get any crash reports for that.
 function Handler.recalculate_networks_now(surfacedata)
   surfacedata.tile_to_network = {}
   surfacedata.next_network_id = 0
@@ -226,10 +228,12 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 
     if deathrattle.type == "undersea-data-cable" then
       local surfacedata = storage.surfacedata[deathrattle.surface_index]
+      if surfacedata == nil then return end
       Handler.surfacedata_sub_tile(surfacedata, deathrattle.position)
       Handler.recalculate_networks(surfacedata)
     elseif deathrattle.type == "undersea-data-cable-interface" then
       local surfacedata = storage.surfacedata[deathrattle.surface_index]
+      if surfacedata == nil then return end
       surfacedata.interfaces[event.useful_id] = nil
       local immortal_snail = surfacedata.surface.find_entity("undersea-data-cable", deathrattle.position)
       if immortal_snail then immortal_snail.destroy() end
