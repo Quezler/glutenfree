@@ -39,6 +39,7 @@ Date: ????
     - Write disconnection code prior to connection code
     - Write code to connect the interfaces together
     - Fix backer name not actually being set
+    - Fix network detection
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29

@@ -63,7 +63,7 @@ function Handler.recalculate_networks_now(surfacedata)
   for _, interface in pairs(surfacedata.interfaces) do
     disconnect_from_other_interfaces(interface)
     local position_str = util.positiontostr({x = math.floor(interface.entity.position.x), y = math.floor(interface.entity.position.y)})
-    local network_here = surfacedata.tile_to_network[interface.position_str]
+    local network_here = surfacedata.tile_to_network[position_str]
     if network_here then
       interface.entity.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", network_here)
       interface.red.connect_to(network_id_to_interface[network_here].red, false, defines.wire_origin.script)
