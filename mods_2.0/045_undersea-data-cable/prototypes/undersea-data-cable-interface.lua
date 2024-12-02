@@ -57,3 +57,9 @@ recipe.results[1].amount = 1
 recipe.enabled = true
 
 data:extend{entity, item, recipe}
+
+entity.circuit_connector = circuit_connector_definitions.create_single
+(
+  universal_connector_template,
+  { variation = 7, main_offset = util.by_pixel(4, 2), shadow_offset = util.by_pixel(4, 2), show_shadow = true }
+)
