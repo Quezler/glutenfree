@@ -36,11 +36,42 @@ end)
 script.on_event(defines.events.on_surface_created, refresh_surfacedata)
 script.on_event(defines.events.on_surface_deleted, refresh_surfacedata)
 
-function Handler.undo_tiles_on_mod_surface()
-  if storage.active_surface_index == nil then return end
+function Handler.get_lab_tile_name(position)
+  return (position.x + position.y) % 2 == 0 and "lab-dark-1" or "lab-dark-2"
 end
 
-function Handler.redo_tiles_on_mod_surface(surface_index)
+function Handler.get_set_tiles_tiles(surfacedata, to_concrete)
+  local tiles = {}
+
+  for _, position in pairs(surfacedata.tiles) do
+    table.insert(tiles, {position = position, name = to_concrete and "concrete" or Handler.get_lab_tile_name(position)})
+  end
+
+  game.print(serpent.line(tiles))
+  return tiles
+end
+
+function Handler.undo_tiles(surfacedata)
+  assert(storage.active_surface_index ~= nil, "storage.active_surface_index is already nil.")
+  storage.active_surface_index = nil
+
+  storage.surface.set_tiles(
+    Handler.get_set_tiles_tiles(surfacedata, false),
+    false,
+    false,
+    false
+  )
+end
+
+function Handler.redo_tiles(surfacedata)
+  storage.active_surface_index = surfacedata.surface.id
+
+  storage.surface.set_tiles(
+    Handler.get_set_tiles_tiles(surfacedata, true),
+    false,
+    false,
+    false
+  )
 end
 
 function Handler.on_created_entity(event)
@@ -52,10 +83,10 @@ function Handler.on_created_entity(event)
 
   storage.surfacedata[entity.surface_index].tiles[position_str] = position
 
-  if entity.surface_index ~= storage.active_surface_index then
-    Handler.reset_surface()
-    Handler.setup_surface(entity.surface_index)
-  end
+  -- if entity.surface_index ~= storage.active_surface_index then
+  --   Handler.reset_surface()
+  --   Handler.setup_surface(entity.surface_index)
+  -- end
 
   -- if a player visits the hidden surface then the chunks start actually generating, and overriding any already set tiles,
   -- so we request that chunk to generate and then force the game or the current set tile is very likely to get overwritten.
@@ -82,7 +113,7 @@ function Handler.on_created_entity(event)
     false,
     false
   )
-  game.print(storage.surface.get_tile(position).name)
+  -- game.print(storage.surface.get_tile(position).name)
 end
 
 for _, event in ipairs({
@@ -115,3 +146,8 @@ end
 -- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- luatile invalid
 -- /c game.surfaces["lab"].request_to_generate_chunks({0, 0}, 0) game.surfaces["lab"].force_generate_chunk_requests() game.surfaces["lab"].set_tiles({{position = {0, 0}, name = "concrete"}})
 -- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- lab dark 1
+
+commands.add_command("undersea-undo", nil, function(command)
+  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+  Handler.undo_tiles(storage.surfacedata[player.surface.index])
+end)
