@@ -3,6 +3,7 @@ local entity = {
   name = "undersea-data-cable-interface",
   icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable-interface.png",
   icon_size = 32,
+  collision_mask = {layers={ground_tile=true, is_lower_object=true}},
 
   energy_usage = "1W",
   energy_source = {type = "void"},
