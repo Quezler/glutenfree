@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: ????
+Date: 2024. 12. 02
   Info:
     - Switch to player placeable entities
     - Rebrand as undersea data cable
