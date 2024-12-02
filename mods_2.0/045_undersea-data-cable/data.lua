@@ -1,7 +1,7 @@
 local entity = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])
 entity.name = "undersea-data-cable"
 entity.icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable.png"
--- entity.collision_mask = {layers={ground_tile=true, is_lower_object = true}}
+entity.collision_mask = {layers={ground_tile=true, is_lower_object=true}}
 entity.heat_buffer.connections = nil -- still visually connects, but we do not want it to transmit heat
 entity.quality_indicator_scale = 0
 
@@ -40,4 +40,23 @@ data:extend{{
   orientation = 0,
 
   hidden = true,
+}}
+
+data:extend{{
+  type = "radar",
+  name = "undersea-data-cable-connector",
+  icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable-connector.png",
+  icon_size = 32,
+
+  energy_usage = "1W",
+  energy_source = {type = "void"},
+
+  energy_per_sector = "1J",
+  energy_per_nearby_scan = "1J",
+
+  max_distance_of_sector_revealed = 0,
+  max_distance_of_nearby_sector_revealed = 0,
+
+  collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
+  selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 }}

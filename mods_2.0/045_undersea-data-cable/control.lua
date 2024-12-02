@@ -48,7 +48,6 @@ function Handler.get_set_tiles_tiles(surfacedata, to_concrete)
     table.insert(tiles, {position = position, name = to_concrete and "concrete" or "out-of-map"})
   end
 
-  -- game.print(serpent.line(tiles))
   return tiles
 end
 
@@ -80,7 +79,6 @@ function Handler.on_created_entity(event)
 
   local position = {x = math.floor(entity.position.x), y = math.floor(entity.position.y)}
   local position_str = util.positiontostr(position)
-  -- game.print(serpent.line(position))
 
   local surfacedata = storage.surfacedata[entity.surface_index]
   surfacedata.tiles[position_str] = position

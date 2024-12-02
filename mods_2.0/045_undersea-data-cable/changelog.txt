@@ -21,6 +21,7 @@ Date: ????
     - Mention when switching the active surface
     - Document player surface visiting side effects
     - Switch between concrete and out-of-map
+    - Use the ugly heat interface sprite for the connector
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29
