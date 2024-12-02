@@ -37,15 +37,15 @@ script.on_event(defines.events.on_surface_created, refresh_surfacedata)
 script.on_event(defines.events.on_surface_deleted, refresh_surfacedata)
 
 -- technically an ungenerated world only has "out-of-map" tiles, lab tiles only start existing when a player visits
-function Handler.get_lab_tile_name(position)
-  return (position.x + position.y) % 2 == 0 and "lab-dark-1" or "lab-dark-2"
-end
+-- function Handler.get_lab_tile_name(position)
+--   return (position.x + position.y) % 2 == 0 and "lab-dark-1" or "lab-dark-2"
+-- end
 
 function Handler.get_set_tiles_tiles(surfacedata, to_concrete)
   local tiles = {}
 
   for _, position in pairs(surfacedata.tiles) do
-    table.insert(tiles, {position = position, name = to_concrete and "concrete" or Handler.get_lab_tile_name(position)})
+    table.insert(tiles, {position = position, name = to_concrete and "concrete" or "out-of-map"})
   end
 
   -- game.print(serpent.line(tiles))
@@ -131,24 +131,6 @@ for _, event in ipairs({
     {filter = "name", name = "undersea-data-cable"},
   })
 end
-
--- *new 50x50 world*
--- /c game.create_surface("lab")
--- /c game.surfaces["lab"].generate_with_lab_tiles = true
--- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- luatile invalid
--- /c game.surfaces["lab"].request_to_generate_chunks({0, 0}, 0)
--- /c game.surfaces["lab"].force_generate_chunk_requests()
--- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- lab dark 1
--- /c game.surfaces["lab"].set_tiles({{position = {0, 0}, name = "concrete"}})
--- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- concrete
--- /c game.player.teleport({0, 0}, "lab")
--- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- concrete
-
--- *new 50x50 world*
--- /c game.create_surface("lab").generate_with_lab_tiles = true
--- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- luatile invalid
--- /c game.surfaces["lab"].request_to_generate_chunks({0, 0}, 0) game.surfaces["lab"].force_generate_chunk_requests() game.surfaces["lab"].set_tiles({{position = {0, 0}, name = "concrete"}})
--- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- lab dark 1
 
 
 script.on_event(defines.events.on_player_changed_surface, function(event)

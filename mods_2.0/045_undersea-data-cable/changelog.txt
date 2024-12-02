@@ -20,6 +20,7 @@ Date: ????
     - Test redo when visiting the hidden surface
     - Mention when switching the active surface
     - Document player surface visiting side effects
+    - Switch between concrete and out-of-map
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29
