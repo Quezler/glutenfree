@@ -51,7 +51,7 @@ data:extend{{
   energy_usage = "1W",
   energy_source = {type = "void"},
 
-  energy_per_sector = "1J",
+  energy_per_sector = "1YJ",
   energy_per_nearby_scan = "1J",
 
   max_distance_of_sector_revealed = 0,
@@ -59,4 +59,24 @@ data:extend{{
 
   collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+
+  connects_to_other_radars = false,
+
+  pictures =
+  {
+    layers =
+    {
+      {
+        filename = "__undersea-data-cable__/graphics/icons/undersea-data-cable-connector.png",
+        priority = "low",
+        width = 32,
+        height = 32,
+        -- apply_projection = false,
+        direction_count = 1,
+        line_length = 1,
+        -- shift = util.by_pixel(1.0, -16.0),
+        -- scale = 0.5
+      },
+    }
+  },
 }}
