@@ -1,7 +1,12 @@
+local icons = {
+  {icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable-interface.png", icon_size = 32},
+  {icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable.png", scale = 0.3},
+}
+
 local entity = {
   type = "radar",
   name = "undersea-data-cable-interface",
-  icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable-interface.png",
+  icons = icons,
   icon_size = 32,
 
   energy_usage = "1W",
@@ -41,8 +46,7 @@ local entity = {
 
 local item = table.deepcopy(data.raw["item"]["heat-pipe"])
 item.name = "undersea-data-cable-interface"
-item.icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable-interface.png"
-item.icon_size = 32
+item.icons = icons
 item.place_result = entity.name
 entity.minable.result = item.name
 
