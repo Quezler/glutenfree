@@ -32,6 +32,8 @@ script.on_init(function()
   storage.active_surface_index = 1 -- nauvis 
 
   storage.deathrattles = {}
+
+  storage.refresh_next_on_tick = {}
 end)
 
 script.on_configuration_changed(function()
@@ -41,7 +43,7 @@ end)
 script.on_event(defines.events.on_surface_created, refresh_surfacedata)
 script.on_event(defines.events.on_surface_deleted, refresh_surfacedata)
 
-function Handler.recalculate_networks(surfacedata)
+function Handler.recalculate_networks_now(surfacedata)
   surfacedata.tile_to_network = {}
   surfacedata.next_network_id = 0
 
@@ -59,6 +61,14 @@ function Handler.recalculate_networks(surfacedata)
       interface.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", surfacedata.next_network_id)
     end
   end
+end
+
+function Handler.recalculate_networks(surfacedata)
+  if not next(storage.refresh_next_on_tick) then
+    script.on_event(defines.events.on_tick, Handler.on_tick)
+  end
+
+  storage.refresh_next_on_tick[surfacedata.surface.index] = true
 end
 
 -- technically an ungenerated world only has "out-of-map" tiles, lab tiles only start existing when a player visits
@@ -207,5 +217,20 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       error(serpent.block(deathrattle))
     end
 
+  end
+end)
+
+function Handler.on_tick(event)
+  for surface_index, _ in pairs(storage.refresh_next_on_tick) do
+    Handler.recalculate_networks_now(storage.surfacedata[surface_index])
+  end
+
+  storage.refresh_next_on_tick = {}
+  script.on_event(defines.events.on_tick, nil)
+end
+
+script.on_load(function()
+  if next(storage.refresh_next_on_tick) then
+    script.on_event(defines.events.on_tick, Handler.on_tick)
   end
 end)

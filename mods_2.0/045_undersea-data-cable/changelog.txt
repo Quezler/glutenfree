@@ -34,6 +34,7 @@ Date: ????
     - Deploy deathrattles to clear up the tiles and networks
     - Move add/sub ing single tiles to specialized functions
     - Recalculate networks after deathratttle
+    - Bundle network recalculation effects for the next on_tick
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29
