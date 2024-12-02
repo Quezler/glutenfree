@@ -36,6 +36,7 @@ end)
 script.on_event(defines.events.on_surface_created, refresh_surfacedata)
 script.on_event(defines.events.on_surface_deleted, refresh_surfacedata)
 
+-- technically an ungenerated world only has "out-of-map" tiles, lab tiles only start existing when a player visits
 function Handler.get_lab_tile_name(position)
   return (position.x + position.y) % 2 == 0 and "lab-dark-1" or "lab-dark-2"
 end
@@ -149,21 +150,24 @@ end
 -- /c game.surfaces["lab"].request_to_generate_chunks({0, 0}, 0) game.surfaces["lab"].force_generate_chunk_requests() game.surfaces["lab"].set_tiles({{position = {0, 0}, name = "concrete"}})
 -- /c game.print(game.surfaces["lab"].get_tile(0, 0).name) -- lab dark 1
 
-commands.add_command("undersea-undo", nil, function(command)
-  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
-  Handler.undo_tiles(storage.surfacedata[player.surface.index])
-end)
 
 script.on_event(defines.events.on_player_changed_surface, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   if player.surface.index == storage.surface.index then
-    Handler.redo_tiles(storage.surfacedata[storage.active_surface_index])
+    game.print("[undersea-data-cable] you just broke the mod by visiting the hidden surface, load an autosave.")
   end
 end)
 
-commands.add_command("undersea-redo", nil, function(command)
-  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
-  if player.surface.index == storage.surface.index then
-    Handler.redo_tiles(storage.surfacedata[storage.active_surface_index])
-  end
-end)
+if debug_mode then
+  commands.add_command("undersea-undo", nil, function(command)
+    local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+    Handler.undo_tiles(storage.surfacedata[player.surface.index])
+  end)
+
+  commands.add_command("undersea-redo", nil, function(command)
+    local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+    if player.surface.index == storage.surface.index then
+      Handler.redo_tiles(storage.surfacedata[storage.active_surface_index])
+    end
+  end)
+end

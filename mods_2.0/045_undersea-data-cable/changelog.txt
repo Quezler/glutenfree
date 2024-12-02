@@ -19,6 +19,7 @@ Date: ????
     - Test the undo functions
     - Test redo when visiting the hidden surface
     - Mention when switching the active surface
+    - Document player surface visiting side effects
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29
