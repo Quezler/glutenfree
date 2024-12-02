@@ -26,7 +26,7 @@ script.on_init(function()
   storage.surface = game.planets["undersea-data-cable"].create_surface()
   storage.surface.generate_with_lab_tiles = true
 
-  storage.last_surface = nil
+  storage.active_surface_index = 1 -- nauvis 
 end)
 
 script.on_configuration_changed(function()
@@ -36,10 +36,11 @@ end)
 script.on_event(defines.events.on_surface_created, refresh_surfacedata)
 script.on_event(defines.events.on_surface_deleted, refresh_surfacedata)
 
-function Handler.undo_surface()
+function Handler.undo_tiles_on_mod_surface()
+  if storage.active_surface_index == nil then return end
 end
 
-function Handler.redo_surface(surface_index)
+function Handler.redo_tiles_on_mod_surface(surface_index)
 end
 
 function Handler.on_created_entity(event)
@@ -50,6 +51,11 @@ function Handler.on_created_entity(event)
   game.print(serpent.line(position))
 
   storage.surfacedata[entity.surface_index].tiles[position_str] = position
+
+  if entity.surface_index ~= storage.active_surface_index then
+    Handler.reset_surface()
+    Handler.setup_surface(entity.surface_index)
+  end
 
   -- if a player visits the hidden surface then the chunks start actually generating, and overriding any already set tiles,
   -- so we request that chunk to generate and then force the game or the current set tile is very likely to get overwritten.
@@ -71,7 +77,10 @@ function Handler.on_created_entity(event)
   storage.surface.set_tiles(
     {
       {position = position, name = "concrete"},
-    }
+    },
+    false,
+    false,
+    false
   )
   game.print(storage.surface.get_tile(position).name)
 end
