@@ -37,6 +37,15 @@ local entity = {
         direction_count = 1,
         line_length = 1,
       },
+      {
+        filename = "__undersea-data-cable__/graphics/icons/undersea-data-cable.png",
+        priority = "low",
+        width = 64,
+        height = 64,
+        direction_count = 1,
+        line_length = 1,
+        scale = 0.2,
+      },
     }
   },
 
