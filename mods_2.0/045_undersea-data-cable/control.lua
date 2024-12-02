@@ -115,6 +115,17 @@ function Handler.on_created_entity(event)
     false
   )
   -- game.print(storage.surface.get_tile(position).name)
+
+  if entity.name == "undersea-data-cable-interface" then
+    entity.surface.create_entity{
+      name = "undersea-data-cable",
+      force = entity.force,
+      position = entity.position,
+      quality = entity.quality, -- why?
+    }
+
+    entity.backer_name = "[font=default-tiny-bold]network 56[/font]"
+  end
 end
 
 for _, event in ipairs({
@@ -127,6 +138,7 @@ for _, event in ipairs({
 }) do
   script.on_event(event, Handler.on_created_entity, {
     {filter = "name", name = "undersea-data-cable"},
+    {filter = "name", name = "undersea-data-cable-interface"},
   })
 end
 

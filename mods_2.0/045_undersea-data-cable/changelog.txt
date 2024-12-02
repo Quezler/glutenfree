@@ -23,6 +23,7 @@ Date: ????
     - Switch between concrete and out-of-map
     - Use the ugly heat interface sprite for the connector
     - Give the radar a texture and translation
+    - Rename connector to interface and place it
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29

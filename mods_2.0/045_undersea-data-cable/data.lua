@@ -44,8 +44,8 @@ data:extend{{
 
 data:extend{{
   type = "radar",
-  name = "undersea-data-cable-connector",
-  icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable-connector.png",
+  name = "undersea-data-cable-interface",
+  icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable-interface.png",
   icon_size = 32,
 
   energy_usage = "1W",
@@ -61,21 +61,19 @@ data:extend{{
   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 
   connects_to_other_radars = false,
+  selection_priority = 51,
 
   pictures =
   {
     layers =
     {
       {
-        filename = "__undersea-data-cable__/graphics/icons/undersea-data-cable-connector.png",
+        filename = "__undersea-data-cable__/graphics/icons/undersea-data-cable-interface.png",
         priority = "low",
         width = 32,
         height = 32,
-        -- apply_projection = false,
         direction_count = 1,
         line_length = 1,
-        -- shift = util.by_pixel(1.0, -16.0),
-        -- scale = 0.5
       },
     }
   },
