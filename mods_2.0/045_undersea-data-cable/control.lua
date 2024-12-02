@@ -15,6 +15,9 @@ local function refresh_surfacedata()
     storage.surfacedata[surface.index] = storage.surfacedata[surface.index] or {
       surface = surface,
       tiles = {},
+      interfaces = {},
+      tile_to_network = {},
+      next_network_id = 0,
     }
   end
 end
@@ -35,6 +38,26 @@ end)
 
 script.on_event(defines.events.on_surface_created, refresh_surfacedata)
 script.on_event(defines.events.on_surface_deleted, refresh_surfacedata)
+
+function Handler.recalculate_networks(surfacedata)
+  surfacedata.tile_to_network = {}
+  surfacedata.next_network_id = 0
+
+  for _, interface in pairs(surfacedata.interfaces) do
+    local position_str = util.positiontostr({x = math.floor(interface.position.x), y = math.floor(interface.position.y)})
+    local network_here = surfacedata.tile_to_network[position_str]
+    if network_here then
+      interface.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", network_here)
+    else
+      surfacedata.next_network_id = surfacedata.next_network_id + 1
+      local tile_positions = surfacedata.surface.get_connected_tiles(interface.position, {"concrete"}, false, nil)
+      for _, tile_position in ipairs(tile_positions) do
+        surfacedata.tile_to_network[util.positiontostr(tile_position)] = surfacedata.next_network_id
+      end
+      interface.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", surfacedata.next_network_id)
+    end
+  end
+end
 
 -- technically an ungenerated world only has "out-of-map" tiles, lab tiles only start existing when a player visits
 -- function Handler.get_lab_tile_name(position)
@@ -125,7 +148,10 @@ function Handler.on_created_entity(event)
     }
 
     entity.backer_name = "[font=default-tiny-bold]network ?[/font]"
+    surfacedata.interfaces[entity.unit_number] = entity
   end
+
+  Handler.recalculate_networks(surfacedata)
 end
 
 for _, event in ipairs({
