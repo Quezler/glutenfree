@@ -30,6 +30,7 @@ Date: ????
     - Draft the initial network recalculation code
     - Now why on earth does get_connected_tiles fail
     - Welp get_connected_tiles looks broken too
+    - Fix surfacedata -> storage typo
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29

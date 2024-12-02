@@ -44,18 +44,13 @@ function Handler.recalculate_networks(surfacedata)
   surfacedata.next_network_id = 0
 
   for _, interface in pairs(surfacedata.interfaces) do
-    -- game.print(serpent.line(surfacedata.tile_to_network))
     local position_str = util.positiontostr({x = math.floor(interface.position.x), y = math.floor(interface.position.y)})
-    -- game.print('at ' .. position_str)
     local network_here = surfacedata.tile_to_network[position_str]
     if network_here then
       interface.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", network_here)
     else
       surfacedata.next_network_id = surfacedata.next_network_id + 1
-      -- game.print(#game.surfaces["undersea-data-cable"].get_connected_tiles({-24, 24}, {"concrete"}, false))
-      game.print(serpent.line(interface.position))
-      local tile_positions = surfacedata.surface.get_connected_tiles(interface.position, {"concrete"}, false)
-      game.print(#tile_positions)
+      local tile_positions = storage.surface.get_connected_tiles(interface.position, {"concrete"}, false)
       for _, tile_position in ipairs(tile_positions) do
         surfacedata.tile_to_network[util.positiontostr(tile_position)] = surfacedata.next_network_id
       end
@@ -122,8 +117,6 @@ function Handler.on_created_entity(event)
   storage.surface.request_to_generate_chunks(position, 0)
   storage.surface.force_generate_chunk_requests()
 
-  -- game.print(event.tick)
-
   -- storage.surface.set_tiles{
   --   tiles = {
   --     {position = entity.position, name = "concrete"},
@@ -172,14 +165,6 @@ for _, event in ipairs({
     {filter = "name", name = "undersea-data-cable-interface"},
   })
 end
-
-
-script.on_event(defines.events.on_player_changed_surface, function(event)
-  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  if player.surface.index == storage.surface.index then
-    game.print("[undersea-data-cable] you just broke the mod by visiting the hidden surface, load an autosave.")
-  end
-end)
 
 if debug_mode then
   commands.add_command("undersea-undo", nil, function(command)
