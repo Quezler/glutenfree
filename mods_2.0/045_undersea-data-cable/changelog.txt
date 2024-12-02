@@ -33,6 +33,7 @@ Date: ????
     - Fix surfacedata -> storage typo
     - Deploy deathrattles to clear up the tiles and networks
     - Move add/sub ing single tiles to specialized functions
+    - Recalculate networks after deathratttle
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29

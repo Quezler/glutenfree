@@ -196,10 +196,13 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if deathrattle.type == "undersea-data-cable" then
       local surfacedata = storage.surfacedata[deathrattle.surface_index]
       Handler.surfacedata_sub_tile(surfacedata, deathrattle.position)
+      Handler.recalculate_networks(surfacedata)
     elseif deathrattle.type == "undersea-data-cable-interface" then
       local surfacedata = storage.surfacedata[deathrattle.surface_index]
+      surfacedata.interfaces[event.useful_id] = nil
       surfacedata.surface.find_entity("undersea-data-cable", deathrattle.position).destroy()
       Handler.surfacedata_sub_tile(surfacedata, deathrattle.position)
+      Handler.recalculate_networks(surfacedata)
     else
       error(serpent.block(deathrattle))
     end
