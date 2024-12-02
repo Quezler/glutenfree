@@ -23,11 +23,11 @@ local function refresh_surfacedata()
 end
 
 script.on_init(function()
-  storage.surfacedata = {}
-  refresh_surfacedata()
-
   storage.surface = game.planets["undersea-data-cable"].create_surface()
   storage.surface.generate_with_lab_tiles = true
+
+  storage.surfacedata = {}
+  refresh_surfacedata()
 
   storage.active_surface_index = 1 -- nauvis 
 end)
@@ -44,13 +44,16 @@ function Handler.recalculate_networks(surfacedata)
   surfacedata.next_network_id = 0
 
   for _, interface in pairs(surfacedata.interfaces) do
+    game.print(serpent.line(surfacedata.tile_to_network))
     local position_str = util.positiontostr({x = math.floor(interface.position.x), y = math.floor(interface.position.y)})
+    game.print('at ' .. position_str)
     local network_here = surfacedata.tile_to_network[position_str]
     if network_here then
       interface.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", network_here)
     else
       surfacedata.next_network_id = surfacedata.next_network_id + 1
-      local tile_positions = surfacedata.surface.get_connected_tiles(interface.position, {"concrete"}, false, nil)
+      local tile_positions = surfacedata.surface.get_connected_tiles(interface.position, {"concrete"}, false)
+      game.print(#tile_positions)
       for _, tile_position in ipairs(tile_positions) do
         surfacedata.tile_to_network[util.positiontostr(tile_position)] = surfacedata.next_network_id
       end
@@ -114,8 +117,8 @@ function Handler.on_created_entity(event)
 
   -- if a player visits the hidden surface then the chunks start actually generating, and overriding any already set tiles,
   -- so we request that chunk to generate and then force the game or the current set tile is very likely to get overwritten.
-  -- storage.surface.request_to_generate_chunks(position, 0)
-  -- storage.surface.force_generate_chunk_requests()
+  storage.surface.request_to_generate_chunks(position, 0)
+  storage.surface.force_generate_chunk_requests()
 
   -- game.print(event.tick)
 
