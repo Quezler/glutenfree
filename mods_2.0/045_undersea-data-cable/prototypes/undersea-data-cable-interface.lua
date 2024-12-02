@@ -16,6 +16,7 @@ local entity = {
   collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 
+  circuit_wire_max_distance = data.raw["radar"]["radar"].circuit_wire_max_distance,
   connects_to_other_radars = false,
   selection_priority = 51,
 

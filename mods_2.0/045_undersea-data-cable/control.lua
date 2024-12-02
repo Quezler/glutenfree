@@ -58,12 +58,16 @@ function Handler.recalculate_networks_now(surfacedata)
   surfacedata.tile_to_network = {}
   surfacedata.next_network_id = 0
 
+  local network_id_to_interface = {}
+
   for _, interface in pairs(surfacedata.interfaces) do
     disconnect_from_other_interfaces(interface)
     local position_str = util.positiontostr({x = math.floor(interface.entity.position.x), y = math.floor(interface.entity.position.y)})
     local network_here = surfacedata.tile_to_network[interface.position_str]
     if network_here then
       interface.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", network_here)
+      interface.red.connect_to(network_id_to_interface[network_here].red, false, defines.wire_origin.script)
+      interface.green.connect_to(network_id_to_interface[network_here].green, false, defines.wire_origin.script)
     else
       surfacedata.next_network_id = surfacedata.next_network_id + 1
       local tile_positions = storage.surface.get_connected_tiles(interface.entity.position, {"concrete"}, false)
@@ -71,6 +75,7 @@ function Handler.recalculate_networks_now(surfacedata)
         surfacedata.tile_to_network[util.positiontostr(tile_position)] = surfacedata.next_network_id
       end
       interface.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", surfacedata.next_network_id)
+      network_id_to_interface[surfacedata.next_network_id] = interface
     end
   end
 end
@@ -176,8 +181,8 @@ function Handler.on_created_entity(event)
     entity.backer_name = "[font=default-tiny-bold]network ?[/font]"
     surfacedata.interfaces[entity.unit_number] = {
       entity = entity,
-      red = entity.get_wire_connector(defines.wire_connector_id.circuit_red),
-      green = entity.get_wire_connector(defines.wire_connector_id.circuit_green),
+      red = entity.get_wire_connector(defines.wire_connector_id.circuit_red, true),
+      green = entity.get_wire_connector(defines.wire_connector_id.circuit_green, true),
     }
   end
 
