@@ -96,6 +96,22 @@ local function new_struct(table, struct)
   return struct
 end
 
+function Handler.surfacedata_add_tile(surfacedata, tile_position)
+  surfacedata.tiles[util.positiontostr(tile_position)] = tile_position
+
+  if surfacedata.surface.index == storage.active_surface_index then
+    storage.surface.set_tiles({{position = tile_position, name = "concrete"}}, false, false, false)
+  end
+end
+
+function Handler.surfacedata_sub_tile(surfacedata, tile_position)
+  surfacedata.tiles[util.positiontostr(tile_position)] = nil
+
+  if surfacedata.surface.index == storage.active_surface_index then
+    storage.surface.set_tiles({{position = tile_position, name = Handler.get_lab_tile_name(tile_position)}}, false, false, false)
+  end
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -103,7 +119,6 @@ function Handler.on_created_entity(event)
   local position_str = util.positiontostr(position)
 
   local surfacedata = storage.surfacedata[entity.surface_index]
-  surfacedata.tiles[position_str] = position
 
   if entity.surface_index ~= storage.active_surface_index then
     game.print(string.format("[undersea-data-cable] switching active surface from %d to %d.", storage.active_surface_index, entity.surface_index))
@@ -116,6 +131,8 @@ function Handler.on_created_entity(event)
   storage.surface.request_to_generate_chunks(position, 0)
   storage.surface.force_generate_chunk_requests()
 
+  Handler.surfacedata_add_tile(surfacedata, position)
+
   -- storage.surface.set_tiles{
   --   tiles = {
   --     {position = entity.position, name = "concrete"},
@@ -124,17 +141,6 @@ function Handler.on_created_entity(event)
   --   remove_colliding_entities = false,
   --   remove_colliding_decoratives = false,
   -- }
-
-  -- game.print(storage.surface.get_tile(position).name)
-  storage.surface.set_tiles(
-    {
-      {position = position, name = "concrete"},
-    },
-    false,
-    false,
-    false
-  )
-  -- game.print(storage.surface.get_tile(position).name)
 
   if entity.name == "undersea-data-cable-interface" then
     local heat_pipe = entity.surface.create_entity{
@@ -189,17 +195,11 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 
     if deathrattle.type == "undersea-data-cable" then
       local surfacedata = storage.surfacedata[deathrattle.surface_index]
-      surfacedata.tiles[deathrattle.position_str] = nil
-      if deathrattle.surface_index == storage.active_surface_index then
-        storage.surface.set_tiles({{position = deathrattle.position, name = Handler.get_lab_tile_name(deathrattle.position)}}, false, false, false)
-      end
-    elseif deathrattle.type == "undersea-data-cable-connector" then
+      Handler.surfacedata_sub_tile(surfacedata, deathrattle.position)
+    elseif deathrattle.type == "undersea-data-cable-interface" then
       local surfacedata = storage.surfacedata[deathrattle.surface_index]
-      surfacedata.tiles[deathrattle.position_str] = nil
-      if deathrattle.surface_index == storage.active_surface_index then
-        storage.surface.set_tiles({{position = deathrattle.position, name = Handler.get_lab_tile_name(deathrattle.position)}}, false, false, false)
-      end
-      surfacedata.surface.find_entity(deathrattle.position, "undersea-data-cable").destroy()
+      surfacedata.surface.find_entity("undersea-data-cable", deathrattle.position).destroy()
+      Handler.surfacedata_sub_tile(surfacedata, deathrattle.position)
     else
       error(serpent.block(deathrattle))
     end
