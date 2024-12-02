@@ -1,7 +1,7 @@
 local entity = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])
 entity.name = "undersea-data-cable"
 entity.icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable.png"
--- entity.collision_mask = {layers={ground_tile=true, is_lower_object=true}}
+entity.collision_mask = {layers={ground_tile=true, is_lower_object=true}}
 entity.heat_buffer.connections = nil -- still visually connects, but we do not want it to transmit heat
 entity.quality_indicator_scale = 0
 -- entity.selection_box = {{-0.25, -0.25}, {0.25, 0.25}}

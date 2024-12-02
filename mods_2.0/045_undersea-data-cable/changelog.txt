@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Update the radar icon
     - Decide on a circuit connector
+    - Setup thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 12. 02
