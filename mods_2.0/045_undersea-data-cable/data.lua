@@ -15,3 +15,9 @@ data:extend{{
 local technology_effects = data.raw["technology"]["circuit-network"].effects --[[@as table]]
 table.insert(technology_effects, {type = "unlock-recipe", recipe = "undersea-data-cable"})
 table.insert(technology_effects, {type = "unlock-recipe", recipe = "undersea-data-cable-interface"})
+
+local subgroup = "terrain"
+if mods["space-age"] then subgroup = "environmental-protection" end
+
+data.raw["item"]["undersea-data-cable"].subgroup = subgroup
+data.raw["item"]["undersea-data-cable-interface"].subgroup = subgroup

@@ -16,7 +16,6 @@ end
 local item = table.deepcopy(data.raw["item"]["heat-pipe"])
 item.name = "undersea-data-cable"
 item.icon = "__undersea-data-cable__/graphics/icons/undersea-data-cable.png"
-item.subgroup = "environmental-protection"
 item.order = "z-e[undersea-data-cable]"
 item.place_result = entity.name
 entity.minable.result = item.name

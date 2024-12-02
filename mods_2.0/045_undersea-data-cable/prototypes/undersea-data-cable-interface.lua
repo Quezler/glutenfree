@@ -56,7 +56,6 @@ local entity = {
 local item = table.deepcopy(data.raw["item"]["heat-pipe"])
 item.name = "undersea-data-cable-interface"
 item.icons = icons
-item.subgroup = "environmental-protection"
 item.order = "z-d[undersea-data-cable-interface]"
 item.stack_size = 10
 item.place_result = entity.name
