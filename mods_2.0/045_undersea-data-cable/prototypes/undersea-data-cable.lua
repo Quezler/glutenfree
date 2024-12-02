@@ -23,7 +23,7 @@ entity.minable.result = item.name
 local recipe = {
   type = "recipe",
   name = "undersea-data-cable",
-  energy_required = 1,
+  energy_required = 0.2,
   enabled = false,
   ingredients = {
     {type = "item", name = "steel-plate", amount = 1},

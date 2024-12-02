@@ -54,6 +54,10 @@ local function disconnect_from_other_interfaces(interface)
   end
 end
 
+function Handler.set_backer_name_to(entity, network_id)
+  entity.backer_name = string.format("[font=default-tiny-bold]network %s[/font]", tostring(network_id))
+end
+
 -- i suppose if the surface got deleted within 0-1 ticks this could crash,
 -- but i am kinda curious to see if i'll ever get any crash reports for that.
 function Handler.recalculate_networks_now(surfacedata)
@@ -64,10 +68,9 @@ function Handler.recalculate_networks_now(surfacedata)
 
   for _, interface in pairs(surfacedata.interfaces) do
     disconnect_from_other_interfaces(interface)
-    local position_str = util.positiontostr({x = math.floor(interface.entity.position.x), y = math.floor(interface.entity.position.y)})
-    local network_here = surfacedata.tile_to_network[position_str]
+    local network_here = surfacedata.tile_to_network[interface.position_str]
     if network_here then
-      interface.entity.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", network_here)
+      Handler.set_backer_name_to(interface.entity, network_here)
       interface.red.connect_to(network_id_to_interface[network_here].red, false, defines.wire_origin.script)
       interface.green.connect_to(network_id_to_interface[network_here].green, false, defines.wire_origin.script)
     else
@@ -76,7 +79,7 @@ function Handler.recalculate_networks_now(surfacedata)
       for _, tile_position in ipairs(tile_positions) do
         surfacedata.tile_to_network[util.positiontostr(tile_position)] = surfacedata.next_network_id
       end
-      interface.entity.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", surfacedata.next_network_id)
+      Handler.set_backer_name_to(interface.entity, surfacedata.next_network_id)
       network_id_to_interface[surfacedata.next_network_id] = interface
     end
   end
@@ -90,7 +93,6 @@ function Handler.recalculate_networks(surfacedata)
   storage.refresh_next_on_tick[surfacedata.surface.index] = true
 end
 
--- technically an ungenerated world only has "out-of-map" tiles, lab tiles only start existing when a player visits
 function Handler.get_lab_tile_name(position)
   return (position.x + position.y) % 2 == 0 and "lab-dark-1" or "lab-dark-2"
 end
@@ -150,7 +152,7 @@ function Handler.on_created_entity(event)
   local surfacedata = storage.surfacedata[entity.surface_index]
 
   if entity.surface_index ~= storage.active_surface_index then
-    game.print(string.format("[undersea-data-cable] switching active surface from %d to %d.", storage.active_surface_index, entity.surface_index))
+    -- game.print(string.format("[undersea-data-cable] switching active surface from %d to %d.", storage.active_surface_index, entity.surface_index))
     Handler.undo_tiles(storage.surfacedata[storage.active_surface_index]) -- todo: what if the active surface got deleted?
     Handler.redo_tiles(surfacedata)
   end
@@ -176,15 +178,16 @@ function Handler.on_created_entity(event)
       name = "undersea-data-cable",
       force = entity.force,
       position = entity.position,
-      quality = entity.quality, -- why?
+      quality = entity.quality, -- why would you even build a quality interface?
     }
     heat_pipe.destructible = false -- the pipe under the interface we control by script
 
-    entity.backer_name = "[font=default-tiny-bold]network ?[/font]"
+    Handler.set_backer_name_to(entity, "?")
     surfacedata.interfaces[entity.unit_number] = {
       entity = entity,
       red = entity.get_wire_connector(defines.wire_connector_id.circuit_red, true),
       green = entity.get_wire_connector(defines.wire_connector_id.circuit_green, true),
+      position_str = position_str,
     }
   end
 
@@ -193,7 +196,6 @@ function Handler.on_created_entity(event)
     type = entity.name,
     surface_index = entity.surface.index,
     position = entity.position,
-    position_str = position_str,
   })
 
   Handler.recalculate_networks(surfacedata)
@@ -214,10 +216,6 @@ for _, event in ipairs({
 end
 
 script.on_event(defines.events.on_player_setup_blueprint, function(event)
-  -- for uint, entity in pairs(event.mapping.get()) do
-  --   event.mapping[uint] = nil
-  --   game.print(entity)
-  -- end
   local blueprint_entities = event.stack.get_blueprint_entities()
   if blueprint_entities == nil then return end
 
