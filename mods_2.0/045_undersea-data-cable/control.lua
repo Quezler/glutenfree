@@ -213,7 +213,32 @@ for _, event in ipairs({
   })
 end
 
--- todo: when creating a blueprint, remove the heat pipe under any interface
+script.on_event(defines.events.on_player_setup_blueprint, function(event)
+  -- for uint, entity in pairs(event.mapping.get()) do
+  --   event.mapping[uint] = nil
+  --   game.print(entity)
+  -- end
+  local blueprint_entities = event.stack.get_blueprint_entities()
+  if blueprint_entities == nil then return end
+
+  local remove_this_heat_pipe = {}
+
+  for _, blueprint_entity in ipairs(blueprint_entities) do
+    if blueprint_entity.name == "undersea-data-cable-interface" then
+      remove_this_heat_pipe[util.positiontostr(blueprint_entity.position)] = true
+    end
+  end
+
+  for i, blueprint_entity in ipairs(blueprint_entities) do
+    if blueprint_entity.name == "undersea-data-cable" then
+      if remove_this_heat_pipe[util.positiontostr(blueprint_entity.position)] then
+        blueprint_entities[i] = nil
+      end
+    end
+  end
+
+  event.stack.set_blueprint_entities(blueprint_entities)
+end)
 
 -- todo: remove when 2.0.24 drops
 script.on_event(defines.events.on_chunk_generated, function(event)

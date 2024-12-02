@@ -11,6 +11,7 @@ Date: ????
     - Fix crash when deleting surface
     - Make the subgroup vanilla proof
     - Allow fulgora to be optional
+    - Prevent the heat pipe under the interface from being blueprinted
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 12. 02
