@@ -124,7 +124,7 @@ function Handler.on_created_entity(event)
       quality = entity.quality, -- why?
     }
 
-    entity.backer_name = "[font=default-tiny-bold]network 56[/font]"
+    entity.backer_name = "[font=default-tiny-bold]network ?[/font]"
   end
 end
 

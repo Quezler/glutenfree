@@ -24,6 +24,7 @@ Date: ????
     - Use the ugly heat interface sprite for the connector
     - Give the radar a texture and translation
     - Rename connector to interface and place it
+    - Move both entities and their items/recipes to their own files
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29
