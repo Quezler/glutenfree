@@ -64,7 +64,7 @@ function Handler.undo_tiles(surfacedata)
 end
 
 function Handler.redo_tiles(surfacedata)
-  storage.active_surface_index = surfacedata.surface.id
+  storage.active_surface_index = surfacedata.surface.index
 
   storage.surface.set_tiles(
     Handler.get_set_tiles_tiles(surfacedata, true),
@@ -81,12 +81,13 @@ function Handler.on_created_entity(event)
   local position_str = util.positiontostr(position)
   game.print(serpent.line(position))
 
-  storage.surfacedata[entity.surface_index].tiles[position_str] = position
+  local surfacedata = storage.surfacedata[entity.surface_index]
+  surfacedata.tiles[position_str] = position
 
-  -- if entity.surface_index ~= storage.active_surface_index then
-  --   Handler.reset_surface()
-  --   Handler.setup_surface(entity.surface_index)
-  -- end
+  if entity.surface_index ~= storage.active_surface_index then
+    Handler.undo_tiles(storage.surfacedata[storage.active_surface_index]) -- todo: what if the active surface got deleted?
+    Handler.redo_tiles(surfacedata)
+  end
 
   -- if a player visits the hidden surface then the chunks start actually generating, and overriding any already set tiles,
   -- so we request that chunk to generate and then force the game or the current set tile is very likely to get overwritten.
@@ -150,4 +151,18 @@ end
 commands.add_command("undersea-undo", nil, function(command)
   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
   Handler.undo_tiles(storage.surfacedata[player.surface.index])
+end)
+
+script.on_event(defines.events.on_player_changed_surface, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  if player.surface.index == storage.surface.index then
+    Handler.redo_tiles(storage.surfacedata[storage.active_surface_index])
+  end
+end)
+
+commands.add_command("undersea-redo", nil, function(command)
+  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+  if player.surface.index == storage.surface.index then
+    Handler.redo_tiles(storage.surfacedata[storage.active_surface_index])
+  end
 end)

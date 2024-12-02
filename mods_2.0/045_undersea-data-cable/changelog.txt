@@ -17,6 +17,7 @@ Date: ????
     - Stash thinksies
     - Stash overnight draft
     - Test the undo functions
+    - Test redo when visiting the hidden surface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29
