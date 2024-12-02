@@ -65,7 +65,7 @@ function Handler.recalculate_networks_now(surfacedata)
     local position_str = util.positiontostr({x = math.floor(interface.entity.position.x), y = math.floor(interface.entity.position.y)})
     local network_here = surfacedata.tile_to_network[interface.position_str]
     if network_here then
-      interface.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", network_here)
+      interface.entity.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", network_here)
       interface.red.connect_to(network_id_to_interface[network_here].red, false, defines.wire_origin.script)
       interface.green.connect_to(network_id_to_interface[network_here].green, false, defines.wire_origin.script)
     else
@@ -74,7 +74,7 @@ function Handler.recalculate_networks_now(surfacedata)
       for _, tile_position in ipairs(tile_positions) do
         surfacedata.tile_to_network[util.positiontostr(tile_position)] = surfacedata.next_network_id
       end
-      interface.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", surfacedata.next_network_id)
+      interface.entity.backer_name = string.format("[font=default-tiny-bold]network %d[/font]", surfacedata.next_network_id)
       network_id_to_interface[surfacedata.next_network_id] = interface
     end
   end
