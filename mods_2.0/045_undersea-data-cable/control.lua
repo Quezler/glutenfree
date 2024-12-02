@@ -163,3 +163,5 @@ if debug_mode then
     end
   end)
 end
+
+-- todo: when creating a blueprint, remove the heat pipe under any interface

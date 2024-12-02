@@ -35,6 +35,7 @@ local entity = {
   },
 
   minable = data.raw["radar"]["radar"].minable,
+  flags = {"player-creation"},
 }
 
 local item = table.deepcopy(data.raw["item"]["heat-pipe"])
