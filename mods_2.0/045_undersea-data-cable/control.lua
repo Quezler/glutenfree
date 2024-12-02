@@ -47,7 +47,7 @@ function Handler.get_set_tiles_tiles(surfacedata, to_concrete)
     table.insert(tiles, {position = position, name = to_concrete and "concrete" or Handler.get_lab_tile_name(position)})
   end
 
-  game.print(serpent.line(tiles))
+  -- game.print(serpent.line(tiles))
   return tiles
 end
 
@@ -79,12 +79,13 @@ function Handler.on_created_entity(event)
 
   local position = {x = math.floor(entity.position.x), y = math.floor(entity.position.y)}
   local position_str = util.positiontostr(position)
-  game.print(serpent.line(position))
+  -- game.print(serpent.line(position))
 
   local surfacedata = storage.surfacedata[entity.surface_index]
   surfacedata.tiles[position_str] = position
 
   if entity.surface_index ~= storage.active_surface_index then
+    game.print(string.format("[undersea-data-cable] switching active surface from %d to %d.", storage.active_surface_index, entity.surface_index))
     Handler.undo_tiles(storage.surfacedata[storage.active_surface_index]) -- todo: what if the active surface got deleted?
     Handler.redo_tiles(surfacedata)
   end

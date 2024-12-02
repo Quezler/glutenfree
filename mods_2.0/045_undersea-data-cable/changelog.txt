@@ -18,6 +18,7 @@ Date: ????
     - Stash overnight draft
     - Test the undo functions
     - Test redo when visiting the hidden surface
+    - Mention when switching the active surface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29
