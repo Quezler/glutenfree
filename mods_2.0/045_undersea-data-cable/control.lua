@@ -30,6 +30,8 @@ script.on_init(function()
   refresh_surfacedata()
 
   storage.active_surface_index = 1 -- nauvis 
+
+  storage.deathrattles = {}
 end)
 
 script.on_configuration_changed(function()
@@ -78,23 +80,20 @@ function Handler.undo_tiles(surfacedata)
   assert(storage.active_surface_index ~= nil, "storage.active_surface_index is already nil.")
   storage.active_surface_index = nil
 
-  storage.surface.set_tiles(
-    Handler.get_set_tiles_tiles(surfacedata, false),
-    false,
-    false,
-    false
-  )
+  storage.surface.set_tiles(Handler.get_set_tiles_tiles(surfacedata, false), false, false, false)
 end
 
 function Handler.redo_tiles(surfacedata)
   storage.active_surface_index = surfacedata.surface.index
 
-  storage.surface.set_tiles(
-    Handler.get_set_tiles_tiles(surfacedata, true),
-    false,
-    false,
-    false
-  )
+  storage.surface.set_tiles(Handler.get_set_tiles_tiles(surfacedata, true), false, false, false)
+end
+
+local function new_struct(table, struct)
+  assert(struct.id, serpent.block(struct))
+  assert(table[struct.id] == nil)
+  table[struct.id] = struct
+  return struct
 end
 
 function Handler.on_created_entity(event)
@@ -138,16 +137,25 @@ function Handler.on_created_entity(event)
   -- game.print(storage.surface.get_tile(position).name)
 
   if entity.name == "undersea-data-cable-interface" then
-    entity.surface.create_entity{
+    local heat_pipe = entity.surface.create_entity{
       name = "undersea-data-cable",
       force = entity.force,
       position = entity.position,
       quality = entity.quality, -- why?
     }
+    heat_pipe.destructible = false -- the pipe under the interface we control by script
 
     entity.backer_name = "[font=default-tiny-bold]network ?[/font]"
     surfacedata.interfaces[entity.unit_number] = entity
   end
+
+  new_struct(storage.deathrattles, {
+    id = script.register_on_object_destroyed(entity),
+    type = entity.name,
+    surface_index = entity.surface.index,
+    position = entity.position,
+    position_str = position_str,
+  })
 
   Handler.recalculate_networks(surfacedata)
 end
@@ -166,18 +174,35 @@ for _, event in ipairs({
   })
 end
 
-if debug_mode then
-  commands.add_command("undersea-undo", nil, function(command)
-    local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
-    Handler.undo_tiles(storage.surfacedata[player.surface.index])
-  end)
-
-  commands.add_command("undersea-redo", nil, function(command)
-    local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
-    if player.surface.index == storage.surface.index then
-      Handler.redo_tiles(storage.surfacedata[storage.active_surface_index])
-    end
-  end)
-end
-
 -- todo: when creating a blueprint, remove the heat pipe under any interface
+
+-- todo: remove when 2.0.24 drops
+script.on_event(defines.events.on_chunk_generated, function(event)
+  if event.surface.index == storage.surface.index then
+    Handler.redo_tiles(storage.surfacedata[storage.active_surface_index])
+  end
+end)
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+
+    if deathrattle.type == "undersea-data-cable" then
+      local surfacedata = storage.surfacedata[deathrattle.surface_index]
+      surfacedata.tiles[deathrattle.position_str] = nil
+      if deathrattle.surface_index == storage.active_surface_index then
+        storage.surface.set_tiles({{position = deathrattle.position, name = Handler.get_lab_tile_name(deathrattle.position)}}, false, false, false)
+      end
+    elseif deathrattle.type == "undersea-data-cable-connector" then
+      local surfacedata = storage.surfacedata[deathrattle.surface_index]
+      surfacedata.tiles[deathrattle.position_str] = nil
+      if deathrattle.surface_index == storage.active_surface_index then
+        storage.surface.set_tiles({{position = deathrattle.position, name = Handler.get_lab_tile_name(deathrattle.position)}}, false, false, false)
+      end
+      surfacedata.surface.find_entity(deathrattle.position, "undersea-data-cable").destroy()
+    else
+      error(serpent.block(deathrattle))
+    end
+
+  end
+end)

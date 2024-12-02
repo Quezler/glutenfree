@@ -31,6 +31,7 @@ Date: ????
     - Now why on earth does get_connected_tiles fail
     - Welp get_connected_tiles looks broken too
     - Fix surfacedata -> storage typo
+    - Deploy deathrattles to clear up the tiles and networks
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2024. 11. 29
