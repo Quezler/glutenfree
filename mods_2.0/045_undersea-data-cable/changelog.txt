@@ -7,6 +7,7 @@ Date: ????
     - Setup thumbnail
     - Write readme
     - Draw the data cable on the interface (under the circuit connector)
+    - Update recipes and technology effects
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2024. 12. 02

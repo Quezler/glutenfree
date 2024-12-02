@@ -56,14 +56,24 @@ local entity = {
 local item = table.deepcopy(data.raw["item"]["heat-pipe"])
 item.name = "undersea-data-cable-interface"
 item.icons = icons
+item.subgroup = "environmental-protection"
+item.order = "z-d[undersea-data-cable-interface]"
+item.stack_size = 10
 item.place_result = entity.name
 entity.minable.result = item.name
 
-local recipe = table.deepcopy(data.raw["recipe"]["radar"])
-recipe.name = "undersea-data-cable-interface"
-recipe.results[1].name = item.name
-recipe.results[1].amount = 1
-recipe.enabled = true
+local recipe = {
+  type = "recipe",
+  name = "undersea-data-cable-interface",
+  ingredients =
+  {
+    {type = "item", name = "electronic-circuit", amount = 1},
+    {type = "item", name = "iron-gear-wheel", amount = 1},
+    {type = "item", name = "iron-plate", amount = 2}
+  },
+  results = {{type="item", name="undersea-data-cable-interface", amount=1}},
+  enabled = false
+}
 
 data:extend{entity, item, recipe}
 

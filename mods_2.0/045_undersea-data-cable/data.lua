@@ -12,3 +12,6 @@ data:extend{{
   hidden = true,
 }}
 
+local technology_effects = data.raw["technology"]["circuit-network"].effects --[[@as table]]
+table.insert(technology_effects, {type = "unlock-recipe", recipe = "undersea-data-cable"})
+table.insert(technology_effects, {type = "unlock-recipe", recipe = "undersea-data-cable-interface"})
