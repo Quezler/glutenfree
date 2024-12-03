@@ -3,6 +3,7 @@ Version: 1.0.1
 Date: ????
   Info:
     - Remove leftover commented out code
+    - Clarify the stance on radars
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2024. 12. 02
