@@ -197,10 +197,6 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
     storage.active_struct_ids[struct_id] = true
     script.on_event(defines.events.on_tick, Handler.on_tick)
     Handler.tick_active_struct(struct)
-    selected.surface.play_sound{
-      path = "alchemical-combinator-charge",
-      position = selected.position,
-    }
   end
 end)
 
@@ -295,11 +291,6 @@ function Handler.tick_active_struct(struct)
   -- during the first tick(s?) the player is still selecting the normal combinator
   if (not selected_by_any_player(struct.alchemical_combinator_active)) and (not selected_by_any_player(struct.alchemical_combinator)) then
     storage.active_struct_ids[struct.id] = nil
-
-    struct.alchemical_combinator.surface.play_sound{
-      path = "alchemical-combinator-uncharge",
-      position = struct.alchemical_combinator.position,
-    }
 
     struct.alchemical_combinator_active.destroy()
     struct.alchemical_combinator_active = nil

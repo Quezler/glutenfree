@@ -56,19 +56,19 @@ combinator_active.selection_priority = (combinator.selection_priority or 50) + 1
 
 data:extend{combinator, combinator_item, combinator_active}
 
-local sound_charge = {
+combinator.build_sound = {
   type = "sound",
   name = "alchemical-combinator-charge",
   filename = "__alchemical-combinator__/sound/charge.ogg",
 }
 
-local sound_uncharge = {
+combinator.mined_sound = {
   type = "sound",
   name = "alchemical-combinator-uncharge",
   filename = "__alchemical-combinator__/sound/uncharge.ogg",
 }
 
-data:extend{sound_charge, sound_uncharge}
+combinator_active.mined_sound = combinator.mined_sound
 
 local function turn_off_combinator_screen(combinator)
   for _, sprite_4_way in ipairs({"equal_symbol_sprites", "greater_symbol_sprites", "less_symbol_sprites", "not_equal_symbol_sprites", "greater_or_equal_symbol_sprites", "less_or_equal_symbol_sprites"}) do
