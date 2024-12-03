@@ -28,7 +28,7 @@ local function refresh_always_show_and_show_in_chart(struct)
   local blueprint_entities = inventory[1].get_blueprint_entities()
   if blueprint_entities == nil then error('blueprint_entities = nil') end
 
-  local display_panel = nil 
+  local display_panel = nil
   for _, blueprint_entity in ipairs(blueprint_entities) do
     if is_display_panel[blueprint_entity.name] then
       display_panel = blueprint_entity
