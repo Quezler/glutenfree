@@ -3,6 +3,7 @@ Version: 1.0.6
 Date: ????
   Info:
     - Move sounds from hovering to building/mining
+    - Fix a crash when editor mining the combinator
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.5
 Date: 2024. 11. 18
