@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.9
-Date: ????
+Version: 1.1.0
+Date: 2024. 12. 03
   Info:
     - Add space location name
     - Remove recycler source pictures (50% less filesize)
