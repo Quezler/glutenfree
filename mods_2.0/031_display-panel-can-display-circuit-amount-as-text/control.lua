@@ -3,6 +3,13 @@ local circuit_green = defines.wire_connector_id.circuit_green
 
 require("util")
 
+local is_display_panel = {}
+for _, prototype in pairs(prototypes.entity) do
+  if prototype.type == "display-panel" then
+    is_display_panel[prototype.name] = true
+  end
+end
+
 local Handler = {}
 
 local function refresh_always_show_and_show_in_chart(struct)
@@ -18,12 +25,22 @@ local function refresh_always_show_and_show_in_chart(struct)
     area = entity.bounding_box,
   }
 
-  local blueprint_entities = inventory[1].get_blueprint_entities() or {}
-  assert(#blueprint_entities == 1)
+  local blueprint_entities = inventory[1].get_blueprint_entities()
+  if blueprint_entities == nil then error('blueprint_entities = nil') end
+
+  local display_panel = nil 
+  for _, blueprint_entity in ipairs(blueprint_entities) do
+    if is_display_panel[blueprint_entity.name] then
+      display_panel = blueprint_entity
+    end
+  end
+
+  assert(display_panel, serpent.line(blueprint_entities))
+
   inventory.destroy()
 
-  struct.always_show = blueprint_entities[1].always_show == true
-  struct.show_in_chart = blueprint_entities[1].show_in_chart == true
+  struct.always_show = display_panel.always_show == true
+  struct.show_in_chart = display_panel.show_in_chart == true
   -- game.print(serpent.line({always_show = struct.always_show, show_in_chart = struct.show_in_chart}))
 
   local surfacedata = storage.surfacedata[entity.surface.index]

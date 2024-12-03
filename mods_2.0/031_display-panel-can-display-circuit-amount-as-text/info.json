@@ -3,7 +3,7 @@
     "title": "Display panel can display circuit amount as text",
     "description": "When you leave the label empty (or when it is a valid number) it'll show the circuit amount.",
 
-    "version": "1.0.7",
+    "version": "1.0.8",
     "author": "Quezler",
     "factorio_version": "2.0",
 
