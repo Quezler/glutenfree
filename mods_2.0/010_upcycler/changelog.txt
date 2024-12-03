@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Add space location name
     - Remove recycler source pictures (50% less filesize)
+    - Support other mods adding their own upcycler tier
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 11. 20

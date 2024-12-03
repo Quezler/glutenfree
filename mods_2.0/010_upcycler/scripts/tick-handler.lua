@@ -45,7 +45,7 @@ function TickHandler.update_struct(struct)
   local green_network = struct.entities.decider.get_circuit_network(defines.wire_connector_id.combinator_output_green)
 
   for _, signal_and_count in ipairs(green_network.signals or {}) do
-    local payout = math.floor(signal_and_count.count / storage.items_per_next_quality)
+    local payout = math.floor(signal_and_count.count / storage.items_per_next_quality[struct.entities.upcycler.name])
     if payout <= 0 then goto continue end
 
     local next_quality = next_quality[signal_and_count.signal.quality or "normal"]
@@ -64,7 +64,7 @@ function TickHandler.update_struct(struct)
         name = signal_and_count.signal.name,
         quality = signal_and_count.signal.quality,
       },
-      constant = -(payout * storage.items_per_next_quality),
+      constant = -(payout * storage.items_per_next_quality[struct.entities.upcycler.name]),
       copy_count_from_input = false,
     })
 
@@ -108,8 +108,8 @@ function TickHandler.handle_observed_struct(struct)
   for _, signal_and_count in ipairs(green_network.signals or {}) do
     if signal_and_count.signal.name == struct.last_held_stack.item_name then
       if (signal_and_count.signal.quality or "normal") == struct.last_held_stack.quality_name then
-        -- game.print(signal_and_count.count / storage.items_per_next_quality)
-        struct.entities.upcycler.crafting_progress = math.min(signal_and_count.count / storage.items_per_next_quality, 0.99)
+        -- game.print(signal_and_count.count / storage.items_per_next_quality[struct.entities.upcycler.name])
+        struct.entities.upcycler.crafting_progress = math.min(signal_and_count.count / storage.items_per_next_quality[struct.entities.upcycler.name], 0.99)
         return
       end
     end
@@ -143,7 +143,7 @@ end
 function TickHandler.on_selected_entity_changed(event)
   local player = assert(game.get_player(event.player_index))
 
-  if player.selected and player.selected.name == "upcycler" then
+  if player.selected and storage.items_per_next_quality[player.selected.name] ~= nil then
     -- log(string.format("player %s started observing upcycler #%d", player.name, player.selected.unit_number))
     storage.observed_structs[player.selected.unit_number] = true
   end
@@ -152,7 +152,7 @@ end
 function TickHandler.on_gui_opened(event)
   local player = assert(game.get_player(event.player_index))
 
-  if event.entity and event.entity.name == "upcycler" then
+  if event.entity and storage.items_per_next_quality[event.entity.name] ~= nil then
     -- log(string.format("player %s started observing upcycler #%d", player.name, event.entity.unit_number))
     storage.observed_structs[event.entity.unit_number] = true
   end

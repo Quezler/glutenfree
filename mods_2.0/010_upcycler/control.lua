@@ -5,12 +5,18 @@ local mod_surface_name = "upcycler"
 
 local Handler = {}
 
+local function reset_items_per_next_quality()
+  storage.items_per_next_quality = {
+    upcycler = settings.global["upcycling-items-per-next-quality"].value,
+  }
+end
+
 function Handler.init()
   storage.structs = {}
   storage.struct_ids = {}
   storage.deathrattles = {}
   storage.next_x_offset = 0
-  storage.items_per_next_quality = settings.global["upcycling-items-per-next-quality"].value
+  reset_items_per_next_quality()
   storage.decider_control_behaviors_to_override = {}
   storage.observed_structs = {}
 
@@ -28,6 +34,8 @@ function Handler.on_configuration_changed()
   if game.planets[mod_surface_name].surface == nil then
     game.planets[mod_surface_name].associate_surface(game.surfaces[mod_surface_name])
   end
+
+  reset_items_per_next_quality()
 end
 
 script.on_init(Handler.init)
@@ -116,18 +124,28 @@ function Handler.on_created_entity(event)
   storage.next_x_offset = storage.next_x_offset + 1
 end
 
-for _, event in ipairs({
-  defines.events.on_built_entity,
-  defines.events.on_robot_built_entity,
-  defines.events.on_space_platform_built_entity,
-  defines.events.script_raised_built,
-  defines.events.script_raised_revive,
-  defines.events.on_entity_cloned,
-}) do
-  script.on_event(event, Handler.on_created_entity, {
-    {filter = "name", name = "upcycler"},
-  })
+local function reset_on_created_entity_listeners()
+  local filters = {}
+
+  for entity_name, _ in pairs(storage.items_per_next_quality) do
+    table.insert(filters, {filter = "name", name = entity_name})
+  end
+
+  for _, event in ipairs({
+    defines.events.on_built_entity,
+    defines.events.on_robot_built_entity,
+    defines.events.on_space_platform_built_entity,
+    defines.events.script_raised_built,
+    defines.events.script_raised_revive,
+    defines.events.on_entity_cloned,
+  }) do
+    script.on_event(event, Handler.on_created_entity, filters)
+  end
 end
+
+script.on_load(function()
+  reset_on_created_entity_listeners()
+end)
 
 function Handler.get_or_create_linkedchest_then_move(entity)
   local linked_chest = entity.surface.find_entities_filtered{
@@ -176,13 +194,13 @@ function Handler.get_or_create_linkedchest_then_move(entity)
 end
 
 script.on_event(defines.events.on_player_rotated_entity, function(event)
-  if event.entity.name == "upcycler" then
+  if storage.items_per_next_quality[event.entity.name] ~= nil then
     Handler.get_or_create_linkedchest_then_move(event.entity)
   end
 end)
 
 script.on_event(defines.events.on_player_flipped_entity, function(event)
-  if event.entity.name == "upcycler" then
+  if storage.items_per_next_quality[event.entity.name] ~= nil then
     Handler.get_or_create_linkedchest_then_move(event.entity)
   end
 end)
@@ -224,10 +242,20 @@ script.on_event(defines.events.on_tick, TickHandler.on_tick)
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
   if event.setting_type == "runtime-global" then
     if event.setting == "upcycling-items-per-next-quality" then
-      storage.items_per_next_quality = settings.global["upcycling-items-per-next-quality"].value
+      storage.items_per_next_quality["upcycler"] = settings.global["upcycling-items-per-next-quality"].value
     end
   end
 end)
 
 script.on_event(defines.events.on_selected_entity_changed, TickHandler.on_selected_entity_changed)
 script.on_event(defines.events.on_gui_opened, TickHandler.on_gui_opened)
+
+remote.add_interface("upcycler", {
+  set_items_per_next_quality = function(data)
+    assert(data.name ~= "upcycler") -- this would desync what is shown in the settings of this mod
+    assert(prototypes.entity[data.name])
+    assert(data.items > 0)
+    storage.items_per_next_quality[data.name] = data.items
+    reset_on_created_entity_listeners()
+  end,
+})
