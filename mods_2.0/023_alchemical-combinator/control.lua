@@ -241,6 +241,9 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       for _, arithmetic in ipairs(struct.arithmetics) do
         arithmetic.destroy()
       end
+      if struct.alchemical_combinator_active then
+        struct.alchemical_combinator_active.destroy()
+      end
       storage.active_struct_ids[deathrattle.struct_id] = nil -- technically a 1 tick desync gap?
     end
 
