@@ -127,8 +127,12 @@ end
 local function reset_on_created_entity_listeners()
   local filters = {}
 
-  for entity_name, _ in pairs(storage.items_per_next_quality) do
-    table.insert(filters, {filter = "name", name = entity_name})
+  if type(storage.items_per_next_quality) == "number" then
+    table.insert(filters, {filter = "name", name = "upcycler"})
+  else
+    for entity_name, _ in pairs(storage.items_per_next_quality) do
+      table.insert(filters, {filter = "name", name = entity_name})
+    end
   end
 
   for _, event in ipairs({
