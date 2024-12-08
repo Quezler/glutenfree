@@ -47,12 +47,28 @@ end
 script.on_init(on_configuration_changed)
 script.on_configuration_changed(on_configuration_changed)
 
-commands.add_command("quality-upgrade-planner", "Receive a quality upgrade planner.", function(command)
-  local player = game.get_player(command.player_index)
+local function equip_player_with_planner(player)
   assert(player)
 
   player.clear_cursor()
   if player.cursor_stack.valid_for_read == true then return end -- cursor not cleared?
 
   player.cursor_stack.set_stack(storage.inventory[1])
+end
+
+local function on_lua_shortcut(event)
+  local name = event.input_name or event.prototype_name
+  if name ~= "get-quality-book" then
+    return
+  end
+  local player = game.get_player(event.player_index)
+  equip_player_with_planner(player)
+end
+
+script.on_event(defines.events.on_lua_shortcut, on_lua_shortcut)
+script.on_event("get-quality-book", on_lua_shortcut)
+
+commands.add_command("quality-upgrade-planner", "Receive a quality upgrade planner.", function(command)
+  local player = game.get_player(command.player_index)
+  equip_player_with_planner(player)
 end)
