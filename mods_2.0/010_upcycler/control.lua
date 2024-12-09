@@ -28,6 +28,8 @@ function Handler.init()
     force = "neutral",
     position = {-1, -1},
   }
+
+  Handler.reset_on_created_entity_listeners()
 end
 
 function Handler.on_configuration_changed()
@@ -36,6 +38,7 @@ function Handler.on_configuration_changed()
   end
 
   reset_items_per_next_quality()
+  Handler.reset_on_created_entity_listeners()
 end
 
 script.on_init(Handler.init)
@@ -124,7 +127,7 @@ function Handler.on_created_entity(event)
   storage.next_x_offset = storage.next_x_offset + 1
 end
 
-local function reset_on_created_entity_listeners()
+function Handler.reset_on_created_entity_listeners()
   local filters = {}
 
   if type(storage.items_per_next_quality) == "number" then
@@ -148,7 +151,7 @@ local function reset_on_created_entity_listeners()
 end
 
 script.on_load(function()
-  reset_on_created_entity_listeners()
+  Handler.reset_on_created_entity_listeners()
 end)
 
 function Handler.get_or_create_linkedchest_then_move(entity)
@@ -260,6 +263,6 @@ remote.add_interface("upcycler", {
     assert(prototypes.entity[data.name])
     assert(data.items > 0)
     storage.items_per_next_quality[data.name] = data.items
-    reset_on_created_entity_listeners()
+    Handler.reset_on_created_entity_listeners()
   end,
 })
