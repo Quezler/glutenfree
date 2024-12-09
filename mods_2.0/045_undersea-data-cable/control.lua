@@ -238,13 +238,6 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
   event.stack.set_blueprint_entities(blueprint_entities)
 end)
 
--- todo: remove when 2.0.24 drops
-script.on_event(defines.events.on_chunk_generated, function(event)
-  if event.surface.index == storage.surface.index then
-    Handler.redo_tiles(storage.surfacedata[storage.active_surface_index])
-  end
-end)
-
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
