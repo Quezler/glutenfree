@@ -5,7 +5,7 @@ This mod took longer than my usual mods since i had to deal with connecting text
 - the recipes unlock when you have both the heat pipe and the corresponding underground belt researched
 - they can be weaved, not sure why you would, but you can
 - the mod uses no on_tick, its all done with hidden entities and listening to just the required events
-- in floor heating! tiles between underground are considered warm and toasty
+- ~~in floor heating! tiles between underground are considered warm and toasty~~
 - they are bidirectional, the underground direction indicator is not relevant
 - the only difference in tiers is the length they can span, since recipes use heat pipes for the full length try to use the lowest tier
 - linked heat pipes when? (or linked connections like the fluidbox has, i mean, the heat prototype also has a connections array)
