@@ -25,7 +25,7 @@ local function handle_surface(surface)
     platform.name = prefix .. platform_name
   end
 
-  log(surface.name .. ' ' .. platform.name)
+  -- log(surface.name  .. ' ' .. platform.name)
 end
 
 local function handle_surfaces()
