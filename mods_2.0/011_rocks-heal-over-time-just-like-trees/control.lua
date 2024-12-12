@@ -14,6 +14,11 @@ local function should_whitelist(prototype)
     return true
   end
 
+  -- fulgora
+  if string.find(prototype.name, "fulgoran%-ruin") then
+    return true
+  end
+
   -- space exploration
   if prototype.localised_name and prototype.localised_name[1] and prototype.localised_name[1] == "entity-name.meteorite" then
     return true

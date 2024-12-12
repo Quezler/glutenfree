@@ -3,6 +3,7 @@ Version: 2.0.5
 Date: ????
   Info:
     - Move whitelist generation out of on_configuration_changed
+    - Support fulgora ruins (how do you even damage those on accident?)
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 2024. 12. 12
