@@ -36,7 +36,12 @@ local function on_configuration_changed()
     local i = 1
     for _, entity in pairs(prototypes.entity) do
       local success, error = pcall(set_mapper, upgrade_planner, i, entity, quality)
-      if success == false then log(error) end
+      if success == false then
+        assert(error)
+        if string.find(error, " is not a valid upgrade source entity.") == nil then
+          log(error)
+        end
+      end
       if success == true then i = i + 1 end
     end
 
