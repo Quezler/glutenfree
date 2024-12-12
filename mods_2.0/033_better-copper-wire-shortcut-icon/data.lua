@@ -16,3 +16,5 @@ copper_shortcut.small_icons = {
   {icon_size = 26, icon = "__better-copper-wire-shortcut-icon__/graphics/icons/shortcut-toolbar/mip/new-copper-wire-x26-tint.png", tint = copper_tint},
   {icon_size = 26, icon = "__better-copper-wire-shortcut-icon__/graphics/icons/shortcut-toolbar/mip/new-copper-wire-x26.png"}, -- 2 extra pixels for the caps
 }
+
+data.raw["item"]["copper-wire"].icons = copper_shortcut.icons
