@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Move whitelist generation out of on_configuration_changed
     - Support fulgora ruins (how do you even damage those on accident?)
+    - Rework multiple if statements into a whitelist_if_name_contains table (and add corpse/iceberg support)
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 2024. 12. 12

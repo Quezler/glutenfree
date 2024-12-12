@@ -1,22 +1,34 @@
-local function should_whitelist(prototype)
+local whitelist_if_name_matches = {
+  -- ?
+}
+
+local whitelist_if_name_contains = {
   -- nauvis
-  if string.find(prototype.name, "rock") then
-    return true
-  end
-
+  "%-rock",
   -- vulcanus
-  if string.find(prototype.name, "chimney") then
-    return true
-  end
-
+  "vulcanus%-chimney",
+  "%-demolisher%-corpse",
   -- gleba
-  if string.find(prototype.name, "stromatolite") then
-    return true
+  "%-stromatolite",
+  "%-stomper%-shell",
+  -- fulgora
+  "fulgoran%-ruin%-",
+  "fulgurite",
+  -- aquilo
+  "lithium%-iceberg%-",
+}
+
+local function should_whitelist(prototype)
+  for _, string in ipairs(whitelist_if_name_matches) do
+    if prototype.name == string then
+      return true
+    end
   end
 
-  -- fulgora
-  if string.find(prototype.name, "fulgoran%-ruin") then
-    return true
+  for _, substring in ipairs(whitelist_if_name_contains) do
+    if string.find(prototype.name, substring) then
+      return true
+    end
   end
 
   -- space exploration
@@ -27,20 +39,26 @@ local function should_whitelist(prototype)
   return false
 end
 
-local entity_name_whitelisted = {}
+local whitelisted_names = {}
+local blacklisted_names = {}
 for _, prototype in pairs(prototypes.entity) do
   if prototype.type == "simple-entity" then
-    entity_name_whitelisted[prototype.name] = should_whitelist(prototype)
+    if should_whitelist(prototype) then
+      whitelisted_names[prototype.name] = true
+    else
+      blacklisted_names[prototype.name] = true
+    end
   end
 end
-log(serpent.block(entity_name_whitelisted))
+log("whitelisted_names: " .. serpent.block(whitelisted_names))
+log("blacklisted_names: " .. serpent.block(blacklisted_names))
 
 local function get_index(entity)
   return entity.position.x .. "," .. entity.position.y .. "," .. entity.surface.name
 end
 
 local function maybe_add_to_damaged_rocks(entity)
-  if entity_name_whitelisted[entity.name] and 1 > entity.get_health_ratio() then
+  if whitelisted_names[entity.name] and 1 > entity.get_health_ratio() then
     local index = get_index(entity)
     if not storage.damaged_rocks[index] then
       storage.damaged_rocks[index] = entity
