@@ -3,6 +3,7 @@ Version: 2.0.1
 Date: ????
   Info:
     - Replace stray tabs with spaces
+    - Ensure each text file ends with a newline
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2024-12-13
