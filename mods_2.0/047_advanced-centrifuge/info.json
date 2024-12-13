@@ -1,0 +1,13 @@
+{
+  "name": "advanced-centrifuge",
+  "version": "1.0.3",
+  "title": "Advanced Centrifuge",
+  "description": "An advanced centrifuge, to fill in the gap of advanced buildings for Krastorio 2",
+  "author": "kiratu11",
+  "contact": "",
+  "homepage": "",
+  "factorio_version": "1.1",
+  "dependencies": [
+    "base >= 1.1.74"
+  ]
+}

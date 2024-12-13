@@ -1,0 +1,30 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-12-13
+  Changes:
+    - Added Quezler as a maintainer.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2023-05-29
+  Changes:
+    - Reduced advanced centrifuge volume.
+    - Changed advanced centrifuge icon.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2023-05-26
+  Bugfixes:
+    - Fixed error when trying to load SE whithout K2.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2023-05-26
+  Changes:
+    - Removed Krastorio 2 requirement.
+    - Changed advanced centrifuge item icon.
+    - Advanced centrifuge recipe changes.
+  Bugfixes:
+    - Fixed some typos.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2023-05-26
+  Features:
+    - Introduced.
