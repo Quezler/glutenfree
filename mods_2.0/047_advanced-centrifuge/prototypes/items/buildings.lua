@@ -8,7 +8,15 @@ data:extend({
   {
     type = "item",
     name = "k11-advanced-centrifuge",
-    icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon.png",
+    icons = {
+      {
+        icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon-base.png",
+      },
+      {
+        icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon-light.png",
+        tint = {0, 1, 0, 0.2},
+      }
+    },
     subgroup = subgroup,
     order = "g[centrifuge]-a[advanced-centrifuge]", -- Needs adjustment
     place_result = "k11-advanced-centrifuge",
