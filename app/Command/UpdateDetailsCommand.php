@@ -21,6 +21,7 @@ class UpdateDetailsCommand extends Command
         if ($input->getOption('all') !== true) throw new \LogicException("Currently its all or nothing");
 
         foreach (ExpansionMods::list() as $expansionMod) {
+            if ($expansionMod->info()["author"] != "Quezler") continue;
             if ($expansionMod->majorVersionIsZero()) continue;
 
             $output->writeln($expansionMod->name);

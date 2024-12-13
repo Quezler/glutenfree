@@ -112,7 +112,6 @@ class ExpansionMod
 
     public function editDetails(): ResponseInterface
     {
-        $readme_prefix = $this->getReadmePrefix();
         return $response = (new Client)->post('https://mods.factorio.com/api/v2/mods/edit_details', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $_ENV['FACTORIO_API_KEY'],
