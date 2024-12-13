@@ -130,7 +130,7 @@ data:extend({
     open_sound = sounds.machine_open,
     close_sound = sounds.machine_close,
     vehicle_impact_sound = sounds.generic_impact,
-	  damaged_trigger_effect = hit_effects.entity(),
-	}
+    damaged_trigger_effect = hit_effects.entity(),
+  }
 })
 

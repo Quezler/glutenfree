@@ -21,19 +21,19 @@ end
 -- Changes for SE
 
 if mods["space-exploration"] then
-	ingredients = {
-		{"automation-science-pack", 1},
+  ingredients = {
+    {"automation-science-pack", 1},
     {"logistic-science-pack", 1},
     {"chemical-science-pack", 1},
     {"utility-science-pack", 1},
     {"se-energy-science-pack-1", 1},
     {"se-material-science-pack-2", 1},
   }
-	prerequisites = {"uranium-processing", "se-heavy-bearing"}
+  prerequisites = {"uranium-processing", "se-heavy-bearing"}
 
-	if mods["Krastorio2"] then
-	  table.insert(prerequisites, "kr-energy-control-unit")
-	end
+  if mods["Krastorio2"] then
+    table.insert(prerequisites, "kr-energy-control-unit")
+  end
 end
 
 data:extend({
@@ -60,7 +60,7 @@ data:extend({
     prerequisites = prerequisites,
     unit = {
       count = 1000,
-	    time = 30,
+      time = 30,
       ingredients = ingredients,
     }
   }
