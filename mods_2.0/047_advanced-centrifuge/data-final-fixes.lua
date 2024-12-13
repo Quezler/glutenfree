@@ -1,0 +1,3 @@
+if mods["space-exploration"] then
+  data.raw["item"]["k11-advanced-centrifuge"].icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon-base.png"
+end
