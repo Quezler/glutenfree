@@ -5,19 +5,15 @@ local recipe_tint = "none"
 local light_tint = {r = 0.0, g = 1.0, b = 0.0}
 
 if mods["space-exploration"] then
-
-recipe_tint = "primary"
-light_tint = {r = 1.0, g = 1.0, b = 1.0}
-
+  recipe_tint = "primary"
+  light_tint = {r = 1.0, g = 1.0, b = 1.0}
 end
 
 data:extend({
-    {
+  {
     type = "assembling-machine",
     name = "k11-advanced-centrifuge",
     icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon.png",
-    icon_size = 64,
-    icon_mipmaps = 4,
     flags = { "placeable-neutral", "placeable-player", "player-creation" },
     minable = { mining_time = 1, result = "k11-advanced-centrifuge" },
     max_health = 1000,
@@ -27,24 +23,16 @@ data:extend({
       { type = "physical", percent = 40 },
       { type = "fire", percent = 60 },
       { type = "impact", percent = 60 },
-    },   
+    },
     collision_box = { { -3.25, -3.25 }, { 3.25, 3.25 } },
     selection_box = { { -3.5, -3.5 }, { 3.5, 3.5 } },
     fast_replaceable_group = "assembling-machine",
-    animation = {
-      layers = {
-        {
-          filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge.png",
-          priority = "high",
-          width = 225,
-          height = 275,
-          shift = { 0, -0.9 },
-          frame_count = 30,
-          line_length = 5,
-          animation_speed = 0.125,
-          scale = 1,
-          hr_version = {
-            filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/hr-advanced-centrifuge.png",
+
+    graphics_set = {
+      animation = {
+        layers = {
+          {
+            filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge.png",
             priority = "high",
             width = 450,
             height = 550,
@@ -54,20 +42,8 @@ data:extend({
             animation_speed = 0.125,
             scale = 0.5,
           },
-        },
-        {
-          filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-sh.png",
-          priority = "high",
-          width = 350,
-          height = 275,
-          shift = { 1.27, -0.38 },
-          frame_count = 1,
-          repeat_count = 30,
-          animation_speed = 0.125,
-          scale = 0.8844,
-          draw_as_shadow = true,
-          hr_version = {
-            filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/hr-advanced-centrifuge-sh.png",
+          {
+            filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-sh.png",
             priority = "high",
             width = 700,
             height = 550,
@@ -80,71 +56,53 @@ data:extend({
           },
         },
       },
-    },
-	
-	working_visualisations =
-	
-    {
-      {
-        effect = "uranium-glow",
-        fadeout = true,
-        light = {intensity = 0.2, size = 9.9, shift = {0.0, 0.0}, color = {r = 1.0, g = 0.9, b = 0.9}}
-      },
-      {
-        effect = "uranium-glow",
-        fadeout = true,
-        draw_as_light = true,
-		apply_recipe_tint = recipe_tint,
-        animation =
+      working_visualisations = {
         {
-          layers =
+          effect = "uranium-glow",
+          fadeout = true,
+          light = {intensity = 0.2, size = 9.9, shift = {0.0, 0.0}, color = {r = 1.0, g = 0.9, b = 0.9}}
+        },
+        {
+          effect = "uranium-glow",
+          fadeout = true,
+          draw_as_light = true,
+          apply_recipe_tint = recipe_tint,
+          animation =
           {
+            layers =
             {
-              filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-light.png",
-              priority = "high",
-              blend_mode = "additive", -- centrifuge
-			  tint = light_tint,
-              line_length = 5,
-              width = 225,
-              height = 275,
-              frame_count = 30,
-			  scale = 1,
-			  animation_speed = 0.125,
-              shift = { 0, -0.9 },
-
-              hr_version =
               {
-                filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/hr-advanced-centrifuge-light.png",
+                filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-light.png",
                 priority = "high",
                 blend_mode = "additive", -- centrifuge
-				tint = light_tint,
+                tint = light_tint,
                 line_length = 5,
                 width = 450,
                 height = 550,
                 frame_count = 30,
-				scale = 0.5,
-				animation_speed = 0.125,
+                scale = 0.5,
+                animation_speed = 0.125,
                 shift = { 0, -0.9 }
               }
             }
           }
         }
-      }
+      },
     },
-	
+
     crafting_categories = { "centrifuging" },
     working_sound = {
-	  sound = {filename = "__advanced-centrifuge__/sounds/advanced-centrifuge.ogg" , volume = 2 },
+      sound = {filename = "__advanced-centrifuge__/sounds/advanced-centrifuge.ogg" , volume = 2 },
       idle_sound = { filename = "__base__/sound/idle1.ogg" },
       apparent_volume = 8,
-	  fade_in_ticks = 20,
+      fade_in_ticks = 20,
       fade_out_ticks = 20,
     },
     crafting_speed = 8,
     energy_source = {
       type = "electric",
       usage_priority = "secondary-input",
-      emissions_per_minute = 30,
+      emissions_per_minute = { pollution = 30 },
     },
 
     water_reflection = {
@@ -163,14 +121,16 @@ data:extend({
 
     energy_usage = "2.0MW",
     ingredient_count = 6,
-    module_specification = { module_slots = 3, module_info_icon_shift = { 0, 1.7 }, module_info_icon_scale = 1 },
-    allowed_effects = { "consumption", "speed", "productivity", "pollution" },
+    icon_draw_specification = {shift = {0, -1.25}, scale = 2},
+    module_slots = 3,
+    icons_positioning = {
+      {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 1.7}, scale = 1}
+    },
+    allowed_effects = { "consumption", "speed", "productivity", "pollution", "quality" },
     open_sound = sounds.machine_open,
     close_sound = sounds.machine_close,
     vehicle_impact_sound = sounds.generic_impact,
-	damaged_trigger_effect = hit_effects.entity()
+	  damaged_trigger_effect = hit_effects.entity(),
 	}
-  
- })
- 
- 
+})
+

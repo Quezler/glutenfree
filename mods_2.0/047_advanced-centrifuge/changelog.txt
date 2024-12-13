@@ -3,6 +3,7 @@ Version: 2.0.0
 Date: 2024-12-13
   Changes:
     - Added Quezler as a maintainer.
+    - Added 2.0 compatibility.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2023-05-29
