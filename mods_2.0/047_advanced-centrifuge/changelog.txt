@@ -8,6 +8,7 @@ Date: ????
     - Use non-green item icon if space exploration is installed
     - Experiment more with tinted icons
     - Experiment with keeping the mask white
+    - Revert it back to how it was
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2024-12-13

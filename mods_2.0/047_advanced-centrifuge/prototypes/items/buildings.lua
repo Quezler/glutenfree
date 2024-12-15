@@ -15,8 +15,3 @@ data:extend({
     stack_size = 10,
   }
 })
-
-data.raw["item"]["centrifuge"].icons = {
-  {icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon-base.png"},
-  {icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon-mask.png"},
-}
