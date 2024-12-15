@@ -1,14 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
-Date: ????
-  Info:
-    - Replace stray tabs with spaces
-    - Ensure each text file ends with a newline
-    - Try to tint the icon a shade of green with a mask
-    - Use non-green item icon if space exploration is installed
-    - Experiment more with tinted icons
-    - Experiment with keeping the mask white
-    - Revert it back to how it was
+Date: 2024-12-15
+  Changes:
+    - Cleaned up the code. (tabs to spaces, and file endings)
+  Compatibility:
+    - Removed the green tint from the icon if SE is installed.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2024-12-13
