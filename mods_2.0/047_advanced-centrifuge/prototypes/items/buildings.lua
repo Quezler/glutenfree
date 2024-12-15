@@ -8,18 +8,7 @@ data:extend({
   {
     type = "item",
     name = "k11-advanced-centrifuge",
-    icons = {
-      {
-        icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon-base.png",
-      },
-      {
-        icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon-mask.png",
-      },
-      {
-        icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon-mask.png",
-        tint = {0, 0.75, 0, 1},
-      }
-    },
+    icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon.png",
     subgroup = subgroup,
     order = "g[centrifuge]-a[advanced-centrifuge]", -- Needs adjustment
     place_result = "k11-advanced-centrifuge",
@@ -27,4 +16,7 @@ data:extend({
   }
 })
 
-data.raw["item"]["centrifuge"].icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon.png"
+data.raw["item"]["centrifuge"].icons = {
+  {icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon-base.png"},
+  {icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon-mask.png"},
+}
