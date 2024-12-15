@@ -77,6 +77,7 @@ local power_switch_item = {
   icon = "__thruster-control-behavior__/graphics/icons/thruster-control-behavior.png",
 
   stack_size = 10,
+  weight = assert(data.raw["item"]["thruster"].weight),
   place_result = power_switch.name,
 
   hidden = true,
