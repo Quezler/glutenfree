@@ -52,8 +52,10 @@ local function get_human_calendar_date()
   if string.len(version) ~= 17 then version = "12024.11114.11645" end
 
   local year = string.sub(version, 2, 5)
-  local month = string.sub(version, 6, 9)
+  local month = string.sub(version, 8, 9)
   local day = string.sub(version, 10, 11)
+
+  -- error(serpent.block({year, month, day}))
 
   return year, month, day
 end
