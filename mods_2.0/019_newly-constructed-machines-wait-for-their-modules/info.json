@@ -3,7 +3,7 @@
     "title": "Newly constructed machines wait for their modules",
     "description": "You probably wouldn't want machines with productivity or quality to start crafting prematurely.",
 
-    "version": "1.1.16",
+    "version": "1.1.17",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -18,6 +18,6 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "base >= 2.0.11"
+        "base >= 2.0.26"
     ]
 }

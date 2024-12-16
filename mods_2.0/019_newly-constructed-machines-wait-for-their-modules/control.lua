@@ -86,6 +86,7 @@ function entity_debug_information(entity)
     position = entity.position,
 
     active = entity.active,
+    disabled_by_script = entity.disabled_by_script,
     status = entity_status_name[entity.status],
     custom_status = entity.custom_status,
 
@@ -98,9 +99,9 @@ end
 -- we'll fix it when we get a report for it, space exploration isn't ported anyways.
 
 function Handler.remove_waiting_for_modules(entity)
-  assert(entity.active == false, "the entity is already active. " .. entity_debug_information(entity))
+  assert(entity.disabled_by_script == true, "the entity is already disabled. " .. entity_debug_information(entity))
   assert(entity.custom_status.label[1] == "entity-status.waiting-for-modules", "the entity is not waiting for modules. " .. entity_debug_information(entity))
-  entity.active = true
+  entity.disabled_by_script = false
   entity.custom_status = nil
 end
 
@@ -126,13 +127,6 @@ script.on_nth_tick(60, function(event)
     end
   end
 end)
-
-local skip_active_true_check = {
-  [defines.entity_status.frozen] = true,
---[defines.entity_status.recipe_is_parameter] = true,
-  [defines.entity_status.recipe_not_researched] = true,
-  [defines.entity_status.disabled_by_control_behavior] = true,
-}
 
 function Handler.on_tick(event)
   for _, proxy in ipairs(storage.new_proxies) do
@@ -160,17 +154,8 @@ function Handler.on_tick(event)
         label = {"entity-status.waiting-for-modules"},
       }
 
-      -- if an entity is frozen their .active reads as false
-      if not skip_active_true_check[entity.status] then
-        if entity.type == "assembling-machine" and entity.get_recipe() and entity.get_recipe().prototype.is_parameter then
-          -- await defines.entity_status.recipe_is_parameter, possibly in 2.0.22?
-          else
-          assert(entity.active == true, "expected entity.active to be true. " .. entity_debug_information(entity))
-        end
-      end
-      -- but we'll still have to set .active to false or it'll start crafting when it becomes unfrozen,
-      -- fortunatently a lua'd .active doesn't get reset when the entity unfreezes, so it keeps waiting.
-      entity.active = false
+      assert(entity.disabled_by_script == false, "expected entity.disabled_by_script to be false. " .. entity_debug_information(entity))
+      entity.disabled_by_script = true
 
       local deathrattle_id = script.register_on_object_destroyed(proxy)
       storage.structs[deathrattle_id] = {
@@ -225,7 +210,7 @@ function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
   if entity.custom_status and entity.custom_status.label[1] == "entity-status.waiting-for-modules" then
     entity.custom_status = nil
-    entity.active = true
+    entity.disabled_by_script = false
   end
 end
 
