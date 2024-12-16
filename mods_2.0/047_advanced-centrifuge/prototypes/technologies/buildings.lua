@@ -40,17 +40,10 @@ data:extend({
   {
     type = "technology",
     name = "k11-advanced-centrifuge",
-    icons = {
-      {
-        icon = util.empty_sprite().filename,
-        icon_size = 1,
-      },
-      {
-        icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-tech-icon.png",
-        icon_size = 256,
-        shift = {0, -10},
-      }
-    },
+    icons = {{
+      icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-tech-icon.png",
+      icon_size = 256,
+    }},
     effects = {
       {
         type = "unlock-recipe",

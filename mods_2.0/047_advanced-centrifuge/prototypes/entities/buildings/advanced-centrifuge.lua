@@ -27,6 +27,13 @@ data:extend({
     collision_box = { { -3.25, -3.25 }, { 3.25, 3.25 } },
     selection_box = { { -3.5, -3.5 }, { 3.5, 3.5 } },
     fast_replaceable_group = "assembling-machine",
+    circuit_wire_max_distance = data.raw["assembling-machine"]["centrifuge"].circuit_wire_max_distance,
+    circuit_connector = circuit_connector_definitions.create_vector(universal_connector_template, {
+      { variation = 26, main_offset = util.by_pixel(0, -20.5), shadow_offset = util.by_pixel(0, -20.5), show_shadow = true },
+      { variation = 26, main_offset = util.by_pixel(0, -20.5), shadow_offset = util.by_pixel(0, -20.5), show_shadow = true },
+      { variation = 26, main_offset = util.by_pixel(0, -20.5), shadow_offset = util.by_pixel(0, -20.5), show_shadow = true },
+      { variation = 26, main_offset = util.by_pixel(0, -20.5), shadow_offset = util.by_pixel(0, -20.5), show_shadow = true },
+    }),
 
     graphics_set = {
       animation = {

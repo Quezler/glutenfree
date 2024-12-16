@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2024-12-16
+  Changes:
+    - The technology icon now shows a green working glow.
+    - The advanced centrifuge now supports circuit wires.
+  Compatibility:
+    - Added a frozen sprite. (200kw heating energy, twice that of the normal centrifuge)
+    - If space age is installed, require space science to unlock the technology as well.
+  Info:
+    - The new sprites and the circuit connection definitions were donated by user S6X here:
+    - https://mods.factorio.com/mod/advanced-centrifuge/discussion/675f51cabdb86728d9d16d8c
+---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2024-12-15
   Changes:
