@@ -154,18 +154,6 @@ commands.add_command("demolisher-compass", "Toggle rendering debug objects.", fu
   end
 end)
 
-function flib_direction.from_positions(source, target, round)
-  local deg = math.deg(math.atan2(target.y - source.y, target.x - source.x))
-  local direction = (deg + 90) / 22.5
-  if direction < 0 then
-    direction = direction + 16
-  end
-  if round then
-    direction = flib_math.round(direction)
-  end
-  return direction --[[@as defines.direction]]
-end
-
 local is_demolisher_compass = {}
 for i = 0, 27 do
   is_demolisher_compass[string.format("demolisher-compass-%02d", i)] = true
