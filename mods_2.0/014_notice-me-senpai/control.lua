@@ -73,6 +73,12 @@ local function playerdata_create(player_index)
     redraw = false,
 
     alt_mode = player.game_view_settings.show_entity_info,
+
+    colormap = {
+      green  = settings.get_player_settings(player.index)["notice-me-senpai--green" ].value,
+      yellow = settings.get_player_settings(player.index)["notice-me-senpai--yellow"].value,
+      red    = settings.get_player_settings(player.index)["notice-me-senpai--red"   ].value,
+    }
   }
 end
 
@@ -149,13 +155,20 @@ local function position_key(position)
   return string.format("[%g, %g]", position.x, position.y)
 end
 
+-- kept as fallback for pre 1.0.9
+local colors = {
+  green  = {0.0, 0.9, 0.0, 1},
+  yellow = {0.9, 0.9, 0.0, 1},
+  red    = {0.9, 0.0, 0.0, 1},
+}
+
 local function get_color_for_tile_key(playerdata, tile_key)
   if playerdata.green_positions[tile_key] then
-    return {0, 0.9, 0, 1} -- green
+    return playerdata.colormap["green"] or colors["green"]
   elseif playerdata.yellow_positions[tile_key] then
-    return {0.9, 0.9, 0, 1} -- yellow
+    return playerdata.colormap["yellow"] or colors["yellow"]
   else
-    return {0.9, 0, 0, 1} -- red
+    return playerdata.colormap["red"] or colors["red"]
   end
 end
 

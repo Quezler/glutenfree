@@ -91,6 +91,12 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
         tile_render_objects = {},
 
         alt_mode = player.game_view_settings.show_entity_info,
+
+        colormap = {
+          green  = settings.get_player_settings(player.index)["agricultural-tower-placement-helper--green" ].value,
+          yellow = settings.get_player_settings(player.index)["agricultural-tower-placement-helper--yellow"].value,
+          red    = settings.get_player_settings(player.index)["agricultural-tower-placement-helper--red"   ].value,
+        }
       }
 
       Handler.tick_player(event)
@@ -122,8 +128,7 @@ script.on_event(defines.events.on_player_toggled_alt_mode, function(event)
   end
 end)
 
---
-
+-- kept as fallback for pre 1.0.3
 local colors = {
   green  = {0.0, 0.9, 0.0, 1},
   yellow = {0.9, 0.9, 0.0, 1},
@@ -133,36 +138,36 @@ local colors = {
 -- todo: generate from prototypes.
 local tile_name_to_color = {
   -- currently plantable for yumako
-  ["natural-yumako-soil"   ] = colors.green,
-  ["artificial-yumako-soil"] = colors.green,
-  ["overgrowth-yumako-soil"] = colors.green,
+  ["natural-yumako-soil"   ] = "green",
+  ["artificial-yumako-soil"] = "green",
+  ["overgrowth-yumako-soil"] = "green",
 
   -- currently plantable for jellynut
-  ["natural-jellynut-soil"   ] = colors.green,
-  ["artificial-jellynut-soil"] = colors.green,
-  ["overgrowth-jellynut-soil"] = colors.green,
+  ["natural-jellynut-soil"   ] = "green",
+  ["artificial-jellynut-soil"] = "green",
+  ["overgrowth-jellynut-soil"] = "green",
 
   -- future plantable for yumako
-  ["wetland-light-green-slime"] = colors.red,
-  ["wetland-green-slime"      ] = colors.red,
-  ["wetland-yumako"           ] = colors.yellow, -- artificial soil
-  ["lowland-olive-blubber"    ] = colors.red,
-  ["lowland-olive-blubber-2"  ] = colors.red,
-  ["lowland-olive-blubber-3"  ] = colors.red,
-  ["lowland-brown-blubber"    ] = colors.red,
-  ["lowland-pale-green"       ] = colors.red,
+  ["wetland-light-green-slime"] = "red",
+  ["wetland-green-slime"      ] = "red",
+  ["wetland-yumako"           ] = "yellow", -- artificial soil
+  ["lowland-olive-blubber"    ] = "red",
+  ["lowland-olive-blubber-2"  ] = "red",
+  ["lowland-olive-blubber-3"  ] = "red",
+  ["lowland-brown-blubber"    ] = "red",
+  ["lowland-pale-green"       ] = "red",
 
   -- future plantable for jellynut
-  ["wetland-pink-tentacle"] = colors.red,
-  ["wetland-red-tentacle" ] = colors.red,
-  ["wetland-jellynut"     ] = colors.yellow, -- artificial soil
-  ["lowland-red-vein"     ] = colors.red,
-  ["lowland-red-vein-2"   ] = colors.red,
-  ["lowland-red-vein-3"   ] = colors.red,
-  ["lowland-red-vein-4"   ] = colors.red,
-  ["lowland-red-vein-dead"] = colors.red,
-  ["lowland-red-infection"] = colors.red,
-  ["lowland-cream-red"    ] = colors.red,
+  ["wetland-pink-tentacle"] = "red",
+  ["wetland-red-tentacle" ] = "red",
+  ["wetland-jellynut"     ] = "yellow", -- artificial soil
+  ["lowland-red-vein"     ] = "red",
+  ["lowland-red-vein-2"   ] = "red",
+  ["lowland-red-vein-3"   ] = "red",
+  ["lowland-red-vein-4"   ] = "red",
+  ["lowland-red-vein-dead"] = "red",
+  ["lowland-red-infection"] = "red",
+  ["lowland-cream-red"    ] = "red",
 }
 
 local tile_names = {}
@@ -217,7 +222,7 @@ function Handler.tick_player(event)
           target = {tile.position.x + 0.5, tile.position.y + 0.5},
           radius = playerdata.alt_mode and 0.2 or 0.1,
 
-          color = color,
+          color = playerdata.colormap[color] or colors[color],
           filled = true,
 
           players = {playerdata.player_index},
