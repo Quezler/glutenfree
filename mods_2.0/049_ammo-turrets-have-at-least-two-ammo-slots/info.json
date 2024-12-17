@@ -1,0 +1,25 @@
+{
+    "name": "ammo-turrets-have-at-least-two-ammo-slots",
+    "title": "Ammo turrets have at least two ammo slots",
+    "description": "So you don't get the dreaded \"out of ammo\" alert when you feed it mixed quality ammo.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "? base",
+        "? quality",
+        "? space-age"
+    ]
+}
