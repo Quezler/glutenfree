@@ -36,3 +36,7 @@ if mods["space-age"] then
 
   table.insert(data.raw["technology"]["k11-advanced-centrifuge"].unit.ingredients, {"space-science-pack", 1})
 end
+
+if settings.startup["k11-advanced-centrifuge-base-productivity"].value then
+  data.raw["assembling-machine"]["k11-advanced-centrifuge"].effect_receiver = { base_effect = { productivity = 0.5 }}
+end
