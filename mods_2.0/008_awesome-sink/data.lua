@@ -72,7 +72,7 @@ local assembler = {
 
   selection_box = sink.selection_box,
   collision_box = sink.collision_box,
-  collision_mask = sink.collision_mask,
+  collision_mask = {layers = {}},
 
   flags = {"placeable-neutral", "placeable-player", "player-creation"},
   crafting_categories = {"awesome-sink"},
