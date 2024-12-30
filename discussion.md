@@ -1,3 +1,2 @@
-**Greetings traveler!** Thanks to my _ADHD_ it is hard to keep track of things that have not been responded to yet or have yet to actually be fixed, if something looks stale please _ping me_ about it on my modding _discord_ since discussions that have been opened disappear from the inbox. (it only keeps track of unread posts and not open stuff)
-
-Also, when reporting a crash always include the entire crash message window, ideally also with a world save and reproduction steps in the form of text (preferably also a video) about which steps to take from loading the world to getting to the point where it crashes, it really helps in debugging vague issues. (you can post them in my discord)
+**Hi!** I have _ADHD_ which makes it hard for me to keep track of open issues on here,
+if something appears stale/unresolved please nag me about it on my _discord_! ❤️
