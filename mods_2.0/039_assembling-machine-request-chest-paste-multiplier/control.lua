@@ -12,7 +12,7 @@ for _, prototype in pairs(prototypes) do
 end
 
 local function compatible(event)
-  return event.source.type == 'assembling-machine' and requester_chest_names[event.destination.name]
+  return (event.source.type == "entity-ghost" and event.source.ghost_type or event.source.type) == "assembling-machine" and requester_chest_names[event.destination.name]
 end
 
 local function serialize_requests(requester_chest)
