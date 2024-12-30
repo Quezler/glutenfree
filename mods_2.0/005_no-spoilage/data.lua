@@ -29,7 +29,13 @@ local shared = require("shared")
 
 local function remove_spoil_mechanic(prototype)
   prototype.spoil_ticks = nil
-  prototype.spoil_result = nil
+
+  -- https://mods.factorio.com/mod/no-spoilage/discussion/67718ed09706cacee2faa48f
+  -- that mod has a valid usecase, however i don't want to always leave this un-niled, so for now only that mod has an exception.
+  if mods["spoiling-plant"] == nil then
+    prototype.spoil_result = nil
+  end
+
   prototype.spoil_to_trigger_result = nil
 end
 
