@@ -5,6 +5,26 @@ local mod_surface_name = "upcycler"
 
 local Handler = {}
 
+local function on_epd_event(event)
+  local entity = event.moved_entity
+  if entity.name == "upcycler" then
+    local struct = storage.structs[entity.unit_number]
+
+    -- move the chest within bounds, then reposition it normally
+    struct.entities.upcycler_input.teleport(entity.position)
+    Handler.get_or_create_linkedchest_then_move(entity)
+  end
+end
+
+local function init_epd_event()
+    local epd_api = remote.interfaces['PickerDollies']
+    if epd_api == nil then return end
+
+    local epd_event_id = remote.call("PickerDollies", "dolly_moved_entity_id")
+
+    script.on_event(epd_event_id, on_epd_event)
+end
+
 local function reset_items_per_next_quality()
   storage.items_per_next_quality = {
     upcycler = settings.global["upcycling-items-per-next-quality"].value,
@@ -30,6 +50,7 @@ function Handler.init()
   }
 
   Handler.reset_on_created_entity_listeners()
+  init_epd_event()
 end
 
 function Handler.on_configuration_changed()
@@ -152,6 +173,7 @@ end
 
 script.on_load(function()
   Handler.reset_on_created_entity_listeners()
+  init_epd_event()
 end)
 
 function Handler.get_or_create_linkedchest_then_move(entity)
