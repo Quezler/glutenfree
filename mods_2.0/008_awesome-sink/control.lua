@@ -318,7 +318,7 @@ end
 
 function Handler.handle_signal(surface_index, force_index, cb, signal_and_count)
   local payout = math.floor(signal_and_count.count / 1000)
-  if payout == 0 then return end
+  if 0 >= payout then return end
 
   local next_quality = next_quality[signal_and_count.signal.quality or "normal"]
   if next_quality == nil then return end
