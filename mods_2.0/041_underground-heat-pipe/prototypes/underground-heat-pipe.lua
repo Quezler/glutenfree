@@ -126,7 +126,7 @@ function UndergroundHeatPipe.make(config)
         selection_priority = 49,
         hidden = true,
         flags = {"not-on-map"},
-        -- heating_radius = 0,
+        heating_radius = 0,
       }
 
       -- heat_pipe_long.connection_sprites = table.deepcopy(heat_pipe_entity.connection_sprites)
