@@ -28,5 +28,5 @@ data:extend{{
   stack_size = 1,
 
   flags = {"only-in-cursor", "not-stackable", "spawnable"},
-  hidden = true,
+  hidden_in_factoriopedia = true,
 }}
