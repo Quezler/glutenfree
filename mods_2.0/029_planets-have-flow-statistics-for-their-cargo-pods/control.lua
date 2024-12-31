@@ -92,12 +92,3 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     end
   end
 end)
-
-script.on_event(defines.events.on_player_changed_surface, function(event)
-  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  if player.controller_type == defines.controllers.character then
-    if player.surface.find_entity("cargo-pod", player.position) then
-      game.print("player in cargo pod!")
-    end
-  end
-end)
