@@ -51,6 +51,8 @@ function Handler.init()
 
   Handler.reset_on_created_entity_listeners()
   init_epd_event()
+
+  storage.ran_migration_1_1_4 = true
 end
 
 function Handler.on_configuration_changed()
@@ -60,6 +62,32 @@ function Handler.on_configuration_changed()
 
   reset_items_per_next_quality()
   Handler.reset_on_created_entity_listeners()
+
+  if storage.ran_migration_1_1_4 ~= true then
+    storage.ran_migration_1_1_4 = true
+
+    for _, surface in pairs(game.surfaces) do
+      if surface.name ~= mod_surface_name then
+        for _, entity in pairs(surface.find_entities_filtered{name = "upcycler-input"}) do
+          local found_an_upcycler = false
+          -- if prototypes.entity["upcycler"] and surface.find_entity("upcycler", entity.position) then
+          --   found_an_upcycler = true
+          -- end
+          -- if prototypes.entity["burner-upcycler"] and surface.find_entity("burner-upcycler", entity.position) then
+          --   found_an_upcycler = true
+          -- end
+          for upcycler_name, _ in pairs(storage.items_per_next_quality) do
+            if surface.find_entity("upcycler", entity.position) then
+              found_an_upcycler = true
+            end
+          end
+          if found_an_upcycler == false then
+            entity.destroy()
+          end
+        end
+      end
+    end
+  end
 end
 
 script.on_init(Handler.init)
