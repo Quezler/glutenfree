@@ -11,8 +11,17 @@ for _, prototype in pairs(prototypes) do
   end
 end
 
+local function get_entity_type(entity)
+  return entity.type == "entity-ghost" and entity.ghost_type or entity.type
+end
+
+
+local function get_entity_name(entity)
+  return entity.type == "entity-ghost" and entity.ghost_name or entity.name
+end
+
 local function compatible(event)
-  return (event.source.type == "entity-ghost" and event.source.ghost_type or event.source.type) == "assembling-machine" and requester_chest_names[event.destination.name]
+  return get_entity_type(event.source) == "assembling-machine" and requester_chest_names[get_entity_name(event.destination)]
 end
 
 local function serialize_requests(requester_chest)
