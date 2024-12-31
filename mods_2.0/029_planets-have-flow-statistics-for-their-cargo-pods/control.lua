@@ -66,7 +66,15 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   -- B) the cargo pod got launched from a platform (trigger fires before inventory insertion)
   -- C) there is a player traveling in the cargo pod
   local inventory = event.target_entity.get_inventory(defines.inventory.cargo_unit) --[[@as LuaInventory]]
-  if inventory.is_empty() then return end
+  local contents = inventory.get_contents()
+
+  local passenger = entity.get_passenger()
+  if passenger then
+    assert(passenger.type == "character")
+    table.insert(contents, {name = "planet-flow-statistics-character", count = 1})
+  end
+
+  if #contents == 0 then return end
 
   local platform = entity.surface.platform
   local flow_surface = get_flow_surface(platform and platform.space_location.name or entity.surface.planet.name)
