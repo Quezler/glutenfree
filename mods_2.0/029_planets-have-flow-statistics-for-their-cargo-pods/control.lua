@@ -61,20 +61,27 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 
   -- game.print(string.format("new cargo pod: %d @ %s", entity.unit_number, entity.surface.name))
 
-  -- the inventory is empty when:
-  -- A) the cargo pod got created underground in the silo (exists before rocket launch)
-  -- B) the cargo pod got launched from a platform (trigger fires before inventory insertion)
-  -- C) there is a player traveling in the cargo pod
-  local inventory = event.target_entity.get_inventory(defines.inventory.cargo_unit) --[[@as LuaInventory]]
-  if inventory.is_empty() then return end
-
   local platform = entity.surface.platform
   local flow_surface = get_flow_surface(platform and platform.space_location.name or entity.surface.planet.name)
   local statistics = entity.force.get_item_production_statistics(flow_surface)
   local multiplier = platform and 1 or -1 -- production = send up, consumption = requesting
 
-  for _, item in ipairs(inventory.get_contents()) do
-    statistics.on_flow({name = item.name, quality = item.quality}, item.count * multiplier)
+  -- the inventory is empty when:
+  -- A) the cargo pod got created underground in the silo (exists before rocket launch)
+  -- B) the cargo pod got launched from a platform (trigger fires before inventory insertion)
+  -- C) there is a player traveling in the cargo pod
+  local inventory = event.target_entity.get_inventory(defines.inventory.cargo_unit) --[[@as LuaInventory]]
+  if inventory.is_empty() then
+    for _, player in pairs(game.players) do
+      -- the cargo pods on both surfaces share the same unit number as it transitions
+      if player.cargo_pod and player.cargo_pod.unit_number == entity.unit_number then
+        statistics.on_flow({name = "planet-flow-statistics-character"}, 1 * multiplier)
+      end
+    end
+  else
+    for _, item in ipairs(inventory.get_contents()) do
+      statistics.on_flow({name = item.name, quality = item.quality}, item.count * multiplier)
+    end
   end
 end)
 
