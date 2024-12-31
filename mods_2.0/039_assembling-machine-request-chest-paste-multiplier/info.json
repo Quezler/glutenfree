@@ -3,7 +3,7 @@
     "title": "Assembling machine request chest paste multiplier",
     "description": "Pasting an assembling machine several times on a requester chest increases the total requested.",
 
-    "version": "2.0.2",
+    "version": "2.0.3",
     "author": "Quezler",
     "factorio_version": "2.0",
 
