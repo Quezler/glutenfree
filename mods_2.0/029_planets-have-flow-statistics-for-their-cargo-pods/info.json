@@ -18,8 +18,8 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "base >= 2.0.28",
-        "space-age >= 2.0.28",
+        "base >= 2.0.29",
+        "space-age >= 2.0.29",
 
         "(?) platforms-do-not-request-full-stacks-of-buildings"
     ]

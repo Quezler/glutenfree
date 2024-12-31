@@ -3,6 +3,7 @@ Version: 2.0.2
 Date: ????
   Info:
     - Make the underground heat pipe only heat directly above itself
+    - Actually i meant .29 instead of .28
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2024. 12. 22
