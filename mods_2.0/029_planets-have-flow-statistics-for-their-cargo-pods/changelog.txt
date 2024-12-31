@@ -7,6 +7,7 @@ Date: ????
     - Hmm
     - Resolve cargo pod from the player's side
     - Orrr it apparently gets created before the actual handover?
+    - Some more cargo pod passenger trial and error
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.1
 Date: 2024. 11. 19
