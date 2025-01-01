@@ -6,6 +6,7 @@ Date: ????
     - Bugfix the new compat
     - Add "Fits x rockets" to the description of each silo
     - Show fits for silos without a description too
+    - Rubber duck the solution to empty descriptions with moterius/obnoxious
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2024. 12. 16
