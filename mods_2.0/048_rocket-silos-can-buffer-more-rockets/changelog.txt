@@ -3,6 +3,7 @@ Version: 1.1.0
 Date: ????
   Info:
     - If QualityRockets is installed, allow configuring how much quality boosts the storage cap
+    - Bugfix the new compat
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2024. 12. 16

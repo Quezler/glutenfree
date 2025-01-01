@@ -18,7 +18,7 @@ if mods["QualityRockets"] then
   for _, quality in pairs(data.raw["quality"]) do
     local silo = data.raw["rocket-silo"][quality.name .. "-rocket-silo"]
     if silo then
-      rocket_silo.rocket_parts_storage_cap = get_storage_cap_for_quality(quality)
+      silo.rocket_parts_storage_cap = get_storage_cap_for_quality(quality)
     end
   end
 end
