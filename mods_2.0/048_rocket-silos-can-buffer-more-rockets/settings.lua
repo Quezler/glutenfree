@@ -17,7 +17,7 @@ if mods["QualityRockets"] then
       type = "string-setting",
       name = mod_prefix .. "quality-rockets-multiplier-math",
       setting_type = "startup",
-      default_value = "50 * (quality.level + 1) * multiplier",
+      default_value = "50 * (quality.level + 1) * above",
       order = "b",
     },
   })

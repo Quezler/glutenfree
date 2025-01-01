@@ -9,7 +9,7 @@ rocket_silo.rocket_parts_storage_cap = rocket_silo.rocket_parts_required * multi
 if mods["QualityRockets"] then
   local function get_storage_cap_for_quality(quality)
     local formula = settings.startup[mod_prefix .. "quality-rockets-multiplier-math"].value
-    local number = load("return " .. formula, "get_storage_cap_for_quality", "t", {quality = quality, math = math, multiplier = multiplier})()
+    local number = load("return " .. formula, "get_storage_cap_for_quality", "t", {quality = quality, math = math, above = multiplier})()
     return number
   end
 
