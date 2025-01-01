@@ -22,6 +22,7 @@
         "? space-age",
 
         "? QualityRockets",
-        "(?) platforms-do-not-request-full-stacks-of-buildings"
+        "(?) platforms-do-not-request-full-stacks-of-buildings",
+        "(?) infinity-rocket-silo"
     ]
 }

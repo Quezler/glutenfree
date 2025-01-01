@@ -5,6 +5,7 @@ Date: ????
     - If QualityRockets is installed, allow configuring how much quality boosts the storage cap
     - Bugfix the new compat
     - Add "Fits x rockets" to the description of each silo
+    - Show fits for silos without a description too
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2024. 12. 16
