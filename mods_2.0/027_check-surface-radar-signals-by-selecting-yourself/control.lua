@@ -4,14 +4,6 @@ function str_starts_with(str, prefix)
   return string.sub(str, 1, #prefix) == prefix
 end
 
-local radar_barrel_name = nil
-for _, item_prototype in pairs(prototypes.item) do
-  if str_starts_with(item_prototype.name, mod_prefix .. "radar-barrel-") then
-    radar_barrel_name = item_prototype.name
-  end
-end
-assert(radar_barrel_name, "failed to detect our radar barrel item (different name for each set of mods & versions)")
-
 script.on_init(function()
   storage.structs = {}
 
@@ -40,7 +32,7 @@ local function proxy_me(player)
 
     -- `{inventory = 255, stack = 0}` is not needed apparently to keep the proxy alive,
     -- neat because it stops the missing items alert when outside roboport range.
-    modules = {{id = {name = radar_barrel_name}, items = {in_inventory = {} }}}
+    modules = {{id = {name = "radar"}, items = {in_inventory = {{inventory = 255, stack = 0}} }}}
   }
 
   storage.proxy_for_character[character.unit_number] = proxy

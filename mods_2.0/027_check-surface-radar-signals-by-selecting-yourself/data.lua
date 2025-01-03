@@ -31,9 +31,3 @@ data:extend{{
   collision_mask = {layers = {}},
   hidden = true
 }}
-
-local radar = table.deepcopy(data.raw["item"]["radar"])
-radar.name = mod_prefix .. "radar-barrel" -- radar.auto_recycle = false
-radar.place_result = nil
-radar.hidden = true
-data:extend{radar}
