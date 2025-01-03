@@ -3,7 +3,7 @@
     "title": "Quality holmium ore returns more holmium solution",
     "description": "Quality holmium ore finally yields you more.",
 
-    "version": "1.1.0",
+    "version": "1.1.1",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -23,6 +23,7 @@
         "space-age",
 
         "(?) Additional-Qualities",
-        "(?) ic-more-qualities"
+        "(?) ic-more-qualities",
+        "(?) infinite-quality-tiers"
     ]
 }

@@ -20,6 +20,7 @@ for _, quality in pairs(data.raw["quality"]) do
 end
 local lines_concat = table.concat(lines, "\n")
 for _, substring in ipairs(splitStringByLength(lines_concat, 200)) do -- possibly problematic if it gets split at exactly in between \n?
+  if #localised_description >= 20 then break end
   table.insert(localised_description, substring)
 end
 
