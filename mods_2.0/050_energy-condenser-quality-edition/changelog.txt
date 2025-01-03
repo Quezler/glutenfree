@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Reword readme for monospaced goodness
     - Stash data stage progress
+    - Make frame count coexist with the shadow
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 03
