@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Reword readme for monospaced goodness
+    - Stash data stage progress
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 03
