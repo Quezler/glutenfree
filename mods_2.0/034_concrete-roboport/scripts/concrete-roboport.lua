@@ -51,13 +51,14 @@ end
 function ConcreteRoboport.mycelium(surface, position, force)
 
   ---@type LuaTile
-  local tile = surface.get_tile(position)
+  ---@diagnostic disable-next-line: param-type-mismatch, missing-parameter
+  local origin_tile = surface.get_tile(position)
 
-  ---@type LuaTile[]
-  local tiles = surface.get_connected_tiles(position, {tile.name}, true)
+  ---@type TilePosition[]
+  local tiles = surface.get_connected_tiles(position, {origin_tile.name}, true)
 
   game.print("#tiles " .. #tiles)
-  game.print("minable? ".. tostring(tile.prototype.mineable_properties.minable))
+  game.print("minable? ".. tostring(origin_tile.prototype.mineable_properties.minable))
 
   local roboports = {}
 
@@ -143,11 +144,11 @@ function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
     tiles[position.x][position.y] = tile
   end
 
-  return tile
+  return assert(tile)
 end
 
 function ConcreteRoboport.on_selected_entity_changed(event)
-  local player = game.get_player(event.player_index)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
   if storage.player_index_to_highlight_box[player.index] then
      storage.player_index_to_highlight_box[player.index].destroy()
@@ -195,7 +196,8 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
 
   for _, network in pairs(encroached) do
     local roboport = table_first(network.roboport)
-    ConcreteRoboport.mycelium(game.get_surface(event.surface_index), roboport.position, game.forces[network.force_index])
+    local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
+    ConcreteRoboport.mycelium(surface, roboport.position, game.forces[network.force_index])
   end
 
 end
