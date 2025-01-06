@@ -104,6 +104,9 @@ class SendNewsletterCommand extends Command
             // maybe for when we check dependencies someday,
             // but that'd just be in latest release.
             unset($mod["updated_at"]);
+
+            // we don't use this and it changes the hash
+            unset($mod["last_highlighted_at"]);
         }
     }
 
