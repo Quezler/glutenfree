@@ -49,7 +49,7 @@ local entity = {
     }
   },
 
-  minable = data.raw["radar"]["radar"].minable,
+  minable = table.deepcopy(data.raw["radar"]["radar"].minable),
   flags = {"player-creation"},
 }
 
