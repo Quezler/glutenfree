@@ -28,6 +28,7 @@ local pipe_to_ground_names = {
   ["fast-underground-heat-pipe"] = true,
   ["express-underground-heat-pipe"] = true,
   ["turbo-underground-heat-pipe"] = true,
+  ["supersonic-underground-heat-pipe"] = true,
 }
 
 local function string_stars_with(str, prefix)
@@ -313,6 +314,7 @@ local filters = {
   {filter = "name", name = "fast-underground-heat-pipe"},
   {filter = "name", name = "express-underground-heat-pipe"},
   {filter = "name", name = "turbo-underground-heat-pipe"},
+  {filter = "name", name = "supersonic-underground-heat-pipe"},
 
   {filter = "name", name = "heat-pipe"},
   {filter = "name", name = "nuclear-reactor"},
@@ -370,10 +372,11 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
 end)
 
 local pipe_to_ground_to_underground_belt_map = {
-          ["underground-heat-pipe"] =         "underground-belt",
-     ["fast-underground-heat-pipe"] =    "fast-underground-belt",
-  ["express-underground-heat-pipe"] = "express-underground-belt",
-    ["turbo-underground-heat-pipe"] =   "turbo-underground-belt",
+               ["underground-heat-pipe"] =            "underground-belt",
+          ["fast-underground-heat-pipe"] =       "fast-underground-belt",
+       ["express-underground-heat-pipe"] =    "express-underground-belt",
+         ["turbo-underground-heat-pipe"] =      "turbo-underground-belt",
+    ["supersonic-underground-heat-pipe"] = "supersonic-underground-belt",
 }
 
 function Handler.update_one_force_recipe_visibility(event)

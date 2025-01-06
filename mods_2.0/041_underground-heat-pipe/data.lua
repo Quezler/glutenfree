@@ -15,9 +15,16 @@ UndergroundHeatPipe.make({
   order = "c",
 })
 
-if mods["space-age"] then
+if mods["space-age"] or mods["factorioplus"] then
   UndergroundHeatPipe.make({
     prefix = "turbo-",
     order = "d",
+  })
+end
+
+if mods["factorioplus"] then
+  UndergroundHeatPipe.make({
+    prefix = "supersonic-",
+    order = "e",
   })
 end

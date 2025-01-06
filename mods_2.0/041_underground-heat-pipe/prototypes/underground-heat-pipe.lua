@@ -78,8 +78,16 @@ function UndergroundHeatPipe.make(config)
     results = {{type="item", name=uhp_item.name, amount=2}}
   }
 
-  local direction_out = table.deepcopy(underground_belt.structure.direction_out.sheet)
+  local direction_out = assert(table.deepcopy(underground_belt.structure.direction_out.sheet))
   direction_out.scale = 0.25
+
+  local width = direction_out.width -- 192 in vanilla
+  if mods["factorioplus"] then
+    if width == 96 then -- half of 192, no hd sprite?
+      direction_out.scale = 0.50
+    end
+  end
+
   uhp.pictures = {
     north = table.deepcopy(direction_out),
     south = table.deepcopy(direction_out),
@@ -87,10 +95,10 @@ function UndergroundHeatPipe.make(config)
     east  = table.deepcopy(direction_out),
   }
 
-  uhp.pictures.south.x = 192 * 0
-  uhp.pictures.west.x  = 192 * 1
-  uhp.pictures.north.x = 192 * 2
-  uhp.pictures.east.x  = 192 * 3
+  uhp.pictures.south.x = width * 0
+  uhp.pictures.west.x  = width * 1
+  uhp.pictures.north.x = width * 2
+  uhp.pictures.east.x  = width * 3
 
   data:extend{uhp, uhp_item, uhp_recipe}
 

@@ -1,10 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
-Date: ????
+Date: 2025. 01. 06
   Info:
     - Make the underground heat pipe only heat directly above itself
     - Actually i meant .29 instead of .28
     - Revert "Make the underground heat pipe only heat directly above itself"
+    - Fix loading with factorioplus installed and support their sonic belt
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2024. 12. 22
