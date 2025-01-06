@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.11
-Date: ????
+Date: 2025. 01. 06
   Info:
     - Require 2.0.28 for the multiplayer .opened fix
     - Actually i meant .29 instead of .28
