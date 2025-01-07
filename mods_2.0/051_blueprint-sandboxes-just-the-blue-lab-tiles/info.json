@@ -1,0 +1,24 @@
+{
+    "name": "blueprint-sandboxes-just-the-blue-lab-tiles",
+    "title": "Blueprint Sandboxes: just the blue lab tiles",
+    "description": "For when you don't need that entire mod but still want a pretty laboratory.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "base",
+        "? space-age"
+    ]
+}
