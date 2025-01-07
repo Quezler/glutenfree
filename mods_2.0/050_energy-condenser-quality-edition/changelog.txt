@@ -7,6 +7,7 @@ Date: ????
     - Make frame count coexist with the shadow
     - Try to get the working visualization to work
     - Fix the working viz due to nesting
+    - Make it look good day and night
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 03
