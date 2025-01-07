@@ -3,7 +3,7 @@
     "title": "Upcycler",
     "description": "No quality modules, sacrifice x (configurable) items to get the next tier.",
 
-    "version": "1.1.5",
+    "version": "1.1.6",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -23,6 +23,9 @@
         "? space-age",
 
         "? even-pickier-dollies",
+
+        "(?) mini-machines",
+        "(?) micro-machines",
 
         "! awesome-sink"
     ]
