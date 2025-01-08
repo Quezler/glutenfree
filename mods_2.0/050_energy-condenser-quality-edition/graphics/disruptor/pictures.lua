@@ -14,6 +14,7 @@ local graphics_set = {
         frame_count = 1,
         repeat_count = 80,
         scale = 0.5,
+        animation_speed = 0.5,
       },
       {
         priority = "high",

@@ -12,6 +12,7 @@ Date: ????
     - Tweak the (animation) speed
     - Add sounds
     - Make the funnel not transparent (kinda distracting)
+    - Fix the glow visualization desyncing
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 03
