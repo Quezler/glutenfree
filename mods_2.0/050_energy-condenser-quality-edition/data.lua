@@ -1,4 +1,7 @@
+local sounds = require("__base__.prototypes.entity.sounds")
+
 local a_9x9_entity = data.raw["rocket-silo"]["rocket-silo"]
+local a_3x3_entity = data.raw["assembling-machine"]["assembling-machine-2"]
 
 local entity = {
   type = "furnace",
@@ -22,7 +25,7 @@ local entity = {
   {
     type = "electric",
     usage_priority = "secondary-input",
-    emissions_per_minute = { pollution = 5 }
+    emissions_per_minute = { pollution = 10 }
   },
   energy_usage = "2500kW",
 
@@ -30,6 +33,10 @@ local entity = {
 
   graphics_set = require("graphics.disruptor.pictures").graphics_set,
   perceived_performance = {minimum = 2, maximum = 2},
+
+  open_sound = sounds.machine_open,
+  close_sound = sounds.machine_close,
+  -- working_sound = space_age_sounds.electromagnetic_plant,
 }
 
 local item = {

@@ -10,6 +10,7 @@ Date: ????
     - Make it look good day and night
     - Credit "hurricane compatible graphics_set" to xorimuth
     - Tweak the (animation) speed
+    - Add sounds
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 03
