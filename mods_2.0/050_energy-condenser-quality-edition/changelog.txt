@@ -11,6 +11,7 @@ Date: ????
     - Credit "hurricane compatible graphics_set" to xorimuth
     - Tweak the (animation) speed
     - Add sounds
+    - Make the funnel not transparent (kinda distracting)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 03

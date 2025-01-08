@@ -7,6 +7,15 @@ local graphics_set = {
     layers =
     {
       {
+        filename = mod_directory .. "/graphics/disruptor/disruptor-hr-animation-bg.png",
+        priority = "high",
+        width = 590,
+        height = 590,
+        frame_count = 1,
+        repeat_count = 80,
+        scale = 0.5,
+      },
+      {
         priority = "high",
         width = 590,
         height = 590,
@@ -34,7 +43,6 @@ local graphics_set = {
         frame_count = 1,
         repeat_count = 80,
         draw_as_shadow = true,
-        shift = util.by_pixel(0, 0),
         scale = 0.5,
       }
     }
