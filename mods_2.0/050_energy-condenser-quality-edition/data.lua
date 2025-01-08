@@ -17,7 +17,7 @@ local entity = {
   effect_receiver = { base_effect = { quality = 1 }},
   allowed_effects = {"consumption", "speed", "pollution", "quality"},
 
-  crafting_speed = 3,
+  crafting_speed = 1,
   energy_source =
   {
     type = "electric",
@@ -29,6 +29,7 @@ local entity = {
   crafting_categories = data.raw["furnace"]["recycler"].crafting_categories,
 
   graphics_set = require("graphics.disruptor.pictures").graphics_set,
+  perceived_performance = {minimum = 2, maximum = 2},
 }
 
 local item = {
