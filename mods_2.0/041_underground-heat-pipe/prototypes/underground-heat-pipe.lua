@@ -161,7 +161,7 @@ function UndergroundHeatPipe.make(config)
       for _, even_or_odd in ipairs({"even", "odd"}) do -- adjacent heat pipes with the same name still try to visually form connections.
         local icons = table.deepcopy(uhp.icons)
         table.insert(icons, {
-          icon = "__base__/graphics/icons/signal/signal_" .. direction_name:sub(1, 1) .. ".png",
+          icon = "__base__/graphics/icons/signal/signal_" .. direction_name:sub(1, 1):upper() .. ".png",
           icon_size = 64,
           scale = 0.25,
           shift = {-8, -8}
