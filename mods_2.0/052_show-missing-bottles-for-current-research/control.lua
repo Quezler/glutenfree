@@ -1,9 +1,9 @@
 local util = require('util')
 
 local function on_configuration_changed(event)
-  global.lab_inputs = {}
-  for _, entity_prototype in pairs(game.get_filtered_entity_prototypes({{filter = 'type', type = 'lab'}})) do
-    global.lab_inputs[entity_prototype.name] = util.list_to_map(entity_prototype.lab_inputs)
+  storage.lab_inputs = {}
+  for _, entity_prototype in pairs(prototypes.get_entity_filtered({{filter = 'type', type = 'lab'}})) do
+    storage.lab_inputs[entity_prototype.name] = util.list_to_map(entity_prototype.lab_inputs)
   end
 end
 
@@ -12,14 +12,14 @@ script.on_configuration_changed(on_configuration_changed)
 local function on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
 
-  global.structs[entity.unit_number] = {
+  storage.structs[entity.unit_number] = {
     -- unit_number = entity.unit_number,
     entity = entity,
   }
 end
 
 script.on_init(function(event)
-  global.structs = {}
+  storage.structs = {}
 
   on_configuration_changed()
 
@@ -96,18 +96,18 @@ end
 local function get_missing_counts(force, list)
   local missing_counts = {}
 
-  for unit_number, struct in pairs(global.structs) do
+  for unit_number, struct in pairs(storage.structs) do
     if not struct.entity.valid then
-      global.structs[unit_number] = nil
+      storage.structs[unit_number] = nil
     else
 
       if struct.entity.force == force then
         if struct.entity.status == defines.entity_status.missing_science_packs then
           local inventory = struct.entity.get_inventory(defines.inventory.lab_input)
           if inventory.is_empty() == false then
-            
+
             for _, item_name in ipairs(list) do
-              if global.lab_inputs[struct.entity.name][item_name] then -- ignore labs that cannot use this item
+              if storage.lab_inputs[struct.entity.name][item_name] then -- ignore labs that cannot use this item
                 if inventory.get_item_count(item_name) == 0 then
                   -- game.print(serpent.line({
                   --   item_name,

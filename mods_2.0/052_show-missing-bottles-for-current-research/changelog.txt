@@ -1,0 +1,30 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 01. 10
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2024. 02. 09
+  Info:
+    - Ignore labs with no bottles in them at all
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2023. 12. 28
+  Info:
+    - Ignore science packs that are only missing once (inserters / old lab / etc)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2023. 12. 28
+  Info:
+    - Bring to front instead of killing the parent and its children
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2023. 12. 28
+  Info:
+    - Publish `Show missing bottles for current research`
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2023. 12. 28
+  Info:
+    - Stash show-missing-bottles-for-current-research concept
