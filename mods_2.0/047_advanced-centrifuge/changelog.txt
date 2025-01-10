@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2025-01-10
+  Compatibility:
+    - Corrected where the Cerys mod adds fluid connections for their nuclear waste centrifuging.
+---------------------------------------------------------------------------------------------------
 Version: 2.2.0
 Date: 2024-12-18
   Changes:
