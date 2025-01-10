@@ -32,6 +32,7 @@ local entity = {
   crafting_categories = data.raw["furnace"]["recycler"].crafting_categories,
 
   graphics_set = require("graphics.disruptor.pictures").graphics_set,
+  perceived_performance = {minimum = 1},
 
   open_sound = sounds.machine_open,
   close_sound = sounds.machine_close,

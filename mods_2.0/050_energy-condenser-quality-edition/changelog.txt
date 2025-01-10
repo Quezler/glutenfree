@@ -15,6 +15,7 @@ Date: ????
     - Fix the glow visualization desyncing
     - Stash crafting speed tweaks (speed modules will be bad)
     - Stash mod comparison table
+    - Set minimum animation speed to 50%
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 03
