@@ -16,6 +16,7 @@ Date: ????
     - Stash crafting speed tweaks (speed modules will be bad)
     - Stash mod comparison table
     - Set minimum animation speed to 50%
+    - Initial draft of multiblock entity
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 03
