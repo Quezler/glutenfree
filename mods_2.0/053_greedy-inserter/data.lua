@@ -106,3 +106,14 @@ corpse.localised_name = {"remnant-name", {"entity-name."..corpse.name:gsub("%-re
 entity.corpse = corpse.name
 
 data:extend({entity, item, recipe, corpse})
+
+data:extend{{
+  type = "planet",
+  name = "greedy-inserter",
+  icon = "__greedy-inserter__/graphics/icons/greedy-inserter.png",
+
+  distance = 0,
+  orientation = 0,
+
+  hidden = true,
+}}
