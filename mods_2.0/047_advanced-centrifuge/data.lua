@@ -1,7 +1,7 @@
-require("prototypes/entities/buildings/advanced-centrifuge")
-require("prototypes/items/buildings")
-require("prototypes/recipes/buildings")
-require("prototypes/technologies/buildings")
+require("prototypes.entities.buildings.advanced-centrifuge")
+require("prototypes.items.buildings")
+require("prototypes.recipes.buildings")
+require("prototypes.technologies.buildings")
 
 local remove_green_tint_from_icons = mods["space-exploration"] ~= nil
 -- remove_green_tint_from_icons = true

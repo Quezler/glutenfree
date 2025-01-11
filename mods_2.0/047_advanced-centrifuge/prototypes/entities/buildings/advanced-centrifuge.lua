@@ -1,5 +1,5 @@
-local hit_effects = require("__base__/prototypes/entity/hit-effects")
-local sounds = require("__base__/prototypes/entity/sounds")
+local hit_effects = require("__base__.prototypes.entity.hit-effects")
+local sounds = require("__base__.prototypes.entity.sounds")
 
 local recipe_tint = "none"
 local light_tint = {r = 0.0, g = 1.0, b = 0.0}

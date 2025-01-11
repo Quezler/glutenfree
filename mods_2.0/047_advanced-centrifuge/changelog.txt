@@ -3,6 +3,7 @@ Version: 2.2.2
 Date: ????
   Info:
     - Get rid of deepcopy for Cerys
+    - Require with . instead of /
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.1
 Date: 2025-01-10
