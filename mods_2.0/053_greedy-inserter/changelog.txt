@@ -5,6 +5,7 @@ Date: ????
     - Resurrect filter inserter as greedy inserter
     - Add thumbnail
     - Setup hidden surface
+    - Start tracking placed greedy inserters
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 11
