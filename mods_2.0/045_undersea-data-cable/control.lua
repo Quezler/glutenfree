@@ -216,6 +216,8 @@ for _, event in ipairs({
 end
 
 script.on_event(defines.events.on_player_setup_blueprint, function(event)
+  if event.stack == nil then return end
+
   local blueprint_entities = event.stack.get_blueprint_entities()
   if blueprint_entities == nil then return end
 
