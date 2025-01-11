@@ -117,3 +117,10 @@ data:extend{{
 
   hidden = true,
 }}
+
+local mining_drill = table.deepcopy(data.raw["mining-drill"]["burner-mining-drill"])
+mining_drill.name = "greedy-inserter-mining-drill"
+mining_drill.minable.result = nil
+mining_drill.energy_source = {type = "void"}
+mining_drill.hidden = true
+data:extend({mining_drill})
