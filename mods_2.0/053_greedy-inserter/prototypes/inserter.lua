@@ -8,6 +8,7 @@ local entity = table.deepcopy(data.raw["inserter"]["fast-inserter"])
 entity.name = "greedy-inserter"
 entity.icon = "__greedy-inserter__/graphics/icons/greedy-inserter.png"
 entity.filter_count = 1 -- allowing multiple items is just asking for trouble
+entity.wait_for_full_hand = true -- we're greedy after all, grabbing just 1 won't do
 
 entity.hand_base_picture =
 {

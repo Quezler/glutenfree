@@ -10,6 +10,7 @@ Date: ????
     - Warn about the circuit network quirks
     - Step away from miner/resource for assembler/item
     - Stash vectored blueprint assembler
+    - Setup the required hidden entities on the surface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 11

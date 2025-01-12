@@ -26,7 +26,7 @@ local recipe = {
 }
 
 local assembling_machine = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
-assembling_machine.name = "greedy-inserter--assembling-machine-1"
+assembling_machine.name = "greedy-inserter--assembling-machine"
 assembling_machine.vector_to_place_result = {-0.5, 2}
 assembling_machine.crafting_categories = {recipe_category.name}
 assembling_machine.hidden = true
