@@ -13,6 +13,7 @@ Date: ????
     - Setup the required hidden entities on the surface
     - Insert the initial blueprint
     - Remove pingpong mechanic for inconsistent behaviour
+    - Make the assemblers arm eachother
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 11

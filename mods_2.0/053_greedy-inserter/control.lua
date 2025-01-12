@@ -17,6 +17,17 @@ local function new_struct(table, struct)
   return struct
 end
 
+local function arm_struct(struct)
+  struct.state = not struct.state
+  local input_itemstack = struct.state and struct.input_itemstack_1 or struct.input_itemstack_2
+
+  input_itemstack.set_stack({name = "deconstruction-planner", count = 1})
+  storage.deathrattles[script.register_on_object_destroyed(input_itemstack.item)] = {
+    struct_id = struct.id,
+    state = struct.state,
+  }
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination -- todo: handle cloning
 
@@ -35,6 +46,8 @@ function Handler.on_created_entity(event)
 
     input_itemstack_1 = nil,
     input_itemstack_2 = nil,
+
+    state = true, -- assembling machine 1 will still be active in the tick it got placed, so we will give the item to assembling machine 2 first
   })
 
   struct.children["assembling-machine-1"] = storage.surface.create_entity{
@@ -82,13 +95,9 @@ function Handler.on_created_entity(event)
   struct.input_itemstack_1 = struct.children["assembling-machine-1"].get_inventory(defines.inventory.assembling_machine_input)[1]
   struct.input_itemstack_2 = struct.children["assembling-machine-2"].get_inventory(defines.inventory.assembling_machine_input)[1]
 
-  -- assembling machine 1 will still be active in the tick it got placed, so we will give the item to assembling machine 2 first.
-  struct.input_itemstack_2.set_stack({name = "deconstruction-planner", count = 1})
-  storage.deathrattles[script.register_on_object_destroyed(struct.input_itemstack_2.item)] = {
-    struct_id = struct.id,
-  }
-
   storage.next_x_offset = storage.next_x_offset + 3
+
+  arm_struct(struct)
 end
 
 for _, event in ipairs({
@@ -109,7 +118,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   if deathrattle then storage.deathrattles[event.registration_number] = nil
 
     local struct = assert(storage.greedy_inserters[deathrattle.struct_id])
-    game.print("owo")
-
+    arm_struct(struct)
+    game.print(serpent.line({hand_empty = struct.state}))
   end
 end)
