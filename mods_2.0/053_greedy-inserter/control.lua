@@ -41,14 +41,12 @@ function Handler.on_created_entity(event)
     name = "greedy-inserter--assembling-machine",
     force = "neutral",
     position = {storage.next_x_offset + 1.5, -1.5},
-    direction = defines.direction.south,
   }
 
   struct.children["assembling-machine-2"] = storage.surface.create_entity{
     name = "greedy-inserter--assembling-machine",
     force = "neutral",
     position = {storage.next_x_offset + 1.5, -4.5},
-    direction = defines.direction.north,
   }
 
   local inserter_circuit_wire = entity.get_wire_connector(defines.wire_connector_id.circuit_red, true)
@@ -85,7 +83,7 @@ function Handler.on_created_entity(event)
   struct.input_itemstack_2 = struct.children["assembling-machine-2"].get_inventory(defines.inventory.assembling_machine_input)[1]
 
   -- assembling machine 1 will still be active in the tick it got placed, so we will give the item to assembling machine 2 first.
-  struct.input_itemstack_2.set_stack({name = "blueprint", count = 1})
+  struct.input_itemstack_2.set_stack({name = "deconstruction-planner", count = 1})
   storage.deathrattles[script.register_on_object_destroyed(struct.input_itemstack_2.item)] = {
     struct_id = struct.id,
   }

@@ -17,17 +17,19 @@ local recipe_category = {
 local recipe = {
   type = "recipe",
   name = "greedy-inserter--recipe",
+  icon = data.raw["deconstruction-item"]["deconstruction-planner"].icon,
   enabled = true,
   category = recipe_category.name,
-  ingredients = {{type = "item", name = "blueprint", amount = 1}},
-  results     = {{type = "item", name = "blueprint", amount = 1}},
+  ingredients = {
+    {type = "item", name = "deconstruction-planner", amount = 1},
+  },
+  results = {},
   hidden = true,
   energy_required = 1,
 }
 
 local assembling_machine = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
 assembling_machine.name = "greedy-inserter--assembling-machine"
-assembling_machine.vector_to_place_result = {-0.5, 2}
 assembling_machine.crafting_categories = {recipe_category.name}
 assembling_machine.hidden = true
 assembling_machine.fixed_recipe = recipe.name
