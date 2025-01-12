@@ -7,6 +7,7 @@ Date: ????
     - Setup hidden surface
     - Start tracking placed greedy inserters
     - Prepare to use a mining drill as circuit trigger
+    - Warn about the circuit network quirks
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 11
