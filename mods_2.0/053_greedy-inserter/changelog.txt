@@ -11,6 +11,7 @@ Date: ????
     - Step away from miner/resource for assembler/item
     - Stash vectored blueprint assembler
     - Setup the required hidden entities on the surface
+    - Insert the initial blueprint
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 11

@@ -6,6 +6,8 @@ script.on_init(function()
 
   storage.next_x_offset = 0
   storage.greedy_inserters = {}
+
+  storage.deathrattles = {}
 end)
 
 local function new_struct(table, struct)
@@ -26,7 +28,13 @@ function Handler.on_created_entity(event)
     id = entity.unit_number,
     entity = entity,
 
-    children = {},
+    children = {
+      ["assembling-machine-1"] = nil,
+      ["assembling-machine-2"] = nil,
+    },
+
+    input_itemstack_1 = nil,
+    input_itemstack_2 = nil,
   })
 
   struct.children["assembling-machine-1"] = storage.surface.create_entity{
@@ -73,6 +81,15 @@ function Handler.on_created_entity(event)
     }
   }
 
+  struct.input_itemstack_1 = struct.children["assembling-machine-1"].get_inventory(defines.inventory.assembling_machine_input)[1]
+  struct.input_itemstack_2 = struct.children["assembling-machine-2"].get_inventory(defines.inventory.assembling_machine_input)[1]
+
+  -- assembling machine 1 will still be active in the tick it got placed, so we will give the item to assembling machine 2 first.
+  struct.input_itemstack_2.set_stack({name = "blueprint", count = 1})
+  storage.deathrattles[script.register_on_object_destroyed(struct.input_itemstack_2.item)] = {
+    struct_id = struct.id,
+  }
+
   storage.next_x_offset = storage.next_x_offset + 3
 end
 
@@ -88,3 +105,13 @@ for _, event in ipairs({
     {filter = "name", name = "greedy-inserter"},
   })
 end
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+
+    local struct = assert(storage.greedy_inserters[deathrattle.struct_id])
+    game.print("owo")
+
+  end
+end)
