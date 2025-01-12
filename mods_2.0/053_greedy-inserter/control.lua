@@ -10,7 +10,9 @@ end)
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination -- todo: handle cloning
 
-  storage.greedy_inserters[entity.unit_number] = entity
+  storage.greedy_inserters[entity.unit_number] = {
+    entity = entity,
+  }
 end
 
 for _, event in ipairs({

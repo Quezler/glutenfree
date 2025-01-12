@@ -124,3 +124,5 @@ mining_drill.minable.result = nil
 mining_drill.energy_source = {type = "void"}
 mining_drill.hidden = true
 data:extend({mining_drill})
+
+data.raw["resource"]["coal"].collision_mask = {layers = {}}
