@@ -9,6 +9,7 @@ Date: ????
     - Prepare to use a mining drill as circuit trigger
     - Warn about the circuit network quirks
     - Step away from miner/resource for assembler/item
+    - Stash vectored blueprint assembler
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 11

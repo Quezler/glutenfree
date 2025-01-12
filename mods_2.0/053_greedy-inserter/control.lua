@@ -13,6 +13,9 @@ function Handler.on_created_entity(event)
   storage.greedy_inserters[entity.unit_number] = {
     entity = entity,
   }
+
+  -- {1.5, -1.5}
+  -- {1.5, -4.5}
 end
 
 for _, event in ipairs({
