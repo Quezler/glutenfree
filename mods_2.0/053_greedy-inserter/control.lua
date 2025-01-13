@@ -18,14 +18,11 @@ local function new_struct(table, struct)
 end
 
 local function arm_struct(struct)
-  struct.state = not struct.state
-  local input_itemstack = struct.state and struct.input_itemstack_1 or struct.input_itemstack_2
+  struct.hand_is_empty = not struct.hand_is_empty
+  local input_itemstack = struct.hand_is_empty and struct.input_itemstack_1 or struct.input_itemstack_2
 
   input_itemstack.set_stack({name = "deconstruction-planner", count = 1})
-  storage.deathrattles[script.register_on_object_destroyed(input_itemstack.item)] = {
-    struct_id = struct.id,
-    state = struct.state,
-  }
+  storage.deathrattles[script.register_on_object_destroyed(input_itemstack.item)] = struct.id
 end
 
 function Handler.on_created_entity(event)
@@ -37,7 +34,7 @@ function Handler.on_created_entity(event)
 
   local struct = new_struct(storage.greedy_inserters, {
     id = entity.unit_number,
-    entity = entity,
+    inserter = entity,
 
     container = nil,
 
@@ -49,7 +46,7 @@ function Handler.on_created_entity(event)
     input_itemstack_1 = nil,
     input_itemstack_2 = nil,
 
-    state = true, -- assembling machine 1 will still be active in the tick it got placed, so we will give the item to assembling machine 2 first
+    hand_is_empty = true, -- assembling machine 1 will still be active in the tick it got placed, so we will give the item to assembling machine 2 first
   })
 
   struct.children["assembling-machine-1"] = storage.surface.create_entity{
@@ -127,9 +124,15 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
 
-    local struct = assert(storage.greedy_inserters[deathrattle.struct_id])
+    local struct = assert(storage.greedy_inserters[deathrattle])
     arm_struct(struct)
-    game.print(serpent.line({hand_empty = struct.state}))
+    game.print(serpent.line({hand_is_empty = struct.hand_is_empty}))
+
+    if struct.hand_is_empty then
+      struct.inserter.drop_target = struct.container
+    else
+      struct.inserter.drop_target = nil
+    end
   end
 end)
 
@@ -139,6 +142,9 @@ local function on_player_rotated_or_flipped_entity(event)
   if entity.name == "greedy-inserter" then
     local struct = storage.greedy_inserters[entity.unit_number]
     struct.container.teleport(entity.drop_position)
+    if struct.hand_is_empty then
+      entity.drop_position = struct.container
+    end
   end
 end
 

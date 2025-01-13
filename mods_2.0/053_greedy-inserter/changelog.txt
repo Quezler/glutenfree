@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2025. 01. 13
   Info:
     - Resurrect filter inserter as greedy inserter
     - Add thumbnail
@@ -16,6 +16,7 @@ Date: ????
     - Make the assemblers arm eachother
     - Add container that detatches with `.drop_target = nil`
     - Rotate the container along with the inserter
+    - Reach MVP state by toggling the drop target repeatedly
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 11
