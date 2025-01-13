@@ -1,3 +1,5 @@
+require("util")
+
 local function replace_recipe_ingredient(recipe, from_name, to_name)
   for _, ingredient in ipairs(recipe.ingredients) do
     if ingredient.name == from_name then
