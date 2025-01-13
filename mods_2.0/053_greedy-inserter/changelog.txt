@@ -14,6 +14,7 @@ Date: ????
     - Insert the initial blueprint
     - Remove pingpong mechanic for inconsistent behaviour
     - Make the assemblers arm eachother
+    - Add container that detatches with `.drop_target = nil`
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 11

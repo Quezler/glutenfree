@@ -1,3 +1,5 @@
+require("util")
+
 local Handler = {}
 
 script.on_init(function()
@@ -94,6 +96,14 @@ function Handler.on_created_entity(event)
 
   struct.input_itemstack_1 = struct.children["assembling-machine-1"].get_inventory(defines.inventory.assembling_machine_input)[1]
   struct.input_itemstack_2 = struct.children["assembling-machine-2"].get_inventory(defines.inventory.assembling_machine_input)[1]
+
+  struct.children["container"] = entity.surface.create_entity{
+    name = "greedy-inserter--container",
+    force = "neutral",
+    position = util.moveposition({entity.position.x, entity.position.y}, entity.direction, -1),
+  }
+  struct.children["container"].destructible = false
+  entity.drop_target = struct.children["container"]
 
   storage.next_x_offset = storage.next_x_offset + 3
 

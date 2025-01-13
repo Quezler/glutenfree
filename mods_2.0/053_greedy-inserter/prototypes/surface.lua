@@ -36,4 +36,19 @@ assembling_machine.fixed_recipe = recipe.name
 assembling_machine.crafting_speed = 60
 assembling_machine.energy_source = {type = "void"}
 
-data:extend({recipe_category, recipe, assembling_machine})
+local container = {
+  type = "container",
+  name = "greedy-inserter--container",
+
+  selection_priority = 51,
+  selection_box = table.deepcopy(data.raw["container"]["wooden-chest"].selection_box),
+  collision_box = table.deepcopy(data.raw["container"]["wooden-chest"].collision_box),
+  collision_mask = {layers = {}},
+
+  flags = {"not-on-map", "no-automated-item-removal", "no-automated-item-insertion"},
+
+  inventory_size = 100,
+  hidden = true,
+}
+
+data:extend({recipe_category, recipe, assembling_machine, container})
