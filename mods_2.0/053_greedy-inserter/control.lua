@@ -1,5 +1,3 @@
-require("util")
-
 local Handler = {}
 
 script.on_init(function()
@@ -40,6 +38,8 @@ function Handler.on_created_entity(event)
   local struct = new_struct(storage.greedy_inserters, {
     id = entity.unit_number,
     entity = entity,
+
+    container = nil,
 
     children = {
       ["assembling-machine-1"] = nil,
@@ -97,13 +97,13 @@ function Handler.on_created_entity(event)
   struct.input_itemstack_1 = struct.children["assembling-machine-1"].get_inventory(defines.inventory.assembling_machine_input)[1]
   struct.input_itemstack_2 = struct.children["assembling-machine-2"].get_inventory(defines.inventory.assembling_machine_input)[1]
 
-  struct.children["container"] = entity.surface.create_entity{
+  struct.container = entity.surface.create_entity{
     name = "greedy-inserter--container",
     force = "neutral",
-    position = util.moveposition({entity.position.x, entity.position.y}, entity.direction, -1),
+    position = entity.drop_position,
   }
-  struct.children["container"].destructible = false
-  entity.drop_target = struct.children["container"]
+  struct.container.destructible = false
+  entity.drop_target = struct.container
 
   storage.next_x_offset = storage.next_x_offset + 3
 
@@ -132,3 +132,16 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     game.print(serpent.line({hand_empty = struct.state}))
   end
 end)
+
+local function on_player_rotated_or_flipped_entity(event)
+  local entity = event.entity
+
+  if entity.name == "greedy-inserter" then
+    local struct = storage.greedy_inserters[entity.unit_number]
+    struct.container.teleport(entity.drop_position)
+  end
+end
+
+-- there is no way to listen for "allow_custom_vectors", but the player can just rotate them.
+script.on_event(defines.events.on_player_rotated_entity, on_player_rotated_or_flipped_entity)
+script.on_event(defines.events.on_player_flipped_entity, on_player_rotated_or_flipped_entity)
