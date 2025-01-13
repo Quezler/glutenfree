@@ -130,6 +130,7 @@ function Handler.on_created_entity(event)
 
   struct.input_itemstack_3.set_stack({name = "repair-pack", count = 2})
   storage.deathrattles[script.register_on_object_destroyed(struct.input_itemstack_3.item)] = {struct.id, "3"}
+  storage.deathrattles[script.register_on_object_destroyed(entity                       )] = {struct.id, "3"}
 end
 
 for _, event in ipairs({
@@ -147,7 +148,7 @@ end
 
 local function purge_struct(struct)
   storage.greedy_inserters[struct.id] = nil
-  struct.inserter.die()
+  if struct.inserter.valid then struct.inserter.die() end
   struct.container.destroy()
   struct.assembler_1.destroy()
   struct.assembler_2.destroy()
@@ -170,7 +171,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
           struct.inserter.drop_target = nil
         end
       elseif deathrattle[2] == "3" then
-        game.print("ohno")
+        -- game.print("ohno")
         purge_struct(struct)
       else
         error(serpent.block(deathrattle))

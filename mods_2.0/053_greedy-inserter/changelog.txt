@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Explode inserter when something enters the container
+    - Cleanup entities when inserter goes away
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 13
