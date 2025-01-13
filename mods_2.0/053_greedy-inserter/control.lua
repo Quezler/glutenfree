@@ -160,6 +160,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
         arm_struct(struct, 1)
         struct.inserter.drop_target = nil
         struct.itemstack_container_out.swap_stack(struct.itemstack_inserter)
+        struct.inserter.inserter_stack_size_override = 1
         struct.inserter.pickup_target = struct.container_in
         struct.itemstack_container_in.set_stack({name = "raw-fish"})
       elseif deathrattle[2] == "3" then
