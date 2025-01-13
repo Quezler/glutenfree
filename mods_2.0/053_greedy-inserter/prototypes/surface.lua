@@ -17,11 +17,11 @@ local recipe_category = {
 local recipe = {
   type = "recipe",
   name = "greedy-inserter--recipe",
-  icon = data.raw["deconstruction-item"]["deconstruction-planner"].icon,
+  icon = data.raw["repair-tool"]["repair-pack"].icon,
   enabled = true,
   category = recipe_category.name,
   ingredients = {
-    {type = "item", name = "deconstruction-planner", amount = 1},
+    {type = "item", name = "repair-pack", amount = 1},
   },
   results = {},
   hidden = true,
@@ -47,7 +47,7 @@ local container = {
 
   flags = {"not-on-map", "no-automated-item-removal", "no-automated-item-insertion"},
 
-  inventory_size = 100,
+  inventory_size = 1,
   hidden = true,
 }
 
