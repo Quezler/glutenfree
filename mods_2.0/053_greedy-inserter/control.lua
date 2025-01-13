@@ -28,6 +28,8 @@ end
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination -- todo: handle cloning
 
+  entity.inserter_stack_size_override = 1
+
   local inserter_cb = entity.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
   inserter_cb.circuit_read_hand_contents = true
   inserter_cb.circuit_hand_read_mode = defines.control_behavior.inserter.hand_read_mode.hold
@@ -163,7 +165,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if struct then
       if deathrattle[2] == "1-2" then
         arm_struct(struct)
-        game.print(serpent.line({hand_is_empty = struct.hand_is_empty}))
+        -- game.print(serpent.line({hand_is_empty = struct.hand_is_empty}))
 
         if struct.hand_is_empty then
           struct.inserter.drop_target = struct.container

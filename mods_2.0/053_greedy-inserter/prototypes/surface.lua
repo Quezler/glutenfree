@@ -48,6 +48,7 @@ local container = {
   flags = {"not-on-map", "no-automated-item-removal", "no-automated-item-insertion"},
 
   inventory_size = 1,
+  selectable_in_game = false,
   hidden = true,
 }
 
