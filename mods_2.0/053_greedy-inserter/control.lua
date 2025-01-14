@@ -17,12 +17,15 @@ local function new_struct(table, struct)
   return struct
 end
 
-local function arm_struct(struct, count)
-  struct.hand_is_empty = not struct.hand_is_empty
-  local input_itemstack = struct.hand_is_empty and struct.itemstack_assembler_1 or struct.itemstack_assembler_2
+local function tick_struct(struct)
+  struct.itemstack_burner.set_stack({name = "greedy-inserter--compiltron"})
+  storage.deathrattles[script.register_on_object_destroyed(struct.itemstack_burner.item)] = {struct.id, "fuel"}
 
-  input_itemstack.set_stack({name = "repair-pack", count = count})
-  storage.deathrattles[script.register_on_object_destroyed(input_itemstack.item)] = {struct.id, struct.hand_is_empty and "1" or "2"}
+  if struct.itemstack_hand.valid_for_read then
+    struct.inserter.drop_target = nil
+  else
+    struct.inserter.drop_target = struct.container
+  end
 end
 
 function Handler.on_created_entity(event)
@@ -32,97 +35,21 @@ function Handler.on_created_entity(event)
     id = entity.unit_number,
 
     inserter = entity,
-    -- container_in = nil,
-    container_out = nil,
-
-    -- assembler_1 = nil,
-    -- assembler_2 = nil,
+    container = nil,
 
     itemstack_hand = entity.held_stack,
     itemstack_burner = entity.get_inventory(defines.inventory.fuel)[1],
-    -- itemstack_container_in = nil,
-    -- itemstack_container_out = nil,
-    -- itemstack_assembler_1 = nil,
-    -- itemstack_assembler_2 = nil,
-
-    -- hand_is_empty = true, -- assembling machine 1 will still be active in the tick it got placed, so we will give the item to assembling machine 2 first
   })
 
-  struct.itemstack_burner.set_stack({name = "spoilage"})
-
-  -- struct.assembler_1 = storage.surface.create_entity{
-  --   name = "greedy-inserter--assembling-machine",
-  --   force = "neutral",
-  --   position = {storage.next_x_offset + 1.5, -1.5},
-  -- }
-  -- struct.itemstack_assembler_1 = struct.assembler_1.get_inventory(defines.inventory.assembling_machine_input)[1]
-
-  -- struct.assembler_2 = storage.surface.create_entity{
-  --   name = "greedy-inserter--assembling-machine",
-  --   force = "neutral",
-  --   position = {storage.next_x_offset + 1.5, -4.5},
-  -- }
-  -- struct.itemstack_assembler_2 = struct.assembler_2.get_inventory(defines.inventory.assembling_machine_input)[1]
-
-  -- local inserter_circuit_wire = entity.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-  -- assert(inserter_circuit_wire.connect_to(struct.assembler_1.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
-  -- assert(inserter_circuit_wire.connect_to(struct.assembler_2.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
-
-  -- local cb_1 = struct.assembler_1.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
-  -- local cb_2 = struct.assembler_2.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
-
-  -- cb_1.circuit_enable_disable = true
-  -- cb_2.circuit_enable_disable = true
-
-  -- ---@diagnostic disable-next-line: missing-fields
-  -- cb_1.circuit_condition = {
-  --   comparator = "=",
-  --   constant = 0,
-  --   first_signal = {
-  --     name = "signal-everything",
-  --     type = "virtual"
-  --   }
-  -- }
-
-  -- ---@diagnostic disable-next-line: missing-fields
-  -- cb_2.circuit_condition = {
-  --   comparator = "≠",
-  --   constant = 0,
-  --   first_signal = {
-  --     name = "signal-anything",
-  --     type = "virtual"
-  --   }
-  -- }
-
-  -- struct.container_in = entity.surface.create_entity{
-  --   name = "greedy-inserter--container",
-  --   force = "neutral",
-  --   position = entity.pickup_position,
-  -- }
-  -- struct.container_in.destructible = false
-
-  struct.container_out = entity.surface.create_entity{
+  struct.container = entity.surface.create_entity{
     name = "greedy-inserter--container",
     force = "neutral",
     position = entity.drop_position,
   }
-  -- struct.container_out.destructible = false
-  -- entity.drop_target = struct.container_out
+  struct.container.destructible = false
 
-  -- struct.itemstack_container_in = struct.container_in.get_inventory(defines.inventory.chest)[1]
-  -- struct.itemstack_container_out = struct.container_out.get_inventory(defines.inventory.chest)[1]
-
-  -- local container_out_circuit_wire = struct.container_out.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-  -- assert(container_out_circuit_wire.connect_to(struct.assembler_1.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
-
-  -- local container_in_circuit_wire = struct.container_in.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-  -- assert(container_in_circuit_wire.connect_to(struct.assembler_2.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
-
-  -- storage.next_x_offset = storage.next_x_offset + 3
-
-  -- arm_struct(struct, 2)
-
-  -- storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct.id, "3"}
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct.id, "inserter"}
+  tick_struct(struct)
 end
 
 for _, event in ipairs({
@@ -140,11 +67,7 @@ end
 
 local function purge_struct(struct)
   storage.greedy_inserters[struct.id] = nil
-  if struct.inserter.valid then struct.inserter.die() end
   struct.container.destroy()
-  struct.assembler_1.destroy()
-  struct.assembler_2.destroy()
-  struct.assembler_3.destroy()
 end
 
 script.on_event(defines.events.on_object_destroyed, function(event)
@@ -155,19 +78,9 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 
     local struct = storage.greedy_inserters[deathrattle[1]]
     if struct then
-      if deathrattle[2] == "1" then
-        arm_struct(struct, 1)
-        struct.inserter.drop_target = struct.container_out
-        struct.inserter.pickup_target = nil
-      elseif deathrattle[2] == "2" then
-        arm_struct(struct, 1)
-        struct.inserter.drop_target = nil
-        struct.itemstack_container_out.swap_stack(struct.itemstack_inserter)
-        struct.inserter.inserter_stack_size_override = 1
-        struct.inserter.pickup_target = struct.container_in
-        struct.itemstack_container_in.set_stack({name = "raw-fish"})
-      elseif deathrattle[2] == "3" then
-        -- game.print("ohno")
+      if deathrattle[2] == "fuel" then
+        tick_struct(struct)
+      elseif deathrattle[2] == "inserter" then
         purge_struct(struct)
       else
         error(serpent.block(deathrattle))
@@ -181,13 +94,8 @@ local function on_player_rotated_or_flipped_entity(event)
 
   if entity.name == "greedy-inserter" then
     local struct = storage.greedy_inserters[entity.unit_number]
-    struct.container_in.teleport(entity.pickup_position)
-    struct.container_out.teleport(entity.drop_position)
-    if struct.hand_is_empty then
-      entity.drop_position = struct.container_out
-    else
-      entity.pickup_position = struct.container_in
-    end
+    struct.container.teleport(entity.drop_position)
+    tick_struct(struct)
   end
 end
 

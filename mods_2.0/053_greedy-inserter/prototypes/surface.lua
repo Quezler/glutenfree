@@ -53,3 +53,19 @@ local container = {
 }
 
 data:extend({recipe_category, recipe, assembling_machine, container})
+
+local fuel = {
+  type = "tool",
+  name = "greedy-inserter--compiltron",
+  icon = "__base__/graphics/icons/compilatron.png",
+
+  fuel_category = "chemical",
+  fuel_value = "4kJ", -- this needs to slightly less than what half a rotation takes (based on both energy_per_rotation & energy_per_movement)
+  stack_size = 1,
+  durability = 1,
+
+  flags = {"only-in-cursor", "not-stackable", "spawnable"},
+  hidden = true,
+}
+
+data:extend({fuel})

@@ -52,8 +52,6 @@ entity.energy_source = {
   type = "burner",
   fuel_inventory_size = 1,
 }
-entity.energy_per_movement = "0kJ"
-data.raw["item"]["spoilage"].fuel_value = "7kJ"
 
 local item = {
   type = "item",
