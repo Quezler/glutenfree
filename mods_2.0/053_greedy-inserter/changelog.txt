@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
-Date: ????
+Date: 2025. 01. 14
   Info:
     - Attempt to not need hold mode by having it in a chest for a tick
     - Force inserter back into drop mode

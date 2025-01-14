@@ -2,7 +2,6 @@ local Handler = {}
 
 script.on_init(function()
   storage.structs = {}
-
   storage.deathrattles = {}
 end)
 
