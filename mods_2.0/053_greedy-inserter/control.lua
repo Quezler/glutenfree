@@ -1,7 +1,7 @@
 local Handler = {}
 
 script.on_init(function()
-  storage.greedy_inserters = {}
+  storage.structs = {}
 
   storage.deathrattles = {}
 end)
@@ -14,6 +14,8 @@ local function new_struct(table, struct)
 end
 
 local function tick_struct(struct)
+  if struct.marked_for_deconstruction then return end
+
   struct.itemstack_burner.set_stack({name = "greedy-inserter--fuel"})
   storage.deathrattles[script.register_on_object_destroyed(struct.itemstack_burner.item)] = {struct.id, "fuel"}
 
@@ -27,7 +29,7 @@ end
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination -- todo: handle cloning
 
-  local struct = new_struct(storage.greedy_inserters, {
+  local struct = new_struct(storage.structs, {
     id = entity.unit_number,
 
     inserter = entity,
@@ -62,7 +64,7 @@ for _, event in ipairs({
 end
 
 local function purge_struct(struct)
-  storage.greedy_inserters[struct.id] = nil
+  storage.structs[struct.id] = nil
   struct.container.destroy()
 end
 
@@ -72,7 +74,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 
     -- game.print(event.tick .. serpent.line(deathrattle))
 
-    local struct = storage.greedy_inserters[deathrattle[1]]
+    local struct = storage.structs[deathrattle[1]]
     if struct then
       if deathrattle[2] == "fuel" then
         tick_struct(struct)
@@ -89,7 +91,7 @@ local function on_player_rotated_or_flipped_entity(event)
   local entity = event.entity
 
   if entity.name == "greedy-inserter" then
-    local struct = storage.greedy_inserters[entity.unit_number]
+    local struct = storage.structs[entity.unit_number]
     struct.container.teleport(entity.drop_position)
 
     if struct.itemstack_hand.valid_for_read then
@@ -117,3 +119,19 @@ script.on_event(defines.events.on_player_main_inventory_changed, function(event)
   local inventory = player.get_inventory(defines.inventory.character_main) --[[@as LuaInventory]]
   inventory.remove({name = "greedy-inserter--fuel"}) -- shift transfer stole it from the fuel slot :o
 end)
+
+script.on_event(defines.events.on_marked_for_deconstruction, function(event)
+  local struct = storage.structs[event.entity.unit_number]
+  struct.marked_for_deconstruction = true
+  struct.itemstack_burner.clear()
+end, {
+  {filter = "name", name = "greedy-inserter"},
+})
+
+script.on_event(defines.events.on_cancelled_deconstruction, function(event)
+  local struct = storage.structs[event.entity.unit_number]
+  struct.marked_for_deconstruction = nil
+  tick_struct(struct)
+end, {
+  {filter = "name", name = "greedy-inserter"},
+})
