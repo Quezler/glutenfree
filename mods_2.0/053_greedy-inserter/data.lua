@@ -1,2 +1,2 @@
 require("prototypes.inserter")
-require("prototypes.surface")
+require("prototypes.hidden")

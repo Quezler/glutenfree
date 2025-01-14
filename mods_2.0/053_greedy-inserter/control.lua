@@ -1,10 +1,6 @@
 local Handler = {}
 
 script.on_init(function()
-  storage.surface = game.planets["greedy-inserter"].create_surface()
-  storage.surface.generate_with_lab_tiles = true
-
-  storage.next_x_offset = 0
   storage.greedy_inserters = {}
 
   storage.deathrattles = {}
@@ -74,7 +70,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
 
-    game.print(event.tick .. serpent.line(deathrattle))
+    -- game.print(event.tick .. serpent.line(deathrattle))
 
     local struct = storage.greedy_inserters[deathrattle[1]]
     if struct then
@@ -95,10 +91,29 @@ local function on_player_rotated_or_flipped_entity(event)
   if entity.name == "greedy-inserter" then
     local struct = storage.greedy_inserters[entity.unit_number]
     struct.container.teleport(entity.drop_position)
-    tick_struct(struct)
+
+    if struct.itemstack_hand.valid_for_read then
+      struct.inserter.drop_target = nil
+    else
+      struct.inserter.drop_target = struct.container
+    end
   end
 end
 
 -- there is no way to listen for "allow_custom_vectors", but the player can just rotate them.
 script.on_event(defines.events.on_player_rotated_entity, on_player_rotated_or_flipped_entity)
 script.on_event(defines.events.on_player_flipped_entity, on_player_rotated_or_flipped_entity)
+
+script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local cursor_stack = player.cursor_stack
+  if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "greedy-inserter--compiltron" then
+    cursor_stack.clear() -- no touchy my monkey!
+  end
+end)
+
+script.on_event(defines.events.on_player_main_inventory_changed, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local inventory = player.get_inventory(defines.inventory.character_main) --[[@as LuaInventory]]
+  inventory.remove({name = "greedy-inserter--compiltron"}) -- shift transfer stole it from the fuel slot :o
+end)
