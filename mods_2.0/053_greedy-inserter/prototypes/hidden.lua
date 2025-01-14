@@ -23,7 +23,7 @@ local fuel_category = {
 
 local fuel = {
   type = "tool",
-  name = "greedy-inserter--compiltron",
+  name = "greedy-inserter--fuel",
   icon = "__base__/graphics/icons/compilatron.png",
 
   fuel_category = fuel_category.name,

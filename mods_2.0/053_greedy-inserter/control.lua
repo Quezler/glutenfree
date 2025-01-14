@@ -14,7 +14,7 @@ local function new_struct(table, struct)
 end
 
 local function tick_struct(struct)
-  struct.itemstack_burner.set_stack({name = "greedy-inserter--compiltron"})
+  struct.itemstack_burner.set_stack({name = "greedy-inserter--fuel"})
   storage.deathrattles[script.register_on_object_destroyed(struct.itemstack_burner.item)] = {struct.id, "fuel"}
 
   if struct.itemstack_hand.valid_for_read then
@@ -107,7 +107,7 @@ script.on_event(defines.events.on_player_flipped_entity, on_player_rotated_or_fl
 script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local cursor_stack = player.cursor_stack
-  if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "greedy-inserter--compiltron" then
+  if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "greedy-inserter--fuel" then
     cursor_stack.clear() -- no touchy my monkey!
   end
 end)
@@ -115,5 +115,5 @@ end)
 script.on_event(defines.events.on_player_main_inventory_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local inventory = player.get_inventory(defines.inventory.character_main) --[[@as LuaInventory]]
-  inventory.remove({name = "greedy-inserter--compiltron"}) -- shift transfer stole it from the fuel slot :o
+  inventory.remove({name = "greedy-inserter--fuel"}) -- shift transfer stole it from the fuel slot :o
 end)
