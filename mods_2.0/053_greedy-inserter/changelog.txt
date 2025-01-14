@@ -9,6 +9,7 @@ Date: ????
     - Remove unused prototypes, and prevent fuel stealing
     - Rename the fuel (category)
     - Prevent bots from stealing the fuel
+    - Update documentation
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 01. 13
