@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Attempt to not need hold mode by having it in a chest for a tick
     - Force inserter back into drop mode
+    - Run some burner inserter fuel usage tests
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 01. 13

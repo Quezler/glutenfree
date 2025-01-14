@@ -32,94 +32,97 @@ function Handler.on_created_entity(event)
     id = entity.unit_number,
 
     inserter = entity,
-    container_in = nil,
+    -- container_in = nil,
     container_out = nil,
 
-    assembler_1 = nil,
-    assembler_2 = nil,
+    -- assembler_1 = nil,
+    -- assembler_2 = nil,
 
-    itemstack_inserter = entity.held_stack,
-    itemstack_container_in = nil,
-    itemstack_container_out = nil,
-    itemstack_assembler_1 = nil,
-    itemstack_assembler_2 = nil,
+    itemstack_hand = entity.held_stack,
+    itemstack_burner = entity.get_inventory(defines.inventory.fuel)[1],
+    -- itemstack_container_in = nil,
+    -- itemstack_container_out = nil,
+    -- itemstack_assembler_1 = nil,
+    -- itemstack_assembler_2 = nil,
 
-    hand_is_empty = true, -- assembling machine 1 will still be active in the tick it got placed, so we will give the item to assembling machine 2 first
+    -- hand_is_empty = true, -- assembling machine 1 will still be active in the tick it got placed, so we will give the item to assembling machine 2 first
   })
 
-  struct.assembler_1 = storage.surface.create_entity{
-    name = "greedy-inserter--assembling-machine",
-    force = "neutral",
-    position = {storage.next_x_offset + 1.5, -1.5},
-  }
-  struct.itemstack_assembler_1 = struct.assembler_1.get_inventory(defines.inventory.assembling_machine_input)[1]
+  struct.itemstack_burner.set_stack({name = "spoilage"})
 
-  struct.assembler_2 = storage.surface.create_entity{
-    name = "greedy-inserter--assembling-machine",
-    force = "neutral",
-    position = {storage.next_x_offset + 1.5, -4.5},
-  }
-  struct.itemstack_assembler_2 = struct.assembler_2.get_inventory(defines.inventory.assembling_machine_input)[1]
+  -- struct.assembler_1 = storage.surface.create_entity{
+  --   name = "greedy-inserter--assembling-machine",
+  --   force = "neutral",
+  --   position = {storage.next_x_offset + 1.5, -1.5},
+  -- }
+  -- struct.itemstack_assembler_1 = struct.assembler_1.get_inventory(defines.inventory.assembling_machine_input)[1]
 
-  local inserter_circuit_wire = entity.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-  assert(inserter_circuit_wire.connect_to(struct.assembler_1.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
-  assert(inserter_circuit_wire.connect_to(struct.assembler_2.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
+  -- struct.assembler_2 = storage.surface.create_entity{
+  --   name = "greedy-inserter--assembling-machine",
+  --   force = "neutral",
+  --   position = {storage.next_x_offset + 1.5, -4.5},
+  -- }
+  -- struct.itemstack_assembler_2 = struct.assembler_2.get_inventory(defines.inventory.assembling_machine_input)[1]
 
-  local cb_1 = struct.assembler_1.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
-  local cb_2 = struct.assembler_2.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
+  -- local inserter_circuit_wire = entity.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+  -- assert(inserter_circuit_wire.connect_to(struct.assembler_1.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
+  -- assert(inserter_circuit_wire.connect_to(struct.assembler_2.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
 
-  cb_1.circuit_enable_disable = true
-  cb_2.circuit_enable_disable = true
+  -- local cb_1 = struct.assembler_1.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
+  -- local cb_2 = struct.assembler_2.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
 
-  ---@diagnostic disable-next-line: missing-fields
-  cb_1.circuit_condition = {
-    comparator = "=",
-    constant = 0,
-    first_signal = {
-      name = "signal-everything",
-      type = "virtual"
-    }
-  }
+  -- cb_1.circuit_enable_disable = true
+  -- cb_2.circuit_enable_disable = true
 
-  ---@diagnostic disable-next-line: missing-fields
-  cb_2.circuit_condition = {
-    comparator = "≠",
-    constant = 0,
-    first_signal = {
-      name = "signal-anything",
-      type = "virtual"
-    }
-  }
+  -- ---@diagnostic disable-next-line: missing-fields
+  -- cb_1.circuit_condition = {
+  --   comparator = "=",
+  --   constant = 0,
+  --   first_signal = {
+  --     name = "signal-everything",
+  --     type = "virtual"
+  --   }
+  -- }
 
-  struct.container_in = entity.surface.create_entity{
-    name = "greedy-inserter--container",
-    force = "neutral",
-    position = entity.pickup_position,
-  }
-  struct.container_in.destructible = false
+  -- ---@diagnostic disable-next-line: missing-fields
+  -- cb_2.circuit_condition = {
+  --   comparator = "≠",
+  --   constant = 0,
+  --   first_signal = {
+  --     name = "signal-anything",
+  --     type = "virtual"
+  --   }
+  -- }
+
+  -- struct.container_in = entity.surface.create_entity{
+  --   name = "greedy-inserter--container",
+  --   force = "neutral",
+  --   position = entity.pickup_position,
+  -- }
+  -- struct.container_in.destructible = false
 
   struct.container_out = entity.surface.create_entity{
     name = "greedy-inserter--container",
     force = "neutral",
     position = entity.drop_position,
   }
-  struct.container_out.destructible = false
-  entity.drop_target = struct.container_out
+  -- struct.container_out.destructible = false
+  -- entity.drop_target = struct.container_out
 
-  struct.itemstack_container_in = struct.container_in.get_inventory(defines.inventory.chest)[1]
-  struct.itemstack_container_out = struct.container_out.get_inventory(defines.inventory.chest)[1]
+  -- struct.itemstack_container_in = struct.container_in.get_inventory(defines.inventory.chest)[1]
+  -- struct.itemstack_container_out = struct.container_out.get_inventory(defines.inventory.chest)[1]
 
-  local container_out_circuit_wire = struct.container_out.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-  assert(container_out_circuit_wire.connect_to(struct.assembler_1.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
+  -- local container_out_circuit_wire = struct.container_out.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+  -- assert(container_out_circuit_wire.connect_to(struct.assembler_1.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
 
-  local container_in_circuit_wire = struct.container_in.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-  assert(container_in_circuit_wire.connect_to(struct.assembler_2.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
+  -- local container_in_circuit_wire = struct.container_in.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+  -- assert(container_in_circuit_wire.connect_to(struct.assembler_2.get_wire_connector(defines.wire_connector_id.circuit_red, true), false, defines.wire_origin.script))
 
-  storage.next_x_offset = storage.next_x_offset + 3
+  -- storage.next_x_offset = storage.next_x_offset + 3
 
-  arm_struct(struct, 2)
+  -- arm_struct(struct, 2)
 
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct.id, "3"}
+  -- storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct.id, "3"}
 end
 
 for _, event in ipairs({

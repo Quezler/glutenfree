@@ -9,6 +9,7 @@ entity.name = "greedy-inserter"
 entity.icon = "__greedy-inserter__/graphics/icons/greedy-inserter.png"
 entity.filter_count = 1 -- allowing multiple items is just asking for trouble
 -- entity.wait_for_full_hand = true -- we're greedy after all, grabbing just 1 won't do
+entity.chases_belt_items = false
 
 entity.hand_base_picture =
 {
@@ -46,6 +47,13 @@ entity.platform_picture =
     scale = 0.5
   }
 }
+
+entity.energy_source = {
+  type = "burner",
+  fuel_inventory_size = 1,
+}
+entity.energy_per_movement = "0kJ"
+data.raw["item"]["spoilage"].fuel_value = "7kJ"
 
 local item = {
   type = "item",
