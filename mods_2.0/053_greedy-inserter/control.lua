@@ -38,6 +38,7 @@ function Handler.on_created_entity(event)
     -- itemstack_burner = entity.get_inventory(defines.inventory.fuel)[1],
 
     state = "empty",
+    state_switched_at = event.tick,
   })
 
   struct.container = entity.surface.create_entity{
@@ -141,15 +142,17 @@ end, {
 })
 
 local states = {
-  ["empty"] = function(struct)
+  ["empty"] = function(struct, tick)
     if struct.itemstack_hand.valid_for_read then
       struct.state = "items"
+      struct.state_switched_at = tick
       struct.inserter.drop_target = nil
     end
   end,
-  ["items"] = function(struct)
+  ["items"] = function(struct, tick)
     if struct.itemstack_hand.valid_for_read == false then
       struct.state = "empty"
+      struct.state_switched_at = tick
       struct.inserter.drop_target = struct.container
     end
   end,
@@ -158,7 +161,7 @@ local states = {
 script.on_event(defines.events.on_tick, function(event)
   for unit_number, struct in pairs(storage.structs) do
     -- game.print(event.tick .. " " .. unit_number .. " " .. serpent.line(struct.itemstack_hand.valid_for_read))
-    game.print(string.format("%d %s %s", event.tick, unit_number, struct.state))
-    states[struct.state](struct)
+    game.print(string.format("%d %s %s for %d", event.tick, unit_number, struct.state, event.tick - struct.state_switched_at))
+    states[struct.state](struct, event.tick)
   end
 end)
