@@ -144,11 +144,13 @@ local states = {
   ["empty"] = function(struct)
     if struct.itemstack_hand.valid_for_read then
       struct.state = "items"
+      struct.inserter.drop_target = nil
     end
   end,
   ["items"] = function(struct)
     if struct.itemstack_hand.valid_for_read == false then
       struct.state = "empty"
+      struct.inserter.drop_target = struct.container
     end
   end,
 }
