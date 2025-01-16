@@ -9,7 +9,7 @@ local container = {
 
   flags = {"not-on-map", "no-automated-item-removal", "no-automated-item-insertion"},
 
-  inventory_size = 1,
+  inventory_size = 100,
   selectable_in_game = false,
   hidden = true,
 }
@@ -27,7 +27,7 @@ local fuel = {
   icon = "__base__/graphics/icons/compilatron.png",
 
   fuel_category = fuel_category.name,
-  fuel_value = "4kJ", -- this needs to slightly less than what half a rotation takes (based on both energy_per_rotation & energy_per_movement)
+  fuel_value = "3kJ", -- this needs to slightly less than what half a rotation takes (based on both energy_per_rotation & energy_per_movement)
   stack_size = 1,
   durability = 1,
 

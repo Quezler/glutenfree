@@ -35,7 +35,9 @@ function Handler.on_created_entity(event)
     container = nil,
 
     itemstack_hand = entity.held_stack,
-    itemstack_burner = entity.get_inventory(defines.inventory.fuel)[1],
+    -- itemstack_burner = entity.get_inventory(defines.inventory.fuel)[1],
+
+    state = "empty",
   })
 
   struct.container = entity.surface.create_entity{
@@ -44,9 +46,12 @@ function Handler.on_created_entity(event)
     position = entity.drop_position,
   }
   struct.container.destructible = false
+  entity.drop_target = struct.container
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct.id, "inserter"}
-  tick_struct(struct)
+  -- tick_struct(struct)
+
+  game.print(event.tick)
 end
 
 for _, event in ipairs({
@@ -134,3 +139,24 @@ script.on_event(defines.events.on_cancelled_deconstruction, function(event)
 end, {
   {filter = "name", name = "greedy-inserter"},
 })
+
+local states = {
+  ["empty"] = function(struct)
+    if struct.itemstack_hand.valid_for_read then
+      struct.state = "items"
+    end
+  end,
+  ["items"] = function(struct)
+    if struct.itemstack_hand.valid_for_read == false then
+      struct.state = "empty"
+    end
+  end,
+}
+
+script.on_event(defines.events.on_tick, function(event)
+  for unit_number, struct in pairs(storage.structs) do
+    -- game.print(event.tick .. " " .. unit_number .. " " .. serpent.line(struct.itemstack_hand.valid_for_read))
+    game.print(string.format("%d %s %s", event.tick, unit_number, struct.state))
+    states[struct.state](struct)
+  end
+end)
