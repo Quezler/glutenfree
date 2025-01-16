@@ -5,6 +5,7 @@ Date: ????
     - Begin on_tick trials
     - Toggle drop target based on state
     - Run some timing tests
+    - Time the normal greedy inserter for container pickup
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 14

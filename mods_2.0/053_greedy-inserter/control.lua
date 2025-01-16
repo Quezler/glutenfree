@@ -3,6 +3,8 @@ local Handler = {}
 script.on_init(function()
   storage.structs = {}
   storage.deathrattles = {}
+
+  storage.at_tick = {}
 end)
 
 local function new_struct(table, struct)
@@ -10,6 +12,15 @@ local function new_struct(table, struct)
   assert(table[struct.id] == nil)
   table[struct.id] = struct
   return struct
+end
+
+local function at_tick(tick, struct_id)
+  local at_tick = storage.at_tick[tick]
+  if at_tick == nil then
+    at_tick = {}
+    storage.at_tick[tick] = at_tick
+  end
+  at_tick[struct_id] = true
 end
 
 local function tick_struct(struct)
@@ -52,7 +63,8 @@ function Handler.on_created_entity(event)
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct.id, "inserter"}
   -- tick_struct(struct)
 
-  game.print(event.tick)
+  -- game.print(event.tick)
+  at_tick(event.tick + 1, struct.id)
 end
 
 for _, event in ipairs({
@@ -145,23 +157,37 @@ local states = {
   ["empty"] = function(struct, tick)
     if struct.itemstack_hand.valid_for_read then
       struct.state = "items"
-      struct.state_switched_at = tick
+      -- struct.state_switched_at = tick
       struct.inserter.drop_target = nil
     end
+    return 1
   end,
   ["items"] = function(struct, tick)
     if struct.itemstack_hand.valid_for_read == false then
       struct.state = "empty"
-      struct.state_switched_at = tick
+      -- struct.state_switched_at = tick
       struct.inserter.drop_target = struct.container
+      return 23
     end
+    return 1
   end,
 }
 
 script.on_event(defines.events.on_tick, function(event)
-  for unit_number, struct in pairs(storage.structs) do
-    -- game.print(event.tick .. " " .. unit_number .. " " .. serpent.line(struct.itemstack_hand.valid_for_read))
-    game.print(string.format("%d %s %s for %d", event.tick, unit_number, struct.state, event.tick - struct.state_switched_at))
-    states[struct.state](struct, event.tick)
+  -- game.print(event.tick)
+  -- for unit_number, struct in pairs(storage.structs) do
+  --   -- game.print(event.tick .. " " .. unit_number .. " " .. serpent.line(struct.itemstack_hand.valid_for_read))
+    -- game.print(string.format("%d %s %s for %d", event.tick, unit_number, struct.state, event.tick - struct.state_switched_at))
+    -- states[struct.state](struct, event.tick)
+  -- end
+
+  local tasks = storage.at_tick[event.tick]
+  if tasks then storage.at_tick[event.tick] = nil
+    for struct_id, _ in pairs(tasks) do
+      local struct = storage.structs[struct_id]
+      local next_tick = event.tick + states[struct.state](struct, event.tick)
+      game.print(string.format("%d %s %s", event.tick, struct_id, struct.state))
+      at_tick(next_tick, struct_id)
+    end
   end
 end)
