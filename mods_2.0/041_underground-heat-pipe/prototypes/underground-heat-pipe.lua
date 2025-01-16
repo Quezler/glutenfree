@@ -108,7 +108,7 @@ function UndergroundHeatPipe.make(config)
     for axis, offset in pairs({horizontal = {x = range, y = 0}, vertical = {x = 0, y = range}}) do
       local icons = table.deepcopy(uhp.icons)
       table.insert(icons, {
-        icon = "__base__/graphics/icons/signal/signal_" .. axis:sub(1, 1) .. ".png",
+        icon = "__base__/graphics/icons/signal/signal_" .. string.upper(axis:sub(1, 1)) .. ".png",
         icon_size = 64,
         scale = 0.25,
         shift = {-8, -8}
@@ -116,7 +116,7 @@ function UndergroundHeatPipe.make(config)
       local zero_padded_length_string = string.format("%02d", length - 2)
       assert(string.len(zero_padded_length_string) == 2) -- why would a transport belt even span 100+ tiles?
       table.insert(icons, {
-        icon = "__base__/graphics/icons/signal/signal_" .. zero_padded_length_string:sub(-1) .. ".png",
+        icon = "__base__/graphics/icons/signal/signal_" .. string.upper(zero_padded_length_string:sub(-1)) .. ".png",
         icon_size = 64,
         scale = 0.25,
         shift = {8, -8}
