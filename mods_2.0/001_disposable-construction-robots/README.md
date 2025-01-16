@@ -1,3 +1,6 @@
+Similar experience to the nanobots mod many of you all know,
+cheap and easy to craft and usable right from the start of map.
+
 This mod adds cheap construction robots that will spoil in one minute,
 though if the stack spoils in a player's inventory it'll only spoil one item.
 
