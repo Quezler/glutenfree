@@ -1,9 +1,13 @@
+local function selection_box_square(range)
+  return {{-range, -range}, {range, range}}
+end
+
 local container = {
   type = "container",
   name = "greedy-inserter--container",
 
   selection_priority = 51,
-  selection_box = table.deepcopy(data.raw["container"]["wooden-chest"].selection_box),
+  selection_box = selection_box_square(0.25),
   collision_box = table.deepcopy(data.raw["container"]["wooden-chest"].collision_box),
   collision_mask = {layers = {}},
 

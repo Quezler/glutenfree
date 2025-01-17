@@ -50,6 +50,7 @@ function Handler.on_created_entity(event)
 
     state = "empty",
     state_switched_at = event.tick,
+    inserter_rotation_speed = entity.prototype.get_inserter_rotation_speed(entity.quality) -- todo: update in on_configuration_changed
   })
 
   struct.container = entity.surface.create_entity{
@@ -65,6 +66,8 @@ function Handler.on_created_entity(event)
 
   -- game.print(event.tick)
   at_tick(event.tick + 1, struct.id)
+
+  game.print(struct.inserter_rotation_speed)
 end
 
 for _, event in ipairs({
@@ -153,6 +156,15 @@ end, {
   {filter = "name", name = "greedy-inserter"},
 })
 
+-- the amount of ticks for the inserter to reach the dropoff position again after grabbing items optimally from a container
+local initial_sleep_ticks = {
+  [0.040] = 23, -- normal
+  [0.052] = 22, -- uncommon
+  [0.064] = 21, -- rare
+  [0.076] = 19, -- epic
+  [0.100] = 16, -- legendary
+}
+
 local states = {
   ["empty"] = function(struct, tick)
     if struct.itemstack_hand.valid_for_read then
@@ -167,7 +179,7 @@ local states = {
       struct.state = "empty"
       -- struct.state_switched_at = tick
       struct.inserter.drop_target = struct.container
-      return 23
+      return initial_sleep_ticks[struct.inserter_rotation_speed] or 23
     end
     return 1
   end,
