@@ -50,7 +50,7 @@ function Handler.on_created_entity(event)
 
     state = "empty",
     state_switched_at = event.tick,
-    inserter_rotation_speed = entity.prototype.get_inserter_rotation_speed(entity.quality) -- todo: update in on_configuration_changed
+    inserter_rotation_speed_str = string.format("%.3f", entity.prototype.get_inserter_rotation_speed(entity.quality)) -- todo: update in on_configuration_changed
   })
 
   struct.container = entity.surface.create_entity{
@@ -67,7 +67,7 @@ function Handler.on_created_entity(event)
   -- game.print(event.tick)
   at_tick(event.tick + 1, struct.id)
 
-  game.print(struct.inserter_rotation_speed)
+  game.print(serpent.line(struct.inserter_rotation_speed_str))
 end
 
 for _, event in ipairs({
@@ -158,11 +158,11 @@ end, {
 
 -- the amount of ticks for the inserter to reach the dropoff position again after grabbing items optimally from a container
 local initial_sleep_ticks = {
-  [0.040] = 23, -- normal
-  [0.052] = 22, -- uncommon
-  [0.064] = 21, -- rare
-  [0.076] = 19, -- epic
-  [0.100] = 16, -- legendary
+  ["0.040"] = 23, -- normal
+  ["0.052"] = 22, -- uncommon
+  ["0.064"] = 21, -- rare
+  ["0.076"] = 19, -- epic
+  ["0.100"] = 16, -- legendary
 }
 
 local states = {
@@ -179,7 +179,8 @@ local states = {
       struct.state = "empty"
       -- struct.state_switched_at = tick
       struct.inserter.drop_target = struct.container
-      return initial_sleep_ticks[struct.inserter_rotation_speed] or 23
+      game.print(struct.inserter_rotation_speed_str)
+      return initial_sleep_ticks[struct.inserter_rotation_speed_str]
     end
     return 1
   end,
@@ -197,9 +198,11 @@ script.on_event(defines.events.on_tick, function(event)
   if tasks then storage.at_tick[event.tick] = nil
     for struct_id, _ in pairs(tasks) do
       local struct = storage.structs[struct_id]
-      local next_tick = event.tick + states[struct.state](struct, event.tick)
-      game.print(string.format("%d %s %s", event.tick, struct_id, struct.state))
-      at_tick(next_tick, struct_id)
+      if struct then
+        local next_tick = event.tick + states[struct.state](struct, event.tick)
+        game.print(string.format("%d %s %s", event.tick, struct_id, struct.state))
+        at_tick(next_tick, struct_id)
+      end
     end
   end
 end)

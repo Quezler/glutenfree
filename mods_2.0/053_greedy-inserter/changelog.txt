@@ -7,6 +7,7 @@ Date: ????
     - Run some timing tests
     - Time the normal greedy inserter for container pickup
     - Try to map the initial sleep ticks
+    - Fixed floating point shenanigans
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 14
