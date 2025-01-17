@@ -159,10 +159,10 @@ end, {
 -- the amount of ticks for the inserter to reach the dropoff position again after grabbing items optimally from a container
 local initial_sleep_ticks = {
   ["0.040"] = 23, -- normal
-  ["0.052"] = 22, -- uncommon
-  ["0.064"] = 21, -- rare
-  ["0.076"] = 19, -- epic
-  ["0.100"] = 16, -- legendary
+  ["0.052"] = 17, -- uncommon
+  ["0.064"] = 13, -- rare
+  ["0.076"] = 11, -- epic
+  ["0.100"] = 07, -- legendary
 }
 
 local states = {
@@ -199,9 +199,9 @@ script.on_event(defines.events.on_tick, function(event)
     for struct_id, _ in pairs(tasks) do
       local struct = storage.structs[struct_id]
       if struct then
-        local next_tick = event.tick + states[struct.state](struct, event.tick)
-        game.print(string.format("%d %s %s", event.tick, struct_id, struct.state))
-        at_tick(next_tick, struct_id)
+        local tick_offset = states[struct.state](struct, event.tick)
+        game.print(string.format("%d %s %s +%d", event.tick, struct_id, struct.state, tick_offset))
+        at_tick(event.tick + tick_offset, struct_id)
       end
     end
   end
