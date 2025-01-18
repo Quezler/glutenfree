@@ -13,6 +13,7 @@ Date: ????
     - Prepare to gather the initial sleep ticks programatically
     - Initial attempt at automated sampling
     - Get the expected 360 numbers
+    - Illustrate how often it is ticking
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 14

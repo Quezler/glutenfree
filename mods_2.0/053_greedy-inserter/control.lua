@@ -211,6 +211,10 @@ script.on_event(defines.events.on_tick, function(event)
     for struct_id, _ in pairs(tasks) do
       local struct = storage.structs[struct_id]
       if struct then
+        game.get_player(1).create_local_flying_text{
+          text = "tick",
+          position = {struct.inserter.position.x + math.random() - 0.5, struct.inserter.position.y},
+        }
         local tick_offset = states[struct.state](struct, event.tick)
         game.print(string.format("%d %s %s +%d", event.tick, struct_id, struct.state, tick_offset))
         at_tick(event.tick + tick_offset, struct_id)
