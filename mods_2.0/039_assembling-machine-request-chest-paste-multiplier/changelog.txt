@@ -1,10 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.5
-Date: ????
+Date: 2025. 01. 18
   Info:
     - get_logistic_sections() -> get_logistic_point() (https://forums.factorio.com/126097)
     - Use the utf8 times symbol instead of ascii x
     - Move thumbnail away from piper perri meme
+    - Rephrase description for 2.0
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 2025. 01. 03
