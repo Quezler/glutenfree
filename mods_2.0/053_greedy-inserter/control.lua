@@ -3,7 +3,13 @@ local Handler = {}
 script.on_init(function()
   storage.surface = game.planets["greedy-inserter"].create_surface()
   storage.surface.generate_with_lab_tiles = true
+
   storage.surface.create_global_electric_network()
+  storage.surface.create_entity{
+    name = "electric-energy-interface",
+    force = "neutral",
+    position = {-1, -1},
+  }
 
   storage.structs = {}
   storage.deathrattles = {}
@@ -183,7 +189,7 @@ local states = {
       struct.state = "empty"
       -- struct.state_switched_at = tick
       struct.inserter.drop_target = struct.container
-      game.print(struct.inserter_rotation_speed_str)
+      -- game.print(struct.inserter_rotation_speed_str)
       return initial_sleep_ticks[struct.inserter_rotation_speed_str]
     end
     return 1
@@ -208,5 +214,33 @@ script.on_event(defines.events.on_tick, function(event)
         at_tick(event.tick + tick_offset, struct_id)
       end
     end
+  end
+end)
+
+
+commands.add_command("greedy-inserter", nil, function(command)
+  local i = 0
+  for _, quality in pairs(prototypes.quality) do
+    local chest_out = storage.surface.create_entity{
+      name = "infinity-chest",
+      force = "neutral",
+      position = {0.5 + i, 0.5},
+    }
+    chest_out.infinity_container_filters = {{name = "iron-plate", count = 100, index = 1}}
+
+    local inserter = storage.surface.create_entity{
+      name = "greedy-inserter",
+      force = "neutral",
+      quality = quality,
+      position = {0.5 + i, 1.5},
+    }
+
+    local chest_in = storage.surface.create_entity{
+      name = "infinity-chest",
+      force = "neutral",
+      position = {0.5 + i, 2.5},
+    }
+
+    i = i + 1
   end
 end)

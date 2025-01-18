@@ -10,6 +10,7 @@ Date: ????
     - Fixed floating point shenanigans
     - Adjust initial sleep tick map
     - Return the hidden surface
+    - Prepare to gather the initial sleep ticks programatically
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 14
