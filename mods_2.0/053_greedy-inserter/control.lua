@@ -11,6 +11,8 @@ script.on_init(function()
     position = {-1, -1},
   }
 
+  storage.samples = nil
+
   storage.structs = {}
   storage.deathrattles = {}
 
@@ -215,10 +217,27 @@ script.on_event(defines.events.on_tick, function(event)
       end
     end
   end
+
+  if storage.samples then
+    for quality_name, sample in pairs(storage.samples) do
+      if sample.item_grabbed_at == nil then
+        if sample.inserter.held_stack.valid_for_read == true then
+          sample.item_grabbed_at = event.tick
+        end
+      elseif sample.item_dropped_at == nil then
+        if sample.inserter.held_stack.valid_for_read == false then
+          sample.item_dropped_at = event.tick
+          game.print(string.format("%s %d", quality_name, sample.item_dropped_at - sample.item_grabbed_at))
+        end
+      end
+    end
+  end
 end)
 
 
 commands.add_command("greedy-inserter", nil, function(command)
+  storage.samples = {}
+
   local i = 0
   for _, quality in pairs(prototypes.quality) do
     local chest_out = storage.surface.create_entity{
@@ -239,6 +258,16 @@ commands.add_command("greedy-inserter", nil, function(command)
       name = "infinity-chest",
       force = "neutral",
       position = {0.5 + i, 2.5},
+    }
+    chest_in.remove_unfiltered_items = true
+
+    storage.samples[quality.name] = {
+      chest_out = chest_out,
+      inserter = inserter,
+      chest_in = chest_in,
+
+      item_grabbed_at = nil,
+      item_dropped_at = nil,
     }
 
     i = i + 1
