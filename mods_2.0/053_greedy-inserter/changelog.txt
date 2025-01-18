@@ -9,6 +9,7 @@ Date: ????
     - Try to map the initial sleep ticks
     - Fixed floating point shenanigans
     - Adjust initial sleep tick map
+    - Return the hidden surface
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 14
