@@ -82,7 +82,7 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
   if matches and table_size(new_requests) > 0 then
     -- game.print(serpent.block(old_requests))
     -- game.print(serpent.block(new_requests))
-    for _, section in ipairs(requester_chest.get_logistic_sections().sections) do
+    for _, section in ipairs(requester_chest.get_logistic_point(defines.logistic_member_index.logistic_container).sections) do
       if section.type == defines.logistic_section_type.manual then
         section.multiplier = old_requests[1].section_multiplier + 1
         set_multiplier = section.multiplier
