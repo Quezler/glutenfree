@@ -28,7 +28,7 @@ local function serialize_requests(requester_chest)
   local manual_filters = {}
   -- local manual_sections = 0
 
-  for _, section in ipairs(requester_chest.get_logistic_sections().sections) do
+  for _, section in ipairs(requester_chest.get_logistic_point(defines.logistic_member_index.logistic_container).sections) do
     if section.type == defines.logistic_section_type.manual then
       -- manual_sections = manual_sections + 1
       for _, filter in ipairs(section.filters) do
