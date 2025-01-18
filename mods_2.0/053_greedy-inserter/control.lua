@@ -227,7 +227,15 @@ script.on_event(defines.events.on_tick, function(event)
       elseif sample.item_dropped_at == nil then
         if sample.inserter.held_stack.valid_for_read == false then
           sample.item_dropped_at = event.tick
-          game.print(string.format("%s %d", quality_name, sample.item_dropped_at - sample.item_grabbed_at))
+        end
+      elseif sample.second_item_grabbed_at == nil then
+        if sample.inserter.held_stack.valid_for_read == true then
+          sample.second_item_grabbed_at = event.tick
+        end
+      else
+        if sample.inserter.held_stack.valid_for_read == false then
+          game.print(string.format("%s %d", quality_name, event.tick - sample.item_dropped_at))
+          storage.samples[quality_name] = nil
         end
       end
     end
@@ -266,8 +274,9 @@ commands.add_command("greedy-inserter", nil, function(command)
       inserter = inserter,
       chest_in = chest_in,
 
-      item_grabbed_at = nil,
-      item_dropped_at = nil,
+      first_item_grabbed_at = nil,
+      first_item_dropped_at = nil,
+      second_item_grabbed_at = nil,
     }
 
     i = i + 1
