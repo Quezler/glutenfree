@@ -93,7 +93,7 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
 
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   player.create_local_flying_text{
-    text = 'x' .. set_multiplier,
+    text = string.format("× %d", set_multiplier),
     create_at_cursor = true,
   }
 end)
