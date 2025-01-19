@@ -58,7 +58,7 @@ function Handler.on_created_entity(event)
     container = nil,
 
     held_stack = entity.held_stack,
-    held_stack_position = entity.held_stack_position,
+    held_stack_position = {x = 0, y = 0}, -- will break if you place it there :D
     -- itemstack_burner = entity.get_inventory(defines.inventory.fuel)[1],
 
     burner = assert(entity.burner, string.format("%s is not using a burner energy source.", entity.name)),
@@ -188,9 +188,11 @@ local states = {
       struct.inserter.drop_target = nil
     end
 
-    held_stack_position = struct.inserter.held_stack_position
+    local held_stack_position = struct.inserter.held_stack_position
 
+    -- log(serpent.block({struct.held_stack_position, held_stack_position}))
     if struct.held_stack_position.x == held_stack_position.x and struct.held_stack_position.y == held_stack_position.y then
+      -- log("match!")
       struct.burner.remaining_burning_fuel = 1
     end
 
@@ -225,6 +227,7 @@ script.on_event(defines.events.on_tick, function(event)
           text = "-",
           position = struct.inserter.position,
         }
+        -- game.print(serpent.line(struct.inserter.held_stack_position))
         local tick_offset = states[struct.state](struct, event.tick) -- this does the update
         struct.held_stack_position = struct.inserter.held_stack_position
         game.print(string.format("%d %s %s +%d", event.tick, struct_id, struct.state, tick_offset))
