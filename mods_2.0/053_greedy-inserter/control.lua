@@ -41,7 +41,7 @@ local function tick_struct(struct)
   struct.itemstack_burner.set_stack({name = "greedy-inserter--fuel"})
   storage.deathrattles[script.register_on_object_destroyed(struct.itemstack_burner.item)] = {struct.id, "fuel"}
 
-  if struct.itemstack_hand.valid_for_read then
+  if struct.held_stack.valid_for_read then
     struct.inserter.drop_target = nil
   else
     struct.inserter.drop_target = struct.container
@@ -57,7 +57,8 @@ function Handler.on_created_entity(event)
     inserter = entity,
     container = nil,
 
-    itemstack_hand = entity.held_stack,
+    held_stack = entity.held_stack,
+    held_stack_position = entity.held_stack_position,
     -- itemstack_burner = entity.get_inventory(defines.inventory.fuel)[1],
 
     state = "empty",
@@ -126,7 +127,7 @@ local function on_player_rotated_or_flipped_entity(event)
     local struct = storage.structs[entity.unit_number]
     struct.container.teleport(entity.drop_position)
 
-    if struct.itemstack_hand.valid_for_read then
+    if struct.held_stack.valid_for_read then
       struct.inserter.drop_target = nil
     else
       struct.inserter.drop_target = struct.container
@@ -179,7 +180,7 @@ local initial_sleep_ticks = {
 
 local states = {
   ["empty"] = function(struct, tick)
-    if struct.itemstack_hand.valid_for_read then
+    if struct.held_stack.valid_for_read then
       struct.state = "items"
       -- struct.state_switched_at = tick
       struct.inserter.drop_target = nil
@@ -187,7 +188,7 @@ local states = {
     return 1
   end,
   ["items"] = function(struct, tick)
-    if struct.itemstack_hand.valid_for_read == false then
+    if struct.held_stack.valid_for_read == false then
       struct.state = "empty"
       -- struct.state_switched_at = tick
       struct.inserter.drop_target = struct.container
@@ -201,7 +202,7 @@ local states = {
 script.on_event(defines.events.on_tick, function(event)
   -- game.print(event.tick)
   -- for unit_number, struct in pairs(storage.structs) do
-  --   -- game.print(event.tick .. " " .. unit_number .. " " .. serpent.line(struct.itemstack_hand.valid_for_read))
+  --   -- game.print(event.tick .. " " .. unit_number .. " " .. serpent.line(struct.held_stack.valid_for_read))
     -- game.print(string.format("%d %s %s for %d", event.tick, unit_number, struct.state, event.tick - struct.state_switched_at))
     -- states[struct.state](struct, event.tick)
   -- end
@@ -215,7 +216,8 @@ script.on_event(defines.events.on_tick, function(event)
           text = "-",
           position = struct.inserter.position,
         }
-        local tick_offset = states[struct.state](struct, event.tick)
+        local tick_offset = states[struct.state](struct, event.tick) -- this does the update
+        struct.held_stack_position = struct.inserter.held_stack_position
         game.print(string.format("%d %s %s +%d", event.tick, struct_id, struct.state, tick_offset))
         at_tick(event.tick + tick_offset, struct_id)
       end
