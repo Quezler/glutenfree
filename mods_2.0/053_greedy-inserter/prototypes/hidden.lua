@@ -31,7 +31,7 @@ local fuel = {
   icon = "__base__/graphics/icons/compilatron.png",
 
   fuel_category = fuel_category.name,
-  fuel_value = "3kJ", -- this needs to slightly less than what half a rotation takes (based on both energy_per_rotation & energy_per_movement)
+  fuel_value = "1GJ",
   stack_size = 1,
   durability = 1,
 
@@ -42,3 +42,5 @@ local fuel = {
 data:extend({fuel_category, fuel})
 
 data.raw["inserter"]["greedy-inserter"].energy_source.fuel_categories = {fuel_category.name}
+data.raw["inserter"]["greedy-inserter"].energy_source.initial_fuel = fuel.name
+data.raw["inserter"]["greedy-inserter"].energy_source.initial_fuel_percent = 1

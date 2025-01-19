@@ -16,6 +16,7 @@ Date: ????
     - Illustrate how often it is ticking
     - Use hyphens for the morsecode
     - Track the held stack position
+    - Prepare to idle the inserter when the hand did not move
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 14

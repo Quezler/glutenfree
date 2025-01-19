@@ -61,6 +61,8 @@ function Handler.on_created_entity(event)
     held_stack_position = entity.held_stack_position,
     -- itemstack_burner = entity.get_inventory(defines.inventory.fuel)[1],
 
+    burner = assert(entity.burner, string.format("%s is not using a burner energy source.", entity.name)),
+
     state = "empty",
     state_switched_at = event.tick,
     inserter_rotation_speed_str = string.format("%.3f", entity.prototype.get_inserter_rotation_speed(entity.quality)) -- todo: update in on_configuration_changed
@@ -185,6 +187,13 @@ local states = {
       -- struct.state_switched_at = tick
       struct.inserter.drop_target = nil
     end
+
+    held_stack_position = struct.inserter.held_stack_position
+
+    if struct.held_stack_position.x == held_stack_position.x and struct.held_stack_position.y == held_stack_position.y then
+      struct.burner.remaining_burning_fuel = 1
+    end
+
     return 1
   end,
   ["items"] = function(struct, tick)

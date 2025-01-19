@@ -46,10 +46,10 @@ entity.platform_picture =
   }
 }
 
--- entity.energy_source = {
---   type = "burner",
---   fuel_inventory_size = 1,
--- }
+entity.energy_source = {
+  type = "burner",
+  fuel_inventory_size = 1,
+}
 
 local item = {
   type = "item",
