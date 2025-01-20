@@ -8,6 +8,7 @@ local entity = table.deepcopy(data.raw["inserter"]["fast-inserter"])
 entity.name = "greedy-inserter"
 entity.icon = "__greedy-inserter__/graphics/icons/greedy-inserter.png"
 entity.filter_count = 1 -- allowing multiple items is just asking for trouble
+entity.insert_position = {0, 0.1}
 
 entity.hand_base_picture =
 {

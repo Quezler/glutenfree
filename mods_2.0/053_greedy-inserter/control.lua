@@ -63,7 +63,7 @@ function Handler.on_created_entity(event)
   struct.container = entity.surface.create_entity{
     name = "greedy-container",
     force = "neutral",
-    position = entity.drop_position,
+    position = entity.position,
   }
   struct.container.destructible = false
   entity.drop_target = struct.container
@@ -142,13 +142,7 @@ local function on_player_rotated_or_flipped_entity(event)
 
   if entity.name == "greedy-inserter" then
     local struct = storage.structs[entity.unit_number]
-    struct.container.teleport(entity.drop_position)
-
-    if struct.itemstack_inserter.valid_for_read then
-      struct.inserter.drop_target = nil
-    else
-      struct.inserter.drop_target = struct.container
-    end
+    struct.inserter.drop_target = struct.container
   end
 end
 
