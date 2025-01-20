@@ -71,7 +71,7 @@ function Handler.on_created_entity(event)
   struct.assembler = storage.surface.create_entity{
     name = "assembling-machine-1",
     force = "neutral",
-    position = {storage.index + 1.5, -1.5},
+    position = {(storage.index * 3) + 1.5, -1.5},
     recipe = "greedy-repair-pack",
   }
 
@@ -94,7 +94,7 @@ function Handler.on_created_entity(event)
   local assembler_connector = struct.assembler.get_wire_connector(defines.wire_connector_id.circuit_red, true)
   assert(container_connector.connect_to(assembler_connector, false))
 
-  struct.itemstack_assembler.set_stack({name = "repair-pack", count = 2})
+  struct.itemstack_assembler.set_stack({name = "repair-pack"})
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct.id, "inserter"}
   storage.index = storage.index + 1

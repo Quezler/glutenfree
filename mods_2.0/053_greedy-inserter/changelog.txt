@@ -19,6 +19,7 @@ Date: ????
     - Prepare to idle the inserter when the hand did not move
     - Fix first tick matching the same held stack position
     - Step away from the timing approach, broken code
+    - Hidden tweaks
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 14
