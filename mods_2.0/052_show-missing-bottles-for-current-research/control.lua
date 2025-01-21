@@ -1,9 +1,21 @@
 local util = require("util")
 
+local Flasks = {}
+
+Flasks.frame_name  = "show_missing_bottles_for_current_research_frame"
+Flasks.window_name = "show_missing_bottles_for_current_research_window"
+Flasks.label_name  = "show_missing_bottles_for_current_research_label"
+
 local function on_configuration_changed(event)
   storage.lab_inputs = {}
   for _, entity_prototype in pairs(prototypes.get_entity_filtered({{filter = "type", type = "lab"}})) do
     storage.lab_inputs[entity_prototype.name] = util.list_to_map(entity_prototype.lab_inputs)
+  end
+
+  for _, player in pairs(game.players) do
+    if player.gui.screen[Flasks.frame_name] then
+      player.gui.screen[Flasks.frame_name].destroy()
+    end
   end
 end
 
@@ -42,12 +54,6 @@ for _, event in ipairs({
   })
 end
 
-local Flasks = {}
-
-Flasks.frame_name  = "show_missing_bottles_for_current_research_frame"
-Flasks.window_name = "show_missing_bottles_for_current_research_window"
-Flasks.label_name  = "show_missing_bottles_for_current_research_label"
-
 function Flasks.update_player(player, caption)
   if script.level.is_simulation then return end
 
@@ -60,10 +66,6 @@ function Flasks.update_player(player, caption)
       direction = "horizontal",
       ignored_by_interaction = true,
     })
-  else
-    -- canceling a research causes the "press T to start a new research" to come ontop layer-wise,
-    -- so to bodge that we'll just bring the frame to front when there's ever no pending research.
-    frame.bring_to_front()
   end
 
   local window = frame[Flasks.window_name]
@@ -78,6 +80,14 @@ function Flasks.update_player(player, caption)
     window.style.padding = 8
     window.style.left_padding = 8 + 1
     window.style.top_padding = 46
+  end
+
+  if player.controller_type == defines.controllers.remote then
+    window.style.top_padding = 46 + 40
+    window.style.right_margin = 12
+  else
+    window.style.top_padding = 46
+    window.style.right_margin = 0
   end
 
   local label = window[Flasks.label_name]
@@ -187,6 +197,7 @@ end
 
 script.on_event(defines.events.on_player_display_resolution_changed, Flasks.resize_player)
 script.on_event(defines.events.on_player_display_scale_changed, Flasks.resize_player)
+script.on_event(defines.events.on_player_controller_changed, on_active_research_changed)
 
 for _, event in ipairs({
   defines.events.on_research_cancelled,
