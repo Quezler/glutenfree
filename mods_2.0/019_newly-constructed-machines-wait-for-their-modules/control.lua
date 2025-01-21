@@ -144,7 +144,6 @@ function Handler.on_tick(event)
       local proxy_that_makes_this_entity_wait = storage.proxy_that_makes_this_entity_wait[entity.unit_number]
       if proxy_that_makes_this_entity_wait then
         assert(proxy_that_makes_this_entity_wait.proxy.valid == false)
-        assert(proxy_that_makes_this_entity_wait.proxy_target.valid == true)
         Handler.on_object_destroyed({registration_number = proxy_that_makes_this_entity_wait.deathrattle_id})
       end
 
