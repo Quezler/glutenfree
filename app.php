@@ -37,5 +37,6 @@ $application->add(new \App\Command\OnceNewsletterCommand());
 // all
 $application->add(new \App\Command\DiscussionNoticeCommand());
 $application->add(new \App\Command\SendNewsletterCommand());
+$application->add(new \App\Command\InstanceMakeCommand());
 
 $application->run();
