@@ -1,9 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.2
-Date: ????
-  Info:
-    - Get rid of deepcopy for Cerys
-    - Require with . instead of /
+Date: 2025-01-21
+  Compatibility:
+    - If the Nuclear Science mod is installed the advanced centrifuge gains two extra module slots.
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.1
 Date: 2025-01-10

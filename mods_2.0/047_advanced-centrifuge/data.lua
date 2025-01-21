@@ -40,3 +40,7 @@ end
 if settings.startup["k11-advanced-centrifuge-base-productivity"].value then
   data.raw["assembling-machine"]["k11-advanced-centrifuge"].effect_receiver = { base_effect = { productivity = 0.5 }}
 end
+
+if mods["atan-nuclear-science"] then
+  data.raw["assembling-machine"]["k11-advanced-centrifuge"].module_slots = 6
+end
