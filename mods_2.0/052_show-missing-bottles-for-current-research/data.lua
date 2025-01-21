@@ -1,6 +1,6 @@
-data.raw['gui-style']['default'].current_research_info_button.bottom_padding = 4 + 20
+data.raw["gui-style"]["default"].current_research_info_button.bottom_padding = 4 + 20
 
-data.raw['gui-style']['default'].show_missing_bottles_for_current_research_frame = {
+data.raw["gui-style"]["default"].show_missing_bottles_for_current_research_frame = {
   type = "frame_style",
   parent = "invisible_frame",
   horizontal_flow_style = {
@@ -10,7 +10,7 @@ data.raw['gui-style']['default'].show_missing_bottles_for_current_research_frame
   }
 }
 
-data.raw['gui-style']['default'].show_missing_bottles_for_current_research_window = {
+data.raw["gui-style"]["default"].show_missing_bottles_for_current_research_window = {
   type = "frame_style",
   parent = "invisible_frame",
   horizontal_flow_style = {
@@ -19,6 +19,6 @@ data.raw['gui-style']['default'].show_missing_bottles_for_current_research_windo
   }
 }
 
-data.raw['gui-style']['default'].show_missing_bottles_for_current_research_label = {
+data.raw["gui-style"]["default"].show_missing_bottles_for_current_research_label = {
   type = "label_style",
 }

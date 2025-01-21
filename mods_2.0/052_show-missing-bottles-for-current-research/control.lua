@@ -1,8 +1,8 @@
-local util = require('util')
+local util = require("util")
 
 local function on_configuration_changed(event)
   storage.lab_inputs = {}
-  for _, entity_prototype in pairs(prototypes.get_entity_filtered({{filter = 'type', type = 'lab'}})) do
+  for _, entity_prototype in pairs(prototypes.get_entity_filtered({{filter = "type", type = "lab"}})) do
     storage.lab_inputs[entity_prototype.name] = util.list_to_map(entity_prototype.lab_inputs)
   end
 end
@@ -24,7 +24,7 @@ script.on_init(function(event)
   on_configuration_changed()
 
   for _, surface in pairs(game.surfaces) do
-    for _, entity in pairs(surface.find_entities_filtered({type = 'lab'})) do
+    for _, entity in pairs(surface.find_entities_filtered({type = "lab"})) do
       on_created_entity({entity = entity})
     end
   end
@@ -38,15 +38,15 @@ for _, event in ipairs({
   defines.events.on_entity_cloned,
 }) do
   script.on_event(event, on_created_entity, {
-    {filter = 'type', type = 'lab'},
+    {filter = "type", type = "lab"},
   })
 end
 
 local Flasks = {}
 
-Flasks.frame_name  = 'show_missing_bottles_for_current_research_frame'
-Flasks.window_name = 'show_missing_bottles_for_current_research_window'
-Flasks.label_name  = 'show_missing_bottles_for_current_research_label'
+Flasks.frame_name  = "show_missing_bottles_for_current_research_frame"
+Flasks.window_name = "show_missing_bottles_for_current_research_window"
+Flasks.label_name  = "show_missing_bottles_for_current_research_label"
 
 function Flasks.update_player(player, caption)
   if script.level.is_simulation then return end
