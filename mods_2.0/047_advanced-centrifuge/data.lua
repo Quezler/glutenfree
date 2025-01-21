@@ -43,4 +43,5 @@ end
 
 if mods["atan-nuclear-science"] then
   data.raw["assembling-machine"]["k11-advanced-centrifuge"].module_slots = 6
+  table.insert(data.raw["assembling-machine"]["k11-advanced-centrifuge"].crafting_categories, "centrifuging-or-crafting")
 end
