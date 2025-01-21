@@ -27,8 +27,23 @@ class InstanceMakeCommand extends Command
         if (!file_exists($instance_directory))
             mkdir($instance_directory);
 
+        $this->syncAuthentication($instance_directory);
         passthru("(cd {$instance_directory} && /Applications/factorio.app/Contents/MacOS/factorio --config ../../config.ini)");
 
         return Command::SUCCESS;
+    }
+
+    private function syncAuthentication($instance_directory): void
+    {
+        $source = "/Users/quezler/Library/Application Support/factorio/player-data.json";
+        $dest = "{$instance_directory}/player-data.json";
+
+        $source_json = json_decode(file_get_contents($source), true);
+        $dest_json = file_exists($dest) ? json_decode(file_get_contents($dest), true) : [];
+
+        $dest_json["service-username"] = $source_json["service-username"];
+        $dest_json["service-token"] = $source_json["service-token"];
+
+        file_put_contents($dest, json_encode($dest_json, JSON_PRETTY_PRINT));
     }
 }
