@@ -7,9 +7,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class InstanceMakeCommand extends Command
+class InstanceCommand extends Command
 {
-    protected static $defaultName = 'make:instance';
+    protected static $defaultName = 'instance';
 
     protected function configure(): void
     {
