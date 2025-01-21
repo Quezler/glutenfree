@@ -9,12 +9,15 @@ if mods["space-exploration"] then
   light_tint = {r = 1.0, g = 1.0, b = 1.0}
 end
 
+local pipe_picture = assembler3pipepictures()
+pipe_picture.south.filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-pipe-S.png"
+
 data:extend({
   {
     type = "assembling-machine",
     name = "k11-advanced-centrifuge",
     icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon.png",
-    flags = { "placeable-neutral", "placeable-player", "player-creation" },
+    flags = { "placeable-neutral", "placeable-player", "player-creation", "not-rotatable" },
     minable = { mining_time = 1, result = "k11-advanced-centrifuge" },
     max_health = 1000,
     corpse = "nuclear-reactor-remnants",
@@ -138,6 +141,28 @@ data:extend({
     close_sound = sounds.machine_close,
     vehicle_impact_sound = sounds.generic_impact,
     damaged_trigger_effect = hit_effects.entity(),
+
+    fluid_boxes_off_when_no_fluid_recipe = true,
+    fluid_boxes = {
+      {
+        production_type = "input",
+        pipe_picture = pipe_picture,
+        pipe_covers = pipecoverspictures(),
+        volume = 1000,
+        pipe_connections = {
+          {flow_direction = "input", direction = defines.direction.south, position = { -2, 3 }},
+        },
+      },
+      {
+        production_type = "output",
+        pipe_picture = pipe_picture,
+        pipe_covers = pipecoverspictures(),
+        volume = 1000,
+        pipe_connections = {
+          {flow_direction = "output", direction = defines.direction.south, position = { 2, 3 }},
+        },
+      },
+    }
   }
 })
 

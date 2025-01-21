@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.4
+Date: 2025-01-21
+  Compatibility:
+    - Defined two front facing fluid connections for other mods to use. (south side, cannot rotate)
+---------------------------------------------------------------------------------------------------
 Version: 2.2.3
 Date: 2025-01-21
   Compatibility:
