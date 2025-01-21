@@ -16,6 +16,8 @@ local whitelist_if_name_contains = {
   "fulgurite",
   -- aquilo
   "lithium%-iceberg%-",
+  -- alien biomes
+  "rock%-",
 }
 
 local function should_whitelist(prototype)

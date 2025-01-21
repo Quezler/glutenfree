@@ -2,7 +2,7 @@
     "name": "rocks-heal-over-time-just-like-trees",
     "title": "Rocks heal over time just like trees",
     "description": "Seeing healthbars until the heat death of the universe is not a fun alternative.",
-    "version": "2.0.5",
+    "version": "2.0.6",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [
@@ -10,6 +10,7 @@
 
         "? base",
         "? space-age",
+        "? alien-biomes",
         "? space-exploration"
     ]
 }
