@@ -14,6 +14,7 @@ class InstanceCommand extends Command
     protected function configure(): void
     {
         $this->addArgument('name', InputArgument::REQUIRED);
+        $this->addArgument('arguments', InputArgument::OPTIONAL);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -28,7 +29,7 @@ class InstanceCommand extends Command
             mkdir($instance_directory);
 
         $this->syncAuthentication($instance_directory);
-        passthru("(cd {$instance_directory} && /Applications/factorio.app/Contents/MacOS/factorio --config ../../config.ini)");
+        passthru("(cd {$instance_directory} && /Applications/factorio.app/Contents/MacOS/factorio --config ../../config.ini {$input->getArgument('arguments')})");
 
         return Command::SUCCESS;
     }
