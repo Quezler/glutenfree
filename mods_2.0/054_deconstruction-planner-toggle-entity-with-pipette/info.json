@@ -1,7 +1,7 @@
 {
     "name": "deconstruction-planner-toggle-entity-with-pipette",
     "title": "Deconstruction planner toggle entity with pipette",
-    "description": "It probably has something to do with the title.",
+    "description": "Pipette a few entities to quickly filter what to whitelist before dragging.",
 
     "version": "0.0.1",
     "author": "Quezler",
