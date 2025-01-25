@@ -69,7 +69,7 @@ EOF;
 
         $output->writeln($info);
 
-        file_put_contents("{$mod_directory}/info.json", $info);
+        file_put_contents("{$mod_directory}/info.json", $info . PHP_EOL);
         file_put_contents("{$mod_directory}/README.md", '');
         
         return Command::SUCCESS;
