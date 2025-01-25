@@ -12,11 +12,17 @@ local mod_prefix = "deconstruction-planner-toggle-entity-with-pipette--"
 --   }
 -- })
 
-data:extend({
-  {
-    type = "custom-input", key_sequence = "",
-    name = mod_prefix .. "pipette",
-    linked_game_control = "pipette",
-    include_selected_prototype = true,
-  }
-})
+local bring_your_own_keybind = settings.startup["deconstruction-planner-toggle-entity-with-pipette--bring-your-own-keybind"].value
+
+local custom_input = {
+  type = "custom-input", key_sequence = "",
+  name = mod_prefix .. "pipette",
+  linked_game_control = "pipette",
+  include_selected_prototype = true,
+}
+
+if bring_your_own_keybind then
+  custom_input.linked_game_control = nil
+end
+
+data:extend({custom_input})

@@ -1,5 +1,7 @@
 local mod_prefix = "deconstruction-planner-toggle-entity-with-pipette--"
 
+local bring_your_own_keybind = settings.startup[mod_prefix .. "bring-your-own-keybind"].value
+
 -- script.on_event(mod_prefix .. "clear-cursor", function(event)
 --   game.print(string.format("%d clear cursor", event.tick))
 -- end)
@@ -56,6 +58,7 @@ script.on_event(mod_prefix .. "pipette", function(event)
   }
   -- game.print(serpent.line({success, result}))
 
+  if bring_your_own_keybind == true then return end
   storage.inventories[player.index] = game.create_inventory(1)
   storage.inventories[player.index][1].swap_stack(cursor_stack)
 end)
@@ -63,16 +66,18 @@ end)
 -- i was a little worried this listener might break if the inventory is full,
 -- but during initial testing it did not seem to cause any issues when i tried.
 
-script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
-  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  local cursor_stack = player.cursor_stack
+if bring_your_own_keybind == false then
+  script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    local cursor_stack = player.cursor_stack
 
-  local inventory = storage.inventories[player.index]
+    local inventory = storage.inventories[player.index]
 
-  -- game.print(serpent.line(cursor_stack.valid_for_read))
-  if inventory and cursor_stack.valid_for_read == false then
-    inventory[1].swap_stack(cursor_stack)
-    inventory.destroy()
-    storage.inventories[player.index] = nil
-  end
-end)
+    -- game.print(serpent.line(cursor_stack.valid_for_read))
+    if inventory and cursor_stack.valid_for_read == false then
+      inventory[1].swap_stack(cursor_stack)
+      inventory.destroy()
+      storage.inventories[player.index] = nil
+    end
+  end)
+end
