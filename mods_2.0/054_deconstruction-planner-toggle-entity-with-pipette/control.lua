@@ -22,13 +22,13 @@ local function toggle_filter(itemstack, filter)
     if old_filter.name == filter.name and old_filter.quality == filter.quality then
       entity_filters[i] = {}
       itemstack.entity_filters = entity_filters
-      return string.format("- 1 %s %s", filter.quality, filter.name)
+      return string.format("- [entity=%s,quality=%s] %s", filter.name, filter.quality, filter.name)
     end
   end
 
   table.insert(entity_filters, filter)
   itemstack.entity_filters = entity_filters
-  return string.format("+ 1 %s %s", filter.quality, filter.name)
+  return string.format("+ [entity=%s,quality=%s] %s", filter.name, filter.quality, filter.name)
 end
 
 script.on_event(mod_prefix .. "pipette", function(event)
