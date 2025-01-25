@@ -3,7 +3,7 @@
     "title": "Deconstruction planner toggle entity with pipette",
     "description": "Pipette a few entities to quickly filter what to whitelist before dragging.",
 
-    "version": "0.0.1",
+    "version": "1.0.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
