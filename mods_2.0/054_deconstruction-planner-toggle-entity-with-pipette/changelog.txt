@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
-Date: ????
+Date: 2025. 01. 25
   Info:
     - Use rich text icon to denote the quality instead
     - Add "bring your own keybind" option
