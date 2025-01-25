@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Use rich text icon to denote the quality instead
     - Add "bring your own keybind" option
+    - Localise the entity names
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 01. 25
