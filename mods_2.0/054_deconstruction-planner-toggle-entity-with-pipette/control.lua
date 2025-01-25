@@ -13,8 +13,25 @@ script.on_load(function()
   assert(count == 0, string.format("expected 0 but found %d lingering inventories.", count))
 end)
 
+local function toggle_filter(itemstack, filter)
+  assert(table_size(filter) == 2) -- name & quality
+
+  local entity_filters = itemstack.entity_filters
+
+  for i, old_filter in ipairs(entity_filters) do
+    if old_filter.name == filter.name and old_filter.quality == filter.quality then
+      entity_filters[i] = {}
+      itemstack.entity_filters = entity_filters
+      return
+    end
+  end
+
+  table.insert(entity_filters, filter)
+  itemstack.entity_filters = entity_filters
+end
+
 script.on_event(mod_prefix .. "pipette", function(event)
-  game.print(string.format("%d pipette", event.tick))
+--game.print(string.format("%d pipette", event.tick))
 
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local cursor_stack = player.cursor_stack
@@ -28,12 +45,10 @@ script.on_event(mod_prefix .. "pipette", function(event)
 
   -- game.print("decon planner! " .. serpent.line(event))
 
-  local entity_filters = cursor_stack.entity_filters
-  table.insert(entity_filters, {
+  toggle_filter(cursor_stack, {
     name = selected_prototype.name,
     quality = selected_prototype.quality,
   })
-  cursor_stack.entity_filters = entity_filters
 
   storage.inventories[player.index] = game.create_inventory(1)
   storage.inventories[player.index][1].swap_stack(cursor_stack)

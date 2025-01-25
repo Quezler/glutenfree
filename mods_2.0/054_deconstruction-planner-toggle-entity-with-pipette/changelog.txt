@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Add primary logic
     - Reach mvp stage
+    - Support toggling filters
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 25
