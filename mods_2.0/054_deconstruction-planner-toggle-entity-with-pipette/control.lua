@@ -22,12 +22,13 @@ local function toggle_filter(itemstack, filter)
     if old_filter.name == filter.name and old_filter.quality == filter.quality then
       entity_filters[i] = {}
       itemstack.entity_filters = entity_filters
-      return
+      return string.format("- 1 %s %s", filter.quality, filter.name)
     end
   end
 
   table.insert(entity_filters, filter)
   itemstack.entity_filters = entity_filters
+  return string.format("+ 1 %s %s", filter.quality, filter.name)
 end
 
 script.on_event(mod_prefix .. "pipette", function(event)
@@ -45,10 +46,15 @@ script.on_event(mod_prefix .. "pipette", function(event)
 
   -- game.print("decon planner! " .. serpent.line(event))
 
-  toggle_filter(cursor_stack, {
+  local success, result = pcall(toggle_filter, cursor_stack, {
     name = selected_prototype.name,
     quality = selected_prototype.quality,
   })
+  player.create_local_flying_text{
+    text = result,
+    create_at_cursor = true
+  }
+  -- game.print(serpent.line({success, result}))
 
   storage.inventories[player.index] = game.create_inventory(1)
   storage.inventories[player.index][1].swap_stack(cursor_stack)

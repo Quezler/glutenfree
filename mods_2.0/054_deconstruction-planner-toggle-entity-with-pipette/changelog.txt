@@ -5,6 +5,7 @@ Date: ????
     - Add primary logic
     - Reach mvp stage
     - Support toggling filters
+    - Handle "x is not a valid deconstruction target" error
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 25
