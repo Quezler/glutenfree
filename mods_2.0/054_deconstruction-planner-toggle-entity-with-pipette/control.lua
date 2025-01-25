@@ -60,12 +60,16 @@ script.on_event(mod_prefix .. "pipette", function(event)
   storage.inventories[player.index][1].swap_stack(cursor_stack)
 end)
 
+-- i was a little worried this listener might break if the inventory is full,
+-- but during initial testing it did not seem to cause any issues when i tried.
+
 script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local cursor_stack = player.cursor_stack
 
   local inventory = storage.inventories[player.index]
 
+  -- game.print(serpent.line(cursor_stack.valid_for_read))
   if inventory and cursor_stack.valid_for_read == false then
     inventory[1].swap_stack(cursor_stack)
     inventory.destroy()
