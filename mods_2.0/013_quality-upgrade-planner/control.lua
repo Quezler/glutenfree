@@ -31,28 +31,40 @@ script.on_configuration_changed(on_configuration_changed)
 --   return itemdata
 -- end
 
+-- copied from 042_change-recipe-quality-without-re-selecting-recipe
+local next_quality = {}
+local previous_quality = {}
+
+-- crude, does not care about a quality having two previouses
+for _, quality in pairs(prototypes.quality) do
+  if quality.next then
+    next_quality[quality.name] = quality.next.name
+    previous_quality[quality.next.name] = quality.name
+  end
+end
+
 local mod_prefix = "quality-upgrade-planner--"
 
-script.on_event(mod_prefix .. "blueprint-book-next", function(event)
+local function cycle_quality(event, up_or_down)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local cursor_stack = player.cursor_stack
 
   if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "quality-upgrade-planner" then
-    local quality = prototypes.quality["legendary"]
-    cursor_stack.label = quality.name
-    cursor_stack.label_color = quality.color
+    local quality_name = (up_or_down == "up" and next_quality or previous_quality)[cursor_stack.quality.name]
+    if quality_name then -- without this if it can fall off the end when scrolling up
+      cursor_stack.set_stack({name = "quality-upgrade-planner", quality = quality_name})
+    end
+    -- cursor_stack.label = quality.name
+    -- cursor_stack.label_color = quality.color
   end
+end
+
+script.on_event(mod_prefix .. "cycle-quality-up", function(event)
+  cycle_quality(event, "up")
 end)
 
-script.on_event(mod_prefix .. "blueprint-book-previous", function(event)
-  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  local cursor_stack = player.cursor_stack
-
-  if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "quality-upgrade-planner" then
-    local quality = prototypes.quality["normal"]
-    cursor_stack.label = quality.name
-    cursor_stack.label_color = quality.color
-  end
+script.on_event(mod_prefix .. "cycle-quality-down", function(event)
+  cycle_quality(event, "down")
 end)
 
 -- script.on_event(defines.events.on_mod_item_opened, function(event)

@@ -81,13 +81,12 @@ local mod_prefix = "quality-upgrade-planner--"
 data:extend({
   {
     type = "custom-input", key_sequence = "",
-    name = mod_prefix .. "blueprint-book-next",
-    linked_game_control = "cycle-blueprint-forwards",
+    name = mod_prefix .. "cycle-quality-up",
+    linked_game_control = "cycle-quality-up",
   },
   {
     type = "custom-input", key_sequence = "",
-    name = mod_prefix .. "blueprint-book-previous",
-    linked_game_control = "cycle-blueprint-backwards",
-  },
+    name = mod_prefix .. "cycle-quality-down",
+    linked_game_control = "cycle-quality-down",
+  }
 })
-
