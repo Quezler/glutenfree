@@ -8,28 +8,28 @@ local function on_configuration_changed()
     storage.inventory = nil
   end
 
-  storage.itemdata = storage.itemdata or {}
-  storage.deathrattles = storage.deathrattles or {}
+  -- storage.itemdata = storage.itemdata or {}
+  -- storage.deathrattles = storage.deathrattles or {}
 end
 
 script.on_init(on_configuration_changed)
 script.on_configuration_changed(on_configuration_changed)
 
-local function get_or_create_itemdata(itemstack)
-  local itemdata = storage.itemdata[assert(itemstack.item_number)]
+-- local function get_or_create_itemdata(itemstack)
+--   local itemdata = storage.itemdata[assert(itemstack.item_number)]
 
-  if itemdata == nil then
-    itemdata = {
-      switch_states = {
-        entities = "right",
-      }
-    }
-    storage.itemdata[itemstack.item_number] = itemdata
-    storage.deathrattles[script.register_on_object_destroyed(itemstack.item)] = {"itemdata", itemstack.item_number}
-  end
+--   if itemdata == nil then
+--     itemdata = {
+--       switch_states = {
+--         entities = "right",
+--       }
+--     }
+--     storage.itemdata[itemstack.item_number] = itemdata
+--     storage.deathrattles[script.register_on_object_destroyed(itemstack.item)] = {"itemdata", itemstack.item_number}
+--   end
 
-  return itemdata
-end
+--   return itemdata
+-- end
 
 local mod_prefix = "quality-upgrade-planner--"
 
@@ -59,7 +59,7 @@ script.on_event(defines.events.on_mod_item_opened, function(event)
   if event.item.name ~= "quality-upgrade-planner" then return end
 
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  local itemdata = get_or_create_itemdata(event.item)
+  -- local itemdata = get_or_create_itemdata(event.item)
 
   local frame = player.gui.screen[mod_prefix .. "frame"]
   if frame then frame.destroy() end
@@ -108,6 +108,7 @@ script.on_event(defines.events.on_mod_item_opened, function(event)
       left_label_caption = {"gui-constant.off"},
       right_label_caption = {"gui-constant.on"}
     }
+    switch.ignored_by_interaction = true -- todo: itemdata
     if quality_category.not_yet_implemented then
       switch.enabled = false
       switch.allow_none_state = true
@@ -132,19 +133,19 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   local cursor_stack = player.cursor_stack
 
   if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "quality-upgrade-planner" then
-    game.print(serpent.line(get_or_create_itemdata(cursor_stack)))
+    -- game.print(serpent.line(get_or_create_itemdata(cursor_stack)))
   end
 end)
 
-script.on_event(defines.events.on_object_destroyed, function(event)
-  local deathrattle = storage.deathrattles[event.registration_number]
-  if deathrattle then storage.deathrattles[event.registration_number] = nil
+-- script.on_event(defines.events.on_object_destroyed, function(event)
+--   local deathrattle = storage.deathrattles[event.registration_number]
+--   if deathrattle then storage.deathrattles[event.registration_number] = nil
 
-    if deathrattle[1] == "itemdata" then
-      storage.itemdata[deathrattle[2]] = nil
-      game.print("itemdata cleared")
-    else
-      error(serpent.block(deathrattle))
-    end
-  end
-end)
+--     if deathrattle[1] == "itemdata" then
+--       storage.itemdata[deathrattle[2]] = nil
+--       game.print("itemdata cleared")
+--     else
+--       error(serpent.block(deathrattle))
+--     end
+--   end
+-- end)

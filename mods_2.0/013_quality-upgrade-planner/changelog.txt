@@ -21,6 +21,7 @@ Date: ????
     - Disable the switch for everything but the entities
     - Define default switch states
     - Attempt to store itemdata within each quality upgrade planner
+    - Abandon itemdata due to https://forums.factorio.com/126350
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12
