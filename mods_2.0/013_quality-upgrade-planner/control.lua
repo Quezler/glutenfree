@@ -84,7 +84,7 @@ script.on_event(defines.events.on_mod_item_opened, function(event)
 
     local switch = flow.add{
       type = "switch",
-      switch_state = "right", -- on by default
+      switch_state = quality_category.default_switch_state,
       left_label_caption = {"gui-constant.off"},
       right_label_caption = {"gui-constant.on"}
     }

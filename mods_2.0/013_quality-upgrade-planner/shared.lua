@@ -2,6 +2,7 @@ return {
   quality_categories = {
     {
       name = "entities",
+      default_switch_state = "right",
     },
     {
       name = "filters",
