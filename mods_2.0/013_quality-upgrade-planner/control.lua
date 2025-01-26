@@ -141,6 +141,11 @@ script.on_event(defines.events.on_gui_closed, function(event)
   end
 end)
 
+local function set_mapper(upgrade_planner, i, entity_prototype, quality_name)
+  upgrade_planner.set_mapper(i, "from", {type = "entity", name = entity_prototype.name})
+  upgrade_planner.set_mapper(i, "to"  , {type = "entity", name = entity_prototype.name, quality = quality_name})
+end
+
 script.on_event(defines.events.on_player_selected_area, function(event)
   if event.item ~= "quality-upgrade-planner" then return end
 
@@ -150,24 +155,23 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "quality-upgrade-planner" then
     -- game.print(serpent.line(get_or_create_itemdata(cursor_stack)))
 
-    for _, entity in ipairs(event.entities) do
-      if entity.type == "entity-ghost" then
-        entity.surface.create_entity{
-          name = entity.name,
-          force = entity.force,
-          position = entity.position,
-          direction = entity.direction,
-          
-        }
-      else
-        entity.order_upgrade{
-          target = {name = entity.name, quality = event.quality},
-          force = player.force,
-          player = player,
-        }
-      end
+    local inventory = game.create_inventory(1)
+    local upgrade_planner = inventory[1]
+    upgrade_planner.set_stack({name = "upgrade-planner"})
+
+    for i, entity in ipairs(event.entities) do
+      set_mapper(upgrade_planner, i, entity.type == "entity-ghost" and entity.ghost_prototype or entity.prototype, event.quality)
     end
 
+    event.surface.upgrade_area{
+      area = event.area,
+      force = player.force,
+      player = player,
+      skip_fog_of_war = true,
+      item = upgrade_planner,
+    }
+
+    inventory.destroy()
   end
 end)
 

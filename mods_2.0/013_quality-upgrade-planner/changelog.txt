@@ -26,6 +26,7 @@ Date: ????
     - Use alt+scroll (vs shift+scroll) to set the quality instead
     - Support upgrading entities like 1.0.x could
     - Begin supporting ghosts (eww, create_entity, lets not)
+    - Support upgrading ghosts properly
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12
