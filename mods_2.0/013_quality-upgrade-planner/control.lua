@@ -8,3 +8,27 @@ end
 
 script.on_init(on_configuration_changed)
 script.on_configuration_changed(on_configuration_changed)
+
+local mod_prefix = "quality-upgrade-planner--"
+
+script.on_event(mod_prefix .. "blueprint-book-next", function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local cursor_stack = player.cursor_stack
+
+  if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "quality-upgrade-planner" then
+    local quality = prototypes.quality["legendary"]
+    cursor_stack.label = quality.name
+    cursor_stack.label_color = quality.color
+  end
+end)
+
+script.on_event(mod_prefix .. "blueprint-book-previous", function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local cursor_stack = player.cursor_stack
+
+  if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "quality-upgrade-planner" then
+    local quality = prototypes.quality["normal"]
+    cursor_stack.label = quality.name
+    cursor_stack.label_color = quality.color
+  end
+end)

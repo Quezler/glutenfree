@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Begin selection tool conversion
     - Add shortcut button (resolves #20)
+    - Test changing quality with scrolling
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12

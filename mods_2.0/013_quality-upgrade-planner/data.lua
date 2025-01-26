@@ -7,7 +7,7 @@ local selection_tool = {
     {icon = data.raw["upgrade-item"]["upgrade-planner"].icon},
     {icon = "__core__/graphics/icons/any-quality.png", scale = 0.375},
   },
-  flags = {"spawnable"},
+  flags = {"spawnable", "not-stackable"},
   subgroup = "tool",
   order = "c[automated-construction]-d[quality-upgrade-planner]",
   inventory_move_sound = item_sounds.planner_inventory_move,
@@ -49,6 +49,7 @@ local selection_tool = {
     mode = {"nothing"},
     cursor_box_type = "not-allowed",
   },
+  draw_label_for_cursor_render = true,
 }
 
 local shortcut = {
@@ -72,3 +73,19 @@ if mods["quality"] then
 end
 
 data:extend{selection_tool, shortcut}
+
+local mod_prefix = "quality-upgrade-planner--"
+
+data:extend({
+  {
+    type = "custom-input", key_sequence = "",
+    name = mod_prefix .. "blueprint-book-next",
+    linked_game_control = "cycle-blueprint-forwards",
+  },
+  {
+    type = "custom-input", key_sequence = "",
+    name = mod_prefix .. "blueprint-book-previous",
+    linked_game_control = "cycle-blueprint-backwards",
+  },
+})
+
