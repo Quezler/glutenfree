@@ -66,14 +66,14 @@ script.on_event(defines.events.on_mod_item_opened, function(event)
 
     local button = flow.add{
       type = "sprite-button",
-      sprite = "quality-category-" .. quality_category,
+      sprite = "quality-category-" .. quality_category.name,
     }
     button.ignored_by_interaction = true
 
     local label = flow.add{
       type = "label",
-      caption = {"", {"quality-category-name." .. quality_category}, " [img=info]"},
-      tooltip = {"quality-category-description." .. quality_category},
+      caption = {"", {"quality-category-name." .. quality_category.name}, " [img=info]"},
+      tooltip = {"quality-category-description." .. quality_category.name},
     }
     label.style.font = "default-bold"
 
@@ -82,11 +82,17 @@ script.on_event(defines.events.on_mod_item_opened, function(event)
     }
     piston.style.horizontally_stretchable = true
 
-    flow.add{
+    local switch = flow.add{
       type = "switch",
+      switch_state = "right", -- on by default
       left_label_caption = {"gui-constant.off"},
       right_label_caption = {"gui-constant.on"}
     }
+    if quality_category.not_yet_implemented then
+      switch.enabled = false
+      switch.allow_none_state = true
+      switch.switch_state = "none"
+    end
   end
 
   player.opened = frame
