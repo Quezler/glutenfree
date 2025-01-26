@@ -7,13 +7,14 @@ local selection_tool = {
     {icon = data.raw["upgrade-item"]["upgrade-planner"].icon},
     {icon = "__core__/graphics/icons/any-quality.png", scale = 0.375},
   },
-  flags = {"spawnable", "not-stackable"},
+  flags = {"not-stackable", "spawnable"},
   subgroup = "tool",
   order = "c[automated-construction]-d[quality-upgrade-planner]",
   inventory_move_sound = item_sounds.planner_inventory_move,
   pick_sound = item_sounds.planner_inventory_pickup,
   drop_sound = item_sounds.planner_inventory_move,
   stack_size = 1,
+  draw_label_for_cursor_render = true,
   skip_fog_of_war = true,
   select =
   {
@@ -49,7 +50,6 @@ local selection_tool = {
     mode = {"nothing"},
     cursor_box_type = "not-allowed",
   },
-  draw_label_for_cursor_render = true,
 }
 
 local shortcut = {
