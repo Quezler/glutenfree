@@ -141,9 +141,9 @@ script.on_event(defines.events.on_gui_closed, function(event)
   end
 end)
 
-local function set_mapper(upgrade_planner, i, entity_prototype, quality_name)
-  upgrade_planner.set_mapper(i, "from", {type = "entity", name = entity_prototype.name})
-  upgrade_planner.set_mapper(i, "to"  , {type = "entity", name = entity_prototype.name, quality = quality_name})
+local function set_mapper(upgrade_planner, i, entity_name, quality_name)
+  upgrade_planner.set_mapper(i, "from", {type = "entity", name = entity_name})
+  upgrade_planner.set_mapper(i, "to"  , {type = "entity", name = entity_name, quality = quality_name})
 end
 
 script.on_event(defines.events.on_player_selected_area, function(event)
@@ -159,8 +159,15 @@ script.on_event(defines.events.on_player_selected_area, function(event)
     local upgrade_planner = inventory[1]
     upgrade_planner.set_stack({name = "upgrade-planner"})
 
+    local map = {}
     for i, entity in ipairs(event.entities) do
-      set_mapper(upgrade_planner, i, entity.type == "entity-ghost" and entity.ghost_prototype or entity.prototype, event.quality)
+      map[(entity.type == "entity-ghost" and entity.ghost_prototype or entity.prototype).name] = event.quality
+    end
+
+    local i = 0
+    for entity_name, quality_name in pairs(map) do
+      i = i + 1
+      set_mapper(upgrade_planner, i, entity_name, quality_name)
     end
 
     event.surface.upgrade_area{

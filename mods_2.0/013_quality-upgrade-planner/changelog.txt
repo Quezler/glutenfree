@@ -28,6 +28,7 @@ Date: ????
     - Begin supporting ghosts (eww, create_entity, lets not)
     - Support upgrading ghosts properly
     - Allow using the quality upgrade planner in remote view
+    - Prevent "index out of bounds" by only mapping once per entity name
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12
