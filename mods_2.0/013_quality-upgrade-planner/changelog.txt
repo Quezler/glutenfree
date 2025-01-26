@@ -16,6 +16,7 @@ Date: ????
     - Localize the quality category names
     - Give the quality categories a description
     - Give each quality category a switch button
+    - Add an inner frame for looks
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12

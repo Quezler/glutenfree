@@ -50,8 +50,14 @@ script.on_event(defines.events.on_mod_item_opened, function(event)
     caption = {"item-name.quality-upgrade-planner"}
   }
 
+  local inner = frame.add{
+    type = "frame",
+    style = "inside_shallow_frame_with_padding",
+    direction = "vertical",
+  }
+
   for _, quality_category in ipairs(shared.quality_categories) do
-    local flow = frame.add{
+    local flow = inner.add{
       type = "flow",
       style = "horizontal_flow",
     }
