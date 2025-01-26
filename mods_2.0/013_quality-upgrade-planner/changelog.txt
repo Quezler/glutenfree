@@ -13,6 +13,7 @@ Date: ????
     - Create initial gui frame
     - Load the quality categories as buttons
     - Give the quality category buttons a label
+    - Localize the quality category names
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12

@@ -62,7 +62,7 @@ script.on_event(defines.events.on_mod_item_opened, function(event)
     }
     local label = flow.add{
       type = "label",
-      caption = quality_category,
+      caption = {"quality-category." .. quality_category},
     }
     label.style.font = "default-bold"
   end
