@@ -56,16 +56,30 @@ script.on_event(defines.events.on_mod_item_opened, function(event)
       style = "horizontal_flow",
     }
     flow.style.vertical_align = "center"
-    flow.add{
+
+    local button = flow.add{
       type = "sprite-button",
       sprite = "quality-category-" .. quality_category,
     }
+    button.ignored_by_interaction = true
+
     local label = flow.add{
       type = "label",
       caption = {"", {"quality-category-name." .. quality_category}, " [img=info]"},
       tooltip = {"quality-category-description." .. quality_category},
     }
     label.style.font = "default-bold"
+
+    local piston = flow.add{
+      type = "flow",
+    }
+    piston.style.horizontally_stretchable = true
+
+    flow.add{
+      type = "switch",
+      left_label_caption = {"gui-constant.off"},
+      right_label_caption = {"gui-constant.on"}
+    }
   end
 
   player.opened = frame

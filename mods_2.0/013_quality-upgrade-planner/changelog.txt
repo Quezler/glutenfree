@@ -15,6 +15,7 @@ Date: ????
     - Give the quality category buttons a label
     - Localize the quality category names
     - Give the quality categories a description
+    - Give each quality category a switch button
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12
