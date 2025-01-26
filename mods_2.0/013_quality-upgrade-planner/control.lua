@@ -3,8 +3,9 @@ local mod_name = "quality-upgrade-planner"
 local shared = require("shared")
 
 local function on_configuration_changed()
-  for _, inventory in ipairs(game.get_script_inventories(mod_name)[mod_name]) do
-    inventory.destroy()
+  if storage.inventory then -- 1.0.1 - 1.0.8
+    storage.inventory.destroy()
+    storage.inventory = nil
   end
 end
 
