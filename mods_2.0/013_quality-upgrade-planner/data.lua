@@ -51,4 +51,24 @@ local selection_tool = {
   },
 }
 
-data:extend{selection_tool}
+local shortcut = {
+  type = "shortcut",
+  name = "give-quality-upgrade-planner",
+  order = "b[blueprints]-k[quality-upgrade-planner]",
+  action = "spawn-item",
+  localised_name = {"shortcut.make-quality-upgrade-planner"},
+--associated_control_input = "give-quality-upgrade-planner",
+  technology_to_unlock = "construction-robotics",
+  item_to_spawn = "quality-upgrade-planner",
+  style = "green",
+  icon = "__quality-upgrade-planner__/graphics/icons/shortcut-toolbar/mip/new-quality-upgrade-planner-x56.png",
+  icon_size = 56,
+  small_icon = "__quality-upgrade-planner__/graphics/icons/shortcut-toolbar/mip/new-quality-upgrade-planner-x24.png",
+  small_icon_size = 24,
+}
+
+if mods["quality"] then
+  shortcut.technology_to_unlock = "quality-module"
+end
+
+data:extend{selection_tool, shortcut}
