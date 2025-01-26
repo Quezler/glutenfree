@@ -1,8 +1,9 @@
 # (cd ./mods_2.0/013_quality-upgrade-planner/graphics/icons && sh generate.sh)
-mkdir ./quality-category
-magick /Users/quezler/Documents/Tower/github/wube/Factorio/data/base/graphics/icons/transport-belt.png       -colorspace Gray -strip quality-category/entities.png
-magick /Users/quezler/Documents/Tower/github/wube/Factorio/data/base/graphics/icons/inserter.png             -colorspace Gray -strip quality-category/filters.png
-magick /Users/quezler/Documents/Tower/github/wube/Factorio/data/base/graphics/icons/assembling-machine-2.png -colorspace Gray -strip quality-category/recipes.png
-magick /Users/quezler/Documents/Tower/github/wube/Factorio/data/base/graphics/icons/efficiency-module-3.png  -colorspace Gray -strip quality-category/modules.png
-magick /Users/quezler/Documents/Tower/github/wube/Factorio/data/base/graphics/icons/logistic-robot.png       -colorspace Gray -strip quality-category/requests.png
-magick /Users/quezler/Documents/Tower/github/wube/Factorio/data/base/graphics/icons/power-switch.png         -colorspace Gray -strip quality-category/conditions.png
+factorio_path="/Users/quezler/Documents/Tower/github/wube/Factorio"
+mkdir quality-category
+magick "$factorio_path/data/base/graphics/icons/transport-belt.png"       -colorspace Gray -strip quality-category/entities.png
+magick "$factorio_path/data/base/graphics/icons/inserter.png"             -colorspace Gray -strip quality-category/filters.png
+magick "$factorio_path/data/base/graphics/icons/assembling-machine-2.png" -colorspace Gray -strip quality-category/recipes.png
+magick "$factorio_path/data/base/graphics/icons/efficiency-module-3.png"  -colorspace Gray -strip quality-category/modules.png
+magick "$factorio_path/data/base/graphics/icons/logistic-robot.png"       -colorspace Gray -strip quality-category/requests.png
+magick "$factorio_path/data/base/graphics/icons/power-switch.png"         -colorspace Gray -strip quality-category/conditions.png
