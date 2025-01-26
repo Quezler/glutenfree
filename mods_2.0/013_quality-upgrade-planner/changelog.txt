@@ -22,6 +22,7 @@ Date: ????
     - Define default switch states
     - Attempt to store itemdata within each quality upgrade planner
     - Abandon itemdata due to https://forums.factorio.com/126350
+    - Open gui by clicking the shortcut again instead
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12

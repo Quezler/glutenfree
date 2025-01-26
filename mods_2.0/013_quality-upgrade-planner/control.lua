@@ -55,11 +55,13 @@ script.on_event(mod_prefix .. "blueprint-book-previous", function(event)
   end
 end)
 
-script.on_event(defines.events.on_mod_item_opened, function(event)
-  if event.item.name ~= "quality-upgrade-planner" then return end
+-- script.on_event(defines.events.on_mod_item_opened, function(event)
+--   if event.item.name ~= "quality-upgrade-planner" then return end
 
-  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  -- local itemdata = get_or_create_itemdata(event.item)
+--   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+--   -- local itemdata = get_or_create_itemdata(event.item)
+
+local function open_gui(player)
 
   local frame = player.gui.screen[mod_prefix .. "frame"]
   if frame then frame.destroy() end
@@ -118,7 +120,8 @@ script.on_event(defines.events.on_mod_item_opened, function(event)
 
   player.opened = frame
   frame.force_auto_center()
-end)
+end
+-- end)
 
 script.on_event(defines.events.on_gui_closed, function(event)
   if event.element and event.element.name == mod_prefix .. "frame" then
@@ -149,3 +152,24 @@ end)
 --     end
 --   end
 -- end)
+
+script.on_event(defines.events.on_lua_shortcut, function(event)
+  if event.prototype_name ~= "give-quality-upgrade-planner" then return end
+
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local cursor_stack = player.cursor_stack
+
+  if cursor_stack then
+    if cursor_stack.valid_for_read == true then
+      if cursor_stack.name == "quality-upgrade-planner" then
+        open_gui(player)
+      else
+        player.clear_cursor()
+      end
+    end
+
+    if cursor_stack.valid_for_read == false then -- only set the stack if the cursor actually was cleared (or empty to begin with)
+      cursor_stack.set_stack({name = "quality-upgrade-planner"})
+    end
+  end
+end)
