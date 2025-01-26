@@ -151,11 +151,21 @@ script.on_event(defines.events.on_player_selected_area, function(event)
     -- game.print(serpent.line(get_or_create_itemdata(cursor_stack)))
 
     for _, entity in ipairs(event.entities) do
-      entity.order_upgrade{
-        target = {name = entity.name, quality = event.quality},
-        force = player.force,
-        player = player,
-      }
+      if entity.type == "entity-ghost" then
+        entity.surface.create_entity{
+          name = entity.name,
+          force = entity.force,
+          position = entity.position,
+          direction = entity.direction,
+          
+        }
+      else
+        entity.order_upgrade{
+          target = {name = entity.name, quality = event.quality},
+          force = player.force,
+          player = player,
+        }
+      end
     end
 
   end
