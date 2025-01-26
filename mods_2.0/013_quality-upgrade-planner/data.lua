@@ -9,7 +9,7 @@ local selection_tool = {
     {icon = data.raw["upgrade-item"]["upgrade-planner"].icon},
     {icon = "__core__/graphics/icons/any-quality.png", scale = 0.375},
   },
-  flags = {"only-in-cursor", "not-stackable"},
+  flags = {"only-in-cursor", "not-stackable" , "spawnable"},
   subgroup = "tool",
   order = "c[automated-construction]-d[quality-upgrade-planner]",
   inventory_move_sound = item_sounds.planner_inventory_move,

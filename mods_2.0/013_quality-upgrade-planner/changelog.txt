@@ -27,6 +27,7 @@ Date: ????
     - Support upgrading entities like 1.0.x could
     - Begin supporting ghosts (eww, create_entity, lets not)
     - Support upgrading ghosts properly
+    - Allow using the quality upgrade planner in remote view
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12
