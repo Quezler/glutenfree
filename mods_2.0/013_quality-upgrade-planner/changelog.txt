@@ -10,6 +10,7 @@ Date: ????
     - Swap beacon icon with module icon
     - Rename inserters to filters (since it includes loaders and splitters too)
     - Decrease generator line width
+    - Create initial gui frame
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12

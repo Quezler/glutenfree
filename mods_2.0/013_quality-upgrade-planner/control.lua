@@ -32,3 +32,28 @@ script.on_event(mod_prefix .. "blueprint-book-previous", function(event)
     cursor_stack.label_color = quality.color
   end
 end)
+
+script.on_event(defines.events.on_mod_item_opened, function(event)
+  if event.item.name ~= "quality-upgrade-planner" then return end
+
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+
+  local frame = player.gui.screen[mod_prefix .. "frame"]
+  if frame then frame.destroy() end
+
+  frame = player.gui.screen.add{
+    type = "frame",
+    name = mod_prefix .. "frame",
+    direction = "vertical",
+    caption = {"item-name.quality-upgrade-planner"}
+  }
+
+  player.opened = frame
+  frame.force_auto_center()
+end)
+
+script.on_event(defines.events.on_gui_closed, function(event)
+  if event.element and event.element.name == mod_prefix .. "frame" then
+    event.element.destroy()
+  end
+end)
