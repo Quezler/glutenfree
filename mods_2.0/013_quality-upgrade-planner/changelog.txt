@@ -8,6 +8,7 @@ Date: ????
     - Reordering
     - Generate greyscale quality category icons
     - Swap beacon icon with module icon
+    - Rename inserters to filters (since it includes loaders and splitters too)
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12
