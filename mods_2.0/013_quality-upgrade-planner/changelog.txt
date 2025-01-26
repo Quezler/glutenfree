@@ -20,6 +20,7 @@ Date: ????
     - Cleanup 1.0.1 - 1.0.8 inventories better
     - Disable the switch for everything but the entities
     - Define default switch states
+    - Attempt to store itemdata within each quality upgrade planner
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12
