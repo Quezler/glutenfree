@@ -8,6 +8,11 @@ local bring_your_own_keybind = settings.startup[mod_prefix .. "bring-your-own-ke
 
 script.on_init(function()
   storage.inventories = {}
+  storage.cursor_stack_temporary = {}
+end)
+
+script.on_configuration_changed(function()
+  storage.cursor_stack_temporary = storage.cursor_stack_temporary or {}
 end)
 
 script.on_load(function()
@@ -60,6 +65,7 @@ script.on_event(mod_prefix .. "pipette", function(event)
 
   if bring_your_own_keybind == true then return end
   storage.inventories[player.index] = game.create_inventory(1)
+  storage.cursor_stack_temporary[player.index] = player.cursor_stack_temporary -- BEFORE swap stack
   storage.inventories[player.index][1].swap_stack(cursor_stack)
 end)
 
@@ -78,6 +84,9 @@ if bring_your_own_keybind == false then
       inventory[1].swap_stack(cursor_stack)
       inventory.destroy()
       storage.inventories[player.index] = nil
+
+      player.cursor_stack_temporary = storage.cursor_stack_temporary[player.index] -- AFTER swap stack
+      storage.cursor_stack_temporary[player.index] = nil
     end
   end)
 end
