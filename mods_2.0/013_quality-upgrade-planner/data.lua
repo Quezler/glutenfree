@@ -1,3 +1,5 @@
+require("prototypes.quality-categories")
+
 local item_sounds = require("__base__.prototypes.item_sounds")
 
 local selection_tool = {

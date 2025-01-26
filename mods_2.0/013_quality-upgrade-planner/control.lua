@@ -1,5 +1,7 @@
 local mod_name = "quality-upgrade-planner"
 
+local shared = require("shared")
+
 local function on_configuration_changed()
   for _, inventory in ipairs(game.get_script_inventories(mod_name)[mod_name]) do
     inventory.destroy()
@@ -47,6 +49,13 @@ script.on_event(defines.events.on_mod_item_opened, function(event)
     direction = "vertical",
     caption = {"item-name.quality-upgrade-planner"}
   }
+
+  for _, quality_category in ipairs(shared.quality_categories) do
+    frame.add{
+      type = "sprite-button",
+      sprite = "quality-category-" .. quality_category,
+    }
+  end
 
   player.opened = frame
   frame.force_auto_center()
