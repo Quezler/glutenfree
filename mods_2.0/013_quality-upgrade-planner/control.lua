@@ -51,10 +51,20 @@ script.on_event(defines.events.on_mod_item_opened, function(event)
   }
 
   for _, quality_category in ipairs(shared.quality_categories) do
-    frame.add{
+    local flow = frame.add{
+      type = "flow",
+      style = "horizontal_flow",
+    }
+    flow.style.vertical_align = "center"
+    flow.add{
       type = "sprite-button",
       sprite = "quality-category-" .. quality_category,
     }
+    local label = flow.add{
+      type = "label",
+      caption = quality_category,
+    }
+    label.style.font = "default-bold"
   end
 
   player.opened = frame
