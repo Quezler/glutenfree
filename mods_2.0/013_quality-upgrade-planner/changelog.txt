@@ -24,6 +24,7 @@ Date: ????
     - Abandon itemdata due to https://forums.factorio.com/126350
     - Open gui by clicking the shortcut again instead
     - Use alt+scroll (vs shift+scroll) to set the quality instead
+    - Support upgrading entities like 1.0.x could
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2024. 12. 12

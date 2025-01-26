@@ -149,6 +149,15 @@ script.on_event(defines.events.on_player_selected_area, function(event)
 
   if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "quality-upgrade-planner" then
     -- game.print(serpent.line(get_or_create_itemdata(cursor_stack)))
+
+    for _, entity in ipairs(event.entities) do
+      entity.order_upgrade{
+        target = {name = entity.name, quality = event.quality},
+        force = player.force,
+        player = player,
+      }
+    end
+
   end
 end)
 
