@@ -53,10 +53,10 @@ script.on_event(mod_prefix .. "cycle-quality-down", function(event)
   cycle_quality(event, "down")
 end)
 
-local function open_gui(player)
+local function toggle_gui(player)
 
   local frame = player.gui.screen[mod_prefix .. "frame"]
-  if frame then frame.destroy() end
+  if frame then frame.destroy() return end
 
   frame = player.gui.screen.add{
     type = "frame",
@@ -170,7 +170,7 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
   if cursor_stack then
     if cursor_stack.valid_for_read == true then
       if is_quality_upgrade_planner_item[cursor_stack.name] then
-        open_gui(player)
+        toggle_gui(player)
       else
         player.clear_cursor()
       end

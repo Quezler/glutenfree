@@ -3,6 +3,7 @@ Version: 2.0.2
 Date: ????
   Info:
     - Remove remnants of itemdata
+    - Make the shortcut able to close the gui again
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2025. 01. 27
