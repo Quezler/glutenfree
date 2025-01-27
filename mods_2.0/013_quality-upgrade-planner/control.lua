@@ -45,6 +45,12 @@ end
 
 local mod_prefix = "quality-upgrade-planner--"
 
+local function set_stack_to_quality_upgrade_planner(cursor_stack, quality)
+  cursor_stack.set_stack({name = "quality-upgrade-planner", quality = quality.name})
+  cursor_stack.label = quality.name
+  cursor_stack.label_color = quality.color
+end
+
 local function cycle_quality(event, up_or_down)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local cursor_stack = player.cursor_stack
@@ -52,9 +58,7 @@ local function cycle_quality(event, up_or_down)
   if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "quality-upgrade-planner" then
     local quality = (up_or_down == "up" and next_quality or previous_quality)[cursor_stack.quality.name]
     if quality then
-      cursor_stack.set_stack({name = "quality-upgrade-planner", quality = quality.name})
-      cursor_stack.label = quality.name
-      cursor_stack.label_color = quality.color
+      set_stack_to_quality_upgrade_planner(cursor_stack, quality)
     end
   end
 end
@@ -211,7 +215,7 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
     end
 
     if cursor_stack.valid_for_read == false then -- only set the stack if the cursor actually was cleared (or empty to begin with)
-      cursor_stack.set_stack({name = "quality-upgrade-planner"})
+      set_stack_to_quality_upgrade_planner(cursor_stack, prototypes.quality["normal"])
     end
   end
 end)

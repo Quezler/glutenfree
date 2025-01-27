@@ -7,6 +7,7 @@ Date: ????
     - Add bootleg shortcut description due to https://forums.factorio.com/126363
     - Embed normal quality indicator inside icon
     - Label the selection tool with the quality's name
+    - Label the spawned one as normal immediately
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 26
