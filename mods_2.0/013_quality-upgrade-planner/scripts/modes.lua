@@ -69,6 +69,41 @@ local function mode_filters(event, playerdata)
   end
 end
 
+local is_assembling_machine = {
+  ["assembling-machine"] = true,
+  ["rocket-silo"] = true,
+}
+
+local recipe_has_item_ingredients = {}
+for _, recipe in pairs(prototypes.recipe) do
+  for _, ingredient in ipairs(recipe.ingredients) do
+    if ingredient.type == "item" then
+      recipe_has_item_ingredients[recipe.name] = true
+      goto continue
+    end
+  end
+  ::continue::
+end
+
+local function mode_recipes(event, playerdata)
+  for _, entity in ipairs(event.entities) do
+    if is_assembling_machine[entity.type] then
+      local recipe, quality = entity.get_recipe()
+      if recipe and recipe_has_item_ingredients[recipe.name] and entity.prototype.fixed_recipe == nil then
+        local items = entity.set_recipe(recipe, event.quality)
+        for _, item in ipairs(items or {}) do
+          entity.surface.spill_item_stack{
+            position = entity.position,
+            stack = item,
+            force = entity.force,
+            allow_belts = false,
+          }
+        end
+      end
+    end
+  end
+end
+
 local function mode_modules(event, playerdata)
   local inventory = game.create_inventory(1)
   inventory[1].set_stack({name = "upgrade-planner"})
@@ -93,5 +128,6 @@ end
 return {
   entities = mode_entities,
   filters = mode_filters,
+  recipes = mode_recipes,
   modules = mode_modules,
 }

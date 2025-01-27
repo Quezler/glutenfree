@@ -12,7 +12,6 @@ return {
     {
       name = "recipes",
       sprite = "entity/assembling-machine-1",
-      not_yet_implemented = true,
     },
     {
       name = "modules",
