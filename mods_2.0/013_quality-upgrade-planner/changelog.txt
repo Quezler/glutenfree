@@ -8,6 +8,7 @@ Date: ????
     - Make shift click move them all to the new side
     - Thumbnail rework attempt one
     - Thumbnail rework attempt two
+    - Make the dice look cursed
 ---------------------------------------------------------------------------------------------------
 Version: 2.5.0
 Date: 2025. 01. 27
