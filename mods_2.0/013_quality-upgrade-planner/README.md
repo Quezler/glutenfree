@@ -10,7 +10,9 @@ Planned features:
 - ~~caching the item in a script inventory and merely giving a copy when triggered~~
 - supporting quality that is out of order, contact me if you know of a mod that breaks this one
 
-- cube/dice shape derived from the outlines of https://www.pngegg.com/en/png-xrouj
+Attribution:
+- thumbnail inspired by [Blueprint Sandboxes](https://mods.factorio.com/mod/blueprint-sandboxes)
+- the outline of the three dimensional shape: https://www.pngegg.com/en/png-xrouj
 
 # 2.0.0
 

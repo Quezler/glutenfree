@@ -7,6 +7,7 @@ Date: ????
     - Disable all other switches if you hold shift
     - Make shift click move them all to the new side
     - Thumbnail rework attempt one
+    - Thumbnail rework attempt two
 ---------------------------------------------------------------------------------------------------
 Version: 2.5.0
 Date: 2025. 01. 27
