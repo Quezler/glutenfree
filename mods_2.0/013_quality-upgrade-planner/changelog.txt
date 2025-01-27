@@ -7,6 +7,7 @@ Date: ????
     - Support space platforms and landing pads
     - Prevent duplicate filter crashes
     - Remove duplicate filters (so they do not keep their old quality)
+    - Ignore non-manual and named groups
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.0
 Date: 2025. 01. 27
