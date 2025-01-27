@@ -38,8 +38,8 @@ local previous_quality = {}
 -- crude, does not care about a quality having two previouses
 for _, quality in pairs(prototypes.quality) do
   if quality.next then
-    next_quality[quality.name] = quality.next.name
-    previous_quality[quality.next.name] = quality.name
+    next_quality[quality.name] = quality.next
+    previous_quality[quality.next.name] = quality
   end
 end
 
@@ -50,12 +50,12 @@ local function cycle_quality(event, up_or_down)
   local cursor_stack = player.cursor_stack
 
   if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "quality-upgrade-planner" then
-    local quality_name = (up_or_down == "up" and next_quality or previous_quality)[cursor_stack.quality.name]
-    if quality_name then -- without this if it can fall off the end when scrolling up
-      cursor_stack.set_stack({name = "quality-upgrade-planner", quality = quality_name})
+    local quality = (up_or_down == "up" and next_quality or previous_quality)[cursor_stack.quality.name]
+    if quality then
+      cursor_stack.set_stack({name = "quality-upgrade-planner", quality = quality.name})
+      cursor_stack.label = quality.name
+      cursor_stack.label_color = quality.color
     end
-    -- cursor_stack.label = quality.name
-    -- cursor_stack.label_color = quality.color
   end
 end
 
