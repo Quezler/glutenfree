@@ -1,9 +1,11 @@
 local mod_name = "quality-upgrade-planner"
 
 local shared = require("shared")
+local Modes = require("scripts.modes")
 
 local function on_player_created(event)
   storage.playerdata[event.player_index] = {
+    player = game.get_player(event.player_index),
     switch_states = {},
   }
 end
@@ -143,40 +145,18 @@ script.on_event(defines.events.on_gui_closed, function(event)
   end
 end)
 
-local function set_mapper(upgrade_planner, i, entity_name, quality_name)
-  upgrade_planner.set_mapper(i, "from", {type = "entity", name = entity_name})
-  upgrade_planner.set_mapper(i, "to"  , {type = "entity", name = entity_name, quality = quality_name})
-end
-
 script.on_event(defines.events.on_player_selected_area, function(event)
   if not is_quality_upgrade_planner_item[event.item] then return end
 
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local playerdata = storage.playerdata[player.index]
 
-  local inventory = game.create_inventory(1)
-  local upgrade_planner = inventory[1]
-  upgrade_planner.set_stack({name = "upgrade-planner"})
-
-  local map = {}
-  for i, entity in ipairs(event.entities) do
-    map[(entity.type == "entity-ghost" and entity.ghost_prototype or entity.prototype).name] = event.quality
+  for _, quality_category in pairs(shared.quality_categories) do
+    local switch_state = playerdata.switch_states[quality_category.name] or quality_category.default_switch_state
+    if switch_state == "right" then
+      Modes[quality_category.name](event, playerdata)
+    end
   end
-
-  local i = 0
-  for entity_name, quality_name in pairs(map) do
-    i = i + 1
-    set_mapper(upgrade_planner, i, entity_name, quality_name)
-  end
-
-  event.surface.upgrade_area{
-    area = event.area,
-    force = player.force,
-    player = player,
-    skip_fog_of_war = true,
-    item = upgrade_planner,
-  }
-
-  inventory.destroy()
 end)
 
 script.on_event(defines.events.on_player_reverse_selected_area, function(event)
