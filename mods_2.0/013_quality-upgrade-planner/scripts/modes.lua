@@ -175,32 +175,50 @@ local function mode_constants(event, playerdata)
   end
 end
 
+-- https://lua-api.factorio.com/latest/classes/LuaGenericOnOffControlBehavior.html
+-- at the time of writing the generic control behavior page does not list all its children neatly,
+-- and instead of parsing the runtime-api.json programatically i'll just take this ugly shortcut for now.
+local function probe_for_generic_on_off_control_behavior(control_behavior)
+  local foo = control_behavior.circuit_condition
+  local bar = control_behavior.logistic_condition
+end
+
+local extends_generic_on_off_control_behavior = {}
+local function get_extends_generic_on_off_control_behavior(control_behavior)
+  if extends_generic_on_off_control_behavior[control_behavior.type] == nil then
+    local success, message = pcall(probe_for_generic_on_off_control_behavior, control_behavior)
+    extends_generic_on_off_control_behavior[control_behavior.type] = success
+    if success == false then
+      log(message) -- just in case its something totally unexpected
+    end
+  end
+
+  -- game.print(serpent.line(extends_generic_on_off_control_behavior))
+  return extends_generic_on_off_control_behavior[control_behavior.type]
+end
+
 local function mode_conditions(event, playerdata)
   for _, entity in ipairs(event.entities) do
     local control_behavior = entity.get_control_behavior()
-    if control_behavior then
+    if control_behavior and get_extends_generic_on_off_control_behavior(control_behavior) then
 
       local circuit_condition = control_behavior.circuit_condition
-      if circuit_condition then
-        if circuit_condition.first_signal then
-          circuit_condition.first_signal.quality = event.quality
-        end
-        if circuit_condition.second_signal then
-          circuit_condition.second_signal.quality = event.quality
-        end
-        control_behavior.circuit_condition = circuit_condition
+      if circuit_condition.first_signal then
+        circuit_condition.first_signal.quality = event.quality
       end
+      if circuit_condition.second_signal then
+        circuit_condition.second_signal.quality = event.quality
+      end
+      control_behavior.circuit_condition = circuit_condition
 
       local logistic_condition = control_behavior.logistic_condition
-      if logistic_condition then
-        if logistic_condition.first_signal then
-          logistic_condition.first_signal.quality = event.quality
-        end
-        if logistic_condition.second_signal then
-          logistic_condition.second_signal.quality = event.quality
-        end
-        control_behavior.logistic_condition = logistic_condition
+      if logistic_condition.first_signal then
+        logistic_condition.first_signal.quality = event.quality
       end
+      if logistic_condition.second_signal then
+        logistic_condition.second_signal.quality = event.quality
+      end
+      control_behavior.logistic_condition = logistic_condition
 
     end
   end

@@ -5,6 +5,7 @@ Date: ????
     - Update requests & constants description
     - Mark lane balancers and loaders enabled as supported
     - Support circuit and logistic conditions
+    - Check for generic on off control behaviour with pcall
 ---------------------------------------------------------------------------------------------------
 Version: 2.4.0
 Date: 2025. 01. 27
