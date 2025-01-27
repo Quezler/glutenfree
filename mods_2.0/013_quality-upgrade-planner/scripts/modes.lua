@@ -175,6 +175,37 @@ local function mode_constants(event, playerdata)
   end
 end
 
+local function mode_conditions(event, playerdata)
+  for _, entity in ipairs(event.entities) do
+    local control_behavior = entity.get_control_behavior()
+    if control_behavior then
+
+      local circuit_condition = control_behavior.circuit_condition
+      if circuit_condition then
+        if circuit_condition.first_signal then
+          circuit_condition.first_signal.quality = event.quality
+        end
+        if circuit_condition.second_signal then
+          circuit_condition.second_signal.quality = event.quality
+        end
+        control_behavior.circuit_condition = circuit_condition
+      end
+
+      local logistic_condition = control_behavior.logistic_condition
+      if logistic_condition then
+        if logistic_condition.first_signal then
+          logistic_condition.first_signal.quality = event.quality
+        end
+        if logistic_condition.second_signal then
+          logistic_condition.second_signal.quality = event.quality
+        end
+        control_behavior.logistic_condition = logistic_condition
+      end
+
+    end
+  end
+end
+
 return {
   entities = mode_entities,
   filters = mode_filters,
@@ -182,4 +213,5 @@ return {
   modules = mode_modules,
   requests = mode_requests,
   constants = mode_constants,
+  conditions = mode_conditions,
 }

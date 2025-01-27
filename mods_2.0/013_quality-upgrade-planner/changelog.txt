@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Update requests & constants description
     - Mark lane balancers and loaders enabled as supported
+    - Support circuit and logistic conditions
 ---------------------------------------------------------------------------------------------------
 Version: 2.4.0
 Date: 2025. 01. 27

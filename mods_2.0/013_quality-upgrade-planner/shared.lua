@@ -28,7 +28,6 @@ return {
     {
       name = "conditions",
       sprite = "entity/power-switch",
-      not_yet_implemented = true,
     },
   }
 }
