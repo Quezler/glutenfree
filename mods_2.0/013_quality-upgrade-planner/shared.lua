@@ -8,7 +8,6 @@ return {
     {
       name = "filters",
       sprite = "entity/inserter",
-      not_yet_implemented = true,
     },
     {
       name = "recipes",
