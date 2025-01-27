@@ -19,6 +19,9 @@
         "? newsletter-for-mods-made-by-quezler",
 
         "base >= 2.0.13",
-        "? quality"
+        "? quality",
+
+        "? lane-balancers",
+        "? loaders-enabled"
     ]
 }

@@ -3,6 +3,7 @@ Version: 2.4.1
 Date: ????
   Info:
     - Update requests & constants description
+    - Mark lane balancers and loaders enabled as supported
 ---------------------------------------------------------------------------------------------------
 Version: 2.4.0
 Date: 2025. 01. 27
