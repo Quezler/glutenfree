@@ -2,10 +2,28 @@ local mod_name = "quality-upgrade-planner"
 
 local shared = require("shared")
 
+local function on_player_created(event)
+  storage.playerdata[event.player_index] = {
+    switch_states = {},
+  }
+end
+
+local function on_player_removed(event)
+  storage.playerdata[event.player_index] = nil
+end
+
+script.on_event(defines.events.on_player_created, on_player_created)
+script.on_event(defines.events.on_player_removed, on_player_removed)
+
 local function on_configuration_changed()
   if storage.inventory then -- 1.0.1 - 1.0.8
     storage.inventory.destroy()
     storage.inventory = nil
+  end
+
+  storage.playerdata = {} -- todo: keep between versions?
+  for _, player in pairs(game.players) do
+    on_player_created({player_index = player.index})
   end
 end
 
@@ -71,6 +89,8 @@ local function toggle_gui(player)
     direction = "vertical",
   }
 
+  local playerdata = storage.playerdata[player.index]
+
   for _, quality_category in ipairs(shared.quality_categories) do
     local flow = inner.add{
       type = "flow",
@@ -98,11 +118,14 @@ local function toggle_gui(player)
 
     local switch = flow.add{
       type = "switch",
-      switch_state = quality_category.default_switch_state,
+      switch_state = playerdata.switch_states[quality_category.name] or quality_category.default_switch_state,
       left_label_caption = {"gui-constant.off"},
-      right_label_caption = {"gui-constant.on"}
+      right_label_caption = {"gui-constant.on"},
+      tags = {
+        action = mod_prefix .. "toggle-quality-category",
+        quality_category_name = quality_category.name,
+      },
     }
-    switch.ignored_by_interaction = true -- todo: itemdata
     if quality_category.not_yet_implemented then
       switch.enabled = false
       switch.allow_none_state = true
@@ -181,5 +204,14 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
     if cursor_stack.valid_for_read == false then -- only set the stack if the cursor actually was cleared (or empty to begin with)
       set_stack_to_quality_upgrade_planner(cursor_stack, prototypes.quality["normal"])
     end
+  end
+end)
+
+script.on_event(defines.events.on_gui_switch_state_changed, function(event)
+  -- game.print(serpent.line({event, event.element.tags}))
+  local tags = event.element.tags
+  if tags and tags.action == mod_prefix .. "toggle-quality-category" then
+    storage.playerdata[event.player_index].switch_states[tags.quality_category_name] = event.element.switch_state
+    -- game.print(serpent.line(storage.playerdata[event.player_index]))
   end
 end)
