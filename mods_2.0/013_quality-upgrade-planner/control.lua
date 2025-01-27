@@ -43,10 +43,15 @@ for _, quality in pairs(prototypes.quality) do
   end
 end
 
+local is_quality_upgrade_planner = {["quality-upgrade-planner"] = true}
+for _, quality in pairs(prototypes.quality) do
+  is_quality_upgrade_planner[quality.name .. "-" .. "quality-upgrade-planner"] = true
+end
+
 local mod_prefix = "quality-upgrade-planner--"
 
 local function set_stack_to_quality_upgrade_planner(cursor_stack, quality)
-  cursor_stack.set_stack({name = "quality-upgrade-planner", quality = quality.name})
+  cursor_stack.set_stack({name = quality.name .. "-" .. "quality-upgrade-planner", quality = quality.name})
   cursor_stack.label = quality.name
   cursor_stack.label_color = quality.color
 end
@@ -55,7 +60,7 @@ local function cycle_quality(event, up_or_down)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local cursor_stack = player.cursor_stack
 
-  if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "quality-upgrade-planner" then
+  if cursor_stack and cursor_stack.valid_for_read and is_quality_upgrade_planner[cursor_stack.name] then
     local quality = (up_or_down == "up" and next_quality or previous_quality)[cursor_stack.quality.name]
     if quality then
       set_stack_to_quality_upgrade_planner(cursor_stack, quality)
@@ -156,7 +161,7 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local cursor_stack = player.cursor_stack
 
-  if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == "quality-upgrade-planner" then
+  if cursor_stack and cursor_stack.valid_for_read and is_quality_upgrade_planner[cursor_stack.name] then
     -- game.print(serpent.line(get_or_create_itemdata(cursor_stack)))
 
     local inventory = game.create_inventory(1)
@@ -207,7 +212,7 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
 
   if cursor_stack then
     if cursor_stack.valid_for_read == true then
-      if cursor_stack.name == "quality-upgrade-planner" then
+      if is_quality_upgrade_planner[cursor_stack.name] then
         open_gui(player)
       else
         player.clear_cursor()
