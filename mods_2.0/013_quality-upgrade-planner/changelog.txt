@@ -9,6 +9,7 @@ Date: ????
     - Thumbnail rework attempt one
     - Thumbnail rework attempt two
     - Make the dice look cursed
+    - Update readme
 ---------------------------------------------------------------------------------------------------
 Version: 2.5.0
 Date: 2025. 01. 27

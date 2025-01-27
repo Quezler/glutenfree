@@ -1,7 +1,7 @@
 {
     "name": "quality-upgrade-planner",
     "title": "Quality upgrade planner",
-    "description": "Allows you to upgrade/downgrade an entire area.",
+    "description": "Allows you to change the quality of buildings, recipes, modules & filters in bulk.",
 
     "version": "2.5.0",
     "author": "Quezler",
