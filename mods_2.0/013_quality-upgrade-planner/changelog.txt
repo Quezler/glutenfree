@@ -5,6 +5,7 @@ Date: ????
     - Remove remnants of itemdata
     - Make the shortcut able to close the gui again
     - Have reverse select toggle the gui as well
+    - Stop using greyscaled "quality category" sprites
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2025. 01. 27

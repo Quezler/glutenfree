@@ -80,7 +80,7 @@ local function toggle_gui(player)
 
     local button = flow.add{
       type = "sprite-button",
-      sprite = "quality-category-" .. quality_category.name,
+      sprite = quality_category.sprite,
     }
     button.ignored_by_interaction = true
 
