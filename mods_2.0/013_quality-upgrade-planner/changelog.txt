@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Remember the last quality you used
     - If the playerdata is fresh, open gui on first use
+    - Disable all other switches if you hold shift
 ---------------------------------------------------------------------------------------------------
 Version: 2.5.0
 Date: 2025. 01. 27

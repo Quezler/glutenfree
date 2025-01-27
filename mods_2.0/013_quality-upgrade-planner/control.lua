@@ -92,6 +92,7 @@ local function toggle_gui(player)
 
   local inner = frame.add{
     type = "frame",
+    name = "inner",
     style = "inside_shallow_frame_with_padding",
     direction = "vertical",
   }
@@ -101,6 +102,7 @@ local function toggle_gui(player)
   for _, quality_category in ipairs(shared.quality_categories) do
     local flow = inner.add{
       type = "flow",
+      name = quality_category.name,
       style = "horizontal_flow",
     }
     flow.style.vertical_align = "center"
@@ -125,6 +127,7 @@ local function toggle_gui(player)
 
     local switch = flow.add{
       type = "switch",
+      name = "switch",
       switch_state = playerdata.switch_states[quality_category.name] or quality_category.default_switch_state,
       left_label_caption = {"gui-constant.off"},
       right_label_caption = {"gui-constant.on"},
@@ -198,10 +201,29 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
 end)
 
 script.on_event(defines.events.on_gui_switch_state_changed, function(event)
+  -- game.print(serpent.line(event))
   -- game.print(serpent.line({event, event.element.tags}))
   local tags = event.element.tags
   if tags and tags.action == mod_prefix .. "toggle-quality-category" then
     storage.playerdata[event.player_index].switch_states[tags.quality_category_name] = event.element.switch_state
     -- game.print(serpent.line(storage.playerdata[event.player_index]))
+  end
+end)
+
+script.on_event(defines.events.on_gui_click, function(event)
+  -- game.print(serpent.line(event))
+  local tags = event.element.tags
+  if tags and tags.action == mod_prefix .. "toggle-quality-category" then
+    if event.shift then
+      local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+      local frame = player.gui.screen[mod_prefix .. "frame"]
+
+      for _, quality_category in ipairs(shared.quality_categories) do
+        if quality_category.name ~= tags.quality_category_name then
+          frame["inner"][quality_category.name]["switch"].switch_state = "left"
+          storage.playerdata[event.player_index].switch_states[quality_category.name] = "left"
+        end
+      end
+    end
   end
 end)
