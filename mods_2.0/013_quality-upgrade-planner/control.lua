@@ -7,35 +7,15 @@ local function on_configuration_changed()
     storage.inventory.destroy()
     storage.inventory = nil
   end
-
-  -- storage.itemdata = storage.itemdata or {}
-  -- storage.deathrattles = storage.deathrattles or {}
 end
 
 script.on_init(on_configuration_changed)
 script.on_configuration_changed(on_configuration_changed)
 
--- local function get_or_create_itemdata(itemstack)
---   local itemdata = storage.itemdata[assert(itemstack.item_number)]
-
---   if itemdata == nil then
---     itemdata = {
---       switch_states = {
---         entities = "right",
---       }
---     }
---     storage.itemdata[itemstack.item_number] = itemdata
---     storage.deathrattles[script.register_on_object_destroyed(itemstack.item)] = {"itemdata", itemstack.item_number}
---   end
-
---   return itemdata
--- end
-
--- copied from 042_change-recipe-quality-without-re-selecting-recipe
 local next_quality = {}
 local previous_quality = {}
 
--- crude, does not care about a quality having two previouses
+-- does not support two qualities having the same next
 for _, quality in pairs(prototypes.quality) do
   if quality.next then
     next_quality[quality.name] = quality.next
@@ -72,12 +52,6 @@ end)
 script.on_event(mod_prefix .. "cycle-quality-down", function(event)
   cycle_quality(event, "down")
 end)
-
--- script.on_event(defines.events.on_mod_item_opened, function(event)
---   if event.item.name ~= "quality-upgrade-planner" then return end
-
---   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
---   -- local itemdata = get_or_create_itemdata(event.item)
 
 local function open_gui(player)
 
@@ -139,7 +113,6 @@ local function open_gui(player)
   player.opened = frame
   frame.force_auto_center()
 end
--- end)
 
 script.on_event(defines.events.on_gui_closed, function(event)
   if event.element and event.element.name == mod_prefix .. "frame" then
@@ -187,19 +160,6 @@ script.on_event(defines.events.on_player_selected_area, function(event)
     inventory.destroy()
   end
 end)
-
--- script.on_event(defines.events.on_object_destroyed, function(event)
---   local deathrattle = storage.deathrattles[event.registration_number]
---   if deathrattle then storage.deathrattles[event.registration_number] = nil
-
---     if deathrattle[1] == "itemdata" then
---       storage.itemdata[deathrattle[2]] = nil
---       game.print("itemdata cleared")
---     else
---       error(serpent.block(deathrattle))
---     end
---   end
--- end)
 
 script.on_event(defines.events.on_lua_shortcut, function(event)
   if event.prototype_name ~= "give-quality-upgrade-planner" then return end
