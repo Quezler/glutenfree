@@ -125,9 +125,46 @@ local function mode_modules(event, playerdata)
   inventory.destroy()
 end
 
+-- local logistic_mode_can_request = {
+--   requester = true,
+--   buffer = true,
+-- }
+
+-- local logistic_chest_can_request = {}
+-- for _, prototype in pairs(prototypes.get_entity_filtered{{filter = "type", type = "logistic-container"}}) do
+--   if logistic_mode_can_request[prototype.logistic_mode] then
+--     logistic_chest_can_request[prototype.name] = true
+--   end
+-- end
+
+local function mode_requests(event, playerdata)
+  for _, entity in ipairs(event.entities) do
+    -- if logistic_chest_can_request[entity.name] then
+    -- end
+    local logistic_sections = entity.get_logistic_sections() -- should support ghosts out of the box
+    if logistic_sections then
+      for _, section in ipairs(logistic_sections.sections) do
+        for slot, filter in ipairs(section.filters) do
+          if filter.value then
+            filter.value.quality = event.quality
+            section.set_slot(slot, filter)
+          end
+        end
+      end
+    end
+  end
+end
+
+local function mode_constants(event, playerdata)
+  if is_assembling_machine[entity.type] then
+  end
+end
+
 return {
   entities = mode_entities,
   filters = mode_filters,
   recipes = mode_recipes,
   modules = mode_modules,
+  requests = mode_requests,
+  constants = mode_constants,
 }

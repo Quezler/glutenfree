@@ -20,12 +20,10 @@ return {
     {
       name = "requests",
       sprite = "entity/blue-chest", -- the OG requester chest sprite, not touched by aai containers.
-      not_yet_implemented = true,
     },
     {
       name = "constants",
       sprite = "entity/constant-combinator",
-      not_yet_implemented = true,
     },
     {
       name = "conditions",
