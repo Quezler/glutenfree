@@ -5,6 +5,7 @@ Date: ????
     - Remember the last quality you used
     - If the playerdata is fresh, open gui on first use
     - Disable all other switches if you hold shift
+    - Make shift click move them all to the new side
 ---------------------------------------------------------------------------------------------------
 Version: 2.5.0
 Date: 2025. 01. 27

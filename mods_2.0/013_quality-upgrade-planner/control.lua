@@ -220,8 +220,8 @@ script.on_event(defines.events.on_gui_click, function(event)
 
       for _, quality_category in ipairs(shared.quality_categories) do
         if quality_category.name ~= tags.quality_category_name then
-          frame["inner"][quality_category.name]["switch"].switch_state = "left"
-          storage.playerdata[event.player_index].switch_states[quality_category.name] = "left"
+          frame["inner"][quality_category.name]["switch"].switch_state = event.element.switch_state
+          storage.playerdata[event.player_index].switch_states[quality_category.name] = event.element.switch_state
         end
       end
     end
