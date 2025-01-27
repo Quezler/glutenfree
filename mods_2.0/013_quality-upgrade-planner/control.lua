@@ -7,6 +7,7 @@ local function on_player_created(event)
   storage.playerdata[event.player_index] = {
     player = game.get_player(event.player_index),
     active_quality = prototypes.quality["normal"],
+    first_time = true,
     switch_states = {},
   }
 end
@@ -50,6 +51,7 @@ local mod_prefix = "quality-upgrade-planner--"
 
 local function hand_player_quality_upgrade_planner(playerdata, quality)
   playerdata.active_quality = quality
+
   local cursor_stack = playerdata.player.cursor_stack
   cursor_stack.set_stack({name = "quality-upgrade-planner", quality = quality.name})
   cursor_stack.label = string.upper(string.sub(quality.name, 1, 1)) .. string.sub(quality.name, 2)
@@ -85,7 +87,7 @@ local function toggle_gui(player)
     type = "frame",
     name = mod_prefix .. "frame",
     direction = "vertical",
-    caption = {"item-name.quality-upgrade-planner"}
+    caption = {"item-name.quality-upgrade-planner"},
   }
 
   local inner = frame.add{
@@ -187,6 +189,10 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
     if cursor_stack.valid_for_read == false then -- only set the stack if the cursor actually was cleared (or empty to begin with)
       local playerdata = storage.playerdata[player.index]
       hand_player_quality_upgrade_planner(playerdata, playerdata.active_quality)
+      if playerdata.first_time then
+        playerdata.first_time = false
+        toggle_gui(player)
+      end
     end
   end
 end)
