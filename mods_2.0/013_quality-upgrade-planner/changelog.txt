@@ -11,6 +11,7 @@ Date: ????
     - Just use a grey upgrade planner as the icon
     - Experiment with tinted selection tools per quality
     - Just stick with one selection tool prototype
+    - Uppercase the first char of the quality name (translating is tedious)
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 26

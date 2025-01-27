@@ -49,7 +49,7 @@ local mod_prefix = "quality-upgrade-planner--"
 
 local function set_stack_to_quality_upgrade_planner(cursor_stack, quality)
   cursor_stack.set_stack({name = "quality-upgrade-planner", quality = quality.name})
-  cursor_stack.label = quality.name
+  cursor_stack.label = string.upper(string.sub(quality.name, 1, 1)) .. string.sub(quality.name, 2)
   cursor_stack.label_color = quality.color
 end
 
