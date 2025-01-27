@@ -18,7 +18,6 @@ return {
     {
       name = "modules",
       sprite = "entity/beacon",
-      not_yet_implemented = true,
     },
     {
       name = "requests",

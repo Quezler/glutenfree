@@ -8,6 +8,7 @@ Date: ????
     - Stop using greyscaled "quality category" sprites
     - Store switch states in playerdata
     - Move modes to their own lua file
+    - Support modules
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2025. 01. 27
