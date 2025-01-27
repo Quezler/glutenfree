@@ -125,38 +125,50 @@ local function mode_modules(event, playerdata)
   inventory.destroy()
 end
 
--- local logistic_mode_can_request = {
---   requester = true,
---   buffer = true,
--- }
+local function get_entity_name(entity)
+  return entity.type == "entity-ghost" and entity.ghost_name or entity.name
+end
 
--- local logistic_chest_can_request = {}
--- for _, prototype in pairs(prototypes.get_entity_filtered{{filter = "type", type = "logistic-container"}}) do
---   if logistic_mode_can_request[prototype.logistic_mode] then
---     logistic_chest_can_request[prototype.name] = true
---   end
--- end
+local function get_entity_type(entity)
+  return entity.type == "entity-ghost" and entity.ghost_type or entity.type
+end
 
-local function mode_requests(event, playerdata)
-  for _, entity in ipairs(event.entities) do
-    -- if logistic_chest_can_request[entity.name] then
-    -- end
-    local logistic_sections = entity.get_logistic_sections() -- should support ghosts out of the box
-    if logistic_sections then
-      for _, section in ipairs(logistic_sections.sections) do
-        for slot, filter in ipairs(section.filters) do
-          if filter.value then
-            filter.value.quality = event.quality
-            section.set_slot(slot, filter)
-          end
-        end
+local logistic_mode_can_request = {
+  requester = true,
+  buffer = true,
+}
+
+local logistic_chest_can_request = {}
+for _, prototype in pairs(prototypes.get_entity_filtered{{filter = "type", type = "logistic-container"}}) do
+  if logistic_mode_can_request[prototype.logistic_mode] then
+    logistic_chest_can_request[prototype.name] = true
+  end
+end
+
+local function set_logistic_sections_quality(logistic_sections, quality_name)
+  for _, section in ipairs(logistic_sections.sections) do
+    for slot, filter in ipairs(section.filters) do
+      if filter.value then
+        filter.value.quality = quality_name
+        section.set_slot(slot, filter)
       end
     end
   end
 end
 
+local function mode_requests(event, playerdata)
+  for _, entity in ipairs(event.entities) do
+    if logistic_chest_can_request[get_entity_name(entity)] then
+      set_logistic_sections_quality(entity.get_logistic_sections(), event.quality)
+    end
+  end
+end
+
 local function mode_constants(event, playerdata)
-  if is_assembling_machine[entity.type] then
+  for _, entity in ipairs(event.entities) do
+    if get_entity_type(entity) == "constant-combinator" then
+      set_logistic_sections_quality(entity.get_logistic_sections(), event.quality)
+    end
   end
 end
 

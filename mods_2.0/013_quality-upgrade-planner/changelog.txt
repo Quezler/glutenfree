@@ -3,6 +3,7 @@ Version: 2.3.1
 Date: ????
   Info:
     - Support requester chests
+    - Handle requesters and combinators in their respective modes
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.0
 Date: 2025. 01. 27
