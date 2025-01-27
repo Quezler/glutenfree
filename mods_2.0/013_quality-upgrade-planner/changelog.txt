@@ -10,6 +10,7 @@ Date: ????
     - Label the spawned one as normal immediately
     - Just use a grey upgrade planner as the icon
     - Experiment with tinted selection tools per quality
+    - Just stick with one selection tool prototype
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 26
