@@ -57,6 +57,7 @@ local selection_tool = {
 local shortcut = {
   type = "shortcut",
   name = "give-quality-upgrade-planner",
+  localised_description = {"shortcut-description.give-quality-upgrade-planner"},
   order = "b[blueprints]-k[quality-upgrade-planner]",
   action = "lua",
   localised_name = {"shortcut.make-quality-upgrade-planner"},
