@@ -34,11 +34,9 @@ local selection_tool = {
   },
   reverse_select =
   {
-    border_color = {246, 255, 0},
-    mode = {"downgrade"},
+    border_color = {0, 0, 0, 0},
+    mode = {"nothing"},
     cursor_box_type = "not-allowed",
-    started_sound = { filename = "__core__/sound/upgrade-select-start.ogg" },
-    ended_sound = { filename = "__core__/sound/upgrade-select-end.ogg" }
   },
   reverse_alt_select =
   {

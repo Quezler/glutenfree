@@ -126,39 +126,41 @@ local function set_mapper(upgrade_planner, i, entity_name, quality_name)
 end
 
 script.on_event(defines.events.on_player_selected_area, function(event)
-  if event.item ~= "quality-upgrade-planner" then return end
+  if not is_quality_upgrade_planner_item[event.item] then return end
 
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-  local cursor_stack = player.cursor_stack
 
-  if cursor_stack and cursor_stack.valid_for_read and is_quality_upgrade_planner_item[cursor_stack.name] then
-    -- game.print(serpent.line(get_or_create_itemdata(cursor_stack)))
+  local inventory = game.create_inventory(1)
+  local upgrade_planner = inventory[1]
+  upgrade_planner.set_stack({name = "upgrade-planner"})
 
-    local inventory = game.create_inventory(1)
-    local upgrade_planner = inventory[1]
-    upgrade_planner.set_stack({name = "upgrade-planner"})
-
-    local map = {}
-    for i, entity in ipairs(event.entities) do
-      map[(entity.type == "entity-ghost" and entity.ghost_prototype or entity.prototype).name] = event.quality
-    end
-
-    local i = 0
-    for entity_name, quality_name in pairs(map) do
-      i = i + 1
-      set_mapper(upgrade_planner, i, entity_name, quality_name)
-    end
-
-    event.surface.upgrade_area{
-      area = event.area,
-      force = player.force,
-      player = player,
-      skip_fog_of_war = true,
-      item = upgrade_planner,
-    }
-
-    inventory.destroy()
+  local map = {}
+  for i, entity in ipairs(event.entities) do
+    map[(entity.type == "entity-ghost" and entity.ghost_prototype or entity.prototype).name] = event.quality
   end
+
+  local i = 0
+  for entity_name, quality_name in pairs(map) do
+    i = i + 1
+    set_mapper(upgrade_planner, i, entity_name, quality_name)
+  end
+
+  event.surface.upgrade_area{
+    area = event.area,
+    force = player.force,
+    player = player,
+    skip_fog_of_war = true,
+    item = upgrade_planner,
+  }
+
+  inventory.destroy()
+end)
+
+script.on_event(defines.events.on_player_reverse_selected_area, function(event)
+  if not is_quality_upgrade_planner_item[event.item] then return end
+
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  toggle_gui(player)
 end)
 
 script.on_event(defines.events.on_lua_shortcut, function(event)
