@@ -5,6 +5,7 @@ Date: ????
     - Attempt to design a custom planner icon
     - Attempt to set the shortcut description
     - Add bootleg shortcut description due to https://forums.factorio.com/126363
+    - Embed normal quality indicator inside icon
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 26
