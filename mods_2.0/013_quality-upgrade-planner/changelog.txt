@@ -6,6 +6,7 @@ Date: ????
     - Handle requesters and combinators in their respective modes
     - Support space platforms and landing pads
     - Prevent duplicate filter crashes
+    - Remove duplicate filters (so they do not keep their old quality)
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.0
 Date: 2025. 01. 27

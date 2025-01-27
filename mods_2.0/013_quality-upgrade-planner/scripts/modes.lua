@@ -144,7 +144,9 @@ local function set_logistic_sections_quality(logistic_sections, quality_name)
         filter.value.quality = quality_name
         local success, message = pcall(section.set_slot, slot, filter)
         if success == false then
-          if string_starts_with(message, "Filter conflicts with filter in slot ") == false then
+          if string_starts_with(message, "Filter conflicts with filter in slot ") then
+            section.clear_slot(slot)
+          else
             error(message)
           end
         end
