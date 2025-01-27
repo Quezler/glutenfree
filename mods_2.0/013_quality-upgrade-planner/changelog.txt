@@ -8,6 +8,7 @@ Date: ????
     - Embed normal quality indicator inside icon
     - Label the selection tool with the quality's name
     - Label the spawned one as normal immediately
+    - Just use a grey upgrade planner as the icon
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 26

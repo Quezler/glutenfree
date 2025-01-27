@@ -6,8 +6,7 @@ local selection_tool = {
   type = "selection-tool",
   name = "quality-upgrade-planner",
   icons = {
-    {icon = data.raw["upgrade-item"]["upgrade-planner"].icon},
-    {icon = "__core__/graphics/icons/any-quality.png", scale = 0.375},
+    {icon = "__quality-upgrade-planner__/graphics/icons/quality-upgrade-planner.png"},
     {icon = "__base__/graphics/icons/quality-normal.png", scale = 0.2, shift = {-9.5, 9.5}},
   },
   flags = {"only-in-cursor", "not-stackable" , "spawnable"},
