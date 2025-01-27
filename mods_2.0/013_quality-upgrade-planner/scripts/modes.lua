@@ -133,12 +133,21 @@ local function get_entity_type(entity)
   return entity.type == "entity-ghost" and entity.ghost_type or entity.type
 end
 
+function string_starts_with(str, prefix)
+  return string.sub(str, 1, #prefix) == prefix
+end
+
 local function set_logistic_sections_quality(logistic_sections, quality_name)
   for _, section in ipairs(logistic_sections.sections) do
     for slot, filter in ipairs(section.filters) do
       if filter.value then
         filter.value.quality = quality_name
-        section.set_slot(slot, filter)
+        local success, message = pcall(section.set_slot, slot, filter)
+        if success == false then
+          if string_starts_with(message, "Filter conflicts with filter in slot ") == false then
+            error(message)
+          end
+        end
       end
     end
   end
