@@ -17,6 +17,8 @@ entity.graphics_set.animation_list[1].animation.layers[1].filename = "__beacon-i
 table.insert(entity.flags, "hide-alt-info")
 entity.allowed_effects = shared.effects
 entity.allowed_module_categories = {mod_prefix .. "module-category"}
+entity.distribution_effectivity = 1
+entity.distribution_effectivity_bonus_per_quality_level = 0
 
 local item = table.deepcopy(data.raw["item"]["beacon"])
 item.name = mod_prefix .. "beacon"
