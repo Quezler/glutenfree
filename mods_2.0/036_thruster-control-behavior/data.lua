@@ -124,3 +124,15 @@ power_switch.led_off = {
   scale = 0.5,
   shift = util.by_pixel(87.75, -32.75),
 }
+
+if mods["fusion-thruster"] then
+  local fusion_power_switch = table.deepcopy(power_switch)
+  fusion_power_switch.name = "fusion-thruster-control-behavior"
+  fusion_power_switch.led_on = nil
+  fusion_power_switch.led_off = nil
+  data:extend{fusion_power_switch}
+
+  local fusion_thruster = data.raw["thruster"]["fusion-thruster"]
+  fusion_thruster.additional_pastable_entities = fusion_thruster.additional_pastable_entities or {}
+  table.insert(fusion_thruster.additional_pastable_entities, "fusion-thruster")
+end

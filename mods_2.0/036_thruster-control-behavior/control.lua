@@ -2,6 +2,25 @@ require("scripts.helpers")
 
 local Handler = {}
 
+local is_thruster = {
+  ["thruster"] = true,
+  ["fusion-thruster"] = true,
+}
+
+local is_control_behavior = {
+  ["thruster-control-behavior"] = true,
+  ["fusion-thruster-control-behavior"] = true,
+}
+
+local function get_entity_type(entity)
+  return entity.type == "entity-ghost" and entity.ghost_type or entity.type
+end
+
+
+local function get_entity_name(entity)
+  return entity.type == "entity-ghost" and entity.ghost_name or entity.name
+end
+
 local function create_struct()
   storage.index = storage.index + 1
   storage.structs[storage.index] = {
@@ -11,7 +30,9 @@ local function create_struct()
     position = nil,
 
     thruster = nil,
+    thruster_name = nil,
     power_switch = nil,
+    power_switch_name = nil,
 
     inserter = nil,
     inserter_offering = {valid = false},
@@ -24,6 +45,7 @@ local function struct_set_thruster(struct, thruster)
   assert(thruster.valid)
 
   struct.thruster = thruster
+  struct.thruster_name = get_entity_name(thruster)
 
   storage.deathrattles[script.register_on_object_destroyed(thruster)] = {type = "thruster", struct_id = struct.id}
   storage.unit_number_to_struct_id[thruster.unit_number] = struct.id
@@ -34,17 +56,18 @@ local function struct_set_power_switch(struct, power_switch)
   assert(power_switch.valid)
 
   struct.power_switch = power_switch
+  struct.power_switch_name = get_entity_name(power_switch)
 
   storage.deathrattles[script.register_on_object_destroyed(power_switch)] = {type = "power-switch", struct_id = struct.id}
   storage.unit_number_to_struct_id[power_switch.unit_number] = struct.id
 end
 
 local function get_control_behavior_position(thruster)
-  return {thruster.position.x - 1.5, thruster.position.y - 1.0}
-end
+  if get_entity_name(thruster) == "fusion-thruster" then
+    return{thruster.position.x - 1.5, thruster.position.y + 1.0}
+  end
 
-local function get_entity_name(entity)
-  return entity.type == "entity-ghost" and entity.ghost_name or entity.name
+  return {thruster.position.x - 1.5, thruster.position.y - 1.0}
 end
 
 local function get_or_create_inserter_offering(struct)
@@ -108,30 +131,47 @@ function Handler.on_init()
     position = {-1, -1},
   }
 
+  storage.migration_structs_store_entity_names = true
+
   for _, surface in pairs(game.surfaces) do
-    for _, entity in pairs(surface.find_entities_filtered{name = "thruster"}) do
-      Handler.on_created_entity({entity = entity})
+    for _, entity in pairs(surface.find_entities_filtered{type = "thruster"}) do
+      if is_thruster[entity.name] then
+        Handler.on_created_entity({entity = entity})
+      end
     end
   end
 end
 
 script.on_init(Handler.on_init)
 
+script.on_configuration_changed(function(event)
+  if storage.migration_structs_store_entity_names == nil then
+    storage.migration_structs_store_entity_names = true
+    for _, struct in pairs(storage.structs) do
+      assert(struct.thruster_name == nil)
+      struct.thruster_name = "thruster"
+      assert(struct.power_switch_name == nil)
+      struct.power_switch_name = "thruster-control-behavior"
+    end
+  end
+end)
+
 local function on_created_thruster(entity)
+  local power_switch_name = get_entity_name(entity) .. "-control-behavior"
   local power_switch_position = get_control_behavior_position(entity)
-  local power_switch = surface_find_entity_or_ghost(entity.surface, power_switch_position, "thruster-control-behavior")
+  local power_switch = surface_find_entity_or_ghost(entity.surface, power_switch_position, power_switch_name)
   if power_switch == nil then
     if entity.type == "entity-ghost" then
       power_switch = entity.surface.create_entity{
         name = "entity-ghost",
-        ghost_name = "thruster-control-behavior",
+        ghost_name = power_switch_name,
         force = entity.force,
         position = power_switch_position,
       }
       power_switch.minable = false
     else
       power_switch = entity.surface.create_entity{
-        name = "thruster-control-behavior",
+        name = power_switch_name,
         force = entity.force,
         position = power_switch_position,
       }
@@ -168,8 +208,14 @@ local function on_created_thruster(entity)
   Handler.on_power_switch_touched(power_switch)
 end
 
+local thruster_control_behavior_name_to_thruster_name = {
+  ["fusion-thruster-control-behavior"] = "fusion-thruster",
+  ["thruster-control-behavior"] = "thruster",
+}
+
 local function on_created_thruster_control_behavior(entity)
-  local thruster = surface_find_entity_or_ghost(entity.surface, entity.position, "thruster")
+  local thruster_name = thruster_control_behavior_name_to_thruster_name[get_entity_name(entity)]
+  local thruster = surface_find_entity_or_ghost(entity.surface, entity.position, thruster_name)
   if thruster == nil then return entity.destroy() end
 
   local cb_position = get_control_behavior_position(thruster)
@@ -182,10 +228,10 @@ end
 
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
-  local entity_name = get_entity_name(entity)
+  local entity_type = get_entity_type(entity)
 
-  if entity_name == "thruster" then return on_created_thruster(entity) end
-  if entity_name == "thruster-control-behavior" then return on_created_thruster_control_behavior(entity) end
+  if entity_type == "thruster" then return on_created_thruster(entity) end
+  if entity_type == "power-switch" then return on_created_thruster_control_behavior(entity) end
 end
 
 for _, event in ipairs({
@@ -201,6 +247,11 @@ for _, event in ipairs({
     {filter = "ghost_name", name = "thruster"},
     {filter = "name"      , name = "thruster-control-behavior"},
     {filter = "ghost_name", name = "thruster-control-behavior"},
+
+    {filter = "name"      , name = "fusion-thruster"},
+    {filter = "ghost_name", name = "fusion-thruster"},
+    {filter = "name"      , name = "fusion-thruster-control-behavior"},
+    {filter = "ghost_name", name = "fusion-thruster-control-behavior"},
   })
 end
 
@@ -219,14 +270,14 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if deathrattle.type == "thruster" then
       local struct = assert(storage.structs[deathrattle.struct_id])
       if struct.surface.valid == false then return destroy_struct(struct) end
-      local new_thruster = surface_find_entity_or_ghost(struct.surface, struct.position, "thruster")
+      local new_thruster = surface_find_entity_or_ghost(struct.surface, struct.position, struct.thruster_name)
       if new_thruster then
         struct_set_thruster(struct, new_thruster)
 
         if new_thruster.type == "entity-ghost" and struct.power_switch.type ~= "entity-ghost" then
           struct.power_switch.destructible = true
           assert(struct.power_switch.die(struct.power_switch.force))
-          struct_set_power_switch(struct, surface_find_entity_or_ghost(struct.surface, get_control_behavior_position(new_thruster), "thruster-control-behavior"))
+          struct_set_power_switch(struct, surface_find_entity_or_ghost(struct.surface, get_control_behavior_position(new_thruster), struct.power_switch_name))
           struct.power_switch.minable = false
         elseif new_thruster.type ~= "entity-ghost" and struct.power_switch.type == "entity-ghost" then
           struct.power_switch.destructible = true
@@ -283,7 +334,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local entity = event.last_entity
 
-  if entity and get_entity_name(entity) == "thruster-control-behavior" then
+  if entity and is_control_behavior[get_entity_name(entity)] then
     Handler.on_power_switch_touched(entity)
   end
 end)
@@ -292,7 +343,7 @@ script.on_event(defines.events.on_gui_closed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local entity = event.entity
 
-  if entity and get_entity_name(entity) == "thruster-control-behavior" then
+  if entity and is_control_behavior[get_entity_name(entity)] then
     Handler.on_power_switch_touched(entity)
   end
 end)
@@ -304,9 +355,9 @@ end
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
   local entity = event.destination
 
-  if get_entity_name(entity) == "thruster-control-behavior" then
+  if is_control_behavior[get_entity_name(entity)] then
     Handler.on_power_switch_touched(entity)
-  elseif get_entity_name(entity) == "thruster" and get_entity_name(event.source) == "thruster" then
+  elseif is_thruster[get_entity_name(entity)] and is_thruster[get_entity_name(event.source)] then
     -- support copying thruster onto truster too, so players are not required to always copy the control behavior
     local old_power_switch = get_power_switch_from_thruster(event.source)
     local new_power_switch = get_power_switch_from_thruster(entity)
@@ -316,7 +367,7 @@ end)
 
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
-  if entity and entity.name == "thruster-control-behavior" then
+  if entity and is_control_behavior[entity.name] then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
     local footer = player.gui.relative["thruster-control-behavior-footer"]
@@ -359,7 +410,7 @@ end)
 script.on_event("thruster-control-behavior-open-gui", function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local selected = player.selected
-  if selected and get_entity_name(selected) == "thruster" then
+  if selected and is_thruster[get_entity_name(selected)] then
     local power_switch = get_power_switch_from_thruster(selected)
     player.opened = power_switch
   end
