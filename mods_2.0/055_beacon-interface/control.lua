@@ -118,6 +118,14 @@ script.on_event(defines.events.on_gui_opened, function(event)
   end
 end)
 
+function getBits(number)
+  local bits = {}
+  for i = 0, 31 do
+      bits[i + 1] = bit32.band(number, bit32.lshift(1, i)) ~= 0 and 1 or 0
+  end
+  return bits
+end
+
 script.on_event(defines.events.on_gui_value_changed, function(event)
   local tags = event.element.tags
   if tags and tags.action == mod_prefix .. "slider-value-changed" then
@@ -125,6 +133,7 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
     local frame = player.gui.relative[gui_frame_name]
     if frame then
       frame.inner[tags.effect].textfield.text = tostring(event.element.slider_value)
+      game.print(serpent.line(getBits(event.element.slider_value)))
     end
   end
 end)
