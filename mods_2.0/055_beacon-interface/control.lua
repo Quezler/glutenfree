@@ -19,6 +19,7 @@ function Handler.on_created_entity(event)
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
     entity = entity,
+    inventory = entity.get_inventory(defines.inventory.beacon_modules),
   })
 end
 
@@ -61,6 +62,9 @@ script.on_event(defines.events.on_gui_opened, function(event)
         gui = defines.relative_gui_type.beacon_gui,
         position = defines.relative_gui_position.right,
         name = mod_prefix .. "beacon",
+      },
+      tags = {
+        unit_number = entity.unit_number,
       }
     }
     frame.style.top_padding = 8
@@ -118,12 +122,27 @@ script.on_event(defines.events.on_gui_opened, function(event)
   end
 end)
 
-function getBits(number)
+function get_bits(number)
   local bits = {}
-  for i = 0, 31 do
+  for i = 0, 15 do
       bits[i + 1] = bit32.band(number, bit32.lshift(1, i)) ~= 0 and 1 or 0
   end
   return bits
+end
+
+function set_effect(unit_number, effect, value)
+  local bits = get_bits(value)
+  game.print(serpent.line(bits))
+
+  local struct = storage.structs[unit_number]
+  assert(struct) -- todo: return if nil
+
+  struct.inventory.clear()
+  for i, bit in ipairs(bits) do
+    if bit == 1 then
+      struct.inventory.insert({name = string.format(mod_prefix .. "module-%s-%d", effect, i)})
+    end
+  end
 end
 
 script.on_event(defines.events.on_gui_value_changed, function(event)
@@ -133,7 +152,7 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
     local frame = player.gui.relative[gui_frame_name]
     if frame then
       frame.inner[tags.effect].textfield.text = tostring(event.element.slider_value)
-      game.print(serpent.line(getBits(event.element.slider_value)))
+      set_effect(frame.tags.unit_number, tags.effect, event.element.slider_value)
     end
   end
 end)
