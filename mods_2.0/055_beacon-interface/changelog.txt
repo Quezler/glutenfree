@@ -9,6 +9,7 @@ Date: ????
     - Remember values in struct, and (thus) support setting multiple effects at once
     - Fix icon cropping crime
     - Still make quality modules without the feature flag, but without the effect
+    - Set the minmax back to their full bounds
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 28
