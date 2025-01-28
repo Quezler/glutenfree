@@ -20,6 +20,13 @@ function Handler.on_created_entity(event)
     id = entity.unit_number,
     entity = entity,
     inventory = entity.get_inventory(defines.inventory.beacon_modules),
+    effects = {
+      speed = 0,
+      productivity = 0,
+      consumption = 0,
+      pollution = 0,
+      quality = 0,
+    },
   })
 end
 
@@ -53,6 +60,9 @@ script.on_event(defines.events.on_gui_opened, function(event)
     local player = game.get_player(event.player_index) --[[@as Luaplayer]]
     local frame = player.gui.relative[gui_frame_name]
     if frame then frame.destroy() end
+
+    local struct = storage.structs[entity.unit_number]
+    assert(struct)
 
     frame = player.gui.relative.add{
       type = "frame",
@@ -100,7 +110,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
         name = "slider",
         minimum_value = -100,
         maximum_value =  100,
-        value = 0,
+        value = struct.effects[effect],
         tags = {
           action = mod_prefix .. "slider-value-changed",
           effect = effect,
@@ -110,7 +120,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
       local textfield = flow.add{
         type = "textfield",
         name = "textfield",
-        text = "0",
+        text = tostring(struct.effects[effect]),
         numeric = true,
         allow_decimal = true,
         allow_negative = true,
@@ -130,6 +140,22 @@ function get_bits(number)
   return bits
 end
 
+function refresh_effects(struct)
+  struct.inventory.clear()
+  for effect, value in pairs(struct.effects) do
+    local bits = get_bits(value)
+    for i, bit in ipairs(bits) do
+      if bit == 1 then
+        if 0 > value and i == 15 then
+          -- hmm
+        else
+          struct.inventory.insert({name = string.format(mod_prefix .. "module-%s-%d", effect, i)})
+        end
+      end
+    end
+  end
+end
+
 function set_effect(unit_number, effect, value)
   local bits = get_bits(value)
   game.print(serpent.line(bits))
@@ -137,16 +163,8 @@ function set_effect(unit_number, effect, value)
   local struct = storage.structs[unit_number]
   assert(struct) -- todo: return if nil
 
-  struct.inventory.clear()
-  for i, bit in ipairs(bits) do
-    if bit == 1 then
-      if 0 > value and i == 15 then
-        -- hmm
-      else
-        struct.inventory.insert({name = string.format(mod_prefix .. "module-%s-%d", effect, i)})
-      end
-    end
-  end
+  struct.effects[effect] = value
+  refresh_effects(struct)
 end
 
 script.on_event(defines.events.on_gui_value_changed, function(event)

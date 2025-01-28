@@ -6,6 +6,7 @@ Date: ????
     - Read the positive bits as expected
     - Insert modules based on the bits
     - Bodge broken negative values
+    - Remember values in struct, and (thus) support setting multiple effects at once
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 28
