@@ -94,10 +94,9 @@ script.on_event(defines.events.on_gui_opened, function(event)
       flow.add{
         type = "slider",
         name = "slider",
-        minimum_value = -32767,
-        maximum_value =  32767,
+        minimum_value = -100,
+        maximum_value =  100,
         value = 0,
-        value_step = effect == "quality" and 0.1 or 1,
         tags = {
           action = mod_prefix .. "slider-value-changed",
           effect = effect,
