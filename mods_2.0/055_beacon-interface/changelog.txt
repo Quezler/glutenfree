@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Swap the module slot for a compilatron
     - Cover the shadow on the other side of the beacon
+    - Add thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 28
