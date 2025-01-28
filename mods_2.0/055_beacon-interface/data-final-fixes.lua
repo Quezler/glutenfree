@@ -60,6 +60,10 @@ for _, effect in ipairs(shared.effects) do
       hidden = true,
     }
 
+    if not feature_flags["quality"] then
+      module.effect["quality"] = nil
+    end
+
     data:extend({module})
   end
 end

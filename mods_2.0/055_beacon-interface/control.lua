@@ -1,4 +1,5 @@
 local mod_prefix = "beacon-interface--"
+local shared = require("shared")
 
 script.on_init(function()
   storage.structs = {}
@@ -43,14 +44,6 @@ for _, event in ipairs({
   })
 end
 
-local effects = {
-  "speed",
-  "productivity",
-  "consumption",
-  "pollution",
-  "quality",
-}
-
 local gui_frame_name = mod_prefix .. "frame"
 
 script.on_event(defines.events.on_gui_opened, function(event)
@@ -86,7 +79,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
       direction = "vertical",
     }
 
-    for _, effect in ipairs(effects) do
+    for _, effect in ipairs(shared.effects) do
       local flow = inner.add{
         type = "flow",
         name = effect,
