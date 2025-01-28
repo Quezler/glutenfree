@@ -4,7 +4,7 @@ local debug_mode = true
 
 local icons = {
   {icon = "__beacon-interface__/graphics/icons/beacon.png"},
-  {icon = "__beacon-interface__/graphics/icons/compilatron.png", scale = 0.375, shift = {-8, 8}},
+  {icon = "__beacon-interface__/graphics/icons/compilatron.png", scale = 0.375, shift = {-4, 4}},
 }
 
 local entity = table.deepcopy(data.raw["beacon"]["beacon"])
