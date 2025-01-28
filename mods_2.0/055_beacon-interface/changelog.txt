@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Lock distribution efficiency at 1
     - Prepare tracking structs and plan out the gui
+    - Update textfield when using the slider left to it
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 28

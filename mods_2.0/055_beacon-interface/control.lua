@@ -43,17 +43,19 @@ local effects = {
   "quality",
 }
 
+local gui_frame_name = mod_prefix .. "frame"
+
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
 
   if entity and entity.name == mod_prefix .. "beacon" then
     local player = game.get_player(event.player_index) --[[@as Luaplayer]]
-    local frame = player.gui.relative[mod_prefix .. "frame"]
+    local frame = player.gui.relative[gui_frame_name]
     if frame then frame.destroy() end
 
     frame = player.gui.relative.add{
       type = "frame",
-      name = mod_prefix .. "frame",
+      name = gui_frame_name,
       direction = "vertical",
       anchor = {
         gui = defines.relative_gui_type.beacon_gui,
@@ -96,6 +98,10 @@ script.on_event(defines.events.on_gui_opened, function(event)
         maximum_value =  32767,
         value = 0,
         value_step = effect == "quality" and 0.1 or 1,
+        tags = {
+          action = mod_prefix .. "slider-value-changed",
+          effect = effect,
+        }
       }
 
       local textfield = flow.add{
@@ -109,6 +115,17 @@ script.on_event(defines.events.on_gui_opened, function(event)
       textfield.style.width = 100
       textfield.style.horizontal_align = "center"
 
+    end
+  end
+end)
+
+script.on_event(defines.events.on_gui_value_changed, function(event)
+  local tags = event.element.tags
+  if tags and tags.action == mod_prefix .. "slider-value-changed" then
+    local player = game.get_player(event.player_index) --[[@as Luaplayer]]
+    local frame = player.gui.relative[gui_frame_name]
+    if frame then
+      frame.inner[tags.effect].textfield.text = tostring(event.element.slider_value)
     end
   end
 end)
