@@ -36,6 +36,7 @@ for _, effect in ipairs(shared.effects) do
 
     local effect_value = math.pow(2, i - 1) / 100
     if i == 16 then
+      -- effect_value = -((math.pow(2, i - 1)-1) / 100)
       effect_value = -(math.pow(2, i - 2) / 100)
     end
 
