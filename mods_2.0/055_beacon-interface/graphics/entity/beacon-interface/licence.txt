@@ -1,1 +1,0 @@
-the drone_walk* sprites are from klonan's GNU LGPLv3 licenced `Construction Drones` mod

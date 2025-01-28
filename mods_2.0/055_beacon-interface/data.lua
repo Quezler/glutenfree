@@ -12,17 +12,7 @@ entity.icon = nil
 entity.icons = icons
 entity.module_slots = 16 * 5
 entity.graphics_set.module_visualisations = nil
-
-table.insert(entity.graphics_set.animation_list, {
-  render_layer = "cargo-hatch",
-  animation = {
-    filename = "__beacon-interface__/graphics/entity/beacon-interface/drone_walk_frame_14.png",
-    width = 79,
-    height = 104,
-    scale = 0.375,
-    shift = util.by_pixel(-15, 10)
-  }
-})
+entity.graphics_set.animation_list[1].animation.layers[1].filename = "__beacon-interface__/graphics/entity/beacon-interface/beacon-interface-bottom.png"
 
 local item = table.deepcopy(data.raw["item"]["beacon"])
 item.name = mod_prefix .. "beacon"
