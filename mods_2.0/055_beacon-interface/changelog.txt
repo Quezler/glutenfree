@@ -5,6 +5,7 @@ Date: ????
     - Prepare for small scale module insertion test
     - Read the positive bits as expected
     - Insert modules based on the bits
+    - Bodge broken negative values
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 28

@@ -140,7 +140,11 @@ function set_effect(unit_number, effect, value)
   struct.inventory.clear()
   for i, bit in ipairs(bits) do
     if bit == 1 then
-      struct.inventory.insert({name = string.format(mod_prefix .. "module-%s-%d", effect, i)})
+      if 0 > value and i == 15 then
+        -- hmm
+      else
+        struct.inventory.insert({name = string.format(mod_prefix .. "module-%s-%d", effect, i)})
+      end
     end
   end
 end
