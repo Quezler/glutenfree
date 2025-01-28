@@ -1,15 +1,5 @@
 local mod_prefix = "beacon-interface--"
-
-local effects = {
-  "speed",
-  "productivity",
-  "consumption",
-  "pollution",
-}
-
-if feature_flags["quality"] then
-  table.insert(effects, "quality")
-end
+local shared = require("shared")
 
 local module_category = {
   type = "module-category",
@@ -17,7 +7,7 @@ local module_category = {
 }
 data:extend{module_category}
 
-for _, effect in ipairs(effects) do
+for _, effect in ipairs(shared.effects) do
   for i = 1, 16 do
     local two_character_number = string.format("%02d", i)
     local icons = {
