@@ -1,0 +1,114 @@
+local mod_prefix = "beacon-interface--"
+
+script.on_init(function()
+  storage.structs = {}
+end)
+
+local function new_struct(table, struct)
+  assert(struct.id, serpent.block(struct))
+  assert(table[struct.id] == nil)
+  table[struct.id] = struct
+  return struct
+end
+
+local Handler = {}
+
+function Handler.on_created_entity(event)
+  local entity = event.entity or event.destination -- todo: handle cloning
+
+  local struct = new_struct(storage.structs, {
+    id = entity.unit_number,
+    entity = entity,
+  })
+end
+
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.on_space_platform_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+  defines.events.on_entity_cloned,
+}) do
+  script.on_event(event, Handler.on_created_entity, {
+    {filter = "name", name = mod_prefix .. "beacon"},
+  })
+end
+
+local effects = {
+  "speed",
+  "productivity",
+  "consumption",
+  "pollution",
+  "quality",
+}
+
+script.on_event(defines.events.on_gui_opened, function(event)
+  local entity = event.entity
+
+  if entity and entity.name == mod_prefix .. "beacon" then
+    local player = game.get_player(event.player_index) --[[@as Luaplayer]]
+    local frame = player.gui.relative[mod_prefix .. "frame"]
+    if frame then frame.destroy() end
+
+    frame = player.gui.relative.add{
+      type = "frame",
+      name = mod_prefix .. "frame",
+      direction = "vertical",
+      anchor = {
+        gui = defines.relative_gui_type.beacon_gui,
+        position = defines.relative_gui_position.right,
+        name = mod_prefix .. "beacon",
+      }
+    }
+    frame.style.top_padding = 8
+
+    local inner = frame.add{
+      type = "frame",
+      name = "inner",
+      style = "inside_shallow_frame_with_padding",
+      direction = "vertical",
+    }
+
+    for _, effect in ipairs(effects) do
+      local flow = inner.add{
+        type = "flow",
+        name = effect,
+        style = "horizontal_flow",
+      }
+      flow.style.vertical_align = "center"
+
+      local piston = flow.add{
+        type = "flow",
+      }
+      piston.style.horizontally_stretchable = true
+
+      local label = flow.add{
+        type = "label",
+        caption = string.upper(string.sub(effect, 1, 1)) .. string.sub(effect, 2),
+      }
+      label.style.font = "default-bold"
+
+      flow.add{
+        type = "slider",
+        name = "slider",
+        minimum_value = -32767,
+        maximum_value =  32767,
+        value = 0,
+        value_step = effect == "quality" and 0.1 or 1,
+      }
+
+      local textfield = flow.add{
+        type = "textfield",
+        name = "textfield",
+        text = "0",
+        numeric = true,
+        allow_decimal = true,
+        allow_negative = true,
+      }
+      textfield.style.width = 100
+      textfield.style.horizontal_align = "center"
+
+    end
+  end
+end)

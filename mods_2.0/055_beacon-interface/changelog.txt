@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Lock distribution efficiency at 1
+    - Prepare tracking structs and plan out the gui
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 28
