@@ -125,6 +125,8 @@ power_switch.led_off = {
   shift = util.by_pixel(87.75, -32.75),
 }
 
+power_switch.localised_name = {"entity-name.thruster-control-behavior", {"entity-name.thruster"}}
+
 if mods["fusion-thruster"] then
   local fusion_power_switch = table.deepcopy(power_switch)
   fusion_power_switch.name = "fusion-thruster-control-behavior"
@@ -135,4 +137,20 @@ if mods["fusion-thruster"] then
   local fusion_thruster = data.raw["thruster"]["fusion-thruster"]
   fusion_thruster.additional_pastable_entities = fusion_thruster.additional_pastable_entities or {}
   table.insert(fusion_thruster.additional_pastable_entities, "fusion-thruster")
+
+  fusion_power_switch.localised_name = {"entity-name.thruster-control-behavior", {"entity-name.fusion-thruster"}}
+end
+
+if mods["ion-thruster"] then
+  local ion_power_switch = table.deepcopy(power_switch)
+  ion_power_switch.name = "ion-thruster-control-behavior"
+  ion_power_switch.led_on = nil
+  ion_power_switch.led_off = nil
+  data:extend{ion_power_switch}
+
+  local ion_thruster = data.raw["thruster"]["ion-thruster"]
+  ion_thruster.additional_pastable_entities = ion_thruster.additional_pastable_entities or {}
+  table.insert(ion_thruster.additional_pastable_entities, "ion-thruster")
+
+  ion_power_switch.localised_name = {"entity-name.thruster-control-behavior", {"entity-name.ion-thruster"}}
 end

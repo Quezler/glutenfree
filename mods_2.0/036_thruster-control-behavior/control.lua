@@ -2,15 +2,41 @@ require("scripts.helpers")
 
 local Handler = {}
 
-local is_thruster = {
-  ["thruster"] = true,
-  ["fusion-thruster"] = true,
+local thruster_pairs = {
+  {
+    thruster = "thruster",
+    power_switch = "thruster-control-behavior",
+  },
+  {
+    thruster = "fusion-thruster",
+    power_switch = "fusion-thruster-control-behavior",
+  },
+  {
+    thruster = "ion-thruster",
+    power_switch = "ion-thruster-control-behavior",
+  },
 }
 
-local is_control_behavior = {
-  ["thruster-control-behavior"] = true,
-  ["fusion-thruster-control-behavior"] = true,
-}
+local is_thruster = {}
+local is_power_switch = {}
+
+local power_switch_name_to_thruster_name = {}
+local thruster_name_to_power_switch_name = {}
+
+local on_created_entity_filters = {}
+
+for _, thruster_pair in ipairs(thruster_pairs) do
+  is_thruster[thruster_pair.thruster] = true
+  is_power_switch[thruster_pair.power_switch] = true
+
+  power_switch_name_to_thruster_name[thruster_pair.power_switch] = thruster_pair.thruster
+  thruster_name_to_power_switch_name[thruster_pair.thruster] = thruster_pair.power_switch
+
+  table.insert(on_created_entity_filters, {filter = "name"      , name = thruster_pair.thruster})
+  table.insert(on_created_entity_filters, {filter = "ghost_name", name = thruster_pair.thruster})
+  table.insert(on_created_entity_filters, {filter = "name"      , name = thruster_pair.power_switch})
+  table.insert(on_created_entity_filters, {filter = "ghost_name", name = thruster_pair.power_switch})
+end
 
 local function get_entity_type(entity)
   return entity.type == "entity-ghost" and entity.ghost_type or entity.type
@@ -63,11 +89,17 @@ local function struct_set_power_switch(struct, power_switch)
 end
 
 local function get_control_behavior_position(thruster)
-  if get_entity_name(thruster) == "fusion-thruster" then
-    return{thruster.position.x - 1.5, thruster.position.y + 1.0}
-  end
+  local entity_name = get_entity_name(thruster)
 
-  return {thruster.position.x - 1.5, thruster.position.y - 1.0}
+  if entity_name == "thruster" then
+    return {thruster.position.x - 1.5, thruster.position.y - 1.0}
+  elseif entity_name == "fusion-thruster" then
+    return {thruster.position.x - 1.5, thruster.position.y + 1.0}
+  elseif entity_name == "ion-thruster" then
+    return {thruster.position.x - 1.5, thruster.position.y - 1.0}
+  else
+    error(string.format("no control behavior position known for %s.", entity_name))
+  end
 end
 
 local function get_or_create_inserter_offering(struct)
@@ -157,7 +189,7 @@ script.on_configuration_changed(function(event)
 end)
 
 local function on_created_thruster(entity)
-  local power_switch_name = get_entity_name(entity) .. "-control-behavior"
+  local power_switch_name = thruster_name_to_power_switch_name[get_entity_name(entity)]
   local power_switch_position = get_control_behavior_position(entity)
   local power_switch = surface_find_entity_or_ghost(entity.surface, power_switch_position, power_switch_name)
   if power_switch == nil then
@@ -208,13 +240,8 @@ local function on_created_thruster(entity)
   Handler.on_power_switch_touched(power_switch)
 end
 
-local thruster_control_behavior_name_to_thruster_name = {
-  ["fusion-thruster-control-behavior"] = "fusion-thruster",
-  ["thruster-control-behavior"] = "thruster",
-}
-
 local function on_created_thruster_control_behavior(entity)
-  local thruster_name = thruster_control_behavior_name_to_thruster_name[get_entity_name(entity)]
+  local thruster_name = power_switch_name_to_thruster_name[get_entity_name(entity)]
   local thruster = surface_find_entity_or_ghost(entity.surface, entity.position, thruster_name)
   if thruster == nil then return entity.destroy() end
 
@@ -242,17 +269,7 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, Handler.on_created_entity, {
-    {filter = "name"      , name = "thruster"},
-    {filter = "ghost_name", name = "thruster"},
-    {filter = "name"      , name = "thruster-control-behavior"},
-    {filter = "ghost_name", name = "thruster-control-behavior"},
-
-    {filter = "name"      , name = "fusion-thruster"},
-    {filter = "ghost_name", name = "fusion-thruster"},
-    {filter = "name"      , name = "fusion-thruster-control-behavior"},
-    {filter = "ghost_name", name = "fusion-thruster-control-behavior"},
-  })
+  script.on_event(event, Handler.on_created_entity, on_created_entity_filters)
 end
 
 local function destroy_struct(struct)
@@ -334,7 +351,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local entity = event.last_entity
 
-  if entity and is_control_behavior[get_entity_name(entity)] then
+  if entity and is_power_switch[get_entity_name(entity)] then
     Handler.on_power_switch_touched(entity)
   end
 end)
@@ -343,7 +360,7 @@ script.on_event(defines.events.on_gui_closed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local entity = event.entity
 
-  if entity and is_control_behavior[get_entity_name(entity)] then
+  if entity and is_power_switch[get_entity_name(entity)] then
     Handler.on_power_switch_touched(entity)
   end
 end)
@@ -355,7 +372,7 @@ end
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
   local entity = event.destination
 
-  if is_control_behavior[get_entity_name(entity)] then
+  if is_power_switch[get_entity_name(entity)] then
     Handler.on_power_switch_touched(entity)
   elseif is_thruster[get_entity_name(entity)] and is_thruster[get_entity_name(event.source)] then
     -- support copying thruster onto truster too, so players are not required to always copy the control behavior
@@ -367,7 +384,7 @@ end)
 
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
-  if entity and is_control_behavior[entity.name] then
+  if entity and is_power_switch[entity.name] then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
     local footer = player.gui.relative["thruster-control-behavior-footer"]

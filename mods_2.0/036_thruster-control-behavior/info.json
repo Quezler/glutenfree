@@ -3,7 +3,7 @@
     "title": "Thruster control behavior",
     "description": "Allows you to enable/disable thrusters with circuits, as well as toggle them by hand.",
 
-    "version": "1.1.0",
+    "version": "1.1.1",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -21,6 +21,7 @@
         "base >= 2.0.29",
         "space-age >= 2.0.29",
 
-        "? fusion-thruster"
+        "? fusion-thruster",
+        "? ion-thruster"
     ]
 }
