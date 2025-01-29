@@ -130,6 +130,7 @@ power_switch.localised_name = {"entity-name.thruster-control-behavior", {"entity
 if mods["fusion-thruster"] then
   local fusion_power_switch = table.deepcopy(power_switch)
   fusion_power_switch.name = "fusion-thruster-control-behavior"
+  fusion_power_switch.placeable_by = {item = power_switch_item.name, count = 1}
   fusion_power_switch.led_on = nil
   fusion_power_switch.led_off = nil
   data:extend{fusion_power_switch}
@@ -144,6 +145,7 @@ end
 if mods["ion-thruster"] then
   local ion_power_switch = table.deepcopy(power_switch)
   ion_power_switch.name = "ion-thruster-control-behavior"
+  ion_power_switch.placeable_by = {item = power_switch_item.name, count = 1}
   ion_power_switch.led_on = nil
   ion_power_switch.led_off = nil
   data:extend{ion_power_switch}
