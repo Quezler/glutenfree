@@ -142,7 +142,8 @@ function refresh_effects(struct)
     local bits = get_bits(value)
     for i, bit in ipairs(bits) do
       if bit == 1 then
-        struct.inventory.insert({name = string.format(mod_prefix .. "module-%s-%d", effect, i)})
+        local module_name = string.format(mod_prefix .. "module-%s-%d", effect, i)
+        assert(struct.inventory.insert({name = module_name}), module_name)
       end
     end
   end

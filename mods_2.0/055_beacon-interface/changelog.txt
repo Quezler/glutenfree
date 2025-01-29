@@ -13,6 +13,7 @@ Date: ????
     - This seems to work
     - Good night peter panda
     - Zoom in on thumbnail
+    - Ensure there is enough space to have them all at -1
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 28
