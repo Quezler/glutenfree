@@ -17,7 +17,6 @@ Date: ????
     - Refer to the modules as bit instead of level
     - Add selftest using the speed effect
     - Give the slider some convenient steps
-    - Prevent players holding the modules?
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 28
