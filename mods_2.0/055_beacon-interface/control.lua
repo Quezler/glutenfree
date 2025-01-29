@@ -46,6 +46,37 @@ end
 
 local gui_frame_name = mod_prefix .. "frame"
 
+local slider_steps = {
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  20,
+  30,
+  40,
+  50,
+  60,
+  70,
+  80,
+  90,
+  100,
+  200,
+  300,
+  400,
+  500,
+  600,
+  700,
+  800,
+  900,
+  1000,
+}
+
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
 
@@ -101,8 +132,8 @@ script.on_event(defines.events.on_gui_opened, function(event)
       flow.add{
         type = "slider",
         name = "slider",
-        minimum_value = -32768,
-        maximum_value =  32767,
+        minimum_value = -#slider_steps,
+        maximum_value =  #slider_steps,
         value = struct.effects[effect],
         tags = {
           action = mod_prefix .. "slider-value-changed",
@@ -173,8 +204,14 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
     local player = game.get_player(event.player_index) --[[@as Luaplayer]]
     local frame = player.gui.relative[gui_frame_name]
     if frame then
-      frame.inner[tags.effect].textfield.text = tostring(event.element.slider_value)
-      set_effect(frame.tags.unit_number, tags.effect, event.element.slider_value)
+      local step = 0
+      if 0 > event.element.slider_value then
+        step = -slider_steps[math.abs(event.element.slider_value)]
+      elseif event.element.slider_value > 0 then
+        step = slider_steps[event.element.slider_value]
+      end
+      frame.inner[tags.effect].textfield.text = tostring(step)
+      set_effect(frame.tags.unit_number, tags.effect, step)
     end
   end
 end)
