@@ -133,6 +133,16 @@ function get_bits(number)
   return bits
 end
 
+function assert_beacon_matches_config(struct)
+  local effects = struct.entity.effects
+
+  for effect, value in pairs(struct.effects) do
+    local effect_strength = (effects[effect] or 0) * 100
+    local within_bounds = 0.01 > math.abs(effect_strength - value)
+    assert(within_bounds, string.format("expected effect %s to be %f but was %f", effect, value, effect_strength))
+  end
+end
+
 function refresh_effects(struct)
   struct.inventory.clear()
   for effect, value in pairs(struct.effects) do
@@ -150,11 +160,8 @@ function refresh_effects(struct)
 end
 
 function set_effect(unit_number, effect, value)
-  local bits = get_bits(value)
-  game.print(serpent.line(bits))
-
   local struct = storage.structs[unit_number]
-  assert(struct) -- todo: return if nil
+  assert(struct)
 
   struct.effects[effect] = value
   refresh_effects(struct)
@@ -170,4 +177,30 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
       set_effect(frame.tags.unit_number, tags.effect, event.element.slider_value)
     end
   end
+end)
+
+commands.add_command("beacon-interface-selftest", "- Check if the bit modules are able to make up every strength.", function(command)
+  local player = game.get_player(command.player_index) --[[@as Luaplayer]]
+  if player.admin == false then
+    player.print(string.format("[beacon-interface] due to lag only admins may run this."))
+    return
+  end
+
+  local beacon = player.surface.create_entity{
+    name = mod_prefix .. "beacon",
+    force = player.force,
+    position = player.position,
+    raise_built = true,
+  }
+  local struct = assert(storage.structs[beacon.unit_number], "raise_built?")
+
+  local min = -32768
+  local max =  32767
+  for percentage = min, max do
+    set_effect(struct.id, "speed", percentage)
+    assert_beacon_matches_config(struct)
+  end
+
+  beacon.destroy()
+  player.print(string.format("[beacon-interface] all %d to %d strengths match.", min, max))
 end)

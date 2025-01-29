@@ -15,6 +15,7 @@ Date: ????
     - Zoom in on thumbnail
     - Ensure there is enough space to have them all at -1
     - Refer to the modules as bit instead of level
+    - Add selftest using the speed effect
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 28
