@@ -12,6 +12,7 @@ Date: ????
     - Set the minmax back to their full bounds
     - This seems to work
     - Good night peter panda
+    - Zoom in on thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 28
