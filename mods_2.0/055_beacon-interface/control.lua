@@ -216,6 +216,12 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
   end
 end)
 
+script.on_event(defines.events.on_player_fast_transferred, function(event)
+  if event.from_player == false and event.entity.name == mod_prefix .. "beacon" then
+    
+  end
+end)
+
 commands.add_command("beacon-interface-selftest", "- Check if the bit modules are able to make up every strength.", function(command)
   local player = game.get_player(command.player_index) --[[@as Luaplayer]]
   if player.admin == false then

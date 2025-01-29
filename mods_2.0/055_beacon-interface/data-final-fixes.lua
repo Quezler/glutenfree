@@ -49,7 +49,7 @@ for _, effect in ipairs(shared.effects) do
       localised_name = {"item-name." .. mod_prefix .. "module", effect, tostring(i)},
 
       stack_size = 1,
-      flags = {"not-stackable"},
+      flags = {"not-stackable", "only-in-cursor"},
 
       category = module_category.name,
       tier = i,
