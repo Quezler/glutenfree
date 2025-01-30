@@ -7,6 +7,7 @@ Date: ????
     - Rename the modules
     - Hide beacon module insert plan
     - Move model strength computer to shared
+    - Store effects within blueprint tags
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 01. 29

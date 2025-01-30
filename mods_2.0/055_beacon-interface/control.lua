@@ -14,6 +14,16 @@ end
 
 local Handler = {}
 
+local function get_empty_effects()
+  return {
+    speed = 0,
+    productivity = 0,
+    consumption = 0,
+    pollution = 0,
+    quality = 0,
+  }
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination -- todo: handle cloning
 
@@ -21,13 +31,7 @@ function Handler.on_created_entity(event)
     id = entity.unit_number,
     entity = entity,
     inventory = entity.get_inventory(defines.inventory.beacon_modules),
-    effects = {
-      speed = 0,
-      productivity = 0,
-      consumption = 0,
-      pollution = 0,
-      quality = 0,
-    },
+    effects = get_empty_effects(),
   })
 end
 
@@ -252,6 +256,17 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
   end
 end)
 
+local function get_effects_from_blueprint_entity(blueprint_entity)
+  local effects = get_empty_effects()
+
+  for _, blueprint_insert_plan in ipairs(blueprint_entity.items or {}) do
+    local effect, strength = table.unpack(shared.module_name_to_effect_and_strength[blueprint_insert_plan.id.name])
+    effects[effect] = effects[effect] + (strength * #blueprint_insert_plan.items.in_inventory)
+  end
+
+  return effects
+end
+
 script.on_event(defines.events.on_player_setup_blueprint, function(event)
   local blueprint = event.stack
   if blueprint == nil then return end
@@ -259,9 +274,12 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
   local blueprint_entities = blueprint.get_blueprint_entities() or {}
   for i, blueprint_entity in ipairs(blueprint_entities) do
     if blueprint_entity.name == mod_prefix .. "beacon" then
-      game.print(serpent.line(blueprint_entity.items))
+      blueprint_entity.tags = blueprint_entity.tags or {}
+      blueprint_entity.tags["__beacon-interface__"] = get_effects_from_blueprint_entity(blueprint_entity)
+      blueprint_entity.items = nil
     end
   end
+  blueprint.set_blueprint_entities(blueprint_entities)
 end)
 
 commands.add_command("beacon-interface-selftest", "- Check if the bit modules are able to make up every strength.", function(command)
@@ -270,6 +288,8 @@ commands.add_command("beacon-interface-selftest", "- Check if the bit modules ar
     player.print(string.format("[beacon-interface] due to lag only admins may run this."))
     return
   end
+
+  game.print(serpent.line(shared.module_number_to_value))
 
   local beacon = player.surface.create_entity{
     name = mod_prefix .. "beacon",

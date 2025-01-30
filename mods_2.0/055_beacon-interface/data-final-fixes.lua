@@ -48,7 +48,7 @@ for _, effect in ipairs(shared.effects) do
       category = module_category.name,
       tier = i,
       effect = {
-        [effect] = shared.module_number_to_value[two_character_number] / 100,
+        [effect] = shared.module_number_to_strength[two_character_number] / 100,
       },
 
       auto_recycle = false,
