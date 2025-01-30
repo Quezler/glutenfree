@@ -2,7 +2,7 @@ local shared = require("shared")
 local debug_mode = false
 
 local icons = {
-  {icon = "__beacon-interface__/graphics/icons/beacon.png"},
+  {icon = "__base__/graphics/icons/beacon.png"},
   {icon = "__beacon-interface__/graphics/icons/compilatron.png", scale = 0.375, shift = {-4, 4}},
 }
 
@@ -22,6 +22,7 @@ entity.icons_positioning = {
 }
 table.insert(entity.flags, "no-automated-item-removal")
 table.insert(entity.flags, "no-automated-item-insertion")
+entity.hidden = true
 
 local item = table.deepcopy(data.raw["item"]["beacon"])
 item.name = mod_prefix .. "beacon"
@@ -54,3 +55,20 @@ data:extend({
     include_selected_prototype = true,
   }
 })
+
+local tile_beacon = table.deepcopy(entity)
+tile_beacon.name = mod_prefix .. "beacon-tile"
+tile_beacon.icons[1].icon = "__base__/graphics/icons/hazard-concrete.png"
+
+tile_beacon.minable = nil
+tile_beacon.profile = {1}
+tile_beacon.graphics_set = nil
+tile_beacon.supply_area_distance = 0
+tile_beacon.selection_box = {{-0.35, -0.35}, {0.35, 0.35}}
+tile_beacon.collision_box = {{-0.45, -0.45}, {0.45, 0.45}}
+tile_beacon.collision_mask = {layers = {}}
+tile_beacon.selection_priority = 51
+tile_beacon.selectable_in_game = debug_mode
+table.insert(entity.flags, "not-on-map")
+
+data:extend{tile_beacon}
