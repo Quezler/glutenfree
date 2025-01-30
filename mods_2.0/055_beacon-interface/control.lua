@@ -251,6 +251,18 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
   end
 end)
 
+script.on_event(defines.events.on_player_setup_blueprint, function(event)
+  local blueprint = event.stack
+  if blueprint == nil then return end
+
+  local blueprint_entities = blueprint.get_blueprint_entities() or {}
+  for i, blueprint_entity in ipairs(blueprint_entities) do
+    if blueprint_entity.name == mod_prefix .. "beacon" then
+      game.print(serpent.line(blueprint_entity.items))
+    end
+  end
+end)
+
 commands.add_command("beacon-interface-selftest", "- Check if the bit modules are able to make up every strength.", function(command)
   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
   if player.admin == false then
