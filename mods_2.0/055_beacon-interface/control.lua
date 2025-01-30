@@ -81,7 +81,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
 
   if entity and entity.name == mod_prefix .. "beacon" then
-    local player = game.get_player(event.player_index) --[[@as Luaplayer]]
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     local frame = player.gui.relative[gui_frame_name]
     if frame then frame.destroy() end
 
@@ -204,7 +204,7 @@ end
 script.on_event(defines.events.on_gui_value_changed, function(event)
   local tags = event.element.tags
   if tags and tags.action == mod_prefix .. "slider-value-changed" then
-    local player = game.get_player(event.player_index) --[[@as Luaplayer]]
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     local frame = player.gui.relative[gui_frame_name]
     if frame then
       local step = 0
@@ -234,7 +234,7 @@ end
 script.on_event(defines.events.on_gui_text_changed, function(event)
   local tags = event.element.tags
   if tags and tags.action == mod_prefix .. "textfield-text-changed" then
-    local player = game.get_player(event.player_index) --[[@as Luaplayer]]
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     local frame = player.gui.relative[gui_frame_name]
     if frame then
       local strength = tonumber(event.element.text) or 0
@@ -252,7 +252,7 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
 end)
 
 commands.add_command("beacon-interface-selftest", "- Check if the bit modules are able to make up every strength.", function(command)
-  local player = game.get_player(command.player_index) --[[@as Luaplayer]]
+  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
   if player.admin == false then
     player.print(string.format("[beacon-interface] due to lag only admins may run this."))
     return
