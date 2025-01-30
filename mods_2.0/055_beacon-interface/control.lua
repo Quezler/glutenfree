@@ -1,5 +1,6 @@
 local mod_prefix = "beacon-interface--"
 local shared = require("shared")
+local Interface = require("scripts.interface")
 
 script.on_init(function()
   storage.structs = {}
@@ -14,16 +15,6 @@ end
 
 local Handler = {}
 
-local function get_empty_effects()
-  return {
-    speed = 0,
-    productivity = 0,
-    consumption = 0,
-    pollution = 0,
-    quality = 0,
-  }
-end
-
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination -- todo: handle cloning
 
@@ -31,7 +22,7 @@ function Handler.on_created_entity(event)
     id = entity.unit_number,
     entity = entity,
     inventory = entity.get_inventory(defines.inventory.beacon_modules),
-    effects = get_empty_effects(),
+    effects = shared.get_empty_effects(),
   })
 end
 
@@ -198,14 +189,6 @@ function refresh_effects(struct)
   end
 end
 
-function set_effect(unit_number, effect, value)
-  local struct = storage.structs[unit_number]
-  assert(struct)
-
-  struct.effects[effect] = value
-  refresh_effects(struct)
-end
-
 script.on_event(defines.events.on_gui_value_changed, function(event)
   local tags = event.element.tags
   if tags and tags.action == mod_prefix .. "slider-value-changed" then
@@ -219,7 +202,7 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
         step = slider_steps[event.element.slider_value]
       end
       frame.inner[tags.effect].textfield.text = tostring(step)
-      set_effect(frame.tags.unit_number, tags.effect, step)
+      Interface.set_effect(frame.tags.unit_number, tags.effect, step)
     end
   end
 end)
@@ -251,13 +234,13 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
         event.element.text = tostring(shared.min_strength)
       end
       frame.inner[tags.effect].slider.slider_value = get_slider_step_from_number(strength)
-      set_effect(frame.tags.unit_number, tags.effect, strength)
+      Interface.set_effect(frame.tags.unit_number, tags.effect, strength)
     end
   end
 end)
 
 local function get_effects_from_blueprint_entity(blueprint_entity)
-  local effects = get_empty_effects()
+  local effects = shared.get_empty_effects()
 
   for _, blueprint_insert_plan in ipairs(blueprint_entity.items or {}) do
     local effect, strength = table.unpack(shared.module_name_to_effect_and_strength[blueprint_insert_plan.id.name])
@@ -289,18 +272,17 @@ commands.add_command("beacon-interface-selftest", "- Check if the bit modules ar
     return
   end
 
-  game.print(serpent.line(shared.module_number_to_value))
-
   local beacon = player.surface.create_entity{
     name = mod_prefix .. "beacon",
     force = player.force,
     position = player.position,
     raise_built = true,
   }
+  assert(beacon)
   local struct = assert(storage.structs[beacon.unit_number], "raise_built?")
 
   for percentage = shared.min_strength, shared.max_strength do
-    set_effect(struct.id, "speed", percentage)
+    Interface.set_effect(beacon.unit_number, "speed", percentage)
     assert_beacon_matches_config(struct)
   end
 

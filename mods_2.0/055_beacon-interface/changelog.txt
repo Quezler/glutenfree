@@ -8,6 +8,7 @@ Date: ????
     - Hide beacon module insert plan
     - Move model strength computer to shared
     - Store effects within blueprint tags
+    - Add a remote interface through which to update beacons
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 01. 29
