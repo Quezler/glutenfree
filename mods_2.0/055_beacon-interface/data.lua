@@ -21,6 +21,8 @@ entity.distribution_effectivity_bonus_per_quality_level = 0
 entity.icons_positioning = {
   {inventory_index = defines.inventory.beacon_modules, scale = 0},
 }
+table.insert(entity.flags, "no-automated-item-removal")
+table.insert(entity.flags, "no-automated-item-insertion")
 
 local item = table.deepcopy(data.raw["item"]["beacon"])
 item.name = mod_prefix .. "beacon"

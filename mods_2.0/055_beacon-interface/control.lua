@@ -38,6 +38,10 @@ function Handler.on_created_entity(event)
   end
 end
 
+local on_created_entity_filters = {
+  {filter = "name", name = mod_prefix .. "beacon"},
+}
+
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
@@ -46,9 +50,7 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, Handler.on_created_entity, {
-    {filter = "name", name = mod_prefix .. "beacon"},
-  })
+  script.on_event(event, Handler.on_created_entity, on_created_entity_filters)
 end
 
 local gui_frame_name = mod_prefix .. "frame"
@@ -279,6 +281,36 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
     end
   end
   blueprint.set_blueprint_entities(blueprint_entities)
+end)
+
+script.on_event(defines.events.on_pre_player_mined_item, function(event)
+  local struct = assert(storage.structs[event.entity.unit_number])
+  struct.inventory.clear()
+  struct.effects = shared.get_empty_effects()
+end, on_created_entity_filters)
+
+script.on_event(defines.events.on_marked_for_deconstruction, function(event)
+  local struct = assert(storage.structs[event.entity.unit_number])
+  struct.inventory.clear()
+  struct.effects = shared.get_empty_effects()
+end, on_created_entity_filters)
+
+local function move_modules_from_inventory(inventory_from, inventory_to)
+  for _, item in ipairs(inventory_from.get_contents()) do
+    if shared.module_name_to_effect_and_strength[item.name] ~= nil then
+      inventory_from.remove(item)
+      inventory_to.insert(item)
+    end
+  end
+end
+
+script.on_event(defines.events.on_player_fast_transferred, function(event)
+  if event.from_player == false and event.entity.name == mod_prefix .. "beacon" then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    local beacon = event.entity.get_inventory(defines.inventory.beacon_modules)
+    move_modules_from_inventory(player.get_inventory(defines.inventory.character_main), beacon)
+    move_modules_from_inventory(player.get_inventory(defines.inventory.character_trash), beacon)
+  end
 end)
 
 commands.add_command("beacon-interface-selftest", "- Check if the bit modules are able to make up every strength.", function(command)
