@@ -1,5 +1,3 @@
-local mod_prefix = "beacon-interface--"
-
 if script.active_mods["EditorExtensions"] then
   -- due to lack of a "starting items interface" for `items_to_add` like freeplay has, we'll just have to bodge it
   script.on_event(defines.events.on_player_created, function(event)

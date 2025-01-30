@@ -1,4 +1,3 @@
-local mod_prefix = "beacon-interface--"
 local shared = require("shared")
 
 local module_category = {

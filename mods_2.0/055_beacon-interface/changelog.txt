@@ -8,6 +8,7 @@ Date: ????
     - Make the south side of the module a straighter black line
     - Clean up the structs with deathrattles
     - Fix quality beacons having no gui
+    - Centralize mod_prefix and put commands in their own file
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 01. 30

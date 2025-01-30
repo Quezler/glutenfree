@@ -1,4 +1,4 @@
-local mod_prefix = "beacon-interface--"
+mod_prefix = "beacon-interface--"
 
 local effects = {
   "speed",
