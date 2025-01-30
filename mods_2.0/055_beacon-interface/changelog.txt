@@ -14,6 +14,7 @@ Date: ????
     - Detect based on allowed module categories
     - Fix the gui not working in editor mode
     - Add command example
+    - Add a reminder about minable/place_result
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 01. 30
