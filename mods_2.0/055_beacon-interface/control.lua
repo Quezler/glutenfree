@@ -16,7 +16,7 @@ end
 local Handler = {}
 
 function Handler.on_created_entity(event)
-  local entity = event.entity or event.destination -- todo: handle cloning
+  local entity = event.entity or event.destination
 
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
@@ -24,6 +24,12 @@ function Handler.on_created_entity(event)
     inventory = entity.get_inventory(defines.inventory.beacon_modules),
     effects = shared.get_empty_effects(),
   })
+
+  -- /c game.player.selected.clone{position = game.player.position}
+  for _, item in ipairs(struct.inventory.get_contents()) do
+    local effect, strength = table.unpack(shared.module_name_to_effect_and_strength[item.name])
+    struct.effects[effect] = struct.effects[effect] + (strength * item.count)
+  end
 
   local tags = event.tags
   if tags and tags["__beacon-interface__"] then

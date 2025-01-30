@@ -11,6 +11,7 @@ Date: ????
     - Add a remote interface through which to update beacons
     - Set beacon effects based on blueprint tags
     - Fix slider being in the wrong position when opening the gui
+    - Support cloning
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 01. 29
