@@ -36,6 +36,16 @@ local function new_struct(table, struct)
   return struct
 end
 
+local function get_fresh_effects()
+  return {
+    speed = 0,
+    productivity = 0,
+    consumption = 0,
+    pollution = 0,
+    quality = 0
+  }
+end
+
 local Handler = {}
 
 function Handler.on_created_entity(event)
@@ -45,16 +55,14 @@ function Handler.on_created_entity(event)
     id = entity.unit_number,
     entity = entity,
     power_switch = nil,
-    effects = {
-      speed = 0,
-      productivity = 0,
-      consumption = 0,
-      pollution = 0,
-      quality = 0,
-    },
+    effects = get_fresh_effects(),
   })
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {"struct", struct.id}
+
+  -- it's parent mod allows blueprinting the modules, but that makes no sense for circuit controlled ones,
+  -- so if one gets cloned/upgraded/built we'll just tell the parent mod to reset the effects to zeroes first.
+  remote.call("beacon-interface", "set_effects", entity.unit_number, struct.effects)
 
   struct.power_switch = entity.surface.create_entity{
     name = mod_prefix .. "beacon-control-behavior",
@@ -87,13 +95,7 @@ local signal_to_effect_map = {
 }
 
 local function tick_struct(struct)
-  local new_effects = {
-    speed = 0,
-    productivity = 0,
-    consumption = 0,
-    pollution = 0,
-    quality = 0
-  }
+  local new_effects = get_fresh_effects()
 
   local signals = struct.power_switch.get_signals(defines.wire_connector_id.circuit_red, defines.wire_connector_id.circuit_green)
   for _, signal in ipairs(signals or {}) do

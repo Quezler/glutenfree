@@ -3,6 +3,7 @@ Version: 1.0.1
 Date: ????
   Info:
     - Add circuit connectors to thumbnail
+    - Fix blueprinted ones keeping their modules from that time
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 01. 30
