@@ -17,6 +17,9 @@ Modding instructions:
 Create the `beacon-interface--beacon` or `beacon-interface--beacon-tile` yourself, be sure to trigger any of the build events,
 afterwards you can get/set the effects by passing the unit number, it is your own responsibility to delete it when no longer needed.
 
+You are encouraged to use `table.deepcopy()` instead of using the above two by name, so they get removed if your mod leaves the save.
+Any beacon with the `beacon-interface--module-category` category will get recognized, beacons that allow all categores via `nil` are skipped.
+
 (note that the `-tile` beacon does have a profile of `{1}`, so any other beacons will not interfere with the transmission strength)
 
 ```lua

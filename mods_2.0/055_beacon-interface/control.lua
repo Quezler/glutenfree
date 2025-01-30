@@ -43,15 +43,21 @@ function Handler.on_created_entity(event)
   end
 end
 
--- local is_beacon_interface = {
---   [mod_prefix .. "beacon"] = true,
---   [mod_prefix .. "beacon-tile"] = true,
--- }
+local is_beacon_interface = {}
+for _, entity_prototype in pairs(prototypes.entity) do
+  if entity_prototype.type == "beacon" then
+    if (entity_prototype.allowed_module_categories or {})[mod_prefix .. "module-category"] then
+      is_beacon_interface[entity_prototype.name] = true
+    end
+  end
+end
+-- log(serpent.line(is_beacon_interface))
 
-local on_created_entity_filters = {
-  {filter = "name", name = mod_prefix .. "beacon"},
-  {filter = "name", name = mod_prefix .. "beacon-tile"},
-}
+local on_created_entity_filters = {}
+for entity_name, _ in pairs(is_beacon_interface) do
+  table.insert(on_created_entity_filters, {filter = "name", name = entity_name})
+end
+-- log(serpent.line(on_created_entity_filters))
 
 for _, event in ipairs({
   defines.events.on_built_entity,
