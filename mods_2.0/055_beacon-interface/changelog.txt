@@ -20,6 +20,7 @@ Date: ????
     - Prevent players & bots from interacting with the modules themselves
     - Make beacon inoperable and make the gui standalone
     - Update thumbnail
+    - Add tooltip to productivity
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 01. 29

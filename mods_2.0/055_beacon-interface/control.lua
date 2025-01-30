@@ -142,7 +142,10 @@ local function open_gui(entity, player)
       caption = string.upper(string.sub(effect, 1, 1)) .. string.sub(effect, 2),
     }
     label.style.font = "default-bold"
-    if effect == "quality" then
+    if effect == "productivity" then
+      label.caption = "[img=info] " .. label.caption
+      label.tooltip = {"beacon-interface.productivity-tooltip"}
+    elseif effect == "quality" then
       label.caption = "[img=info] " .. label.caption
       label.tooltip = {"beacon-interface.quality-tooltip"}
     end
