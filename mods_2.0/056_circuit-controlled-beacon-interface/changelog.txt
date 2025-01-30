@@ -1,11 +1,12 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
-Date: ????
+Date: 2025. 01. 30
   Info:
-    - Add readme and thumbnail
-    - Add the circuit connector and all the magic sauce
+    - Mod portal release
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 30
   Info:
     - Initial commit
+    - Add readme and thumbnail
+    - Add the circuit connector and all the magic sauce

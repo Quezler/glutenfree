@@ -23,6 +23,8 @@ Any beacon with the `beacon-interface--module-category` category will get recogn
 
 (note that the `-tile` beacon does have a profile of `{1}`, so any other beacons will not interfere with the transmission strength)
 
+(you can examine a live example here, but it might already be a tad complex: https://mods.factorio.com/mod/circuit-controlled-beacon-interface)
+
 ```lua
 /c remote.call("beacon-interface", "set_effect", game.player.selected.unit_number, "productivity", 10)
 ...
