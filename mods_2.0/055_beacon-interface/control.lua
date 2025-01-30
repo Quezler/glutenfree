@@ -86,6 +86,7 @@ local slider_steps = {
   800,
   900,
   1000,
+  10000,
 }
 
 local function get_slider_step_from_number(number)
