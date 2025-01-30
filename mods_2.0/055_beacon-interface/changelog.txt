@@ -16,6 +16,7 @@ Date: ????
     - Update description and dependencies
     - Explain that quality is divided by 10
     - Support editor extentions
+    - Give the beacons during `/cheat all` regardless of ee
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 01. 29
