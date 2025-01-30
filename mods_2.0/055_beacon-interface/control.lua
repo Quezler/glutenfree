@@ -146,8 +146,11 @@ script.on_event(defines.events.on_gui_opened, function(event)
         name = "textfield",
         text = tostring(struct.effects[effect]),
         numeric = true,
-        allow_decimal = true,
         allow_negative = true,
+        tags = {
+          action = mod_prefix .. "textfield-text-changed",
+          effect = effect,
+        }
       }
       textfield.style.width = 100
       textfield.style.horizontal_align = "center"
@@ -212,6 +215,31 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
       end
       frame.inner[tags.effect].textfield.text = tostring(step)
       set_effect(frame.tags.unit_number, tags.effect, step)
+    end
+  end
+end)
+
+local function get_slider_step_from_number(number)
+  local highest = 0
+  for i, step in ipairs(slider_steps) do
+    if math.abs(number) >= step then
+      highest = i
+    else
+      break
+    end
+  end
+  return number > 0 and highest or -highest
+end
+
+script.on_event(defines.events.on_gui_text_changed, function(event)
+  local tags = event.element.tags
+  if tags and tags.action == mod_prefix .. "textfield-text-changed" then
+    local player = game.get_player(event.player_index) --[[@as Luaplayer]]
+    local frame = player.gui.relative[gui_frame_name]
+    if frame then
+      local strength = tonumber(event.element.text) or 0
+      frame.inner[tags.effect].slider.slider_value = get_slider_step_from_number(strength)
+      set_effect(frame.tags.unit_number, tags.effect, strength)
     end
   end
 end)
