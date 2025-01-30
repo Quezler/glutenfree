@@ -1,6 +1,6 @@
 local mod_prefix = "beacon-interface--"
 local shared = require("shared")
-local debug_mode = true
+local debug_mode = false
 
 local icons = {
   {icon = "__beacon-interface__/graphics/icons/beacon.png"},
