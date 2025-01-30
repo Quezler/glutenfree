@@ -1,7 +1,7 @@
 {
     "name": "beacon-interface",
     "title": "Beacon interface",
-    "description": "Beacon with sliders for all 5 of the effects, from min all the way to max.",
+    "description": "Can use any module effect at any strength, is configurable via the gui, and has modding support.",
 
     "version": "1.0.0",
     "author": "Quezler",
