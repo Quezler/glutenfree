@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
-Date: ????
+Date: 2025. 01. 29
   Info:
     - Prepare for small scale module insertion test
     - Read the positive bits as expected
