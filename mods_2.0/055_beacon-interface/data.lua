@@ -62,6 +62,7 @@ tile_beacon.icons[1].icon = "__base__/graphics/icons/hazard-concrete.png"
 
 tile_beacon.minable = nil
 tile_beacon.profile = {1}
+tile_beacon.beacon_counter = "same_type" -- does this do anything if the profile is {1}?
 tile_beacon.graphics_set = nil
 tile_beacon.supply_area_distance = 0
 tile_beacon.selection_box = {{-0.35, -0.35}, {0.35, 0.35}}

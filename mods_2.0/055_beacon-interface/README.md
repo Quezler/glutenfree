@@ -11,3 +11,21 @@ This beacon is not craftable, it is intended for use in editor mode, and can als
 
 In addition to the visible/configurable beacon this mod also has a remote interface in which mods can add 1x1 tile beacons,
 that way you can modify the speed/productivity/consumption/pollution/quality of buildings on the fly should your mod need that.
+
+Modding instructions:
+
+Create the `beacon-interface--beacon` or `beacon-interface--beacon-tile` yourself, be sure to trigger any of the build events,
+afterwards you can get/set the effects by passing the unit number, it is your own responsibility to delete it when no longer needed.
+
+(note that the `-tile` beacon does have a profile of `{1}`, so any other beacons will not interfere with the transmission strength)
+
+```lua
+local effects = remote.call("beacon-interface", "get_effects", unit_number)
+effects["speed"] = 25
+remote.call("beacon-interface", "set_effects", unit_number, effects)
+...
+remote.call("beacon-interface", "set_effect", unit_number, "speed", 25)
+...
+local speed = remote.call("beacon-interface", "get_effect", unit_number, "speed")
+remote.call("beacon-interface", "set_effect", unit_number, "speed", speed + 25)
+```

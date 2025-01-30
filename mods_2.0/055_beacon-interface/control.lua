@@ -43,8 +43,14 @@ function Handler.on_created_entity(event)
   end
 end
 
+-- local is_beacon_interface = {
+--   [mod_prefix .. "beacon"] = true,
+--   [mod_prefix .. "beacon-tile"] = true,
+-- }
+
 local on_created_entity_filters = {
   {filter = "name", name = mod_prefix .. "beacon"},
+  {filter = "name", name = mod_prefix .. "beacon-tile"},
 }
 
 for _, event in ipairs({

@@ -1,7 +1,7 @@
 local Interface = {}
 
 function Interface.refresh_effects(unit_number)
-  local struct = assert(storage.structs[unit_number], unit_number)
+  local struct = assert(storage.structs[unit_number], string.format("no beacon interface with unit number %d found.", unit_number))
 
   struct.inventory.clear()
   for effect, value in pairs(struct.effects) do
@@ -20,13 +20,13 @@ function Interface.refresh_effects(unit_number)
 end
 
 function Interface.get_effects(unit_number)
-  local struct = assert(storage.structs[unit_number], unit_number)
+  local struct = assert(storage.structs[unit_number], string.format("no beacon interface with unit number %d found.", unit_number))
 
   return struct.effects
 end
 
 function Interface.get_effect(unit_number, effect)
-  local struct = assert(storage.structs[unit_number], unit_number)
+  local struct = assert(storage.structs[unit_number], string.format("no beacon interface with unit number %d found.", unit_number))
 
   return struct.effects[effect]
 end
@@ -47,7 +47,7 @@ local function validate_effects(effects)
 end
 
 function Interface.set_effects(unit_number, effects)
-  local struct = assert(storage.structs[unit_number], unit_number)
+  local struct = assert(storage.structs[unit_number], string.format("no beacon interface with unit number %d found.", unit_number))
 
   struct.effects = validate_effects(effects)
   Interface.refresh_effects(unit_number)
