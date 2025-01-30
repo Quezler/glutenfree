@@ -15,6 +15,7 @@ Date: ????
     - Fix the gui not working in editor mode
     - Add command example
     - Add a reminder about minable/place_result
+    - Fix circuit controlled beacon interface gui opening
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 01. 30

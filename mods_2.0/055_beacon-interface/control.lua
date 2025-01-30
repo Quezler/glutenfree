@@ -201,7 +201,12 @@ end
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
   if entity and is_beacon_interface[entity.name] then
-    open_gui(entity, game.get_player(event.player_index))
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    if entity.name == mod_prefix .. "beacon" then
+      open_gui(entity, game.get_player(event.player_index))
+    else
+      player.opened = nil -- only the default beacon interface supports opening (reach out of this inteferes with your mod!)
+    end
   end
 end)
 
