@@ -5,6 +5,7 @@ Date: ????
     - Add 10k slider step
     - Disable the recipe
     - Write readme
+    - Make the south side of the module a straighter black line
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 01. 30
