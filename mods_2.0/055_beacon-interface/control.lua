@@ -197,6 +197,14 @@ local function open_gui(entity, player)
   frame.force_auto_center()
 end
 
+-- editor mode bypasses the .operable check in terms of opening the gui
+script.on_event(defines.events.on_gui_opened, function(event)
+  local entity = event.entity
+  if entity and is_beacon_interface[entity.name] then
+    open_gui(entity, game.get_player(event.player_index))
+  end
+end)
+
 script.on_event(mod_prefix .. "open-gui", function(event)
   local selected_prototype = event.selected_prototype --[[@as SelectedPrototypeData?]]
   if selected_prototype and selected_prototype.base_type == "entity" and selected_prototype.name == mod_prefix .. "beacon" then

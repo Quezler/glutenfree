@@ -12,6 +12,7 @@ Date: ????
     - Create the tile beacon prototype
     - Add modding instructions to the readme
     - Detect based on allowed module categories
+    - Fix the gui not working in editor mode
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 01. 30
