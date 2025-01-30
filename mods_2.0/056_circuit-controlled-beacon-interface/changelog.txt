@@ -3,6 +3,7 @@ Version: 1.0.0
 Date: ????
   Info:
     - Add readme and thumbnail
+    - Add the circuit connector and all the magic sauce
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 01. 30

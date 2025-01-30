@@ -11,3 +11,8 @@ P productivity
 C consumption
 E pollution (e for exhaust)
 Q quality
+
+Todo:
+
+- instead of polling every 60 ticks, add a hidden surface that fires events only if one of those 5 signals change
+- not breaking the circuit wires if you upgrade the quality of the beacon
