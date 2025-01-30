@@ -24,6 +24,11 @@ function Handler.on_created_entity(event)
     inventory = entity.get_inventory(defines.inventory.beacon_modules),
     effects = shared.get_empty_effects(),
   })
+
+  local tags = event.tags
+  if tags and tags["__beacon-interface__"] then
+    Interface.set_effects(entity.unit_number, tags["__beacon-interface__"])
+  end
 end
 
 for _, event in ipairs({
