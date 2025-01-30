@@ -77,6 +77,18 @@ local slider_steps = {
   1000,
 }
 
+local function get_slider_step_from_number(number)
+  local highest = 0
+  for i, step in ipairs(slider_steps) do
+    if math.abs(number) >= step then
+      highest = i
+    else
+      break
+    end
+  end
+  return number > 0 and highest or -highest
+end
+
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
 
@@ -134,7 +146,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
         name = "slider",
         minimum_value = -#slider_steps,
         maximum_value =  #slider_steps,
-        value = struct.effects[effect],
+        value = get_slider_step_from_number(struct.effects[effect]),
         tags = {
           action = mod_prefix .. "slider-value-changed",
           effect = effect,
@@ -211,18 +223,6 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
     end
   end
 end)
-
-local function get_slider_step_from_number(number)
-  local highest = 0
-  for i, step in ipairs(slider_steps) do
-    if math.abs(number) >= step then
-      highest = i
-    else
-      break
-    end
-  end
-  return number > 0 and highest or -highest
-end
 
 script.on_event(defines.events.on_gui_text_changed, function(event)
   local tags = event.element.tags
