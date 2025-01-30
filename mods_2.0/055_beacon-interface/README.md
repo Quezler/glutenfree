@@ -23,12 +23,14 @@ Any beacon with the `beacon-interface--module-category` category will get recogn
 (note that the `-tile` beacon does have a profile of `{1}`, so any other beacons will not interfere with the transmission strength)
 
 ```lua
+/c remote.call("beacon-interface", "set_effect", game.player.selected.unit_number, "productivity", 10)
+...
 local effects = remote.call("beacon-interface", "get_effects", unit_number)
 effects["speed"] = 25
 remote.call("beacon-interface", "set_effects", unit_number, effects)
 ...
-remote.call("beacon-interface", "set_effect", unit_number, "speed", 25)
+remote.call("beacon-interface", "set_effect", unit_number, "efficiency", 25)
 ...
-local speed = remote.call("beacon-interface", "get_effect", unit_number, "speed")
-remote.call("beacon-interface", "set_effect", unit_number, "speed", speed + 25)
+local quality = remote.call("beacon-interface", "get_effect", unit_number, "quality")
+remote.call("beacon-interface", "set_effect", unit_number, "quality", speed + 25)
 ```

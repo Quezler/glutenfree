@@ -13,6 +13,7 @@ Date: ????
     - Add modding instructions to the readme
     - Detect based on allowed module categories
     - Fix the gui not working in editor mode
+    - Add command example
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 01. 30
