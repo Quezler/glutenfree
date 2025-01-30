@@ -5,6 +5,7 @@ require("scripts.compatibility")
 
 script.on_init(function()
   storage.structs = {}
+  storage.deathrattles = {}
 end)
 
 local function new_struct(table, struct)
@@ -27,6 +28,8 @@ function Handler.on_created_entity(event)
     inventory = entity.get_inventory(defines.inventory.beacon_modules),
     effects = shared.get_empty_effects(),
   })
+
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {"struct", struct.id}
 
   -- /c game.player.selected.clone{position = game.player.position}
   for _, item in ipairs(struct.inventory.get_contents()) do
@@ -310,6 +313,18 @@ script.on_event(defines.events.on_marked_for_deconstruction, function(event)
   struct.inventory.clear()
   struct.effects = shared.get_empty_effects()
 end, on_created_entity_filters)
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+
+    if deathrattle[1] == "struct" then
+      storage.structs[deathrattle[2]] = nil
+    else
+      error(serpent.block(deathrattle))
+    end
+  end
+end)
 
 commands.add_command("beacon-interface-selftest", "- Check if the bit modules are able to make up every strength.", function(command)
   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
