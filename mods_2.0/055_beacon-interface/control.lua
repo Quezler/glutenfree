@@ -1,6 +1,7 @@
 local mod_prefix = "beacon-interface--"
 local shared = require("shared")
 local Interface = require("scripts.interface")
+require("scripts.compatibility")
 
 script.on_init(function()
   storage.structs = {}
