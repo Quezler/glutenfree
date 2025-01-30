@@ -8,4 +8,6 @@ local effects = {
 
 return {
   effects = effects,
+  min_strength = -32768,
+  max_strength =  32767,
 }

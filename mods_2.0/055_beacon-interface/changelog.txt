@@ -18,6 +18,7 @@ Date: ????
     - Add selftest using the speed effect
     - Give the slider some convenient steps
     - Move the slider when the textfield changes
+    - Clamp strength from textfield
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 28

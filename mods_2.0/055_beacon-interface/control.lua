@@ -238,6 +238,13 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
     local frame = player.gui.relative[gui_frame_name]
     if frame then
       local strength = tonumber(event.element.text) or 0
+      if strength > shared.max_strength then
+        strength = shared.max_strength
+        event.element.text = tostring(shared.max_strength)
+      elseif strength < shared.min_strength then
+        strength = shared.min_strength
+        event.element.text = tostring(shared.min_strength)
+      end
       frame.inner[tags.effect].slider.slider_value = get_slider_step_from_number(strength)
       set_effect(frame.tags.unit_number, tags.effect, strength)
     end
@@ -259,13 +266,11 @@ commands.add_command("beacon-interface-selftest", "- Check if the bit modules ar
   }
   local struct = assert(storage.structs[beacon.unit_number], "raise_built?")
 
-  local min = -32768
-  local max =  32767
-  for percentage = min, max do
+  for percentage = shared.min_strength, shared.max_strength do
     set_effect(struct.id, "speed", percentage)
     assert_beacon_matches_config(struct)
   end
 
   beacon.destroy()
-  player.print(string.format("[beacon-interface] all %d to %d strengths match.", min, max))
+  player.print(string.format("[beacon-interface] all %d to %d strengths match.", shared.min_strength, shared.max_strength))
 end)
