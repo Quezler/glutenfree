@@ -34,12 +34,6 @@ for _, effect in ipairs(shared.effects) do
       },
     }
 
-    local effect_value = math.pow(2, i - 1) / 100
-    if i == 16 then
-      -- effect_value = -((math.pow(2, i - 1)-1) / 100)
-      effect_value = -(math.pow(2, i - 2) / 100)
-    end
-
     local module = {
       type = "module",
       name = string.format(mod_prefix .. "%s-module-%s", effect, two_character_number),
@@ -54,7 +48,7 @@ for _, effect in ipairs(shared.effects) do
       category = module_category.name,
       tier = i,
       effect = {
-        [effect] = effect_value,
+        [effect] = shared.module_number_to_value[two_character_number] / 100,
       },
 
       auto_recycle = false,
