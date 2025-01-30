@@ -146,6 +146,10 @@ script.on_event(defines.events.on_gui_opened, function(event)
         caption = string.upper(string.sub(effect, 1, 1)) .. string.sub(effect, 2),
       }
       label.style.font = "default-bold"
+      if effect == "quality" then
+        label.caption = "[img=info] " .. label.caption
+        label.tooltip = {"beacon-interface.quality-tooltip"}
+      end
 
       flow.add{
         type = "slider",

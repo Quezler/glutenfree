@@ -14,6 +14,7 @@ Date: ????
     - Support cloning
     - Fix module lamp base pixels still being visible
     - Update description and dependencies
+    - Explain that quality is divided by 10
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 01. 29
