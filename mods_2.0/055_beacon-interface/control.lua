@@ -189,7 +189,7 @@ script.on_event(mod_prefix .. "open-gui", function(event)
   local selected_prototype = event.selected_prototype --[[@as SelectedPrototypeData?]]
   if selected_prototype and selected_prototype.base_type == "entity" and selected_prototype.name == mod_prefix .. "beacon" then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    local beacon = player.surface.find_entity(mod_prefix .. "beacon", event.cursor_position)
+    local beacon = player.surface.find_entity({name = mod_prefix .. "beacon", quality = selected_prototype.quality}, event.cursor_position)
     if beacon then
       open_gui(beacon, player)
     end
