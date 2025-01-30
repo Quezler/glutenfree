@@ -46,3 +46,12 @@ if debug_mode then
 end
 
 data:extend{entity, item}
+
+data:extend({
+  {
+    type = "custom-input", key_sequence = "",
+    name = mod_prefix .. "open-gui",
+    linked_game_control = "open-gui",
+    include_selected_prototype = true,
+  }
+})

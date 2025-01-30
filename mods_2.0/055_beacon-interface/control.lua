@@ -19,6 +19,8 @@ local Handler = {}
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
+  entity.operable = false
+
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
     entity = entity,
@@ -98,89 +100,99 @@ local function get_slider_step_from_number(number)
   return number > 0 and highest or -highest
 end
 
-script.on_event(defines.events.on_gui_opened, function(event)
-  local entity = event.entity
+local function open_gui(entity, player)
+  local frame = player.gui.screen[gui_frame_name]
+  if frame then frame.destroy() end
 
-  if entity and entity.name == mod_prefix .. "beacon" then
-    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    local frame = player.gui.relative[gui_frame_name]
-    if frame then frame.destroy() end
+  local struct = storage.structs[entity.unit_number]
+  assert(struct)
 
-    local struct = storage.structs[entity.unit_number]
-    assert(struct)
-
-    frame = player.gui.relative.add{
-      type = "frame",
-      name = gui_frame_name,
-      direction = "vertical",
-      anchor = {
-        gui = defines.relative_gui_type.beacon_gui,
-        position = defines.relative_gui_position.right,
-        name = mod_prefix .. "beacon",
-      },
-      tags = {
-        unit_number = entity.unit_number,
-      }
+  frame = player.gui.screen.add{
+    type = "frame",
+    name = gui_frame_name,
+    direction = "vertical",
+    caption = {"entity-name." .. mod_prefix .. "beacon"},
+    tags = {
+      unit_number = entity.unit_number,
     }
-    frame.style.top_padding = 8
+  }
 
-    local inner = frame.add{
-      type = "frame",
-      name = "inner",
-      style = "inside_shallow_frame_with_padding",
-      direction = "vertical",
+  local inner = frame.add{
+    type = "frame",
+    name = "inner",
+    style = "inside_shallow_frame_with_padding",
+    direction = "vertical",
+  }
+
+  for _, effect in ipairs(shared.effects) do
+    local flow = inner.add{
+      type = "flow",
+      name = effect,
+      style = "horizontal_flow",
     }
+    flow.style.vertical_align = "center"
 
-    for _, effect in ipairs(shared.effects) do
-      local flow = inner.add{
-        type = "flow",
-        name = effect,
-        style = "horizontal_flow",
-      }
-      flow.style.vertical_align = "center"
+    local piston = flow.add{
+      type = "flow",
+    }
+    piston.style.horizontally_stretchable = true
 
-      local piston = flow.add{
-        type = "flow",
-      }
-      piston.style.horizontally_stretchable = true
-
-      local label = flow.add{
-        type = "label",
-        caption = string.upper(string.sub(effect, 1, 1)) .. string.sub(effect, 2),
-      }
-      label.style.font = "default-bold"
-      if effect == "quality" then
-        label.caption = "[img=info] " .. label.caption
-        label.tooltip = {"beacon-interface.quality-tooltip"}
-      end
-
-      flow.add{
-        type = "slider",
-        name = "slider",
-        minimum_value = -#slider_steps,
-        maximum_value =  #slider_steps,
-        value = get_slider_step_from_number(struct.effects[effect]),
-        tags = {
-          action = mod_prefix .. "slider-value-changed",
-          effect = effect,
-        }
-      }
-
-      local textfield = flow.add{
-        type = "textfield",
-        name = "textfield",
-        text = tostring(struct.effects[effect]),
-        numeric = true,
-        allow_negative = true,
-        tags = {
-          action = mod_prefix .. "textfield-text-changed",
-          effect = effect,
-        }
-      }
-      textfield.style.width = 100
-      textfield.style.horizontal_align = "center"
-
+    local label = flow.add{
+      type = "label",
+      caption = string.upper(string.sub(effect, 1, 1)) .. string.sub(effect, 2),
+    }
+    label.style.font = "default-bold"
+    if effect == "quality" then
+      label.caption = "[img=info] " .. label.caption
+      label.tooltip = {"beacon-interface.quality-tooltip"}
     end
+
+    flow.add{
+      type = "slider",
+      name = "slider",
+      minimum_value = -#slider_steps,
+      maximum_value =  #slider_steps,
+      value = get_slider_step_from_number(struct.effects[effect]),
+      tags = {
+        action = mod_prefix .. "slider-value-changed",
+        effect = effect,
+      }
+    }
+
+    local textfield = flow.add{
+      type = "textfield",
+      name = "textfield",
+      text = tostring(struct.effects[effect]),
+      numeric = true,
+      allow_negative = true,
+      tags = {
+        action = mod_prefix .. "textfield-text-changed",
+        effect = effect,
+      }
+    }
+    textfield.style.width = 100
+    textfield.style.horizontal_align = "center"
+  end
+
+  player.opened = frame
+  frame.force_auto_center()
+end
+
+script.on_event(mod_prefix .. "open-gui", function(event)
+  local selected_prototype = event.selected_prototype --[[@as SelectedPrototypeData?]]
+  if selected_prototype and selected_prototype.base_type == "entity" and selected_prototype.name == mod_prefix .. "beacon" then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    local beacon = player.surface.find_entity(mod_prefix .. "beacon", event.cursor_position)
+    if beacon then
+      open_gui(beacon, player)
+    end
+  end
+end)
+
+script.on_event(defines.events.on_gui_closed, function(event)
+  if event.element and event.element.name == gui_frame_name then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    event.element.destroy()
   end
 end)
 
@@ -223,7 +235,7 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
   local tags = event.element.tags
   if tags and tags.action == mod_prefix .. "slider-value-changed" then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    local frame = player.gui.relative[gui_frame_name]
+    local frame = player.gui.screen[gui_frame_name]
     if frame then
       local step = 0
       if 0 > event.element.slider_value then
@@ -241,7 +253,7 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
   local tags = event.element.tags
   if tags and tags.action == mod_prefix .. "textfield-text-changed" then
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    local frame = player.gui.relative[gui_frame_name]
+    local frame = player.gui.screen[gui_frame_name]
     if frame then
       local strength = tonumber(event.element.text) or 0
       if strength > shared.max_strength then
@@ -294,24 +306,6 @@ script.on_event(defines.events.on_marked_for_deconstruction, function(event)
   struct.inventory.clear()
   struct.effects = shared.get_empty_effects()
 end, on_created_entity_filters)
-
-local function move_modules_from_inventory(inventory_from, inventory_to)
-  for _, item in ipairs(inventory_from.get_contents()) do
-    if shared.module_name_to_effect_and_strength[item.name] ~= nil then
-      inventory_from.remove(item)
-      inventory_to.insert(item)
-    end
-  end
-end
-
-script.on_event(defines.events.on_player_fast_transferred, function(event)
-  if event.from_player == false and event.entity.name == mod_prefix .. "beacon" then
-    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    local beacon = event.entity.get_inventory(defines.inventory.beacon_modules)
-    move_modules_from_inventory(player.get_inventory(defines.inventory.character_main), beacon)
-    move_modules_from_inventory(player.get_inventory(defines.inventory.character_trash), beacon)
-  end
-end)
 
 commands.add_command("beacon-interface-selftest", "- Check if the bit modules are able to make up every strength.", function(command)
   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
