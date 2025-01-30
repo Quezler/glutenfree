@@ -12,6 +12,7 @@ Date: ????
     - Set beacon effects based on blueprint tags
     - Fix slider being in the wrong position when opening the gui
     - Support cloning
+    - Fix module lamp base pixels still being visible
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 01. 29
