@@ -13,6 +13,7 @@ Date: ????
     - Fix slider being in the wrong position when opening the gui
     - Support cloning
     - Fix module lamp base pixels still being visible
+    - Update description and dependencies
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 01. 29

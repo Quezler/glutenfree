@@ -1,7 +1,7 @@
 {
     "name": "beacon-interface",
     "title": "Beacon interface",
-    "description": "Beacon with configurable effects in the control stage.",
+    "description": "Beacon with sliders for all 5 of the effects, from min all the way to max.",
 
     "version": "0.0.4",
     "author": "Quezler",
@@ -18,7 +18,7 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "? base",
+        "base",
         "? quality",
         "? space-age"
     ]
