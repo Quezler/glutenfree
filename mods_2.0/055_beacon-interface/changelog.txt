@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Luaplayer -> LuaPlayer
     - Prepare to swap modules with tags in blueprints
+    - Rename the modules
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 01. 29

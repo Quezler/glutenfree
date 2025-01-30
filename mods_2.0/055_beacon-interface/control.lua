@@ -181,12 +181,13 @@ function refresh_effects(struct)
   struct.inventory.clear()
   for effect, value in pairs(struct.effects) do
     if 0 > value then
-      struct.inventory.insert({name = string.format(mod_prefix .. "module-%s-%d", effect, 16)})
+      struct.inventory.insert({name = string.format(mod_prefix .. "%s-module-16", effect)})
     end
     local bits = get_bits(value)
     for i, bit in ipairs(bits) do
       if bit == 1 then
-        local module_name = string.format(mod_prefix .. "module-%s-%d", effect, i)
+        local two_character_number = string.format("%02d", i)
+        local module_name = string.format(mod_prefix .. "%s-module-%s", effect, two_character_number)
         assert(struct.inventory.insert({name = module_name}), module_name)
       end
     end

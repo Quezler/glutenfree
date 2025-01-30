@@ -42,11 +42,11 @@ for _, effect in ipairs(shared.effects) do
 
     local module = {
       type = "module",
-      name = string.format(mod_prefix .. "module-%s-%d", effect, i),
+      name = string.format(mod_prefix .. "%s-module-%s", effect, two_character_number),
       icons = icons,
 
-      order = string.format("[%s]%s", effect, two_character_number),
-      localised_name = {"item-name." .. mod_prefix .. "module", effect, tostring(i)},
+      order = string.format(mod_prefix .. "%s-module-%s", effect, two_character_number),
+      localised_name = {"item-name." .. mod_prefix .. "module", effect, two_character_number},
 
       stack_size = 1,
       flags = {"not-stackable"},
