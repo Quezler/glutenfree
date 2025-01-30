@@ -14,11 +14,13 @@ entity.icons = icons
 entity.module_slots = 16 * 5 -- there will be 16 "bits" at most per effect, and there are 5 effects
 entity.graphics_set.module_visualisations = nil
 entity.graphics_set.animation_list[1].animation.layers[1].filename = "__beacon-interface__/graphics/entity/beacon-interface/beacon-interface-bottom.png"
-table.insert(entity.flags, "hide-alt-info")
 entity.allowed_effects = shared.effects
 entity.allowed_module_categories = {mod_prefix .. "module-category"}
 entity.distribution_effectivity = 1
 entity.distribution_effectivity_bonus_per_quality_level = 0
+entity.icons_positioning = {
+  {inventory_index = defines.inventory.beacon_modules, scale = 0},
+}
 
 local item = table.deepcopy(data.raw["item"]["beacon"])
 item.name = mod_prefix .. "beacon"
