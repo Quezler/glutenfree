@@ -23,6 +23,7 @@ Date: ????
     - Add configurable base quality ("items per next quality")
     - `draw_as_glow = true`
     - Add an inserter that waits for 5 seconds
+    - Increase selection area
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10

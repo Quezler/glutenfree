@@ -23,8 +23,8 @@ local crafter_entity = {
   icon = skin.icon,
 
   selection_priority = 51,
-  drawing_box_vertical_extension = 1.0,
-  selection_box = {{-3, -3}, {3, 3}},
+  drawing_box_vertical_extension = 0.5,
+  selection_box = {{-3.5, -3.5}, {3.5, 3.5}},
   collision_box = table.deepcopy(a_9x9_entity.collision_box),
   health = 2500,
 
