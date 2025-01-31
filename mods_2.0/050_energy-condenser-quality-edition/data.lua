@@ -59,7 +59,7 @@ local crafter_entity = {
   minable = table.deepcopy(a_9x9_entity.minable),
   quality_indicator_scale = 0,
 
-  flags = {"player-creation", "no-automated-item-insertion", "no-automated-item-extraction"},
+  flags = {"player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
 }
 
 local crafter_item = {

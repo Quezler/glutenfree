@@ -26,6 +26,7 @@ Date: ????
     - Increase selection area
     - Prevent highlighting by inserters
     - Only match the tick to make re-arming simpler
+    - Fix flag typo
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10
