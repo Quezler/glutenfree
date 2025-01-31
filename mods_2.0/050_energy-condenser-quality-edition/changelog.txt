@@ -24,6 +24,7 @@ Date: ????
     - `draw_as_glow = true`
     - Add an inserter that waits for 5 seconds
     - Increase selection area
+    - Prevent highlighting by inserters
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10
