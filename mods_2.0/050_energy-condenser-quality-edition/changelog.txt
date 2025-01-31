@@ -15,6 +15,7 @@ Date: ????
     - Get a reset pulse every time the sum changes
     - Add the counter itself
     - Tuck the combinator setup away in another file
+    - Rebrand from quality disruptor to quality condenser
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10

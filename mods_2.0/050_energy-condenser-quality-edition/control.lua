@@ -1,4 +1,4 @@
-mod_prefix = "quality-disruptor--"
+mod_prefix = "quality-condenser--"
 
 local Combinators = require("scripts.combinators")
 
@@ -12,7 +12,7 @@ end
 local Handler = {}
 
 script.on_init(function()
-  storage.surface = game.planets["quality-disruptor"].create_surface()
+  storage.surface = game.planets["quality-condenser"].create_surface()
   storage.surface.generate_with_lab_tiles = true
 
   storage.surface.create_global_electric_network()

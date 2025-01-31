@@ -3,7 +3,7 @@ local sounds = require("__base__.prototypes.entity.sounds")
 local a_9x9_entity = data.raw["rocket-silo"]["rocket-silo"]
 local a_3x3_entity = data.raw["assembling-machine"]["assembling-machine-2"]
 
-mod_prefix = "quality-disruptor--"
+mod_prefix = "quality-condenser--"
 mod_directory = "__energy-condenser-quality-edition__"
 
 local crafter_entity = {
@@ -54,7 +54,7 @@ local crafter_item = {
   icon = mod_directory .. "/graphics/disruptor/disruptor-icon.png",
 
   stack_size = 10,
-  order = "e[quality-disruptor--furnace]",
+  order = "e[quality-condenser--crafter]",
   subgroup = "smelting-machine",
 
   weight = 200 * kg,
