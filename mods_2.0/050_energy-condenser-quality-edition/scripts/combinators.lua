@@ -200,7 +200,7 @@ function Combinators.create_for_struct(struct)
   inserter_1_cb = struct.inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
   inserter_1_cb.circuit_enable_disable = true
   inserter_1_cb.circuit_condition = {
-    comparator = ">",
+    comparator = "=",
     constant = 60 * 5,
     first_signal = {
       name = "signal-T",
