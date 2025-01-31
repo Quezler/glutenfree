@@ -42,6 +42,8 @@ function Handler.on_created_entity(event)
     inserter_1 = nil, -- T = ?
   })
 
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {"crafter", struct.id}
+
   struct.container = entity.surface.create_entity{
     name = mod_prefix .. "container",
     force = entity.force,
@@ -67,3 +69,21 @@ for _, event in ipairs({
     {filter = "name", name = mod_prefix .. "crafter"},
   })
 end
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+
+    if deathrattle[1] == "crafter" then
+      local struct = storage.structs[deathrattle[2]]
+      struct.arithmetic_1.destroy()
+      struct.arithmetic_2.destroy()
+      struct.decider_1.destroy()
+      struct.decider_2.destroy()
+      struct.inserter_1.destroy()
+      storage.structs[struct.id] = nil
+    else
+      error(serpent.block(deathrattle))
+    end
+  end
+end)

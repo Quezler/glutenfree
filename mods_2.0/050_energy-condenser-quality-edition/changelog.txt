@@ -27,6 +27,7 @@ Date: ????
     - Prevent highlighting by inserters
     - Only match the tick to make re-arming simpler
     - Fix flag typo
+    - Clean up the combinators upon deathrattle
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10
