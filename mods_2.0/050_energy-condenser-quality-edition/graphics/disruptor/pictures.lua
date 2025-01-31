@@ -1,6 +1,4 @@
 
-local mod_directory = "__energy-condenser-quality-edition__"
-
 local graphics_set = {
   animation =
   {

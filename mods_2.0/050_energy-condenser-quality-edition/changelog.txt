@@ -16,6 +16,7 @@ Date: ????
     - Add the counter itself
     - Tuck the combinator setup away in another file
     - Rebrand from quality disruptor to quality condenser
+    - Add research center skin (as an option)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10

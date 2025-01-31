@@ -1,15 +1,26 @@
+require("shared")
+
 local sounds = require("__base__.prototypes.entity.sounds")
 
 local a_9x9_entity = data.raw["rocket-silo"]["rocket-silo"]
 local a_3x3_entity = data.raw["assembling-machine"]["assembling-machine-2"]
 
-mod_prefix = "quality-condenser--"
-mod_directory = "__energy-condenser-quality-edition__"
+local skins = {
+  ["Disruptor"] = {
+    icon = mod_directory .. "/graphics/disruptor/disruptor-icon.png",
+    graphics_set = require("graphics.disruptor.pictures").graphics_set,
+  },
+  ["Research center"] = {
+    icon = mod_directory .. "/graphics/research-center/research-center-icon.png",
+    graphics_set = require("graphics.research-center.pictures").graphics_set,
+  },
+}
+local skin = skins[settings.startup[mod_prefix .. "skin"].value]
 
 local crafter_entity = {
   type = "assembling-machine",
   name = mod_prefix .. "crafter",
-  icon = mod_directory .. "/graphics/disruptor/disruptor-icon.png",
+  icon = skin.icon,
 
   selection_priority = 51,
   drawing_box_vertical_extension = 0.5,
@@ -35,7 +46,7 @@ local crafter_entity = {
   fixed_quality = "normal",
   icon_draw_specification = {shift = {0, 0}, scale = 2},
 
-  graphics_set = require("graphics.disruptor.pictures").graphics_set,
+  graphics_set = skin.graphics_set,
   perceived_performance = {minimum = 1},
 
   open_sound = sounds.machine_open,
@@ -51,7 +62,7 @@ local crafter_entity = {
 local crafter_item = {
   type = "item",
   name = mod_prefix .. "crafter",
-  icon = mod_directory .. "/graphics/disruptor/disruptor-icon.png",
+  icon = skin.icon,
 
   stack_size = 10,
   order = "e[quality-condenser--crafter]",
@@ -83,7 +94,7 @@ data:extend({crafter_entity, crafter_item, crafter_recipe})
 local container_entity = {
   type = "container",
   name = mod_prefix .. "container",
-  icon = mod_directory .. "/graphics/disruptor/disruptor-icon.png",
+  icon = skin.icon,
 
   inventory_size = 20,
   inventory_type = "normal",
