@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Resume development
+    - Do not drop a rocket silo
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10

@@ -94,5 +94,6 @@ local container_entity = {
 
   minable = table.deepcopy(a_9x9_entity.minable),
 }
+container_entity.minable.result = nil
 
 data:extend({container_entity})
