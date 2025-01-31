@@ -3,8 +3,8 @@ local sounds = require("__base__.prototypes.entity.sounds")
 local a_9x9_entity = data.raw["rocket-silo"]["rocket-silo"]
 local a_3x3_entity = data.raw["assembling-machine"]["assembling-machine-2"]
 
-local mod_prefix = "quality-disruptor--"
-local mod_directory = "__energy-condenser-quality-edition__"
+mod_prefix = "quality-disruptor--"
+mod_directory = "__energy-condenser-quality-edition__"
 
 local furnace_entity = {
   type = "furnace",
@@ -97,3 +97,5 @@ local container_entity = {
 container_entity.minable.result = nil
 
 data:extend({container_entity})
+
+require("prototypes.surface")
