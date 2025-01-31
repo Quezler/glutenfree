@@ -21,6 +21,7 @@ Date: ????
     - Step away from the timing approach, broken code
     - Hidden tweaks
     - Experiment with dropping into itself first
+    - Prepare the recipe icon
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 14

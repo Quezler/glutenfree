@@ -99,3 +99,21 @@ container_entity.minable.result = nil
 data:extend({container_entity})
 
 require("prototypes.surface")
+
+-- uncomment only to generate a fancy recycling icon, the quality mod itself remains an optional dependency
+-- require("__quality__.prototypes.recycling")
+-- error(serpent.block(generate_recycling_recipe_icons_from_item({
+--   icon = "__core__/graphics/icons/any-quality.png",
+-- })))
+local icons = {
+  {
+    icon = mod_directory .. "/graphics/icons/recycling.png"
+  },
+  {
+    icon = "__core__/graphics/icons/any-quality.png",
+    scale = 0.4
+  },
+  {
+    icon = mod_directory .. "__quality__/graphics/icons/recycling-top.png"
+  }
+}
