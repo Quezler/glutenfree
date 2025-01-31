@@ -29,7 +29,7 @@ local crafter_entity = {
   health = 2500,
 
   module_slots = 3,
-  effect_receiver = { base_effect = { quality = 1 }},
+  effect_receiver = { base_effect = { quality = settings.startup[mod_prefix .. "base-quality"].value / 100 }},
   allowed_effects = {"consumption", "speed", "pollution", "quality"},
 
   crafting_speed = 2,
