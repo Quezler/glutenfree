@@ -5,6 +5,7 @@ Date: ????
     - Resume development
     - Do not drop a rocket silo
     - Setup the hidden surface
+    - Sum the total items inside with circuits
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10
