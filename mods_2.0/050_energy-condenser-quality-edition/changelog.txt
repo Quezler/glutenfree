@@ -19,6 +19,7 @@ Date: ????
     - Add research center skin (as an option)
     - Hide the alt recipe icon
     - Use automated insertion!
+    - Render the modules large and offset
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10
