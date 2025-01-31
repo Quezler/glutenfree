@@ -78,7 +78,7 @@ function Combinators.create_for_struct(struct)
     direction = defines.direction.north,
   }
   assert(struct.decider_1)
-  decider_1_cb = struct.decider_1.get_control_behavior() --[[@as LuaArithmeticCombinatorControlBehavior]]
+  decider_1_cb = struct.decider_1.get_control_behavior() --[[@as LuaDeciderCombinatorControlBehavior]]
   decider_1_cb.parameters = {
     conditions = {
       {
@@ -133,7 +133,7 @@ function Combinators.create_for_struct(struct)
     direction = defines.direction.north,
   }
   assert(struct.decider_2)
-  decider_2_cb = struct.decider_2.get_control_behavior() --[[@as LuaArithmeticCombinatorControlBehavior]]
+  decider_2_cb = struct.decider_2.get_control_behavior() --[[@as LuaDeciderCombinatorControlBehavior]]
   decider_2_cb.parameters = {
     conditions = {
       {
@@ -188,6 +188,31 @@ function Combinators.create_for_struct(struct)
     local green = struct.decider_2.get_wire_connector(defines.wire_connector_id.combinator_output_green, false) --[[@as LuaWireConnector]]
     local green_in = struct.decider_2.get_wire_connector(defines.wire_connector_id.combinator_input_green, false) --[[@as LuaWireConnector]]
     assert(green.connect_to(green_in, false, defines.wire_origin.player))
+  end
+
+  struct.inserter_1 = storage.surface.create_entity{
+    name = "inserter",
+    force = "neutral",
+    position = {0.5 + storage.index, -9.0},
+    direction = defines.direction.north,
+  }
+  assert(struct.inserter_1)
+  inserter_1_cb = struct.inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
+  inserter_1_cb.circuit_enable_disable = true
+  inserter_1_cb.circuit_condition = {
+    comparator = ">",
+    constant = 60 * 5,
+    first_signal = {
+      name = "signal-T",
+      type = "virtual"
+    },
+    fulfilled = false
+  }
+
+  do
+    local green_out = struct.decider_2.get_wire_connector(defines.wire_connector_id.combinator_output_green, false) --[[@as LuaWireConnector]]
+    local green_in = struct.inserter_1.get_wire_connector(defines.wire_connector_id.circuit_green, false) --[[@as LuaWireConnector]]
+    assert(green_out.connect_to(green_in, false, defines.wire_origin.player))
   end
 end
 

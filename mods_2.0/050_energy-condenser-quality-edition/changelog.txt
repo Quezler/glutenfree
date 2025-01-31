@@ -22,6 +22,7 @@ Date: ????
     - Render the modules large and offset
     - Add configurable base quality ("items per next quality")
     - `draw_as_glow = true`
+    - Add an inserter that waits for 5 seconds
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10

@@ -39,6 +39,7 @@ function Handler.on_created_entity(event)
     arithmetic_2 = nil, -- each + 0 = each
     decider_1 = nil, -- red T != green T | R 1
     decider_2 = nil, -- R == 0 | T = T + 1
+    inserter_1 = nil, -- T > 300
   })
 
   struct.container = entity.surface.create_entity{
