@@ -10,6 +10,7 @@ Date: ????
     - Prepare the recipe icon
     - Lock the quality disruptor to an "any quality" recipe
     - Test with the repair pack
+    - Make the entity blueprintable
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10

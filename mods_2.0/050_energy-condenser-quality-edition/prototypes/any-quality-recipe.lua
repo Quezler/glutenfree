@@ -26,7 +26,7 @@ local recipe = {
     }
   },
   category = recipe_category.name,
-  enabled = false,
+  enabled = true,
   auto_recycle = false,
   energy_required = 30,
   ingredients = {{type = "item", name = "repair-pack", amount = 1}},

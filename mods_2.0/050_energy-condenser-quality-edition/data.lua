@@ -44,6 +44,8 @@ local furnace_entity = {
 
   minable = table.deepcopy(a_9x9_entity.minable),
   quality_indicator_scale = 0,
+
+  flags = {"player-creation"},
 }
 
 local furnace_item = {
