@@ -11,20 +11,20 @@ local recipe_category = {
 
 local recipe = {
   type = "recipe",
-  name = mod_prefix .. "any-quality",
-  localised_name = {"virtual-signal-name.signal-any-quality"},
-  icons = {
-    {
-      icon = mod_directory .. "/graphics/icons/recycling.png"
-    },
-    {
-      icon = "__core__/graphics/icons/any-quality.png",
-      scale = 0.4
-    },
-    {
-      icon = mod_directory .. "/graphics/icons/recycling-top.png"
-    }
-  },
+  name = mod_prefix .. "recipe",
+  -- icons = {
+  --   {
+  --     icon = mod_directory .. "/graphics/icons/recycling.png"
+  --   },
+  --   {
+  --     icon = data.raw["assembling-machine"][mod_prefix .. "crafter"].icon,
+  --     scale = 0.4
+  --   },
+  --   {
+  --     icon = mod_directory .. "/graphics/icons/recycling-top.png"
+  --   }
+  -- },
+  icon = data.raw["assembling-machine"][mod_prefix .. "crafter"].icon,
   category = recipe_category.name,
   enabled = true,
   auto_recycle = false,

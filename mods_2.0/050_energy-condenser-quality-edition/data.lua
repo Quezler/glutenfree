@@ -23,7 +23,7 @@ local crafter_entity = {
   icon = skin.icon,
 
   selection_priority = 51,
-  drawing_box_vertical_extension = 0.5,
+  drawing_box_vertical_extension = 1.0,
   selection_box = {{-3, -3}, {3, 3}},
   collision_box = table.deepcopy(a_9x9_entity.collision_box),
   health = 2500,
@@ -42,9 +42,9 @@ local crafter_entity = {
   energy_usage = "2500kW",
 
   crafting_categories = {mod_prefix .. "recipe-category"},
-  fixed_recipe = mod_prefix .. "any-quality",
+  fixed_recipe = mod_prefix .. "recipe",
   fixed_quality = "normal",
-  icon_draw_specification = {shift = {0, 0}, scale = 2},
+  icon_draw_specification = {scale = 0},
 
   graphics_set = skin.graphics_set,
   perceived_performance = {minimum = 1},
@@ -111,4 +111,4 @@ container_entity.minable.result = nil
 data:extend({container_entity})
 
 require("prototypes.surface")
-require("prototypes.any-quality-recipe")
+require("prototypes.recipe")
