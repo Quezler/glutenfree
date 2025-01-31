@@ -4,7 +4,7 @@ function Combinators.create_for_struct(struct)
   struct.arithmetic_1 = storage.surface.create_entity{
     name = "arithmetic-combinator",
     force = "neutral",
-    position = {0.5 + storage.index, -1.0},
+    position = {0.5 + struct.index, -1.0},
     direction = defines.direction.north,
   }
   assert(struct.arithmetic_1)
@@ -39,7 +39,7 @@ function Combinators.create_for_struct(struct)
   struct.arithmetic_2 = storage.surface.create_entity{
     name = "arithmetic-combinator",
     force = "neutral",
-    position = {0.5 + storage.index, -3.0},
+    position = {0.5 + struct.index, -3.0},
     direction = defines.direction.north,
   }
   assert(struct.arithmetic_2)
@@ -74,7 +74,7 @@ function Combinators.create_for_struct(struct)
   struct.decider_1 = storage.surface.create_entity{
     name = "decider-combinator",
     force = "neutral",
-    position = {0.5 + storage.index, -5.0},
+    position = {0.5 + struct.index, -5.0},
     direction = defines.direction.north,
   }
   assert(struct.decider_1)
@@ -129,7 +129,7 @@ function Combinators.create_for_struct(struct)
   struct.decider_2 = storage.surface.create_entity{
     name = "decider-combinator",
     force = "neutral",
-    position = {0.5 + storage.index, -7.0},
+    position = {0.5 + struct.index, -7.0},
     direction = defines.direction.north,
   }
   assert(struct.decider_2)
@@ -193,7 +193,7 @@ function Combinators.create_for_struct(struct)
   struct.inserter_1 = storage.surface.create_entity{
     name = "inserter",
     force = "neutral",
-    position = {0.5 + storage.index, -9.0},
+    position = {0.5 + struct.index, -9.0},
     direction = defines.direction.north,
   }
   assert(struct.inserter_1)
