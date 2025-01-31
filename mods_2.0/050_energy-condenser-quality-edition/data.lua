@@ -7,7 +7,7 @@ mod_prefix = "quality-disruptor--"
 mod_directory = "__energy-condenser-quality-edition__"
 
 local furnace_entity = {
-  type = "furnace",
+  type = "assembling-machine",
   name = mod_prefix .. "furnace",
   icon = mod_directory .. "/graphics/disruptor/disruptor-icon.png",
 
@@ -16,10 +16,6 @@ local furnace_entity = {
   selection_box = {{-3, -3}, {3, 3}},
   collision_box = table.deepcopy(a_9x9_entity.collision_box),
   health = 2500,
-
-  source_inventory_size = 1,
-  result_inventory_size = 1,
-  -- custom_input_slot_tooltip_key
 
   module_slots = 3,
   effect_receiver = { base_effect = { quality = 1 }},
@@ -34,7 +30,10 @@ local furnace_entity = {
   },
   energy_usage = "2500kW",
 
-  crafting_categories = data.raw["furnace"]["recycler"].crafting_categories,
+  crafting_categories = {mod_prefix .. "recipe-category"},
+  fixed_recipe = mod_prefix .. "any-quality",
+  fixed_quality = "normal",
+  icon_draw_specification = {shift = {0, 0}, scale = 2},
 
   graphics_set = require("graphics.disruptor.pictures").graphics_set,
   perceived_performance = {minimum = 1},
@@ -99,21 +98,4 @@ container_entity.minable.result = nil
 data:extend({container_entity})
 
 require("prototypes.surface")
-
--- uncomment only to generate a fancy recycling icon, the quality mod itself remains an optional dependency
--- require("__quality__.prototypes.recycling")
--- error(serpent.block(generate_recycling_recipe_icons_from_item({
---   icon = "__core__/graphics/icons/any-quality.png",
--- })))
-local icons = {
-  {
-    icon = mod_directory .. "/graphics/icons/recycling.png"
-  },
-  {
-    icon = "__core__/graphics/icons/any-quality.png",
-    scale = 0.4
-  },
-  {
-    icon = mod_directory .. "__quality__/graphics/icons/recycling-top.png"
-  }
-}
+require("prototypes.any-quality-recipe")

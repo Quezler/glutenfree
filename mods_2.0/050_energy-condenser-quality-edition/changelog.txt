@@ -8,6 +8,7 @@ Date: ????
     - Sum the total items inside with circuits
     - Add note about the machine being ticked
     - Prepare the recipe icon
+    - Lock the quality disruptor to an "any quality" recipe
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10
