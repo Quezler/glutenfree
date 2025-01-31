@@ -6,9 +6,9 @@ local a_3x3_entity = data.raw["assembling-machine"]["assembling-machine-2"]
 mod_prefix = "quality-disruptor--"
 mod_directory = "__energy-condenser-quality-edition__"
 
-local furnace_entity = {
+local crafter_entity = {
   type = "assembling-machine",
-  name = mod_prefix .. "furnace",
+  name = mod_prefix .. "crafter",
   icon = mod_directory .. "/graphics/disruptor/disruptor-icon.png",
 
   selection_priority = 51,
@@ -48,9 +48,9 @@ local furnace_entity = {
   flags = {"player-creation"},
 }
 
-local furnace_item = {
+local crafter_item = {
   type = "item",
-  name = mod_prefix .. "furnace",
+  name = mod_prefix .. "crafter",
   icon = mod_directory .. "/graphics/disruptor/disruptor-icon.png",
 
   stack_size = 10,
@@ -60,12 +60,12 @@ local furnace_item = {
   weight = 200 * kg,
 }
 
-furnace_item.place_result = furnace_entity.name
-furnace_entity.minable = {mining_time = 0.3, result = furnace_item.name}
+crafter_item.place_result = crafter_entity.name
+crafter_entity.minable = {mining_time = 0.3, result = crafter_item.name}
 
-local furnace_recipe = {
+local crafter_recipe = {
   type = "recipe",
-  name = mod_prefix .. "furnace",
+  name = mod_prefix .. "crafter",
   ingredients =
   {
     {type = "item", name = "assembling-machine-2", amount = 9},
@@ -73,12 +73,12 @@ local furnace_recipe = {
     {type = "item", name = "battery", amount = 50},
     {type = "item", name = "iron-gear-wheel", amount = 25},
   },
-  results = {{type="item", name=furnace_item.name, amount=1}},
+  results = {{type="item", name=crafter_item.name, amount=1}},
   energy_required = 3,
   enabled = true,
 }
 
-data:extend({furnace_entity, furnace_item, furnace_recipe})
+data:extend({crafter_entity, crafter_item, crafter_recipe})
 
 local container_entity = {
   type = "container",
