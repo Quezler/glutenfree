@@ -6,6 +6,7 @@ Date: ????
     - Do not drop a rocket silo
     - Setup the hidden surface
     - Sum the total items inside with circuits
+    - Add note about the machine being ticked
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10
