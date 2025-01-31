@@ -29,7 +29,7 @@ local recipe = {
   enabled = false,
   auto_recycle = false,
   energy_required = 30,
-  ingredients = {{type = "item", name = "scrap", amount = 1}},
+  ingredients = {{type = "item", name = "repair-pack", amount = 1}},
   results = {},
   hidden = true,
 }
