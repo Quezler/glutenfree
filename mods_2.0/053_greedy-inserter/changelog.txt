@@ -22,6 +22,7 @@ Date: ????
     - Hidden tweaks
     - Experiment with dropping into itself first
     - Prepare the recipe icon
+    - Move the recycling icons to the correct mod
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 01. 14
