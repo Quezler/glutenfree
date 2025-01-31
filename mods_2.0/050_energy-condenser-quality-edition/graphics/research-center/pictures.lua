@@ -46,33 +46,7 @@ local graphics_set = {
         frame_count = 80,
         animation_speed = 0.5,
         scale = 0.5,
-        draw_as_light = false, -- daytime
-        blend_mode = "additive",
-        stripes =
-        {
-          {
-            filename = mod_directory .. "/graphics/research-center/research-center-hr-emission-1.png",
-            width_in_frames = 8,
-            height_in_frames = 8,
-          },
-          {
-            filename = mod_directory .. "/graphics/research-center/research-center-hr-emission-2.png",
-            width_in_frames = 8,
-            height_in_frames = 2,
-          },
-        },
-      },
-    },
-    {
-      fadeout = true,
-      animation = {
-        priority = "high",
-        width = 4720 / 8,
-        height = 5120 / 8,
-        frame_count = 80,
-        animation_speed = 0.5,
-        scale = 0.5,
-        draw_as_light = true, -- nighttime
+        draw_as_glow = true,
         blend_mode = "additive",
         stripes =
         {
