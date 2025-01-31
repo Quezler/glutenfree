@@ -13,6 +13,7 @@ Date: ????
     - Make the entity blueprintable
     - Rename furnace to crafter
     - Get a reset pulse every time the sum changes
+    - Add the counter itself
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10

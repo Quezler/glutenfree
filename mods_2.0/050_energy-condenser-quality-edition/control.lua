@@ -35,7 +35,8 @@ function Handler.on_created_entity(event)
     container = nil,
     arithmetic_1 = nil, -- each + 0 = S
     arithmetic_2 = nil, -- each + 0 = each
-    decider_1 = nil, -- red T != green T = R 1
+    decider_1 = nil, -- red T != green T | R 1
+    decider_2 = nil, -- R == 0 | T = T + 1
   })
 
   struct.container = entity.surface.create_entity{
@@ -168,6 +169,70 @@ function Handler.on_created_entity(event)
     local red_in = struct.decider_1.get_wire_connector(defines.wire_connector_id.combinator_input_red, false) --[[@as LuaWireConnector]]
     local green_in = struct.decider_1.get_wire_connector(defines.wire_connector_id.combinator_input_green, false) --[[@as LuaWireConnector]]
     assert(red.connect_to(red_in, false, defines.wire_origin.player))
+    assert(green.connect_to(green_in, false, defines.wire_origin.player))
+  end
+
+  struct.decider_2 = storage.surface.create_entity{
+    name = "decider-combinator",
+    force = "neutral",
+    position = {0.5 + storage.index, -7.0},
+    direction = defines.direction.north,
+  }
+  assert(struct.decider_2)
+  decider_2_cb = struct.decider_2.get_control_behavior() --[[@as LuaArithmeticCombinatorControlBehavior]]
+  decider_2_cb.parameters = {
+    conditions = {
+      {
+        comparator = "=",
+        compare_type = "or",
+        constant = 0,
+        first_signal = {
+          name = "signal-R",
+          type = "virtual"
+        },
+        first_signal_networks = {
+          green = true,
+          red = true
+        },
+        second_signal_networks = {
+          green = true,
+          red = true
+        }
+      }
+    },
+    outputs = {
+      {
+        copy_count_from_input = true,
+        networks = {
+          green = true,
+          red = true
+        },
+        signal = {
+          name = "signal-T",
+          type = "virtual"
+        }
+      },
+      {
+        copy_count_from_input = false,
+        networks = {
+          green = true,
+          red = true
+        },
+        signal = {
+          name = "signal-T",
+          type = "virtual"
+        }
+      }
+    }
+  }
+
+  do
+    local red = struct.decider_1.get_wire_connector(defines.wire_connector_id.combinator_output_red, false) --[[@as LuaWireConnector]]
+    local red_in = struct.decider_2.get_wire_connector(defines.wire_connector_id.combinator_input_red, false) --[[@as LuaWireConnector]]
+    assert(red.connect_to(red_in, false, defines.wire_origin.player))
+
+    local green = struct.decider_2.get_wire_connector(defines.wire_connector_id.combinator_output_green, false) --[[@as LuaWireConnector]]
+    local green_in = struct.decider_2.get_wire_connector(defines.wire_connector_id.combinator_input_green, false) --[[@as LuaWireConnector]]
     assert(green.connect_to(green_in, false, defines.wire_origin.player))
   end
 
