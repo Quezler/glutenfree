@@ -14,6 +14,7 @@ Date: ????
     - Rename furnace to crafter
     - Get a reset pulse every time the sum changes
     - Add the counter itself
+    - Tuck the combinator setup away in another file
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10
