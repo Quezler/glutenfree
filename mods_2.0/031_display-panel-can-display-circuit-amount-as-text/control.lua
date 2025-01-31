@@ -39,7 +39,9 @@ local function refresh_always_show_and_show_in_chart(struct)
 
   inventory.destroy()
 
+  ---@diagnostic disable-next-line: undefined-field
   struct.always_show = display_panel.always_show == true
+  ---@diagnostic disable-next-line: undefined-field
   struct.show_in_chart = display_panel.show_in_chart == true
   -- game.print(serpent.line({always_show = struct.always_show, show_in_chart = struct.show_in_chart}))
 
