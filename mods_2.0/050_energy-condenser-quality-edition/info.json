@@ -1,6 +1,6 @@
 {
     "name": "energy-condenser-quality-edition",
-    "title": "Energy condenser: quality edition",
+    "title": "Quality disruptor",
     "description": "The spiritual successor to the upcycler mod, which was the spirital successor to the awesome sink.",
 
     "version": "0.0.2",
@@ -20,6 +20,8 @@
 
         "base",
         "quality",
-        "? space-age"
+        "? space-age",
+
+        "beacon-interface"
     ]
 }
