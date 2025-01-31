@@ -18,6 +18,7 @@ Date: ????
     - Rebrand from quality disruptor to quality condenser
     - Add research center skin (as an option)
     - Hide the alt recipe icon
+    - Use automated insertion!
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10
