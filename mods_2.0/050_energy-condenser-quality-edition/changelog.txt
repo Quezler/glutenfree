@@ -12,6 +12,7 @@ Date: ????
     - Test with the repair pack
     - Make the entity blueprintable
     - Rename furnace to crafter
+    - Get a reset pulse every time the sum changes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 01. 10
