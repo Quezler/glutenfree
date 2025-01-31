@@ -41,6 +41,14 @@ function force_insert(inventory, item)
 end
 
 function TickHandler.update_struct(struct)
+  -- rendering.draw_circle{
+  --   color = {1, 1, 1},
+  --   filled = true,
+  --   radius = 0.25,
+  --   surface = struct.entities.upcycler.surface,
+  --   target = struct.entities.upcycler,
+  --   time_to_live = 10,
+  -- }
   local control_behavior = struct.entities.decider.get_control_behavior()
   local green_network = struct.entities.decider.get_circuit_network(defines.wire_connector_id.combinator_output_green)
 
