@@ -1,4 +1,5 @@
 require("shared")
+
 local Hurricane = require("graphics.hurricane")
 
 local a_5x5_entity = data.raw["reactor"]["nuclear-reactor"]
@@ -20,6 +21,8 @@ local gravity_assembler = Hurricane.crafter({
 entity.icon = gravity_assembler.icon
 entity.graphics_set = gravity_assembler.graphics_set
 
-entity.icon_draw_specification = {shift = {0, -0.375}, scale = 1.5},
+entity.icon_draw_specification = {shift = {0, -0.375}, scale = 1.5}
+entity.fluid_boxes = nil
+-- entity.circuit_wire_max_distance = nil
 
 data:extend{entity}
