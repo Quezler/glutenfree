@@ -69,8 +69,8 @@ end
 local technology = {
   type = "technology",
   name = "apprentice-assembler",
-  icon = mod_directory .. "/graphics/gravity-assembler/gravity-assembler-icon-big.png",
-  icon_size = 640,
+  icon = mod_directory .. "/graphics/technology/gravity-assembler.png",
+  icon_size = 256,
   effects =
   {
     {
