@@ -11,6 +11,7 @@ Date: ????
     - Hook up the beacon interface
     - Optimize beacon interface calls
     - Explain the current cap
+    - Add thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 01
