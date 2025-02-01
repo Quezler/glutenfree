@@ -13,6 +13,7 @@ Date: ????
     - Explain the current cap
     - Add thumbnail
     - Note machine quality
+    - Module positioning
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 01

@@ -46,7 +46,7 @@ local crafter_entity = {
   fixed_quality = "normal",
   icon_draw_specification = {scale = 0},
   icons_positioning = {
-    {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 2.0}, scale = 1}
+    {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 2.0}, scale = 1},
   },
 
   graphics_set = skin.graphics_set,
