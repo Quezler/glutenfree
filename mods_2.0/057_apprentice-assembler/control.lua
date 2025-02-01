@@ -129,6 +129,13 @@ end
 local function stopped_working(struct)
   struct.working = false
   struct.last_idle_at = game.tick
+  remote.call("beacon-interface", "set_effects", struct.beacon_interface.unit_number, {
+    speed = 0,
+    productivity = 0,
+    consumption = 0,
+    pollution = 0,
+    quality = 0,
+  })
   reset_offering_1(struct)
 end
 
