@@ -3,7 +3,7 @@
     "title": "Circuit controlled beacon interface",
     "description": "Allows you to control a beacon interface with circuit signals.",
 
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
 

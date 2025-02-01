@@ -1,9 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
-Date: ????
+Date: 2025. 02. 01
   Info:
     - Add circuit connectors to thumbnail
     - Fix blueprinted ones keeping their modules from that time
+    - Fix freeplay scenario cutscene crash here as well
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 01. 30
