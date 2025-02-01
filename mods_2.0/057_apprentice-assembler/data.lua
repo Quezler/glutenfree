@@ -35,8 +35,8 @@ entity.crafting_speed = 1 -- 0.25 worse than the assembling machine 3
 entity.energy_source.buffer_capacity = "10GJ" -- does nothing?
 
 entity.icons_positioning = {
-  {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 2.0}, scale = 1},
-},
+  {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 1.5}, scale = 0.75},
+}
 
 local item = table.deepcopy(data.raw["item"]["assembling-machine-3"])
 item.name = mod_name
