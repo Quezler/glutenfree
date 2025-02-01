@@ -33,18 +33,6 @@ function Hurricane.crafter(config)
           frame_count = config.total_frames,
           animation_speed = 0.5,
           scale = 0.5,
-          -- stripes = {
-            -- {
-            --   filename = mod_directory .. string.format("/graphics/%s/%s-hr-animation-1.png", config.name, config.name),
-            --   width_in_frames = config.columns,
-            --   height_in_frames = math.min(8, total_rows - (8 * 0)),
-            -- },
-          --   {
-          --     filename = mod_directory .. string.format("/graphics/%s/%s-hr-animation-2.png", config.name, config.name),
-          --     width_in_frames = config.columns,
-          --     height_in_frames = math.min(8, total_rows - (8 * 1)),
-          --   },
-          -- },
           stripes = get_stripes(mod_directory .. string.format("/graphics/%s/%s-hr-animation-%%d.png", config.name, config.name))
         },
         {
@@ -67,24 +55,11 @@ function Hurricane.crafter(config)
           priority = "high",
           width = config.width / config.columns,
           height = config.height / config.rows,
-          frame_count = 80,
+          frame_count = config.total_frames,
           animation_speed = 0.5,
           scale = 0.5,
           draw_as_glow = true,
           blend_mode = "additive",
-          -- stripes =
-          -- {
-          --   {
-          --     filename = mod_directory .. string.format("/graphics/%s/%s-hr-emission-1.png", config.name, config.name),
-          --     width_in_frames = config.columns,
-          --     height_in_frames = math.min(8, total_rows - (8 * 0)),
-          --   },
-          --   {
-          --     filename = mod_directory .. string.format("/graphics/%s/%s-hr-emission-2.png", config.name, config.name),
-          --     width_in_frames = config.columns,
-          --     height_in_frames = math.min(8, total_rows - (8 * 1)),
-          --   },
-          -- },
           stripes = get_stripes(mod_directory .. string.format("/graphics/%s/%s-hr-emission-%%d.png", config.name, config.name))
         },
       },
