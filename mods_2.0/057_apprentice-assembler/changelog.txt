@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Re-add entity description
     - Decrease speed each tick whilst not crafting
+    - Keep speed upon stopping, but lose 20% per second
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2025. 02. 01
