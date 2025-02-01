@@ -1,0 +1,2 @@
+Credits:
+- concept and assets by [Hurricane046](https://mods.factorio.com/user/Hurricane046)
