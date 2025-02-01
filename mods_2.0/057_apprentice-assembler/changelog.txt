@@ -7,6 +7,7 @@ Date: ????
     - Update readme
     - Set default recipe finished & working signals
     - Setup the hidden surface with two inserters
+    - Add item and recipe
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 01

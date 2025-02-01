@@ -100,13 +100,13 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if deathrattle[1] == "offering_1" then
       local struct = storage.structs[deathrattle[2]]
       if struct then
-        game.print(string.format("offering_1 (F) #%d @%d", struct.id, event.tick))
+        game.print(string.format("#%d finished crafting @ %d", struct.id, event.tick))
         reset_offering_1(struct)
       end
     elseif deathrattle[1] == "offering_2" then
       local struct = storage.structs[deathrattle[2]]
       if struct then
-        game.print(string.format("offering_2 (W) #%d @%d", struct.id, event.tick))
+        game.print(string.format("#%d stopped working @ %d", struct.id, event.tick))
         reset_offering_2(struct)
       end
     elseif deathrattle[1] == "crafter" then
