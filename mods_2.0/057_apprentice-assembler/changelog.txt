@@ -10,6 +10,7 @@ Date: ????
     - Add item and recipe
     - Hook up the beacon interface
     - Optimize beacon interface calls
+    - Explain the current cap
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 01
