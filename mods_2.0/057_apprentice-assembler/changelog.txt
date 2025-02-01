@@ -3,6 +3,7 @@ Version: 1.0.3
 Date: ????
   Info:
     - Re-add entity description
+    - Decrease speed each tick whilst not crafting
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2025. 02. 01

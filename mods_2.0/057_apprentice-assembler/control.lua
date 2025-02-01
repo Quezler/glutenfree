@@ -123,16 +123,22 @@ local function finished_crafting(struct)
 end
 
 local function stopped_working(struct)
-  struct.working = false
-  struct.products_finished = 0
-  remote.call("beacon-interface", "set_effects", struct.beacon_interface.unit_number, {
-    speed = 0,
-    productivity = 0,
-    consumption = 0,
-    pollution = 0,
-    quality = 0,
-  })
-  reset_offering_1(struct)
+  if struct.working then
+    struct.working = false
+    reset_offering_1(struct)
+  end
+
+  if struct.products_finished > 0 then
+    struct.products_finished = math.max(0, struct.products_finished - 1)
+    remote.call("beacon-interface", "set_effects", struct.beacon_interface.unit_number, {
+      speed = struct.products_finished,
+      productivity = 0,
+      consumption = struct.products_finished,
+      pollution = 0,
+      quality = 0,
+    })
+    reset_offering_2(struct)
+  end
 end
 
 script.on_event(defines.events.on_object_destroyed, function(event)
