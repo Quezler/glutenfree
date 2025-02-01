@@ -9,6 +9,7 @@ Date: ????
     - Setup the hidden surface with two inserters
     - Add item and recipe
     - Hook up the beacon interface
+    - Optimize beacon interface calls
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 01

@@ -102,8 +102,13 @@ local function finished_crafting(struct)
   end
 
   if 400 >= struct.entity.products_finished then
-    remote.call("beacon-interface", "set_effect", struct.beacon_interface.unit_number, "speed", struct.entity.products_finished)
-    remote.call("beacon-interface", "set_effect", struct.beacon_interface.unit_number, "consumption", struct.entity.products_finished)
+    remote.call("beacon-interface", "set_effects", struct.beacon_interface.unit_number, {
+      speed = struct.entity.products_finished,
+      productivity = 0,
+      consumption = struct.entity.products_finished,
+      pollution = 0,
+      quality = 0,
+    })
     reset_offering_1(struct)
   end
 end
@@ -111,8 +116,13 @@ end
 local function stopped_working(struct)
   struct.working = false
   struct.entity.products_finished = 0
-  remote.call("beacon-interface", "set_effect", struct.beacon_interface.unit_number, "speed", 0)
-  remote.call("beacon-interface", "set_effect", struct.beacon_interface.unit_number, "consumption", 0)
+  remote.call("beacon-interface", "set_effects", struct.beacon_interface.unit_number, {
+    speed = 0,
+    productivity = 0,
+    consumption = 0,
+    pollution = 0,
+    quality = 0,
+  })
 end
 
 script.on_event(defines.events.on_object_destroyed, function(event)
