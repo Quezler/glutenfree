@@ -49,6 +49,12 @@ script.on_init(function()
   storage.deathrattles = {}
 end)
 
+script.on_configuration_changed(function(data)
+  for _, struct in pairs(storage.structs) do
+    struct.products_finished = struct.products_finished or 0
+  end
+end)
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -56,6 +62,8 @@ function Handler.on_created_entity(event)
     id = entity.unit_number,
     index = storage.index,
     entity = entity,
+
+    products_finished = 0, -- since last idle
 
     inserter_1 = nil, -- F > 0
     inserter_1_offering = nil,
@@ -101,11 +109,12 @@ local function finished_crafting(struct)
     reset_offering_2(struct)
   end
 
-  if 400 >= struct.entity.products_finished then
+  if 400 > struct.products_finished then
+    struct.products_finished = struct.products_finished + 1
     remote.call("beacon-interface", "set_effects", struct.beacon_interface.unit_number, {
-      speed = struct.entity.products_finished,
+      speed = struct.products_finished,
       productivity = 0,
-      consumption = struct.entity.products_finished,
+      consumption = struct.products_finished,
       pollution = 0,
       quality = 0,
     })
@@ -115,7 +124,7 @@ end
 
 local function stopped_working(struct)
   struct.working = false
-  struct.entity.products_finished = 0
+  struct.products_finished = 0
   remote.call("beacon-interface", "set_effects", struct.beacon_interface.unit_number, {
     speed = 0,
     productivity = 0,

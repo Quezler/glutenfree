@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Update thumbnail
     - Update technology icon
+    - Keep an internal products_finished counter
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2025. 02. 01
