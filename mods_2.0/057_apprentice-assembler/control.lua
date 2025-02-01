@@ -132,6 +132,7 @@ local function stopped_working(struct)
     pollution = 0,
     quality = 0,
   })
+  reset_offering_1(struct)
 end
 
 script.on_event(defines.events.on_object_destroyed, function(event)
@@ -143,14 +144,12 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       if struct then
         -- game.print(string.format("#%d finished crafting @ %d", struct.id, event.tick))
         finished_crafting(struct)
-        -- reset_offering_1(struct)
       end
     elseif deathrattle[1] == "offering_2" then
       local struct = storage.structs[deathrattle[2]]
       if struct then
         -- game.print(string.format("#%d stopped working @ %d", struct.id, event.tick))
         stopped_working(struct)
-        -- reset_offering_2(struct)
       end
     elseif deathrattle[1] == "crafter" then
       local struct = storage.structs[deathrattle[2]]

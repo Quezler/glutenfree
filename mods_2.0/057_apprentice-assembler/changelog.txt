@@ -5,6 +5,7 @@ Date: ????
     - Update thumbnail
     - Update technology icon
     - Keep an internal products_finished counter
+    - Fix the machine not always resetting properly
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2025. 02. 01
