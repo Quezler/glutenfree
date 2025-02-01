@@ -31,6 +31,9 @@ entity.circuit_wire_max_distance = nil
 entity.corpse = nil
 entity.dying_explosion = nil
 
+entity.crafting_speed = 1 -- 0.25 worse than the assembling machine 3
+entity.energy_source.buffer_capacity = "10GJ" -- does nothing?
+
 local item = table.deepcopy(data.raw["item"]["assembling-machine-3"])
 item.name = mod_name
 item.icon = gravity_assembler.icon
@@ -65,3 +68,7 @@ table.insert(data.raw["technology"]["automation-3"].effects, {
 })
 
 data:extend{entity, item, recipe}
+
+local beacon_interface = table.deepcopy(data.raw["beacon"]["beacon-interface--beacon-tile"])
+beacon_interface.name = mod_prefix .. "beacon-interface"
+data:extend{beacon_interface}

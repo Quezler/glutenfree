@@ -61,19 +61,21 @@ function Handler.on_created_entity(event)
     inserter_1_offering = nil,
     inserter_2 = nil, -- W = 0
     inserter_2_offering = nil,
+    beacon_interface = nil,
+
+    working = false,
   })
   storage.index = storage.index + 1
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {"crafter", struct.id}
 
-  -- todo: beacon interface tile
-  -- struct.container = entity.surface.create_entity{
-  --   name = mod_prefix .. "container",
-  --   force = entity.force,
-  --   position = entity.position,
-  --   quality = entity.quality,
-  -- }
-  -- struct.container.destructible = false
+  struct.beacon_interface = entity.surface.create_entity{
+    name = mod_prefix .. "beacon-interface",
+    force = entity.force,
+    position = entity.position,
+    raise_built = true,
+  }
+  struct.beacon_interface.destructible = false
 
   Inserters.create_for_struct(struct)
   reset_offering_1(struct)
@@ -93,6 +95,26 @@ for _, event in ipairs({
   })
 end
 
+local function finished_crafting(struct)
+  if struct.working == false then
+    struct.working = true
+    reset_offering_2(struct)
+  end
+
+  if 400 >= struct.entity.products_finished then
+    remote.call("beacon-interface", "set_effect", struct.beacon_interface.unit_number, "speed", struct.entity.products_finished)
+    remote.call("beacon-interface", "set_effect", struct.beacon_interface.unit_number, "consumption", struct.entity.products_finished)
+    reset_offering_1(struct)
+  end
+end
+
+local function stopped_working(struct)
+  struct.working = false
+  struct.entity.products_finished = 0
+  remote.call("beacon-interface", "set_effect", struct.beacon_interface.unit_number, "speed", 0)
+  remote.call("beacon-interface", "set_effect", struct.beacon_interface.unit_number, "consumption", 0)
+end
+
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
@@ -100,14 +122,16 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if deathrattle[1] == "offering_1" then
       local struct = storage.structs[deathrattle[2]]
       if struct then
-        game.print(string.format("#%d finished crafting @ %d", struct.id, event.tick))
-        reset_offering_1(struct)
+        -- game.print(string.format("#%d finished crafting @ %d", struct.id, event.tick))
+        finished_crafting(struct)
+        -- reset_offering_1(struct)
       end
     elseif deathrattle[1] == "offering_2" then
       local struct = storage.structs[deathrattle[2]]
       if struct then
-        game.print(string.format("#%d stopped working @ %d", struct.id, event.tick))
-        reset_offering_2(struct)
+        -- game.print(string.format("#%d stopped working @ %d", struct.id, event.tick))
+        stopped_working(struct)
+        -- reset_offering_2(struct)
       end
     elseif deathrattle[1] == "crafter" then
       local struct = storage.structs[deathrattle[2]]
@@ -115,6 +139,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       struct.inserter_1_offering.destroy()
       struct.inserter_2.destroy()
       struct.inserter_2_offering.destroy()
+      struct.beacon_interface.destroy()
       storage.structs[struct.id] = nil
     else
       error(serpent.block(deathrattle))

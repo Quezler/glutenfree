@@ -8,6 +8,7 @@ Date: ????
     - Set default recipe finished & working signals
     - Setup the hidden surface with two inserters
     - Add item and recipe
+    - Hook up the beacon interface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 01
