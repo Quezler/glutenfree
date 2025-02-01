@@ -12,6 +12,7 @@ Date: ????
     - Optimize beacon interface calls
     - Explain the current cap
     - Add thumbnail
+    - Note machine quality
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 01
