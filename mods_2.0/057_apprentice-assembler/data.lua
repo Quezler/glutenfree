@@ -25,4 +25,7 @@ entity.icon_draw_specification = {shift = {0, -0.375}, scale = 1.5}
 entity.fluid_boxes = nil
 -- entity.circuit_wire_max_distance = nil
 
+entity.default_recipe_finished_signal = {type = "virtual", name = "signal-F"}
+entity.default_working_signal = {type = "virtual", name = "signal-W"}
+
 data:extend{entity}

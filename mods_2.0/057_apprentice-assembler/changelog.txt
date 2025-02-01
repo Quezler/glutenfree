@@ -5,6 +5,7 @@ Date: ????
     - Cleanup wrapper
     - Disable fluid crafting
     - Update readme
+    - Set default recipe finished & working signals
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 01
