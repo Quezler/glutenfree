@@ -1,5 +1,7 @@
 require("shared")
 
+require("prototypes.surface")
+
 local Hurricane = require("graphics.hurricane")
 
 local a_5x5_entity = data.raw["reactor"]["nuclear-reactor"]
@@ -23,9 +25,6 @@ entity.graphics_set = gravity_assembler.graphics_set
 
 entity.icon_draw_specification = {shift = {0, -0.375}, scale = 1.5}
 entity.fluid_boxes = nil
--- entity.circuit_wire_max_distance = nil
-
-entity.default_recipe_finished_signal = {type = "virtual", name = "signal-F"}
-entity.default_working_signal = {type = "virtual", name = "signal-W"}
+entity.circuit_wire_max_distance = nil
 
 data:extend{entity}
