@@ -3,6 +3,9 @@ however the base speed & power usage increase through constant crafting,
 once it idles due to insufficient inputs or full output it resets,
 however it lacks fluid connections and circuit connectors.
 
+When the machine is idle it loses 20% boost per second,
+but the remaining boost will be calculated when the machine resumes.
+
 The base speed is 1, and after 400 crafts you hit the 400% cap, which puts you at 5,
 note that you can use any modules in the machine, and any beacons can increase it further.
 (note that the speed boost of the machine itself does not negate any quality modules at all)
