@@ -3,7 +3,7 @@ if script.active_mods["EditorExtensions"] then
   script.on_event(defines.events.on_player_created, function(event)
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     local inventory = player.get_inventory(defines.inventory.character_main) --[[@as LuaInventory]]
-    if inventory.get_item_count("ee-super-substation") > 0 then -- detect whether "ee.set_loadout()" ran
+    if inventory and inventory.get_item_count("ee-super-substation") > 0 then -- detect whether "ee.set_loadout()" ran
       inventory.insert({name = mod_prefix .. "beacon", count = 20})
     end
   end)

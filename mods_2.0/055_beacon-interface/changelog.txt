@@ -1,9 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
-Date: ????
+Date: 2025. 02. 01
   Info:
     - Fix 3rd party beacon interfaces being being blueprinted with modules
     - Update description
+    - Fix freeplay scenario cutscene crash
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 01. 30
