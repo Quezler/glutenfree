@@ -63,15 +63,38 @@ local recipe = {
 if mods["space-age"] then
   table.insert(recipe.ingredients, {type = "item", name = "carbon", amount = 50})
 else
-  table.insert(recipe.ingredients, {type = "item", name = "coal", amount = 50})
+  table.insert(recipe.ingredients, {type = "item", name = "coal", amount = 100})
 end
 
-table.insert(data.raw["technology"]["automation-3"].effects, {
-  type = "unlock-recipe",
-  recipe = recipe.name,
-})
+local technology = {
+  type = "technology",
+  name = "apprentice-assembler",
+  icon = mod_directory .. "/graphics/gravity-assembler/gravity-assembler-icon-big.png",
+  icon_size = 640,
+  effects =
+  {
+    {
+      type = "unlock-recipe",
+      recipe = recipe.name
+    }
+  },
+  prerequisites = {"effect-transmission", "automation-3"},
+  unit =
+  {
+    count = 1000,
+    ingredients =
+    {
+      -- it only costs time
+    },
+    time = 60
+  }
+}
 
-data:extend{entity, item, recipe}
+if mods["space-age"] then
+  table.insert(technology.prerequisites, "space-platform")
+end
+
+data:extend{entity, item, recipe, technology}
 
 local beacon_interface = table.deepcopy(data.raw["beacon"]["beacon-interface--beacon-tile"])
 beacon_interface.name = mod_prefix .. "beacon-interface"
