@@ -6,6 +6,7 @@ Date: ????
     - Use my hurricane crafter graphic set generator
     - Make the base quality setting a double
     - Update thumbnail
+    - Change debounce from 5 to 2.5 seconds
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 31
