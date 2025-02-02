@@ -252,15 +252,17 @@ script.on_event(defines.events.on_tick, function(event)
   for player_index, active_gui in pairs(storage.active_guis) do
     local player = active_gui.player
     local entity = active_gui.entity
-    local struct = storage.structs[entity.unit_number]
-    if player.valid and player.opened == entity and player.connected then
-      -- if storage.alt_mode[player_index] then
-      tick_display_panel(struct, event.tick)
-      -- end
-    else
-      refresh_always_show_and_show_in_chart(struct)
-      storage.active_guis[player_index] = nil
-      struct.do_not_auto_tick_until = 0
+    if entity.valid then
+      local struct = storage.structs[entity.unit_number]
+      if player.valid and player.opened == entity and player.connected then
+        -- if storage.alt_mode[player_index] then
+        tick_display_panel(struct, event.tick)
+        -- end
+      else
+        refresh_always_show_and_show_in_chart(struct)
+        storage.active_guis[player_index] = nil
+        struct.do_not_auto_tick_until = 0
+      end
     end
   end
 
