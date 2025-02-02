@@ -9,11 +9,11 @@ data:extend({
     allowed_values = {"Disruptor", "Research center"},
   },
   {
-    type = "int-setting",
+    type = "double-setting",
     name = mod_prefix .. "base-quality",
     setting_type = "startup", order = "b",
-    default_value = 10.0 * 10,
+    default_value = 0,
     minimum_value = 0,
-    maximum_value = 1000,
+    maximum_value = 100,
   },
 })
