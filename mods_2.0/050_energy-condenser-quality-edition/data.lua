@@ -7,15 +7,21 @@ local a_3x3_entity = data.raw["assembling-machine"]["assembling-machine-2"]
 
 local skins = {
   ["Disruptor"] = {
-    icon = mod_directory .. "/graphics/disruptor/disruptor-icon.png",
-    graphics_set = require("graphics.disruptor.pictures").graphics_set,
+    name = "disruptor",
+    width = 4720, height = 4720,
+    total_frames = 40 + 40,
+    shadow_width = 1200, shadow_height = 700,
   },
   ["Research center"] = {
-    icon = mod_directory .. "/graphics/research-center/research-center-icon.png",
-    graphics_set = require("graphics.research-center.pictures").graphics_set,
+    name = "research-center",
+    width = 4720, height = 5120,
+    total_frames = 40 + 40,
+    shadow_width = 1200, shadow_height = 700,
   },
 }
-local skin = skins[settings.startup[mod_prefix .. "skin"].value]
+
+local Hurricane = require("graphics.hurricane")
+local skin = Hurricane.crafter(skins[settings.startup[mod_prefix .. "skin"].value])
 
 local crafter_entity = {
   type = "assembling-machine",

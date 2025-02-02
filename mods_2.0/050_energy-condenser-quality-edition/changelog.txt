@@ -3,6 +3,7 @@ Version: 0.0.4
 Date: ????
   Info:
     - Module positioning
+    - Use my hurricane crafter graphic set generator
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 31
