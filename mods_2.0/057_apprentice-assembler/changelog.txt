@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.4
-Date: ????
+Version: 1.0.5
+Date: 2025. 02. 02
   Info:
     - Stash thumbnail parts
     - Nil the next_upgrade to be sure
