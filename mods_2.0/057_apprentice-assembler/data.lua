@@ -38,6 +38,8 @@ entity.icons_positioning = {
   {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 1.5}, scale = 0.75},
 }
 
+entity.next_upgrade = nil
+
 local item = table.deepcopy(data.raw["item"]["assembling-machine-3"])
 item.name = mod_name
 item.icon = gravity_assembler.icon
