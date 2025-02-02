@@ -9,8 +9,8 @@ local function new_struct(table, struct)
   return struct
 end
 
-local function reset_offering(struct)
-  game.print(string.format("resetting offering for #%d @ %d", struct.id, game.tick))
+local function reset_offering_1(struct)
+  game.print(string.format("resetting offering 1 for #%d @ %d", struct.id, game.tick))
   struct.inserter_1.held_stack.clear()
   struct.inserter_1_offering = storage.surface.create_entity{
     name = "item-on-ground",
@@ -18,7 +18,19 @@ local function reset_offering(struct)
     position = {0.5 + struct.index, -9.5},
     stack = {name = "wood"},
   }
-  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_1_offering)] = {"offering", struct.id}
+  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_1_offering)] = {"offering-1", struct.id}
+end
+
+local function reset_offering_2(struct)
+  game.print(string.format("resetting offering 2 for #%d @ %d", struct.id, game.tick))
+  struct.inserter_1.held_stack.clear()
+  struct.inserter_1_offering = storage.surface.create_entity{
+    name = "item-on-ground",
+    force = "neutral",
+    position = {0.5 + struct.index, -11.5},
+    stack = {name = "wood"},
+  }
+  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_1_offering)] = {"offering-2", struct.id}
 end
 
 local Handler = {}
@@ -54,6 +66,8 @@ function Handler.on_created_entity(event)
     decider_2 = nil, -- R == 0 | T = T + 1
     inserter_1 = nil, -- T = ?
     inserter_1_offering = nil,
+    inserter_2 = nil, -- F > 0
+    inserter_2_offering = nil,
   })
   storage.index = storage.index + 1
 
@@ -68,7 +82,8 @@ function Handler.on_created_entity(event)
   struct.container.destructible = false
 
   Combinators.create_for_struct(struct)
-  reset_offering(struct)
+  reset_offering_1(struct)
+  reset_offering_2(struct)
 end
 
 for _, event in ipairs({
@@ -88,9 +103,12 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
 
-    if deathrattle[1] == "offering" then
+    if deathrattle[1] == "offering-1" then
       local struct = storage.structs[deathrattle[2]]
-      if struct then reset_offering(storage.structs[deathrattle[2]]) end
+      if struct then reset_offering_1(struct) end
+    elseif deathrattle[1] == "offering-2" then
+      local struct = storage.structs[deathrattle[2]]
+      if struct then reset_offering_2(struct) end
     elseif deathrattle[1] == "crafter" then
       local struct = storage.structs[deathrattle[2]]
       struct.arithmetic_1.destroy()
@@ -99,6 +117,8 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       struct.decider_2.destroy()
       struct.inserter_1.destroy()
       struct.inserter_1_offering.destroy()
+      struct.inserter_2.destroy()
+      struct.inserter_2_offering.destroy()
       storage.structs[struct.id] = nil
     else
       error(serpent.block(deathrattle))
