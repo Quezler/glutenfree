@@ -5,6 +5,7 @@ Date: ????
     - Module positioning
     - Use my hurricane crafter graphic set generator
     - Make the base quality setting a double
+    - Update thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 31
