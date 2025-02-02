@@ -1,6 +1,7 @@
 require("shared")
 
 local Inserters = require("scripts.inserters")
+Deathrattles = require("scripts.deathrattles")
 
 local function new_struct(table, struct)
   assert(struct.id, serpent.block(struct))
@@ -139,32 +140,22 @@ local function stopped_working(struct)
   reset_offering_1(struct)
 end
 
-script.on_event(defines.events.on_object_destroyed, function(event)
-  local deathrattle = storage.deathrattles[event.registration_number]
-  if deathrattle then storage.deathrattles[event.registration_number] = nil
+Deathrattles.add("offering-1", function (deathrattle)
+  local struct = storage.structs[deathrattle[2]]
+  if struct then finished_crafting(struct) end
+end)
 
-    if deathrattle[1] == "offering_1" then
-      local struct = storage.structs[deathrattle[2]]
-      if struct then
-        -- game.print(string.format("#%d finished crafting @ %d", struct.id, event.tick))
-        finished_crafting(struct)
-      end
-    elseif deathrattle[1] == "offering_2" then
-      local struct = storage.structs[deathrattle[2]]
-      if struct then
-        -- game.print(string.format("#%d stopped working @ %d", struct.id, event.tick))
-        stopped_working(struct)
-      end
-    elseif deathrattle[1] == "crafter" then
-      local struct = storage.structs[deathrattle[2]]
-      struct.inserter_1.destroy()
-      struct.inserter_1_offering.destroy()
-      struct.inserter_2.destroy()
-      struct.inserter_2_offering.destroy()
-      struct.beacon_interface.destroy()
-      storage.structs[struct.id] = nil
-    else
-      error(serpent.block(deathrattle))
-    end
-  end
+Deathrattles.add("offering-2", function (deathrattle)
+  local struct = storage.structs[deathrattle[2]]
+  if struct then stopped_working(struct) end
+end)
+
+Deathrattles.add("crafter", function (deathrattle)
+  local struct = storage.structs[deathrattle[2]]
+  struct.inserter_1.destroy()
+  struct.inserter_1_offering.destroy()
+  struct.inserter_2.destroy()
+  struct.inserter_2_offering.destroy()
+  struct.beacon_interface.destroy()
+  storage.structs[struct.id] = nil
 end)

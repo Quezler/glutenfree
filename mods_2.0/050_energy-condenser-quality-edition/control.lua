@@ -1,6 +1,7 @@
 mod_prefix = "quality-condenser--"
 
 local Combinators = require("scripts.combinators")
+require("scripts.deathrattles")
 
 local function new_struct(table, struct)
   assert(struct.id, serpent.block(struct))
@@ -99,29 +100,25 @@ for _, event in ipairs({
   })
 end
 
-script.on_event(defines.events.on_object_destroyed, function(event)
-  local deathrattle = storage.deathrattles[event.registration_number]
-  if deathrattle then storage.deathrattles[event.registration_number] = nil
+Deathrattles["offering-1"] = function (deathrattle)
+  local struct = storage.structs[deathrattle[2]]
+  if struct then reset_offering_1(struct) end
+end
 
-    if deathrattle[1] == "offering-1" then
-      local struct = storage.structs[deathrattle[2]]
-      if struct then reset_offering_1(struct) end
-    elseif deathrattle[1] == "offering-2" then
-      local struct = storage.structs[deathrattle[2]]
-      if struct then reset_offering_2(struct) end
-    elseif deathrattle[1] == "crafter" then
-      local struct = storage.structs[deathrattle[2]]
-      struct.arithmetic_1.destroy()
-      struct.arithmetic_2.destroy()
-      struct.decider_1.destroy()
-      struct.decider_2.destroy()
-      struct.inserter_1.destroy()
-      struct.inserter_1_offering.destroy()
-      struct.inserter_2.destroy()
-      struct.inserter_2_offering.destroy()
-      storage.structs[struct.id] = nil
-    else
-      error(serpent.block(deathrattle))
-    end
-  end
-end)
+Deathrattles["offering-2"] = function (deathrattle)
+  local struct = storage.structs[deathrattle[2]]
+  if struct then reset_offering_2(struct) end
+end
+
+Deathrattles["crafter"] = function (deathrattle)
+  local struct = storage.structs[deathrattle[2]]
+  struct.arithmetic_1.destroy()
+  struct.arithmetic_2.destroy()
+  struct.decider_1.destroy()
+  struct.decider_2.destroy()
+  struct.inserter_1.destroy()
+  struct.inserter_1_offering.destroy()
+  struct.inserter_2.destroy()
+  struct.inserter_2_offering.destroy()
+  storage.structs[struct.id] = nil
+end
