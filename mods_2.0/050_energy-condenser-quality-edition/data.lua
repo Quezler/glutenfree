@@ -114,6 +114,8 @@ local container_entity = {
   health = 2500,
 
   minable = table.deepcopy(a_9x9_entity.minable),
+
+  icon_draw_specification = {scale = 2, scale_for_many = 2},
 }
 container_entity.minable.result = nil
 

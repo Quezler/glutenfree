@@ -7,6 +7,7 @@ Date: ????
     - Make the base quality setting a double
     - Update thumbnail
     - Change debounce from 5 to 2.5 seconds
+    - Draw the 4 items in the base larger
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 01. 31
