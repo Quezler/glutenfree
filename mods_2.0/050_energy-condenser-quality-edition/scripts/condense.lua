@@ -24,13 +24,23 @@ end
 function Condense.trigger(struct)
   local target_quality = ensure_recipe_is_set(struct.entity).name
   local quality_points = (struct.entity.effects["quality"] or 0) * 100 -- 0-1000
-  game.print("each item is worth: " .. quality_points)
 
   for _, item in ipairs(struct.container_inventory.get_contents()) do
     local next_quality_name = get_next_quality_name[item.quality]
     if next_quality_name and struct.entity.force.is_quality_unlocked(next_quality_name) then
       if target_quality == "normal" or is_quality_grandchild[target_quality][item.quality] then
-        
+
+        local number = quality_points * item.count / 1000
+        local integer = math.floor(number)
+        local decimal = number - integer
+
+        -- any leftover points? leave that to chance :)
+        if decimal > 0 and math.random() < decimal then
+          integer = integer + 1
+        end
+
+        struct.container_inventory.remove(item) -- all items are consumed, this way there is always space.
+        struct.container_inventory.insert({name = item.name, count = integer, quality = next_quality_name})
       end
     end
   end

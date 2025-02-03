@@ -201,7 +201,7 @@ function Combinators.create_for_struct(struct)
   inserter_1_cb.circuit_enable_disable = true
   inserter_1_cb.circuit_condition = {
     comparator = "=",
-    constant = 60 * 2.5,
+    constant = 60 * 2,
     first_signal = {
       name = "signal-T",
       type = "virtual"
