@@ -15,6 +15,7 @@ Just put items inside the building and when full/idle it will condense the items
 | directional insertions only | ✔            | ✔        | ✗                |
 | problematic data final fixes| ✗            | ✔        | ✗                |
 | updates totally at random   | ✗            | ✔        | ✗                |
+| respects spoil percentages  | ✗            | ✗        | ✔                |
 
 - graphics by [Hurricane046](https://mods.factorio.com/user/Hurricane046) (originally named disruptor, later revision is called laboratory)
 - "how to use his graphics" observed from [Xorimuth](https://github.com/tburrows13/LunarLandings/blob/master/prototypes/core-extractor.lua)

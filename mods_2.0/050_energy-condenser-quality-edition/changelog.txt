@@ -18,6 +18,7 @@ Date: ????
     - Fix closure saving error
     - Initial attempt at preserving spoil percentages
     - Fix lower than expected spoil percentages
+    - Document it preserves spoiled state
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 02. 03
