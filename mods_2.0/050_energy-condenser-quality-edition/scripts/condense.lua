@@ -36,7 +36,7 @@ local function populate_spoil_percentages(inventory)
     if item.valid_for_read and item_can_spoil[item.name] then
       local key = item.quality.name .. "-" .. item.name
       if spoil_percentages[key] then
-        spoil_percentages[key] = spoil_percentages[key] + item.spoil_percent / 2
+        spoil_percentages[key] = (spoil_percentages[key] + item.spoil_percent) / 2
       else
         spoil_percentages[key] = item.spoil_percent
       end
