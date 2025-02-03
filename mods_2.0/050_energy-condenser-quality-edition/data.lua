@@ -21,7 +21,22 @@ local skins = {
 }
 
 local Hurricane = require("graphics.hurricane")
-local skin = Hurricane.crafter(skins[settings.startup[mod_prefix .. "skin"].value])
+local appearance = settings.startup[mod_prefix .. "skin"].value
+local skin = Hurricane.crafter(skins[appearance])
+
+-- a manual modification to block some transparency
+if appearance == "Disruptor" then
+  table.insert(skin.graphics_set.animation.layers, 1, {
+    filename = mod_directory .. "/graphics/disruptor/disruptor-hr-animation-bg.png",
+    priority = "high",
+    width = 590,
+    height = 590,
+    frame_count = 1,
+    repeat_count = 80,
+    scale = 0.5,
+    animation_speed = 0.5,
+  })
+end
 
 local crafter_entity = {
   type = "assembling-machine",

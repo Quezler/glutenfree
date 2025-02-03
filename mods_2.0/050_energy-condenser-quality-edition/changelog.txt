@@ -12,6 +12,7 @@ Date: ????
     - Map which qualities are below the current setting
     - Detect eligible stacks
     - Make the machine function
+    - Fix black square not loading
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 02. 03
