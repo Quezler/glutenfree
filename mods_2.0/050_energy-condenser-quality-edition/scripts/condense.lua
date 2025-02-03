@@ -37,7 +37,7 @@ local function get_spoil_percentage(inventory, item)
       if spoil_percentage == nil then
         spoil_percentage = stack.spoil_percent
       else
-        spoil_percentage = (spoil_percentage + item.spoil_percent) / 2
+        spoil_percentage = (spoil_percentage + stack.spoil_percent) / 2
       end
     end
   end
