@@ -66,7 +66,7 @@ function Condense.trigger(struct)
         log(string.format("%d x %s (%s) x %d%% = %d (%d + %f)", item.count, item.name, item.quality, quality_points / 10, integer, number, decimal))
 
         local to_insert = {name = item.name, count = integer, quality = next_quality_name}
-        if item_can_spoil then
+        if item_can_spoil[item.name] then
           to_insert["spoil_percent"] = assert(get_spoil_percentage(struct.container_inventory, item))
         end
 
