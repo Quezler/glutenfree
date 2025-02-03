@@ -23,7 +23,7 @@ end
 
 function Condense.trigger(struct)
   local target_quality = ensure_recipe_is_set(struct.entity).name
-  local quality_points = math.min((struct.entity.effects["quality"] or 0) * 100) -- 0-1000
+  local quality_points = math.floor(math.min((struct.entity.effects["quality"] or 0) * 100) + 0.5) -- 0-1000
 
   for _, item in ipairs(struct.container_inventory.get_contents()) do
     local next_quality_name = get_next_quality_name[item.quality]
@@ -39,12 +39,13 @@ function Condense.trigger(struct)
           integer = integer + 1
         end
 
+        log(string.format("%d x %s (%s) x %d%% = %d (%d + %f)", item.count, item.name, item.quality, quality_points / 10, integer, number, decimal))
+
         struct.container_inventory.remove(item) -- all items are consumed, this way there is always space.
         struct.container_inventory.insert({name = item.name, count = integer, quality = next_quality_name})
       end
     end
   end
-  game.print(serpent.block( struct.container_inventory.get_contents() ))
 end
 
 return Condense
