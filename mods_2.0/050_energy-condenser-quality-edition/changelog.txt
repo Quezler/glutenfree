@@ -13,6 +13,7 @@ Date: ????
     - Detect eligible stacks
     - Make the machine function
     - Fix black square not loading
+    - Cap quality at 100%
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 02. 03

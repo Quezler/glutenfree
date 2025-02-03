@@ -23,7 +23,7 @@ end
 
 function Condense.trigger(struct)
   local target_quality = ensure_recipe_is_set(struct.entity).name
-  local quality_points = (struct.entity.effects["quality"] or 0) * 100 -- 0-1000
+  local quality_points = math.min((struct.entity.effects["quality"] or 0) * 100) -- 0-1000
 
   for _, item in ipairs(struct.container_inventory.get_contents()) do
     local next_quality_name = get_next_quality_name[item.quality]
