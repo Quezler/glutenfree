@@ -3,6 +3,7 @@ Version: 0.0.6
 Date: ????
   Info:
     - Tinker with the accumulator sounds
+    - This doesn't sound half bad tbh
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 02. 03
