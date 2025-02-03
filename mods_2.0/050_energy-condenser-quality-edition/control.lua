@@ -53,7 +53,7 @@ script.on_init(function()
   storage.deathrattles = {}
 end)
 
-local function ensure_recipe_is_set(entity)
+function ensure_recipe_is_set(entity)
   local recipe, quality = entity.get_recipe()
   if recipe == nil then entity.set_recipe(mod_prefix .. "a-whole-bunch-of-items") end
   return quality or prototypes.quality["normal"]

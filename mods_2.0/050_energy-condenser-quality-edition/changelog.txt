@@ -10,6 +10,7 @@ Date: ????
     - Fix 〃
     - Fix deadlock
     - Map which qualities are below the current setting
+    - Detect eligible stacks
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 02. 03
