@@ -23,14 +23,14 @@ end
 
 local function reset_offering_2(struct)
   game.print(string.format("resetting offering 2 for #%d @ %d", struct.id, game.tick))
-  struct.inserter_1.held_stack.clear()
-  struct.inserter_1_offering = storage.surface.create_entity{
+  struct.inserter_2.held_stack.clear()
+  struct.inserter_2_offering = storage.surface.create_entity{
     name = "item-on-ground",
     force = "neutral",
     position = {0.5 + struct.index, -11.5},
     stack = {name = "wood"},
   }
-  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_1_offering)] = {"offering-2", struct.id}
+  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_2_offering)] = {"offering-2", struct.id}
 end
 
 local Handler = {}
