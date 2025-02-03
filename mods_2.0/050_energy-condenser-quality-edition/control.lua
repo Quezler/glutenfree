@@ -158,3 +158,15 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     deathrattles[deathrattle[1]](deathrattle)
   end
 end)
+
+script.on_nth_tick(60 * 60, function(event)
+  for _, struct in pairs(storage.structs) do
+    local signal_T = struct.inserter_1.get_signal({type = "virtual", name = "signal-T"}, defines.wire_connector_id.circuit_green)
+    if signal_T > 300 then -- idle for over 5 seconds
+      if struct.entity.crafting_progress == 0 and struct.container_inventory.is_empty() == false then -- is currently not crafting
+        ensure_recipe_is_set(struct.entity)
+        struct.entity.crafting_progress = 0.001
+      end
+    end
+  end
+end)
