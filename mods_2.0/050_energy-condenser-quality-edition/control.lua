@@ -10,6 +10,7 @@ local function new_struct(table, struct)
 end
 
 local function reset_offering_idle(struct)
+  if struct.inserter_1_offering.valid then return end
   game.print(string.format("resetting offering idle for #%d @ %d", struct.id, game.tick))
   struct.inserter_1.held_stack.clear()
   struct.inserter_1_offering = storage.surface.create_entity{
@@ -22,6 +23,7 @@ local function reset_offering_idle(struct)
 end
 
 local function reset_offering_done(struct)
+  if struct.inserter_2_offering.valid then return end
   game.print(string.format("resetting offering done for #%d @ %d", struct.id, game.tick))
   struct.inserter_2.held_stack.clear()
   struct.inserter_2_offering = storage.surface.create_entity{
@@ -73,9 +75,9 @@ function Handler.on_created_entity(event)
     decider_1 = nil, -- red T != green T | R 1
     decider_2 = nil, -- R == 0 | T = T + 1
     inserter_1 = nil, -- T = ?
-    inserter_1_offering = nil,
+    inserter_1_offering = {valid = false, destroy = function () end},
     inserter_2 = nil, -- F > 0
-    inserter_2_offering = nil,
+    inserter_2_offering = {valid = false, destroy = function () end},
   })
   storage.index = storage.index + 1
 
@@ -111,9 +113,8 @@ local deathrattles = {
   ["offering-idle"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
     if struct then
-      if struct.container_inventory.is_empty() then
-        reset_offering_idle(struct)
-      else
+      reset_offering_idle(struct)
+      if struct.entity.crafting_progress == 0 and struct.container_inventory.is_empty() == false then
         ensure_recipe_is_set(struct.entity)
         struct.entity.crafting_progress = 0.001
         reset_offering_done(struct)
@@ -133,9 +134,7 @@ local deathrattles = {
     struct.inserter_1.destroy()
     struct.inserter_1_offering.destroy()
     struct.inserter_2.destroy()
-    if struct.inserter_2_offering then
-      struct.inserter_2_offering.destroy()
-    end
+    struct.inserter_2_offering.destroy()
     storage.structs[struct.id] = nil
   end,
 }
