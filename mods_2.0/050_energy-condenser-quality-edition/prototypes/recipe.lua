@@ -4,7 +4,7 @@ local item = {
   icon = "__core__/graphics/empty.png",
   icon_size = 1,
   stack_size = 1,
-  flags = {"not-stackable"},
+  flags = {"not-stackable", "only-in-cursor"},
   hidden = true,
 }
 

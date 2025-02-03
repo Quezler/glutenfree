@@ -5,6 +5,7 @@ Date: ????
     - Tinker with the accumulator sounds
     - This doesn't sound half bad tbh
     - Cleanup unused sound settings
+    - Prevent pipetting it in editor mode
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 02. 03
