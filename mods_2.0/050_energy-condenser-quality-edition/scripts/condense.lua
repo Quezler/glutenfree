@@ -28,29 +28,26 @@ for _, item in pairs(prototypes.item) do
   end
 end
 
-local function populate_spoil_percentages(inventory)
-  local spoil_percentages = {}
+local function get_spoil_percentage(inventory, item)
+  spoil_percentage = nil
 
   for slot = 1, #inventory do
-    local item = inventory[slot]
-    if item.valid_for_read and item_can_spoil[item.name] then
-      local key = item.quality.name .. "-" .. item.name
-      if spoil_percentages[key] then
-        spoil_percentages[key] = (spoil_percentages[key] + item.spoil_percent) / 2
+    local stack = inventory[slot]
+    if stack.valid_for_read and stack.name == item.name then
+      if spoil_percentage == nil then
+        spoil_percentage = stack.spoil_percent
       else
-        spoil_percentages[key] = item.spoil_percent
+        spoil_percentage = (spoil_percentage + item.spoil_percent) / 2
       end
     end
   end
 
-  return spoil_percentages
+  return spoil_percentage
 end
 
 function Condense.trigger(struct)
   local target_quality = ensure_recipe_is_set(struct.entity).name
   local quality_points = math.floor(math.min((struct.entity.effects["quality"] or 0) * 100) + 0.5) -- 0-1000
-
-  local spoil_percentages = nil
 
   for _, item in ipairs(struct.container_inventory.get_contents()) do
     local next_quality_name = get_next_quality_name[item.quality]
@@ -70,10 +67,7 @@ function Condense.trigger(struct)
 
         local to_insert = {name = item.name, count = integer, quality = next_quality_name}
         if item_can_spoil then
-          if spoil_percentages == nil then
-            spoil_percentages = populate_spoil_percentages(struct.container_inventory)
-          end
-          to_insert["spoil_percent"] = assert(spoil_percentages[item.quality .. "-" .. item.name])
+          to_insert["spoil_percent"] = assert(get_spoil_percentage(struct.container_inventory, item))
         end
 
         struct.container_inventory.remove(item) -- all items are consumed, this way there is always space.
