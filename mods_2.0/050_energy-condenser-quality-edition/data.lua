@@ -142,10 +142,32 @@ local crafter_recipe = {
   },
   results = {{type="item", name=crafter_item.name, amount=1}},
   energy_required = 10,
-  enabled = true,
 }
 
-data:extend({crafter_entity, crafter_item, crafter_recipe})
+local crafter_technology = {
+  type = "technology",
+  name = "quality-condenser", -- todo: shared.lua
+  icons = skin.technology_icons,
+  effects =
+  {
+    {
+      type = "unlock-recipe",
+      recipe = crafter_recipe.name
+    }
+  },
+  prerequisites = {"advanced-circuit"},
+  unit =
+  {
+    count = 1000,
+    ingredients =
+    {
+      -- it only costs time
+    },
+    time = 60
+  }
+}
+
+data:extend({crafter_entity, crafter_item, crafter_recipe, crafter_technology})
 
 local container_entity = {
   type = "container",

@@ -66,9 +66,22 @@ function Hurricane.crafter(config)
     },
   }
 
+  local technology_icons = {
+    {
+      icon = "__core__/graphics/empty.png",
+      icon_size = 1,
+    },
+    {
+      icon = mod_directory .. string.format("/graphics/%s/%s-icon-big.png", config.name , config.name),
+      icon_size = 640,
+      scale = 0.19, -- 256 / 2 / 640 = 0.2
+    },
+  }
+
   return {
     icon = mod_directory .. string.format("/graphics/%s/%s-icon.png", config.name, config.name),
     graphics_set = graphics_set,
+    technology_icons = technology_icons,
   }
 end
 

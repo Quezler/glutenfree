@@ -6,6 +6,7 @@ Date: ????
     - Fix crash when there is not enough to upgrade
     - Add failsafe for machines stuck in idle (full & newly unlocked quality, changed recipe)
     - Update recipe
+    - Add a technology node under red chips
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 02. 03
