@@ -62,7 +62,7 @@ local crafter_entity = {
 
   open_sound = sounds.machine_open,
   close_sound = sounds.machine_close,
-  -- working_sound = space_age_sounds.electromagnetic_plant,
+  working_sound = table.deepcopy(data.raw["accumulator"]["accumulator"].working_sound),
 
   minable = table.deepcopy(a_9x9_entity.minable),
   quality_indicator_scale = 0,
@@ -71,6 +71,15 @@ local crafter_entity = {
 
   flags = {"player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
 }
+
+crafter_entity.working_sound.main_sounds[1].probability = 10
+crafter_entity.working_sound.main_sounds[2].probability = 10
+crafter_entity.working_sound.main_sounds[1].sound.volume = 10
+crafter_entity.working_sound.main_sounds[2].sound.volume = 10
+crafter_entity.working_sound.main_sounds[1].fade_in_ticks = nil
+crafter_entity.working_sound.main_sounds[2].fade_in_ticks = nil
+crafter_entity.working_sound.main_sounds[1].fade_out_ticks = nil
+crafter_entity.working_sound.main_sounds[2].fade_out_ticks = nil
 
 local crafter_item = {
   type = "item",
