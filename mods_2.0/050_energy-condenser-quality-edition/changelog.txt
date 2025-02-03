@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
-Date: ????
+Date: 2025. 02. 03
   Info:
     - Align result quality over the chimney
     - Fix second offering
