@@ -5,6 +5,7 @@ Date: ????
     - Align result quality over the chimney
     - Fix second offering
     - Use the recipe quality as the shown quality
+    - Draw the quality icon nice and large
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 02. 02

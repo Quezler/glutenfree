@@ -50,7 +50,7 @@ local crafter_entity = {
   crafting_categories = {mod_prefix .. "recipe-category"},
   fixed_recipe = mod_prefix .. "recipe",
   -- fixed_quality = "normal",
-  icon_draw_specification = {shift = util.by_pixel_hr(32, -32), scale = 2},
+  icon_draw_specification = {shift = {1 - 0.05, -1 + 0.05}, scale = 4},
   icons_positioning = {
     {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 2.0}, scale = 1},
   },
