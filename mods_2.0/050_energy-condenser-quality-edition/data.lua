@@ -50,8 +50,7 @@ local crafter_entity = {
   crafting_categories = {mod_prefix .. "recipe-category"},
   fixed_recipe = mod_prefix .. "recipe",
   -- fixed_quality = "normal",
-  -- icon_draw_specification = {shift = {-2.25, 0.75}, scale = 2},
-  icon_draw_specification = {shift = util.by_pixel_hr(-157, 38), scale = 2},
+  icon_draw_specification = {shift = util.by_pixel_hr(32, -32), scale = 2},
   icons_positioning = {
     {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 2.0}, scale = 1},
   },
@@ -116,7 +115,7 @@ local container_entity = {
 
   minable = table.deepcopy(a_9x9_entity.minable),
 
-  icon_draw_specification = {scale = 2, scale_for_many = 2},
+  icon_draw_specification = {scale = 0, scale_for_many = 0},
 }
 container_entity.minable.result = nil
 
