@@ -16,6 +16,7 @@ Date: ????
     - Cap quality at 100%
     - Strengthen math and logging
     - Fix closure saving error
+    - Initial attempt at preserving spoil percentages
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 02. 03
