@@ -15,6 +15,7 @@ Date: ????
     - Fix black square not loading
     - Cap quality at 100%
     - Strengthen math and logging
+    - Fix closure saving error
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 02. 03

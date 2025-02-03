@@ -48,6 +48,14 @@ script.on_init(function()
     position = {-1, -1},
   }
 
+  -- {valid = false, destroy = function () end}
+  storage.invalid = storage.surface.create_entity{
+    name = "small-electric-pole",
+    force = "neutral",
+    position = {-2.5, -0.5},
+  }
+  storage.invalid.destroy()
+
   storage.index = 0
   storage.structs = {}
   storage.deathrattles = {}
@@ -75,9 +83,9 @@ function Handler.on_created_entity(event)
     decider_1 = nil, -- red T != green T | R 1
     decider_2 = nil, -- R == 0 | T = T + 1
     inserter_1 = nil, -- T = ?
-    inserter_1_offering = {valid = false, destroy = function () end},
+    inserter_1_offering = storage.invalid,
     inserter_2 = nil, -- F > 0
-    inserter_2_offering = {valid = false, destroy = function () end},
+    inserter_2_offering = storage.invalid,
   })
   storage.index = storage.index + 1
 
