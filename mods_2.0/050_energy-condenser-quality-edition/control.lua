@@ -9,20 +9,20 @@ local function new_struct(table, struct)
   return struct
 end
 
-local function reset_offering_1(struct)
-  game.print(string.format("resetting offering 1 for #%d @ %d", struct.id, game.tick))
+local function reset_offering_idle(struct)
+  game.print(string.format("resetting offering idle for #%d @ %d", struct.id, game.tick))
   struct.inserter_1.held_stack.clear()
   struct.inserter_1_offering = storage.surface.create_entity{
     name = "item-on-ground",
     force = "neutral",
-    position = {0.5 + struct.index, -9.5},
+    position = {0.5 + struct.index, -8.5},
     stack = {name = "wood"},
   }
-  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_1_offering)] = {"offering-1", struct.id}
+  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_1_offering)] = {"offering-idle", struct.id}
 end
 
-local function reset_offering_2(struct)
-  game.print(string.format("resetting offering 2 for #%d @ %d", struct.id, game.tick))
+local function reset_offering_done(struct)
+  game.print(string.format("resetting offering done for #%d @ %d", struct.id, game.tick))
   struct.inserter_2.held_stack.clear()
   struct.inserter_2_offering = storage.surface.create_entity{
     name = "item-on-ground",
@@ -30,7 +30,7 @@ local function reset_offering_2(struct)
     position = {0.5 + struct.index, -11.5},
     stack = {name = "wood"},
   }
-  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_2_offering)] = {"offering-2", struct.id}
+  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_2_offering)] = {"offering-done", struct.id}
 end
 
 local Handler = {}
@@ -60,6 +60,7 @@ function Handler.on_created_entity(event)
     entity = entity,
 
     container = nil,
+    container_inventory = nil,
     arithmetic_1 = nil, -- each + 0 = S
     arithmetic_2 = nil, -- each + 0 = each
     decider_1 = nil, -- red T != green T | R 1
@@ -80,10 +81,10 @@ function Handler.on_created_entity(event)
     quality = entity.quality,
   }
   struct.container.destructible = false
+  struct.container_inventory = struct.container.get_inventory(defines.inventory.chest)
 
   Combinators.create_for_struct(struct)
-  reset_offering_1(struct)
-  reset_offering_2(struct)
+  reset_offering_idle(struct)
 end
 
 for _, event in ipairs({
@@ -100,13 +101,22 @@ for _, event in ipairs({
 end
 
 local deathrattles = {
-  ["offering-1"] = function (deathrattle)
+  ["offering-idle"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
-    if struct then reset_offering_1(struct) end
+    if struct then
+      if struct.container_inventory.is_empty() then
+        reset_offering_idle(struct)
+      else
+        local recipe, quality = struct.entity.get_recipe()
+        if recipe == nil then struct.entity.set_recipe(mod_prefix .. "a-whole-bunch-of-items") end
+        struct.entity.crafting_progress = 0.001
+        reset_offering_done(struct)
+      end
+    end
   end,
-  ["offering-2"] = function (deathrattle)
+  ["offering-done"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
-    if struct then reset_offering_2(struct) end
+    if struct then reset_offering_idle(struct) end
   end,
   ["crafter"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
@@ -117,7 +127,9 @@ local deathrattles = {
     struct.inserter_1.destroy()
     struct.inserter_1_offering.destroy()
     struct.inserter_2.destroy()
-    struct.inserter_2_offering.destroy()
+    if struct.inserter_2_offering then
+      struct.inserter_2_offering.destroy()
+    end
     storage.structs[struct.id] = nil
   end,
 }

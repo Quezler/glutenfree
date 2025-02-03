@@ -193,8 +193,8 @@ function Combinators.create_for_struct(struct)
   struct.inserter_1 = storage.surface.create_entity{
     name = "inserter",
     force = "neutral",
-    position = {0.5 + struct.index, -9.0},
-    direction = defines.direction.north,
+    position = {0.5 + struct.index, -9.5},
+    direction = defines.direction.south,
   }
   assert(struct.inserter_1)
   inserter_1_cb = struct.inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
@@ -222,7 +222,7 @@ function Combinators.create_for_struct(struct)
   struct.inserter_2 = storage.surface.create_entity{
     name = "inserter",
     force = "neutral",
-    position = {0.5 + struct.index, -10.5},
+    position = {0.5 + struct.index, -12.5},
     direction = defines.direction.south,
   }
   assert(struct.inserter_2)

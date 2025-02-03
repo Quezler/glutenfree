@@ -67,6 +67,8 @@ local crafter_entity = {
   minable = table.deepcopy(a_9x9_entity.minable),
   quality_indicator_scale = 0,
 
+  -- circuit_wire_max_distance = 9,
+
   flags = {"player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
 }
 

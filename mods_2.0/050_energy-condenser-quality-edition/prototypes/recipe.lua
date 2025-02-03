@@ -1,6 +1,6 @@
 local item = {
   type = "item",
-  name = mod_prefix .. "recipe",
+  name = mod_prefix .. "a-whole-bunch-of-items",
   icon = "__core__/graphics/empty.png",
   icon_size = 1,
   stack_size = 1,
@@ -15,7 +15,7 @@ local recipe_category = {
 
 local recipe = {
   type = "recipe",
-  name = mod_prefix .. "recipe",
+  name = mod_prefix .. "a-whole-bunch-of-items",
   icon = "__core__/graphics/empty.png",
   icon_size = 1,
   category = recipe_category.name,

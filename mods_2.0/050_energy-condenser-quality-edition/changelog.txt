@@ -8,6 +8,7 @@ Date: ????
     - Draw the quality icon nice and large
     - Allow users access to the quality dropdown
     - Use a whole bunch of items as placeholder
+    - Get the machine to spin once with idle items
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 02. 02
