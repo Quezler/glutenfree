@@ -59,7 +59,6 @@ end
 
 function Handler.on_created_entity(event)
   local entity = event.entity
-
   ensure_recipe_is_set(entity)
 
   local struct = new_struct(storage.structs, {
@@ -115,7 +114,7 @@ local deathrattles = {
       if struct.container_inventory.is_empty() then
         reset_offering_idle(struct)
       else
-        ensure_recipe_is_set()
+        ensure_recipe_is_set(struct.entity)
         struct.entity.crafting_progress = 0.001
         reset_offering_done(struct)
       end
