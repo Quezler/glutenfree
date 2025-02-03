@@ -9,6 +9,7 @@ Date: ????
     - Ensure the recipe is always set
     - Fix 〃
     - Fix deadlock
+    - Map which qualities are below the current setting
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 02. 03

@@ -109,6 +109,8 @@ for _, event in ipairs({
   })
 end
 
+local Condense = require("scripts.condense")
+
 local deathrattles = {
   ["offering-idle"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
@@ -123,7 +125,10 @@ local deathrattles = {
   end,
   ["offering-done"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
-    if struct then reset_offering_idle(struct) end
+    if struct then
+      Condense.trigger(struct)
+      reset_offering_idle(struct)
+    end
   end,
   ["crafter"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
