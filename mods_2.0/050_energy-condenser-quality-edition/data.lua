@@ -133,13 +133,15 @@ local crafter_recipe = {
   name = mod_prefix .. "crafter",
   ingredients =
   {
-    {type = "item", name = "assembling-machine-2", amount = 9},
-    {type = "item", name = "copper-cable", amount = 100},
-    {type = "item", name = "battery", amount = 50},
+    {type = "item", name = "iron-plate", amount = 100},
     {type = "item", name = "iron-gear-wheel", amount = 25},
+    {type = "item", name = "steel-plate", amount = 50},
+    {type = "item", name = "copper-cable", amount = 200},
+    {type = "item", name = "electronic-circuit", amount = 100},
+    {type = "item", name = "advanced-circuit", amount = 50},
   },
   results = {{type="item", name=crafter_item.name, amount=1}},
-  energy_required = 3,
+  energy_required = 10,
   enabled = true,
 }
 
