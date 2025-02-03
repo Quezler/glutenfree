@@ -70,32 +70,23 @@ local crafter_entity = {
         sound =
         {
           filename = "__base__/sound/accumulator-working.ogg",
-          -- volume = 0.4,
-          -- modifiers = volume_multiplier("main-menu", 1.44),
           volume = 10,
-          -- audible_distance_modifier = 0.5
         },
-        -- match_volume_to_activity = true,
         activity_to_volume_modifiers = {offset = 2, inverted = true},
-        -- fade_in_ticks = 4,
-        -- fade_out_ticks = 20
+        fade_in_ticks = 4,
+        fade_out_ticks = 20
       },
       {
         sound =
         {
           filename = "__base__/sound/accumulator-discharging.ogg",
-          -- volume = 0.4,
-          -- modifiers = volume_multiplier("main-menu", 1.44),
           volume = 10,
-          -- audible_distance_modifier = 0.5
         },
-        -- match_volume_to_activity = true,
         activity_to_volume_modifiers = {offset = 1},
-        -- fade_in_ticks = 4,
-        -- fade_out_ticks = 20
+        fade_in_ticks = 4,
+        fade_out_ticks = 20
       }
     },
-    -- idle_sound = {filename = "__base__/sound/accumulator-idle.ogg", volume = 0.35, audible_distance_modifier = 0.5},
     max_sounds_per_prototype = 3,
   },
 

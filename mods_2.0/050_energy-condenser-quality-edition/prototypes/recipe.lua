@@ -21,7 +21,7 @@ local recipe = {
   category = recipe_category.name,
   enabled = true,
   auto_recycle = false,
-  energy_required = 20,
+  energy_required = 40,
   ingredients = {{type = "item", name = item.name, amount = 1}},
   results = {},
   hide_from_player_crafting = true,
