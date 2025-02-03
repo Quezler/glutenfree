@@ -48,8 +48,10 @@ local crafter_entity = {
   energy_usage = "2500kW",
 
   crafting_categories = {mod_prefix .. "recipe-category"},
-  fixed_recipe = mod_prefix .. "recipe",
+  -- fixed_recipe = mod_prefix .. "recipe",
   -- fixed_quality = "normal",
+  return_ingredients_on_change = false,
+  show_recipe_icon_on_map = false,
   icon_draw_specification = {shift = {1 - 0.05, -1 + 0.05}, scale = 4},
   icons_positioning = {
     {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 2.0}, scale = 1},

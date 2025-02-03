@@ -14,7 +14,8 @@ local recipe = {
   energy_required = 30,
   ingredients = {{type = "item", name = "repair-pack", amount = 1}},
   results = {},
-  hidden = true,
+  hide_from_player_crafting = true,
+  hidden_in_factoriopedia = true,
 }
 
 data:extend{recipe_category, recipe}

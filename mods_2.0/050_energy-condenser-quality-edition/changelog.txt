@@ -6,6 +6,7 @@ Date: ????
     - Fix second offering
     - Use the recipe quality as the shown quality
     - Draw the quality icon nice and large
+    - Allow users access to the quality dropdown
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 02. 02
