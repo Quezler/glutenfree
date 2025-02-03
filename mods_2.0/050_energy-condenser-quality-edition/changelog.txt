@@ -6,6 +6,7 @@ Date: ????
     - This doesn't sound half bad tbh
     - Cleanup unused sound settings
     - Prevent pipetting it in editor mode
+    - Ensure the recipe is always set
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 02. 03

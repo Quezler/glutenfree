@@ -51,8 +51,16 @@ script.on_init(function()
   storage.deathrattles = {}
 end)
 
+local function ensure_recipe_is_set(entity)
+  local recipe, quality = entity.get_recipe()
+  if recipe == nil then entity.set_recipe(mod_prefix .. "a-whole-bunch-of-items") end
+  return quality or prototypes.quality["normal"]
+end
+
 function Handler.on_created_entity(event)
   local entity = event.entity
+
+  ensure_recipe_is_set(entity)
 
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
@@ -107,8 +115,7 @@ local deathrattles = {
       if struct.container_inventory.is_empty() then
         reset_offering_idle(struct)
       else
-        local recipe, quality = struct.entity.get_recipe()
-        if recipe == nil then struct.entity.set_recipe(mod_prefix .. "a-whole-bunch-of-items") end
+        ensure_recipe_is_set()
         struct.entity.crafting_progress = 0.001
         reset_offering_done(struct)
       end
