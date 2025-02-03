@@ -71,7 +71,9 @@ function Condense.trigger(struct)
         end
 
         struct.container_inventory.remove(item) -- all items are consumed, this way there is always space.
-        struct.container_inventory.insert(to_insert)
+        if to_insert.count > 0 then
+          struct.container_inventory.insert(to_insert)
+        end
       end
     end
   end
