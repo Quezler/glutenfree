@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
-Date: ????
+Date: 2025. 02. 03
   Info:
     - Fix unrenamed variable
     - Fix crash when there is not enough to upgrade
