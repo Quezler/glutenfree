@@ -60,6 +60,7 @@ local tile_beacon = table.deepcopy(entity)
 tile_beacon.name = mod_prefix .. "beacon-tile"
 tile_beacon.icons[1].icon = "__base__/graphics/icons/hazard-concrete.png"
 
+tile_beacon.max_health = 1
 tile_beacon.minable = nil
 tile_beacon.profile = {1}
 tile_beacon.beacon_counter = "same_type" -- does this do anything if the profile is {1}?

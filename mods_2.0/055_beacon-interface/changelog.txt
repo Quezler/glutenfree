@@ -3,6 +3,7 @@ Version: 1.0.2
 Date: ????
   Info:
     - Add deepcopy example
+    - Make the tile beacon indestructible by default
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2025. 02. 01

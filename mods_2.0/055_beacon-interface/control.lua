@@ -21,6 +21,7 @@ function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
   entity.operable = false
+  entity.destructible = false
 
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
