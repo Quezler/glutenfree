@@ -17,5 +17,11 @@ Just put items inside the building and when full/idle it will condense the items
 | updates totally at random   | ✗            | ✔        | ✗                |
 | respects spoil percentages  | ✗            | ✗        | ✔                |
 
+Base quality:
+- `0` (no base quality)
+- `10 * (quality.level)` (no base quality, then 10% per quality)
+- `10 * (quality.level + 1)` (10% base quality, then 10% per quality)
+- `math.pow(2, quality.level) * 2` (2, 4, 8, 16, 64)
+
 - graphics by [Hurricane046](https://mods.factorio.com/user/Hurricane046) (originally named disruptor, later revision is called laboratory)
 - "how to use his graphics" observed from [Xorimuth](https://github.com/tburrows13/LunarLandings/blob/master/prototypes/core-extractor.lua)

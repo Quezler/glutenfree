@@ -50,7 +50,7 @@ local crafter_entity = {
   max_health = 1000,
 
   module_slots = settings.startup[mod_prefix .. "module-slots"].value,
-  effect_receiver = { base_effect = { quality = math.floor(settings.startup[mod_prefix .. "base-quality"].value * 10) / 100 }},
+  effect_receiver = { base_effect = { quality = get_base_quality(data.raw["quality"]["normal"]) / 100 }},
   allowed_effects = {"consumption", "speed", "pollution", "quality"},
 
   crafting_speed = 2,
