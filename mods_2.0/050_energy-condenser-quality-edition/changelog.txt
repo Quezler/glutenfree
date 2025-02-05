@@ -16,6 +16,7 @@ Date: ????
     - Typo
     - Fix recipe being unlocked
     - Anticipate quality_indicator_shift
+    - Make module slots configurable
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03

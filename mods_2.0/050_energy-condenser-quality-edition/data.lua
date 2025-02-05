@@ -49,7 +49,7 @@ local crafter_entity = {
   collision_box = table.deepcopy(a_9x9_entity.collision_box),
   max_health = 1000,
 
-  module_slots = 3,
+  module_slots = settings.startup[mod_prefix .. "module-slots"].value,
   effect_receiver = { base_effect = { quality = math.floor(settings.startup[mod_prefix .. "base-quality"].value * 10) / 100 }},
   allowed_effects = {"consumption", "speed", "pollution", "quality"},
 
