@@ -1,6 +1,15 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.8
+Version: 0.0.9
 Date: ????
+  Info:
+    - Make module slots configurable
+    - Convert base quality into a math expression
+    - Set all base qualities with the beacon interface
+    - Rely on beacon interface for indestructible invisible beacons
+    - Update beacon interfaces in on_configuration_changed
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 2025. 02. 03
   Info:
     - Only condense when it would output at least one
     - Confirm the right amount got removed and inserted
@@ -16,11 +25,6 @@ Date: ????
     - Typo
     - Fix recipe being unlocked
     - Anticipate quality_indicator_shift
-    - Make module slots configurable
-    - Convert base quality into a math expression
-    - Set all base qualities with the beacon interface
-    - Rely on beacon interface for indestructible invisible beacons
-    - Update beacon interfaces in on_configuration_changed
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03
