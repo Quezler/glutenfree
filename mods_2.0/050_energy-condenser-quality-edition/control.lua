@@ -89,6 +89,13 @@ function Handler.on_created_entity(event)
   })
   storage.index = storage.index + 1
 
+  local other_quality_container = entity.surface.find_entities_filtered{
+    name = mod_prefix .. "container",
+    force = entity.force,
+    position = entity.position,
+    limit = 1,
+  }[1]
+
   struct.container = entity.surface.create_entity{
     name = mod_prefix .. "container",
     force = entity.force,
@@ -97,6 +104,16 @@ function Handler.on_created_entity(event)
   }
   struct.container.destructible = false
   struct.container_inventory = struct.container.get_inventory(defines.inventory.chest)
+
+  if other_quality_container then
+    local other_quality_container_inventory = other_quality_container.get_inventory(defines.inventory.chest)
+    for slot = 1, #other_quality_container_inventory do
+      local stack = other_quality_container_inventory[slot]
+      if stack.valid_for_read then
+        stack.count = stack.count - struct.container_inventory.insert(stack)
+      end
+    end
+  end
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {"crafter", struct.id}
   storage.deathrattles[script.register_on_object_destroyed(struct.container)] = {"container", struct.id}

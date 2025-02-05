@@ -7,6 +7,7 @@ Date: ????
     - Cleanup the container when the crafter goes away
     - Spill items when mining the crafter
     - Spill in deathrattle
+    - Handle transferring quality upgraded containers ourselves
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03
