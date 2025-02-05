@@ -259,17 +259,26 @@ script.on_nth_tick(60 * 60, function(event)
   end
 end)
 
-local function technology_changes_quality(technology)
-  for _, effect in pairs(technology.prototype) do
-    if effect.type == "nothing" and effect.effect_description[1] and type(effect.effect_description[1]) == "string" and effect.effect_description[1] == "effect-description.quality-condenser-quality" then
-      return true
+local technology_changes_quality = {}
+for _, technology in pairs(prototypes.technology) do
+  local sum = 0
+  for _, effect in pairs(technology.effects) do
+    if effect.type == "nothing" then
+      local effect_description = effect.effect_description[1]
+      if effect_description and type(effect_description) == "string" and effect_description == "effect-description.quality-condenser-quality" then
+        sum = sum + tonumber(effect.effect_description[2])
+      end
     end
   end
-  return false
+  if sum ~= 0 then
+    technology_changes_quality[technology.name] = sum
+  end
 end
 
+log("technology_changes_quality = " .. serpent.block(technology_changes_quality))
+
 local function on_research_toggled(event)
-  if technology_changes_quality(event.technology) then
+  if technology_changes_quality[event.technology.name] then
     for _, struct in pairs(storage.structs) do
       if struct.entity.force == event.technology.force then
         update_beacon_interface(struct)
