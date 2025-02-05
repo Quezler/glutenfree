@@ -89,8 +89,6 @@ function Handler.on_created_entity(event)
   })
   storage.index = storage.index + 1
 
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = {"crafter", struct.id}
-
   struct.container = entity.surface.create_entity{
     name = mod_prefix .. "container",
     force = entity.force,
@@ -99,6 +97,9 @@ function Handler.on_created_entity(event)
   }
   struct.container.destructible = false
   struct.container_inventory = struct.container.get_inventory(defines.inventory.chest)
+
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {"crafter", struct.id}
+  storage.deathrattles[script.register_on_object_destroyed(struct.container)] = {"container", struct.id}
 
   Combinators.create_for_struct(struct)
   reset_offering_idle(struct)
@@ -140,6 +141,7 @@ local deathrattles = {
   end,
   ["crafter"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
+    struct.container.destroy()
     struct.arithmetic_1.destroy()
     struct.arithmetic_2.destroy()
     struct.decider_1.destroy()
@@ -149,6 +151,8 @@ local deathrattles = {
     struct.inserter_2.destroy()
     struct.inserter_2_offering.destroy()
     storage.structs[struct.id] = nil
+  end,
+  ["container"] = function (deathrattle)
   end,
 }
 
