@@ -58,20 +58,20 @@ function Condense.trigger(struct)
         local integer = math.floor(number)
         local decimal = number - integer
 
-        -- any leftover points? leave that to chance :)
-        if decimal > 0 and math.random() < decimal then
-          integer = integer + 1
-        end
+        if integer > 0 then
+          -- any leftover points? leave that to chance :)
+          if decimal > 0 and math.random() < decimal then
+            integer = integer + 1
+          end
 
-        log(string.format("%d x %s (%s) x %d%% = %d (%d + %f)", item.count, item.name, item.quality, quality_points / 10, integer, number, decimal))
+          log(string.format("%d x %s (%s) x %d%% = %d (%d + %f)", item.count, item.name, item.quality, quality_points / 10, integer, number, decimal))
 
-        local to_insert = {name = item.name, count = integer, quality = next_quality_name}
-        if item_can_spoil[item.name] then
-          to_insert["spoil_percent"] = assert(get_spoil_percentage(struct.container_inventory, item))
-        end
+          local to_insert = {name = item.name, count = integer, quality = next_quality_name}
+          if item_can_spoil[item.name] then
+            to_insert["spoil_percent"] = assert(get_spoil_percentage(struct.container_inventory, item))
+          end
 
-        struct.container_inventory.remove(item) -- all items are consumed, this way there is always space.
-        if to_insert.count > 0 then
+          struct.container_inventory.remove(item) -- all items are consumed, this way there is always space.
           struct.container_inventory.insert(to_insert)
         end
       end
