@@ -1,17 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.9
-Date: ????
-  Info:
-    - Make module slots configurable
-    - Convert base quality into a math expression
-    - Set all base qualities with the beacon interface
-    - Rely on beacon interface for indestructible invisible beacons
-    - Update beacon interfaces in on_configuration_changed
-    - Prototype a nothing effect
-    - Write boilerplate for control stage nothing technology
-    - Map technology names to quality modifiers on world load
-    - Support parsing negative quality boosts
----------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 02. 03
   Info:
@@ -29,6 +16,15 @@ Date: 2025. 02. 03
     - Typo
     - Fix recipe being unlocked
     - Anticipate quality_indicator_shift
+    - Make module slots configurable
+    - Convert base quality into a math expression
+    - Set all base qualities with the beacon interface
+    - Rely on beacon interface for indestructible invisible beacons
+    - Update beacon interfaces in on_configuration_changed
+    - Prototype a nothing effect
+    - Write boilerplate for control stage nothing technology
+    - Map technology names to quality modifiers on world load
+    - Support parsing negative quality boosts
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03
