@@ -15,6 +15,7 @@ Date: ????
     - Hide deathrattle debug messages
     - Typo
     - Fix recipe being unlocked
+    - Anticipate quality_indicator_shift
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03
