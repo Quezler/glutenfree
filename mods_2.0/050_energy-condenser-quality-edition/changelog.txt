@@ -10,6 +10,7 @@ Date: ????
     - Prototype a nothing effect
     - Write boilerplate for control stage nothing technology
     - Map technology names to quality modifiers on world load
+    - Support parsing negative quality boosts
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 02. 03
