@@ -42,9 +42,9 @@ local function spill_chest_inventory(entity)
     local stack = inventory[slot]
     if stack.valid_for_read then
       entity.surface.spill_item_stack{
-        position = entity.container.position,
+        position = entity.position,
         stack = stack,
-        force = entity.container.force,
+        force = entity.force,
         allow_belts = false,
       }
     end

@@ -13,6 +13,7 @@ Date: ????
     - This should be enough to support cloning
     - Fix item loss due to disallowed cloning
     - Hide deathrattle debug messages
+    - Typo
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03
