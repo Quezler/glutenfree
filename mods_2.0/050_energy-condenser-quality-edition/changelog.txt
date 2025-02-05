@@ -11,6 +11,7 @@ Date: ????
     - Fix entity healths
     - Give the container no deathrattle
     - This should be enough to support cloning
+    - Fix item loss due to disallowed cloning
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03

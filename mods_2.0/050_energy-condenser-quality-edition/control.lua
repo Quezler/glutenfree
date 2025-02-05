@@ -35,6 +35,24 @@ local function reset_offering_done(struct)
   storage.deathrattles[script.register_on_object_destroyed(struct.inserter_2_offering)] = {"offering-done", struct.id}
 end
 
+local function spill_chest_inventory(entity)
+  local inventory = entity.get_inventory(defines.inventory.chest)
+
+  for slot = 1, #inventory do
+    local stack = inventory[slot]
+    if stack.valid_for_read then
+      entity.surface.spill_item_stack{
+        position = entity.container.position,
+        stack = stack,
+        force = entity.container.force,
+        allow_belts = false,
+      }
+    end
+  end
+
+  inventory.clear()
+end
+
 local Handler = {}
 
 script.on_init(function()
@@ -72,7 +90,8 @@ function Handler.on_created_entity(event)
 
   -- mods to not get to clone/place the container.
   if entity.name == mod_prefix .. "container" then
-    entity.destroy() -- todo: what about the items?
+    spill_chest_inventory(entity)
+    entity.destroy()
     return
   end
 
@@ -167,18 +186,7 @@ local deathrattles = {
   ["crafter"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
     if struct.container_inventory.valid then
-      for slot = 1, #struct.container_inventory do
-        local stack = struct.container_inventory[slot]
-        if stack.valid_for_read then
-          struct.container.surface.spill_item_stack{
-            position = struct.container.position,
-            stack = stack,
-            force = struct.container.force,
-            allow_belts = false,
-          }
-        end
-      end
-      struct.container_inventory.clear()
+      spill_chest_inventory(struct.container)
     end
     struct.container.destroy()
     struct.arithmetic_1.destroy()
