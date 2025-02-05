@@ -5,6 +5,7 @@ Date: ????
     - Only condense when it would output at least one
     - Confirm the right amount got removed and inserted
     - Cleanup the container when the crafter goes away
+    - Spill items when mining the crafter
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03

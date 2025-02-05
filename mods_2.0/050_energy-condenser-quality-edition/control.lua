@@ -174,3 +174,27 @@ script.on_nth_tick(60 * 60, function(event)
     end
   end
 end)
+
+function Handler.on_mined_entity(event)
+  local entity = event.entity
+  local struct = storage.structs[entity.unit_number]
+
+  for slot = 1, #struct.container_inventory do
+    local stack = struct.container_inventory[slot]
+    if stack.valid_for_read then
+      event.buffer.insert(stack)
+    end
+  end
+
+  struct.container_inventory.clear()
+end
+
+for _, event in ipairs({
+  defines.events.on_player_mined_entity,
+  defines.events.on_robot_mined_entity,
+  defines.events.on_space_platform_mined_entity,
+}) do
+  script.on_event(event, Handler.on_mined_entity, {
+    {filter = "name", name = mod_prefix .. "crafter"},
+  })
+end
