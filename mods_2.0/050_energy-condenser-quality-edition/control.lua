@@ -80,6 +80,22 @@ script.on_init(function()
   storage.deathrattles = {}
 end)
 
+local function update_beacon_interface(struct)
+  remote.call("beacon-interface", "set_effects", struct.beacon_interface.unit_number, {
+    speed = 0,
+    productivity = 0,
+    consumption = 0,
+    pollution = 0,
+    quality = get_base_quality(struct.entity.quality),
+  })
+end
+
+script.on_configuration_changed(function(data)
+  for _, struct in pairs(storage.structs) do
+    update_beacon_interface(struct)
+  end
+end)
+
 function ensure_recipe_is_set(entity)
   local recipe, quality = entity.get_recipe()
   if recipe == nil then entity.set_recipe(mod_prefix .. "a-whole-bunch-of-items") end
@@ -132,13 +148,7 @@ function Handler.on_created_entity(event)
     raise_built = true,
   }
   allow_beacon_interface_creation = false
-  remote.call("beacon-interface", "set_effects", struct.beacon_interface.unit_number, {
-    speed = 0,
-    productivity = 0,
-    consumption = 0,
-    pollution = 0,
-    quality = get_base_quality(entity.quality),
-  })
+  update_beacon_interface(struct)
 
   local other_quality_container = entity.surface.find_entities_filtered{
     name = mod_prefix .. "container",

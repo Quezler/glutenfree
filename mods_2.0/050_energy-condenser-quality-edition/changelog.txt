@@ -20,6 +20,7 @@ Date: ????
     - Convert base quality into a math expression
     - Set all base qualities with the beacon interface
     - Rely on beacon interface for indestructible invisible beacons
+    - Update beacon interfaces in on_configuration_changed
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03
