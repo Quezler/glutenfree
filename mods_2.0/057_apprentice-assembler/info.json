@@ -21,6 +21,6 @@
         "base",
         "? space-age",
 
-        "beacon-interface"
+        "beacon-interface >= 1.0.2"
     ]
 }

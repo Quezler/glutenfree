@@ -85,7 +85,6 @@ function Handler.on_created_entity(event)
     position = entity.position,
     raise_built = true,
   }
-  struct.beacon_interface.destructible = false
 
   Inserters.create_for_struct(struct)
   reset_offering_1(struct)

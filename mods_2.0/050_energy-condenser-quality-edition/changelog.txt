@@ -19,6 +19,7 @@ Date: ????
     - Make module slots configurable
     - Convert base quality into a math expression
     - Set all base qualities with the beacon interface
+    - Rely on beacon interface for indestructible invisible beacons
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03
