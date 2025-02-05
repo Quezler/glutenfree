@@ -8,6 +8,7 @@ Date: ????
     - Spill items when mining the crafter
     - Spill in deathrattle
     - Handle transferring quality upgraded containers ourselves
+    - Fix entity healths
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03

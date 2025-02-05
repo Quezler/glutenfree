@@ -47,7 +47,7 @@ local crafter_entity = {
   drawing_box_vertical_extension = 0.5,
   selection_box = {{-3.5, -3.5}, {3.5, 3.5}},
   collision_box = table.deepcopy(a_9x9_entity.collision_box),
-  health = 2500,
+  max_health = 1000,
 
   module_slots = 3,
   effect_receiver = { base_effect = { quality = math.floor(settings.startup[mod_prefix .. "base-quality"].value * 10) / 100 }},
@@ -180,11 +180,12 @@ local container_entity = {
   selection_box = table.deepcopy(a_9x9_entity.selection_box),
   collision_box = table.deepcopy(a_9x9_entity.collision_box),
   collision_mask = {layers = {}},
-  health = 2500,
+  max_health = 10,
 
   minable = table.deepcopy(a_9x9_entity.minable),
 
   icon_draw_specification = {scale = 0, scale_for_many = 0},
+  hidden = true,
 }
 container_entity.minable.result = nil
 
