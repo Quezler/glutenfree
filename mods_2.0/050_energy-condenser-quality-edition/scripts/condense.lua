@@ -71,8 +71,8 @@ function Condense.trigger(struct)
             to_insert["spoil_percent"] = assert(get_spoil_percentage(struct.container_inventory, item))
           end
 
-          struct.container_inventory.remove(item) -- all items are consumed, this way there is always space.
-          struct.container_inventory.insert(to_insert)
+          assert(struct.container_inventory.remove(item) == item.count) -- all items are consumed, this way there is always space.
+          assert(struct.container_inventory.insert(to_insert) == to_insert.count)
         end
       end
     end
