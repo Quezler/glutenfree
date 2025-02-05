@@ -12,6 +12,7 @@ Date: ????
     - Give the container no deathrattle
     - This should be enough to support cloning
     - Fix item loss due to disallowed cloning
+    - Hide deathrattle debug messages
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03

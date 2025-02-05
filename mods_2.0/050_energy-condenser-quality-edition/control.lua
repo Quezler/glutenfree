@@ -11,7 +11,7 @@ end
 
 local function reset_offering_idle(struct)
   if struct.inserter_1_offering.valid then return end
-  game.print(string.format("resetting offering idle for #%d @ %d", struct.id, game.tick))
+  -- game.print(string.format("resetting offering idle for #%d @ %d", struct.id, game.tick))
   struct.inserter_1.held_stack.clear()
   struct.inserter_1_offering = storage.surface.create_entity{
     name = "item-on-ground",
@@ -24,7 +24,7 @@ end
 
 local function reset_offering_done(struct)
   if struct.inserter_2_offering.valid then return end
-  game.print(string.format("resetting offering done for #%d @ %d", struct.id, game.tick))
+  -- game.print(string.format("resetting offering done for #%d @ %d", struct.id, game.tick))
   struct.inserter_2.held_stack.clear()
   struct.inserter_2_offering = storage.surface.create_entity{
     name = "item-on-ground",
