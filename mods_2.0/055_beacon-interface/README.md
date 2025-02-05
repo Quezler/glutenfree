@@ -37,3 +37,10 @@ remote.call("beacon-interface", "set_effect", unit_number, "efficiency", 25)
 local quality = remote.call("beacon-interface", "get_effect", unit_number, "quality")
 remote.call("beacon-interface", "set_effect", unit_number, "quality", speed + 25)
 ```
+
+An example on how to copy the invisible prototype for use in your own mod:
+```lua
+local beacon_interface = table.deepcopy(data.raw["beacon"]["beacon-interface--beacon-tile"])
+beacon_interface.name = mod_prefix .. "beacon-interface"
+data:extend{beacon_interface}
+```
