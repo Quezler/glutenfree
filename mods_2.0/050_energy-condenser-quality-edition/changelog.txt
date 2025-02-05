@@ -14,6 +14,7 @@ Date: ????
     - Fix item loss due to disallowed cloning
     - Hide deathrattle debug messages
     - Typo
+    - Fix recipe being unlocked
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03

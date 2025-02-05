@@ -142,6 +142,7 @@ local crafter_recipe = {
   },
   results = {{type="item", name=crafter_item.name, amount=1}},
   energy_required = 10,
+  enabled = false,
 }
 
 local crafter_technology = {
