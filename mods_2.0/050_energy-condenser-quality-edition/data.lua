@@ -50,7 +50,6 @@ local crafter_entity = {
   max_health = 1000,
 
   module_slots = settings.startup[mod_prefix .. "module-slots"].value,
-  effect_receiver = { base_effect = { quality = get_base_quality(data.raw["quality"]["normal"]) / 100 }},
   allowed_effects = {"consumption", "speed", "pollution", "quality"},
 
   crafting_speed = 2,
@@ -196,3 +195,7 @@ data:extend({container_entity})
 
 require("prototypes.surface")
 require("prototypes.recipe")
+
+local beacon_interface = table.deepcopy(data.raw["beacon"]["beacon-interface--beacon-tile"])
+beacon_interface.name = mod_prefix .. "beacon-interface"
+data:extend{beacon_interface}

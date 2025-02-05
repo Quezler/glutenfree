@@ -1,3 +1,4 @@
+require("shared")
 mod_prefix = "quality-condenser--"
 
 local Combinators = require("scripts.combinators")
@@ -85,6 +86,8 @@ function ensure_recipe_is_set(entity)
   return quality or prototypes.quality["normal"]
 end
 
+local allow_beacon_interface_creation = false
+
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -92,6 +95,11 @@ function Handler.on_created_entity(event)
   if entity.name == mod_prefix .. "container" then
     spill_chest_inventory(entity)
     entity.destroy()
+    return
+  elseif entity.name == mod_prefix .. "beacon-interface" then
+    if allow_beacon_interface_creation == false then
+      entity.destroy()
+    end
     return
   end
 
@@ -102,6 +110,7 @@ function Handler.on_created_entity(event)
     index = storage.index,
     entity = entity,
 
+    beacon_interface = nil,
     container = nil,
     container_inventory = nil,
     arithmetic_1 = nil, -- each + 0 = S
@@ -114,6 +123,22 @@ function Handler.on_created_entity(event)
     inserter_2_offering = storage.invalid,
   })
   storage.index = storage.index + 1
+
+  allow_beacon_interface_creation = true
+  struct.beacon_interface = entity.surface.create_entity{
+    name = mod_prefix .. "beacon-interface",
+    force = entity.force,
+    position = entity.position,
+    raise_built = true,
+  }
+  allow_beacon_interface_creation = false
+  remote.call("beacon-interface", "set_effects", struct.beacon_interface.unit_number, {
+    speed = 0,
+    productivity = 0,
+    consumption = 0,
+    pollution = 0,
+    quality = get_base_quality(entity.quality),
+  })
 
   local other_quality_container = entity.surface.find_entities_filtered{
     name = mod_prefix .. "container",
@@ -159,6 +184,7 @@ for _, event in ipairs({
   script.on_event(event, Handler.on_created_entity, {
     {filter = "name", name = mod_prefix .. "crafter"},
     {filter = "name", name = mod_prefix .. "container"},
+    {filter = "name", name = mod_prefix .. "beacon-interface"},
   })
 end
 
@@ -188,6 +214,7 @@ local deathrattles = {
     if struct.container_inventory.valid then
       spill_chest_inventory(struct.container)
     end
+    struct.beacon_interface.destroy()
     struct.container.destroy()
     struct.arithmetic_1.destroy()
     struct.arithmetic_2.destroy()

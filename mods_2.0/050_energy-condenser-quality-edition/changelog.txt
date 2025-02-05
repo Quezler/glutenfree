@@ -18,6 +18,7 @@ Date: ????
     - Anticipate quality_indicator_shift
     - Make module slots configurable
     - Convert base quality into a math expression
+    - Set all base qualities with the beacon interface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03
