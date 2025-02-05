@@ -6,6 +6,7 @@ Date: ????
     - Confirm the right amount got removed and inserted
     - Cleanup the container when the crafter goes away
     - Spill items when mining the crafter
+    - Spill in deathrattle
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03
