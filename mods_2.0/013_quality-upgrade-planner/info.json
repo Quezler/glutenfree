@@ -3,7 +3,7 @@
     "title": "Quality upgrade planner",
     "description": "Bulk changing the quality of buildings, recipes, modules, filters, and more.",
 
-    "version": "2.5.1",
+    "version": "2.5.2",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -18,7 +18,7 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "base >= 2.0.13",
+        "base >= 2.0.33",
         "? quality",
 
         "? lane-balancers",

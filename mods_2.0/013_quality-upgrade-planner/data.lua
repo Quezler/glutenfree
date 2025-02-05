@@ -48,6 +48,8 @@ local selection_tool = {
     mode = {"nothing"},
     cursor_box_type = "not-allowed",
   },
+  auto_recycle = false,
+  hidden = true,
 }
 
 local shortcut = {
