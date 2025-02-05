@@ -258,3 +258,25 @@ script.on_nth_tick(60 * 60, function(event)
     end
   end
 end)
+
+local function technology_changes_quality(technology)
+  for _, effect in pairs(technology.prototype) do
+    if effect.type == "nothing" and effect.effect_description[1] and type(effect.effect_description[1]) == "string" and effect.effect_description[1] == "effect-description.quality-condenser-quality" then
+      return true
+    end
+  end
+  return false
+end
+
+local function on_research_toggled(event)
+  if technology_changes_quality(event.technology) then
+    for _, struct in pairs(storage.structs) do
+      if struct.entity.force == event.technology.force then
+        update_beacon_interface(struct)
+      end
+    end
+  end
+end
+
+script.on_event(defines.events.on_research_finished, on_research_toggled)
+script.on_event(defines.events.on_research_reversed, on_research_toggled)

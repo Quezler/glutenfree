@@ -8,6 +8,7 @@ Date: ????
     - Rely on beacon interface for indestructible invisible beacons
     - Update beacon interfaces in on_configuration_changed
     - Prototype a nothing effect
+    - Write boilerplate for control stage nothing technology
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 02. 03
