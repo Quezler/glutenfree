@@ -9,6 +9,7 @@ Date: ????
     - Spill in deathrattle
     - Handle transferring quality upgraded containers ourselves
     - Fix entity healths
+    - Give the container no deathrattle
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 02. 03

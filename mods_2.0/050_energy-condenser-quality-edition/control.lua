@@ -116,7 +116,7 @@ function Handler.on_created_entity(event)
   end
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {"crafter", struct.id}
-  storage.deathrattles[script.register_on_object_destroyed(struct.container)] = {"container", struct.id}
+  -- storage.deathrattles[script.register_on_object_destroyed(struct.container)] = {"container", struct.id}
 
   Combinators.create_for_struct(struct)
   reset_offering_idle(struct)
@@ -183,8 +183,8 @@ local deathrattles = {
     struct.inserter_2_offering.destroy()
     storage.structs[struct.id] = nil
   end,
-  ["container"] = function (deathrattle)
-  end,
+  -- ["container"] = function (deathrattle)
+  -- end,
 }
 
 script.on_event(defines.events.on_object_destroyed, function(event)
