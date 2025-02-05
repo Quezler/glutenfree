@@ -68,7 +68,14 @@ function ensure_recipe_is_set(entity)
 end
 
 function Handler.on_created_entity(event)
-  local entity = event.entity
+  local entity = event.entity or event.destination
+
+  -- mods to not get to clone/place the container.
+  if entity.name == mod_prefix .. "container" then
+    entity.destroy() -- todo: what about the items?
+    return
+  end
+
   ensure_recipe_is_set(entity)
 
   local struct = new_struct(storage.structs, {
@@ -128,10 +135,11 @@ for _, event in ipairs({
   defines.events.on_space_platform_built_entity,
   defines.events.script_raised_built,
   defines.events.script_raised_revive,
-  -- defines.events.on_entity_cloned,
+  defines.events.on_entity_cloned,
 }) do
   script.on_event(event, Handler.on_created_entity, {
     {filter = "name", name = mod_prefix .. "crafter"},
+    {filter = "name", name = mod_prefix .. "container"},
   })
 end
 
