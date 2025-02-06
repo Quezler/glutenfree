@@ -1,10 +1,11 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.4
-Date: ????
+Version: 1.0.5
+Date: 2025. 02. 06
   Info:
     - Rely on beacon interface for indestructible invisible beacons
+    - Revert beacon interface being indestructible by default
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.5
+Version: 1.0.4
 Date: 2025. 02. 02
   Info:
     - Stash thumbnail parts

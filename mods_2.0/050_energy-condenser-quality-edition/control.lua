@@ -148,6 +148,7 @@ function Handler.on_created_entity(event)
     raise_built = true,
   }
   allow_beacon_interface_creation = false
+  struct.beacon_interface.destructible = false
   update_beacon_interface(struct)
 
   local other_quality_container = entity.surface.find_entities_filtered{

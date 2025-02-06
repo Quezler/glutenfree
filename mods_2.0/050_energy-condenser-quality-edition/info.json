@@ -22,7 +22,7 @@
         "? quality",
         "? space-age",
 
-        "beacon-interface >= 1.0.2",
+        "beacon-interface >= 1.0.3",
         "? change-recipe-quality-without-re-selecting-recipe"
     ]
 }
