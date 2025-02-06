@@ -6,6 +6,7 @@ Date: ????
     - Revert beacon interface being indestructible by default
     - Apply the technology modifiers
     - Test and document negative nothing effects
+    - Correctly apply bonus quality research
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 02. 03

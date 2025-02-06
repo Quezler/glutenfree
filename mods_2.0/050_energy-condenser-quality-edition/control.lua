@@ -54,6 +54,37 @@ local function spill_chest_inventory(entity)
   inventory.clear()
 end
 
+local technology_changes_quality = {}
+for _, technology in pairs(prototypes.technology) do
+  local sum = 0
+  for _, effect in pairs(technology.effects) do
+    if effect.type == "nothing" then
+      local effect_description = effect.effect_description[1]
+      if effect_description and type(effect_description) == "string" and effect_description == "effect-description.quality-condenser-quality" then
+        sum = sum + tonumber(effect.effect_description[3])
+      end
+    end
+  end
+  if sum ~= 0 then
+    technology_changes_quality[technology.name] = sum
+  end
+end
+log("technology_changes_quality = " .. serpent.block(technology_changes_quality))
+
+local function get_bonus_quality(force)
+  if table_size(technology_changes_quality) == 0 then return 0 end
+
+  local sum = 0
+
+  for technology_name, technology in pairs(force.technologies) do
+    if technology_changes_quality[technology_name] and technology.researched then
+      sum = sum + technology_changes_quality[technology_name]
+    end
+  end
+
+  return sum * 10 -- technology_changes_quality is in 0-100 decimal format, we need it in 0-1000 format
+end
+
 local Handler = {}
 
 script.on_init(function()
@@ -80,13 +111,13 @@ script.on_init(function()
   storage.deathrattles = {}
 end)
 
-local function update_beacon_interface(struct)
+local function update_beacon_interface(struct, bonus_quality)
   remote.call("beacon-interface", "set_effects", struct.beacon_interface.unit_number, {
     speed = 0,
     productivity = 0,
     consumption = 0,
     pollution = 0,
-    quality = get_base_quality(struct.entity.quality),
+    quality = get_base_quality(struct.entity.quality) + bonus_quality or get_bonus_quality(struct.entity.force),
   })
 end
 
@@ -260,29 +291,13 @@ script.on_nth_tick(60 * 60, function(event)
   end
 end)
 
-local technology_changes_quality = {}
-for _, technology in pairs(prototypes.technology) do
-  local sum = 0
-  for _, effect in pairs(technology.effects) do
-    if effect.type == "nothing" then
-      local effect_description = effect.effect_description[1]
-      if effect_description and type(effect_description) == "string" and effect_description == "effect-description.quality-condenser-quality" then
-        sum = sum + tonumber(effect.effect_description[3])
-      end
-    end
-  end
-  if sum ~= 0 then
-    technology_changes_quality[technology.name] = sum
-  end
-end
-
-log("technology_changes_quality = " .. serpent.block(technology_changes_quality))
-
 local function on_research_toggled(event)
   if technology_changes_quality[event.technology.name] then
+    local force = event.technology.force
+    local bonus_quality = get_bonus_quality(force)
     for _, struct in pairs(storage.structs) do
-      if struct.entity.force == event.technology.force then
-        update_beacon_interface(struct)
+      if struct.entity.force == force then
+        update_beacon_interface(struct, bonus_quality)
       end
     end
   end
