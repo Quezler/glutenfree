@@ -117,7 +117,7 @@ local function update_beacon_interface(struct, bonus_quality)
     productivity = 0,
     consumption = 0,
     pollution = 0,
-    quality = get_base_quality(struct.entity.quality) + bonus_quality or get_bonus_quality(struct.entity.force),
+    quality = get_base_quality(struct.entity.quality) + (bonus_quality or get_bonus_quality(struct.entity.force)),
   })
 end
 
@@ -292,8 +292,8 @@ script.on_nth_tick(60 * 60, function(event)
 end)
 
 local function on_research_toggled(event)
-  if technology_changes_quality[event.technology.name] then
-    local force = event.technology.force
+  if technology_changes_quality[event.research.name] then
+    local force = event.research.force
     local bonus_quality = get_bonus_quality(force)
     for _, struct in pairs(storage.structs) do
       if struct.entity.force == force then
