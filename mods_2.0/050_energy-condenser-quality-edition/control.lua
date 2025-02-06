@@ -266,7 +266,8 @@ for _, technology in pairs(prototypes.technology) do
     if effect.type == "nothing" then
       local effect_description = effect.effect_description[1]
       if effect_description and type(effect_description) == "string" and effect_description == "effect-description.quality-condenser-quality" then
-        sum = sum + tonumber(effect.effect_description[3])
+        error(serpent.block(effect.effect_description))
+        sum = sum + tonumber(effect.effect_description[2][3])
       end
     end
   end

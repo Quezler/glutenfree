@@ -3,6 +3,7 @@ Version: 0.0.9
 Date: ????
   Info:
     - Prepare to assign technology bonuses from config
+    - Stash broken localization
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 02. 03
