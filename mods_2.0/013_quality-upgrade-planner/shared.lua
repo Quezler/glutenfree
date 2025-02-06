@@ -10,6 +10,10 @@ return {
       sprite = "entity/inserter",
     },
     {
+      name = "storage",
+      sprite = "entity/storage-chest",
+    },
+    {
       name = "recipes",
       sprite = "entity/assembling-machine-1",
     },
@@ -19,7 +23,7 @@ return {
     },
     {
       name = "requests",
-      sprite = "entity/blue-chest", -- the OG requester chest sprite, not touched by aai containers.
+      sprite = "entity/requester-chest",
     },
     {
       name = "constants",
