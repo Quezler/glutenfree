@@ -1,3 +1,36 @@
+[below: coherent summary]
+Ehmm sorry for the incomplete and messy readme, the mod is finally done and i lack energy to write a coherent one,
+but suffice it to say this mod includes the functionality of the two mods before it along with a bunch of options.
+
+Those that know the energy condenser from the minecraft days might recognize the mechanic,
+just put the items you wish to upgrade inside of the machine, power it and wait for a bit.
+
+You can limit the upper quality to which it upgrades by setting the quality of the recipe,
+the normal quality means that the machine will just keep going and going.
+
+If there are not enough items to upgrade (item count * percentage = below 100) the machine does nothing,
+if there is a remainder that 1-99 percentage will be turned into a chance for one more item.
+
+The mod is quite performant in that it does bulk and triggers machine states by circuits instead of polling the entities,
+if you manage to get a machine stuck then fear not, every 60 seconds any stuck machine (changed quality or researched more) becomes unstuck.
+
+Quality quality condensers are faster and have more inventory space.
+
+[below: failed attempt at rewriting below]
+
+Both of the mods that came before this had some shortcomings and there were a bunch of feature requests for both since,
+it would have been tricky to retcon those features in those two mods, so here's a new one that should cover a whole lot.
+
+- module slots: 
+
+Configuration options:
+- appearance: pick between two of the awesome textures made by [Hurricane046](https://mods.factorio.com/user/Hurricane046)
+- base quality: 0-100
+- module slots: 0-6
+- technology effects: comma seperated technology names with their values
+
+[below: technical summary]
+
 Attempts to deal with the shortcomings of both mods that came before it, like bulk items without sacrificing performance.
 
 Just put items inside the building and when full/idle it will condense the items to the their next unlocked quality tier.

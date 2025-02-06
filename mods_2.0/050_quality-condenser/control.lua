@@ -224,7 +224,7 @@ for _, event in ipairs({
   defines.events.on_entity_cloned,
 }) do
   script.on_event(event, Handler.on_created_entity, {
-    {filter = "name", name = mod_prefix .. "crafter"},
+    {filter = "name", name = mod_name},
     {filter = "name", name = mod_prefix .. "container"},
     {filter = "name", name = mod_prefix .. "beacon-interface"},
   })

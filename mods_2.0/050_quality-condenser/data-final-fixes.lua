@@ -1,6 +1,7 @@
 require("shared")
 
 local function string_split(s, delimiter)
+  if s == "" then return {} end
   local result = {}
   for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
       table.insert(result, match)
@@ -17,7 +18,7 @@ for _, part in ipairs(string_split(parts, ",")) do
   table.insert(data.raw["technology"][technology_name].effects, {
     type = "nothing",
     icons = {
-      {icon = data.raw["assembling-machine"][mod_prefix .. "crafter"].icon},
+      {icon = data.raw["assembling-machine"][mod_name].icon},
       {icon = "__core__/graphics/icons/any-quality.png", shift = {8, 8}, scale = 0.25},
     },
     effect_description = {"effect-description.quality-condenser-quality", tonumber(quality_modifier) > 0 and "+" or "", quality_modifier}

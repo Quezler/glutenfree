@@ -40,7 +40,7 @@ end
 
 local crafter_entity = {
   type = "assembling-machine",
-  name = mod_prefix .. "crafter",
+  name = mod_name,
   icon = skin.icon,
 
   selection_priority = 51,
@@ -115,11 +115,11 @@ local crafter_entity = {
 
 local crafter_item = {
   type = "item",
-  name = mod_prefix .. "crafter",
+  name = mod_name,
   icon = skin.icon,
 
   stack_size = 10,
-  order = "e[quality-condenser--crafter]",
+  order = "e[quality-condenser]",
   subgroup = "smelting-machine",
 
   weight = 200 * kg,
@@ -130,7 +130,7 @@ crafter_entity.minable = {mining_time = 0.3, result = crafter_item.name}
 
 local crafter_recipe = {
   type = "recipe",
-  name = mod_prefix .. "crafter",
+  name = mod_name,
   ingredients =
   {
     {type = "item", name = "iron-plate", amount = 100},
@@ -147,7 +147,7 @@ local crafter_recipe = {
 
 local crafter_technology = {
   type = "technology",
-  name = "quality-condenser", -- todo: shared.lua
+  name = mod_name,
   icons = skin.technology_icons,
   effects =
   {

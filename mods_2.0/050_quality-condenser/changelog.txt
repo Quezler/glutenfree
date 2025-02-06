@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2025. 01. 06
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
 Version: 0.0.9
-Date: ????
+Date: 2025. 02. 06
   Info:
     - Prepare to assign technology bonuses from config
     - Revert beacon interface being indestructible by default
@@ -10,7 +15,7 @@ Date: ????
     - Ahem
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
-Date: 2025. 02. 03
+Date: 2025. 02. 05
   Info:
     - Only condense when it would output at least one
     - Confirm the right amount got removed and inserted
