@@ -11,6 +11,7 @@ entity.name = mod_prefix .. "beacon"
 entity.icon = nil
 entity.icons = icons
 entity.module_slots = 16 * 5 -- there will be 16 "bits" at most per effect, and there are 5 effects
+entity.graphics_set = require("__base__.prototypes.entity.beacon-animations")
 entity.graphics_set.module_visualisations = nil
 entity.graphics_set.animation_list[1].animation.layers[1].filename = "__beacon-interface__/graphics/entity/beacon-interface/beacon-interface-bottom.png"
 entity.allowed_effects = shared.effects
