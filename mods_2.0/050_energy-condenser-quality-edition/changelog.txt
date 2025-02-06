@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Prepare to assign technology bonuses from config
     - Revert beacon interface being indestructible by default
+    - Apply the technology modifiers
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 02. 03
