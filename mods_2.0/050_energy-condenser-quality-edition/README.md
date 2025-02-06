@@ -23,5 +23,9 @@ Base quality:
 - `10 * (quality.level + 1)` (10% base quality, then 10% per quality)
 - `math.pow(2, quality.level) * 2` (2, 4, 8, 16, 64)
 
+Technology effects:
+- `` (no additional base quality)
+- `planet-discovery-fulgora=10,planet-discovery-gleba=10,planet-discovery-vulcanus=10,planet-discovery-aquilo=20` (extra quality per known planet)
+
 - graphics by [Hurricane046](https://mods.factorio.com/user/Hurricane046) (originally named disruptor, later revision is called laboratory)
 - "how to use his graphics" observed from [Xorimuth](https://github.com/tburrows13/LunarLandings/blob/master/prototypes/core-extractor.lua)

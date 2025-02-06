@@ -21,4 +21,11 @@ data:extend({
     default_value = 3,
     allowed_values = {0, 1, 2, 3, 4, 5, 6},
   },
+  {
+    type = "string-setting",
+    name = mod_prefix .. "technology-effects",
+    setting_type = "startup", order = "d",
+    default_value = "",
+    allow_blank = true,
+  },
 })
