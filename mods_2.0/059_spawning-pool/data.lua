@@ -13,10 +13,13 @@ local entity = {
   name = mod_name,
   icon = skin.icon,
 
+  collision_box = {{-3.25, -3.25}, {3.25, 3.25}},
+  selection_box = {{-3.50, -3.50}, {3.50, 3.50}},
+
   graphics_set = skin.graphics_set,
   max_count_of_owned_units = 2,
   max_friends_around_to_spawn = 4,
-  spawning_cooldown = {60 * 1, 60 * 2},
+  spawning_cooldown = {64, 64},
   spawning_radius = 10,
   spawning_spacing = 1,
 
@@ -28,12 +31,7 @@ local entity = {
   result_units = {
     {
       unit = "small-spitter",
-      spawn_points = {
-        {
-          evolution_factor = 0,
-          spawn_weight = 1,
-        }
-      },
+      spawn_points = {{0, 1}},
     }
   },
 }

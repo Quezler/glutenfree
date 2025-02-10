@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Get the prototype to load
+    - Tweak boxes and animation speed
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 10
