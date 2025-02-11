@@ -31,15 +31,31 @@ local entity = {
   icon_draw_specification = {shift = {0.45, -0.375}, scale = 1.5},
 }
 
-local make_optical_fiber_pictures = function (path, name_prefix, data, draw_as_glow)
-  for _, t in pairs(data) do
-    t.ommit_number = true
-    t.width = t.width or 128
-    t.height = t.height or 128
-    t.shift = t.shift or {1, 1}
+function make_optical_fiber_pictures(path, name_prefix, data)
+  local all_pictures = {}
+  local func = function(t) return t end -- modified
+  for key, t in pairs(data) do
+    if t.empty then
+      all_pictures[key] = { priority = "extra-high", filename = "__core__/graphics/empty.png", width = 1, height = 1 }
+    else
+      local tile_pictures = {}
+      for i = 1, (t.variations or 1) do
+        local sprite = func
+        {
+          priority = "extra-high",
+          filename = path .. name_prefix .. "-" .. (t.name or string.gsub(key, "_", "-")) .. ".png", -- modified
+          width = (t.width or 128) * 2, -- modified
+          height = (t.height or 128) * 2, -- modified
+          scale = 0.5,
+          shift = t.shift or {1, 1} ,-- modified
+          tint = {0.1, 0, 0, 1}, -- custom
+        }
+        table.insert(tile_pictures, sprite)
+      end
+      all_pictures[key] = tile_pictures
+    end
   end
-  ---@diagnostic disable-next-line: undefined-global
-  return make_heat_pipe_pictures(path, name_prefix, data, draw_as_glow)
+  return all_pictures
 end
 
 local pipe = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])

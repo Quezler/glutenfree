@@ -12,6 +12,7 @@ Date: ????
     - Fix the neighbourless one being offset
     - Tweak 〃
     - Tweak pixels
+    - Attempt (and fail at) tinting
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 10
