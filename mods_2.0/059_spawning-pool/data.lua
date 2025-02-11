@@ -31,25 +31,36 @@ local entity = {
   icon_draw_specification = {shift = {0.45, -0.375}, scale = 1.5},
 }
 
+---@diagnostic disable-next-line: undefined-global
+local base_make_heat_pipe_pictures = make_heat_pipe_pictures
+local make_heat_pipe_pictures = function (path, name_prefix, data, draw_as_glow)
+  for _, t in pairs(data) do
+    t.ommit_number = true
+    t.width = 128
+    t.height = 128
+  end
+  return base_make_heat_pipe_pictures(path, name_prefix, data, draw_as_glow)
+end
+
 local pipe = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])
 pipe.connection_sprites = make_heat_pipe_pictures(mod_directory .. "/graphics/entity/opticalfiber/", "opticalfiber",
 {
-  single = { name = "straight-vertical-single", ommit_number = true },
-  straight_vertical = { ommit_number = true },
-  straight_horizontal = { ommit_number = true },
-  corner_right_up = { name = "corner-up-right", ommit_number = true },
-  corner_left_up = { name = "corner-up-left", ommit_number = true },
-  corner_right_down = { name = "corner-down-right", ommit_number = true },
-  corner_left_down = { name = "corner-down-left", ommit_number = true },
-  t_up = { ommit_number = true },
-  t_down = { ommit_number = true },
-  t_right = { ommit_number = true },
-  t_left = { ommit_number = true },
-  cross = { ommit_number = true },
-  ending_up = { ommit_number = true },
-  ending_down = { ommit_number = true },
-  ending_right = { ommit_number = true },
-  ending_left = { ommit_number = true },
+  single = { name = "straight-vertical-single" },
+  straight_vertical = {},
+  straight_horizontal = {},
+  corner_right_up = { name = "corner-up-right" },
+  corner_left_up = { name = "corner-up-left" },
+  corner_right_down = { name = "corner-down-right" },
+  corner_left_down = { name = "corner-down-left" },
+  t_up = {},
+  t_down = {},
+  t_right = {},
+  t_left = {},
+  cross = {},
+  ending_up = {},
+  ending_down = {},
+  ending_right = {},
+  ending_left = {},
 })
 -- error(serpent.block(heat_pipe.connection_sprites))
 

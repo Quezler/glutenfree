@@ -6,6 +6,7 @@ Date: ????
     - Position the alt icon over the meaty blob
     - Prepare to use optical fibers
     - Load the game without crashing
+    - Fix the sprites being clipped
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 10
