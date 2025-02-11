@@ -10,6 +10,7 @@ Date: ????
     - Remove the optical fiber strand
     - Remove unused optical fiber files
     - Fix the neighbourless one being offset
+    - Tweak 〃
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 10

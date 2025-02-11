@@ -46,7 +46,7 @@ local pipe = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])
 pipe.icon = mod_directory .. "/graphics/icons/optical-fiber.png"
 pipe.connection_sprites = make_optical_fiber_pictures(mod_directory .. "/graphics/entity/opticalfiber/", "opticalfiber",
 {
-  single = { name = "straight-vertical-single", shift = {0.75, 0.75} },
+  single = { name = "straight-vertical-single", width = 160, height = 160, shift = {1.25, 1.25} },
   straight_vertical = {},
   straight_horizontal = {},
   corner_right_up = { name = "corner-up-right" },
@@ -57,7 +57,7 @@ pipe.connection_sprites = make_optical_fiber_pictures(mod_directory .. "/graphic
   t_down = {},
   t_right = {},
   t_left = {},
-  cross = { width = 160, height = 160 },
+  cross = {},
   ending_up = {},
   ending_down = {},
   ending_right = {},
