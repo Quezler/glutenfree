@@ -31,19 +31,18 @@ local entity = {
   icon_draw_specification = {shift = {0.45, -0.375}, scale = 1.5},
 }
 
----@diagnostic disable-next-line: undefined-global
-local base_make_heat_pipe_pictures = make_heat_pipe_pictures
-local make_heat_pipe_pictures = function (path, name_prefix, data, draw_as_glow)
+local make_optical_fiber_pictures = function (path, name_prefix, data, draw_as_glow)
   for _, t in pairs(data) do
     t.ommit_number = true
     t.width = 128
     t.height = 128
   end
-  return base_make_heat_pipe_pictures(path, name_prefix, data, draw_as_glow)
+  ---@diagnostic disable-next-line: undefined-global
+  return make_heat_pipe_pictures(path, name_prefix, data, draw_as_glow)
 end
 
 local pipe = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])
-pipe.connection_sprites = make_heat_pipe_pictures(mod_directory .. "/graphics/entity/opticalfiber/", "opticalfiber",
+pipe.connection_sprites = make_optical_fiber_pictures(mod_directory .. "/graphics/entity/opticalfiber/", "opticalfiber",
 {
   single = { name = "straight-vertical-single" },
   straight_vertical = {},
