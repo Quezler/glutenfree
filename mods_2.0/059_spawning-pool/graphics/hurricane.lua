@@ -1,6 +1,6 @@
 local Hurricane = {}
 
-function Hurricane.spawner(config)
+function Hurricane.crafter(config)
   local prefix = mod_directory .. string.format("/graphics/%s/%s-", config.name , config.name)
 
   config.rows = config.rows or 8
@@ -24,7 +24,7 @@ function Hurricane.spawner(config)
   end
 
   local graphics_set = {
-    animations =
+    animation =
     {
       layers =
       {

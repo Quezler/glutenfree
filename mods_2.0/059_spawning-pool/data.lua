@@ -1,7 +1,7 @@
 require("shared")
 
 local Hurricane = require("graphics/hurricane")
-local skin = Hurricane.spawner({
+local skin = Hurricane.crafter({
   name = "pathogen-lab",
   width = 4000, height = 4000,
   total_frames = 60,
@@ -9,31 +9,25 @@ local skin = Hurricane.spawner({
 })
 
 local entity = {
-  type = "unit-spawner",
+  type = "assembling-machine",
   name = mod_name,
   icon = skin.icon,
 
-  collision_box = {{-3.25, -3.25}, {3.25, 3.25}},
-  selection_box = {{-3.50, -3.50}, {3.50, 3.50}},
+  collision_box = {{-3.4, -3.4}, {3.4, 3.4}},
+  selection_box = {{-3.5, -3.5}, {3.5, 3.5}},
 
   graphics_set = skin.graphics_set,
-  max_count_of_owned_units = 2,
-  max_friends_around_to_spawn = 4,
-  spawning_cooldown = {64, 64},
-  spawning_radius = 10,
-  spawning_spacing = 1,
 
-  -- don't these control like the same thing?
-  max_richness_for_spawn_shift = 0,
-  max_spawn_shift = 0,
-
-  call_for_help_radius = 0,
-  result_units = {
-    {
-      unit = "small-spitter",
-      spawn_points = {{0, 1}},
-    }
+  crafting_speed = 1,
+  energy_usage = "1MW",
+  energy_source =
+  {
+    type = "electric",
+    usage_priority = "secondary-input",
+    emissions_per_minute = { pollution = -100 }
   },
+
+  crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories),
 }
 
 data:extend{entity}
