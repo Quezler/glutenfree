@@ -5,6 +5,7 @@ Date: ????
     - Swap the spawner for a crafter (too finicky)
     - Position the alt icon over the meaty blob
     - Prepare to use optical fibers
+    - Load the game without crashing
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 10
