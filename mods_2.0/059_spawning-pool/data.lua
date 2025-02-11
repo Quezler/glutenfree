@@ -28,6 +28,7 @@ local entity = {
   },
 
   crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories),
+  icon_draw_specification = {shift = {0.45, -0.375}, scale = 1.5},
 }
 
 data:extend{entity}

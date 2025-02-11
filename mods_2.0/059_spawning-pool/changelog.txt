@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Swap the spawner for a crafter (too finicky)
+    - Position the alt icon over the meaty blob
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 10
