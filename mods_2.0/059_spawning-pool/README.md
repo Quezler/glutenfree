@@ -6,4 +6,5 @@ The biters spawned by this contraption will seak out nesting sites nearby and se
 
 (personally not really a fan of the craftable captured spawner, the recipe is weird, swapped for this)
 
-- graphics by [Hurricane046](https://mods.factorio.com/user/Hurricane046)
+- entity graphics by [Hurricane046](https://mods.factorio.com/user/Hurricane046)
+- pipe graphics by [snouz](https://mods.factorio.com/user/snouz)

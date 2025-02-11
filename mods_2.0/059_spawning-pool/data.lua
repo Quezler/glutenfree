@@ -31,4 +31,7 @@ local entity = {
   icon_draw_specification = {shift = {0.45, -0.375}, scale = 1.5},
 }
 
+local heat_pipe = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])
+error(serpent.block(heat_pipe.connection_sprites))
+
 data:extend{entity}
