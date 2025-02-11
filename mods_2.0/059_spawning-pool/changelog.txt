@@ -8,6 +8,7 @@ Date: ????
     - Load the game without crashing
     - Fix the sprites being clipped
     - Remove the optical fiber strand
+    - Remove unused optical fiber files
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 10
