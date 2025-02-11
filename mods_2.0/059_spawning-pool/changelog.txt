@@ -13,6 +13,7 @@ Date: ????
     - Tweak 〃
     - Tweak pixels
     - Attempt (and fail at) tinting
+    - Generate the artery sprites
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 10
