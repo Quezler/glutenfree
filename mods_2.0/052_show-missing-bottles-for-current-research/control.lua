@@ -116,9 +116,14 @@ local function get_missing_counts(force, list)
           local inventory = struct.entity.get_inventory(defines.inventory.lab_input)
           if inventory.is_empty() == false then
 
+            local get_item_count = {} -- qualities summed together
+            for _, item in ipairs(inventory.get_contents()) do
+              get_item_count[item.name] = (get_item_count[item.name] or 0) + item.count
+            end
+
             for _, item_name in ipairs(list) do
               if storage.lab_inputs[struct.entity.name][item_name] then -- ignore labs that cannot use this item
-                if inventory.get_item_count(item_name) == 0 then
+                if get_item_count[item_name] == nil then
                   -- game.print(serpent.line({
                   --   item_name,
                   --   struct.entity.name,
