@@ -9,6 +9,7 @@ Date: ????
     - Fix the sprites being clipped
     - Remove the optical fiber strand
     - Remove unused optical fiber files
+    - Fix the neighbourless one being offset
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 10

@@ -34,17 +34,19 @@ local entity = {
 local make_optical_fiber_pictures = function (path, name_prefix, data, draw_as_glow)
   for _, t in pairs(data) do
     t.ommit_number = true
-    t.width = 128
-    t.height = 128
+    t.width = t.width or 128
+    t.height = t.height or 128
+    t.shift = t.shift or {1, 1}
   end
   ---@diagnostic disable-next-line: undefined-global
   return make_heat_pipe_pictures(path, name_prefix, data, draw_as_glow)
 end
 
 local pipe = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])
+pipe.icon = mod_directory .. "/graphics/icons/optical-fiber.png"
 pipe.connection_sprites = make_optical_fiber_pictures(mod_directory .. "/graphics/entity/opticalfiber/", "opticalfiber",
 {
-  single = { name = "straight-vertical-single" },
+  single = { name = "straight-vertical-single", shift = {0.75, 0.75} },
   straight_vertical = {},
   straight_horizontal = {},
   corner_right_up = { name = "corner-up-right" },
@@ -55,7 +57,7 @@ pipe.connection_sprites = make_optical_fiber_pictures(mod_directory .. "/graphic
   t_down = {},
   t_right = {},
   t_left = {},
-  cross = {},
+  cross = { width = 160, height = 160 },
   ending_up = {},
   ending_down = {},
   ending_right = {},
