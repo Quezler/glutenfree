@@ -177,6 +177,7 @@ local container_entity = {
 
   inventory_size = 20,
   inventory_type = "normal",
+  flags = {"player-creation", "not-on-map"},
 
   selection_box = table.deepcopy(a_9x9_entity.selection_box),
   collision_box = table.deepcopy(a_9x9_entity.collision_box),
