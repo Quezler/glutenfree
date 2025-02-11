@@ -42,9 +42,10 @@ local make_optical_fiber_pictures = function (path, name_prefix, data, draw_as_g
   return make_heat_pipe_pictures(path, name_prefix, data, draw_as_glow)
 end
 
-local pipe = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])
-pipe.icon = mod_directory .. "/graphics/icons/artery.png"
-pipe.connection_sprites = make_optical_fiber_pictures(mod_directory .. "/graphics/entity/artery/", "artery",
+local artery = table.deepcopy(data.raw["heat-pipe"]["heat-pipe"])
+artery.name = mod_prefix .. "artery"
+artery.icon = mod_directory .. "/graphics/icons/artery.png"
+artery.connection_sprites = make_optical_fiber_pictures(mod_directory .. "/graphics/entity/artery/", "artery",
 {
   single = { name = "straight-vertical-single", width = 160, height = 160, shift = {1.25, 1.25} },
   straight_vertical = {},
@@ -63,6 +64,7 @@ pipe.connection_sprites = make_optical_fiber_pictures(mod_directory .. "/graphic
   ending_right = {},
   ending_left = {},
 })
--- error(serpent.block(heat_pipe.connection_sprites))
-
-data:extend{entity, pipe}
+artery.minable = nil
+artery.heat_buffer.connections = {}
+artery.hidden = true
+data:extend{entity, artery}
