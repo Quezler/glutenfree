@@ -89,40 +89,54 @@ local Handler = {}
 
 function Handler.refresh_gui_for_player(player)
   for _, relative_gui in ipairs(player.gui.relative.children) do
-    if relative_gui.get_mod == mod_name then
+    if relative_gui.get_mod() == mod_name then
       relative_gui.destroy()
     end
   end
 
-  local tabbed_pane = player.gui.relative.add{
-    type = "tabbed-pane",
-    anchor = {
-      gui = defines.relative_gui_type.assembling_machine_gui,
-      position = defines.relative_gui_position.top,
-      name = "quality-condenser",
+  do
+    local tabbed_pane = player.gui.relative.add{
+      name = mod_prefix .. "tabbed-pane-modules",
+      type = "tabbed-pane",
+      style = "quality_condenser_tabbed_pane",
+      anchor = {
+        gui = defines.relative_gui_type.assembling_machine_gui,
+        position = defines.relative_gui_position.top,
+        name = "quality-condenser",
+      }
     }
-  }
-  tabbed_pane.style.maximal_height = 0
-  tabbed_pane.style.top_padding = 0
-  tabbed_pane.style.bottom_padding = 0
+    tabbed_pane.style.horizontally_stretchable = true
 
-  local tab1 = tabbed_pane.add{type="tab", caption="Tab 1"}
-  local tab2 = tabbed_pane.add{type="tab", caption="Tab 2"}
-  local label1 = tabbed_pane.add{type="empty-widget"}
-  local label2 = tabbed_pane.add{type="empty-widget"}
-  tabbed_pane.add_tab(tab1, label1)
-  tabbed_pane.add_tab(tab2, label2)
-  label1.visible = false
-  label2.visible = false
+    local tab1 = tabbed_pane.add{type="tab", caption="Modules"}
+    local tab2 = tabbed_pane.add{type="tab", caption="Inventory"}
+    local label1 = tabbed_pane.add{type="empty-widget"}
+    local label2 = tabbed_pane.add{type="empty-widget"}
+    tabbed_pane.add_tab(tab1, label1)
+    tabbed_pane.add_tab(tab2, label2)
+    tabbed_pane.selected_tab_index = 1
+  end
 
-  -- local tab2 = player.gui.relative.add{
-  --   type = "tabbed-pane",
-  --   anchor = {
-  --     gui = defines.relative_gui_type.container_gui,
-  --     position = defines.relative_gui_position.top,
-  --     name = "quality-condenser--container",
-  --   }
-  -- }
+  do
+    local tabbed_pane = player.gui.relative.add{
+      name = mod_prefix .. "tabbed-pane-inventory",
+      type = "tabbed-pane",
+      style = "quality_condenser_tabbed_pane",
+      anchor = {
+        gui = defines.relative_gui_type.container_gui,
+        position = defines.relative_gui_position.top,
+        name = "quality-condenser--container",
+      }
+    }
+    tabbed_pane.style.horizontally_stretchable = true
+
+    local tab1 = tabbed_pane.add{type="tab", caption="Modules"}
+    local tab2 = tabbed_pane.add{type="tab", caption="Inventory"}
+    local label1 = tabbed_pane.add{type="empty-widget"}
+    local label2 = tabbed_pane.add{type="empty-widget"}
+    tabbed_pane.add_tab(tab1, label1)
+    tabbed_pane.add_tab(tab2, label2)
+    tabbed_pane.selected_tab_index = 2
+  end
 end
 
 function Handler.refresh_gui_for_players()
@@ -353,3 +367,33 @@ end
 
 script.on_event(defines.events.on_research_finished, on_research_toggled)
 script.on_event(defines.events.on_research_reversed, on_research_toggled)
+
+script.on_event(defines.events.on_gui_selected_tab_changed, function(event)
+  if event.element.name == mod_prefix .. "tabbed-pane-modules" then
+    if event.element.selected_tab_index == 1 then return end
+    event.element.selected_tab_index = 1
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    local entity = player.opened --[[@as LuaEntity]]
+    if player.opened_gui_type == defines.gui_type.entity and entity.name == mod_name then
+      player.opened = entity.surface.find_entities_filtered{
+        name = mod_prefix .. "container",
+        force = entity.force,
+        position = entity.position,
+        limit = 1,
+      }[1]
+    end
+  elseif event.element.name == mod_prefix .. "tabbed-pane-inventory" then
+    if event.element.selected_tab_index == 2 then return end
+    event.element.selected_tab_index = 2
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    local entity = player.opened --[[@as LuaEntity]]
+    if player.opened_gui_type == defines.gui_type.entity and entity.name == mod_prefix .. "container" then
+      player.opened = entity.surface.find_entities_filtered{
+        name = mod_name,
+        force = entity.force,
+        position = entity.position,
+        limit = 1,
+      }[1]
+    end
+  end
+end)

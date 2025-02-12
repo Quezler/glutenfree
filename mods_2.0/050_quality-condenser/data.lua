@@ -200,3 +200,14 @@ require("prototypes.recipe")
 local beacon_interface = table.deepcopy(data.raw["beacon"]["beacon-interface--beacon-tile"])
 beacon_interface.name = mod_prefix .. "beacon-interface"
 data:extend{beacon_interface}
+
+data.raw["gui-style"]["default"].quality_condenser_tabbed_pane =
+{
+  type = "tabbed_pane_style",
+  parent = "tabbed_pane",
+  tab_content_frame =
+  {
+    type = "frame_style",
+    parent = "invisible_frame", -- https://discord.com/channels/139677590393716737/1217401074877599745/1339208959512543324
+  }
+}

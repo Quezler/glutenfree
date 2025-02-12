@@ -6,6 +6,7 @@ Date: ????
     - Fix empty backtick shenanigans
     - Mention the alt scrolling quality change mod
     - Experience tabbed pane hell
+    - Add tabs to switch between modules and inventory
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2025. 02. 11
