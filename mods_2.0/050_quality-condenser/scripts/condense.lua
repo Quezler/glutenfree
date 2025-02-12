@@ -49,6 +49,7 @@ function Condense.trigger(struct)
   local target_quality = ensure_recipe_is_set(struct.entity).name
   local quality_points = math.floor(math.min((struct.entity.effects["quality"] or 0) * 100, 1000) + 0.5) -- 0-1000
 
+  struct.container_inventory.sort_and_merge()
   for _, item in ipairs(struct.container_inventory.get_contents()) do
     local next_quality_name = get_next_quality_name[item.quality]
     if next_quality_name and struct.entity.force.is_quality_unlocked(next_quality_name) then
@@ -72,7 +73,9 @@ function Condense.trigger(struct)
           end
 
           assert(struct.container_inventory.remove(item) == item.count) -- all items are consumed, this way there is always space.
-          assert(struct.container_inventory.insert(to_insert) == to_insert.count)
+
+          local inserted = struct.container_inventory.insert(to_insert)
+          assert(inserted == to_insert.count, string.format("inserted only %d of %d %s (%s)", inserted, to_insert.count, item.name, item.quality))
         end
       end
     end
