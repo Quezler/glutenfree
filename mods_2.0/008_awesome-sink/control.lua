@@ -272,6 +272,12 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 end)
 
 function Handler.sync_module_qualities_with_arithmetic_combinators()
+  if storage.printed_quality_condenser_upgrade_message == nil then
+    storage.printed_quality_condenser_upgrade_message = true
+
+    game.print("[item=awesome-sink] Please upgrade to the \"Quality condenser\" mod, this mod is being phased out.")
+  end
+
   for key, map in pairs(storage.assembler_to_arithmetic_map) do
     -- converts two place decimal into nearest full number
     local points = math.floor((map.assembler.effects["quality"] or 0) * 100 + 0.5)

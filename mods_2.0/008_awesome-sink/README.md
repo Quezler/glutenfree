@@ -1,3 +1,5 @@
+> **This mod is being phased out, consider the [Quality condenser](https://mods.factorio.com/mod/quality-condenser) mod instead.**
+
 Greetings pione.. ahem engineer,
 
 This mod allows you to get quality items without the random aspect,

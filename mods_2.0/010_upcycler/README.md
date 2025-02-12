@@ -1,3 +1,5 @@
+> **This mod is being phased out, consider the [Quality condenser](https://mods.factorio.com/mod/quality-condenser) mod instead.**
+
 This mod hides quality modules, in its place you'll unlock the upcycler alongside uncommon and rare quality.
 
 For every x amount of items (configurable in the mod settings) you'll get 1 of the next tier (if you have it unlocked).

@@ -129,6 +129,12 @@ function TickHandler.handle_observed_struct(struct)
 end
 
 function TickHandler.on_tick(event)
+  if storage.printed_quality_condenser_upgrade_message == nil then
+    storage.printed_quality_condenser_upgrade_message = true
+
+    game.print("[item=upcycler] Please upgrade to the \"Quality condenser\" mod, this mod is being phased out.")
+  end
+
   for _, control_behavior in pairs(storage.decider_control_behaviors_to_override) do
     control_behavior.parameters = decider_combinator_parameters
   end
