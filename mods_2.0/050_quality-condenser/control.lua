@@ -87,6 +87,50 @@ end
 
 local Handler = {}
 
+function Handler.refresh_gui_for_player(player)
+  for _, relative_gui in ipairs(player.gui.relative.children) do
+    if relative_gui.get_mod == mod_name then
+      relative_gui.destroy()
+    end
+  end
+
+  local tabbed_pane = player.gui.relative.add{
+    type = "tabbed-pane",
+    anchor = {
+      gui = defines.relative_gui_type.assembling_machine_gui,
+      position = defines.relative_gui_position.top,
+      name = "quality-condenser",
+    }
+  }
+  tabbed_pane.style.maximal_height = 0
+  tabbed_pane.style.top_padding = 0
+  tabbed_pane.style.bottom_padding = 0
+
+  local tab1 = tabbed_pane.add{type="tab", caption="Tab 1"}
+  local tab2 = tabbed_pane.add{type="tab", caption="Tab 2"}
+  local label1 = tabbed_pane.add{type="empty-widget"}
+  local label2 = tabbed_pane.add{type="empty-widget"}
+  tabbed_pane.add_tab(tab1, label1)
+  tabbed_pane.add_tab(tab2, label2)
+  label1.visible = false
+  label2.visible = false
+
+  -- local tab2 = player.gui.relative.add{
+  --   type = "tabbed-pane",
+  --   anchor = {
+  --     gui = defines.relative_gui_type.container_gui,
+  --     position = defines.relative_gui_position.top,
+  --     name = "quality-condenser--container",
+  --   }
+  -- }
+end
+
+function Handler.refresh_gui_for_players()
+  for _, player in pairs(game.players) do
+    Handler.refresh_gui_for_player(player)
+  end
+end
+
 script.on_init(function()
   storage.surface = game.planets["quality-condenser"].create_surface()
   storage.surface.generate_with_lab_tiles = true
@@ -109,6 +153,8 @@ script.on_init(function()
   storage.index = 0
   storage.structs = {}
   storage.deathrattles = {}
+
+  Handler.refresh_gui_for_players()
 end)
 
 local function update_beacon_interface(struct, bonus_quality)
@@ -125,6 +171,8 @@ script.on_configuration_changed(function(data)
   for _, struct in pairs(storage.structs) do
     update_beacon_interface(struct)
   end
+
+  Handler.refresh_gui_for_players()
 end)
 
 function ensure_recipe_is_set(entity)
