@@ -1,65 +1,74 @@
-[below: coherent summary]
-Ehmm sorry for the incomplete and messy readme, the mod is finally done and i lack energy to write a coherent one,
-but suffice it to say this mod includes the functionality of the two mods before it along with a bunch of options.
+### Introduction
 
-Those that know the energy condenser from the minecraft days might recognize the mechanic,
-just put the items you wish to upgrade inside of the machine, power it and wait for a bit.
+Those familair with old minecraft modpacks might recognize the energy condenser,
+in which you could set a target item and everything inside will slowly convert to that.
 
-You can limit the upper quality to which it upgrades by setting the quality of the recipe,
-the normal quality means that the machine will just keep going and going.
+The quality condenser is roughly similar, set a target quality (or leave it uncapped),
+then all the items inside will slowly combine and upgrade to the next quality tier over time.
 
-If there are not enough items to upgrade (item count * percentage = below 100) the machine does nothing,
-if there is a remainder that 1-99 percentage will be turned into a chance for one more item.
+### Functionality
 
-The mod is quite performant in that it does bulk and triggers machine states by circuits instead of polling the entities,
-if you manage to get a machine stuck then fear not, every 60 seconds any stuck machine (changed quality or researched more) becomes unstuck.
+It is similar to the recycler, but it returns the item itself instead of their ingredients,
+and instead of a 25% output chance each item's upgrade (or void) chance is that machine's quality.
 
-Quality quality condensers are faster and have more inventory space.
+For example 100 items times 12.5% quality (100 * 0.125 = 12.5), those 12 are guaranteed items,
+if the item count & quality percentage leave a decimal (.5 in this case) that becomes chance based,
+based on how much is left the machine randomly rounds up or down, keeping the average completely fair.
 
-[below: failed attempt at rewriting below]
+If there is not enough for one guaranteed item the machine will skip that item/quality so you'll always have one.
 
-Both of the mods that came before this had some shortcomings and there were a bunch of feature requests for both since,
-it would have been tricky to retcon those features in those two mods, so here's a new one that should cover a whole lot.
+### Usage
 
-- module slots: 
+After researching (which is free) craft and place the device,
+it consists of two parts, the center entity is the crafter in which you can put modules,
+and the outer edge of the selection box will allow access to the container for the items.
+(note that you cannot put items in the machine from the crafter gui, use inserters/loaders)
 
-Configuration options:
-- appearance: pick between two of the awesome textures made by [Hurricane046](https://mods.factorio.com/user/Hurricane046)
-- base quality: 0-100
-- module slots: 0-6
-- technology effects: comma seperated technology names with their values
+Do not forget to put in quality modules, those are what determine the upgrade chance after all.
 
-[below: technical summary]
+Once the machine is full or idle for a few seconds it will start the upgrade cycle process,
+you can leave the result items in to upgrade them more, or extract them for use elsewhere.
 
-Attempts to deal with the shortcomings of both mods that came before it, like bulk items without sacrificing performance.
+In order to limit which quality to upgrade too you can chance the quality of the recipe,
+it will upgrade up to that quality, save for the normal quality which means uncapped.
 
-Just put items inside the building and when full/idle it will condense the items to the their next unlocked quality tier.
+Higher qualities of the machine itself are faster and have more upgrade slots,
+note that beyond 100% quality there is no bonus, so you could use speed modules then.
 
+### Configurability
 
-| Feature                     | Awesome sink | Upcycler | Energy condenser |
-|-----------------------------|--------------|----------|------------------|
-| modules                     | ✔            | ✗        | ✔                |
-| configurable                | ✗            | ✔        | ✔                |
-| configurable per quality    | ✗            | ✗        | ✔                |
-| bulk items                  | ✗            | ✗        | ✔                |
-| upgradable with technology  | ✗            | ✗        | ✔                |
-| kidnaps unupgradable items  | ✔            | ✔        | ✗                |
-| downgrade items somehow     | ✗            | ✗        | ✗                |
-| directional insertions only | ✔            | ✔        | ✗                |
-| problematic data final fixes| ✗            | ✔        | ✗                |
-| updates totally at random   | ✗            | ✔        | ✗                |
-| respects spoil percentages  | ✗            | ✗        | ✔                |
+In the startup settings you are able to change the module slots, base quality (per quality),
+and even set which technologies unlock additional bonus quality ontop of the base quality,
+some notable options to explain the format and serve as examples:
 
-Base quality:
+Base quality: (has access to lua's math helper)
 - `0` (no base quality)
 - `10 * (quality.level)` (no base quality, then 10% per quality)
 - `10 * (quality.level + 1)` (10% base quality, then 10% per quality)
-- `math.pow(2, quality.level) * 2` (2, 4, 8, 16, 64)
 
-Technology effects:
+Technology effects: (flat value ontop of the base quality)
 - `` (no additional base quality)
 - `planet-discovery-fulgora=10,planet-discovery-gleba=10,planet-discovery-vulcanus=10,planet-discovery-aquilo=20` (extra quality per known planet)
 - `speed-module=-1,speed-module-2=-1.5,speed-module-3=-2.5` (want to punish some technology choices? you can)
 
-- graphics by [Hurricane046](https://mods.factorio.com/user/Hurricane046) (originally named disruptor, later revision is called laboratory)
-- "how to use his graphics" observed from [Xorimuth](https://github.com/tburrows13/LunarLandings/blob/master/prototypes/core-extractor.lua)
+### Number 3
+
+This is the third mod in my quality upgrading serries:
+1) https://mods.factorio.com/mod/awesome-sink
+2) https://mods.factorio.com/mod/upcycler
+3) https://mods.factorio.com/mod/quality-condenser
+
+This mod was born due limitations in the first two mods and user requested features,
+the most notable changes are in terms of throughput and performance, this mod is just better.
+
+The quality condenser is capable of completely emulating the first two mods:
+- for the awesome sink, just set module slots to 4
+- for the upcycler, set the module slots to 0 and divide 100 by your "items per next quality" and set that as base quality
+
+For a comparison table check out the previous version of this readme here:
+https://github.com/Quezler/glutenfree/blob/main/mods_2.0/050_quality-condenser/README_1.md
+(notable mentions: this mod does respect spoil percentages and does not kidnap inserted legendary items)
+
+### Credits
+
+- "Disruptor" (later named) "Research Center" graphics by [Hurricane046](https://mods.factorio.com/user/Hurricane046)
