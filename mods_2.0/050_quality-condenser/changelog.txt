@@ -3,6 +3,7 @@ Version: 1.0.3
 Date: ????
   Info:
     - Update readme
+    - Fix empty backtick shenanigans
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2025. 02. 11

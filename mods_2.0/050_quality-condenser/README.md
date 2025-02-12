@@ -47,7 +47,7 @@ Base quality: (has access to lua's math helper)
 - `10 * (quality.level + 1)` (10% base quality, then 10% per quality)
 
 Technology effects: (flat value ontop of the base quality)
-- `` (no additional base quality)
+- `""` (no additional base quality)
 - `planet-discovery-fulgora=10,planet-discovery-gleba=10,planet-discovery-vulcanus=10,planet-discovery-aquilo=20` (extra quality per known planet)
 - `speed-module=-1,speed-module-2=-1.5,speed-module-3=-2.5` (want to punish some technology choices? you can)
 
