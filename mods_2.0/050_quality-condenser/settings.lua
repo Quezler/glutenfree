@@ -28,4 +28,10 @@ data:extend({
     default_value = "",
     allow_blank = true,
   },
+  {
+    type = "string-setting",
+    name = mod_prefix .. "energy-usage",
+    setting_type = "startup", order = "e",
+    default_value = "2.5MW",
+  },
 })

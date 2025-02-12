@@ -59,7 +59,7 @@ local crafter_entity = {
     usage_priority = "secondary-input",
     emissions_per_minute = { pollution = 10 }
   },
-  energy_usage = "2500kW",
+  energy_usage = settings.startup[mod_prefix .. "energy-usage"].value,
 
   crafting_categories = {mod_prefix .. "recipe-category"},
   -- fixed_recipe = mod_prefix .. "recipe",
