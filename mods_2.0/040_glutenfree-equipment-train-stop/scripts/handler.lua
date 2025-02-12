@@ -91,7 +91,11 @@ function handler.on_object_destroyed(event)
           local inventory = entity.get_inventory(defines.inventory.chest)
           for slot = 1, #inventory do
             local stack = inventory[slot]
-            entity.surface.spill_item_stack({position = entity.position, stack = stack, enable_looted = false, force = nil, allow_belts = false})
+            entity.surface.spill_item_stack({
+              position = entity.position,
+              stack = stack,
+              allow_belts = false,
+            })
           end
         end
       end
