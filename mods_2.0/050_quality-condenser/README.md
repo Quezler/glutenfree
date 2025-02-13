@@ -1,3 +1,5 @@
+> **The spiritual successor to the upcycler mod, which was the spirital successor to the awesome sink.**
+
 ### Introduction
 
 Those familair with old minecraft modpacks might recognize the energy condenser,
@@ -16,6 +18,11 @@ if the item count & quality percentage leave a decimal (.5 in this case) that be
 based on how much is left the machine randomly rounds up or down, keeping the average completely fair.
 
 If there is not enough for one guaranteed item the machine will skip that item/quality so you'll always have one.
+
+## Balance
+
+By default the mod is balanced, recyclers have 4 module slots and a 25% output chance,
+the quality condenser has 1 module slot and the output is guaranteed based on quality percentage.
 
 ### Usage
 
