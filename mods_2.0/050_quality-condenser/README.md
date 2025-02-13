@@ -8,6 +8,10 @@ in which you could set a target item and everything inside will slowly convert t
 The quality condenser is roughly similar, set a target quality (or leave it uncapped),
 then all the items inside will slowly combine and upgrade to the next quality tier over time.
 
+A honorable mention to the [Augmentor](https://mods.factorio.com/mod/augmentor) mod by [khoanguyen0497](https://mods.factorio.com/user/khoanguyen0497),
+that mod released whilst this mod was still being developed over the span of a month with similar functionality,
+notable differences are that mine does not require taking the item out and back in, and its not data stage based.
+
 ### Functionality
 
 It is similar to the recycler, but it returns the item itself instead of their ingredients,

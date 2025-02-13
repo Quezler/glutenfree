@@ -3,6 +3,7 @@ Version: 1.1.1
 Date: ????
   Info:
     - Mention how it is not a cheat with just one module slot
+    - Give the augmentor mod a honorable mention
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2025. 02. 13
