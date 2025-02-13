@@ -36,8 +36,8 @@ local function reset_offering_done(struct)
   storage.deathrattles[script.register_on_object_destroyed(struct.inserter_2_offering)] = {"offering-done", struct.id}
 end
 
-local function spill_chest_inventory(entity)
-  local inventory = entity.get_inventory(defines.inventory.chest)
+local function spill_entity_inventory(entity, defines_inventory)
+  local inventory = entity.get_inventory(defines_inventory)
 
   for slot = 1, #inventory do
     local stack = inventory[slot]
@@ -202,7 +202,7 @@ function Handler.on_created_entity(event)
 
   -- mods to not get to clone/place the container.
   if entity.name == mod_prefix .. "container" then
-    spill_chest_inventory(entity)
+    spill_entity_inventory(entity, defines.inventory.chest)
     entity.destroy()
     return
   elseif entity.name == mod_prefix .. "beacon-interface" then
@@ -271,7 +271,7 @@ function Handler.on_created_entity(event)
   end
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {"crafter", struct.id}
-  -- storage.deathrattles[script.register_on_object_destroyed(struct.container)] = {"container", struct.id}
+  storage.deathrattles[script.register_on_object_destroyed(struct.container)] = {"container", struct.id}
 
   Combinators.create_for_struct(struct)
   reset_offering_idle(struct)
@@ -315,23 +315,44 @@ local deathrattles = {
   end,
   ["crafter"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
-    if struct.container_inventory.valid then
-      spill_chest_inventory(struct.container)
+    if struct then
+      storage.structs[struct.id] = nil
+      if struct.container_inventory.valid then
+        spill_entity_inventory(struct.container, defines.inventory.chest)
+      end
+      -- struct.entity.destroy()
+      struct.beacon_interface.destroy()
+      struct.container.destroy()
+      struct.arithmetic_1.destroy()
+      struct.arithmetic_2.destroy()
+      struct.decider_1.destroy()
+      struct.decider_2.destroy()
+      struct.inserter_1.destroy()
+      struct.inserter_1_offering.destroy()
+      struct.inserter_2.destroy()
+      struct.inserter_2_offering.destroy()
     end
-    struct.beacon_interface.destroy()
-    struct.container.destroy()
-    struct.arithmetic_1.destroy()
-    struct.arithmetic_2.destroy()
-    struct.decider_1.destroy()
-    struct.decider_2.destroy()
-    struct.inserter_1.destroy()
-    struct.inserter_1_offering.destroy()
-    struct.inserter_2.destroy()
-    struct.inserter_2_offering.destroy()
-    storage.structs[struct.id] = nil
   end,
-  -- ["container"] = function (deathrattle)
-  -- end,
+  ["container"] = function (deathrattle)
+    local struct = storage.structs[deathrattle[2]]
+    if struct then
+      storage.structs[struct.id] = nil
+      if struct.entity.valid then
+        spill_entity_inventory(struct.entity, defines.inventory.assembling_machine_modules)
+      end
+      struct.entity.destroy()
+      struct.beacon_interface.destroy()
+      -- struct.container.destroy()
+      struct.arithmetic_1.destroy()
+      struct.arithmetic_2.destroy()
+      struct.decider_1.destroy()
+      struct.decider_2.destroy()
+      struct.inserter_1.destroy()
+      struct.inserter_1_offering.destroy()
+      struct.inserter_2.destroy()
+      struct.inserter_2_offering.destroy()
+    end
+  end,
 }
 
 script.on_event(defines.events.on_object_destroyed, function(event)
