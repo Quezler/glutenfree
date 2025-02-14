@@ -1,5 +1,7 @@
 require("shared")
 
+local item_sounds = require("__base__.prototypes.item_sounds")
+
 local Hurricane = require("graphics/hurricane")
 local skin = Hurricane.crafter({
   name = "pathogen-lab",
@@ -30,6 +32,57 @@ local entity = {
   crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories),
   icon_draw_specification = {shift = {0.45, -0.375}, scale = 1.5},
 }
+
+local item = {
+  type = "item",
+  name = mod_name,
+  icon = skin.icon,
+  subgroup = "agriculture",
+  order = "c["..mod_name.."]",
+  inventory_move_sound = item_sounds.mechanical_inventory_move,
+  pick_sound = item_sounds.mechanical_inventory_pickup,
+  drop_sound = item_sounds.mechanical_inventory_move,
+  stack_size = 1,
+}
+
+item.place_result = entity.name
+entity.minable = {mining_time = 0.5, result = item.name}
+
+recipe = {
+  type = "recipe",
+  name = mod_name,
+  category = "organic-or-assembling",
+  order = "c["..mod_name.."]",
+  -- auto_recycle = false,
+  enabled = false,
+  -- allow_productivity = true,
+  -- result_is_always_fresh = true,
+  -- hide_from_signal_gui = true,
+  energy_required = 30,
+  ingredients =
+  {
+    {type = "item", name = "nutrients", amount = 50},
+    {type = "item", name = "biter-egg", amount =  2},
+    {type = "item", name = "iron-plate", amount = 100},
+    {type = "item", name = "biochamber", amount = 1},
+  },
+  results =
+  {
+    {type = "item", name = item.name, amount = 1},
+  },
+  crafting_machine_tint = -- same as pentapod egg
+  {
+    primary = {r = 45, g = 129, b = 86, a = 1.000},
+    secondary = {r = 122, g = 75, b = 156, a = 1.000},
+  }
+}
+
+local biter_egg_handling = data.raw["technology"]["biter-egg-handling"]
+biter_egg_handling.effects = biter_egg_handling.effects or {}
+table.insert(biter_egg_handling.effects, {
+  type = "unlock-recipe",
+  recipe = recipe.name,
+})
 
 local make_optical_fiber_pictures = function (path, name_prefix, data, draw_as_glow)
   for _, t in pairs(data) do
@@ -67,4 +120,4 @@ artery.connection_sprites = make_optical_fiber_pictures(mod_directory .. "/graph
 artery.minable = nil
 artery.heat_buffer.connections = {}
 artery.hidden = true
-data:extend{entity, artery}
+data:extend{entity, item, recipe, artery}
