@@ -30,6 +30,10 @@ class InstanceCommand extends Command
         if (!file_exists($saves_directory))
             mkdir($saves_directory);
 
+        $mods_directory = "{$instance_directory}/mods";
+        if (!file_exists($mods_directory))
+            mkdir($mods_directory);
+
         $this->syncAuthentication($instance_directory);
         passthru("(cd {$instance_directory} && /Applications/factorio.app/Contents/MacOS/factorio --config ../../config.ini)");
 
