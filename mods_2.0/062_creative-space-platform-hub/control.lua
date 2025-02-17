@@ -15,7 +15,8 @@ script.on_event(mod_prefix .. "cycle-quality-up", function(event)
     surface = player.surface,
     sprite = mod_prefix .. "platform-hub-3",
     target = hub,
-    time_to_live = 120,
+    render_layer = "above-inserters",
+    time_to_live = 60 * 5,
   }
 end)
 

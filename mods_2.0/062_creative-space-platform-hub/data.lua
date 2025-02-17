@@ -28,10 +28,11 @@ data:extend({
   }
 })
 
-local sprite = require("__space-age__/graphics/entity/cargo-hubs/hubs/platform-hub-3")
-sprite.type = "sprite"
-sprite.name = mod_prefix .. "platform-hub-3"
-sprite.filename = "__space-age__/graphics/entity/cargo-hubs/hubs/platform-hub-3.png"
-sprite.tint = {0.5, 0.5, 1}
-sprite.scale = 0.5
-data:extend{sprite}
+data:extend{util.sprite_load("__space-age__/graphics/entity/cargo-hubs/hubs/platform-hub-3",
+{
+  type = "sprite",
+  name = mod_prefix .. "platform-hub-3",
+  scale = 0.5,
+  shift = {0, -1},
+  tint = {0.5, 0.5, 1},
+})}
