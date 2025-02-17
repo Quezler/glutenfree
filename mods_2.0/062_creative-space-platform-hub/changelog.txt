@@ -3,6 +3,7 @@ Version: 1.0.1
 Date: ????
   Info:
     - Add remote interface for blacklisting
+    - If editor extentions is installed, new platforms start in cheat mode
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 02. 16

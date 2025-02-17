@@ -66,6 +66,36 @@ script.on_load(function()
   end
 end)
 
+local function enlist_hub(entity)
+  local struct = new_struct(storage.hubs, {
+    id = entity.unit_number,
+    entity = entity,
+
+    sections = entity.get_logistic_sections(),
+    inventory = entity.get_inventory(defines.inventory.hub_main),
+
+    rendering_1 = nil,
+    rendering_2 = nil,
+  })
+
+  struct.rendering_1 = rendering.draw_sprite{
+    surface = entity.surface,
+    sprite = mod_prefix .. "platform-hub-3",
+    target = entity,
+    render_layer = "cargo-hatch",
+  }
+
+  struct.rendering_2 = rendering.draw_sprite{
+    surface = entity.surface,
+    sprite = mod_prefix .. "platform-upper-hatch-occluder",
+    target = entity,
+    render_layer = "item-in-inserter-hand",
+  }
+
+  script.on_nth_tick(INTERVAL, on_nth_tick)
+  tick_hub(struct)
+end
+
 script.on_event(mod_prefix .. "cycle-quality-up", function(event)
   if not about_space_platform_hub(event) then return end
 
@@ -78,33 +108,7 @@ script.on_event(mod_prefix .. "cycle-quality-up", function(event)
   local allowed_to_enable = player.cheat_mode or player.physical_controller_type == defines.controllers.editor
   if not allowed_to_enable then return end
 
-  local struct = new_struct(storage.hubs, {
-    id = hub.unit_number,
-    entity = hub,
-
-    sections = hub.get_logistic_sections(),
-    inventory = hub.get_inventory(defines.inventory.hub_main),
-
-    rendering_1 = nil,
-    rendering_2 = nil,
-  })
-
-  struct.rendering_1 = rendering.draw_sprite{
-    surface = player.surface,
-    sprite = mod_prefix .. "platform-hub-3",
-    target = hub,
-    render_layer = "cargo-hatch",
-  }
-
-  struct.rendering_2 = rendering.draw_sprite{
-    surface = player.surface,
-    sprite = mod_prefix .. "platform-upper-hatch-occluder",
-    target = hub,
-    render_layer = "item-in-inserter-hand",
-  }
-
-  script.on_nth_tick(INTERVAL, on_nth_tick)
-  tick_hub(struct)
+  enlist_hub(hub)
 end)
 
 script.on_event(mod_prefix .. "cycle-quality-down", function(event)
@@ -125,3 +129,13 @@ remote.add_interface("creative-space-platform-hub", {
   end,
 })
 
+if script.active_mods["EditorExtensions"] then
+  script.on_event(defines.events.on_surface_created, function(event)
+    local platform = game.surfaces[event.surface_index].platform
+    if platform then
+      game.print("1 " .. serpent.line(platform.hub))
+      game.print("2 " .. serpent.line(platform.apply_starter_pack()))
+      enlist_hub(platform.hub or platform.apply_starter_pack())
+    end
+  end)
+end
