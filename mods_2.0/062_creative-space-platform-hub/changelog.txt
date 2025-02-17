@@ -7,6 +7,7 @@ Date: ????
     - Fix the giga hatch clipping issue
     - Resolve layer issue without touching circuit wires
     - Support opting hubs in and out
+    - Check for the construction request section
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 16
