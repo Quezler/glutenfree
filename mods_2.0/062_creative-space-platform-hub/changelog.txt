@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Log inserted items
     - Require either active cheat mode or editor to enable
+    - Add thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 17
