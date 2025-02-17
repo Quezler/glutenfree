@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Log inserted items
+    - Require either active cheat mode or editor to enable
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 17

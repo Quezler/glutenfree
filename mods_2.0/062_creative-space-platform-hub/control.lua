@@ -69,6 +69,9 @@ script.on_event(mod_prefix .. "cycle-quality-up", function(event)
 
   if storage.hubs[hub.unit_number] then return end
 
+  local allowed_to_enable = player.cheat_mode or player.physical_controller_type == defines.controllers.editor
+  if not allowed_to_enable then return end
+
   local struct = new_struct(storage.hubs, {
     id = hub.unit_number,
     entity = hub,
