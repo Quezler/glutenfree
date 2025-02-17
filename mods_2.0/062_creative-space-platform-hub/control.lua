@@ -15,6 +15,14 @@ script.on_event(mod_prefix .. "cycle-quality-up", function(event)
     surface = player.surface,
     sprite = mod_prefix .. "platform-hub-3",
     target = hub,
+    render_layer = "cargo-hatch",
+    time_to_live = 60 * 5,
+  }
+
+  rendering.draw_sprite{
+    surface = player.surface,
+    sprite = mod_prefix .. "platform-upper-hatch-occluder",
+    target = hub,
     render_layer = "above-inserters",
     time_to_live = 60 * 5,
   }

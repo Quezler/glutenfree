@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Draw the creative mode using luarendering
     - Use util.sprite_load
+    - Fix the giga hatch clipping issue
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 16

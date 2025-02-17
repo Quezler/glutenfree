@@ -1,6 +1,9 @@
 require("shared")
 
-local entity = table.deepcopy(data.raw["space-platform-hub"]["space-platform-hub"])
+local space_platform_hub = data.raw["space-platform-hub"]["space-platform-hub"]
+space_platform_hub.cargo_station_parameters.giga_hatch_definitions[1].hatch_render_layer_front = "wires"
+
+local entity = table.deepcopy(space_platform_hub)
 entity.name = "creative-" .. entity.name
 
 local item = table.deepcopy(data.raw["space-platform-starter-pack"]["space-platform-starter-pack"])
@@ -32,6 +35,15 @@ data:extend{util.sprite_load("__space-age__/graphics/entity/cargo-hubs/hubs/plat
 {
   type = "sprite",
   name = mod_prefix .. "platform-hub-3",
+  scale = 0.5,
+  shift = {0, -1},
+  tint = {0.5, 0.5, 1},
+})}
+
+data:extend{util.sprite_load("__space-age__/graphics/entity/cargo-hubs/hatches/platform-upper-hatch-occluder",
+{
+  type = "sprite",
+  name = mod_prefix .. "platform-upper-hatch-occluder",
   scale = 0.5,
   shift = {0, -1},
   tint = {0.5, 0.5, 1},
