@@ -42,6 +42,7 @@ local function tick_hub(struct)
       local missing = filter.min - struct.inventory.get_item_count(item)
       if missing > 0 then
         struct.inventory.insert({name = filter.value.name, count = missing, quality = filter.value.quality})
+        log(string.format("gave platform '%s' %d x %s (%s)", struct.entity.name, missing, item.name, item.quality))
       end
     end
   end
