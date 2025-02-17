@@ -172,6 +172,10 @@ function Handler.on_init()
       end
     end
   end
+
+  if script.active_mods["creative-space-platform-hub"] then
+    remote.call("creative-space-platform-hub", "blacklist", "thruster-control-behavior")
+  end
 end
 
 script.on_init(Handler.on_init)
@@ -185,6 +189,10 @@ script.on_configuration_changed(function(event)
       assert(struct.power_switch_name == nil)
       struct.power_switch_name = "thruster-control-behavior"
     end
+  end
+
+  if script.active_mods["creative-space-platform-hub"] then
+    remote.call("creative-space-platform-hub", "blacklist", "thruster-control-behavior")
   end
 end)
 
