@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Add remote interface for blacklisting
     - If editor extentions is installed, new platforms start in cheat mode
+    - Fix platform.hub being in limbo
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 02. 16

@@ -129,13 +129,21 @@ remote.add_interface("creative-space-platform-hub", {
   end,
 })
 
+local new_platform = nil
+local function on_tick(event)
+  -- game.print(event.tick)
+  enlist_hub(assert(assert(new_platform, "platform == nil").hub, "platform.hub == nil"))
+  new_platform = nil
+  script.on_event(defines.events.on_tick, nil)
+end
+
 if script.active_mods["EditorExtensions"] then
   script.on_event(defines.events.on_surface_created, function(event)
+    -- game.print(event.tick)
     local platform = game.surfaces[event.surface_index].platform
     if platform then
-      game.print("1 " .. serpent.line(platform.hub))
-      game.print("2 " .. serpent.line(platform.apply_starter_pack()))
-      enlist_hub(platform.hub or platform.apply_starter_pack())
+      new_platform = platform
+      script.on_event(defines.events.on_tick, on_tick)
     end
   end)
 end
