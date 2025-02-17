@@ -23,7 +23,7 @@ script.on_event(mod_prefix .. "cycle-quality-up", function(event)
     surface = player.surface,
     sprite = mod_prefix .. "platform-upper-hatch-occluder",
     target = hub,
-    render_layer = "above-inserters",
+    render_layer = "item-in-inserter-hand",
     time_to_live = 60 * 5,
   }
 end)

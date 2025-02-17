@@ -5,6 +5,7 @@ Date: ????
     - Draw the creative mode using luarendering
     - Use util.sprite_load
     - Fix the giga hatch clipping issue
+    - Resolve layer issue without touching circuit wires
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 16

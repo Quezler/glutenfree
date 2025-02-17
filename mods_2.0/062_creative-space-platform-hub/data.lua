@@ -1,7 +1,12 @@
 require("shared")
 
 local space_platform_hub = data.raw["space-platform-hub"]["space-platform-hub"]
-space_platform_hub.cargo_station_parameters.giga_hatch_definitions[1].hatch_render_layer_front = "wires"
+
+for _, sprite in ipairs(space_platform_hub.graphics_set.picture) do
+  if sprite.render_layer == "above-inserters" then
+    sprite.render_layer = "item-in-inserter-hand"
+  end
+end
 
 local entity = table.deepcopy(space_platform_hub)
 entity.name = "creative-" .. entity.name
