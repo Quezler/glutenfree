@@ -1,9 +1,9 @@
 {
     "name": "creative-space-platform-hub",
     "title": "Creative space platform hub",
-    "description": "It probably has something to do with the title.",
+    "description": "Gives the platforms you enable it on infinite construction materials.",
 
-    "version": "0.0.2",
+    "version": "1.0.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 

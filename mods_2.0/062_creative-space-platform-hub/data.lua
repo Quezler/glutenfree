@@ -8,22 +8,6 @@ for _, sprite in ipairs(space_platform_hub.graphics_set.picture) do
   end
 end
 
-local entity = table.deepcopy(space_platform_hub)
-entity.name = "creative-" .. entity.name
-
-local item = table.deepcopy(data.raw["space-platform-starter-pack"]["space-platform-starter-pack"])
-item.name = "creative-" .. item.name
-item.order = "c[creative-space-platform-starter-pack]"
-item.trigger[1].action_delivery.source_effects[1].entity_name = entity.name
-item.icons =
-{{
-  icon = item.icon,
-  tint = {0.5, 0.5, 1}
-}}
-item.icon = nil
-
-data:extend{entity, item}
-
 data:extend({
   {
     type = "custom-input", key_sequence = "",
@@ -42,13 +26,15 @@ data:extend({
   }
 })
 
+local tint = {0.5, 0.5, 1}
+
 data:extend{util.sprite_load("__space-age__/graphics/entity/cargo-hubs/hubs/platform-hub-3",
 {
   type = "sprite",
   name = mod_prefix .. "platform-hub-3",
   scale = 0.5,
   shift = {0, -1},
-  tint = {0.5, 0.5, 1},
+  tint = tint,
 })}
 
 data:extend{util.sprite_load("__space-age__/graphics/entity/cargo-hubs/hatches/platform-upper-hatch-occluder",
@@ -57,5 +43,5 @@ data:extend{util.sprite_load("__space-age__/graphics/entity/cargo-hubs/hatches/p
   name = mod_prefix .. "platform-upper-hatch-occluder",
   scale = 0.5,
   shift = {0, -1},
-  tint = {0.5, 0.5, 1},
+  tint = tint,
 })}
