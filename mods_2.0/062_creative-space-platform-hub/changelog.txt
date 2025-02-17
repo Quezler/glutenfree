@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2025. 02. 17
   Info:
     - Draw the creative mode using luarendering
     - Use util.sprite_load
