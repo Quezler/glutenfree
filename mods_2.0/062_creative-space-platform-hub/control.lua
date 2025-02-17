@@ -36,7 +36,15 @@ local function tick_hub(struct)
   local section = struct.sections.sections[1]
   if section == nil or section.type ~= defines.logistic_section_type.request_missing_materials_controlled then return end
 
-  game.print(serpent.line(section.filters))
+  for _, filter in pairs(section.filters) do
+    if filter.min > 0 then
+      local item = {name = filter.value.name, count = filter.min, quality = filter.value.quality}
+      local missing = filter.min - struct.inventory.get_item_count(item)
+      if missing > 0 then
+        struct.inventory.insert({name = filter.value.name, count = missing, quality = filter.value.quality})
+      end
+    end
+  end
 end
 
 local function on_nth_tick(event)
@@ -86,6 +94,7 @@ script.on_event(mod_prefix .. "cycle-quality-up", function(event)
   }
 
   script.on_nth_tick(INTERVAL, on_nth_tick)
+  tick_hub(struct)
 end)
 
 script.on_event(mod_prefix .. "cycle-quality-down", function(event)

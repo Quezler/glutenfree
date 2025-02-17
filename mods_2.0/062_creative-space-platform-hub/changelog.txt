@@ -8,6 +8,7 @@ Date: ????
     - Resolve layer issue without touching circuit wires
     - Support opting hubs in and out
     - Check for the construction request section
+    - Reach MVP
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 16
