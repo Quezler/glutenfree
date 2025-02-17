@@ -65,6 +65,7 @@ script.on_event(mod_prefix .. "cycle-quality-up", function(event)
   if not about_space_platform_hub(event) then return end
 
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  if player.is_cursor_empty() == false then return end
   local hub = player.surface.platform.hub --[[@as LuaEntity]]
 
   if storage.hubs[hub.unit_number] then return end
@@ -105,6 +106,7 @@ script.on_event(mod_prefix .. "cycle-quality-down", function(event)
   if not about_space_platform_hub(event) then return end
 
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  if player.is_cursor_empty() == false then return end
   local hub = player.surface.platform.hub --[[@as LuaEntity]]
 
   local struct = storage.hubs[hub.unit_number]
