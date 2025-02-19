@@ -53,11 +53,62 @@ for _, event in ipairs({
   })
 end
 
+local gui_frame_name = mod_prefix .. "frame"
+
+local function open_gui(player, entity)
+  local frame = player.gui.screen[gui_frame_name]
+  if frame then frame.destroy() end
+
+  local struct = storage.structs[entity.unit_number]
+  assert(struct)
+
+  frame = player.gui.screen.add{
+    type = "frame",
+    name = gui_frame_name,
+    direction = "vertical",
+    caption = entity.prototype.localised_name,
+    tags = {
+      unit_number = entity.unit_number,
+    }
+  }
+
+  local inner = frame.add{
+    type = "frame",
+    name = "inner",
+    style = "inside_shallow_frame_with_padding",
+    direction = "vertical",
+  }
+
+  inner.add{
+    type = "entity-preview",
+    style = "wide_entity_button",
+  }.entity = entity
+
+  local slider = inner.add{
+    type = "slider",
+    name = "slider",
+    style = "notched_slider",
+    minimum_value = 0,
+    maximum_value = 10,
+  }
+  slider.style.top_margin = 10
+
+  player.opened = frame
+  frame.force_auto_center()
+end
+
 ---@param event EventData.CustomInputEvent
 script.on_event(mod_prefix .. "open-gui", function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local selected = player.selected
   if selected and selected.name == mod_name and player.is_cursor_empty() then
-    game.print("thruster-interface")
+    open_gui(player, selected)
+  end
+end)
+
+script.on_event(defines.events.on_gui_closed, function(event)
+  local element = event.element
+  if element and element.name == gui_frame_name then
+    element.destroy()
   end
 end)
