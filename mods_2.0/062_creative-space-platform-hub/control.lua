@@ -132,7 +132,10 @@ remote.add_interface("creative-space-platform-hub", {
 local new_platform = nil
 local function on_tick(event)
   -- game.print(event.tick)
-  enlist_hub(assert(assert(new_platform, "platform == nil").hub, "platform.hub == nil"))
+  assert(new_platform)
+  if new_platform.hub then
+    enlist_hub(new_platform.hub)
+  end
   new_platform = nil
   script.on_event(defines.events.on_tick, nil)
 end

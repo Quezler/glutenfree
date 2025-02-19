@@ -1,18 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2025. 02. 19
+  Info:
+    - Fix compatibility issue with platforms without a hub
+---------------------------------------------------------------------------------------------------
 Version: 1.0.1
-Date: 2025. 02. 16
+Date: 2025. 02. 17
   Info:
     - Add remote interface for blacklisting
     - If editor extentions is installed, new platforms start in cheat mode
     - Fix platform.hub being in limbo
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
-Date: 2025. 02. 16
+Date: 2025. 02. 17
   Info:
     - Mod portal release
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: 2025. 02. 16
+Date: 2025. 02. 17
   Info:
     - Log inserted items
     - Require either active cheat mode or editor to enable
