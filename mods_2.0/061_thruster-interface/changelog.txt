@@ -15,6 +15,7 @@ Date: ????
     - Replace the ? with the current slider value
     - Test adding the internal thrusters
     - Cleanup the thruster during the deathrattle
+    - Use the stone wall as a battering ram
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 19
