@@ -2,6 +2,7 @@ require("shared")
 
 script.on_init(function()
   storage.structs = {}
+  storage.deathrattles = {}
 end)
 
 local function on_created_entity(event)
@@ -38,6 +39,8 @@ local function on_created_entity(event)
   struct.oxidizer_pipe.destructible = false
   struct.oxidizer_pipe.set_infinity_pipe_filter({name = "thruster-oxidizer", percentage = 1})
   struct.oxidizer_pipe.fluidbox.add_linked_connection(0, entity, 3)
+
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {"thruster-interface", struct.id}
 end
 
 for _, event in ipairs({
@@ -152,6 +155,7 @@ local function add_thruster(struct)
     force = struct.entity.force,
     position = struct.entity.position,
     quality = struct.entity.quality,
+    create_build_effect_smoke = false,
   }
   thruster.destructible = false
   thruster.fluidbox.add_linked_connection(1, parent, 2)
@@ -168,5 +172,26 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
       frame["inner"]["flow"]["?"].caption = tostring(element.slider_value)
       add_thruster(storage.structs[frame.tags.unit_number])
     end
+  end
+end)
+
+local deathrattles = {
+  ["thruster-interface"] = function (deathrattle)
+    local struct = storage.structs[deathrattle[2]]
+    if struct then
+      storage.structs[struct.id] = nil
+      struct.fuel_pipe.destroy()
+      struct.oxidizer_pipe.destroy()
+      for _, thruster in ipairs(struct.thrusters) do
+        thruster.destroy()
+      end
+    end
+  end,
+}
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    deathrattles[deathrattle[1]](deathrattle)
   end
 end)

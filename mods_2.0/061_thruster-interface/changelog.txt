@@ -14,6 +14,7 @@ Date: ????
     - Add 0 ? 100 above the slider
     - Replace the ? with the current slider value
     - Test adding the internal thrusters
+    - Cleanup the thruster during the deathrattle
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 19

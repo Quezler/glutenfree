@@ -43,6 +43,7 @@ entity.oxidizer_fluid_box.pipe_connections = {
 }
 
 -- table.insert(entity.flags, "get-by-unit-number")
+entity.plumes = nil
 
 local item = table.deepcopy(data.raw["item"]["thruster"])
 item.name = mod_name
