@@ -26,8 +26,17 @@ entity.graphics_set.integration_patch = util.sprite_load("__space-age__/graphics
   tint = {0.5, 0.5, 1},
 })
 
-entity.fuel_fluid_box.pipe_connections = {}
-entity.oxidizer_fluid_box.pipe_connections = {}
+entity.min_performance = {fluid_volume = 0, fluid_usage = 0, effectivity = 0}
+entity.max_performance = {fluid_volume = 0, fluid_usage = 0, effectivity = 1}
+
+entity.fuel_fluid_box.pipe_connections = {
+  {flow_direction = "input", connection_type = "linked", linked_connection_id = 1},
+  {flow_direction = "output", connection_type = "linked", linked_connection_id = 2},
+}
+entity.oxidizer_fluid_box.pipe_connections = {
+  {flow_direction = "input", connection_type = "linked", linked_connection_id = 3},
+  {flow_direction = "output", connection_type = "linked", linked_connection_id = 4},
+}
 
 local item = table.deepcopy(data.raw["item"]["thruster"])
 item.name = mod_name
@@ -51,27 +60,21 @@ local recipe = {
   results = {{type="item", name = item.name, amount=1}}
 }
 
--- table.insert(thruster.fuel_fluid_box.pipe_connections, {
---   flow_direction = "input", connection_type = "linked", linked_connection_id = 1, position = {-1.5,  0},
--- })
+local pipe = table.deepcopy(data.raw["infinity-pipe"]["infinity-pipe"])
+pipe.name = mod_prefix .. pipe.name
+pipe.selection_priority = 51
+pipe.minable = nil
 
--- table.insert(thruster.oxidizer_fluid_box.pipe_connections, {
---   flow_direction = "input", connection_type = "linked", linked_connection_id = 2, position = { 1.5,  0},
--- })
+pipe.icons =
+{{
+  icon = entity.icons[1].icon,
+  tint = {0.5, 0.5, 1}
+}, pipe.icons[1]}
 
--- local pipe = table.deepcopy(data.raw["infinity-pipe"]["infinity-pipe"])
--- pipe.name = mod_prefix .. pipe.name
--- pipe.selection_priority = 51
--- pipe.minable = nil
+pipe.fluid_box.pipe_connections = {
+  {flow_direction = "input-output", connection_type = "linked", linked_connection_id = 0},
+}
 
--- pipe.icons =
--- {{
---   icon = thruster.icons[1].icon,
---   tint = {0.5, 0.5, 1}
--- }, pipe.icons[1]}
+pipe.gui_mode = "none"
 
--- pipe.fluid_box.pipe_connections = {
---   {flow_direction = "input-output", connection_type = "linked", linked_connection_id = 1},
--- }
-
-data:extend{entity, item, recipe}
+data:extend{entity, item, recipe, pipe}

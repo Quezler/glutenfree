@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Tint the thruster interface purple
+    - Place and link the infinity pipes again
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 19
