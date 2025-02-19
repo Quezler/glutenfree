@@ -26,8 +26,8 @@ entity.graphics_set.integration_patch = util.sprite_load("__space-age__/graphics
   tint = {0.5, 0.5, 1},
 })
 
-entity.min_performance = {fluid_volume = 0, fluid_usage = 0, effectivity = 0}
-entity.max_performance = {fluid_volume = 0, fluid_usage = 0, effectivity = 1}
+entity.min_performance = {fluid_volume = 0, fluid_usage = 0.0, effectivity = 0}
+entity.max_performance = {fluid_volume = 1, fluid_usage = 0.1, effectivity = 0}
 
 entity.fuel_fluid_box.pipe_connections = {
   {flow_direction = "input", connection_type = "linked", linked_connection_id = 1},
