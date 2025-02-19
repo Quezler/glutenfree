@@ -1,7 +1,7 @@
 {
-    "name": "creative-thruster",
-    "title": "Creative thruster",
-    "description": "This thruster has infinite fuel.",
+    "name": "thruster-interface",
+    "title": "Thruster interface",
+    "description": "Configurable in steps of 10%, up to 1000%.",
 
     "version": "0.0.1",
     "author": "Quezler",
@@ -18,7 +18,7 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "? base",
-        "? space-age"
+        "base",
+        "space-age"
     ]
 }
