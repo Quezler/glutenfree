@@ -1,7 +1,9 @@
 require("util")
 require("shared")
 
-local entity = table.deepcopy(data.raw["thruster"]["thruster"])
+local space_age_thruster = data.raw["thruster"]["thruster"]
+
+local entity = table.deepcopy(space_age_thruster)
 entity.name = mod_name
 
 entity.icons =
@@ -61,7 +63,8 @@ local recipe = {
     {type = "item", name = "infinity-pipe", amount = 1},
   },
   energy_required = 1,
-  results = {{type="item", name = item.name, amount=1}}
+  results = {{type="item", name = item.name, amount=1}},
+  auto_recycle = false,
 }
 
 local pipe = table.deepcopy(data.raw["infinity-pipe"]["infinity-pipe"])
@@ -94,3 +97,13 @@ data:extend({
     -- include_selected_prototype = true,
   }
 })
+
+local thruster = table.deepcopy(entity)
+thruster.name = mod_prefix .. "thruster"
+thruster.graphics_set = nil
+thruster.minable = nil
+thruster.selection_priority = 49
+thruster.quality_indicator_scale = 0
+thruster.min_performance = table.deepcopy(space_age_thruster.min_performance)
+thruster.max_performance = table.deepcopy(space_age_thruster.max_performance)
+data:extend{thruster}

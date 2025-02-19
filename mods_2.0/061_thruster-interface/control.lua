@@ -18,6 +18,7 @@ local function on_created_entity(event)
 
     fuel_pipe = nil,
     oxidizer_pipe = nil,
+    thrusters = {},
   })
 
   struct.fuel_pipe = entity.surface.create_entity{
@@ -144,6 +145,20 @@ script.on_event(defines.events.on_gui_closed, function(event)
   end
 end)
 
+local function add_thruster(struct)
+  local parent = struct.thrusters[#struct.thrusters] or struct.entity
+  local thruster = struct.entity.surface.create_entity{
+    name = mod_prefix .. "thruster",
+    force = struct.entity.force,
+    position = struct.entity.position,
+    quality = struct.entity.quality,
+  }
+  thruster.destructible = false
+  thruster.fluidbox.add_linked_connection(1, parent, 2)
+  thruster.fluidbox.add_linked_connection(3, parent, 4)
+  table.insert(struct.thrusters, thruster)
+end
+
 script.on_event(defines.events.on_gui_value_changed, function(event)
   local element = event.element
   if element and element.name == gui_slider_name then
@@ -151,6 +166,7 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
     local frame = player.gui.screen[gui_frame_name]
     if frame then
       frame["inner"]["flow"]["?"].caption = tostring(element.slider_value)
+      add_thruster(storage.structs[frame.tags.unit_number])
     end
   end
 end)
