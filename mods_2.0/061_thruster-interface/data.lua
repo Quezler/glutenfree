@@ -1,3 +1,4 @@
+require("util")
 require("shared")
 
 local entity = table.deepcopy(data.raw["thruster"]["thruster"])
@@ -10,8 +11,23 @@ entity.icons =
 }}
 entity.icon = nil
 
-entity.min_performance = {fluid_volume =  0, fluid_usage =  0, effectivity =  1}
-entity.max_performance = {fluid_volume = 10, fluid_usage = 10, effectivity = 10}
+entity.graphics_set.animation = util.sprite_load("__space-age__/graphics/entity/thruster/thruster",
+{
+  animation_speed = 0.5,
+  frame_count = 64,
+  scale = 0.5,
+  shift = {0, 3},
+  tint = {0.5, 0.5, 1},
+})
+entity.graphics_set.integration_patch = util.sprite_load("__space-age__/graphics/entity/thruster/thruster-bckg",
+{
+  scale = 0.5,
+  shift = {0, 3},
+  tint = {0.5, 0.5, 1},
+})
+
+entity.fuel_fluid_box.pipe_connections = {}
+entity.oxidizer_fluid_box.pipe_connections = {}
 
 local item = table.deepcopy(data.raw["item"]["thruster"])
 item.name = mod_name
