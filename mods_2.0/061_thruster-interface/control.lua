@@ -79,19 +79,47 @@ local function open_gui(player, entity)
     direction = "vertical",
   }
 
-  inner.add{
+  local entity_preview = inner.add{
     type = "entity-preview",
     style = "wide_entity_button",
-  }.entity = entity
+  }
+  entity_preview.entity = entity
+
+  local flow = inner.add{
+    type = "flow",
+    style = "horizontal_flow",
+  }
+  flow.style.top_margin = 5
+  flow.style.bottom_margin = 5
+
+  local min = flow.add{
+    type = "label",
+    caption = "0",
+  }
+  min.style.font = "default-bold"
+  min.style.minimal_width = 24 -- width of max (CTRL + F6)
+  flow.add{
+    type = "flow",
+  }.style.horizontally_stretchable = true
+  flow.add{
+    type = "label",
+    caption = "?",
+  }.style.font = "default-bold"
+  flow.add{
+    type = "flow",
+  }.style.horizontally_stretchable = true
+  local max = flow.add{
+    type = "label",
+    caption = "100",
+  }
+  max.style.font = "default-bold"
 
   local slider = inner.add{
     type = "slider",
     name = "slider",
-    style = "notched_slider",
     minimum_value = 0,
-    maximum_value = 10,
+    maximum_value = 100,
   }
-  slider.style.top_margin = 10
 
   player.opened = frame
   frame.force_auto_center()

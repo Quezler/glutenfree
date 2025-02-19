@@ -11,6 +11,7 @@ Date: ????
     - Make a struct for the entity and its pipes
     - Listen for the thruster gui opened event
     - Setup the gui with entity preview and slider
+    - Add 0 ? 100 above the slider
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 19
