@@ -12,23 +12,31 @@ local function on_created_entity(event)
     return
   end
 
-  local fuel_pipe = entity.surface.create_entity{
+  local struct = new_struct(storage.structs, {
+    id = entity.unit_number,
+    entity = entity,
+
+    fuel_pipe = nil,
+    oxidizer_pipe = nil,
+  })
+
+  struct.fuel_pipe = entity.surface.create_entity{
     name = mod_prefix .. "infinity-pipe",
     force = entity.force,
     position = {entity.position.x - 0.5, entity.position.y}
   }
-  fuel_pipe.destructible = false
-  fuel_pipe.set_infinity_pipe_filter({name = "thruster-fuel", percentage = 1})
-  fuel_pipe.fluidbox.add_linked_connection(0, entity, 1)
+  struct.fuel_pipe.destructible = false
+  struct.fuel_pipe.set_infinity_pipe_filter({name = "thruster-fuel", percentage = 1})
+  struct.fuel_pipe.fluidbox.add_linked_connection(0, entity, 1)
 
-  local oxidizer_pipe = entity.surface.create_entity{
+  struct.oxidizer_pipe = entity.surface.create_entity{
     name = mod_prefix .. "infinity-pipe",
     force = entity.force,
     position = {entity.position.x + 0.5, entity.position.y}
   }
-  oxidizer_pipe.destructible = false
-  oxidizer_pipe.set_infinity_pipe_filter({name = "thruster-oxidizer", percentage = 1})
-  oxidizer_pipe.fluidbox.add_linked_connection(0, entity, 3)
+  struct.oxidizer_pipe.destructible = false
+  struct.oxidizer_pipe.set_infinity_pipe_filter({name = "thruster-oxidizer", percentage = 1})
+  struct.oxidizer_pipe.fluidbox.add_linked_connection(0, entity, 3)
 end
 
 for _, event in ipairs({
