@@ -3,7 +3,7 @@
     "title": "Thruster interface",
     "description": "Configurable in steps of 10%, up to 1000%.",
 
-    "version": "0.0.1",
+    "version": "0.0.2",
     "author": "Quezler",
     "factorio_version": "2.0",
 

@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2025. 02. 19
   Info:
     - Rename creative thruster to thruster interface
     - Get the thruster performance curve to show
