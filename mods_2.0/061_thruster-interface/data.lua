@@ -65,7 +65,7 @@ local recipe = {
 local pipe = table.deepcopy(data.raw["infinity-pipe"]["infinity-pipe"])
 pipe.name = mod_prefix .. pipe.name
 pipe.selection_priority = 51
-pipe.selectable_in_game = true -- todo: false
+pipe.selectable_in_game = false
 pipe.minable = nil
 
 pipe.icons =
@@ -80,5 +80,6 @@ pipe.fluid_box.pipe_connections = {
 
 pipe.gui_mode = "none"
 pipe.flags = {"not-on-map", "hide-alt-info"}
+pipe.pictures = nil
 
 data:extend{entity, item, recipe, pipe}

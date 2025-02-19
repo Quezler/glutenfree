@@ -7,6 +7,7 @@ Date: ????
     - Give the thruster interface a cute little nub
     - Tweak fluid consumption to always display 120/s
     - Hide fluid icons
+    - Hide the infinity pipes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 19
