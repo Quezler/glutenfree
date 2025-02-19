@@ -29,10 +29,12 @@ entity.graphics_set.integration_patch = util.sprite_load("__space-age__/graphics
 entity.min_performance = {fluid_volume = 1, fluid_usage = 2, effectivity = 0}
 entity.max_performance = {fluid_volume = 1, fluid_usage = 2, effectivity = 0}
 
+entity.fuel_fluid_box.hide_connection_info = true
 entity.fuel_fluid_box.pipe_connections = {
   {flow_direction = "input", connection_type = "linked", linked_connection_id = 1},
   {flow_direction = "output", connection_type = "linked", linked_connection_id = 2},
 }
+entity.oxidizer_fluid_box.hide_connection_info = true
 entity.oxidizer_fluid_box.pipe_connections = {
   {flow_direction = "input", connection_type = "linked", linked_connection_id = 3},
   {flow_direction = "output", connection_type = "linked", linked_connection_id = 4},
@@ -63,6 +65,7 @@ local recipe = {
 local pipe = table.deepcopy(data.raw["infinity-pipe"]["infinity-pipe"])
 pipe.name = mod_prefix .. pipe.name
 pipe.selection_priority = 51
+pipe.selectable_in_game = true -- todo: false
 pipe.minable = nil
 
 pipe.icons =
@@ -76,5 +79,6 @@ pipe.fluid_box.pipe_connections = {
 }
 
 pipe.gui_mode = "none"
+pipe.flags = {"not-on-map", "hide-alt-info"}
 
 data:extend{entity, item, recipe, pipe}
