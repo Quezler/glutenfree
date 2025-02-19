@@ -54,6 +54,7 @@ for _, event in ipairs({
 end
 
 local gui_frame_name = mod_prefix .. "frame"
+local gui_slider_name = mod_prefix .. "slider"
 
 local function open_gui(player, entity)
   local frame = player.gui.screen[gui_frame_name]
@@ -87,6 +88,7 @@ local function open_gui(player, entity)
 
   local flow = inner.add{
     type = "flow",
+    name = "flow",
     style = "horizontal_flow",
   }
   flow.style.top_margin = 5
@@ -103,6 +105,7 @@ local function open_gui(player, entity)
   }.style.horizontally_stretchable = true
   flow.add{
     type = "label",
+    name = "?",
     caption = "?",
   }.style.font = "default-bold"
   flow.add{
@@ -116,7 +119,7 @@ local function open_gui(player, entity)
 
   local slider = inner.add{
     type = "slider",
-    name = "slider",
+    name = gui_slider_name,
     minimum_value = 0,
     maximum_value = 100,
   }
@@ -138,5 +141,16 @@ script.on_event(defines.events.on_gui_closed, function(event)
   local element = event.element
   if element and element.name == gui_frame_name then
     element.destroy()
+  end
+end)
+
+script.on_event(defines.events.on_gui_value_changed, function(event)
+  local element = event.element
+  if element and element.name == gui_slider_name then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    local frame = player.gui.screen[gui_frame_name]
+    if frame then
+      frame["inner"]["flow"]["?"].caption = tostring(element.slider_value)
+    end
   end
 end)

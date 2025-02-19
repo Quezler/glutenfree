@@ -12,6 +12,7 @@ Date: ????
     - Listen for the thruster gui opened event
     - Setup the gui with entity preview and slider
     - Add 0 ? 100 above the slider
+    - Replace the ? with the current slider value
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 19
