@@ -9,6 +9,7 @@ Date: ????
     - Hide fluid icons
     - Hide the infinity pipes
     - Make a struct for the entity and its pipes
+    - Listen for the thruster gui opened event
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 19

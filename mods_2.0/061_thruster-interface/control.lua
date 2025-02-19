@@ -52,3 +52,12 @@ for _, event in ipairs({
     {filter = "name", name = mod_prefix .. "infinity-pipe"},
   })
 end
+
+---@param event EventData.CustomInputEvent
+script.on_event(mod_prefix .. "open-gui", function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local selected = player.selected
+  if selected and selected.name == mod_name and player.is_cursor_empty() then
+    game.print("thruster-interface")
+  end
+end)

@@ -40,6 +40,8 @@ entity.oxidizer_fluid_box.pipe_connections = {
   {flow_direction = "output", connection_type = "linked", linked_connection_id = 4},
 }
 
+-- table.insert(entity.flags, "get-by-unit-number")
+
 local item = table.deepcopy(data.raw["item"]["thruster"])
 item.name = mod_name
 
@@ -83,3 +85,12 @@ pipe.flags = {"not-on-map", "hide-alt-info"}
 pipe.pictures = nil
 
 data:extend{entity, item, recipe, pipe}
+
+data:extend({
+  {
+    type = "custom-input", key_sequence = "",
+    name = mod_prefix .. "open-gui",
+    linked_game_control = "open-gui",
+    -- include_selected_prototype = true,
+  }
+})
