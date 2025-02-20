@@ -319,12 +319,9 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
   local blueprint_entities = blueprint.get_blueprint_entities() or {}
   for i, blueprint_entity in ipairs(blueprint_entities) do
     if is_beacon_interface[blueprint_entity.name] then
-      blueprint_entity.tags = blueprint_entity.tags or {}
-      blueprint_entity.tags["__beacon-interface__"] = get_effects_from_blueprint_entity(blueprint_entity)
-      blueprint_entity.items = nil
+      blueprint.set_blueprint_entity_tag(i, "__beacon-interface__", get_effects_from_blueprint_entity(blueprint_entity))
     end
   end
-  blueprint.set_blueprint_entities(blueprint_entities)
 end)
 
 script.on_event(defines.events.on_pre_player_mined_item, function(event)

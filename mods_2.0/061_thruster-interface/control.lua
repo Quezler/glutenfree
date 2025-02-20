@@ -238,15 +238,13 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
     if blueprint_entity.name == mod_name then
       local entity = event.mapping.get()[i]
       if entity and entity.name == mod_name then
-        blueprint_entity.tags = blueprint_entity.tags or {}
-        blueprint_entity.tags[mod_directory] = {thrusters = #storage.structs[entity.unit_number].thrusters}
+        blueprint.set_blueprint_entity_tag(i, mod_directory, {thrusters = #storage.structs[entity.unit_number].thrusters})
       else
         log(string.format("failed to save thruster count due to modified blueprint mapping:"))
-        log(string.format("expected 'thruster-interface--thruster' at #%d but found '%s'", i, entity and entity.name or "nil"))
+        log(string.format("expected 'thruster-interface' at #%d but found '%s'", i, entity and entity.name or "nil"))
       end
     end
   end
-  blueprint.set_blueprint_entities(blueprint_entities)
 end)
 
 script.on_event(defines.events.on_post_entity_died, function(event)

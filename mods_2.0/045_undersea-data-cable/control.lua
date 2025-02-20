@@ -218,6 +218,7 @@ end
 script.on_event(defines.events.on_player_setup_blueprint, function(event)
   if event.stack == nil then return end
 
+  local blueprint_entities_modified = false
   local blueprint_entities = event.stack.get_blueprint_entities()
   if blueprint_entities == nil then return end
 
@@ -233,11 +234,14 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
     if blueprint_entity.name == "undersea-data-cable" then
       if remove_this_heat_pipe[util.positiontostr(blueprint_entity.position)] then
         blueprint_entities[i] = nil
+        blueprint_entities_modified = true
       end
     end
   end
 
-  event.stack.set_blueprint_entities(blueprint_entities)
+  if blueprint_entities_modified then
+    event.stack.set_blueprint_entities(blueprint_entities)
+  end
 end)
 
 script.on_event(defines.events.on_object_destroyed, function(event)
