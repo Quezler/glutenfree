@@ -33,13 +33,13 @@ entity.max_performance = {fluid_volume = 1, fluid_usage = 2, effectivity = 0}
 
 entity.fuel_fluid_box.hide_connection_info = true
 entity.fuel_fluid_box.pipe_connections = {
-  {flow_direction = "input", connection_type = "linked", linked_connection_id = 1},
-  {flow_direction = "output", connection_type = "linked", linked_connection_id = 2},
+  {flow_direction = "input-output", connection_type = "linked", linked_connection_id = 1},
+  {flow_direction = "input-output", connection_type = "linked", linked_connection_id = 2},
 }
 entity.oxidizer_fluid_box.hide_connection_info = true
 entity.oxidizer_fluid_box.pipe_connections = {
-  {flow_direction = "input", connection_type = "linked", linked_connection_id = 3},
-  {flow_direction = "output", connection_type = "linked", linked_connection_id = 4},
+  {flow_direction = "input-output", connection_type = "linked", linked_connection_id = 3},
+  {flow_direction = "input-output", connection_type = "linked", linked_connection_id = 4},
 }
 
 -- table.insert(entity.flags, "get-by-unit-number")
@@ -88,7 +88,6 @@ pipe.gui_mode = "none"
 pipe.flags = {"not-on-map", "hide-alt-info"}
 pipe.pictures = nil
 pipe.collision_mask = {layers = {}}
-pipe.fluid_box.volume = pipe.fluid_box.volume * 100
 
 data:extend{entity, item, recipe, pipe}
 

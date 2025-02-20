@@ -5,6 +5,7 @@ Date: ????
     - Instead of only adding, match the slider always
     - Nullify collision box of the hidden entities
     - Increase infinity pipe fluidbox
+    - Fix fluid throughput being inexplicably low
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 02. 19
