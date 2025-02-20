@@ -116,7 +116,7 @@ local function open_gui(player, entity)
   flow.add{
     type = "label",
     name = "?",
-    caption = "?",
+    caption = tostring(#struct.thrusters),
   }.style.font = "default-bold"
   flow.add{
     type = "flow",
@@ -131,6 +131,7 @@ local function open_gui(player, entity)
     type = "slider",
     name = gui_slider_name,
     minimum_value = 0,
+    value = #struct.thrusters,
     maximum_value = 100,
   }
 
