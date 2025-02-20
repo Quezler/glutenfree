@@ -3,6 +3,7 @@ Version: 1.0.1
 Date: ????
   Info:
     - Add thumbnail
+    - Add editor extensions support
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 02. 20

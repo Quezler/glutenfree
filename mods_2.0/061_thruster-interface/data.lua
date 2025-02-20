@@ -58,11 +58,7 @@ local recipe = {
   type = "recipe",
   name = mod_name,
   enabled = false,
-  ingredients =
-  {
-    {type = "item", name = "thruster", amount = 1},
-    {type = "item", name = "infinity-pipe", amount = 1},
-  },
+  ingredients = {},
   energy_required = 1,
   results = {{type="item", name = item.name, amount=1}},
   auto_recycle = false,
@@ -112,3 +108,18 @@ thruster.collision_mask = {layers = {}}
 thruster.selectable_in_game = false
 thruster.fast_replaceable_group = nil
 data:extend{thruster}
+
+if mods["EditorExtensions"] then
+  recipe.category = "ee-testing-tool"
+
+  data:extend({
+    {
+      type = "item-subgroup",
+      name = "ee-quezler",
+      group = "ee-tools",
+      order = "q",
+    },
+  })
+
+  item.subgroup = "ee-quezler"
+end

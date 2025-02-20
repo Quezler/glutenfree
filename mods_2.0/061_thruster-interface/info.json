@@ -19,6 +19,8 @@
         "? newsletter-for-mods-made-by-quezler",
 
         "base >= 2.0.35",
-        "space-age"
+        "space-age",
+
+        "? EditorExtensions"
     ]
 }

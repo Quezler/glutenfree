@@ -7,4 +7,6 @@ Grab yourself a thruster interface, some supported methods are:
 `/c game.player.cursor_ghost = "thruster-interface"` (in case you are viewing the platform with remote view)
 `/c game.player.insert("thruster-interface")` (in case you're on the platform as character/editor)
 
+Additionally if Editor Extensions is installed you can find at the bottom of their item list.
+
 (versions below 2.0.35 are supported manually by editing the info.json, do not upgrade the quality on lower verions)
