@@ -169,6 +169,21 @@ local function add_thruster(struct)
   table.insert(struct.thrusters, thruster)
 end
 
+local function remove_thruster(struct)
+  struct.thrusters[#struct.thrusters].destroy()
+  struct.thrusters[#struct.thrusters] = nil
+end
+
+local function set_thrusters(struct, amount)
+  while amount > #struct.thrusters do
+    add_thruster(struct)
+  end
+
+  while amount < #struct.thrusters do
+    remove_thruster(struct)
+  end
+end
+
 script.on_event(defines.events.on_gui_value_changed, function(event)
   local element = event.element
   if element and element.name == gui_slider_name then
@@ -176,7 +191,7 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
     local frame = player.gui.screen[gui_frame_name]
     if frame then
       frame["inner"]["flow"]["?"].caption = tostring(element.slider_value)
-      add_thruster(storage.structs[frame.tags.unit_number])
+      set_thrusters(storage.structs[frame.tags.unit_number], element.slider_value)
     end
   end
 end)
