@@ -10,6 +10,7 @@ Date: ????
     - Add blueprint support
     - Preserve setting after death
     - Fix changing quality targeting the hidden thrusters
+    - Preserve settings when changing quality
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 02. 19

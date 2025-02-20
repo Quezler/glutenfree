@@ -51,6 +51,11 @@ local function on_created_entity(event)
 
   if event.tags and event.tags[mod_directory] and event.tags[mod_directory].thrusters then
     this.set_thrusters(struct, tonumber(event.tags[mod_directory].thrusters))
+  else
+    this.set_thrusters(struct, entity.surface.count_entities_filtered{
+      name = mod_prefix .. "thruster",
+      position = entity.position,
+    })
   end
 end
 
