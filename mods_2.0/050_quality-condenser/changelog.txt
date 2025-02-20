@@ -1,9 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.1
-Date: ????
+Date: 2025. 02. 20
   Info:
     - Mention how it is not a cheat with just one module slot
     - Give the augmentor mod a honorable mention
+    - Sort and merge only when there are split stacks when full
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2025. 02. 13
