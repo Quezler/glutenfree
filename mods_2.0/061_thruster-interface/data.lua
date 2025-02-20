@@ -88,6 +88,7 @@ pipe.gui_mode = "none"
 pipe.flags = {"not-on-map", "hide-alt-info"}
 pipe.pictures = nil
 pipe.collision_mask = {layers = {}}
+pipe.fluid_box.volume = pipe.fluid_box.volume * 100
 
 data:extend{entity, item, recipe, pipe}
 
