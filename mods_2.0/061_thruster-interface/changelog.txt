@@ -9,6 +9,7 @@ Date: ????
     - Open the gui with the current value
     - Add blueprint support
     - Preserve setting after death
+    - Fix changing quality targeting the hidden thrusters
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 02. 19

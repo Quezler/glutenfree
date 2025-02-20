@@ -109,4 +109,6 @@ thruster.quality_indicator_scale = 0
 thruster.min_performance = table.deepcopy(space_age_thruster.min_performance)
 thruster.max_performance = table.deepcopy(space_age_thruster.max_performance)
 thruster.collision_mask = {layers = {}}
+thruster.selectable_in_game = false
+thruster.fast_replaceable_group = nil
 data:extend{thruster}
