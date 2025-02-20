@@ -87,6 +87,7 @@ pipe.fluid_box.pipe_connections = {
 pipe.gui_mode = "none"
 pipe.flags = {"not-on-map", "hide-alt-info"}
 pipe.pictures = nil
+pipe.collision_mask = {layers = {}}
 
 data:extend{entity, item, recipe, pipe}
 
@@ -107,4 +108,5 @@ thruster.selection_priority = 49
 thruster.quality_indicator_scale = 0
 thruster.min_performance = table.deepcopy(space_age_thruster.min_performance)
 thruster.max_performance = table.deepcopy(space_age_thruster.max_performance)
+thruster.collision_mask = {layers = {}}
 data:extend{thruster}
