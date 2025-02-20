@@ -8,6 +8,7 @@ Date: ????
     - Fix fluid throughput being inexplicably low
     - Open the gui with the current value
     - Add blueprint support
+    - Preserve setting after death
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 02. 19

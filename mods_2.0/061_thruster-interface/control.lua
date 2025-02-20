@@ -243,3 +243,15 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
   end
   blueprint.set_blueprint_entities(blueprint_entities)
 end)
+
+script.on_event(defines.events.on_post_entity_died, function(event)
+  local ghost = event.ghost
+
+  if ghost and ghost.ghost_name == mod_name then
+    local tags = ghost.tags or {}
+    tags[mod_directory] = {thrusters = #storage.structs[event.unit_number].thrusters}
+    ghost.tags = tags
+  end
+end, {
+  {filter = "type", type = "thruster"},
+})
