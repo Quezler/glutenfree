@@ -12,6 +12,7 @@ Date: ????
     - Fix changing quality targeting the hidden thrusters
     - Preserve settings when changing quality
     - Disable the invulnerable stone walls
+    - Disable the recipe
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 02. 19

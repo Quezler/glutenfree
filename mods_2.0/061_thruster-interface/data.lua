@@ -57,7 +57,7 @@ entity.minable.result = item.name
 local recipe = {
   type = "recipe",
   name = mod_name,
-  enabled = true,
+  enabled = false,
   ingredients =
   {
     {type = "item", name = "thruster", amount = 1},
