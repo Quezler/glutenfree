@@ -1,9 +1,9 @@
 {
     "name": "thruster-interface",
     "title": "Thruster interface",
-    "description": "Configurable in steps of 10%, up to 1000%.",
+    "description": "Needs no fuel and you can configure the thrust multiplier in a gui.",
 
-    "version": "0.0.3",
+    "version": "1.0.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -18,7 +18,7 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "base",
+        "base >= 2.0.35",
         "space-age"
     ]
 }
