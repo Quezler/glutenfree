@@ -10,10 +10,10 @@ end)
 local function on_created_entity(event)
   local entity = event.entity or event.destination
 
-  if entity.name == "stone-wall" then
-    entity.destructible = false
-    return
-  end
+  -- if entity.name == "stone-wall" then
+  --   entity.destructible = false
+  --   return
+  -- end
 
   if entity.name == mod_prefix .. "infinity-pipe" then
     entity.destroy()
@@ -68,7 +68,7 @@ for _, event in ipairs({
   defines.events.on_entity_cloned,
 }) do
   script.on_event(event, on_created_entity, {
-    {filter = "name", name = "stone-wall"},
+    -- {filter = "name", name = "stone-wall"},
     {filter = "name", name = mod_name},
     {filter = "name", name = mod_prefix .. "infinity-pipe"},
   })
