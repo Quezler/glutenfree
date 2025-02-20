@@ -7,6 +7,7 @@ Date: ????
     - Increase infinity pipe fluidbox
     - Fix fluid throughput being inexplicably low
     - Open the gui with the current value
+    - Add blueprint support
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 02. 19

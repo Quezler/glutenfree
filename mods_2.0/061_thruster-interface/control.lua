@@ -1,5 +1,7 @@
 require("shared")
 
+local this = {}
+
 script.on_init(function()
   storage.structs = {}
   storage.deathrattles = {}
@@ -46,6 +48,10 @@ local function on_created_entity(event)
   struct.oxidizer_pipe.fluidbox.add_linked_connection(0, entity, 3)
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {"thruster-interface", struct.id}
+
+  if event.tags and event.tags[mod_directory] and event.tags[mod_directory].thrusters then
+    this.set_thrusters(struct, tonumber(event.tags[mod_directory].thrusters))
+  end
 end
 
 for _, event in ipairs({
@@ -155,7 +161,7 @@ script.on_event(defines.events.on_gui_closed, function(event)
   end
 end)
 
-local function add_thruster(struct)
+function this.add_thruster(struct)
   local parent = struct.thrusters[#struct.thrusters] or struct.entity
   local thruster = struct.entity.surface.create_entity{
     name = mod_prefix .. "thruster",
@@ -170,18 +176,18 @@ local function add_thruster(struct)
   table.insert(struct.thrusters, thruster)
 end
 
-local function remove_thruster(struct)
+function this.remove_thruster(struct)
   struct.thrusters[#struct.thrusters].destroy()
   struct.thrusters[#struct.thrusters] = nil
 end
 
-local function set_thrusters(struct, amount)
+function this.set_thrusters(struct, amount)
   while amount > #struct.thrusters do
-    add_thruster(struct)
+    this.add_thruster(struct)
   end
 
   while amount < #struct.thrusters do
-    remove_thruster(struct)
+    this.remove_thruster(struct)
   end
 end
 
@@ -192,7 +198,7 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
     local frame = player.gui.screen[gui_frame_name]
     if frame then
       frame["inner"]["flow"]["?"].caption = tostring(element.slider_value)
-      set_thrusters(storage.structs[frame.tags.unit_number], element.slider_value)
+      this.set_thrusters(storage.structs[frame.tags.unit_number], element.slider_value)
     end
   end
 end)
@@ -216,4 +222,24 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     deathrattles[deathrattle[1]](deathrattle)
   end
+end)
+
+script.on_event(defines.events.on_player_setup_blueprint, function(event)
+  local blueprint = event.stack
+  if blueprint == nil then return end
+
+  local blueprint_entities = blueprint.get_blueprint_entities() or {}
+  for i, blueprint_entity in ipairs(blueprint_entities) do
+    if blueprint_entity.name == mod_name then
+      local entity = event.mapping.get()[i]
+      if entity and entity.name == mod_name then
+        blueprint_entity.tags = blueprint_entity.tags or {}
+        blueprint_entity.tags[mod_directory] = {thrusters = #storage.structs[entity.unit_number].thrusters}
+      else
+        log(string.format("failed to save thruster count due to modified blueprint mapping:"))
+        log(string.format("expected 'thruster-interface--thruster' at #%d but found '%s'", i, entity and entity.name or "nil"))
+      end
+    end
+  end
+  blueprint.set_blueprint_entities(blueprint_entities)
 end)
