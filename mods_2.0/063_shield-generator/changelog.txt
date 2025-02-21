@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Stash proof of concept
+    - Test with a single large cover
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 19

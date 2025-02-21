@@ -2,10 +2,10 @@ local cover = {
   type = "simple-entity",
   name = "space-platform-foundation-protective-cover",
 
-  selection_box = {{ 0.0,  0.0}, { 0.0,  0.0}},
-  collision_box = {{-0.4, -0.4}, { 0.4,  0.4}},
+  selection_box = {{0, 0}, {0, 0}},
+  collision_box = {{-16, -16}, {16, 16}},
 
-  collision_mask = {layers = {ground_tile = true}},
+  collision_mask = {layers = {}},
   resistances = {
     {
       type = "impact",
