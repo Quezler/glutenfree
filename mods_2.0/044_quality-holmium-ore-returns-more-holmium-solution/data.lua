@@ -174,5 +174,3 @@ local inserter = {
   hidden = true,
 }
 data:extend{inserter}
-
-holmium_chemical_plant.icon_draw_specification.shift[2] = -0.2
