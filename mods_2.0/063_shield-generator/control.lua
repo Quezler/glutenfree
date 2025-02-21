@@ -7,26 +7,6 @@ script.on_event(defines.events.on_tick, function(event)
   end
 end)
 
-commands.add_command("shield-generator", nil, function(command)
-  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
-  local platform = player.surface.platform
-  if not platform then return end
-
-  -- platform.surface.create_entity{
-  --   name = "space-platform-foundation-protective-cover",
-  --   force = "neutral",
-  --   position = {0, 0},
-  -- }
-
-  for _, tile_position in ipairs(platform.surface.get_connected_tiles({0, 0}, {"space-platform-foundation"}, true)) do
-    platform.surface.create_entity{
-      name = "space-platform-foundation-protective-cover",
-      force = "neutral",
-      position = {tile_position.x + 0.5, tile_position.y + 0.5},
-    }
-  end
-end)
-
 script.on_event(defines.events.on_entity_damaged, function (event)
   -- local entity = event.entity
   -- if not entity.surface.platform then return end
@@ -37,3 +17,35 @@ script.on_event(defines.events.on_entity_damaged, function (event)
 end, {
   {filter = "damage-type", type = "impact"}
 })
+
+local function on_created_tile(event)
+  if event.tile.name ~= "space-platform-foundation" then return end
+
+  local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
+  if not surface.platform then return end
+
+  for _, tile_and_position in ipairs(event.tiles) do
+    local position = {tile_and_position.position.x + 0.5, tile_and_position.position.y + 0.5}
+    local cover = surface.find_entity("space-platform-foundation-protective-cover", position)
+    if not cover then
+      cover = surface.create_entity{
+        name = "space-platform-foundation-protective-cover",
+        force = "neutral",
+        position = position,
+      }
+    end
+  end
+end
+
+for _, event in ipairs({
+  defines.events.on_player_built_tile,
+  defines.events.on_robot_built_tile,
+  defines.events.on_space_platform_built_tile,
+  defines.events.script_raised_set_tiles,
+  -- todo: on_area_cloned.clone_tiles
+}) do
+  script.on_event(event, on_created_tile)
+  -- script.on_event(event, on_created_tile, {
+  --   {filter = "name", name = "space-platform-foundation"},
+  -- })
+end
