@@ -159,7 +159,8 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local playerdata = storage.playerdata[player.index]
 
-  for _, quality_category in pairs(shared.quality_categories) do
+  for i = 1, #shared.quality_categories do
+    local quality_category = shared.quality_categories[(i % #shared.quality_categories) + 1]
     local switch_state = playerdata.switch_states[quality_category.name] or quality_category.default_switch_state
     if switch_state == "right" then
       Modes[quality_category.name](event, playerdata)

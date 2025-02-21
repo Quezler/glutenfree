@@ -3,7 +3,6 @@ return {
     {
       name = "entities",
       sprite = "entity/transport-belt",
-      default_switch_state = "right",
     },
     {
       name = "filters",
