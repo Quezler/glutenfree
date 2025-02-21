@@ -42,7 +42,7 @@ local function tick_hub(struct)
   if section == nil or section.type ~= defines.logistic_section_type.request_missing_materials_controlled then return end
 
   for _, filter in pairs(section.filters) do
-    if filter.min > 0 and storage.blacklist[filter.value.name] ~= true then
+    if filter.value and filter.min > 0 and storage.blacklist[filter.value.name] ~= true then
       local item = {name = filter.value.name, count = filter.min, quality = filter.value.quality}
       local missing = filter.min - struct.inventory.get_item_count(item)
       if missing > 0 then
