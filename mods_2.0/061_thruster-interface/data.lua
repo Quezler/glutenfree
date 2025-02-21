@@ -66,7 +66,7 @@ local recipe = {
 
 local pipe = table.deepcopy(data.raw["infinity-pipe"]["infinity-pipe"])
 pipe.name = mod_prefix .. pipe.name
-pipe.selection_priority = 51
+pipe.selection_priority = 49
 pipe.selectable_in_game = false
 pipe.minable = nil
 
@@ -100,12 +100,12 @@ local thruster = table.deepcopy(entity)
 thruster.name = mod_prefix .. "thruster"
 thruster.graphics_set = nil
 thruster.minable = nil
-thruster.selection_priority = 49
+thruster.selection_priority = 48
+thruster.selectable_in_game = false
 thruster.quality_indicator_scale = 0
 thruster.min_performance = table.deepcopy(space_age_thruster.min_performance)
 thruster.max_performance = table.deepcopy(space_age_thruster.max_performance)
 thruster.collision_mask = {layers = {}}
-thruster.selectable_in_game = false
 thruster.fast_replaceable_group = nil
 data:extend{thruster}
 
