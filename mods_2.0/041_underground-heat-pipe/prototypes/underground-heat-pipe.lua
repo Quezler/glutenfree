@@ -17,6 +17,8 @@ data:extend{subgroup}
 
 function UndergroundHeatPipe.make(config)
   local underground_belt = table.deepcopy(data.raw["underground-belt"][config.prefix .. "underground-belt"])
+  local max_distance = settings.startup[mod_prefix .. "distance-" .. underground_belt.name].value
+  if max_distance == -1 then max_distance = underground_belt.max_distance end
 
   local uhp = {
     type = "pipe-to-ground",
@@ -34,12 +36,12 @@ function UndergroundHeatPipe.make(config)
           connection_type = "underground",
           direction = defines.direction.south,
           position = {0, 0},
-          max_underground_distance = underground_belt.max_distance,
+          max_underground_distance = max_distance,
           connection_category = config.prefix .. "underground-heat-pipe",
         }
       },
       hide_connection_info = true,
-      max_pipeline_extent = underground_belt.max_distance + 1,
+      max_pipeline_extent = max_distance + 1,
     },
     collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
     selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
@@ -73,7 +75,7 @@ function UndergroundHeatPipe.make(config)
     energy_required = 1,
     ingredients =
     {
-      {type = "item", name = "heat-pipe", amount = underground_belt.max_distance + 1},
+      {type = "item", name = "heat-pipe", amount = max_distance + 1},
       {type = "item", name = config.prefix .. "underground-belt", amount = 2}
     },
     results = {{type="item", name=uhp_item.name, amount=2}}
@@ -103,7 +105,7 @@ function UndergroundHeatPipe.make(config)
 
   data:extend{uhp, uhp_item, uhp_recipe}
 
-  for length = 3, underground_belt.max_distance + 1 do
+  for length = 3, max_distance + 1 do
     local range = (length - 3) / 2 -- as in, half of the diameter, minus the center or something.
     -- right = vertical, left = horizontal
     for axis, offset in pairs({horizontal = {x = range, y = 0}, vertical = {x = 0, y = range}}) do

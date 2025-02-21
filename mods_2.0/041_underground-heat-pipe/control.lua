@@ -143,6 +143,11 @@ end)
 script.on_configuration_changed(function()
   inflate_surfacedata()
   Handler.update_all_force_recipe_visibility()
+
+  for _, surfacedata in pairs(storage.surfacedata) do
+    Handler.update_mode_for_all_pipe_to_grounds(surfacedata)
+    Handler.validate_all_underpasses(surfacedata)
+  end
 end)
 
 script.on_event(defines.events.on_surface_created, function(event)
