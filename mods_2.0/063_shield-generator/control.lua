@@ -26,3 +26,14 @@ commands.add_command("shield-generator", nil, function(command)
   --   }
   -- end
 end)
+
+script.on_event(defines.events.on_entity_damaged, function (event)
+  -- local entity = event.entity
+  -- if not entity.surface.platform then return end
+
+  if event.source and event.source.type == "asteroid" then
+    event.entity.health = event.entity.health + event.final_damage_amount
+  end
+end, {
+  {filter = "damage-type", type = "impact"}
+})

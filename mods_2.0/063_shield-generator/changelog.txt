@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Stash proof of concept
     - Test with a single large cover
+    - Nullify asteroid damage via script
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 19
