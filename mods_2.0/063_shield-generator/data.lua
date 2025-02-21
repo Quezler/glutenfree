@@ -3,7 +3,7 @@ local cover = {
   name = "space-platform-foundation-protective-cover",
 
   selection_box = {{0, 0}, {0, 0}},
-  collision_box = {{-16, -16}, {16, 16}},
+  collision_box = {{0, 0}, {0, 0}},
 
   collision_mask = {layers = {}},
   resistances = {

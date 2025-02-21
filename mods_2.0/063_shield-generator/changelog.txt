@@ -5,6 +5,7 @@ Date: ????
     - Stash proof of concept
     - Test with a single large cover
     - Nullify asteroid damage via script
+    - Revert to per-tile covers to keep collision debug renderer clean
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 19

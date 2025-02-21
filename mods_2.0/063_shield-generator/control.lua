@@ -12,19 +12,19 @@ commands.add_command("shield-generator", nil, function(command)
   local platform = player.surface.platform
   if not platform then return end
 
-  platform.surface.create_entity{
-    name = "space-platform-foundation-protective-cover",
-    force = "neutral",
-    position = {0, 0},
-  }
+  -- platform.surface.create_entity{
+  --   name = "space-platform-foundation-protective-cover",
+  --   force = "neutral",
+  --   position = {0, 0},
+  -- }
 
-  -- for _, tile_position in ipairs(platform.surface.get_connected_tiles({0, 0}, {"space-platform-foundation"}, true)) do
-  --   platform.surface.create_entity{
-  --     name = "space-platform-foundation-protective-cover",
-  --     force = "neutral",
-  --     position = {tile_position.x + 0.5, tile_position.y + 0.5},
-  --   }
-  -- end
+  for _, tile_position in ipairs(platform.surface.get_connected_tiles({0, 0}, {"space-platform-foundation"}, true)) do
+    platform.surface.create_entity{
+      name = "space-platform-foundation-protective-cover",
+      force = "neutral",
+      position = {tile_position.x + 0.5, tile_position.y + 0.5},
+    }
+  end
 end)
 
 script.on_event(defines.events.on_entity_damaged, function (event)
