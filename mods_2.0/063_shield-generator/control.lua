@@ -27,7 +27,7 @@ local function on_created_tile(event)
   for _, tile_and_position in ipairs(event.tiles) do
     local position = {tile_and_position.position.x + 0.5, tile_and_position.position.y + 0.5}
     local cover = surface.create_entity{
-      name = "space-platform-foundation-protective-cover",
+      name = mod_prefix .. "simple-entity",
       force = "neutral",
       position = position,
     }

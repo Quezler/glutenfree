@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Update description and dependencies
+    - Rename simple entity
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 21

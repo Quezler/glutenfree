@@ -1,6 +1,12 @@
+require("shared")
+
 local cover = {
   type = "simple-entity",
-  name = "space-platform-foundation-protective-cover",
+  name = mod_prefix .. "simple-entity",
+
+  icons = {
+    {icon = data.raw["item"]["space-platform-foundation"].icon, tint = {0.5, 0.5, 1}},
+  },
 
   selection_box = {{0, 0}, {0, 0}},
   collision_box = {{0, 0}, {0, 0}},
