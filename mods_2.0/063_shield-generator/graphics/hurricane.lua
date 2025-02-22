@@ -33,7 +33,7 @@ function Hurricane.crafter(config)
           width = config.width / config.columns,
           height = config.height / config.rows,
           frame_count = config.total_frames,
-          animation_speed = 0.5,
+          animation_speed = 1,
           scale = 0.5,
           stripes = get_stripes(prefix .. "hr-animation-%d.png")
         },
@@ -58,7 +58,7 @@ function Hurricane.crafter(config)
           width = config.width / config.columns,
           height = config.height / config.rows,
           frame_count = config.total_frames,
-          animation_speed = 0.5,
+          animation_speed = 1,
           scale = 0.5,
           draw_as_glow = true,
           blend_mode = "additive",
