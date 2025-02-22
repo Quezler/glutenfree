@@ -11,6 +11,7 @@ Date: ????
     - Lock crafter to space
     - Fix shield generator not being ghostable
     - Keep track of shield generators on a surface
+    - Only listen for the damage event when necessary
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 21

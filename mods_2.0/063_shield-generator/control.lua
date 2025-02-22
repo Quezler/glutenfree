@@ -7,16 +7,31 @@ script.on_init(function()
   storage.deathrattles = {}
 end)
 
-script.on_event(defines.events.on_entity_damaged, function (event)
-  local entity = event.entity
-  if not storage.platformdata[entity.surface.index] then return end
+function app.listen_for_damage(boolean)
+  assert(boolean ~= nil)
+  if boolean then
+    log("started listening for impact damage for every surface.")
+    script.on_event(defines.events.on_entity_damaged, function (event)
+      local entity = event.entity
+      if not storage.platformdata[entity.surface.index] then return end
 
-  if event.source and event.source.type == "asteroid" then
-    event.entity.health = event.entity.health + event.final_damage_amount
+      if event.source and event.source.type == "asteroid" then
+        event.entity.health = event.entity.health + event.final_damage_amount
+      end
+    end, {
+      {filter = "damage-type", type = "impact"}
+    })
+  else
+    log("stopped listening for impact damage for every surface.")
+    script.on_event(defines.events.on_entity_damaged, nil)
   end
-end, {
-  {filter = "damage-type", type = "impact"}
-})
+end
+
+script.on_load(function()
+  if next(storage.platformdata) then
+    app.listen_for_damage(true)
+  end
+end)
 
 function app.on_created_tile(event)
   if event.tile.name ~= "space-platform-foundation" then return end
@@ -63,19 +78,24 @@ function app.on_created_entity(event)
     return entity.destroy()
   end
 
+  -- start listening if there were no platforms with a shield generator yet
+  if not next(storage.platformdata) then
+    app.listen_for_damage(true)
+  end
+
   local platformdata = storage.platformdata[entity.surface.index]
   if not platformdata then
-    storage.platformdata[entity.surface.index] = {
+    platformdata = {
       surface = entity.surface,
       shield_generators = {},
     }
-    platformdata = storage.platformdata[entity.surface.index]
+    storage.platformdata[entity.surface.index] = platformdata
   end
 
   platformdata.shield_generators[entity.unit_number] = entity
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {"shield-generator", entity.surface.index}
 
-  app.clear_simple_entities(entity.surface)
+  app.clear_simple_entities(entity.surface) -- simple way to prevent duplicates if someone ever places more per-platform
   for _, tile_position in ipairs(entity.surface.get_connected_tiles({0, 0}, {"space-platform-foundation"}, true)) do
     entity.surface.create_entity{
       name = mod_prefix .. "simple-entity",
@@ -112,6 +132,10 @@ local deathrattles = {
         storage.platformdata[deathrattle[2]] = nil
         log(string.format("platform #%d (%s) no longer has any shield generators.", platformdata.surface.index, platformdata.surface.name))
         app.clear_simple_entities(platformdata.surface)
+      end
+
+      if not next(storage.platformdata) then
+        app.listen_for_damage(false)
       end
 
     end
