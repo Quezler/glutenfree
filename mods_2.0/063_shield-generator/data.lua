@@ -51,6 +51,15 @@ local crafter = {
   energy_usage = "1GW",
   energy_source = {type = "void"},
   minable = {mining_time = 1},
+
+  surface_conditions =
+  {
+    {
+      property = "gravity",
+      min = 0,
+      max = 0
+    }
+  },
 }
 
 local item = table.deepcopy(data.raw["item"]["assembling-machine-3"])
