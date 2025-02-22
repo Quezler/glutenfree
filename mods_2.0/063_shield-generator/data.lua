@@ -1,3 +1,4 @@
+require("util")
 require("shared")
 
 local simple_entity = {
@@ -55,7 +56,8 @@ local crafter = {
 local item = table.deepcopy(data.raw["item"]["assembling-machine-3"])
 item.name = mod_name
 item.icon = skin.icon
-item.order = "d[shield-generator]"
+item.subgroup = "space-rocket"
+item.order = "c[shield-generator]"
 item.stack_size = 1
 item.weight = 1000*kg
 
@@ -98,4 +100,18 @@ local technology = {
   }
 }
 
-data:extend{simple_entity, crafter, crafting_category, item, recipe, technology}
+local shield = {
+  type = "recipe",
+  name = mod_prefix .. "shield",
+  icons = {util.empty_icon()},
+  energy_required = 1,
+  ingredients = {},
+  results = {},
+  category = crafting_category.name,
+  hidden = true
+}
+
+crafter.fixed_recipe = shield.name
+crafter.fixed_quality = "normal"
+
+data:extend{simple_entity, crafter, crafting_category, item, recipe, technology, shield}

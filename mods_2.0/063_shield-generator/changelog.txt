@@ -6,6 +6,7 @@ Date: ????
     - Rename simple entity
     - Remove stray example code
     - Add crafter, item, recipe & technology
+    - Lock the shield generator to an active animation
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 21
