@@ -1,7 +1,7 @@
 {
     "name": "shield-generator",
     "title": "Shield generator",
-    "description": "It probably has something to do with the title.",
+    "description": "Place this on a space platform and it will not take asteroid damage, testing tool.",
 
     "version": "0.0.2",
     "author": "Quezler",
@@ -18,7 +18,7 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "? base",
-        "? space-age"
+        "base",
+        "space-age"
     ]
 }
