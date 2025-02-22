@@ -9,6 +9,7 @@ Date: ????
     - Lock the shield generator to an active animation
     - Speed up the animation
     - Lock crafter to space
+    - Fix shield generator not being ghostable
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 21

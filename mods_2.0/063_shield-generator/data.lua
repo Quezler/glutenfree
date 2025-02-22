@@ -60,6 +60,8 @@ local crafter = {
       max = 0
     }
   },
+
+  flags = {"player-creation"},
 }
 
 local item = table.deepcopy(data.raw["item"]["assembling-machine-3"])
