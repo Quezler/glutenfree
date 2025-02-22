@@ -1,11 +1,4 @@
-script.on_event(defines.events.on_tick, function(event)
-  if not game.surfaces["fulgora"] then return end
-  for _, player in ipairs(game.connected_players) do
-    player.remove_alert{
-      surface = "fulgora"
-    }
-  end
-end)
+require("shared")
 
 script.on_event(defines.events.on_entity_damaged, function (event)
   -- local entity = event.entity

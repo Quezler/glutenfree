@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Update description and dependencies
     - Rename simple entity
+    - Remove stray example code
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 21
