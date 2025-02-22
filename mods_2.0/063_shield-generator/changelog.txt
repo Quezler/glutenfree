@@ -10,6 +10,7 @@ Date: ????
     - Speed up the animation
     - Lock crafter to space
     - Fix shield generator not being ghostable
+    - Keep track of shield generators on a surface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 21
