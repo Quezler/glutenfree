@@ -5,6 +5,7 @@ Date: ????
     - Update description and dependencies
     - Rename simple entity
     - Remove stray example code
+    - Add crafter, item, recipe & technology
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 21

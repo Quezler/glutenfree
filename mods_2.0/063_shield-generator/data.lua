@@ -1,6 +1,6 @@
 require("shared")
 
-local cover = {
+local simple_entity = {
   type = "simple-entity",
   name = mod_prefix .. "simple-entity",
 
@@ -18,7 +18,84 @@ local cover = {
       type = "impact",
         percent = 100
     },
+  },
+  hidden = true,
+}
+
+local Hurricane = require("graphics/hurricane")
+local skin = Hurricane.crafter({
+  name = "fusion-reactor",
+  width = 3200, height = 3200,
+  total_frames = 60,
+  shadow_width = 700, shadow_height = 600,
+})
+
+local crafting_category = {
+  type = "recipe-category",
+  name = mod_name,
+}
+
+local crafter = {
+  type = "assembling-machine",
+  name = mod_name,
+  icon = skin.icon,
+
+  selection_box = {{-3.0, -3.0}, {3.0, 3.0}},
+  collision_box = {{-2.8, -2.8}, {2.8, 2.8}},
+
+  crafting_categories = {crafting_category.name},
+  graphics_set = skin.graphics_set,
+
+  crafting_speed = 1,
+  energy_usage = "1GW",
+  energy_source = {type = "void"},
+  minable = {mining_time = 1},
+}
+
+local item = table.deepcopy(data.raw["item"]["assembling-machine-3"])
+item.name = mod_name
+item.icon = skin.icon
+item.order = "d[shield-generator]"
+item.stack_size = 1
+item.weight = 1000*kg
+
+crafter.minable.result = item.name
+item.place_result = crafter.name
+
+local recipe = {
+  type = "recipe",
+  name = item.name,
+  enabled = false,
+  ingredients =
+  {
+    {type = "item", name = "stone-wall", amount = 1},
+    {type = "item", name = "space-platform-foundation", amount = 1},
+  },
+  energy_required = 60,
+  results = {{type="item", name=item.name, amount=1}}
+}
+
+local technology = {
+  type = "technology",
+  name =  mod_name,
+  icons = skin.technology_icons,
+  effects =
+  {
+    {
+      type = "unlock-recipe",
+      recipe = recipe.name
+    }
+  },
+  prerequisites = {"stone-wall", "space-platform"},
+  unit =
+  {
+    count = 1000,
+    ingredients =
+    {
+      -- it only costs time
+    },
+    time = 60
   }
 }
 
-data:extend{cover}
+data:extend{simple_entity, crafter, crafting_category, item, recipe, technology}
