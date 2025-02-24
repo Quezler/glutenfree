@@ -25,7 +25,7 @@ local function toggle_filter(itemstack, filter)
 
   local entity_filters = itemstack.entity_filters
 
-  for i, old_filter in ipairs(entity_filters) do
+  for i, old_filter in pairs(entity_filters) do
     if old_filter.name == filter.name and old_filter.quality == filter.quality then
       entity_filters[i] = {}
       itemstack.entity_filters = entity_filters
