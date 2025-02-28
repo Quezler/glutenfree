@@ -6,6 +6,7 @@ Date: ????
     - Position control behavior over the lab's collision box
     - Position the selection boxes for both labs
     - Move the biolab's one off grid a bit
+    - Store the cb proxy on the struct
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 28

@@ -18,15 +18,22 @@ function mod.on_created_entity(event)
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
     entity = entity,
+
+    proxy = nil,
+    proxies = {},
   })
 
   game.print("new lab registered: " .. tostring(entity))
 
-  entity.surface.create_entity{
+  local cb = entity.surface.create_entity{
     name = mod_prefix .. entity.name .. "-control-behavior",
     force = entity.force,
     position = {entity.position.x, entity.position.y + 1},
   }
+  cb.destructible = false
+  cb.proxy_target_entity = entity
+  cb.proxy_target_inventory = defines.inventory.lab_input
+  struct.proxy = cb
 end
 
 for _, event in ipairs({
