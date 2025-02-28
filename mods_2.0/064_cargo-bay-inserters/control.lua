@@ -58,6 +58,7 @@ function mod.on_created_entity(event)
       position = entity.position,
     }
     proxy_container.destructible = false
+    proxy_container.proxy_target_inventory = entity.surface.platform and defines.inventory.hub_main or defines.inventory.cargo_landing_pad_main
 
     surfacedata.cargo_bays[entity.unit_number] = {entity = entity, proxy = proxy_container}
     storage.deathrattles[script.register_on_object_destroyed(entity)] = {
@@ -154,12 +155,12 @@ function mod.update_proxies_for_surface(surface)
 
   for _, space_platform_hub in pairs(surfacedata.space_platform_hubs) do
     for _, cargo_bay in pairs(luaentity_get_cargo_bays(space_platform_hub.entity)) do
-      map[cargo_bay.unit_number] = {entity = space_platform_hub.entity, inventory = defines.inventory.hub_main}
+      map[cargo_bay.unit_number] = {entity = space_platform_hub.entity}
     end
   end
   for _, cargo_landing_pad in pairs(surfacedata.cargo_landing_pads) do
     for _, cargo_bay in pairs(luaentity_get_cargo_bays(cargo_landing_pad.entity)) do
-      map[cargo_bay.unit_number] = {entity = cargo_landing_pad.entity, inventory = defines.inventory.cargo_landing_pad_main}
+      map[cargo_bay.unit_number] = {entity = cargo_landing_pad.entity}
     end
   end
 
@@ -167,10 +168,8 @@ function mod.update_proxies_for_surface(surface)
     local target = map[cargo_bay.entity.unit_number]
     if target then
       cargo_bay.proxy.proxy_target_entity = target.entity
-      cargo_bay.proxy.proxy_target_inventory = target.inventory
     else
       cargo_bay.proxy.proxy_target_entity = nil
-      cargo_bay.proxy.proxy_target_inventory = 0
     end
   end
 end
