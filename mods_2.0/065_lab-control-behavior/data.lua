@@ -35,3 +35,25 @@ for _, lab in pairs(data.raw["lab"]) do
 
   data:extend{lab_control_behavior}
 end
+
+local base_lab = data.raw["lab"]["lab"]
+
+local proxy_container = {
+  type = "proxy-container",
+  name = mod_prefix .. "proxy-container",
+
+  icons = {
+    {icon = base_lab.icon, tint = proxy_tint},
+  },
+
+  collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
+  selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+  collision_mask = {layers = {}},
+
+  flags = {"not-on-map", "no-automated-item-insertion", "no-automated-item-removal"},
+  draw_inventory_content = false,
+  selection_priority = 49,
+  hidden = true,
+}
+
+data:extend{proxy_container}
