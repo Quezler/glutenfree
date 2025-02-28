@@ -10,6 +10,7 @@ Date: ????
     - Support circuit wires
     - Add initial circuit connection gui
     - Forward lab cb gui opened to lab
+    - Make the radio buttons radio
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 28

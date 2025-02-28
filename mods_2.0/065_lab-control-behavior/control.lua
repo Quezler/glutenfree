@@ -50,6 +50,10 @@ for _, event in ipairs({
 end
 
 local gui_frame_name = mod_prefix .. "frame"
+local gui_inner_name = mod_prefix .. "inner"
+local gui_radio_entity = mod_prefix .. "entity"
+local gui_radio_surface = mod_prefix .. "surface"
+local gui_radio_surfaces = mod_prefix .. "surfaces"
 
 function mod.open_gui(entity, player)
   local frame = player.gui.relative[gui_frame_name]
@@ -67,22 +71,26 @@ function mod.open_gui(entity, player)
 
   local inner = frame.add{
     type = "frame",
+    name = gui_inner_name,
     style = "inside_shallow_frame_with_padding",
     direction = "vertical",
   }
 
   inner.add{
     type = "radiobutton",
+    name = gui_radio_entity,
     caption = "Read contents",
     state = true,
   }
   inner.add{
     type = "radiobutton",
+    name = gui_radio_surface,
     caption = "Read contents (surface)",
     state = false,
   }
   inner.add{
     type = "radiobutton",
+    name = gui_radio_surfaces,
     caption = "Read contents (surfaces)",
     state = false,
   }
@@ -95,7 +103,6 @@ for _, prototype in pairs(prototypes.get_entity_filtered{{filter="type", type="l
     is_lab_control_behavior[proxy.name] = true
   end
 end
-log(serpent.block(is_lab_control_behavior))
 
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
@@ -115,5 +122,15 @@ script.on_event(defines.events.on_gui_opened, function(event)
         player.opened = lab
       end
     end
+  end
+end)
+
+script.on_event(defines.events.on_gui_checked_state_changed, function(event)
+  local element = event.element
+  if element.parent.name == gui_inner_name then
+    element.parent[gui_radio_entity].state = false
+    element.parent[gui_radio_surface].state = false
+    element.parent[gui_radio_surfaces].state = false
+    element.parent[element.name].state = true
   end
 end)
