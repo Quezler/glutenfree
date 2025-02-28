@@ -46,6 +46,9 @@ function mod.refresh_surfacedata()
   end
 end
 
+script.on_event(defines.events.on_surface_created, mod.refresh_surfacedata)
+script.on_event(defines.events.on_surface_deleted, mod.refresh_surfacedata)
+
 local platform_cargo_bay_proxy_name = mod_prefix .. "platform-cargo-bay-proxy"
 local planet_cargo_bay_proxy_name = mod_prefix .. "planet-cargo-bay-proxy"
 

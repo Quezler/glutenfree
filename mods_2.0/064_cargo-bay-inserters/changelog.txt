@@ -9,6 +9,7 @@ Date: ????
     - Never update the inventory index
     - Schedule surface wide proxy update for the next tick
     - Do not draw cargo bay inventory contents
+    - Listen to the surface events
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 28
