@@ -29,6 +29,8 @@ for _, lab in pairs(data.raw["lab"]) do
     draw_inventory_content = false,
     selection_priority = 51,
     hidden = true,
+
+    circuit_wire_max_distance = 9,
   }
 
   data:extend{lab_control_behavior}
