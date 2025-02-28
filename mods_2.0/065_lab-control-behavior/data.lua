@@ -1,0 +1,26 @@
+require("shared")
+
+local proxy_tint = {0.8, 0.1, 0.3}
+
+for _, lab in pairs(data.raw["lab"]) do
+  local lab_control_behavior = {
+    type = "proxy-container",
+    name = mod_prefix .. lab.name .. "-control-behavior",
+    localised_name = {"entity-name.lab-control-behavior--x-control-behavior", {"entity-name." .. lab.name}},
+
+    icons = {
+      {icon = lab.icon, tint = proxy_tint},
+    },
+
+    collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
+    selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+    collision_mask = {layers = {}},
+
+    flags = {"not-on-map", "player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
+    draw_inventory_content = false,
+    selection_priority = 51,
+    hidden = true,
+  }
+
+  data:extend{lab_control_behavior}
+end
