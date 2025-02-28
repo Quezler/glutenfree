@@ -13,6 +13,8 @@ script.on_init(function()
       mod.on_created_entity({entity = entity})
     end
   end
+
+  mod.update_proxies_for_surfaces()
 end)
 
 script.on_configuration_changed(function()
@@ -78,6 +80,8 @@ function mod.on_created_entity(event)
       unit_number = entity.unit_number,
     }
   end
+
+  mod.update_proxies_for_surface(entity.surface)
 end
 
 for _, event in ipairs({
@@ -105,18 +109,21 @@ local deathrattles = {
       if cargo_bay then surfacedata.cargo_bays[deathrattle.unit_number] = nil
         cargo_bay.proxy.destroy()
       end
+      mod.update_proxies_for_surface(surfacedata.surface)
     end
   end,
   ["space-platform-hub"] = function (deathrattle)
     local surfacedata = storage.surfacedata[deathrattle.surface_index]
     if surfacedata then
       surfacedata.space_platform_hubs[deathrattle.unit_number] = nil
+      mod.update_proxies_for_surface(surfacedata.surface)
     end
   end,
   ["cargo-landing-pad"] = function (deathrattle)
     local surfacedata = storage.surfacedata[deathrattle.surface_index]
     if surfacedata then
       surfacedata.cargo_landing_pads[deathrattle.unit_number] = nil
+      mod.update_proxies_for_surface(surfacedata.surface)
     end
   end,
 }
@@ -127,3 +134,49 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     deathrattles[deathrattle.name](deathrattle)
   end
 end)
+
+local function luaentity_get_cargo_bays(entity)
+  local cargo_bays = {}
+
+  for _, cargo_hatch in ipairs(entity.cargo_hatches) do
+    local owner = cargo_hatch.owner
+    if owner.type == "cargo-bay" then
+      cargo_bays[owner.unit_number] = owner
+    end
+  end
+
+  return cargo_bays
+end
+
+function mod.update_proxies_for_surface(surface)
+  local surfacedata = storage.surfacedata[surface.index]
+  local map = {}
+
+  for _, space_platform_hub in ipairs(surfacedata.space_platform_hubs) do
+    for _, cargo_bay in pairs(luaentity_get_cargo_bays(space_platform_hub.entity)) do
+      map[cargo_bay.unit_number] = {entity = space_platform_hub.entity, inventory = defines.inventory.hub_main}
+    end
+  end
+  for _, cargo_landing_pad in ipairs(surfacedata.cargo_landing_pads) do
+    for _, cargo_bay in pairs(luaentity_get_cargo_bays(cargo_landing_pad.entity)) do
+      map[cargo_bay.unit_number] = {entity = cargo_landing_pad.entity, inventory = defines.inventory.cargo_landing_pad_main}
+    end
+  end
+
+  for _, cargo_bay in ipairs(surfacedata.cargo_bays) do
+    local target = map[cargo_bay.entity.unit_number]
+    if target then
+      cargo_bay.proxy.proxy_target_entity = target.entity
+      cargo_bay.proxy.proxy_target_inventory = target.inventory
+    else
+      cargo_bay.proxy.proxy_target_entity = 0
+      cargo_bay.proxy.proxy_target_inventory = 0
+    end
+  end
+end
+
+function mod.update_proxies_for_surfaces()
+  for _, surface in pairs(game.surfaces) do
+    mod.update_proxies_for_surface(surface)
+  end
+end
