@@ -162,6 +162,12 @@ function mod.update_proxies_for_surface(surface)
   local surfacedata = storage.surfacedata[surface.index]
   local map = {}
 
+  -- log(serpent.line(surfacedata))
+
+  if surface.platform and surface.platform.hub and not surfacedata.space_platform_hubs[surface.platform.hub.unit_number] then
+    mod.on_created_entity({entity = surface.platform.hub})
+  end
+
   for _, space_platform_hub in pairs(surfacedata.space_platform_hubs) do
     for _, cargo_bay in pairs(luaentity_get_cargo_bays(space_platform_hub.entity)) do
       map[cargo_bay.unit_number] = {entity = space_platform_hub.entity}
@@ -172,6 +178,8 @@ function mod.update_proxies_for_surface(surface)
       map[cargo_bay.unit_number] = {entity = cargo_landing_pad.entity}
     end
   end
+
+  -- game.print(serpent.line(map))
 
   for _, cargo_bay in pairs(surfacedata.cargo_bays) do
     local target = map[cargo_bay.entity.unit_number]
