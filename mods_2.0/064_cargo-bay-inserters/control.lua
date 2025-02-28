@@ -152,18 +152,18 @@ function mod.update_proxies_for_surface(surface)
   local surfacedata = storage.surfacedata[surface.index]
   local map = {}
 
-  for _, space_platform_hub in ipairs(surfacedata.space_platform_hubs) do
+  for _, space_platform_hub in pairs(surfacedata.space_platform_hubs) do
     for _, cargo_bay in pairs(luaentity_get_cargo_bays(space_platform_hub.entity)) do
       map[cargo_bay.unit_number] = {entity = space_platform_hub.entity, inventory = defines.inventory.hub_main}
     end
   end
-  for _, cargo_landing_pad in ipairs(surfacedata.cargo_landing_pads) do
+  for _, cargo_landing_pad in pairs(surfacedata.cargo_landing_pads) do
     for _, cargo_bay in pairs(luaentity_get_cargo_bays(cargo_landing_pad.entity)) do
       map[cargo_bay.unit_number] = {entity = cargo_landing_pad.entity, inventory = defines.inventory.cargo_landing_pad_main}
     end
   end
 
-  for _, cargo_bay in ipairs(surfacedata.cargo_bays) do
+  for _, cargo_bay in pairs(surfacedata.cargo_bays) do
     local target = map[cargo_bay.entity.unit_number]
     if target then
       cargo_bay.proxy.proxy_target_entity = target.entity
