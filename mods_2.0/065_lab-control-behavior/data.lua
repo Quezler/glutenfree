@@ -8,7 +8,7 @@ end
 
 local selection_boxes = {
   lab    = {{-0.5, -0.5}, {0.5, 0.5}},
-  biolab = {{ 0.5,  0.5}, {1.5, 1.5}},
+  biolab = {{ 0.3,  0.5}, {1.3, 1.5}},
 }
 
 for _, lab in pairs(data.raw["lab"]) do
