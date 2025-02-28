@@ -6,6 +6,11 @@ local function shift_bounding_box_up_by_one(bounding_box)
   return {{bounding_box[1][1], bounding_box[1][2] - 1}, {bounding_box[2][1], bounding_box[2][2] - 1}}
 end
 
+local selection_boxes = {
+  lab    = {{-0.5, -0.5}, {0.5, 0.5}},
+  biolab = {{ 0.5,  0.5}, {1.5, 1.5}},
+}
+
 for _, lab in pairs(data.raw["lab"]) do
   local lab_control_behavior = {
     type = "proxy-container",
@@ -17,7 +22,7 @@ for _, lab in pairs(data.raw["lab"]) do
     },
 
     collision_box = shift_bounding_box_up_by_one(lab.collision_box),
-    selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+    selection_box = selection_boxes[lab.name] or selection_boxes.lab,
     collision_mask = {layers = {}},
 
     flags = {"not-on-map", "player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
