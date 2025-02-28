@@ -48,3 +48,61 @@ for _, event in ipairs({
     {filter = "type", type = "lab"},
   })
 end
+
+local gui_frame_name = mod_prefix .. "frame"
+
+function mod.open_gui(entity, player)
+  local frame = player.gui.relative[gui_frame_name]
+  if frame then frame.destroy() end
+
+  frame = player.gui.relative.add{
+    type = "frame",
+    name = gui_frame_name,
+    caption = {"gui-control-behavior.circuit-connection"},
+    anchor = {
+      gui = defines.relative_gui_type.lab_gui,
+      position = defines.relative_gui_position.right,
+    },
+  }
+
+  local inner = frame.add{
+    type = "frame",
+    style = "inside_shallow_frame_with_padding",
+    direction = "vertical",
+  }
+
+  inner.add{
+    type = "radiobutton",
+    caption = "Read contents",
+    state = true,
+  }
+  inner.add{
+    type = "radiobutton",
+    caption = "Read contents (surface)",
+    state = false,
+  }
+  inner.add{
+    type = "radiobutton",
+    caption = "Read contents (surfaces)",
+    state = false,
+  }
+end
+
+-- local has_control_behavior = {}
+-- local is_lab_control_behavior = {}
+-- for _, prototype in pairs(prototypes.get_entity_filtered{{filter="type", type="lab-equipment"}}) do
+--   local proxy = prototypes.entity[mod_prefix .. prototype.name .. "-control-behavior"]
+--   if proxy then
+--     has_control_behavior[prototype.name] = true
+--     is_lab_control_behavior[proxy.name] = true
+--   end
+-- end
+
+script.on_event(defines.events.on_gui_opened, function(event)
+  local entity = event.entity
+
+  if entity and entity.type == "lab" then
+    local player = game.get_player(event.player_index) --[[@as LuaEntity]]
+    mod.open_gui(entity, player)
+  end
+end)
