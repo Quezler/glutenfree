@@ -8,6 +8,7 @@ Date: ????
     - Fix clearing the entity target
     - Never update the inventory index
     - Schedule surface wide proxy update for the next tick
+    - Do not draw cargo bay inventory contents
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 28

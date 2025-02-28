@@ -17,6 +17,7 @@ local platform_cargo_bay = {
   build_grid_size = 2,
 
   flags = {"player-creation", "not-on-map"},
+  draw_inventory_content = false,
   selectable_in_game = false,
   selection_priority = 49,
   hidden = true,
