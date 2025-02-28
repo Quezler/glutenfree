@@ -14,6 +14,7 @@ Date: ????
     - Rename entity to single and store in struct
     - Setup the one-to-many proxy container prototype
     - Reach proof of concept status
+    - Fix surfaces mode not working
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 28

@@ -161,7 +161,7 @@ function mod.set_mode(struct, mode)
 
   for _, other_struct in pairs(storage.structs) do
     if other_struct.entity.force == struct.entity.force then
-      if other_struct.mode == gui_radio_surfaces or other_struct.entity.surface == struct.entity.surface then
+      if mode == gui_radio_surfaces or other_struct.entity.surface == struct.entity.surface then
         local proxy = struct.entity.surface.create_entity{
           name = mod_prefix .. "proxy-container",
           force = struct.entity.force,
