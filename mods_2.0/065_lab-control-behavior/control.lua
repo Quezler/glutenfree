@@ -135,5 +135,49 @@ script.on_event(defines.events.on_gui_checked_state_changed, function(event)
     element.parent[gui_radio_surface].state = false
     element.parent[gui_radio_surfaces].state = false
     element.parent[element.name].state = true
+
+    local struct = storage.structs[element.parent.tags.unit_number]
+    if struct then
+      mod.set_mode(struct, element.name)
+    end
   end
 end)
+
+function mod.set_mode(struct, mode)
+  if struct.mode == mode then return end
+  struct.mode = mode
+  -- game.print(mode)
+
+  for _, proxy in pairs(struct.proxies) do
+    proxy.entity.destroy()
+  end
+  struct.proxies = {}
+
+  -- in single mode there are no other proxies required
+  if struct.mode == gui_radio_single then return end
+
+  local red_connector = struct.proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+  local green_connector = struct.proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+
+  for _, other_struct in pairs(storage.structs) do
+    if other_struct.entity.force == struct.entity.force then
+      if other_struct.mode == gui_radio_surfaces or other_struct.entity.surface == struct.entity.surface then
+        local proxy = struct.entity.surface.create_entity{
+          name = mod_prefix .. "proxy-container",
+          force = struct.entity.force,
+          position = struct.entity.position
+        }
+        proxy.destructible = false
+        proxy.proxy_target_entity = other_struct.entity
+        proxy.proxy_target_inventory = defines.inventory.lab_input
+        struct.proxies[proxy.unit_number] = {entity = proxy}
+
+        local other_red_connector = proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+        local other_green_connector = proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+
+        assert(red_connector.connect_to(other_red_connector, false, defines.wire_origin.script))
+        assert(green_connector.connect_to(other_green_connector, false, defines.wire_origin.script))
+      end
+    end
+  end
+end
