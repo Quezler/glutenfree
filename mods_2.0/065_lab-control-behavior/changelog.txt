@@ -11,6 +11,7 @@ Date: ????
     - Add initial circuit connection gui
     - Forward lab cb gui opened to lab
     - Make the radio buttons radio
+    - Rename entity to single and store in struct
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 28

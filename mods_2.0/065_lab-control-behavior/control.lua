@@ -1,6 +1,12 @@
 require("shared")
 local mod = {}
 
+local gui_frame_name = mod_prefix .. "frame"
+local gui_inner_name = mod_prefix .. "inner"
+local gui_radio_single = mod_prefix .. "single"
+local gui_radio_surface = mod_prefix .. "surface"
+local gui_radio_surfaces = mod_prefix .. "surfaces"
+
 script.on_init(function()
   storage.deathrattles = {}
   storage.structs = {}
@@ -18,6 +24,8 @@ function mod.on_created_entity(event)
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
     entity = entity,
+
+    radio = gui_radio_single,
 
     proxy = nil,
     proxies = {},
@@ -49,12 +57,6 @@ for _, event in ipairs({
   })
 end
 
-local gui_frame_name = mod_prefix .. "frame"
-local gui_inner_name = mod_prefix .. "inner"
-local gui_radio_entity = mod_prefix .. "entity"
-local gui_radio_surface = mod_prefix .. "surface"
-local gui_radio_surfaces = mod_prefix .. "surfaces"
-
 function mod.open_gui(entity, player)
   local frame = player.gui.relative[gui_frame_name]
   if frame then frame.destroy() end
@@ -74,11 +76,12 @@ function mod.open_gui(entity, player)
     name = gui_inner_name,
     style = "inside_shallow_frame_with_padding",
     direction = "vertical",
+    tags = {unit_number = entity.unit_number},
   }
 
   inner.add{
     type = "radiobutton",
-    name = gui_radio_entity,
+    name = gui_radio_single,
     caption = "Read contents",
     state = true,
   }
@@ -128,7 +131,7 @@ end)
 script.on_event(defines.events.on_gui_checked_state_changed, function(event)
   local element = event.element
   if element.parent.name == gui_inner_name then
-    element.parent[gui_radio_entity].state = false
+    element.parent[gui_radio_single].state = false
     element.parent[gui_radio_surface].state = false
     element.parent[gui_radio_surfaces].state = false
     element.parent[element.name].state = true
