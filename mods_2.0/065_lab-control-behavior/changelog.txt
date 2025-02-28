@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Create a control behavior for each lab
+    - Position control behavior over the lab's collision box
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 28

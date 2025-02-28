@@ -2,6 +2,10 @@ require("shared")
 
 local proxy_tint = {0.8, 0.1, 0.3}
 
+local function shift_bounding_box_up_by_one(bounding_box)
+  return {{bounding_box[1][1], bounding_box[1][2] - 1}, {bounding_box[2][1], bounding_box[2][2] - 1}}
+end
+
 for _, lab in pairs(data.raw["lab"]) do
   local lab_control_behavior = {
     type = "proxy-container",
@@ -12,7 +16,7 @@ for _, lab in pairs(data.raw["lab"]) do
       {icon = lab.icon, tint = proxy_tint},
     },
 
-    collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
+    collision_box = shift_bounding_box_up_by_one(lab.collision_box),
     selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
     collision_mask = {layers = {}},
 

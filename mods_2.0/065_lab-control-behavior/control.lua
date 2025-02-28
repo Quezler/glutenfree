@@ -21,6 +21,12 @@ function mod.on_created_entity(event)
   })
 
   game.print("new lab registered: " .. tostring(entity))
+
+  entity.surface.create_entity{
+    name = mod_prefix .. entity.name .. "-control-behavior",
+    force = entity.force,
+    position = {entity.position.x, entity.position.y + 1},
+  }
 end
 
 for _, event in ipairs({
