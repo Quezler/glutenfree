@@ -169,7 +169,7 @@ function mod.update_proxies_for_surface(surface)
       cargo_bay.proxy.proxy_target_entity = target.entity
       cargo_bay.proxy.proxy_target_inventory = target.inventory
     else
-      cargo_bay.proxy.proxy_target_entity = 0
+      cargo_bay.proxy.proxy_target_entity = nil
       cargo_bay.proxy.proxy_target_inventory = 0
     end
   end

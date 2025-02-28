@@ -5,6 +5,7 @@ Date: ????
     - Track space platform hubs and cargo landing pads
     - Attempt to write link and update proxy code
     - Fix ipairs issue
+    - Fix clearing the entity target
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 28
