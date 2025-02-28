@@ -7,18 +7,24 @@ script.on_init(function()
 
   storage.surfacedata = {}
   mod.refresh_surfacedata()
+  storage.dirty_surfaces = {}
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered({type = {"cargo-bay", "space-platform-hub", "cargo-landing-pad"}})) do
       mod.on_created_entity({entity = entity})
     end
   end
-
-  mod.update_proxies_for_surfaces()
 end)
 
 script.on_configuration_changed(function()
   mod.refresh_surfacedata()
+  mod.update_proxies_for_surfaces()
+end)
+
+script.on_load(function()
+  if next(storage.dirty_surfaces) then
+    script.on_event(defines.events.on_tick, mod.on_tick)
+  end
 end)
 
 function mod.refresh_surfacedata()
@@ -82,7 +88,7 @@ function mod.on_created_entity(event)
     }
   end
 
-  mod.update_proxies_for_surface(entity.surface)
+  mod.mark_surface_dirty(entity.surface)
 end
 
 for _, event in ipairs({
@@ -110,21 +116,21 @@ local deathrattles = {
       if cargo_bay then surfacedata.cargo_bays[deathrattle.unit_number] = nil
         cargo_bay.proxy.destroy()
       end
-      mod.update_proxies_for_surface(surfacedata.surface)
+      mod.mark_surface_dirty(surfacedata.surface)
     end
   end,
   ["space-platform-hub"] = function (deathrattle)
     local surfacedata = storage.surfacedata[deathrattle.surface_index]
     if surfacedata then
       surfacedata.space_platform_hubs[deathrattle.unit_number] = nil
-      mod.update_proxies_for_surface(surfacedata.surface)
+      mod.mark_surface_dirty(surfacedata.surface)
     end
   end,
   ["cargo-landing-pad"] = function (deathrattle)
     local surfacedata = storage.surfacedata[deathrattle.surface_index]
     if surfacedata then
       surfacedata.cargo_landing_pads[deathrattle.unit_number] = nil
-      mod.update_proxies_for_surface(surfacedata.surface)
+      mod.mark_surface_dirty(surfacedata.surface)
     end
   end,
 }
@@ -178,4 +184,21 @@ function mod.update_proxies_for_surfaces()
   for _, surface in pairs(game.surfaces) do
     mod.update_proxies_for_surface(surface)
   end
+end
+
+function mod.on_tick(event)
+  for surface_index, _ in pairs(storage.dirty_surfaces) do
+    local surface = game.get_surface(surface_index)
+    if surface then mod.update_proxies_for_surface(surface) end
+  end
+  storage.dirty_surfaces = {}
+  script.on_event(defines.events.on_tick, nil)
+end
+
+function mod.mark_surface_dirty(surface)
+  if not next(storage.dirty_surfaces) then
+    script.on_event(defines.events.on_tick, mod.on_tick)
+  end
+
+  storage.dirty_surfaces[surface.index] = true
 end
