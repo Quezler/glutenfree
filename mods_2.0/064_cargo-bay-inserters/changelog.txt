@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2025. 02. 28
   Info:
     - Track space platform hubs and cargo landing pads
     - Attempt to write link and update proxy code
