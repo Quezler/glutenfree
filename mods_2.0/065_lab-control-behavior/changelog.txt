@@ -9,6 +9,7 @@ Date: ????
     - Store the cb proxy on the struct
     - Support circuit wires
     - Add initial circuit connection gui
+    - Forward lab cb gui opened to lab
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 02. 28

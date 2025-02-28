@@ -88,21 +88,32 @@ function mod.open_gui(entity, player)
   }
 end
 
--- local has_control_behavior = {}
--- local is_lab_control_behavior = {}
--- for _, prototype in pairs(prototypes.get_entity_filtered{{filter="type", type="lab-equipment"}}) do
---   local proxy = prototypes.entity[mod_prefix .. prototype.name .. "-control-behavior"]
---   if proxy then
---     has_control_behavior[prototype.name] = true
---     is_lab_control_behavior[proxy.name] = true
---   end
--- end
+local is_lab_control_behavior = {}
+for _, prototype in pairs(prototypes.get_entity_filtered{{filter="type", type="lab"}}) do
+  local proxy = prototypes.entity[mod_prefix .. prototype.name .. "-control-behavior"]
+  if proxy then
+    is_lab_control_behavior[proxy.name] = true
+  end
+end
+log(serpent.block(is_lab_control_behavior))
 
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
 
-  if entity and entity.type == "lab" then
-    local player = game.get_player(event.player_index) --[[@as LuaEntity]]
-    mod.open_gui(entity, player)
+  if entity then
+    if entity.type == "lab" then
+      local player = game.get_player(event.player_index) --[[@as LuaEntity]]
+      mod.open_gui(entity, player)
+    elseif is_lab_control_behavior[entity.name] then
+      local lab = entity.surface.find_entities_filtered{
+        type = "lab",
+        position = entity.position,
+        limit = 1,
+      }[1]
+      if lab then
+        local player = game.get_player(event.player_index) --[[@as LuaEntity]]
+        player.opened = lab
+      end
+    end
   end
 end)
