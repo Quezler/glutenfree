@@ -101,7 +101,9 @@ function mod.on_created_entity(event)
 
   for _, other_struct in pairs(storage.structs) do
     if other_struct.mode ~= gui_radio_single then
-      mod.consider_linking_to_struct(other_struct, struct)
+      if other_struct.entity.valid then -- invalid if we're upgrading the quality of one
+        mod.consider_linking_to_struct(other_struct, struct)
+      end
     end
   end
 end

@@ -16,6 +16,7 @@ Date: ????
     - Add support for labs that already have layered icons
     - Add comment about the proxied labs
     - Make newly built labs connect to existing circuit behaviors
+    - Fix upgrade crash introduced in the last commit
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28
