@@ -27,21 +27,40 @@ function mod.on_created_entity(event)
 
     mode = gui_radio_single,
 
-    proxy = nil,
+    wire_proxy = nil,
+    wire_proxy_red = nil,
+    wire_proxy_green = nil,
+    item_proxy = nil,
     proxies = {},
   })
 
   game.print("new lab registered: " .. tostring(entity))
 
-  local cb = entity.surface.create_entity{
+  local wire_proxy = entity.surface.create_entity{
     name = mod_prefix .. entity.name .. "-control-behavior",
     force = entity.force,
     position = {entity.position.x, entity.position.y + 1},
   }
-  cb.destructible = false
-  cb.proxy_target_entity = entity
-  cb.proxy_target_inventory = defines.inventory.lab_input
-  struct.proxy = cb
+  wire_proxy.destructible = false
+  struct.wire_proxy = wire_proxy
+  struct.wire_proxy_red = struct.wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+  struct.wire_proxy_green = struct.wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+
+  local item_proxy = entity.surface.create_entity{
+    name = mod_prefix .. "proxy-container",
+    force = entity.force,
+    position = entity.position
+  }
+  item_proxy.destructible = false
+  item_proxy.proxy_target_entity = entity
+  item_proxy.proxy_target_inventory = defines.inventory.lab_input
+  struct.item_proxy = item_proxy
+
+  local red_connector = item_proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+  local green_connector = item_proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+
+  assert(struct.wire_proxy_red.connect_to(red_connector, false, defines.wire_origin.player))
+  assert(struct.wire_proxy_green.connect_to(green_connector, false, defines.wire_origin.player))
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "lab", unit_number = entity.unit_number}
 end
@@ -161,9 +180,6 @@ function mod.set_mode(struct, mode)
   -- in single mode there are no other proxies required
   if struct.mode == gui_radio_single then return end
 
-  local red_connector = struct.proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-  local green_connector = struct.proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
-
   for _, other_struct in pairs(storage.structs) do
     if other_struct.entity.force == struct.entity.force then
       if mode == gui_radio_surfaces or other_struct.entity.surface == struct.entity.surface then
@@ -177,11 +193,11 @@ function mod.set_mode(struct, mode)
         proxy.proxy_target_inventory = defines.inventory.lab_input
         struct.proxies[proxy.unit_number] = {entity = proxy}
 
-        local other_red_connector = proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-        local other_green_connector = proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+        local red_connector = proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+        local green_connector = proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
 
-        assert(red_connector.connect_to(other_red_connector, false, defines.wire_origin.script))
-        assert(green_connector.connect_to(other_green_connector, false, defines.wire_origin.script))
+        assert(struct.wire_proxy_red.connect_to(red_connector, false, defines.wire_origin.script))
+        assert(struct.wire_proxy_green.connect_to(green_connector, false, defines.wire_origin.script))
       end
     end
   end

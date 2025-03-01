@@ -25,6 +25,7 @@ circuit_connector_definitions["lab-control-behavior"].sprites.connector_shadow =
 circuit_connector_definitions["lab-control-behavior"].sprites.led_red = util.empty_sprite()
 circuit_connector_definitions["lab-control-behavior"].sprites.led_green = util.empty_sprite()
 circuit_connector_definitions["lab-control-behavior"].sprites.led_blue = util.empty_sprite()
+circuit_connector_definitions["lab-control-behavior"].sprites.led_blue_off = nil
 
 for _, lab in pairs(data.raw["lab"]) do
   local lab_control_behavior = {
@@ -67,6 +68,7 @@ local proxy_container = {
   collision_mask = {layers = {}},
 
   flags = {"not-on-map", "no-automated-item-insertion", "no-automated-item-removal"},
+  draw_circuit_wires = false,
   draw_inventory_content = false,
   selection_priority = 49,
   hidden = true,
