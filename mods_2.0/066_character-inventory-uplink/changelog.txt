@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Setup the hurricane framework
     - Fix weird jumping frame slices
+    - Inflate the selection and collision boxes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 01

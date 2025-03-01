@@ -13,6 +13,9 @@ entity.name = mod_name
 entity.icon = skin.icon
 entity.graphics_set = skin.graphics_set
 entity.crafting_speed = 1
+entity.selection_box[2][2] = entity.selection_box[2][2] + 1
+entity.collision_box[2][2] = entity.collision_box[2][2] + 1
+entity.next_upgrade = nil
 data:extend{entity}
 
 data.raw["item"]["assembling-machine-1"].place_result = entity.name
