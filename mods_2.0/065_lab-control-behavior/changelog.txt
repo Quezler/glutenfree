@@ -19,6 +19,7 @@ Date: ????
     - Fix upgrade crash introduced in the last commit
     - Preserve the struct during quality changes
     - Disable debug
+    - Add thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28
