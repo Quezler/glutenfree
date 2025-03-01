@@ -12,6 +12,7 @@ Date: ????
     - Fix deathrattle crashing
     - Abandon blueprints, only quality upgrades will be supported
     - Block third party placement of control behaviors
+    - Preserve wires through quality upgrades
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28

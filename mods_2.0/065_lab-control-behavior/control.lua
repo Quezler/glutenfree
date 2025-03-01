@@ -31,6 +31,12 @@ for _, prototype in pairs(prototypes.get_entity_filtered{{filter="type", type="l
   end
 end
 
+local function copy_connectors(from, to)
+  for _, from_connection in ipairs(from.connections) do
+    assert(to.connect_to(from_connection.target, false, from_connection.origin))
+  end
+end
+
 function mod.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -51,8 +57,17 @@ function mod.on_created_entity(event)
 
   game.print("new lab registered: " .. tostring(entity))
 
+  local cb_name = mod_prefix .. entity.name .. "-control-behavior"
+  -- in case of a quality upgrade we take on the wire connections just before that entity gets purged by the deathrattle
+  local other_wire_proxy = entity.surface.find_entities_filtered{
+    name = cb_name,
+    position = entity.position,
+    radius = 0,
+    limit = 1,
+  }[1]
+
   local wire_proxy = entity.surface.create_entity{
-    name = mod_prefix .. entity.name .. "-control-behavior",
+    name = cb_name,
     force = entity.force,
     position = {entity.position.x, entity.position.y + 1},
   }
@@ -60,6 +75,11 @@ function mod.on_created_entity(event)
   struct.wire_proxy = wire_proxy
   struct.wire_proxy_red = struct.wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
   struct.wire_proxy_green = struct.wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+
+  if other_wire_proxy then
+    copy_connectors(other_wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true), struct.wire_proxy_red)
+    copy_connectors(other_wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true), struct.wire_proxy_green)
+  end
 
   local item_proxy = entity.surface.create_entity{
     name = mod_prefix .. "proxy-container",
