@@ -11,6 +11,7 @@ Date: ????
     - Setup the item so it can be blueprinted
     - Fix deathrattle crashing
     - Abandon blueprints, only quality upgrades will be supported
+    - Block third party placement of control behaviors
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28

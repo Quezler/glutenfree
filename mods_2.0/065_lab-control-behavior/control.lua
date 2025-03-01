@@ -18,8 +18,23 @@ script.on_init(function()
   end
 end)
 
+local on_created_entity_filter = {
+  {filter = "type", type = "lab"},
+}
+
+local is_lab_control_behavior = {}
+for _, prototype in pairs(prototypes.get_entity_filtered{{filter="type", type="lab"}}) do
+  local proxy = prototypes.entity[mod_prefix .. prototype.name .. "-control-behavior"]
+  if proxy then
+    is_lab_control_behavior[proxy.name] = true
+    table.insert(on_created_entity_filter, {filter = "name", name = proxy.name})
+  end
+end
+
 function mod.on_created_entity(event)
   local entity = event.entity or event.destination
+
+  if is_lab_control_behavior[entity.name] then return entity.destroy() end
 
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
@@ -73,9 +88,7 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, mod.on_created_entity, {
-    {filter = "type", type = "lab"},
-  })
+  script.on_event(event, mod.on_created_entity, on_created_entity_filter)
 end
 
 function mod.open_gui(entity, player)
@@ -121,14 +134,6 @@ function mod.open_gui(entity, player)
     caption = "Read contents (surfaces)",
     state = struct.mode == gui_radio_surfaces,
   }
-end
-
-local is_lab_control_behavior = {}
-for _, prototype in pairs(prototypes.get_entity_filtered{{filter="type", type="lab"}}) do
-  local proxy = prototypes.entity[mod_prefix .. prototype.name .. "-control-behavior"]
-  if proxy then
-    is_lab_control_behavior[proxy.name] = true
-  end
 end
 
 script.on_event(defines.events.on_gui_opened, function(event)
