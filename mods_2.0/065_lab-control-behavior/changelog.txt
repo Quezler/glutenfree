@@ -15,6 +15,7 @@ Date: ????
     - Preserve wires through quality upgrades
     - Add support for labs that already have layered icons
     - Add comment about the proxied labs
+    - Make newly built labs connect to existing circuit behaviors
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28

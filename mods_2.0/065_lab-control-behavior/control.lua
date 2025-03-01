@@ -98,6 +98,12 @@ function mod.on_created_entity(event)
   assert(struct.wire_proxy_green.connect_to(green_connector, false, defines.wire_origin.player))
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "lab", unit_number = entity.unit_number}
+
+  for _, other_struct in pairs(storage.structs) do
+    if other_struct.mode ~= gui_radio_single then
+      mod.consider_linking_to_struct(other_struct, struct)
+    end
+  end
 end
 
 for _, event in ipairs({
@@ -206,27 +212,31 @@ function mod.set_mode(struct, mode)
   if struct.mode == gui_radio_single then return end
 
   for _, other_struct in pairs(storage.structs) do
-    if other_struct.entity.force == struct.entity.force then
-      if mode == gui_radio_surfaces or other_struct.entity.surface == struct.entity.surface then
-        local proxy = struct.entity.surface.create_entity{
-          name = mod_prefix .. "proxy-container",
-          force = struct.entity.force,
-          position = struct.entity.position
-        }
-        proxy.destructible = false
-        proxy.proxy_target_entity = other_struct.entity
-        proxy.proxy_target_inventory = defines.inventory.lab_input
-        struct.proxies[proxy.unit_number] = {entity = proxy}
+    mod.consider_linking_to_struct(struct, other_struct)
+  end
+end
 
-        local red_connector = proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-        local green_connector = proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+function mod.consider_linking_to_struct(source_struct, target_struct)
+  if target_struct.entity.force == source_struct.entity.force then
+    if source_struct.mode == gui_radio_surfaces or target_struct.entity.surface == source_struct.entity.surface then
+      local proxy = source_struct.entity.surface.create_entity{
+        name = mod_prefix .. "proxy-container",
+        force = source_struct.entity.force,
+        position = source_struct.entity.position
+      }
+      proxy.destructible = false
+      proxy.proxy_target_entity = target_struct.entity
+      proxy.proxy_target_inventory = defines.inventory.lab_input
+      source_struct.proxies[proxy.unit_number] = {entity = proxy}
 
-        assert(struct.wire_proxy_red.connect_to(red_connector, false, defines.wire_origin.script))
-        assert(struct.wire_proxy_green.connect_to(green_connector, false, defines.wire_origin.script))
+      local red_connector = proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+      local green_connector = proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
 
-        -- we do not need to bother deathrattling this proxy container when the entity target dies,
-        -- it just stops reading the signals and will clean itself up again someday, not very pressing.
-      end
+      assert(source_struct.wire_proxy_red.connect_to(red_connector, false, defines.wire_origin.script))
+      assert(source_struct.wire_proxy_green.connect_to(green_connector, false, defines.wire_origin.script))
+
+      -- we do not need to bother deathrattling this proxy container when the entity target dies,
+      -- it just stops reading the signals and will clean itself up again someday, not very pressing.
     end
   end
 end
