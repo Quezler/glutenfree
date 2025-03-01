@@ -7,6 +7,7 @@ Date: ????
     - Draw lab circuit connector
     - Force the wire connector to always draw
     - Setup the circuit connector for the biolab
+    - Add circuit connector to the cb's icon
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28

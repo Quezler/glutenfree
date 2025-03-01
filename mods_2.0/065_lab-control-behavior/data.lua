@@ -25,7 +25,8 @@ for _, lab in pairs(data.raw["lab"]) do
     localised_name = {"entity-name.lab-control-behavior--x-control-behavior", {"entity-name." .. lab.name}},
 
     icons = {
-      {icon = lab.icon, tint = proxy_tint},
+      {icon = lab.icon},
+      {icon = mod_directory .. "/graphics/icons/lab-control-behavior-overlay.png", icon_size = 23, scale = 1, shift = {0, 8}, draw_background = true, floating = true},
     },
 
     collision_box = shift_bounding_box_up_by_one(lab.collision_box),
