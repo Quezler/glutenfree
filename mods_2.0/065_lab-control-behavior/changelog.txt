@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Activate the correct radio button on gui open
     - Clean up proxies when the owning lab vanishes
+    - Draw lab circuit connector
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28
