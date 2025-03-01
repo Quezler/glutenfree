@@ -37,7 +37,7 @@ function mod.on_created_entity(event)
 
   if is_lab_control_behavior[entity.name] then return entity.destroy() end
   local struct = nil
-  game.print("new lab registered: " .. tostring(entity))
+  -- game.print("new lab registered: " .. tostring(entity))
 
   local cb_name = mod_prefix .. entity.name .. "-control-behavior"
   -- in case of a quality upgrade we take on the wire connections just before that entity gets purged by the deathrattle
