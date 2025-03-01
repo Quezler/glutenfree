@@ -8,6 +8,7 @@ local gui_radio_surface = mod_prefix .. "surface"
 local gui_radio_surfaces = mod_prefix .. "surfaces"
 
 script.on_init(function()
+  storage.entitydata = {}
   storage.deathrattles = {}
   storage.structs = {}
 
@@ -31,30 +32,11 @@ for _, prototype in pairs(prototypes.get_entity_filtered{{filter="type", type="l
   end
 end
 
-local function copy_connectors(from, to)
-  for _, from_connection in ipairs(from.connections) do
-    assert(to.connect_to(from_connection.target, false, from_connection.origin))
-  end
-end
-
 function mod.on_created_entity(event)
   local entity = event.entity or event.destination
 
   if is_lab_control_behavior[entity.name] then return entity.destroy() end
-
-  local struct = new_struct(storage.structs, {
-    id = entity.unit_number,
-    entity = entity,
-
-    mode = gui_radio_single,
-
-    wire_proxy = nil,
-    wire_proxy_red = nil,
-    wire_proxy_green = nil,
-    item_proxy = nil,
-    proxies = {},
-  })
-
+  local struct = nil
   game.print("new lab registered: " .. tostring(entity))
 
   local cb_name = mod_prefix .. entity.name .. "-control-behavior"
@@ -65,37 +47,63 @@ function mod.on_created_entity(event)
     radius = 0,
     limit = 1,
   }[1]
-
-  local wire_proxy = entity.surface.create_entity{
-    name = cb_name,
-    force = entity.force,
-    position = {entity.position.x, entity.position.y + 1},
-  }
-  wire_proxy.destructible = false
-  struct.wire_proxy = wire_proxy
-  struct.wire_proxy_red = struct.wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-  struct.wire_proxy_green = struct.wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
-
   if other_wire_proxy then
-    copy_connectors(other_wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true), struct.wire_proxy_red)
-    copy_connectors(other_wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true), struct.wire_proxy_green)
+    local entitydata = storage.entitydata[other_wire_proxy.unit_number]
+    assert(entitydata)
+
+    struct = storage.structs[entitydata.struct_id]
+    assert(struct)
+
+    storage.structs[struct.id] = nil
+    struct.id = entity.unit_number
+    storage.structs[struct.id] = struct
+    struct.entity = entity
+    entitydata.struct_id = struct.id
   end
 
-  local item_proxy = entity.surface.create_entity{
-    name = mod_prefix .. "proxy-container",
-    force = entity.force,
-    position = entity.position
-  }
-  item_proxy.destructible = false
-  item_proxy.proxy_target_entity = entity
-  item_proxy.proxy_target_inventory = defines.inventory.lab_input
-  struct.item_proxy = item_proxy
+  if struct == nil then
+    struct = new_struct(storage.structs, {
+      id = entity.unit_number,
+      entity = entity,
 
-  local red_connector = item_proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
-  local green_connector = item_proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+      mode = gui_radio_single,
 
-  assert(struct.wire_proxy_red.connect_to(red_connector, false, defines.wire_origin.player))
-  assert(struct.wire_proxy_green.connect_to(green_connector, false, defines.wire_origin.player))
+      wire_proxy = nil,
+      wire_proxy_red = nil,
+      wire_proxy_green = nil,
+      item_proxy = nil,
+      proxies = {},
+    })
+
+    local wire_proxy = entity.surface.create_entity{
+      name = cb_name,
+      force = entity.force,
+      position = {entity.position.x, entity.position.y + 1},
+    }
+    wire_proxy.destructible = false
+    struct.wire_proxy = wire_proxy
+    struct.wire_proxy_red = struct.wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+    struct.wire_proxy_green = struct.wire_proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+
+    storage.entitydata[wire_proxy.unit_number] = {entity = wire_proxy, struct_id = struct.id}
+    storage.deathrattles[script.register_on_object_destroyed(wire_proxy)] = {name = "entitydata", unit_number = wire_proxy.unit_number}
+
+    local item_proxy = entity.surface.create_entity{
+      name = mod_prefix .. "proxy-container",
+      force = entity.force,
+      position = entity.position
+    }
+    item_proxy.destructible = false
+    item_proxy.proxy_target_entity = entity
+    item_proxy.proxy_target_inventory = defines.inventory.lab_input
+    struct.item_proxy = item_proxy
+
+    local red_connector = item_proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+    local green_connector = item_proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+
+    assert(struct.wire_proxy_red.connect_to(red_connector, false, defines.wire_origin.player))
+    assert(struct.wire_proxy_green.connect_to(green_connector, false, defines.wire_origin.player))
+  end
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "lab", unit_number = entity.unit_number}
 
@@ -253,6 +261,9 @@ local deathrattles = {
         proxy.entity.destroy()
       end
     end
+  end,
+  ["entitydata"] = function (deathrattle)
+    storage.entitydata[deathrattle.unit_number] = nil
   end,
 }
 

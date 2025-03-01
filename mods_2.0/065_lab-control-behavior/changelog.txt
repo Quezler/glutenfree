@@ -17,6 +17,7 @@ Date: ????
     - Add comment about the proxied labs
     - Make newly built labs connect to existing circuit behaviors
     - Fix upgrade crash introduced in the last commit
+    - Preserve the struct during quality changes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28
