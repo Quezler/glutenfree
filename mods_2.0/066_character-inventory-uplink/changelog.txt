@@ -5,6 +5,7 @@ Date: ????
     - Setup the hurricane framework
     - Fix weird jumping frame slices
     - Inflate the selection and collision boxes
+    - Use the forward-then-backward animation mode for now
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 01

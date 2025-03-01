@@ -4,7 +4,7 @@ local Hurricane = require("graphics/hurricane")
 local skin = Hurricane.crafter({
   name = "suit-plug-outlet",
   width = 1280, height = 580,
-  total_frames = 16, rows = 2, -- notice: rows
+  total_frames = 16, rows = 2, -- custom
   shadow_width = 400, shadow_height = 350,
 })
 
