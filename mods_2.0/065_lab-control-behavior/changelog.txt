@@ -14,6 +14,7 @@ Date: ????
     - Block third party placement of control behaviors
     - Preserve wires through quality upgrades
     - Add support for labs that already have layered icons
+    - Add comment about the proxied labs
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28

@@ -223,6 +223,9 @@ function mod.set_mode(struct, mode)
 
         assert(struct.wire_proxy_red.connect_to(red_connector, false, defines.wire_origin.script))
         assert(struct.wire_proxy_green.connect_to(green_connector, false, defines.wire_origin.script))
+
+        -- we do not need to bother deathrattling this proxy container when the entity target dies,
+        -- it just stops reading the signals and will clean itself up again someday, not very pressing.
       end
     end
   end
