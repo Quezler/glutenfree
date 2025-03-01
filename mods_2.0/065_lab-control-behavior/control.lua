@@ -25,7 +25,7 @@ function mod.on_created_entity(event)
     id = entity.unit_number,
     entity = entity,
 
-    radio = gui_radio_single,
+    mode = gui_radio_single,
 
     proxy = nil,
     proxies = {},
@@ -61,6 +61,9 @@ function mod.open_gui(entity, player)
   local frame = player.gui.relative[gui_frame_name]
   if frame then frame.destroy() end
 
+  local struct = storage.structs[entity.unit_number]
+  assert(struct)
+
   frame = player.gui.relative.add{
     type = "frame",
     name = gui_frame_name,
@@ -83,19 +86,19 @@ function mod.open_gui(entity, player)
     type = "radiobutton",
     name = gui_radio_single,
     caption = "Read contents",
-    state = true,
+    state = struct.mode == gui_radio_single,
   }
   inner.add{
     type = "radiobutton",
     name = gui_radio_surface,
     caption = "Read contents (surface)",
-    state = false,
+    state = struct.mode == gui_radio_surface,
   }
   inner.add{
     type = "radiobutton",
     name = gui_radio_surfaces,
     caption = "Read contents (surfaces)",
-    state = false,
+    state = struct.mode == gui_radio_surfaces,
   }
 end
 
