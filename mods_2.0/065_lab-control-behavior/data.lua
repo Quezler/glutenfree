@@ -57,17 +57,7 @@ for _, lab in pairs(data.raw["lab"]) do
   lab_control_behavior.circuit_connector.sprites.led_blue = util.empty_sprite()
   lab_control_behavior.circuit_connector.sprites.led_blue_off = nil
 
-  local item = {
-    type = "item",
-    name = lab_control_behavior.name,
-    icons = icons,
-    place_result = lab_control_behavior.name,
-    hidden = true,
-    stack_size = 1,
-    flags = {"not-stackable"},
-  }
-
-  data:extend{lab_control_behavior, item}
+  data:extend{lab_control_behavior}
 end
 
 local base_lab = data.raw["lab"]["lab"]
