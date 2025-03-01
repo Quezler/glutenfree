@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: ????
+Date: 2025. 03. 01
   Info:
     - Activate the correct radio button on gui open
     - Clean up proxies when the owning lab vanishes
