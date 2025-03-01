@@ -18,7 +18,7 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "? base",
+        "base >= 2.0.38",
         "? space-age",
 
         "(?) EditorExtensions"
