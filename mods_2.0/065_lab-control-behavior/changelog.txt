@@ -13,6 +13,7 @@ Date: ????
     - Abandon blueprints, only quality upgrades will be supported
     - Block third party placement of control behaviors
     - Preserve wires through quality upgrades
+    - Add support for labs that already have layered icons
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28

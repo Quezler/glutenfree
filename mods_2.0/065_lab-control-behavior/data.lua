@@ -19,11 +19,10 @@ local configs = {
 
 for _, lab in pairs(data.raw["lab"]) do
   local config = table.deepcopy(configs[lab.name] or configs["lab"])
-  local icons = {
-    {icon = lab.icon},
-    {icon = mod_directory .. "/graphics/icons/lab-control-behavior-overlay.png",
-    icon_size = 23, scale = 1, shift = {0, 8}, draw_background = true, floating = true},
-  }
+
+  local icons = lab.icons and table.deepcopy(lab.icons) or {{icon = lab.icon}}
+  table.insert(icons, {icon = mod_directory .. "/graphics/icons/lab-control-behavior-overlay.png",
+  icon_size = 23, scale = 1, shift = {0, 8}, draw_background = true, floating = true})
 
   local lab_control_behavior = {
     type = "proxy-container",
