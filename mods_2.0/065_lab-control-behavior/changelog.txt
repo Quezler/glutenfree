@@ -6,6 +6,7 @@ Date: ????
     - Clean up proxies when the owning lab vanishes
     - Draw lab circuit connector
     - Force the wire connector to always draw
+    - Setup the circuit connector for the biolab
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28

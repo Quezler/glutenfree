@@ -6,28 +6,19 @@ local function shift_bounding_box_up_by_one(bounding_box)
   return {{bounding_box[1][1], bounding_box[1][2] - 1}, {bounding_box[2][1], bounding_box[2][2] - 1}}
 end
 
-local selection_boxes = {
-  lab    = {{-0.5, -0.5}, {0.5, 0.5}},
-  biolab = {{ 0.3,  0.5}, {1.3, 1.5}},
+local configs = {
+  lab = {
+    selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+    circuit_definition = {variation = 0, main_offset = util.by_pixel(4.5, 2.0), shadow_offset = util.by_pixel(4.5, 2.0 + 2)},
+  },
+  biolab = {
+    selection_box = {{ 0.5,  0.5}, {1.5, 1.5}},
+    circuit_definition = {variation = 0, main_offset = util.by_pixel(32.5, 32.5), shadow_offset = util.by_pixel(32.5, 32.5 + 2)},
+  },
 }
 
-circuit_connector_definitions["lab-control-behavior"] = circuit_connector_definitions.create_single
-(
-  universal_connector_template,
-  { variation = 0, main_offset = util.by_pixel(4.5, 2), shadow_offset = util.by_pixel(4.5, 7.5)}
-)
--- circuit_connector_definitions["lab-control-behavior"].sprites = {
---   wire_pins = circuit_connector_definitions["lab-control-behavior"].sprites.wire_pins,
---   wire_pins_shadow = circuit_connector_definitions["lab-control-behavior"].sprites.wire_pins_shadow,
--- }
-circuit_connector_definitions["lab-control-behavior"].sprites.connector_main = nil
-circuit_connector_definitions["lab-control-behavior"].sprites.connector_shadow = nil
-circuit_connector_definitions["lab-control-behavior"].sprites.led_red = util.empty_sprite()
-circuit_connector_definitions["lab-control-behavior"].sprites.led_green = util.empty_sprite()
-circuit_connector_definitions["lab-control-behavior"].sprites.led_blue = util.empty_sprite()
-circuit_connector_definitions["lab-control-behavior"].sprites.led_blue_off = nil
-
 for _, lab in pairs(data.raw["lab"]) do
+  local config = table.deepcopy(configs[lab.name] or configs["lab"])
   local lab_control_behavior = {
     type = "proxy-container",
     name = mod_prefix .. lab.name .. "-control-behavior",
@@ -38,7 +29,7 @@ for _, lab in pairs(data.raw["lab"]) do
     },
 
     collision_box = shift_bounding_box_up_by_one(lab.collision_box),
-    selection_box = selection_boxes[lab.name] or selection_boxes.lab,
+    selection_box = config.selection_box,
     collision_mask = {layers = {}},
 
     flags = {"not-on-map", "player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
@@ -47,8 +38,20 @@ for _, lab in pairs(data.raw["lab"]) do
     hidden = true,
 
     circuit_wire_max_distance = 9,
-    circuit_connector = circuit_connector_definitions["lab-control-behavior"],
   }
+
+  lab_control_behavior.circuit_connector = circuit_connector_definitions.create_single
+  (
+    universal_connector_template,
+    config.circuit_definition
+  )
+
+  lab_control_behavior.circuit_connector.sprites.connector_main = nil
+  lab_control_behavior.circuit_connector.sprites.connector_shadow = nil
+  lab_control_behavior.circuit_connector.sprites.led_red = util.empty_sprite()
+  lab_control_behavior.circuit_connector.sprites.led_green = util.empty_sprite()
+  lab_control_behavior.circuit_connector.sprites.led_blue = util.empty_sprite()
+  lab_control_behavior.circuit_connector.sprites.led_blue_off = nil
 
   data:extend{lab_control_behavior}
 end
