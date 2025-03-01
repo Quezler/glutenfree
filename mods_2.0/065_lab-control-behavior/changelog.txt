@@ -9,6 +9,7 @@ Date: ????
     - Setup the circuit connector for the biolab
     - Add circuit connector to the cb's icon
     - Setup the item so it can be blueprinted
+    - Fix deathrattle crashing
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 02. 28

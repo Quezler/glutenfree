@@ -207,7 +207,8 @@ local deathrattles = {
   ["lab"] = function (deathrattle)
     local struct = storage.structs[deathrattle.unit_number]
     if struct then storage.structs[deathrattle.unit_number] = nil
-      struct.proxy.destroy()
+      struct.wire_proxy.destroy()
+      struct.item_proxy.destroy()
       for _, proxy in pairs(struct.proxies) do
         proxy.entity.destroy()
       end
