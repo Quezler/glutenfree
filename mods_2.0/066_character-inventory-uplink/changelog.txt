@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2025. 03. 01
   Info:
     - Setup the hurricane framework
     - Fix weird jumping frame slices

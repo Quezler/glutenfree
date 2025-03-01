@@ -4,7 +4,7 @@
     "_description": "Interact with the inventories of players on that surface with inserters, who needs personal logistic requests?",
     "description": "Read the inventory contents of players with circuits and restock them with inserters, early game logistic bots.",
 
-    "version": "0.0.1",
+    "version": "0.0.2",
     "author": "Quezler",
     "factorio_version": "2.0",
 
