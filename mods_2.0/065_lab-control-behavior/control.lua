@@ -42,6 +42,8 @@ function mod.on_created_entity(event)
   cb.proxy_target_entity = entity
   cb.proxy_target_inventory = defines.inventory.lab_input
   struct.proxy = cb
+
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "lab", unit_number = entity.unit_number}
 end
 
 for _, event in ipairs({
@@ -184,3 +186,22 @@ function mod.set_mode(struct, mode)
     end
   end
 end
+
+local deathrattles = {
+  ["lab"] = function (deathrattle)
+    local struct = storage.structs[deathrattle.unit_number]
+    if struct then storage.structs[deathrattle.unit_number] = nil
+      struct.proxy.destroy()
+      for _, proxy in pairs(struct.proxies) do
+        proxy.entity.destroy()
+      end
+    end
+  end,
+}
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    deathrattles[deathrattle.name](deathrattle)
+  end
+end)
