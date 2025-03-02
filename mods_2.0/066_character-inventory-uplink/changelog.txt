@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Setup the proxy container prototype
     - Place a proxy when constructing the uplink
+    - Setup entitydata wrapper
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 02

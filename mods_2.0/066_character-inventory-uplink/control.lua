@@ -10,6 +10,13 @@ mod.on_created_entity_filters = {
   {filter = "name", name = mod_prefix .. "proxy-container"},
 }
 
+function mod.create_entitydata(entity, data)
+  data.entity = entity
+  data.unit_number = entity.unit_number
+  storage.entitydata[entity.unit_number] = data
+  return data
+end
+
 function mod.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -17,22 +24,20 @@ function mod.on_created_entity(event)
     return entity.destroy()
   end
 
-  storage.entitydata[entity.unit_number] = {
-    entity = entity,
+  local entitydata = mod.create_entitydata(entity, {
     proxy = nil,
-  }
+  })
 
-  local proxy = entity.surface.create_entity{
+  entitydata.proxy = entity.surface.create_entity{
     name = mod_prefix .. "proxy-container",
     force = entity.force,
     position = entity.position,
   }
-  proxy.destructible = false
-  storage.entitydata[entity.unit_number].proxy = proxy
+  entitydata.proxy.destructible = false
 
   if entity.last_user then
-    proxy.proxy_target_entity = entity.last_user.character
-    proxy.proxy_target_inventory = defines.inventory.character_main
+    entitydata.proxy.proxy_target_entity = entity.last_user.character
+    entitydata.proxy.proxy_target_inventory = defines.inventory.character_main
   end
 end
 
