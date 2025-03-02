@@ -21,15 +21,32 @@ local entity = {
   crafting_speed = 1,
   selection_box = {{-1.5, -1.5}, {1.5, 2.5}},
   collision_box = {{-1.2, -1.2}, {1.2, 2.2}},
+  tile_height = 3.5,
 
   energy_usage = "1kW",
   energy_source = {type = "void"},
 
   icon_draw_specification = {shift = {0, 1}, scale = 0.75},
-  tile_height = 3.5,
 
   flags = {"player-creation", "placeable-player", "not-rotatable"},
   circuit_wire_max_distance = 9,
+}
+
+local proxy = {
+  type = "proxy-container",
+  name = mod_prefix .. "proxy-container",
+
+  icons = {{icon = entity.icon, tint = proxy_tint}},
+  selection_box = entity.selection_box,
+  collision_box = entity.collision_box,
+  collision_mask = {layers = {}},
+  tile_height = 3.5,
+
+  flags = {"player-creation"},
+  draw_inventory_content = false,
+  selectable_in_game = false,
+  selection_priority = 49,
+  hidden = true,
 }
 
 local item = {
@@ -110,4 +127,4 @@ local technology = {
   }
 }
 
-data:extend{entity, item, recipe, technology}
+data:extend{entity, proxy, item, recipe, technology}
