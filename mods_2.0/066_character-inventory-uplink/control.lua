@@ -97,10 +97,11 @@ function mod.refresh_gui(player, entity)
   frame = player.gui.relative.add{
     type = "frame",
     name = mod.gui_frame,
-    caption = "Target",
+    caption = {"gui.character"},
     anchor = {
-      gui = defines.relative_gui_type.container_gui,
+      gui = defines.relative_gui_type.proxy_container_gui,
       position = defines.relative_gui_position.right,
+      name = mod_prefix .. "proxy-container",
     },
   }
 

@@ -7,6 +7,7 @@ Date: ????
     - Setup entitydata wrapper
     - Clean up proxy when the uplink goes away
     - Prepare the basis of the gui
+    - Fix the relative gui anchor
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 02
