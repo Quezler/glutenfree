@@ -3,6 +3,7 @@ local mod = {}
 
 script.on_init(function ()
   storage.entitydata = {}
+  storage.deathrattles = {}
 end)
 
 mod.on_created_entity_filters = {
@@ -27,6 +28,7 @@ function mod.on_created_entity(event)
   local entitydata = mod.create_entitydata(entity, {
     proxy = nil,
   })
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = mod_name, unit_number = entity.unit_number}
 
   entitydata.proxy = entity.surface.create_entity{
     name = mod_prefix .. "proxy-container",
@@ -51,3 +53,19 @@ for _, event in ipairs({
 }) do
   script.on_event(event, mod.on_created_entity, mod.on_created_entity_filters)
 end
+
+local deathrattles = {
+  [mod_name] = function (deathrattle)
+    local entitydata = storage.entitydata[deathrattle.unit_number]
+    if entitydata then storage.entitydata[deathrattle.unit_number] = nil
+      entitydata.proxy.destroy()
+    end
+  end,
+}
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    deathrattles[deathrattle.name](deathrattle)
+  end
+end)
