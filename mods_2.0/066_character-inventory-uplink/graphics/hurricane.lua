@@ -37,6 +37,7 @@ function Hurricane.crafter(config)
           scale = 0.5,
           stripes = get_stripes(prefix .. "hr-animation-%d.png"),
           run_mode = "forward-then-backward", -- custom
+          shift = config.shift,
         },
         {
           filename = prefix .. "hr-shadow.png",
@@ -47,6 +48,7 @@ function Hurricane.crafter(config)
           repeat_count = config.total_frames * 2 - 2, -- custom
           draw_as_shadow = true,
           scale = 0.5,
+          shift = config.shift,
         }
       }
     },
@@ -65,6 +67,7 @@ function Hurricane.crafter(config)
           blend_mode = "additive",
           stripes = get_stripes(prefix .. "hr-emission-%d.png"),
           run_mode = "forward-then-backward", -- custom
+          shift = config.shift,
         },
       },
     },

@@ -8,6 +8,7 @@ local skin = Hurricane.crafter({
   width = 1280, height = 580,
   total_frames = 16, rows = 2, -- custom
   shadow_width = 400, shadow_height = 350,
+  shift = {0, 0.25}, -- custom
 })
 
 local entity = {
@@ -24,7 +25,8 @@ local entity = {
   energy_usage = "1kW",
   energy_source = {type = "void"},
 
-  icon_draw_specification = {shift = {0, 0.75}, scale = 0.75},
+  icon_draw_specification = {shift = {0, 1}, scale = 0.75},
+  tile_height = 3.5,
 
   flags = {"player-creation", "placeable-player"},
   circuit_wire_max_distance = 9,

@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Decouple the uplink from the assembling-machine-1
     - Unlock a craftable recipe with technology
+    - Shift down the texture a bit
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 01
