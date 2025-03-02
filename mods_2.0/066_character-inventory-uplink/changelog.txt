@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
-Date: ????
+Date: 2025. 03. 02
   Info:
     - Setup the proxy container prototype
     - Place a proxy when constructing the uplink
