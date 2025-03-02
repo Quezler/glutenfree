@@ -1,10 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: ????
+Date: 2025. 03. 02
   Info:
     - Decouple the uplink from the assembling-machine-1
     - Unlock a craftable recipe with technology
     - Shift down the texture a bit
+    - Add the not-rotatable flag
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 01

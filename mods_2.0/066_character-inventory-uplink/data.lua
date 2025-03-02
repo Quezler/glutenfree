@@ -28,7 +28,7 @@ local entity = {
   icon_draw_specification = {shift = {0, 1}, scale = 0.75},
   tile_height = 3.5,
 
-  flags = {"player-creation", "placeable-player"},
+  flags = {"player-creation", "placeable-player", "not-rotatable"},
   circuit_wire_max_distance = 9,
 }
 
