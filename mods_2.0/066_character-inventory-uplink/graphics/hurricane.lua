@@ -77,8 +77,8 @@ function Hurricane.crafter(config)
     },
     {
       icon = prefix .. "icon-big.png",
-      icon_size = 320,
-      scale = 0.19 * 2, -- 256 / 2 / 320 = 0.4
+      icon_size = 640,
+      scale = 256 / 2 / 640,
     },
   }
 

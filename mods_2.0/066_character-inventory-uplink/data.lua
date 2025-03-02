@@ -35,34 +35,77 @@ local item = {
   name = mod_name,
 
   icon = skin.icon,
+  subgroup = "storage",
+  order = "c[character-inventory-uplink]",
 
   stack_size = 5,
   weight = 200*kg,
   place_result = entity.name,
 }
+entity.minable = {mining_time = 0.5, result = item.name}
 
-local recipe_category = {
-  type = "recipe-category",
-  name = mod_name,
-}
+do -- internal recipe
+  local recipe_category = {
+    type = "recipe-category",
+    name = mod_name,
+  }
 
+  local recipe = {
+    type = "recipe",
+    name = mod_prefix .. "active",
+
+    icon = data.raw["character"]["character"].icon,
+
+    energy_required = 1,
+
+    ingredients = {},
+    results = {},
+
+    category = recipe_category.name,
+  }
+
+  entity.crafting_categories = {recipe_category.name}
+  entity.fixed_recipe = recipe.name
+  entity.fixed_quality = "normal"
+
+  data:extend{recipe_category, recipe}
+end
 
 local recipe = {
   type = "recipe",
-  name = mod_prefix .. "active",
+  name = mod_name,
+  enabled = false,
+  ingredients =
+  {
+    {type = "item", name = "iron-plate", amount = 100},
+    {type = "item", name = "copper-cable", amount = 50},
+    {type = "item", name = "electronic-circuit", amount = 25},
 
-  icon = data.raw["character"]["character"].icon,
-
-  energy_required = 1,
-
-  ingredients = {},
-  results = {},
-
-  category = recipe_category.name,
+  },
+  results = {{type="item", name=item.name, amount=1}}
 }
 
-entity.crafting_categories = {recipe_category.name}
-entity.fixed_recipe = recipe.name
-entity.fixed_quality = "normal"
+local technology = {
+  type = "technology",
+  name = mod_name,
+  icons = skin.technology_icons,
+  effects =
+  {
+    {
+      type = "unlock-recipe",
+      recipe = recipe.name
+    }
+  },
+  prerequisites = {"radar", "circuit-network"},
+  unit =
+  {
+    count = 100,
+    ingredients =
+    {
+      -- it only costs time
+    },
+    time = 60
+  }
+}
 
-data:extend{entity, item, recipe_category, recipe}
+data:extend{entity, item, recipe, technology}

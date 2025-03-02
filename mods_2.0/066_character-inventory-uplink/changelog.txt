@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Decouple the uplink from the assembling-machine-1
+    - Unlock a craftable recipe with technology
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 01
