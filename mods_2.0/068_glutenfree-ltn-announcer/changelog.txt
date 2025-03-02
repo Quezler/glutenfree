@@ -1,0 +1,157 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 03. 02
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.22
+Date: 2024. 10. 02
+  Info:
+    - Include position into color specific debug message
+---------------------------------------------------------------------------------------------------
+Version: 1.0.21
+Date: 2024. 09. 06
+  Info:
+    - Reviving could invalidate tree-06-stump
+---------------------------------------------------------------------------------------------------
+Version: 1.0.20
+Date: 2024. 09. 06
+  Info:
+    - Debug invalid luaentity call at speaker.lua:48
+---------------------------------------------------------------------------------------------------
+Version: 1.0.19
+Date: 2024. 01. 17
+  Info:
+    - Remove cargo ships incompatibility (ports won't get a pole tho)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.18
+Date: 2023. 05. 08
+  Info:
+    - Fix the LTN announcer mod touching speaker history
+    - Weird, thought i bumped this already locally
+---------------------------------------------------------------------------------------------------
+Version: 1.0.17
+Date: 2023. 05. 02
+  Info:
+    - Renamed the mod
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: 2023. 03. 31
+  Info:
+    - Set default signals to blank instead of color ones
+    - Switch from on_delivery_created to new_deliveries
+---------------------------------------------------------------------------------------------------
+Version: 1.0.15
+Date: 2022. 10. 21
+  Info:
+    - Fixes #11 by checking if both are still valid
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: 2022. 10. 13
+  Info:
+    - Fix crash when low power piles up problems
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 2022. 09. 29
+  Info:
+    - Fix #5
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 2022. 09. 23
+  Info:
+    - Verify that the new on_delivery_created event works
+    - Revert back to LTN dispatcher events (plural ^-^)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 2022. 09. 22
+  Info:
+    - Apparently temporary records might not have a rail
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2022. 09. 22
+  Info:
+    - Move the event registerer into load() instead
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2022. 09. 22
+  Info:
+    - Avoid LTN’s temper tantrum by listening in on_init
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2022. 09. 22
+  Info:
+    - Dumbledore asked LTN’s updateAllTrains func calmly
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2022. 09. 20
+  Info:
+    - Undo on_nth_ticks since LTN’s dispatcher is a copy
+    - Remove dispatcher event hook pending restructuring
+    - Switch away delivery/pickup determination from LTN
+    - Get the rail position even if the rail isn’t alive
+    - Fix expected crash, tested especially for it ^-^
+    - Reimplement failed “trolleyproblem” as “entangled”
+    - Remove “on_stops_updated” dependency
+    - Disable the debug messages prior to update
+    - Bump patch version
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2022. 09. 18
+  Info:
+    - Never clear global.on_nth_ticks during init
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2022. 09. 17
+  Info:
+    - Potentially fix delivery being nil by skipping tick
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2022. 09. 17
+  Info:
+    - Fix a rare crash
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2022. 09. 16
+  Info:
+    - Increment minor version(s)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022. 09. 16
+  Info:
+    - Increment minor version(s)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022. 09. 15
+  Info:
+    - Thank vscode for not autosaving info.json
+    - Place a speaker pole when an LTN station is placed
+    - Mark cargoships as incompatible
+    - Drop support for a standalone announcer
+    - Observe ltn dispatcher event output
+    - Listen to on_train_schedule_changed instead
+    - Re-hook LTN events to get the from/to station ids
+    - Add multiblock deathrattles
+    - Add speaker to all existing ltn stops on the map
+    - Make speaker pole blueprintable
+    - Expand search area to 2x2
+    - Revive speakerpole ghost to preserve bpt’ed wires
+    - Experiment with hiding ghost wires
+    - Disconnect it, even though its hidden anyways
+    - Propogate speakerpole down the list
+    - Fix color combinators stacking
+    - Get the LTN destination station on schedule changed
+    - Update red & green signal based on active deliveries
+    - Subtract the delivery once the tmp stop gets removed
+    - Move the delivery to combinator param converter
+    - Introduce trolleyproblem checker
+    - Revert "Introduce trolleyproblem checker"
+    - Initial cleanup
+    - Add a little garbage collection
+    - Write initial readme/description
+    - Prepare for release
+    - Increment minor version(s)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2022. 09. 15
+  Info:
+    - Stash initial glutenfree ltn announcer prototype
