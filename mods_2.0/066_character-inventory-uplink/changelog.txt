@@ -6,6 +6,7 @@ Date: ????
     - Place a proxy when constructing the uplink
     - Setup entitydata wrapper
     - Clean up proxy when the uplink goes away
+    - Prepare the basis of the gui
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 02

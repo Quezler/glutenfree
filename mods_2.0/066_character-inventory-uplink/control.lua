@@ -69,3 +69,46 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     deathrattles[deathrattle.name](deathrattle)
   end
 end)
+
+script.on_event(defines.events.on_gui_opened, function(event)
+  local entity = event.entity
+  if entity then
+    if entity.name == mod_name then
+      local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+      local entitydata = storage.entitydata[entity.unit_number]
+      player.opened = entitydata.proxy
+      mod.refresh_gui(player, entity)
+    elseif entity.name == mod_prefix .. "proxy-container" then
+      local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    end
+  end
+end)
+
+mod.gui_frame = mod_prefix .. "gui-frame"
+mod.gui_inner = mod_prefix .. "gui-inner"
+
+function mod.refresh_gui(player, entity)
+  local frame = player.gui.relative[mod.gui_frame]
+  if frame then frame.destroy() end
+
+  local entitydata = storage.entitydata[entity.unit_number]
+  assert(entitydata)
+
+  frame = player.gui.relative.add{
+    type = "frame",
+    name = mod.gui_frame,
+    caption = "Target",
+    anchor = {
+      gui = defines.relative_gui_type.container_gui,
+      position = defines.relative_gui_position.right,
+    },
+  }
+
+  local inner = frame.add{
+    type = "frame",
+    name = mod.gui_inner,
+    style = "inside_shallow_frame_with_padding",
+    direction = "vertical",
+    -- tags = {unit_number = entity.unit_number},
+  }
+end
