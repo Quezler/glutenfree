@@ -1,0 +1,16 @@
+{
+    "name": "glutenfree-ltn-thought-bubble",
+    "title": "Logistic Train Network - thought bubble",
+    "description": "Gives the locomotives a thought bubble for what it wants to pickup.",
+    "version": "2.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "base",
+        "? space-age",
+        
+        "LogisticTrainNetwork"
+    ]
+}
