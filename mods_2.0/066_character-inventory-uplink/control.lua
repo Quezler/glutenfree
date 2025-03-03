@@ -41,6 +41,9 @@ function mod.on_created_entity(event)
     entitydata.proxy.proxy_target_entity = entity.last_user.character
     entitydata.proxy.proxy_target_inventory = defines.inventory.character_main
   end
+
+  -- local cb = entity.get_or_create_control_behavior()
+  -- game.print(serpent.line(cb.logistic_condition))
 end
 
 for _, event in ipairs({
@@ -86,6 +89,8 @@ end)
 
 mod.gui_frame = mod_prefix .. "gui-frame"
 mod.gui_inner = mod_prefix .. "gui-inner"
+mod.gui_dropdown_player = mod_prefix .. "gui-dropdown-player"
+mod.gui_dropdown_inventory = mod_prefix .. "gui-dropdown-inventory"
 
 mod.comparator_to_inventory = {
   [">"] = defines.inventory.character_main,
@@ -119,11 +124,12 @@ function mod.refresh_gui(player, entity)
     name = mod.gui_inner,
     style = "inside_shallow_frame_with_padding",
     direction = "vertical",
-    -- tags = {unit_number = entity.unit_number},
+    tags = {unit_number = entity.unit_number},
   }
 
   local player_dropdown = inner.add{
     type = "drop-down",
+    name = mod.gui_dropdown_player,
     items = {
       {"character-inventory-uplink.select-player"},
     },
@@ -139,6 +145,7 @@ function mod.refresh_gui(player, entity)
 
   local inventory_dropdown = inner.add{
     type = "drop-down",
+    name = mod.gui_dropdown_inventory,
     items = {
       {"character-inventory-uplink.select-inventory"},
       {"character-inventory-uplink.character-main"},
@@ -152,3 +159,19 @@ function mod.refresh_gui(player, entity)
   }
   inventory_dropdown.style.horizontally_stretchable = true
 end
+
+script.on_event(defines.events.on_gui_selection_state_changed, function(event)
+  local element = event.element
+  if element.parent.name == mod.gui_inner then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    local entitydata = storage.entitydata[element.parent.tags.unit_number]
+    assert(entitydata)
+
+    if element.name == mod.gui_dropdown_player then
+      game.print(element.selected_index ~= 1 and element.items[element.selected_index] or nil)
+    elseif element.name == mod.gui_dropdown_inventory then
+      game.print(element.selected_index ~= 1 and element.items[element.selected_index] or nil)
+    end
+  end
+
+end)
