@@ -5,6 +5,7 @@ Date: ????
     - Setup the two dropdowns
     - Setup the comparator map
     - Grab the dropdown changes
+    - Resolve inventory dropdown to comparator
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 03. 02

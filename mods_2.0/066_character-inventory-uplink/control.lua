@@ -15,6 +15,7 @@ function mod.create_entitydata(entity, data)
   data.entity = entity
   data.unit_number = entity.unit_number
   storage.entitydata[entity.unit_number] = data
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = entity.name, unit_number = entity.unit_number}
   return data
 end
 
@@ -27,8 +28,10 @@ function mod.on_created_entity(event)
 
   local entitydata = mod.create_entitydata(entity, {
     proxy = nil,
+
+    player = nil,
+    inventory_index = nil,
   })
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = mod_name, unit_number = entity.unit_number}
 
   entitydata.proxy = entity.surface.create_entity{
     name = mod_prefix .. "proxy-container",
@@ -101,6 +104,15 @@ mod.comparator_to_inventory = {
   ["≠"] = defines.inventory.character_trash,
 }
 
+mod.dropdown_to_comparator = {
+  ["character-inventory-uplink.select-inventory"] = "<",
+  ["character-inventory-uplink.character-main"  ] = ">",
+  ["character-inventory-uplink.character-guns"  ] = "=",
+  ["character-inventory-uplink.character-ammo"  ] = "≥",
+  ["character-inventory-uplink.character-armor" ] = "≤",
+  ["character-inventory-uplink.character-trash" ] = "≠",
+}
+
 function mod.refresh_gui(player, entity)
   local frame = player.gui.relative[mod.gui_frame]
   if frame then frame.destroy() end
@@ -152,7 +164,6 @@ function mod.refresh_gui(player, entity)
       {"character-inventory-uplink.character-guns"},
       {"character-inventory-uplink.character-ammo"},
       {"character-inventory-uplink.character-armor"},
-      {"character-inventory-uplink.character-vehicle"},
       {"character-inventory-uplink.character-trash"},
     },
     selected_index = 1,
@@ -170,7 +181,7 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
     if element.name == mod.gui_dropdown_player then
       game.print(element.selected_index ~= 1 and element.items[element.selected_index] or nil)
     elseif element.name == mod.gui_dropdown_inventory then
-      game.print(element.selected_index ~= 1 and element.items[element.selected_index] or nil)
+      game.print(mod.dropdown_to_comparator[element.items[element.selected_index][1]])
     end
   end
 
