@@ -232,3 +232,31 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
   end
 
 end)
+
+function mod.check_player(player)
+  for _, entitydata in pairs(storage.entitydata) do
+    if entitydata.player == player then
+      if player.character and player.character.surface == entitydata.entity.surface then
+        entitydata.proxy.proxy_target_entity = player.character
+      else
+        entitydata.proxy.proxy_target_entity = nil
+      end
+    end
+  end
+end
+
+script.on_event(defines.events.on_player_controller_changed, function(event)
+  -- game.print("on_player_controller_changed")
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  mod.check_player(player)
+end)
+
+script.on_event(defines.events.on_player_changed_surface, function(event)
+  -- game.print("on_player_changed_surface")
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  mod.check_player(player)
+end)
+
+-- script.on_event(defines.events.on_player_changed_force, function(event)
+--   game.print("on_player_changed_force")
+-- end)

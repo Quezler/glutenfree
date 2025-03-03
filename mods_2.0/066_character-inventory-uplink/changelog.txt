@@ -9,6 +9,7 @@ Date: ????
     - Run into blueprints not preserving logistic conditions
     - Persist the settings through just logistic conditions thanks to boskid
     - Actually switch the proxy between players/indexes
+    - Link whilst the character is on the same surface
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 03. 02
