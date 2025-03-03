@@ -22,6 +22,7 @@ local entity = {
   selection_box = {{-1.5, -1.5}, {1.5, 2.5}},
   collision_box = {{-1.2, -1.2}, {1.2, 2.2}},
   tile_height = 3.5,
+  max_health = 500,
 
   energy_usage = "1kW",
   energy_source = {type = "void"},
