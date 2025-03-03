@@ -87,6 +87,15 @@ end)
 mod.gui_frame = mod_prefix .. "gui-frame"
 mod.gui_inner = mod_prefix .. "gui-inner"
 
+mod.comparator_to_inventory = {
+  [">"] = defines.inventory.character_main,
+  ["<"] = nil,
+  ["="] = defines.inventory.character_guns,
+  ["≥"] = defines.inventory.character_ammo,
+  ["≤"] = defines.inventory.character_armor,
+  ["≠"] = defines.inventory.character_trash,
+}
+
 function mod.refresh_gui(player, entity)
   local frame = player.gui.relative[mod.gui_frame]
   if frame then frame.destroy() end

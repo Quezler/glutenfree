@@ -3,6 +3,7 @@ Version: 0.0.5
 Date: ????
   Info:
     - Setup the two dropdowns
+    - Setup the comparator map
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 03. 02
