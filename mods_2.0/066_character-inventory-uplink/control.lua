@@ -30,7 +30,7 @@ function mod.on_created_entity(event)
     proxy = nil,
 
     player = nil,
-    inventory_index = nil,
+    inventory_index = 0,
   })
 
   entitydata.proxy = entity.surface.create_entity{
@@ -40,14 +40,11 @@ function mod.on_created_entity(event)
   }
   entitydata.proxy.destructible = false
 
-  if entity.last_user then
-    entitydata.proxy.proxy_target_entity = entity.last_user.character
-    entitydata.proxy.proxy_target_inventory = defines.inventory.character_main
-  end
+  -- todo: admin check with entity.last_user or something
 
   local cb = entity.get_or_create_control_behavior()
   local logistic_condition = cb.logistic_condition
-  game.print(serpent.line(logistic_condition))
+  -- game.print(serpent.line(logistic_condition))
   if logistic_condition.constant ~= 0 then
     mod.entitydata_set_player(entitydata, game.get_player(logistic_condition.constant))
   end
@@ -104,7 +101,7 @@ mod.gui_dropdown_inventory = mod_prefix .. "gui-dropdown-inventory"
 
 mod.comparator_to_inventory_index = {
   [">"] = defines.inventory.character_main,
-  ["<"] = nil,
+  ["<"] = 0,
   ["="] = defines.inventory.character_guns,
   ["≥"] = defines.inventory.character_ammo,
   ["≤"] = defines.inventory.character_armor,
@@ -190,7 +187,7 @@ function mod.refresh_gui(player, entity)
       {"character-inventory-uplink.character-armor"},
       {"character-inventory-uplink.character-trash"},
     },
-    selected_index = mod.comparator_to_dropdown_index[mod.inventory_index_to_comparator[entitydata.inventory_index]] or 1,
+    selected_index = mod.comparator_to_dropdown_index[mod.inventory_index_to_comparator[entitydata.inventory_index]],
   }
   inventory_dropdown.style.horizontally_stretchable = true
 end
@@ -204,11 +201,17 @@ end
 
 function mod.entitydata_set_player(entitydata, player_or_nil)
   entitydata.player = player_or_nil
+  if entitydata.player and entitydata.player.character then
+    entitydata.proxy.proxy_target_entity = entitydata.player.character
+  else
+    entitydata.proxy.proxy_target_entity = nil
+  end
   mod.entitydata_write_logistic_condition(entitydata)
 end
 
 function mod.entitydata_set_inventory(entitydata, index_or_nil)
   entitydata.inventory_index = index_or_nil
+  entitydata.proxy.proxy_target_inventory = index_or_nil
   mod.entitydata_write_logistic_condition(entitydata)
 end
 
