@@ -161,10 +161,10 @@ function mod.refresh_gui(player, entity)
   local player_dropdown_items = {
     {"character-inventory-uplink.select-player"},
   }
-  for i, player in ipairs(entity.force.players) do
+  for _, player in pairs(game.players) do
     table.insert(player_dropdown_items, player.name)
     if entitydata.player and entitydata.player.name == player.name then
-      player_dropdown_index = i + 1
+      player_dropdown_index = #player_dropdown_items
     end
   end
   local player_dropdown = inner.add{
@@ -256,7 +256,3 @@ script.on_event(defines.events.on_player_changed_surface, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   mod.check_player(player)
 end)
-
--- script.on_event(defines.events.on_player_changed_force, function(event)
---   game.print("on_player_changed_force")
--- end)
