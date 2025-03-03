@@ -97,7 +97,7 @@ function mod.refresh_gui(player, entity)
   frame = player.gui.relative.add{
     type = "frame",
     name = mod.gui_frame,
-    caption = {"gui.character"},
+    caption = {"gui-menu.settings"},
     anchor = {
       gui = defines.relative_gui_type.proxy_container_gui,
       position = defines.relative_gui_position.right,
@@ -112,4 +112,34 @@ function mod.refresh_gui(player, entity)
     direction = "vertical",
     -- tags = {unit_number = entity.unit_number},
   }
+
+  local player_dropdown = inner.add{
+    type = "drop-down",
+    items = {
+      {"character-inventory-uplink.select-player"},
+    },
+    selected_index = 1,
+  }
+  player_dropdown.style.horizontally_stretchable = true
+  player_dropdown.style.bottom_margin = 12
+  local items = player_dropdown.items
+  for _, player in ipairs(entity.force.players) do
+    table.insert(items, player.name)
+  end
+  player_dropdown.items = items
+
+  local inventory_dropdown = inner.add{
+    type = "drop-down",
+    items = {
+      {"character-inventory-uplink.select-inventory"},
+      {"character-inventory-uplink.character-main"},
+      {"character-inventory-uplink.character-guns"},
+      {"character-inventory-uplink.character-ammo"},
+      {"character-inventory-uplink.character-armor"},
+      {"character-inventory-uplink.character-vehicle"},
+      {"character-inventory-uplink.character-trash"},
+    },
+    selected_index = 1,
+  }
+  inventory_dropdown.style.horizontally_stretchable = true
 end
