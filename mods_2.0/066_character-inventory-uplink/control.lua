@@ -46,7 +46,14 @@ function mod.on_created_entity(event)
   end
 
   local cb = entity.get_or_create_control_behavior()
-  game.print(serpent.line(cb.logistic_condition))
+  local logistic_condition = cb.logistic_condition
+  game.print(serpent.line(logistic_condition))
+  if logistic_condition.constant ~= 0 then
+    mod.entitydata_set_player(entitydata, game.get_player(logistic_condition.constant))
+  end
+  if logistic_condition.comparator ~= "<" then
+    mod.entitydata_set_inventory(entitydata, mod.comparator_to_inventory_index[logistic_condition.comparator])
+  end
 end
 
 for _, event in ipairs({
@@ -118,6 +125,15 @@ mod.dropdown_to_comparator = {
   ["character-inventory-uplink.character-trash" ] = "≠",
 }
 
+mod.comparator_to_dropdown_index = {
+  [">"] = 2,
+  ["<"] = 1,
+  ["="] = 3,
+  ["≥"] = 4,
+  ["≤"] = 5,
+  ["≠"] = 6,
+}
+
 function mod.refresh_gui(player, entity)
   local frame = player.gui.relative[mod.gui_frame]
   if frame then frame.destroy() end
@@ -144,21 +160,24 @@ function mod.refresh_gui(player, entity)
     tags = {unit_number = entity.unit_number},
   }
 
+  local player_dropdown_index = 1
+  local player_dropdown_items = {
+    {"character-inventory-uplink.select-player"},
+  }
+  for i, player in ipairs(entity.force.players) do
+    table.insert(player_dropdown_items, player.name)
+    if entitydata.player and entitydata.player.name == player.name then
+      player_dropdown_index = i + 1
+    end
+  end
   local player_dropdown = inner.add{
     type = "drop-down",
     name = mod.gui_dropdown_player,
-    items = {
-      {"character-inventory-uplink.select-player"},
-    },
-    selected_index = 1,
+    items = player_dropdown_items,
+    selected_index = player_dropdown_index,
   }
   player_dropdown.style.horizontally_stretchable = true
   player_dropdown.style.bottom_margin = 12
-  local items = player_dropdown.items
-  for _, player in ipairs(entity.force.players) do
-    table.insert(items, player.name)
-  end
-  player_dropdown.items = items
 
   local inventory_dropdown = inner.add{
     type = "drop-down",
@@ -171,7 +190,7 @@ function mod.refresh_gui(player, entity)
       {"character-inventory-uplink.character-armor"},
       {"character-inventory-uplink.character-trash"},
     },
-    selected_index = 1,
+    selected_index = mod.comparator_to_dropdown_index[mod.inventory_index_to_comparator[entitydata.inventory_index]] or 1,
   }
   inventory_dropdown.style.horizontally_stretchable = true
 end
@@ -181,7 +200,6 @@ function mod.entitydata_write_logistic_condition(entitydata)
     comparator = mod.inventory_index_to_comparator[entitydata.inventory_index],
     constant = entitydata.player and entitydata.player.index or 0,
   }
-  game.print(serpent.line(entitydata.entity.get_control_behavior().logistic_condition))
 end
 
 function mod.entitydata_set_player(entitydata, player_or_nil)

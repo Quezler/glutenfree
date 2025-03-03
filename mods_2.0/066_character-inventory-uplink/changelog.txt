@@ -7,6 +7,7 @@ Date: ????
     - Grab the dropdown changes
     - Resolve inventory dropdown to comparator
     - Run into blueprints not preserving logistic conditions
+    - Persist the settings through just logistic conditions thanks to boskid
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 03. 02
