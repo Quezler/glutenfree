@@ -45,8 +45,8 @@ function mod.on_created_entity(event)
     entitydata.proxy.proxy_target_inventory = defines.inventory.character_main
   end
 
-  -- local cb = entity.get_or_create_control_behavior()
-  -- game.print(serpent.line(cb.logistic_condition))
+  local cb = entity.get_or_create_control_behavior()
+  game.print(serpent.line(cb.logistic_condition))
 end
 
 for _, event in ipairs({
@@ -95,7 +95,7 @@ mod.gui_inner = mod_prefix .. "gui-inner"
 mod.gui_dropdown_player = mod_prefix .. "gui-dropdown-player"
 mod.gui_dropdown_inventory = mod_prefix .. "gui-dropdown-inventory"
 
-mod.comparator_to_inventory = {
+mod.comparator_to_inventory_index = {
   [">"] = defines.inventory.character_main,
   ["<"] = nil,
   ["="] = defines.inventory.character_guns,
@@ -103,6 +103,11 @@ mod.comparator_to_inventory = {
   ["≤"] = defines.inventory.character_armor,
   ["≠"] = defines.inventory.character_trash,
 }
+
+mod.inventory_index_to_comparator = {}
+for k, v in pairs(mod.comparator_to_inventory_index) do
+  mod.inventory_index_to_comparator[v] = k
+end
 
 mod.dropdown_to_comparator = {
   ["character-inventory-uplink.select-inventory"] = "<",
@@ -171,6 +176,24 @@ function mod.refresh_gui(player, entity)
   inventory_dropdown.style.horizontally_stretchable = true
 end
 
+function mod.entitydata_write_logistic_condition(entitydata)
+  entitydata.entity.get_control_behavior().logistic_condition = {
+    comparator = mod.inventory_index_to_comparator[entitydata.inventory_index],
+    constant = entitydata.player and entitydata.player.index or 0,
+  }
+  game.print(serpent.line(entitydata.entity.get_control_behavior().logistic_condition))
+end
+
+function mod.entitydata_set_player(entitydata, player_or_nil)
+  entitydata.player = player_or_nil
+  mod.entitydata_write_logistic_condition(entitydata)
+end
+
+function mod.entitydata_set_inventory(entitydata, index_or_nil)
+  entitydata.inventory_index = index_or_nil
+  mod.entitydata_write_logistic_condition(entitydata)
+end
+
 script.on_event(defines.events.on_gui_selection_state_changed, function(event)
   local element = event.element
   if element.parent.name == mod.gui_inner then
@@ -179,9 +202,11 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
     assert(entitydata)
 
     if element.name == mod.gui_dropdown_player then
-      game.print(element.selected_index ~= 1 and element.items[element.selected_index] or nil)
+      local player_name = element.selected_index ~= 1 and element.items[element.selected_index] or nil
+      mod.entitydata_set_player(entitydata, player_name and game.get_player(tostring(player_name)) or nil)
     elseif element.name == mod.gui_dropdown_inventory then
-      game.print(mod.dropdown_to_comparator[element.items[element.selected_index][1]])
+      local comparator = mod.dropdown_to_comparator[element.items[element.selected_index][1]]
+      mod.entitydata_set_inventory(entitydata, mod.comparator_to_inventory_index[comparator])
     end
   end
 
