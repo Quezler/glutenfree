@@ -79,6 +79,7 @@ function mod.on_created_entity(event)
 
   -- todo: admin check with entity.last_user or something
 
+  mod.update_custom_status(entitydata)
   local cb = entity.get_or_create_control_behavior()
   local logistic_condition = cb.logistic_condition
   -- game.print(serpent.line(logistic_condition))
@@ -234,6 +235,7 @@ function mod.entitydata_set_player(entitydata, player_or_nil)
     entitydata.proxy.proxy_target_entity = nil
     entitydata.text_top.text = ""
   end
+  mod.update_custom_status(entitydata)
   mod.entitydata_write_logistic_condition(entitydata)
 end
 
@@ -241,6 +243,7 @@ function mod.entitydata_set_inventory(entitydata, index)
   entitydata.inventory_index = index
   entitydata.proxy.proxy_target_inventory = index
   entitydata.text_bottom.text = index == 0 and "" or {mod.roundabout_from_inventory_index[index].locale}
+  mod.update_custom_status(entitydata)
   mod.entitydata_write_logistic_condition(entitydata)
 end
 
@@ -269,6 +272,7 @@ function mod.check_player(player)
       else
         entitydata.proxy.proxy_target_entity = nil
       end
+      mod.update_custom_status(entitydata)
     end
   end
 end
@@ -284,3 +288,26 @@ script.on_event(defines.events.on_player_changed_surface, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   mod.check_player(player)
 end)
+
+function mod.update_custom_status(entitydata)
+  if entitydata.player == nil then
+    entitydata.entity.custom_status = {label = {"character-inventory-uplink-status.no-player-selected"}, diode = defines.entity_status_diode.red}
+    entitydata.entity.disabled_by_script = true
+    return
+  end
+
+  if entitydata.inventory_index == 0 then
+    entitydata.entity.custom_status = {label = {"character-inventory-uplink-status.no-inventory-selected"}, diode = defines.entity_status_diode.red}
+    entitydata.entity.disabled_by_script = true
+    return
+  end
+
+  if entitydata.proxy.proxy_target_entity == nil then
+    entitydata.entity.custom_status = {label = {"character-inventory-uplink-status.no-character-in-range"}, diode = defines.entity_status_diode.yellow}
+    entitydata.entity.disabled_by_script = true
+    return
+  end
+
+  entitydata.entity.custom_status = {label = {"character-inventory-uplink-status.connected"}, diode = defines.entity_status_diode.green}
+  entitydata.entity.disabled_by_script = false
+end

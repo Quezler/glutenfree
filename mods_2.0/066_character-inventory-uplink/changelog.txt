@@ -7,6 +7,7 @@ Date: ????
     - Add circuit connector graphics
     - Use a roundabout instead of several maps
     - Luarender the target player and ammo
+    - Add custom entity status
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 03. 03
