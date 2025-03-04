@@ -11,6 +11,7 @@ Date: ????
     - Add untested player left/joined event listeners
     - Remove completed todo
     - Stash wip approval draft
+    - Update readme
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 03. 03
