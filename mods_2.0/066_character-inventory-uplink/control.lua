@@ -1,6 +1,13 @@
 require("shared")
 local mod = {}
 
+-- todo: deactivate when not actively linked
+-- todo: wire passthrough
+-- todo: admin check
+-- todo: check_player performance
+-- todo: cleaner combinator mapping
+-- todo: luarendered labels
+
 script.on_init(function ()
   storage.entitydata = {}
   storage.deathrattles = {}
