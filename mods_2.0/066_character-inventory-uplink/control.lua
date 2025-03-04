@@ -4,7 +4,6 @@ local mod = {}
 -- todo: deactivate when not actively linked
 -- todo: admin check
 -- todo: check_player performance
--- todo: luarendered labels
 
 script.on_init(function ()
   storage.entitydata = {}
@@ -36,6 +35,9 @@ function mod.on_created_entity(event)
 
     player = nil,
     inventory_index = 0,
+
+    text_top = nil,
+    text_bottom = nil,
   })
 
   entitydata.proxy = entity.surface.create_entity{
@@ -55,6 +57,25 @@ function mod.on_created_entity(event)
     assert(red_wire.connect_to(proxy_red_wire, false, defines.wire_origin.script))
     assert(green_wire.connect_to(proxy_green_wire, false, defines.wire_origin.script))
   end
+
+  entitydata.text_top = rendering.draw_text{
+    text = "",
+    surface = entity.surface,
+    target = {entity = entity, offset = {0, 0.25}},
+    color = {1, 1, 1},
+    only_in_alt_mode = true,
+    alignment = "center",
+    scale = 0.5,
+  }
+  entitydata.text_bottom = rendering.draw_text{
+    text = "",
+    surface = entity.surface,
+    target = {entity = entity, offset = {0,  1.50}},
+    color = {1, 1, 1},
+    only_in_alt_mode = true,
+    alignment = "center",
+    scale = 0.5,
+  }
 
   -- todo: admin check with entity.last_user or something
 
@@ -208,8 +229,10 @@ function mod.entitydata_set_player(entitydata, player_or_nil)
   entitydata.player = player_or_nil
   if entitydata.player and entitydata.player.character then
     entitydata.proxy.proxy_target_entity = entitydata.player.character
+    entitydata.text_top.text = entitydata.player.name
   else
     entitydata.proxy.proxy_target_entity = nil
+    entitydata.text_top.text = ""
   end
   mod.entitydata_write_logistic_condition(entitydata)
 end
@@ -217,6 +240,7 @@ end
 function mod.entitydata_set_inventory(entitydata, index)
   entitydata.inventory_index = index
   entitydata.proxy.proxy_target_inventory = index
+  entitydata.text_bottom.text = index == 0 and "" or {mod.roundabout_from_inventory_index[index].locale}
   mod.entitydata_write_logistic_condition(entitydata)
 end
 
