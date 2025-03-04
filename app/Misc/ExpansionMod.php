@@ -56,7 +56,7 @@ class ExpansionMod
     {
         $source = __GLUTENFREE__ . '/mods_2.0/' . $this->directory;
         $dest = '/Users/quezler/Library/Application\ Support/factorio/mods/' . $this->name; // public
-        $dest = '/Users/quezler/Documents/Tower/github/wube/Factorio/mods/' . $this->name; // private
+        // $dest = '/Users/quezler/Documents/Tower/github/wube/Factorio/mods/' . $this->name; // private
 
         passthru(sprintf("rsync -avr --delete %s/ %s", $source, $dest));
     }
