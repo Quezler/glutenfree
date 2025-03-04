@@ -4,7 +4,6 @@ local mod = {}
 -- todo: deactivate when not actively linked
 -- todo: admin check
 -- todo: check_player performance
--- todo: cleaner combinator mapping
 -- todo: luarendered labels
 
 script.on_init(function ()
@@ -66,7 +65,7 @@ function mod.on_created_entity(event)
     mod.entitydata_set_player(entitydata, game.get_player(logistic_condition.constant))
   end
   if logistic_condition.comparator ~= "<" then
-    mod.entitydata_set_inventory(entitydata, mod.comparator_to_inventory_index[logistic_condition.comparator])
+    mod.entitydata_set_inventory(entitydata, mod.roundabout_from_comparator[logistic_condition.comparator].inventory_index)
   end
 end
 
@@ -116,37 +115,26 @@ mod.gui_inner = mod_prefix .. "gui-inner"
 mod.gui_dropdown_player = mod_prefix .. "gui-dropdown-player"
 mod.gui_dropdown_inventory = mod_prefix .. "gui-dropdown-inventory"
 
-mod.comparator_to_inventory_index = {
-  [">"] = defines.inventory.character_main,
-  ["<"] = 0,
-  ["="] = defines.inventory.character_guns,
-  ["≥"] = defines.inventory.character_ammo,
-  ["≤"] = defines.inventory.character_armor,
-  ["≠"] = defines.inventory.character_trash,
+mod.roundabouts = {
+  {comparator = "<", locale = "character-inventory-uplink.select-inventory", dropdown_index = 1, inventory_index = 0                                },
+  {comparator = ">", locale = "character-inventory-uplink.character-main"  , dropdown_index = 2, inventory_index = defines.inventory.character_main },
+  {comparator = "=", locale = "character-inventory-uplink.character-guns"  , dropdown_index = 3, inventory_index = defines.inventory.character_guns },
+  {comparator = "≥", locale = "character-inventory-uplink.character-ammo"  , dropdown_index = 4, inventory_index = defines.inventory.character_ammo },
+  {comparator = "≤", locale = "character-inventory-uplink.character-armor" , dropdown_index = 5, inventory_index = defines.inventory.character_armor},
+  {comparator = "≠", locale = "character-inventory-uplink.character-trash" , dropdown_index = 6, inventory_index = defines.inventory.character_trash},
 }
 
-mod.inventory_index_to_comparator = {}
-for k, v in pairs(mod.comparator_to_inventory_index) do
-  mod.inventory_index_to_comparator[v] = k
+mod.roundabout_from_comparator = {}
+mod.roundabout_from_locale = {}
+mod.roundabout_from_dropdown_index = {}
+mod.roundabout_from_inventory_index = {}
+
+for _, roundabout in ipairs(mod.roundabouts) do
+  mod.roundabout_from_comparator[roundabout.comparator] = roundabout
+  mod.roundabout_from_locale[roundabout.locale] = roundabout
+  mod.roundabout_from_dropdown_index[roundabout.dropdown_index] = roundabout
+  mod.roundabout_from_inventory_index[roundabout.inventory_index] = roundabout
 end
-
-mod.dropdown_to_comparator = {
-  ["character-inventory-uplink.select-inventory"] = "<",
-  ["character-inventory-uplink.character-main"  ] = ">",
-  ["character-inventory-uplink.character-guns"  ] = "=",
-  ["character-inventory-uplink.character-ammo"  ] = "≥",
-  ["character-inventory-uplink.character-armor" ] = "≤",
-  ["character-inventory-uplink.character-trash" ] = "≠",
-}
-
-mod.comparator_to_dropdown_index = {
-  [">"] = 2,
-  ["<"] = 1,
-  ["="] = 3,
-  ["≥"] = 4,
-  ["≤"] = 5,
-  ["≠"] = 6,
-}
 
 function mod.refresh_gui(player, entity)
   local frame = player.gui.relative[mod.gui_frame]
@@ -204,14 +192,14 @@ function mod.refresh_gui(player, entity)
       {"character-inventory-uplink.character-armor"},
       {"character-inventory-uplink.character-trash"},
     },
-    selected_index = mod.comparator_to_dropdown_index[mod.inventory_index_to_comparator[entitydata.inventory_index]],
+    selected_index = mod.roundabout_from_inventory_index[entitydata.inventory_index].dropdown_index,
   }
   inventory_dropdown.style.horizontally_stretchable = true
 end
 
 function mod.entitydata_write_logistic_condition(entitydata)
   entitydata.entity.get_control_behavior().logistic_condition = {
-    comparator = mod.inventory_index_to_comparator[entitydata.inventory_index],
+    comparator = mod.roundabout_from_inventory_index[entitydata.inventory_index].comparator,
     constant = entitydata.player and entitydata.player.index or 0,
   }
 end
@@ -226,9 +214,9 @@ function mod.entitydata_set_player(entitydata, player_or_nil)
   mod.entitydata_write_logistic_condition(entitydata)
 end
 
-function mod.entitydata_set_inventory(entitydata, index_or_nil)
-  entitydata.inventory_index = index_or_nil
-  entitydata.proxy.proxy_target_inventory = index_or_nil
+function mod.entitydata_set_inventory(entitydata, index)
+  entitydata.inventory_index = index
+  entitydata.proxy.proxy_target_inventory = index
   mod.entitydata_write_logistic_condition(entitydata)
 end
 
@@ -243,8 +231,7 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
       local player_name = element.selected_index ~= 1 and element.items[element.selected_index] or nil
       mod.entitydata_set_player(entitydata, player_name and game.get_player(tostring(player_name)) or nil)
     elseif element.name == mod.gui_dropdown_inventory then
-      local comparator = mod.dropdown_to_comparator[element.items[element.selected_index][1]]
-      mod.entitydata_set_inventory(entitydata, mod.comparator_to_inventory_index[comparator])
+      mod.entitydata_set_inventory(entitydata, mod.roundabout_from_dropdown_index[element.selected_index].inventory_index)
     end
   end
 

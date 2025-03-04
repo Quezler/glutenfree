@@ -5,6 +5,7 @@ Date: ????
     - Add todos
     - Pass signal through the wire
     - Add circuit connector graphics
+    - Use a roundabout instead of several maps
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 03. 03
