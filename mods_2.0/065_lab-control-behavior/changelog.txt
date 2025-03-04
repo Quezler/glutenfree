@@ -1,0 +1,51 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2025. 03. 04
+  Info:
+    - Update dependencies
+    - Update description
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2025. 03. 01
+  Info:
+    - Activate the correct radio button on gui open
+    - Clean up proxies when the owning lab vanishes
+    - Draw lab circuit connector
+    - Force the wire connector to always draw
+    - Setup the circuit connector for the biolab
+    - Add circuit connector to the cb's icon
+    - Setup the item so it can be blueprinted
+    - Fix deathrattle crashing
+    - Abandon blueprints, only quality upgrades will be supported
+    - Block third party placement of control behaviors
+    - Preserve wires through quality upgrades
+    - Add support for labs that already have layered icons
+    - Add comment about the proxied labs
+    - Make newly built labs connect to existing circuit behaviors
+    - Fix upgrade crash introduced in the last commit
+    - Preserve the struct during quality changes
+    - Disable debug
+    - Add thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2025. 02. 28
+  Info:
+    - Create a control behavior for each lab
+    - Position control behavior over the lab's collision box
+    - Position the selection boxes for both labs
+    - Move the biolab's one off grid a bit
+    - Store the cb proxy on the struct
+    - Support circuit wires
+    - Add initial circuit connection gui
+    - Forward lab cb gui opened to lab
+    - Make the radio buttons radio
+    - Rename entity to single and store in struct
+    - Setup the one-to-many proxy container prototype
+    - Reach proof of concept status
+    - Fix surfaces mode not working
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2025. 02. 28
+  Info:
+    - Initial commit

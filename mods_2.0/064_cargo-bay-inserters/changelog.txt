@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2025. 02. 04
+  Info:
+    - Swap out LuaEntity::get_gargo_bays() polyfill
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2025. 02. 28
+  Info:
+    - Track space platform hubs and cargo landing pads
+    - Attempt to write link and update proxy code
+    - Fix ipairs issue
+    - Fix clearing the entity target
+    - Never update the inventory index
+    - Schedule surface wide proxy update for the next tick
+    - Do not draw cargo bay inventory contents
+    - Listen to the surface events
+    - Fix new space platform hubs going unnoticed
+    - Add thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2025. 02. 28
+  Info:
+    - Initial commit

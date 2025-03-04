@@ -1,0 +1,65 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2025. 03. 04
+  Info:
+    - Initial commit
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2025. 03. 04
+  Info:
+    - Add todos
+    - Pass signal through the wire
+    - Add circuit connector graphics
+    - Use a roundabout instead of several maps
+    - Luarender the target player and ammo
+    - Add custom entity status
+    - Add untested player left/joined event listeners
+    - Remove completed todo
+    - Stash wip approval draft
+    - Update readme
+    - Add thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2025. 03. 03
+  Info:
+    - Setup the two dropdowns
+    - Setup the comparator map
+    - Grab the dropdown changes
+    - Resolve inventory dropdown to comparator
+    - Run into blueprints not preserving logistic conditions
+    - Persist the settings through just logistic conditions thanks to boskid
+    - Actually switch the proxy between players/indexes
+    - Link whilst the character is on the same surface
+    - Lets not bother with a force restriction
+    - Give the uplink 500 health
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2025. 03. 02
+  Info:
+    - Setup the proxy container prototype
+    - Place a proxy when constructing the uplink
+    - Setup entitydata wrapper
+    - Clean up proxy when the uplink goes away
+    - Prepare the basis of the gui
+    - Fix the relative gui anchor
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2025. 03. 02
+  Info:
+    - Decouple the uplink from the assembling-machine-1
+    - Unlock a craftable recipe with technology
+    - Shift down the texture a bit
+    - Add the not-rotatable flag
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2025. 03. 01
+  Info:
+    - Setup the hurricane framework
+    - Fix weird jumping frame slices
+    - Inflate the selection and collision boxes
+    - Use the forward-then-backward animation mode for now
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2025. 03. 01
+  Info:
+    - Initial commit
