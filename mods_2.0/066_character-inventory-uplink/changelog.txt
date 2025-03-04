@@ -12,6 +12,7 @@ Date: ????
     - Remove completed todo
     - Stash wip approval draft
     - Update readme
+    - Add thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 03. 03
