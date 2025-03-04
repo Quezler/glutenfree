@@ -2,7 +2,6 @@ require("shared")
 local mod = {}
 
 -- todo: deactivate when not actively linked
--- todo: wire passthrough
 -- todo: admin check
 -- todo: check_player performance
 -- todo: cleaner combinator mapping
@@ -46,6 +45,17 @@ function mod.on_created_entity(event)
     position = entity.position,
   }
   entitydata.proxy.destructible = false
+
+  do
+    local red_wire = entity.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+    local green_wire = entity.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+
+    local proxy_red_wire = entitydata.proxy.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+    local proxy_green_wire = entitydata.proxy.get_wire_connector(defines.wire_connector_id.circuit_green, true)
+
+    assert(red_wire.connect_to(proxy_red_wire, false, defines.wire_origin.script))
+    assert(green_wire.connect_to(proxy_green_wire, false, defines.wire_origin.script))
+  end
 
   -- todo: admin check with entity.last_user or something
 
