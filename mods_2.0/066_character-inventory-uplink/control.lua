@@ -37,6 +37,8 @@ function mod.on_created_entity(event)
 
     text_top = nil,
     text_bottom = nil,
+
+    -- approved = true,
   })
 
   entitydata.proxy = entity.surface.create_entity{
@@ -88,6 +90,10 @@ function mod.on_created_entity(event)
   if logistic_condition.comparator ~= "<" then
     mod.entitydata_set_inventory(entitydata, mod.roundabout_from_comparator[logistic_condition.comparator].inventory_index)
   end
+
+  -- if entity.last_user and mod.player_needs_approval(entity.last_user, entitydata) then
+  --   entitydata.approved = false
+  -- end
 end
 
 for _, event in ipairs({
@@ -322,3 +328,10 @@ function mod.update_custom_status(entitydata)
   entitydata.entity.custom_status = {label = {"character-inventory-uplink-status.connected"}, diode = defines.entity_status_diode.green}
   entitydata.entity.disabled_by_script = false
 end
+
+-- function mod.player_needs_approval(player, entitydata)
+--   if player.admin then return false end
+--   if entitydata.player == player then return false end
+
+--   return true
+-- end
