@@ -289,6 +289,18 @@ script.on_event(defines.events.on_player_changed_surface, function(event)
   mod.check_player(player)
 end)
 
+script.on_event(defines.events.on_player_left_game, function(event)
+  -- game.print("on_player_changed_surface")
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  mod.check_player(player)
+end)
+
+script.on_event(defines.events.on_player_joined_game, function(event)
+  -- game.print("on_player_changed_surface")
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  mod.check_player(player)
+end)
+
 function mod.update_custom_status(entitydata)
   if entitydata.player == nil then
     entitydata.entity.custom_status = {label = {"character-inventory-uplink-status.no-player-selected"}, diode = defines.entity_status_diode.red}

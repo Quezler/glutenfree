@@ -8,6 +8,7 @@ Date: ????
     - Use a roundabout instead of several maps
     - Luarender the target player and ammo
     - Add custom entity status
+    - Add untested player left/joined event listeners
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 03. 03
