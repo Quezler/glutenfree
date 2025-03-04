@@ -145,19 +145,6 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   end
 end)
 
-local function luaentity_get_cargo_bays(entity)
-  local cargo_bays = {}
-
-  for _, cargo_hatch in ipairs(entity.cargo_hatches) do
-    local owner = cargo_hatch.owner
-    if owner.type == "cargo-bay" then
-      cargo_bays[owner.unit_number] = owner
-    end
-  end
-
-  return cargo_bays
-end
-
 function mod.update_proxies_for_surface(surface)
   local surfacedata = storage.surfacedata[surface.index]
   local map = {}
@@ -169,12 +156,12 @@ function mod.update_proxies_for_surface(surface)
   end
 
   for _, space_platform_hub in pairs(surfacedata.space_platform_hubs) do
-    for _, cargo_bay in pairs(luaentity_get_cargo_bays(space_platform_hub.entity)) do
+    for _, cargo_bay in ipairs(space_platform_hub.entity.get_cargo_bays()) do
       map[cargo_bay.unit_number] = {entity = space_platform_hub.entity}
     end
   end
   for _, cargo_landing_pad in pairs(surfacedata.cargo_landing_pads) do
-    for _, cargo_bay in pairs(luaentity_get_cargo_bays(cargo_landing_pad.entity)) do
+    for _, cargo_bay in ipairs(cargo_landing_pad.entity.get_cargo_bays()) do
       map[cargo_bay.unit_number] = {entity = cargo_landing_pad.entity}
     end
   end
