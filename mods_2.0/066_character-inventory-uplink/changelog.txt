@@ -9,6 +9,7 @@ Date: ????
     - Luarender the target player and ammo
     - Add custom entity status
     - Add untested player left/joined event listeners
+    - Remove completed todo
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 03. 03

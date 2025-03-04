@@ -1,7 +1,6 @@
 require("shared")
 local mod = {}
 
--- todo: deactivate when not actively linked
 -- todo: admin check
 -- todo: check_player performance
 
