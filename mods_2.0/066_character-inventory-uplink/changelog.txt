@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Add todos
     - Pass signal through the wire
+    - Add circuit connector graphics
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 03. 03

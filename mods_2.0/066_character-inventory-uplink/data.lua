@@ -129,3 +129,21 @@ local technology = {
 }
 
 data:extend{entity, proxy, item, recipe, technology}
+
+entity.circuit_connector = circuit_connector_definitions.create_vector
+(
+  universal_connector_template,
+  {
+    {variation = 22, main_offset = util.by_pixel(-17.5, 53), shadow_offset = util.by_pixel(-17.5, 53), show_shadow = true},
+    {variation = 22, main_offset = util.by_pixel(-17.5, 53), shadow_offset = util.by_pixel(-17.5, 53), show_shadow = true},
+    {variation = 22, main_offset = util.by_pixel(-17.5, 53), shadow_offset = util.by_pixel(-17.5, 53), show_shadow = true},
+    {variation = 22, main_offset = util.by_pixel(-17.5, 53), shadow_offset = util.by_pixel(-17.5, 53), show_shadow = true},
+  }
+)
+
+entity.circuit_connector[1].sprites.connector_main = nil
+entity.circuit_connector[1].sprites.connector_shadow = nil
+entity.circuit_connector[1].sprites.led_red = util.empty_sprite()
+entity.circuit_connector[1].sprites.led_green = util.empty_sprite()
+entity.circuit_connector[1].sprites.led_blue = util.empty_sprite()
+entity.circuit_connector[1].sprites.led_blue_off = nil
