@@ -1,9 +1,13 @@
+local item_sounds = require("__base__.prototypes.item_sounds")
+local item_tints = require("__base__.prototypes.item-tints")
+local sounds = require("__base__.prototypes.entity.sounds")
+
 require("shared")
 
 local factories = {
   {
     i = 1,
-    order = "a",
+    order = "c-a",
     selection_box = {{-4.0, -4.0}, {4.0, 4.0}},
     collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
     max_health = 2000,
@@ -14,10 +18,13 @@ local factories = {
       scale = 0.5,
       shift = {1.5, 0},
     },
+    ingredients = {
+      {type = "item", name = "wooden-chest", amount = 1},
+    },
   },
   {
     i = 2,
-    order = "b",
+    order = "c-b",
     selection_box = {{-6.0, -6.0}, {6.0, 6.0}},
     collision_box = {{-5.8, -5.8}, {5.8, 5.8}},
     max_health = 3500,
@@ -28,10 +35,13 @@ local factories = {
       scale = 0.5,
       shift = {1.5, 0},
     },
+    ingredients = {
+      {type = "item", name = "iron-chest", amount = 1},
+    },
   },
   {
     i = 3,
-    order = "c",
+    order = "c-c",
     selection_box = {{-8.0, -8.0}, {8.0, 8.0}},
     collision_box = {{-7.8, -7.8}, {7.8, 7.8}},
     max_health = 5000,
@@ -41,6 +51,9 @@ local factories = {
       height = 608 * 2,
       scale = 0.5,
       shift = {2, -0.09375},
+    },
+    ingredients = {
+      {type = "item", name = "steel-chest", amount = 1},
     },
   },
 }
@@ -69,7 +82,6 @@ for _, factory in ipairs(factories) do
 
     -- the factory does not benefit from any quality bonuses
     quality_affects_inventory_size = false,
-    quality_indicator_scale = 0,
 
     picture = {
       layers = {
@@ -84,6 +96,9 @@ for _, factory in ipairs(factories) do
     },
 
     circuit_wire_max_distance = default_circuit_wire_max_distance,
+    open_sound = sounds.machine_open,
+    close_sound = sounds.machine_close,
+    impact_category = "metal",
   }
 
   for key, value in pairs(factory.picture_properties) do
@@ -91,5 +106,30 @@ for _, factory in ipairs(factories) do
     container.picture.layers[2][key] = value
   end
 
-  data:extend{container}
+  local item = {
+    type = "item",
+    name = container.name,
+    icon = container.icon,
+    subgroup = "tool",
+    order = factory.order,
+    inventory_move_sound = item_sounds.metal_chest_inventory_move,
+    pick_sound = item_sounds.metal_chest_inventory_pickup,
+    drop_sound = item_sounds.metal_chest_inventory_move,
+    place_result = container.name,
+    stack_size = 1,
+    flags = {"not-stackable"},
+    random_tint_color = item_tints.iron_rust
+  }
+
+  container.minable = {mining_time = 0.5, result = item.name}
+
+  local recipe = {
+    type = "recipe",
+    name = item.name,
+    enabled = true,
+    ingredients = factory.ingredients,
+    results = {{type="item", name=item.name, amount=1}}
+  }
+
+  data:extend{container, item, recipe}
 end

@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Setup the factory container prototypes
+    - Give the magic huts an item w/recipe
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 04
