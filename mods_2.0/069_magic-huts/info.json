@@ -21,6 +21,8 @@
         "base >= 2.0.38",
         "? space-age",
 
-        "factoryplanner"
+        "factoryplanner",
+        
+        "(?) factorissimo-2-notnotmelon"
     ]
 }
