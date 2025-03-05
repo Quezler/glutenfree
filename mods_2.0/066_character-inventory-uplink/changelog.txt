@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
-Date: ????
+Date: 2025. 03. 05
   Info:
     - Swap suit-plug-outlet with radio-station graphics
     - Hide character recipe from player crafting
