@@ -82,6 +82,7 @@ do -- internal recipe
     results = {},
 
     category = recipe_category.name,
+    hidden = true,
   }
 
   entity.crafting_categories = {recipe_category.name}
