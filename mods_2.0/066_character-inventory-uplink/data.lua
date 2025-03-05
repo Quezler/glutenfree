@@ -4,9 +4,9 @@ local proxy_tint = {0.8, 0.1, 0.3}
 
 local Hurricane = require("graphics/hurricane")
 local skin = Hurricane.crafter({
-  name = "suit-plug-outlet",
-  width = 1280, height = 580,
-  total_frames = 16, rows = 2, -- custom
+  name = "radio-station",
+  width = 1280, height = 870,
+  total_frames = 20, rows = 3, -- custom
   shadow_width = 400, shadow_height = 350,
   shift = {0, 0.25}, -- custom
 })
