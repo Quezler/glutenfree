@@ -21,6 +21,7 @@ local factories = {
     ingredients = {
       {type = "item", name = "wooden-chest", amount = 1},
     },
+    per_rocket = 4,
   },
   {
     i = 2,
@@ -38,6 +39,7 @@ local factories = {
     ingredients = {
       {type = "item", name = "iron-chest", amount = 1},
     },
+    per_rocket = 2,
   },
   {
     i = 3,
@@ -55,6 +57,7 @@ local factories = {
     ingredients = {
       {type = "item", name = "steel-chest", amount = 1},
     },
+    per_rocket = 1,
   },
 }
 
@@ -118,7 +121,8 @@ for _, factory in ipairs(factories) do
     place_result = container.name,
     stack_size = 1,
     flags = {"not-stackable"},
-    random_tint_color = item_tints.iron_rust
+    random_tint_color = item_tints.iron_rust,
+    weight = 1000*kg / factory.per_rocket,
   }
 
   container.minable = {mining_time = 0.5, result = item.name}
