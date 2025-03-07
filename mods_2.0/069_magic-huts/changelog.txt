@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Add the magic hut button next to products
+    - Detect the selected factory
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 05
