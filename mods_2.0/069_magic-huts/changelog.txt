@@ -5,6 +5,7 @@ Date: ????
     - Add the magic hut button next to products
     - Detect the selected factory
     - Strip the trashed icon from the factory name
+    - Move the factoryplanner code into its own file
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 05
