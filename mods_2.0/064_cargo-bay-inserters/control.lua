@@ -169,11 +169,13 @@ function mod.update_proxies_for_surface(surface)
   -- game.print(serpent.line(map))
 
   for _, cargo_bay in pairs(surfacedata.cargo_bays) do
-    local target = map[cargo_bay.entity.unit_number]
-    if target then
-      cargo_bay.proxy.proxy_target_entity = target.entity
-    else
-      cargo_bay.proxy.proxy_target_entity = nil
+    if cargo_bay.entity.valid then
+      local target = map[cargo_bay.entity.unit_number]
+      if target then
+        cargo_bay.proxy.proxy_target_entity = target.entity
+      else
+        cargo_bay.proxy.proxy_target_entity = nil
+      end
     end
   end
 end
