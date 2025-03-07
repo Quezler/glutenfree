@@ -41,7 +41,7 @@ local function get_selected_factory(factories)
   for _, factory in ipairs(factories.children) do
     if factory.children[2].toggled then
       return {
-        name = factory.children[2].caption,
+        name = factory.children[2].caption:gsub("^%[img=fp_trash_red%] ", ""),
       }
     end
   end
@@ -54,7 +54,6 @@ script.on_event(defines.events.on_gui_click, function(event)
     game.print("summon magic hut!")
 
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    game.print(serpent.block(player.gui.screen.children_names))
 
     local root = event.element
     while not is_fp_frame_main_dialog[root.name] do
@@ -64,7 +63,6 @@ script.on_event(defines.events.on_gui_click, function(event)
 
     -- game.print(LuaGuiPrettyPrint.path_to_tag(root, "on_gui_click", "duplicate_factory", "root"))
     local factories = root.children[2].children[1].children[2].children[2].children[1]
-    LuaGuiPrettyPrint.dump(factories)
     local factory = get_selected_factory(factories)
     game.print(serpent.line(factory))
   end
