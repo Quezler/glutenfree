@@ -156,13 +156,17 @@ function mod.update_proxies_for_surface(surface)
   end
 
   for _, space_platform_hub in pairs(surfacedata.space_platform_hubs) do
-    for _, cargo_bay in ipairs(space_platform_hub.entity.get_cargo_bays()) do
-      map[cargo_bay.unit_number] = {entity = space_platform_hub.entity}
+    if space_platform_hub.entity.valid then
+      for _, cargo_bay in ipairs(space_platform_hub.entity.get_cargo_bays()) do
+        map[cargo_bay.unit_number] = {entity = space_platform_hub.entity}
+      end
     end
   end
   for _, cargo_landing_pad in pairs(surfacedata.cargo_landing_pads) do
-    for _, cargo_bay in ipairs(cargo_landing_pad.entity.get_cargo_bays()) do
-      map[cargo_bay.unit_number] = {entity = cargo_landing_pad.entity}
+    if cargo_landing_pad.entity.valid then
+      for _, cargo_bay in ipairs(cargo_landing_pad.entity.get_cargo_bays()) do
+        map[cargo_bay.unit_number] = {entity = cargo_landing_pad.entity}
+      end
     end
   end
 
