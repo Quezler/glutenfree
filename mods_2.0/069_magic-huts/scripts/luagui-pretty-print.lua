@@ -55,3 +55,21 @@ function LuaGuiPrettyPrint.dump(element, silent)
 
   return node
 end
+
+function LuaGuiPrettyPrint.path_to_element(element, breadcrumbs)
+  breadcrumbs = breadcrumbs or ""
+
+  local breadcrumb = nil
+  if element.name ~= "" then
+    breadcrumb = "[\"" .. element.name .. "\"]"
+  else
+    breadcrumb = ".children[" .. element.get_index_in_parent() .. "]"
+  end
+
+  local parent = element.parent
+  if parent then
+    return LuaGuiPrettyPrint.path_to_element(parent, breadcrumb .. breadcrumbs)
+  else
+    return "player.gui." .. element.name .. breadcrumbs
+  end
+end
