@@ -17,7 +17,7 @@ local recipe_category = {
 
 local active_recipe = {
   type = "recipe",
-  name = mod_prefix .. "active",
+  name = mod_prefix .. "animation-loop",
 
   icon = "__core__/graphics/icons/parametrise.png",
 
@@ -61,6 +61,7 @@ local function create_assembling_machine_prototypes(directory, name)
     flags = {"player-creation"},
   }
 
+  entity.icon_draw_specification = {scale = 0}
   entity.fixed_recipe = active_recipe.name
   entity.fixed_quality = "normal"
 

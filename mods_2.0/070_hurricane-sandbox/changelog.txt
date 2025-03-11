@@ -17,6 +17,7 @@ Date: ????
     - Fix loading machines with no icon
     - Put each assembler into their animation loop
     - Note about the intention and shadows
+    - Rename animation loop
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 11
