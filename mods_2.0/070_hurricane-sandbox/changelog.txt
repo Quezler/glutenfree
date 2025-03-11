@@ -8,6 +8,7 @@ Date: ????
     - Put the critical information inside the lua file
     - Handle sprites subdirectory and outlying conduit case
     - Fix lua table key indicator
+    - Ponder
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 11
