@@ -9,6 +9,7 @@ Date: ????
     - Handle sprites subdirectory and outlying conduit case
     - Fix lua table key indicator
     - Ponder
+    - Avoid manual splitting shenanigans
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 11

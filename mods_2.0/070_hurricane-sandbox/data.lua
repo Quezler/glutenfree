@@ -11,4 +11,4 @@ require("shared")
 -- })
 
 local Hurricane = require("hurricane")
-local skin = Hurricane.assembling_machine(mod_directory .. "/factorio-sprites/radio-station")
+local skin = Hurricane.assembling_machine(mod_directory .. "/factorio-sprites", "radio-station")

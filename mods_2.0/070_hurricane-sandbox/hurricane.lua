@@ -1,12 +1,9 @@
-require("util")
-
 local Hurricane = {}
 
-function Hurricane.assembling_machine(directory)
-  local parts = util.split(directory, "/")
-  local config = require(directory .. "/" .. parts[#parts])
+function Hurricane.assembling_machine(directory, name)
+  local config = require(string.format("%s/%s/%s.lua", directory, name, name))
 
-  -- error(serpent.block(config))
+  error(serpent.block(config))
 end
 
 return Hurricane
