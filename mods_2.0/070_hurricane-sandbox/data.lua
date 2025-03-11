@@ -24,8 +24,8 @@ local entity = {
   localised_name = skin.name,
   icon = skin.icon,
 
-  selection_box = {{-3.0, -3.0}, {3.0, 3.0}},
-  collision_box = {{-2.8, -2.8}, {2.8, 2.8}},
+  selection_box = skin.selection_box,
+  collision_box = skin.collision_box,
 
   crafting_categories = {crafting_category.name},
   graphics_set = skin.graphics_set,

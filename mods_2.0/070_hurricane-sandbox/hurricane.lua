@@ -1,17 +1,19 @@
+require("util")
+
 local Hurricane = {}
 
 function Hurricane.assembling_machine(directory, name)
   local prefix = string.format("%s/%s/%s", directory, name, name)
   local config = require(prefix .. ".lua")
 
-  config.rows = config.rows or 8
   config.columns = config.columns or 8
+  config.rows = config.rows or math.min(8, math.ceil(config.frames / config.columns))
 
   local total_rows = math.ceil(config.frames / config.columns)
   local total_stripes = math.ceil(total_rows / config.rows)
 
   local frame_width = config.animation.width / config.columns
-  local frame_height = config.animation.height / config.columns
+  local frame_height = config.animation.height / config.rows
 
   local function get_stripes(s)
     local stripes = {}
@@ -20,16 +22,24 @@ function Hurricane.assembling_machine(directory, name)
       stripes[i] = {
         filename = string.format(s, i),
         width_in_frames = config.columns,
-        height_in_frames = math.min(8, total_rows - (8 * (i - 1))),
+        height_in_frames = math.min(config.rows, total_rows - (config.rows * (i - 1))),
       }
     end
 
     return stripes
   end
 
+  local dimensions = util.split(config.size, "x")
+  local half_x = dimensions[1] / 2
+  local half_y = dimensions[2] / 2
+
   return {
     name = name,
     icon = prefix .. "-icon.png",
+
+    selection_box = {{-half_x, -half_y}, {half_x, half_y}},
+    collision_box = {{-half_x - 0.2, -half_y - 0.2}, {half_x - 0.2, half_y - 0.2}},
+
     graphics_set = {
       animation =
       {

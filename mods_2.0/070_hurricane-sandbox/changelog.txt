@@ -11,6 +11,7 @@ Date: ????
     - Ponder
     - Avoid manual splitting shenanigans
     - Load the game without prototype errors
+    - Fix loading animations with less than 57 frames
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 11
