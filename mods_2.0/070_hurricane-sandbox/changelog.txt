@@ -5,6 +5,7 @@ Date: ????
     - Import prior work
     - List all assets and manually map them
     - Create a lua file in each asset directory
+    - Put the critical information inside the lua file
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 11

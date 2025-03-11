@@ -33,9 +33,25 @@ const figma = [
 
 function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
 {
-    $lua_pathname = $directory->getPathname() . '/' . $directory->getFilename() . '.lua';
+    $lua = ["return {"];
 
-    file_put_contents($lua_pathname, "return {}");
+    $lua[] = sprintf('  name: "%s",', $directory->getFilename());
+    $lua[] = sprintf('  size: "%s",', figma[$directory->getFilename()][0]);
+    $lua[] = sprintf('  frames: %s,', figma[$directory->getFilename()][1]);
+
+    $lua[] = '';
+    list($width, $height) = getimagesize($directory->getPathname() . '/' . $directory->getFilename() . '-hr-animation-1.png');
+    $lua[] = sprintf('  animation_width: %s,', $width);
+    $lua[] = sprintf('  animation_height: %s,', $height);
+
+    $lua[] = '';
+    list($width, $height) = getimagesize($directory->getPathname() . '/' . $directory->getFilename() . '-hr-shadow.png');
+    $lua[] = sprintf('  shadow_width: %s,', $width);
+    $lua[] = sprintf('  shadow_height: %s,', $height);
+
+    $lua[] = "}";
+    $lua_pathname = $directory->getPathname() . '/' . $directory->getFilename() . '.lua';
+    file_put_contents($lua_pathname, implode("\n", $lua) . "\n");
 }
 
 function check_directory($directory): void
