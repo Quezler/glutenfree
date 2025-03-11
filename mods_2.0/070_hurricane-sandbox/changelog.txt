@@ -7,6 +7,7 @@ Date: ????
     - Create a lua file in each asset directory
     - Put the critical information inside the lua file
     - Handle sprites subdirectory and outlying conduit case
+    - Fix lua table key indicator
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 11
