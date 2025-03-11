@@ -33,24 +33,34 @@ const figma = [
 
 function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
 {
+    $filename = $directory->getFilename();
+    $pathname = $directory->getPathname();
+    $subdirectory = $pathname . '/sprites';
+    if (file_exists($subdirectory))
+        $pathname = $subdirectory;
+
     $lua = ["return {"];
 
-    $lua[] = sprintf('  name: "%s",', $directory->getFilename());
-    $lua[] = sprintf('  size: "%s",', figma[$directory->getFilename()][0]);
-    $lua[] = sprintf('  frames: %s,', figma[$directory->getFilename()][1]);
+    $lua[] = sprintf('  name: "%s",', $filename);
+    $lua[] = sprintf('  size: "%s",', figma[$filename][0]);
+    $lua[] = sprintf('  frames: %s,', figma[$filename][1]);
 
-    $lua[] = '';
-    list($width, $height) = getimagesize($directory->getPathname() . '/' . $directory->getFilename() . '-hr-animation-1.png');
-    $lua[] = sprintf('  animation_width: %s,', $width);
-    $lua[] = sprintf('  animation_height: %s,', $height);
+    $hr_animation_1_suffix = '-hr-animation-1.png';
+    if ($filename == 'conduit')
+        $hr_animation_1_suffix = '-hr-animation.png';
 
+    list($width, $height) = getimagesize($pathname . '/' . $filename . $hr_animation_1_suffix);
     $lua[] = '';
-    list($width, $height) = getimagesize($directory->getPathname() . '/' . $directory->getFilename() . '-hr-shadow.png');
-    $lua[] = sprintf('  shadow_width: %s,', $width);
-    $lua[] = sprintf('  shadow_height: %s,', $height);
+    $lua[] = sprintf('  animation_file_width: %s,', $width);
+    $lua[] = sprintf('  animation_file_height: %s,', $height);
+
+    list($width, $height) = getimagesize($pathname . '/' . $filename . '-hr-shadow.png');
+    $lua[] = '';
+    $lua[] = sprintf('  shadow_file_width: %s,', $width);
+    $lua[] = sprintf('  shadow_file_height: %s,', $height);
 
     $lua[] = "}";
-    $lua_pathname = $directory->getPathname() . '/' . $directory->getFilename() . '.lua';
+    $lua_pathname = $directory->getPathname() . '/' . $filename . '.lua';
     file_put_contents($lua_pathname, implode("\n", $lua) . "\n");
 }
 
