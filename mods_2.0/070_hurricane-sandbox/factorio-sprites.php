@@ -4,20 +4,6 @@
 // (cd mods_2.0/070_hurricane-sandbox && php factorio-sprites.php)
 require __DIR__ . '/vendor/autoload.php';
 
-function check_directory($directory): void
-{
-    $finder = new \Symfony\Component\Finder\Finder();
-    foreach ($finder->in($directory)->directories()->depth(0)->sortByName() as $folder) {
-        if (!str_starts_with($folder->getFilename(), '_')) {
-//            dump($folder->getRealPath());
-            echo $folder->getBasename() . "\n";
-        }
-    }
-}
-
-//check_directory(__DIR__ . '/factorio-sprites/_deprecated');
-check_directory(__DIR__ . '/factorio-sprites');
-
 // todo: imagecreatefrompng() & imagecolorat()
 const figma = [
     "alloy-forge"           => [ "8x8" , 120],
@@ -44,3 +30,24 @@ const figma = [
     "scrubber"              => [ "3x3" ,  60],
     "thermal-plant"         => [ "6x6" ,  60],
 ];
+
+function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
+{
+    $lua_pathname = $directory->getPathname() . '/' . $directory->getFilename() . '.lua';
+
+    file_put_contents($lua_pathname, "return {}");
+}
+
+function check_directory($directory): void
+{
+    $finder = new \Symfony\Component\Finder\Finder();
+    foreach ($finder->in($directory)->directories()->depth(0)->sortByName() as $folder) {
+        if (!str_starts_with($folder->getFilename(), '_')) {
+            echo $folder->getBasename() . "\n";
+            create_lua_file($folder);
+        }
+    }
+}
+
+//check_directory(__DIR__ . '/factorio-sprites/_deprecated');
+check_directory(__DIR__ . '/factorio-sprites');
