@@ -14,58 +14,87 @@ local crafting_category = {
   type = "recipe-category",
   name = mod_name,
 }
+data:extend{crafting_category}
 
 local Hurricane = require("hurricane")
-local skin = Hurricane.assembling_machine(mod_directory .. "/factorio-sprites", "radio-station")
 
-local order = string.format("hurricane[%s]", skin.name)
+local function create_assembling_machine_prototypes(directory, name)
+  local skin = Hurricane.assembling_machine(directory, name)
 
-local entity = {
-  type = "assembling-machine",
-  name = skin.name,
-  localised_name = skin.name,
+  local order = string.format("hurricane[%s]", skin.name)
+  local prefix = "hurricane-"
 
-  icon = skin.icon,
-  order = order,
+  local entity = {
+    type = "assembling-machine",
+    name = prefix .. skin.name,
+    localised_name = skin.name,
 
-  selection_box = skin.selection_box,
-  collision_box = skin.collision_box,
+    icon = skin.icon,
+    order = order,
 
-  crafting_categories = {crafting_category.name},
-  graphics_set = skin.graphics_set,
+    selection_box = skin.selection_box,
+    collision_box = skin.collision_box,
 
-  crafting_speed = 1,
-  energy_usage = "1GW",
-  energy_source = {type = "void"},
-  minable = {mining_time = 0.2},
+    crafting_categories = {crafting_category.name},
+    graphics_set = skin.graphics_set,
 
-  flags = {"player-creation"},
-}
+    crafting_speed = 1,
+    energy_usage = "1GW",
+    energy_source = {type = "void"},
+    minable = {mining_time = 0.2},
 
-local item = {
-  type = "item",
-  name = skin.name,
+    flags = {"player-creation"},
+  }
 
-  icon = skin.icon,
-  order = order,
+  local item = {
+    type = "item",
+    name = entity.name,
 
-  stack_size = 10,
-  weight = 100*kg,
-  place_result = entity.name,
-}
-entity.minable.result = item.name
+    icon = skin.icon,
+    order = order,
 
-local recipe = {
-  type = "recipe",
-  name = item.name,
+    stack_size = 10,
+    weight = 100*kg,
+    place_result = entity.name,
+  }
+  entity.minable.result = item.name
 
-  icon = item.icon,
-  energy_required = 0.1,
+  local recipe = {
+    type = "recipe",
+    name = item.name,
 
-  ingredients = {},
-  results = {
-    {type = "item", name = item.name, amount = 1},
-  },
-}
+    icon = item.icon,
+    energy_required = 0.1,
 
-data:extend{crafting_category, entity, item, recipe}
+    ingredients = {},
+    results = {
+      {type = "item", name = item.name, amount = 1},
+    },
+  }
+
+  data:extend{entity, item, recipe}
+end
+
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "alloy-forge")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "arc-furnace")
+-- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "atom-forge")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "chemical-stager")
+-- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "conduit")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "core-extractor")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "electricity-extractor")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "fluid-extractor")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "fusion-reactor")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "glass-furnace")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "gravity-assembler")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "greenhouse")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "item-extractor")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "lumber-mill")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "manufacturer")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "oxidizer")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "pathogen-lab")
+-- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "photometric-lab")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "quantum-stabilizer")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "radio-station")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "research-center")
+-- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "scrubber")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "thermal-plant")

@@ -46,6 +46,9 @@ function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
     $lua[] = sprintf('  frames = %s,', figma[$filename][1]);
     $lua[] = '';
 
+    $lua[] = sprintf('  directory_suffix = "%s",', file_exists($subdirectory) ? '/sprites' : '');
+    $lua[] = '';
+
     $hr_animation_1_suffix = '-hr-animation-1.png';
     if ($filename == 'conduit')
         $hr_animation_1_suffix = '-hr-animation.png';

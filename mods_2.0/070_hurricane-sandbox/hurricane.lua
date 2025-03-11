@@ -5,6 +5,7 @@ local Hurricane = {}
 function Hurricane.assembling_machine(directory, name)
   local prefix = string.format("%s/%s/%s", directory, name, name)
   local config = require(prefix .. ".lua")
+  local prefix = string.format("%s/%s/%s", directory, name .. config.directory_suffix, name)
 
   config.columns = config.columns or math.min(8, config.frames)
   config.rows = config.rows or math.min(8, math.ceil(config.frames / config.columns))
