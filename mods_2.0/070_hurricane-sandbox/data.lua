@@ -18,11 +18,15 @@ local crafting_category = {
 local Hurricane = require("hurricane")
 local skin = Hurricane.assembling_machine(mod_directory .. "/factorio-sprites", "radio-station")
 
+local order = string.format("hurricane[%s]", skin.name)
+
 local entity = {
   type = "assembling-machine",
   name = skin.name,
   localised_name = skin.name,
+
   icon = skin.icon,
+  order = order,
 
   selection_box = skin.selection_box,
   collision_box = skin.collision_box,
@@ -33,9 +37,35 @@ local entity = {
   crafting_speed = 1,
   energy_usage = "1GW",
   energy_source = {type = "void"},
-  minable = {mining_time = 1},
+  minable = {mining_time = 0.2},
 
   flags = {"player-creation"},
 }
 
-data:extend{crafting_category, entity}
+local item = {
+  type = "item",
+  name = skin.name,
+
+  icon = skin.icon,
+  order = order,
+
+  stack_size = 10,
+  weight = 100*kg,
+  place_result = entity.name,
+}
+entity.minable.result = item.name
+
+local recipe = {
+  type = "recipe",
+  name = item.name,
+
+  icon = item.icon,
+  energy_required = 0.1,
+
+  ingredients = {},
+  results = {
+    {type = "item", name = item.name, amount = 1},
+  },
+}
+
+data:extend{crafting_category, entity, item, recipe}

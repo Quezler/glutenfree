@@ -6,7 +6,7 @@ function Hurricane.assembling_machine(directory, name)
   local prefix = string.format("%s/%s/%s", directory, name, name)
   local config = require(prefix .. ".lua")
 
-  config.columns = config.columns or 8
+  config.columns = config.columns or math.min(8, config.frames)
   config.rows = config.rows or math.min(8, math.ceil(config.frames / config.columns))
 
   local total_rows = math.ceil(config.frames / config.columns)
