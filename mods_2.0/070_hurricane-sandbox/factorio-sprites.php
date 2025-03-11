@@ -48,7 +48,11 @@ function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
 
     $icon_pathname = $pathname . '/' . $filename . '-icon.png';
     if (! file_exists($icon_pathname))
-        $lua[] = '  icon = "__core__/graphics/icons/unknown.png",';
+        $lua[] = '  icon_missing = true,';
+
+    $emission_pathname = $pathname . '/' . $filename . '-hr-emission-1.png';
+    if (! file_exists($emission_pathname))
+        $lua[] = '  emission_missing = true,';
 
     $lua[] = sprintf('  directory_suffix = "%s",', file_exists($subdirectory) ? '/sprites' : '');
     $lua[] = '';

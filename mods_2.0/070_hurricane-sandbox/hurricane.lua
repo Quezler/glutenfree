@@ -34,9 +34,9 @@ function Hurricane.assembling_machine(directory, name)
   local half_x = dimensions[1] / 2
   local half_y = dimensions[2] / 2
 
-  return {
+  local to_return = {
     name = name,
-    icon = config.icon and config.icon or prefix .. "-icon.png",
+    icon = config.icon_missing and  "__core__/graphics/icons/unknown.png" or prefix .. "-icon.png",
 
     selection_box = {{-half_x, -half_y}, {half_x, half_y}},
     collision_box = {{-half_x - 0.2, -half_y - 0.2}, {half_x - 0.2, half_y - 0.2}},
@@ -89,6 +89,12 @@ function Hurricane.assembling_machine(directory, name)
       },
     }
   }
+
+  if config.emission_missing then
+    to_return.graphics_set.working_visualisations = nil
+  end
+
+  return to_return
 end
 
 return Hurricane

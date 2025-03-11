@@ -115,5 +115,5 @@ create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "path
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "quantum-stabilizer")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "radio-station")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "research-center")
--- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "scrubber")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "scrubber")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "thermal-plant")
