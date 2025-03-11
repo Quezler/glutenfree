@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Import prior work
+    - List all assets and manually map them
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 11

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "symfony/finder": "^5.4",
+        "symfony/var-dumper": "^5.4"
+    }
+}
