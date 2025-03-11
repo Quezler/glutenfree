@@ -79,7 +79,7 @@ create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "allo
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "arc-furnace")
 -- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "atom-forge")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "chemical-stager")
--- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "conduit")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "conduit")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "core-extractor")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "electricity-extractor")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "fluid-extractor")

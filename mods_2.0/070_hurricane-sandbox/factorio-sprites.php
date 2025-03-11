@@ -46,18 +46,18 @@ function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
     $lua[] = sprintf('  frames = %s,', figma[$filename][1]);
     $lua[] = '';
 
+    $icon_pathname = $pathname . '/' . $filename . '-icon.png';
+    if (! file_exists($icon_pathname))
+        $lua[] = '  icon = "__core__/graphics/icons/unknown.png",';
+
     $lua[] = sprintf('  directory_suffix = "%s",', file_exists($subdirectory) ? '/sprites' : '');
     $lua[] = '';
 
-    $hr_animation_1_suffix = '-hr-animation-1.png';
-    if ($filename == 'conduit')
-        $hr_animation_1_suffix = '-hr-animation.png';
+    list($width1, $height1) = getimagesize($pathname . '/' . $filename . '-hr-animation-1.png');
+    $lua[] = sprintf('  animation = {width = %d, height = %d},', $width1, $height1);
 
-    list($width, $height) = getimagesize($pathname . '/' . $filename . $hr_animation_1_suffix);
-    $lua[] = sprintf('  animation = {width = %d, height = %d},', $width, $height);
-
-    list($width, $height) = getimagesize($pathname . '/' . $filename . '-hr-shadow.png');
-    $lua[] = sprintf('  shadow = {width = %d, height = %d},', $width, $height);
+    list($width2, $height2) = getimagesize($pathname . '/' . $filename . '-hr-shadow.png');
+    $lua[] = sprintf('  shadow = {width = %d, height = %d},', $width2, $height2);
 
     $lua[] = "}";
     $lua_pathname = $directory->getPathname() . '/' . $filename . '.lua';

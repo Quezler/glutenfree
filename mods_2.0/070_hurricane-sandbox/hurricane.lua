@@ -36,7 +36,7 @@ function Hurricane.assembling_machine(directory, name)
 
   return {
     name = name,
-    icon = prefix .. "-icon.png",
+    icon = config.icon and config.icon or prefix .. "-icon.png",
 
     selection_box = {{-half_x, -half_y}, {half_x, half_y}},
     collision_box = {{-half_x - 0.2, -half_y - 0.2}, {half_x - 0.2, half_y - 0.2}},
