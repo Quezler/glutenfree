@@ -10,11 +10,26 @@ require("shared")
 --   shift = {0, 0.25}, -- custom
 -- })
 
-local crafting_category = {
+local recipe_category = {
   type = "recipe-category",
   name = mod_name,
 }
-data:extend{crafting_category}
+
+local active_recipe = {
+  type = "recipe",
+  name = mod_prefix .. "active",
+
+  icon = "__core__/graphics/icons/parametrise.png",
+
+  energy_required = 1,
+
+  ingredients = {},
+  results = {},
+
+  category = recipe_category.name,
+  hidden = true,
+}
+data:extend{recipe_category, active_recipe}
 
 local Hurricane = require("hurricane")
 
@@ -35,7 +50,7 @@ local function create_assembling_machine_prototypes(directory, name)
     selection_box = skin.selection_box,
     collision_box = skin.collision_box,
 
-    crafting_categories = {crafting_category.name},
+    crafting_categories = {recipe_category.name},
     graphics_set = skin.graphics_set,
 
     crafting_speed = 1,
@@ -45,6 +60,9 @@ local function create_assembling_machine_prototypes(directory, name)
 
     flags = {"player-creation"},
   }
+
+  entity.fixed_recipe = active_recipe.name
+  entity.fixed_quality = "normal"
 
   local item = {
     type = "item",

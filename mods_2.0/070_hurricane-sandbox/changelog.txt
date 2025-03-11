@@ -15,6 +15,7 @@ Date: ????
     - Add item and free recipe
     - Load (almost) all of hurricane's sprites as assemblers
     - Fix loading machines with no icon
+    - Put each assembler into their animation loop
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 11
