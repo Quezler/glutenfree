@@ -1,3 +1,6 @@
+Pretty much a mod made for the personal use of Hurricane046 in order to possibly assist him with checking his sprites ingame,
+you're free to take a peek, but just assume that issues like some building having a bigger shadow just means a new format upstream.
+
 Note that this mod does **not** work out of the box, and is **not** intended to be used on multiplayer at all.
 
 The purpose for this mod is to load all of Hurricane's assets using a generic loader,
