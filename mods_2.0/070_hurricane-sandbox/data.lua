@@ -96,7 +96,7 @@ end
 
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "alloy-forge")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "arc-furnace")
--- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "atom-forge")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "atom-forge")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "chemical-stager")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "conduit")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "core-extractor")
@@ -111,7 +111,7 @@ create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "lumb
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "manufacturer")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "oxidizer")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "pathogen-lab")
--- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "photometric-lab")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "photometric-lab")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "quantum-stabilizer")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "radio-station")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "research-center")

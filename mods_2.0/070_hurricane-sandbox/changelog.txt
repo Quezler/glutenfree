@@ -19,6 +19,7 @@ Date: ????
     - Note about the intention and shadows
     - Rename animation loop
     - Support entities with no emission graphics
+    - Fix multiple emission support
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 11

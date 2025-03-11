@@ -69,29 +69,44 @@ function Hurricane.assembling_machine(directory, name)
           }
         }
       },
-      working_visualisations =
-      {
-        {
-          fadeout = true,
-          animation = {
-            priority = "high",
-            width = frame_width,
-            height = frame_height,
-            frame_count = config.frames,
-            animation_speed = 1,
-            scale = 0.5,
-            draw_as_glow = true,
-            blend_mode = "additive",
-            stripes = get_stripes(prefix .. "-hr-emission-%d.png"),
-            shift = config.shift,
-          },
-        },
-      },
+      working_visualisations = {},
     }
   }
 
-  if config.emission_missing then
-    to_return.graphics_set.working_visualisations = nil
+  if config.emissions == 1 then
+    table.insert(to_return.graphics_set.working_visualisations, {
+      fadeout = true,
+      animation = {
+        priority = "high",
+        width = frame_width,
+        height = frame_height,
+        frame_count = config.frames,
+        animation_speed = 1,
+        scale = 0.5,
+        draw_as_glow = true,
+        blend_mode = "additive",
+        stripes = get_stripes(prefix .. "-hr-emission-%d.png"),
+        shift = config.shift,
+      }
+    })
+  elseif config.emissions > 1 then
+    for i = 1, config.emissions do
+      table.insert(to_return.graphics_set.working_visualisations, {
+        fadeout = true,
+        animation = {
+          priority = "high",
+          width = frame_width,
+          height = frame_height,
+          frame_count = config.frames,
+          animation_speed = 1,
+          scale = 0.5,
+          draw_as_glow = true,
+          blend_mode = "additive",
+          stripes = get_stripes(prefix .. string.format("-hr-emission%d-%%d.png", i)),
+          shift = config.shift,
+        }
+      })
+    end
   end
 
   return to_return
