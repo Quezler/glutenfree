@@ -10,5 +10,32 @@ require("shared")
 --   shift = {0, 0.25}, -- custom
 -- })
 
+local crafting_category = {
+  type = "recipe-category",
+  name = mod_name,
+}
+
 local Hurricane = require("hurricane")
 local skin = Hurricane.assembling_machine(mod_directory .. "/factorio-sprites", "radio-station")
+
+local entity = {
+  type = "assembling-machine",
+  name = skin.name,
+  localised_name = skin.name,
+  icon = skin.icon,
+
+  selection_box = {{-3.0, -3.0}, {3.0, 3.0}},
+  collision_box = {{-2.8, -2.8}, {2.8, 2.8}},
+
+  crafting_categories = {crafting_category.name},
+  graphics_set = skin.graphics_set,
+
+  crafting_speed = 1,
+  energy_usage = "1GW",
+  energy_source = {type = "void"},
+  minable = {mining_time = 1},
+
+  flags = {"player-creation"},
+}
+
+data:extend{crafting_category, entity}

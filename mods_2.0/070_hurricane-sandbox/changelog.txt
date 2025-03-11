@@ -10,6 +10,7 @@ Date: ????
     - Fix lua table key indicator
     - Ponder
     - Avoid manual splitting shenanigans
+    - Load the game without prototype errors
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 03. 11
