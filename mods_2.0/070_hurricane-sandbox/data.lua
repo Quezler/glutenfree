@@ -37,11 +37,10 @@ local function create_assembling_machine_prototypes(directory, name)
   local skin = Hurricane.assembling_machine(directory, name)
 
   local order = string.format("hurricane[%s]", skin.name)
-  local prefix = "hurricane-"
 
   local entity = {
     type = "assembling-machine",
-    name = prefix .. skin.name,
+    name = mod_prefix .. skin.name,
     localised_name = skin.name,
 
     icon = skin.icon,
