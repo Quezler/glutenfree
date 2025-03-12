@@ -41,7 +41,7 @@ local function create_assembling_machine_prototypes(directory, name)
   local entity = {
     type = "assembling-machine",
     name = mod_prefix .. skin.name,
-    localised_name = skin.name,
+    localised_name = skin.localised_name,
 
     icon = skin.icon,
     order = order,

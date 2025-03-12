@@ -42,6 +42,7 @@ function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
     $lua = ["return {"];
 
     $lua[] = sprintf('  name = "%s",', $filename);
+    $lua[] = sprintf('  localised_name = "%s",', ucwords(str_replace('-', ' ', $filename)));
     $lua[] = sprintf('  size = "%s",', figma[$filename][0]);
     $lua[] = sprintf('  frames = %s,', figma[$filename][1]);
     $lua[] = '';

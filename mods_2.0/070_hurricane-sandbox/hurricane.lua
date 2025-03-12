@@ -36,6 +36,7 @@ function Hurricane.assembling_machine(directory, name)
 
   local to_return = {
     name = name,
+    localised_name = config.localised_name,
     icon = config.icon_missing and  "__core__/graphics/icons/unknown.png" or prefix .. "-icon.png",
 
     selection_box = {{-half_x, -half_y}, {half_x, half_y}},
