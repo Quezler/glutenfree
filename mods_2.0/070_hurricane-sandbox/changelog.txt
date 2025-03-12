@@ -16,6 +16,7 @@ Date: ????
     - Tweak deprecated sprites
     - Comment out deprecated sprites
     - Remove `// frames wrong on figma` after figma update
+    - Remove the need for composer/symfony
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 11

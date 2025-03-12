@@ -2,7 +2,7 @@
 
 // (cd mods_2.0/070_hurricane-sandbox && composer install)
 // (cd mods_2.0/070_hurricane-sandbox && php factorio-sprites.php)
-require __DIR__ . '/vendor/autoload.php';
+//require __DIR__ . '/vendor/autoload.php';
 
 // todo: imagecreatefrompng() & imagecolorat()
 const figma = [
@@ -35,10 +35,9 @@ const figma = [
     "thermal-plant"         => [ "6x6" ,  80],
 ];
 
-function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
+function create_lua_file($directory, $filename): void
 {
-    $filename = $directory->getFilename();
-    $pathname = $directory->getPathname();
+    $pathname = $directory . '/' . $filename;
     $subdirectory = $pathname . '/sprites';
     if (file_exists($subdirectory))
         $pathname = $subdirectory;
@@ -88,17 +87,16 @@ function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
     $lua[] = sprintf('  shadow = {width = %d, height = %d},', $width2, $height2);
 
     $lua[] = "}";
-    $lua_pathname = $directory->getPathname() . '/' . $filename . '.lua';
+    $lua_pathname = $pathname . '/' . $filename . '.lua';
     file_put_contents($lua_pathname, implode("\n", $lua) . "\n");
 }
 
 function check_directory($directory): void
 {
-    $finder = new \Symfony\Component\Finder\Finder();
-    foreach ($finder->in($directory)->directories()->depth(0)->sortByName() as $folder) {
-        if (!str_starts_with($folder->getFilename(), '_')) {
-            echo $folder->getBasename() . "\n";
-            create_lua_file($folder);
+    foreach (scandir($directory) as $folder) {
+        if (!str_starts_with($folder, '.') && !str_starts_with($folder, '_')) {
+            echo $folder . "\n";
+            create_lua_file($directory, $folder);
         }
     }
 }
