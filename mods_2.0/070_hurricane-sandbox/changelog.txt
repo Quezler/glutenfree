@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.3
-Date: ????
+Version: 1.0.0
+Date: 2025. 03. 11
   Info:
     - Place all the entities on the map for review
     - Space them out based on their width
