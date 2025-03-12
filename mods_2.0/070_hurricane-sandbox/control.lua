@@ -17,6 +17,8 @@ script.on_init(function()
   storage.periodically_toggle = {}
 
   local surface = game.get_surface("nauvis") --[[@as LuaSurface]]
+  surface.ticks_per_day = 60 * 20
+  surface.always_day = false
   local force = game.forces["player"]
 
   local x = 3

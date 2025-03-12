@@ -10,6 +10,7 @@ Date: ????
     - Have an inactive and an active row for each entity
     - Fix oversized collision box
     - Toggle some entities periodically
+    - Set a 20 second day-night cycle
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 11
