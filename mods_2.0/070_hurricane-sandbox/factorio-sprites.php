@@ -8,7 +8,7 @@ require __DIR__ . '/vendor/autoload.php';
 const figma = [
     "_convector"            => [ "5x5" ,  80],
     "_oxidizer"             => [ "4x4" ,  60],
-    "_train-loader"         => [ "2x2" ,  40],
+    "_train-loader"         => [ "4x4" ,  40],
 
     "alloy-forge"           => [ "8x8" , 120],
     "arc-furnace"           => [ "5x5" ,  50], // frames wrong on figma

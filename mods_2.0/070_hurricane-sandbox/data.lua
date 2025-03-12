@@ -33,14 +33,14 @@ data:extend{recipe_category, active_recipe}
 
 local Hurricane = require("hurricane")
 
-local function create_assembling_machine_prototypes(directory, name)
+local function create_assembling_machine_prototypes(directory, name, ingame_name)
   local skin = Hurricane.assembling_machine(directory, name)
 
   local order = string.format("hurricane[%s]", skin.name)
 
   local entity = {
     type = "assembling-machine",
-    name = mod_prefix .. skin.name,
+    name = mod_prefix .. (ingame_name or skin.name),
     localised_name = skin.localised_name,
 
     icon = skin.icon,
@@ -94,7 +94,7 @@ local function create_assembling_machine_prototypes(directory, name)
 end
 
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "convector")
-create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "oxidizer")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "oxidizer", "old-oxidizer")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "train-loader")
 
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "alloy-forge")
