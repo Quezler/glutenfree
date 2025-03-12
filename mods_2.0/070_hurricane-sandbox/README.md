@@ -25,6 +25,10 @@ return {
 
 Once you have created such a file either manually or through running the `factorio-sprites.php` script this mod can load them.
 
+Security:
+This mod contains arbitrary code, before running the included php script have the contents checked by someone who knows PHP,
+whilst the code is not written with malicious intent it is important to understand that it is not safely sandboxed like LUA mods are.
+
 Usage:
 - unzip the mod
 - download the factorio-sprites folder from his google drive and unzip it in this mod's folder
