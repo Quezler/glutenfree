@@ -50,7 +50,7 @@ script.on_init(function()
   end
 end)
 
-script.on_nth_tick(60, function(event)
+script.on_nth_tick(60 * 1.5, function(event)
   for unit_number, entity in pairs(storage.periodically_toggle) do
     if entity.valid then
       entity.disabled_by_script = not entity.disabled_by_script
