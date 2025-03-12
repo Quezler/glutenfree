@@ -25,7 +25,7 @@ const figma = [
     "item-extractor"        => [ "8x8" ,   1],
     "lumber-mill"           => [ "8x8" ,  80],
     "manufacturer"          => [ "4x4" , 128],
-    "oxidizer"              => [ "2x2" ,  60],
+    "oxidizer"              => [ "4x4" ,  60], // frames wrong on figma
     "pathogen-lab"          => [ "7x7" ,  60],
     "photometric-lab"       => [ "5x5" ,  80],
     "quantum-stabilizer"    => [ "6x6" , 100],
@@ -43,6 +43,13 @@ function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
     if (file_exists($subdirectory))
         $pathname = $subdirectory;
 
+    { // the conduit and the deprecated oxidizer have no numbers here yet, for the convenience of the mod we update them:
+        if (file_exists($pathname . '/' . $filename . '-hr-emission.png'))
+            rename($pathname . '/' . $filename . '-hr-emission.png', $pathname . '/' . $filename . '-hr-emission-1.png');
+        if (file_exists($pathname . '/' . $filename . '-hr-animation.png'))
+            rename($pathname . '/' . $filename . '-hr-animation.png', $pathname . '/' . $filename . '-hr-animation-1.png');
+    }
+
     $lua = ["return {"];
 
     $figma = figma[$filename] ?? figma['_' . $filename];
@@ -57,15 +64,10 @@ function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
     if (! file_exists($icon_pathname))
         $lua[] = '  icon_missing = true,';
 
-    $emission_suffix = '-hr-emission-1.png';
-    $old_emission_suffix = '-hr-emission.png';
-    if (file_exists($pathname . '/' . $filename . $old_emission_suffix))
-        $emission_suffix = $old_emission_suffix;
-
     {
         $emissions = 1;
 
-        $emission_pathname = $pathname . '/' . $filename . $emission_suffix;
+        $emission_pathname = $pathname . '/' . $filename . '-hr-emission-1.png';
         if (! file_exists($emission_pathname))
             $emissions = 0;
 
@@ -79,12 +81,7 @@ function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
     $lua[] = sprintf('  directory_suffix = "%s",', file_exists($subdirectory) ? '/sprites' : '');
     $lua[] = '';
 
-    $animation_suffix = '-hr-animation-1.png';
-    $old_animation_suffix = '-hr-animation.png';
-    if (file_exists($pathname . '/' . $filename . $old_animation_suffix))
-        $animation_suffix = $old_animation_suffix;
-
-    list($width1, $height1) = getimagesize($pathname . '/' . $filename . $animation_suffix);
+    list($width1, $height1) = getimagesize($pathname . '/' . $filename . '-hr-animation-1.png');
     $lua[] = sprintf('  animation = {width = %d, height = %d},', $width1, $height1);
 
     list($width2, $height2) = getimagesize($pathname . '/' . $filename . '-hr-shadow.png');
