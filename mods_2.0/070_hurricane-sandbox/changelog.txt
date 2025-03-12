@@ -18,6 +18,7 @@ Date: ????
     - Remove `// frames wrong on figma` after figma update
     - Remove the need for composer/symfony
     - Increase toggle interval
+    - Update readme
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 11
