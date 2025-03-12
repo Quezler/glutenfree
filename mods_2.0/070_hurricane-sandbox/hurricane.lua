@@ -40,7 +40,7 @@ function Hurricane.assembling_machine(directory, name)
     icon = config.icon_missing and  "__core__/graphics/icons/unknown.png" or prefix .. "-icon.png",
 
     selection_box = {{-half_x, -half_y}, {half_x, half_y}},
-    collision_box = {{-half_x - 0.2, -half_y - 0.2}, {half_x - 0.2, half_y - 0.2}},
+    collision_box = {{-half_x + 0.2, -half_y + 0.2}, {half_x - 0.2, half_y - 0.2}},
 
     graphics_set = {
       animation =
