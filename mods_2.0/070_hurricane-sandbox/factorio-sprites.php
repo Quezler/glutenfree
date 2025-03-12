@@ -7,7 +7,7 @@ require __DIR__ . '/vendor/autoload.php';
 // todo: imagecreatefrompng() & imagecolorat()
 const figma = [
     "alloy-forge"           => [ "8x8" , 120],
-    "arc-furnace"           => [ "5x5" ,  60],
+    "arc-furnace"           => [ "5x5" ,  50],
     "atom-forge"            => [ "6x6" ,  80],
     "chemical-stager"       => [ "5x5" ,  60],
     "conduit"               => [ "3x3" ,  60],

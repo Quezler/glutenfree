@@ -13,3 +13,6 @@ Usage:
 - start a new singleplayer game
 
 - graphics by [Hurricane046](https://mods.factorio.com/user/Hurricane046)
+
+Common issues:
+- is the sprite scrolling? check the frame count against the amount of frames in the sprite by hand.
