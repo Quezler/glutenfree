@@ -44,6 +44,11 @@ Common issues:
 - oversized shadow? reach out to the artist.
 - sprite scrolling vertically? count and confirm the amount of frames in the files by hand.
 
+Planned features:
+- using a surface instead of nauvis
+- showing off machine/recipe tints
+- easy copy pasting to other mods
+
 For support ping `@Quezler` in the `#mod-dev-graphics` channel on the Factorio discord.
 - graphics by [Hurricane046](https://mods.factorio.com/user/Hurricane046)
 
