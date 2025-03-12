@@ -6,6 +6,7 @@ Date: ????
     - Space them out based on their width
     - Fix arc furnace animation
     - Give each entity a cleaner localised name
+    - Fix thermal plant sprite count
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 11

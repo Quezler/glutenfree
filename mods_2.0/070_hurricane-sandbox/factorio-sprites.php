@@ -7,7 +7,7 @@ require __DIR__ . '/vendor/autoload.php';
 // todo: imagecreatefrompng() & imagecolorat()
 const figma = [
     "alloy-forge"           => [ "8x8" , 120],
-    "arc-furnace"           => [ "5x5" ,  50],
+    "arc-furnace"           => [ "5x5" ,  50], // frames wrong on figma
     "atom-forge"            => [ "6x6" ,  80],
     "chemical-stager"       => [ "5x5" ,  60],
     "conduit"               => [ "3x3" ,  60],
@@ -28,7 +28,7 @@ const figma = [
     "radio-station"         => [ "2x2" ,  20],
     "research-center"       => [ "9x9" ,  80],
     "scrubber"              => [ "3x3" ,  60],
-    "thermal-plant"         => [ "6x6" ,  60],
+    "thermal-plant"         => [ "6x6" ,  80], // frames wrong on figma
 ];
 
 function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
