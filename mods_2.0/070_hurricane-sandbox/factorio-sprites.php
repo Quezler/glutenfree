@@ -11,7 +11,7 @@ const figma = [
     "_train-loader"         => [ "4x4" ,  40],
 
     "alloy-forge"           => [ "8x8" , 120],
-    "arc-furnace"           => [ "5x5" ,  50], // frames wrong on figma
+    "arc-furnace"           => [ "5x5" ,  50],
     "atom-forge"            => [ "6x6" ,  80],
     "chemical-stager"       => [ "5x5" ,  60],
     "conduit"               => [ "3x3" ,  60],
@@ -25,14 +25,14 @@ const figma = [
     "item-extractor"        => [ "8x8" ,   1],
     "lumber-mill"           => [ "8x8" ,  80],
     "manufacturer"          => [ "4x4" , 128],
-    "oxidizer"              => [ "4x4" ,  60], // frames wrong on figma
+    "oxidizer"              => [ "4x4" ,  60],
     "pathogen-lab"          => [ "7x7" ,  60],
     "photometric-lab"       => [ "5x5" ,  80],
     "quantum-stabilizer"    => [ "6x6" , 100],
     "radio-station"         => [ "2x2" ,  20],
     "research-center"       => [ "9x9" ,  80],
     "scrubber"              => [ "3x3" ,  60],
-    "thermal-plant"         => [ "6x6" ,  80], // frames wrong on figma
+    "thermal-plant"         => [ "6x6" ,  80],
 ];
 
 function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void

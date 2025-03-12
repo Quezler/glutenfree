@@ -15,6 +15,7 @@ Date: ????
     - Get the deprecated sprites to load
     - Tweak deprecated sprites
     - Comment out deprecated sprites
+    - Remove `// frames wrong on figma` after figma update
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 11
