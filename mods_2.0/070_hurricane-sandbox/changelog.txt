@@ -9,6 +9,7 @@ Date: ????
     - Fix thermal plant sprite count
     - Have an inactive and an active row for each entity
     - Fix oversized collision box
+    - Toggle some entities periodically
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 11

@@ -14,6 +14,8 @@ for _, prototype in pairs(prototypes.entity) do
 end
 
 script.on_init(function()
+  storage.periodically_toggle = {}
+
   local surface = game.get_surface("nauvis") --[[@as LuaSurface]]
   local force = game.forces["player"]
 
@@ -27,14 +29,31 @@ script.on_init(function()
       force = force,
       position = {x, -6},
     }
-    entity1.disabled_by_script = true
 
     local entity2 = surface.create_entity{
       name = name,
       force = force,
       position = {x, -6 - highest_tile_height - 1},
     }
+    storage.periodically_toggle[entity2.unit_number] = entity2
+
+    local entity3 = surface.create_entity{
+      name = name,
+      force = force,
+      position = {x, -6 - highest_tile_height - 1 - highest_tile_height - 1},
+    }
+    entity3.disabled_by_script = true
 
     x = x + (prototype.tile_width / 2) + 1
+  end
+end)
+
+script.on_nth_tick(60, function(event)
+  for unit_number, entity in pairs(storage.periodically_toggle) do
+    if entity.valid then
+      entity.disabled_by_script = not entity.disabled_by_script
+    else
+      storage.periodically_toggle[unit_number] = nil
+    end
   end
 end)
