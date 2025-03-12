@@ -11,6 +11,7 @@ Date: ????
     - Fix oversized collision box
     - Toggle some entities periodically
     - Set a 20 second day-night cycle
+    - Do an attempt at making the deprecated sprites load
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 11

@@ -6,6 +6,10 @@ require __DIR__ . '/vendor/autoload.php';
 
 // todo: imagecreatefrompng() & imagecolorat()
 const figma = [
+    "_convector"            => [ "5x5" ,  80],
+    "_oxidizer"             => [ "4x4" ,  60],
+    "_train-loader"         => [ "2x2" ,  40],
+
     "alloy-forge"           => [ "8x8" , 120],
     "arc-furnace"           => [ "5x5" ,  50], // frames wrong on figma
     "atom-forge"            => [ "6x6" ,  80],
@@ -21,7 +25,7 @@ const figma = [
     "item-extractor"        => [ "8x8" ,   1],
     "lumber-mill"           => [ "8x8" ,  80],
     "manufacturer"          => [ "4x4" , 128],
-    "oxidizer"              => [ "4x4" ,  60],
+    "oxidizer"              => [ "2x2" ,  60],
     "pathogen-lab"          => [ "7x7" ,  60],
     "photometric-lab"       => [ "5x5" ,  80],
     "quantum-stabilizer"    => [ "6x6" , 100],
@@ -41,20 +45,27 @@ function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
 
     $lua = ["return {"];
 
+    $figma = figma[$filename] ?? figma['_' . $filename];
+
     $lua[] = sprintf('  name = "%s",', $filename);
     $lua[] = sprintf('  localised_name = "%s",', ucwords(str_replace('-', ' ', $filename)));
-    $lua[] = sprintf('  size = "%s",', figma[$filename][0]);
-    $lua[] = sprintf('  frames = %s,', figma[$filename][1]);
+    $lua[] = sprintf('  size = "%s",', $figma[0]);
+    $lua[] = sprintf('  frames = %s,', $figma[1]);
     $lua[] = '';
 
     $icon_pathname = $pathname . '/' . $filename . '-icon.png';
     if (! file_exists($icon_pathname))
         $lua[] = '  icon_missing = true,';
 
+    $emission_suffix = '-hr-emission-1.png';
+    $old_emission_suffix = '-hr-emission.png';
+    if (file_exists($pathname . '/' . $filename . $old_emission_suffix))
+        $emission_suffix = $old_emission_suffix;
+
     {
         $emissions = 1;
 
-        $emission_pathname = $pathname . '/' . $filename . '-hr-emission-1.png';
+        $emission_pathname = $pathname . '/' . $filename . $emission_suffix;
         if (! file_exists($emission_pathname))
             $emissions = 0;
 
@@ -68,7 +79,12 @@ function create_lua_file(\Symfony\Component\Finder\SplFileInfo $directory): void
     $lua[] = sprintf('  directory_suffix = "%s",', file_exists($subdirectory) ? '/sprites' : '');
     $lua[] = '';
 
-    list($width1, $height1) = getimagesize($pathname . '/' . $filename . '-hr-animation-1.png');
+    $animation_suffix = '-hr-animation-1.png';
+    $old_animation_suffix = '-hr-animation.png';
+    if (file_exists($pathname . '/' . $filename . $old_animation_suffix))
+        $animation_suffix = $old_animation_suffix;
+
+    list($width1, $height1) = getimagesize($pathname . '/' . $filename . $animation_suffix);
     $lua[] = sprintf('  animation = {width = %d, height = %d},', $width1, $height1);
 
     list($width2, $height2) = getimagesize($pathname . '/' . $filename . '-hr-shadow.png');
@@ -90,5 +106,5 @@ function check_directory($directory): void
     }
 }
 
-//check_directory(__DIR__ . '/factorio-sprites/_deprecated');
+check_directory(__DIR__ . '/factorio-sprites/_deprecated');
 check_directory(__DIR__ . '/factorio-sprites');

@@ -93,6 +93,10 @@ local function create_assembling_machine_prototypes(directory, name)
   data:extend{entity, item, recipe}
 end
 
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "convector")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "oxidizer")
+create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "train-loader")
+
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "alloy-forge")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "arc-furnace")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "atom-forge")
