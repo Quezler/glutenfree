@@ -20,6 +20,7 @@ Date: ????
     - Increase toggle interval
     - Update readme
     - Add security notice infront of the usage instructions
+    - Add mod portal reason
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 11

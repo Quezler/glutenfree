@@ -28,6 +28,7 @@ Once you have created such a file either manually or through running the `factor
 Security:
 This mod contains arbitrary code, before running the included php script have the contents checked by someone who knows PHP,
 whilst the code is not written with malicious intent it is important to understand that it is not safely sandboxed like LUA mods are.
+The reason this mod is on the portal at all is for discoverability and noticing when updates are available, it is never usable as-is.
 
 Usage:
 - unzip the mod
