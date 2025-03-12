@@ -103,5 +103,5 @@ function check_directory($directory): void
     }
 }
 
-check_directory(__DIR__ . '/factorio-sprites/_deprecated');
+//check_directory(__DIR__ . '/factorio-sprites/_deprecated');
 check_directory(__DIR__ . '/factorio-sprites');

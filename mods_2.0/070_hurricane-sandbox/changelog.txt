@@ -14,6 +14,7 @@ Date: ????
     - Do an attempt at making the deprecated sprites load
     - Get the deprecated sprites to load
     - Tweak deprecated sprites
+    - Comment out deprecated sprites
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 03. 11

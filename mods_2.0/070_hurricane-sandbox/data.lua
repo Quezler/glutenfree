@@ -93,9 +93,9 @@ local function create_assembling_machine_prototypes(directory, name, ingame_name
   data:extend{entity, item, recipe}
 end
 
-create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "convector")
-create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "oxidizer", "old-oxidizer")
-create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "train-loader")
+-- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "convector")
+-- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "oxidizer", "old-oxidizer")
+-- create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites/_deprecated", "train-loader")
 
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "alloy-forge")
 create_assembling_machine_prototypes(mod_directory .. "/factorio-sprites", "arc-furnace")
