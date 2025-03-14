@@ -3,6 +3,7 @@ Version: 0.0.4
 Date: ????
   Info:
     - Grab the products, byproducts & ingredients
+    - Default serpent to sort keys
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07

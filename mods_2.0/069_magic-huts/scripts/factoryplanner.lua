@@ -80,7 +80,7 @@ function Factoryplanner.on_gui_click(event)
   local factory = get_selected_factory(root)
   game.print(serpent.line(factory))
 
-  game.print(serpent.line(get_item_box_contents(root, 1), {sortkeys = false}))
-  game.print(serpent.line(get_item_box_contents(root, 2), {sortkeys = false}))
-  game.print(serpent.line(get_item_box_contents(root, 3), {sortkeys = false}))
+  game.print(serpent_line(get_item_box_contents(root, 1)))
+  game.print(serpent_line(get_item_box_contents(root, 2)))
+  game.print(serpent_line(get_item_box_contents(root, 3)))
 end
