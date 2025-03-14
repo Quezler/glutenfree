@@ -58,8 +58,8 @@ local function get_class_and_name(sprite_path)
   return sprite_path:match('([^/]+)/([^/]+)')
 end
 
-local function get_item_box_contents(root, item_box_index)
-  local sprite_buttons = root.children[2].children[2].children[3].children[item_box_index].children[2].children[1].children[1].children
+local function get_item_box_contents(item_boxes, item_box_index)
+  local sprite_buttons = item_boxes[item_box_index].children[2].children[1].children[1].children
 
   local contents = {}
   for _, sprite_button in ipairs(sprite_buttons) do
@@ -69,6 +69,20 @@ local function get_item_box_contents(root, item_box_index)
     end
   end
   return contents
+end
+
+local function all_products_satisfied(item_boxes)
+  local sprite_buttons = item_boxes[1].children[2].children[1].children[1].children
+
+  for _, sprite_button in ipairs(sprite_buttons) do
+    if sprite_button.sprite ~= "utility/add" then
+      if sprite_button.style.name ~= "flib_slot_button_green" then
+        return false
+      end
+    end
+  end
+
+  return true
 end
 
 -- after adding the mod anyone who was on the districts page gets sent back to the main page (on_configuration_changed?),
@@ -81,9 +95,18 @@ function Factoryplanner.on_gui_click(event)
   if not factory then return end
   game.print(serpent.line(factory))
 
-  game.print(serpent_line(get_item_box_contents(root, 1)))
-  game.print(serpent_line(get_item_box_contents(root, 2)))
-  game.print(serpent_line(get_item_box_contents(root, 3)))
+  local item_boxes = root.children[2].children[2].children[3].children
+
+  if not all_products_satisfied(item_boxes) then
+    return player.create_local_flying_text{create_at_cursor = true, text = "not all products are 100% satisfied."}
+  end
+
+  local products = get_item_box_contents(item_boxes, 1)
+  local byproducts = get_item_box_contents(item_boxes, 2)
+  local ingredients = get_item_box_contents(item_boxes, 3)
+  game.print("products: " .. serpent_line(products))
+  game.print("byproducts: " .. serpent_line(byproducts))
+  game.print("ingredients: " .. serpent_line(ingredients))
 
   local timescale = player.gui.screen["fp_frame_main_dialog"].children[2].children[2].children[1].children[5].children[1].switch_state
   if timescale ~= "right" then
