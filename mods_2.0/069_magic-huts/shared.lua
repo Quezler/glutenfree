@@ -8,7 +8,7 @@ mod_directory = "__" .. mod_name .. "__"
 ---@param options? serpent.options
 ---@return string
 function serpent_line(value, options)
-  _options = {sortKeys = false}
+  _options = {sortkeys = false}
   for k, v in pairs(options or {}) do _options[k] = v end
   return serpent.line(value, _options)
 end
@@ -17,7 +17,7 @@ end
 ---@param options? serpent.options
 ---@return string
 function serpent_block(value, options)
-  _options = {sortKeys = false}
+  _options = {sortkeys = false}
   for k, v in pairs(options or {}) do _options[k] = v end
   return serpent.block(value, _options)
 end

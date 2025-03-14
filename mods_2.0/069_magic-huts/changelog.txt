@@ -8,6 +8,7 @@ Date: ????
     - Check if all products are 100% satisfied
     - Micro
     - Grab the power and pollution
+    - Fix sortKeys typo
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07
