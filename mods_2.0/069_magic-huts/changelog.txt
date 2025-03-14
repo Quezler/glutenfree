@@ -9,6 +9,7 @@ Date: ????
     - Micro
     - Grab the power and pollution
     - Fix sortKeys typo
+    - Extract the recipe and machine from the table
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07

@@ -122,4 +122,37 @@ function Factoryplanner.on_gui_click(event)
   local pollution = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][2])
   -- log("power: " .. tostring(power))
   -- log("pollution: " .. tostring(pollution))
+
+  local production_table = root.children[2].children[2].children[4].children[2].children[1]
+  local production_table_column = {}
+  local production_table_columns = 1 -- accounting for the empty-widget at the end of each row
+  local production_table_children = production_table.children
+
+  for i, cell in ipairs(production_table_children) do
+    if cell.type ~= "label" then break end
+    production_table_columns = production_table_columns + 1
+    if type(cell.caption) == "table" then
+      production_table_column[cell.caption[1]] = i
+    end
+  end
+
+  local production_table_rows = #production_table_children / production_table_columns
+  for row = 2, production_table_rows do
+    local offset = (row - 1) * production_table_columns
+
+    local cell_recipe  = production_table_children[offset + production_table_column["fp.pu_recipe" ]]
+    local cell_machine = production_table_children[offset + production_table_column["fp.pu_machine"]]
+
+    local machine_style_name = cell_machine.children[1].style.name
+    if machine_style_name == "flib_slot_button_pink_small" or machine_style_name == "flib_slot_button_purple_small" then
+      return player.create_local_flying_text{create_at_cursor = true, text = "machines must not be limited."}
+    end
+
+    log(cell_recipe.children[1].sprite)
+    log(cell_machine.children[1].sprite)
+    log(cell_machine.children[1].number)
+
+    -- LuaGuiPrettyPrint.dump(cell_recipe)
+    -- LuaGuiPrettyPrint.dump(cell_machine)
+  end
 end
