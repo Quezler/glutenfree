@@ -100,11 +100,12 @@ function Factoryplanner.on_gui_click(event)
     return player.create_local_flying_text{create_at_cursor = true, text = "not all products are 100% satisfied."}
   end
 
-  local timescale = player.gui.screen["fp_frame_main_dialog"].children[2].children[2].children[1].children[5].children[1].switch_state
+  local timescale = root.children[2].children[2].children[1].children[5].children[1].switch_state
   if timescale ~= "right" then
     return player.create_local_flying_text{create_at_cursor = true, text = "/minute is required."}
   end
 
+  -- todo: the order is not guaranteed, and the button can even be hidden
   local first_rate_button_active = root.children[2].children[2].children[1].children[6]["table_views"].children[1].toggled
   if not first_rate_button_active then
     return player.create_local_flying_text{create_at_cursor = true, text = "items/m is required."}
@@ -117,6 +118,8 @@ function Factoryplanner.on_gui_click(event)
   -- game.print("byproducts: " .. serpent_line(byproducts))
   -- game.print("ingredients: " .. serpent_line(ingredients))
 
-  
-
+  local power     = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2])
+  local pollution = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][2])
+  -- log("power: " .. tostring(power))
+  -- log("pollution: " .. tostring(pollution))
 end
