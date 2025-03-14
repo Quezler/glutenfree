@@ -170,6 +170,8 @@ function Factoryplanner.on_gui_click(event)
       return player.create_local_flying_text{create_at_cursor = true, text = "machines must not be limited."}
     end
 
+    local x_of_this_building = math.ceil(cell_machine.children[1].number or 0)
+
     -- buildings
     if cell_machine.children[1].sprite ~= "fp_generic_assembler" then
       local recipe_type, recipe_name = split_class_and_name(cell_recipe.children[1].sprite)
@@ -188,7 +190,7 @@ function Factoryplanner.on_gui_click(event)
         type = "item",
         name = item_to_place_this.name,
         quality = "normal",
-        count = item_to_place_this.count * (cell_machine.children[1].number or 0),
+        count = item_to_place_this.count * x_of_this_building,
       })
     end
 
@@ -201,7 +203,7 @@ function Factoryplanner.on_gui_click(event)
           type = "item",
           name = module_name,
           quality = "normal",
-          count = module_button.number * (cell_machine.children[1].number or 0),
+          count = module_button.number * x_of_this_building,
         })
       end
     end

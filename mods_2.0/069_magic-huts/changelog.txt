@@ -12,6 +12,7 @@ Date: ????
     - Extract the recipe and machine from the table
     - Blacklist rockets, drills & offshore pumps
     - Sum all the entities and modules
+    - Do round up the buildings
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07
