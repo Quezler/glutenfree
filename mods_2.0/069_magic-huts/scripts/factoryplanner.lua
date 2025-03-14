@@ -96,17 +96,9 @@ function Factoryplanner.on_gui_click(event)
   game.print(serpent.line(factory))
 
   local item_boxes = root.children[2].children[2].children[3].children
-
   if not all_products_satisfied(item_boxes) then
     return player.create_local_flying_text{create_at_cursor = true, text = "not all products are 100% satisfied."}
   end
-
-  local products = get_item_box_contents(item_boxes, 1)
-  local byproducts = get_item_box_contents(item_boxes, 2)
-  local ingredients = get_item_box_contents(item_boxes, 3)
-  game.print("products: " .. serpent_line(products))
-  game.print("byproducts: " .. serpent_line(byproducts))
-  game.print("ingredients: " .. serpent_line(ingredients))
 
   local timescale = player.gui.screen["fp_frame_main_dialog"].children[2].children[2].children[1].children[5].children[1].switch_state
   if timescale ~= "right" then
@@ -117,5 +109,14 @@ function Factoryplanner.on_gui_click(event)
   if not first_rate_button_active then
     return player.create_local_flying_text{create_at_cursor = true, text = "items/m is required."}
   end
+
+  local products = get_item_box_contents(item_boxes, 1)
+  local byproducts = get_item_box_contents(item_boxes, 2)
+  local ingredients = get_item_box_contents(item_boxes, 3)
+  -- game.print("products: " .. serpent_line(products))
+  -- game.print("byproducts: " .. serpent_line(byproducts))
+  -- game.print("ingredients: " .. serpent_line(ingredients))
+
+  
 
 end

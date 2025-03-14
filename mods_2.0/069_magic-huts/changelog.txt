@@ -6,6 +6,7 @@ Date: ????
     - Default serpent to sort keys
     - Validate timescale/rate
     - Check if all products are 100% satisfied
+    - Micro
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07
