@@ -91,6 +91,19 @@ local entity_type_blacklisted = util.list_to_map({
   "offshore-pump",
 })
 
+local function add_to_contents(contents, type_name_quality_count)
+  for _, content in ipairs(contents) do
+    if content.type == type_name_quality_count.type
+    and content.name == type_name_quality_count.name
+    and content.quality == type_name_quality_count.quality then
+      content.count = content.count + type_name_quality_count.count
+      return
+    end
+  end
+
+  table.insert(contents, type_name_quality_count)
+end
+
 -- after adding the mod anyone who was on the districts page gets sent back to the main page (on_configuration_changed?),
 -- in either case it means our magic button will always be initialized since even when switching it seems to persist fine.
 function Factoryplanner.on_gui_click(event)
@@ -157,17 +170,46 @@ function Factoryplanner.on_gui_click(event)
       return player.create_local_flying_text{create_at_cursor = true, text = "machines must not be limited."}
     end
 
+    -- buildings
     if cell_machine.children[1].sprite ~= "fp_generic_assembler" then
       local recipe_type, recipe_name = split_class_and_name(cell_recipe.children[1].sprite)
       local entity_type, entity_name = split_class_and_name(cell_machine.children[1].sprite)
-      entity_type = prototypes.entity[entity_name].type
+      local entity_prototype = prototypes.entity[entity_name]
+      entity_type = entity_prototype.type
 
       if entity_type_blacklisted[entity_type] then
         return player.create_local_flying_text{create_at_cursor = true, text = entity_type .. "'s are blacklisted."}
+      end
+
+      local item_to_place_this = entity_prototype.items_to_place_this[1]
+      log(entity_name)
+      log(cell_machine.children[1].number)
+      add_to_contents(entities, {
+        type = "item",
+        name = item_to_place_this.name,
+        quality = "normal",
+        count = item_to_place_this.count * (cell_machine.children[1].number or 0),
+      })
+    end
+
+    -- modules
+    for i = 2, #cell_machine.children do
+      local module_button = cell_machine.children[i]
+      if module_button.sprite ~= "utility/add" then
+        local module_type, module_name = split_class_and_name(module_button.sprite)
+        add_to_contents(modules, {
+          type = "item",
+          name = module_name,
+          quality = "normal",
+          count = module_button.number * (cell_machine.children[1].number or 0),
+        })
       end
     end
 
     -- LuaGuiPrettyPrint.dump(cell_recipe)
     -- LuaGuiPrettyPrint.dump(cell_machine)
   end
+
+  game.print(serpent_block(modules))
+  game.print(serpent_block(entities))
 end
