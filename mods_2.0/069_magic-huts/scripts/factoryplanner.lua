@@ -78,9 +78,21 @@ function Factoryplanner.on_gui_click(event)
   local root = get_root(event.element)
 
   local factory = get_selected_factory(root)
+  if not factory then return end
   game.print(serpent.line(factory))
 
   game.print(serpent_line(get_item_box_contents(root, 1)))
   game.print(serpent_line(get_item_box_contents(root, 2)))
   game.print(serpent_line(get_item_box_contents(root, 3)))
+
+  local timescale = player.gui.screen["fp_frame_main_dialog"].children[2].children[2].children[1].children[5].children[1].switch_state
+  if timescale ~= "right" then
+    return player.create_local_flying_text{create_at_cursor = true, text = "/minute is required."}
+  end
+
+  local first_rate_button_active = root.children[2].children[2].children[1].children[6]["table_views"].children[1].toggled
+  if not first_rate_button_active then
+    return player.create_local_flying_text{create_at_cursor = true, text = "items/m is required."}
+  end
+
 end

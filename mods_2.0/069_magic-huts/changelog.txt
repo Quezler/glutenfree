@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Grab the products, byproducts & ingredients
     - Default serpent to sort keys
+    - Validate timescale/rate
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07
