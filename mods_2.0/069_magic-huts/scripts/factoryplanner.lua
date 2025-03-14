@@ -54,7 +54,7 @@ local function get_selected_factory(root)
   end
 end
 
-local function get_class_and_name(sprite_path)
+local function split_class_and_name(sprite_path)
   return sprite_path:match('([^/]+)/([^/]+)')
 end
 
@@ -64,7 +64,7 @@ local function get_item_box_contents(item_boxes, item_box_index)
   local contents = {}
   for _, sprite_button in ipairs(sprite_buttons) do
     if sprite_button.sprite ~= "utility/add" then
-      local class, name = get_class_and_name(sprite_button.sprite)
+      local class, name = split_class_and_name(sprite_button.sprite)
       table.insert(contents, {type = class, name = name, amount = sprite_button.number, quality = "normal"})
     end
   end
@@ -84,6 +84,12 @@ local function all_products_satisfied(item_boxes)
 
   return true
 end
+
+local entity_type_blacklisted = util.list_to_map({
+  "rocket-silo",
+  "mining-drill",
+  "offshore-pump",
+})
 
 -- after adding the mod anyone who was on the districts page gets sent back to the main page (on_configuration_changed?),
 -- in either case it means our magic button will always be initialized since even when switching it seems to persist fine.
@@ -118,7 +124,7 @@ function Factoryplanner.on_gui_click(event)
   -- game.print("byproducts: " .. serpent_line(byproducts))
   -- game.print("ingredients: " .. serpent_line(ingredients))
 
-  local power     = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2])
+  local power     = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2]) -- todo: multiply kw
   local pollution = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][2])
   -- log("power: " .. tostring(power))
   -- log("pollution: " .. tostring(pollution))
@@ -136,6 +142,9 @@ function Factoryplanner.on_gui_click(event)
     end
   end
 
+  local modules = {}
+  local entities = {}
+
   local production_table_rows = #production_table_children / production_table_columns
   for row = 2, production_table_rows do
     local offset = (row - 1) * production_table_columns
@@ -148,9 +157,15 @@ function Factoryplanner.on_gui_click(event)
       return player.create_local_flying_text{create_at_cursor = true, text = "machines must not be limited."}
     end
 
-    log(cell_recipe.children[1].sprite)
-    log(cell_machine.children[1].sprite)
-    log(cell_machine.children[1].number)
+    if cell_machine.children[1].sprite ~= "fp_generic_assembler" then
+      local recipe_type, recipe_name = split_class_and_name(cell_recipe.children[1].sprite)
+      local entity_type, entity_name = split_class_and_name(cell_machine.children[1].sprite)
+      entity_type = prototypes.entity[entity_name].type
+
+      if entity_type_blacklisted[entity_type] then
+        return player.create_local_flying_text{create_at_cursor = true, text = entity_type .. "'s are blacklisted."}
+      end
+    end
 
     -- LuaGuiPrettyPrint.dump(cell_recipe)
     -- LuaGuiPrettyPrint.dump(cell_machine)

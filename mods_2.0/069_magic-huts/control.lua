@@ -1,3 +1,4 @@
+require("util")
 require("shared")
 require("scripts.factoryplanner")
 require("scripts.luagui-pretty-print")
