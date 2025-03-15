@@ -142,8 +142,8 @@ function Factoryplanner.on_gui_click(event)
   -- game.print("byproducts: " .. serpent_line(byproducts))
   -- game.print("ingredients: " .. serpent_line(ingredients))
 
-  local power     = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2]) -- todo: multiply kw
-  local pollution = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][2])
+  local power     = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2]) -- todo: kw
+  local pollution = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][2]) -- todo: me
   -- log("power: " .. tostring(power))
   -- log("pollution: " .. tostring(pollution))
 

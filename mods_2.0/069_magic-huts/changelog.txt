@@ -18,6 +18,7 @@ Date: ????
     - Check for beacons
     - Ensure the player is on the 1st floor
     - Require all subfloors to be visible
+    - Power pollution comment
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07
