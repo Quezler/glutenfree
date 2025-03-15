@@ -91,17 +91,17 @@ local entity_type_blacklisted = util.list_to_map({
   "offshore-pump",
 })
 
-local function add_to_contents(contents, type_name_quality_count)
+local function add_to_contents(contents, type_name_count_quality)
   for _, content in ipairs(contents) do
-    if content.type == type_name_quality_count.type
-    and content.name == type_name_quality_count.name
-    and content.quality == type_name_quality_count.quality then
-      content.count = content.count + type_name_quality_count.count
+    if content.type == type_name_count_quality.type
+    and content.name == type_name_count_quality.name
+    and content.quality == type_name_count_quality.quality then
+      content.count = content.count + type_name_count_quality.count
       return
     end
   end
 
-  table.insert(contents, type_name_quality_count)
+  table.insert(contents, type_name_count_quality)
 end
 
 -- after adding the mod anyone who was on the districts page gets sent back to the main page (on_configuration_changed?),
@@ -189,8 +189,8 @@ function Factoryplanner.on_gui_click(event)
       add_to_contents(entities, {
         type = "item",
         name = item_to_place_this.name,
-        quality = "normal",
         count = item_to_place_this.count * x_of_this_building,
+        quality = "normal",
       })
     end
 
@@ -202,8 +202,8 @@ function Factoryplanner.on_gui_click(event)
         add_to_contents(modules, {
           type = "item",
           name = module_name,
-          quality = "normal",
           count = module_button.number * x_of_this_building,
+          quality = "normal",
         })
       end
     end
