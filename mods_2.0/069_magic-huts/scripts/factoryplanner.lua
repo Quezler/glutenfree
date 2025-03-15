@@ -163,6 +163,8 @@ function Factoryplanner.on_gui_click(event)
   local modules = {}
   local entities = {}
 
+  local any_subfloors = false
+
   local production_table_rows = #production_table_children / production_table_columns
   for row = 2, production_table_rows do
     local offset = (row - 1) * production_table_columns
@@ -173,6 +175,10 @@ function Factoryplanner.on_gui_click(event)
     local machine_style_name = cell_machine.children[1].style.name
     if machine_style_name == "flib_slot_button_pink_small" or machine_style_name == "flib_slot_button_purple_small" then
       return player.create_local_flying_text{create_at_cursor = true, text = "machines must not be limited."}
+    end
+
+    if cell_machine.children[1].sprite == "fp_generic_assembler" then
+      any_subfloors = true
     end
 
     if cell_machine.children[1].sprite ~= "fp_generic_assembler" and cell_machine.children[1].number then -- skip factory floor headers
@@ -221,6 +227,13 @@ function Factoryplanner.on_gui_click(event)
 
     -- LuaGuiPrettyPrint.dump(cell_recipe)
     -- LuaGuiPrettyPrint.dump(cell_machine)
+  end
+
+  if any_subfloors then
+    local show_all_subfloors_at_the_top_level = root.children[2].children[2].children[4].children[1].children[1].children[6].toggled
+    if not show_all_subfloors_at_the_top_level then
+      return player.create_local_flying_text{create_at_cursor = true, text = "all subfloors must be visible."}
+    end
   end
 
   game.print(serpent_block(modules))
