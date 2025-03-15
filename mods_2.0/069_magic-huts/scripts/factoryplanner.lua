@@ -114,6 +114,11 @@ function Factoryplanner.on_gui_click(event)
   if not factory then return end
   game.print(serpent.line(factory))
 
+  local level = tonumber(root.children[2].children[2].children[4].children[1].children[1].children[3].caption[2][4])
+  if level > 1 then
+    return player.create_local_flying_text{create_at_cursor = true, text = "you must be on level 1."}
+  end
+
   local item_boxes = root.children[2].children[2].children[3].children
   if not all_products_satisfied(item_boxes) then
     return player.create_local_flying_text{create_at_cursor = true, text = "not all products are 100% satisfied."}
