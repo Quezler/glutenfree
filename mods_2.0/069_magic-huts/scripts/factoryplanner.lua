@@ -170,7 +170,7 @@ function Factoryplanner.on_gui_click(event)
       return player.create_local_flying_text{create_at_cursor = true, text = "machines must not be limited."}
     end
 
-    if cell_machine.children[1].sprite ~= "fp_generic_assembler" then -- skip factory floor headers
+    if cell_machine.children[1].sprite ~= "fp_generic_assembler" and cell_machine.children[1].number then -- skip factory floor headers
       local x_of_this_building = math.ceil(cell_machine.children[1].number)
 
       -- buildings
@@ -205,6 +205,12 @@ function Factoryplanner.on_gui_click(event)
             quality = "normal",
           })
         end
+      end
+
+      -- beacons
+      local cell_beacons = production_table_children[offset + production_table_column["fp.pu_beacon"]]
+      if #cell_beacons.children >= 2 then -- 1 = supports beacons, 2+ means beacon and modules selected
+        return player.create_local_flying_text{create_at_cursor = true, text = "beacons are not allowed."}
       end
     end
 
