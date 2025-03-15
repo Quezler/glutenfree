@@ -104,6 +104,22 @@ local function add_to_contents(contents, type_name_count_quality)
   table.insert(contents, type_name_count_quality)
 end
 
+local function prefix_to_multiplier(locale_key)
+  local multiplier = 1
+  local prefixes = {"kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta"}
+
+  if locale_key == nil then
+    return multiplier
+  end
+
+  for _, prefix in ipairs(prefixes) do
+    multiplier = multiplier * 1000
+    if "fp.prefix_" .. prefix == locale_key then
+      return multiplier
+    end
+  end
+end
+
 -- after adding the mod anyone who was on the districts page gets sent back to the main page (on_configuration_changed?),
 -- in either case it means our magic button will always be initialized since even when switching it seems to persist fine.
 function Factoryplanner.on_gui_click(event)
@@ -142,8 +158,15 @@ function Factoryplanner.on_gui_click(event)
   -- game.print("byproducts: " .. serpent_line(byproducts))
   -- game.print("ingredients: " .. serpent_line(ingredients))
 
-  local power     = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2]) -- todo: kw
-  local pollution = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][2]) -- todo: me
+  local power = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2])
+  local power_prefix  =  root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][3][1]
+
+  local pollution = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][2])
+  local pollution_prefix  =  root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][3][1]
+
+  -- game.print(string.format("%.3f %s (%d)", power, power_prefix, power * prefix_to_multiplier(power_prefix)))
+  -- game.print(string.format("%.3f %s (%d)", pollution, pollution_prefix, pollution * prefix_to_multiplier(pollution_prefix)))
+
   -- log("power: " .. tostring(power))
   -- log("pollution: " .. tostring(pollution))
 
