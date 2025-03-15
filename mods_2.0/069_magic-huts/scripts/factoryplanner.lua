@@ -120,6 +120,24 @@ local function prefix_to_multiplier(locale_key)
   end
 end
 
+local function check_recipe_is_allowed(player, recipe_name)
+  local recipe = player.force.recipes[recipe_name]
+
+  if not recipe then
+    return false, string.format("Recipe \"%s\" not found.")
+  end
+
+  if not recipe.enabled then
+    return false, string.format("Recipe \"%s\" not unlocked.")
+  end
+
+  if recipe.hidden then
+    return false, string.format("Recipe \"%s\" is not visible.")
+  end
+
+  return true
+end
+
 -- after adding the mod anyone who was on the districts page gets sent back to the main page (on_configuration_changed?),
 -- in either case it means our magic button will always be initialized since even when switching it seems to persist fine.
 function Factoryplanner.on_gui_click(event)
@@ -245,6 +263,12 @@ function Factoryplanner.on_gui_click(event)
       local cell_beacons = production_table_children[offset + production_table_column["fp.pu_beacon"]]
       if #cell_beacons.children >= 2 then -- 1 = supports beacons, 2+ means beacon and modules selected
         return player.create_local_flying_text{create_at_cursor = true, text = "beacons are not allowed."}
+      end
+
+      -- recipe
+      local recipe_is_allowed, recipe_is_not_allowed_reason = check_recipe_is_allowed(player, recipe_name)
+      if not recipe_is_allowed then
+        return player.create_local_flying_text{create_at_cursor = true, text = recipe_is_not_allowed_reason}
       end
     end
 
