@@ -170,10 +170,10 @@ function Factoryplanner.on_gui_click(event)
       return player.create_local_flying_text{create_at_cursor = true, text = "machines must not be limited."}
     end
 
-    local x_of_this_building = math.ceil(cell_machine.children[1].number or 0)
+    if cell_machine.children[1].sprite ~= "fp_generic_assembler" then -- skip factory floor headers
+      local x_of_this_building = math.ceil(cell_machine.children[1].number)
 
-    -- buildings
-    if cell_machine.children[1].sprite ~= "fp_generic_assembler" then
+      -- buildings
       local recipe_type, recipe_name = split_class_and_name(cell_recipe.children[1].sprite)
       local entity_type, entity_name = split_class_and_name(cell_machine.children[1].sprite)
       local entity_prototype = prototypes.entity[entity_name]
@@ -192,19 +192,19 @@ function Factoryplanner.on_gui_click(event)
         count = item_to_place_this.count * x_of_this_building,
         quality = "normal",
       })
-    end
 
-    -- modules
-    for i = 2, #cell_machine.children do
-      local module_button = cell_machine.children[i]
-      if module_button.sprite ~= "utility/add" then
-        local module_type, module_name = split_class_and_name(module_button.sprite)
-        add_to_contents(modules, {
-          type = "item",
-          name = module_name,
-          count = module_button.number * x_of_this_building,
-          quality = "normal",
-        })
+      -- modules
+      for i = 2, #cell_machine.children do
+        local module_button = cell_machine.children[i]
+        if module_button.sprite ~= "utility/add" then
+          local module_type, module_name = split_class_and_name(module_button.sprite)
+          add_to_contents(modules, {
+            type = "item",
+            name = module_name,
+            count = module_button.number * x_of_this_building,
+            quality = "normal",
+          })
+        end
       end
     end
 

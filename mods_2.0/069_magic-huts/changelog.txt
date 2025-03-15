@@ -14,6 +14,7 @@ Date: ????
     - Sum all the entities and modules
     - Do round up the buildings
     - Move quality to the back
+    - Rearrange code
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07
