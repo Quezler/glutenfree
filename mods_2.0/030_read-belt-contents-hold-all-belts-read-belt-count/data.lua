@@ -16,6 +16,7 @@ local entity = {
   selectable_in_game = false,
 
   hidden = true,
+  icon_draw_specification = {scale = 0.5},
 }
 
 local item = {

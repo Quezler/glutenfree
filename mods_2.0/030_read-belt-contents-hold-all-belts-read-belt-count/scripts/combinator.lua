@@ -47,6 +47,9 @@ end
 local function get_transport_line_backward(next_direction, belt, data)
   if data.belts[assert(belt.unit_number)] then return end
 
+  -- we cannot go back through splitters :)
+  if belt.type == "splitter" then return end
+
   data.total = data.total + 1
   data.belts[belt.unit_number] = belt
 
