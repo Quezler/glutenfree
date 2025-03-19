@@ -1,0 +1,46 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 03. 19
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+  Info:
+    - Resque the descriptions from the google cache
+    - Recover markdown formatting by visual comparison
+    - Fix the issue xwy694466780 (and now me) was having
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+  Info:
+    - Destroy old delivery proxies when any mods update
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+  Info:
+    - This changelog entry should be hidden/unreleased
+    - Fix changelog generator failing because of fetch depth
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+  Info:
+    - This changelog entry should be under 1.0.9
+    - This changelog entry should be under 1.0.9 as well
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+  Info:
+    - This changelog entry should be under 1.0.8
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+  Info:
+    - Allow you to set how many are requested
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+  Info:
+    - Fix getting the table size of the wrong thing
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+  Info:
+    - Increment minor version(s)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+  Info:
+    - Add a debug error
+    - Increment minor version(s)
