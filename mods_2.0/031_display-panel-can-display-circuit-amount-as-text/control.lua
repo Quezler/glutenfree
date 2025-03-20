@@ -149,6 +149,7 @@ local function tick_display_panel(struct, tick)
   -- storage.ticked_this_tick = storage.ticked_this_tick + 1
 
   local entity = struct.entity
+  if not entity.valid then return end
   -- game.print(string.format("@%d ticked display panel #%d", tick, entity.unit_number))
 
   local cb = entity.get_control_behavior()
