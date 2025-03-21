@@ -7,13 +7,18 @@ local function shift_bounding_box_up_by_one(bounding_box)
 end
 
 local configs = {
-  lab = {
+  ["lab"] = {
     selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
     circuit_definition = {variation = 0, main_offset = util.by_pixel(4.5, 2.0), shadow_offset = util.by_pixel(4.5, 2.0 + 2)},
   },
-  biolab = {
+  ["biolab"] = {
     selection_box = {{ 0.5,  0.5}, {1.5, 1.5}},
     circuit_definition = {variation = 0, main_offset = util.by_pixel(32.5, 32.5), shadow_offset = util.by_pixel(32.5, 32.5 + 2)},
+  },
+  ["fusion-lab"] = {
+    selection_box = {{ -1.5,  0.5}, {-0.5, 1.5}},
+    selection_priority = 151,
+    circuit_definition = {variation = 0, main_offset = util.by_pixel(-27.5, 32.5), shadow_offset = util.by_pixel(-27.5, 32.5 + 2)},
   },
 }
 
@@ -37,7 +42,7 @@ for _, lab in pairs(data.raw["lab"]) do
 
     flags = {"not-on-map", "player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
     draw_inventory_content = false,
-    selection_priority = 51,
+    selection_priority = config.selection_priority or 51,
     hidden = true,
 
     circuit_wire_max_distance = 9,
