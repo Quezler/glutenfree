@@ -136,7 +136,9 @@ function TickHandler.on_tick(event)
   end
 
   for _, control_behavior in pairs(storage.decider_control_behaviors_to_override) do
-    control_behavior.parameters = decider_combinator_parameters
+    if control_behavior.valid then
+      control_behavior.parameters = decider_combinator_parameters
+    end
   end
   storage.decider_control_behaviors_to_override = {}
 
