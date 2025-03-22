@@ -39,7 +39,6 @@ sign_post.sprites =
 }
 sign_post.text_shift = {0, -1.0}
 sign_post.icon_draw_specification = {shift = {0, -0.365}, scale = 0.4}
-table.insert(sign_post.flags, "not-rotatable")
 
 data:extend{sign_post, sign_post_item}
 

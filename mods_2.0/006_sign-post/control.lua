@@ -1,7 +1,10 @@
+local function reset_direction(entity)
+  entity.direction = defines.direction.north
+end
+
 local function on_created_entity(event)
   local entity = event.entity or event.destination
-
-  entity.direction = defines.direction.north
+  reset_direction(entity)
 end
 
 for _, event in ipairs({
@@ -12,7 +15,8 @@ for _, event in ipairs({
   defines.events.on_entity_cloned,
 }) do
   script.on_event(event, on_created_entity, {
-    {filter = "name", name = "sign-post"},
+    {filter =       "name", name = "sign-post"},
+    {filter = "ghost_name", name = "sign-post"},
   })
 end
 
@@ -64,5 +68,21 @@ script.on_configuration_changed(function(event)
         end
       end
     end
+  end
+end)
+
+local function get_entity_name(entity)
+  return entity.type == "entity-ghost" and entity.ghost_name or entity.name
+end
+
+script.on_event(defines.events.on_player_rotated_entity, function(event)
+  if get_entity_name(event.entity) then
+    reset_direction(event.entity)
+  end
+end)
+
+script.on_event(defines.events.on_player_flipped_entity, function(event)
+  if get_entity_name(event.entity) then
+    reset_direction(event.entity)
   end
 end)
