@@ -76,13 +76,13 @@ local function get_entity_name(entity)
 end
 
 script.on_event(defines.events.on_player_rotated_entity, function(event)
-  if get_entity_name(event.entity) then
+  if get_entity_name(event.entity) == "sign-post" then
     reset_direction(event.entity)
   end
 end)
 
 script.on_event(defines.events.on_player_flipped_entity, function(event)
-  if get_entity_name(event.entity) then
+  if get_entity_name(event.entity) == "sign-post" then
     reset_direction(event.entity)
   end
 end)
