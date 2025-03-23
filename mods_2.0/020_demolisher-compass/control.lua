@@ -217,15 +217,15 @@ function Handler.get_demolisher_from_chunk_key(chunk_key, chunk_position)
 
   -- log(string.format("found no demolisher in this chunk after %d tries.", i))
 
-  for i = 1, 20 do
-    local try_chunk_key = position_key({x = chunk_position.x, y = chunk_position.y - i})
+  for x = 1, 20 do
+    local try_chunk_key = position_key({x = chunk_position.x + x - 10, y = chunk_position.y})
     -- log(try_chunk_key)
     local demolisher = flatmap[try_chunk_key]
     if demolisher then
       -- game.print("demolisher found at i " .. i)
 
-      for j = 1, 20 do
-        local try_chunk_key = position_key({x = chunk_position.x, y = chunk_position.y + j})
+      for y = 1, 20 do
+        try_chunk_key = position_key({x = chunk_position.x, y = chunk_position.y + y - 10})
         -- log(try_chunk_key)
         if demolisher == flatmap[try_chunk_key] then
           -- game.print("im inside a territory")
