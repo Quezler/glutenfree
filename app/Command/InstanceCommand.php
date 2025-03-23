@@ -30,6 +30,10 @@ class InstanceCommand extends Command
         if (!file_exists($saves_directory))
             mkdir($saves_directory);
 
+        $freeplay_please = "{$instance_directory}/saves/freeplay_please.txt";
+        if (!file_exists($freeplay_please))
+            touch($freeplay_please);
+
         $mods_directory = "{$instance_directory}/mods";
         if (!file_exists($mods_directory))
             mkdir($mods_directory);
