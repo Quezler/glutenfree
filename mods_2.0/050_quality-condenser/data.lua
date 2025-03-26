@@ -105,8 +105,7 @@ local crafter_entity = {
   },
 
   minable = table.deepcopy(a_9x9_entity.minable),
-  -- quality_indicator_shift = {-1, 1}, #7398
-  quality_indicator_scale = 0,
+  quality_indicator_shift = {-1, 1},
 
   -- circuit_wire_max_distance = 9,
 
@@ -187,7 +186,7 @@ local container_entity = {
   minable = table.deepcopy(a_9x9_entity.minable),
 
   icon_draw_specification = {scale = 0, scale_for_many = 0},
-  -- quality_indicator_scale = 0, #7398
+  quality_indicator_scale = 0,
   hidden = true,
 }
 container_entity.minable.result = nil
