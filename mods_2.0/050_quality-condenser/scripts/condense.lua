@@ -2,12 +2,14 @@ local Condense = {}
 
 local get_next_quality_name = {} -- next_quality_name["normal"] = "uncommon"
 local is_quality_grandchild = {} -- if is_quality_grandchild["legendary"]["uncommon"] then (uncommon eventually leads to legendary)
+local get_next_probability = {}
 
 for _, quality in pairs(prototypes.quality) do
   if quality.next then
     get_next_quality_name[quality.name] = quality.next.name
   end
   is_quality_grandchild[quality.name] = {}
+  get_next_probability[quality.name] = quality.next_probability
 end
 
 for _, quality in pairs(prototypes.quality) do
@@ -46,14 +48,16 @@ local function get_spoil_percentage(inventory, item)
 end
 
 function Condense.trigger(struct)
-  local target_quality = ensure_recipe_is_set(struct.entity)
-  local quality_points = math.floor(math.min((struct.entity.effects["quality"] or 0) * 1000 * target_quality.next_probability, 1000) + 0.5) -- 0-1000
+  local target_quality = ensure_recipe_is_set(struct.entity).name
+  local quality_effect = (struct.entity.effects["quality"] or 0) * 1000
+  if 0 >= quality_effect then return end
 
   for _, item in ipairs(struct.container_inventory.get_contents()) do
     local next_quality_name = get_next_quality_name[item.quality]
     if next_quality_name and struct.entity.force.is_quality_unlocked(next_quality_name) then
-      if target_quality.name == "normal" or is_quality_grandchild[target_quality.name][item.quality] then
+      if target_quality == "normal" or is_quality_grandchild[target_quality][item.quality] then
 
+        local quality_points = math.floor(math.min(quality_effect * get_next_probability[item.quality], 1000) + 0.5) -- returns percentage * 10
         local number = quality_points * item.count / 1000
         local integer = math.floor(number)
         local decimal = number - integer
