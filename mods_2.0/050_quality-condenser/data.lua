@@ -107,8 +107,6 @@ local crafter_entity = {
   minable = table.deepcopy(a_9x9_entity.minable),
   quality_indicator_shift = {-1, 1},
 
-  -- circuit_wire_max_distance = 9,
-
   flags = {"player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
 }
 
@@ -184,6 +182,13 @@ local container_entity = {
   max_health = 10,
 
   minable = table.deepcopy(a_9x9_entity.minable),
+
+  circuit_wire_max_distance = default_circuit_wire_max_distance,
+  circuit_connector = circuit_connector_definitions.create_single
+  (
+    universal_connector_template,
+    {variation = 22, main_offset = util.by_pixel(-85, 127), shadow_offset = util.by_pixel(-90, 127)}
+  ),
 
   icon_draw_specification = {scale = 0, scale_for_many = 0},
   quality_indicator_scale = 0,

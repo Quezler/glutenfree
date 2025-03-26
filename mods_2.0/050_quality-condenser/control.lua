@@ -186,6 +186,13 @@ script.on_configuration_changed(function(data)
     update_beacon_interface(struct)
   end
 
+  if not storage.migrated_to_2_0_38 then
+    for _, struct in pairs(storage.structs) do
+      Combinators.migrate_to_2_0_38(struct)
+    end
+    storage.migrated_to_2_0_38 = true
+  end
+
   Handler.refresh_gui_for_players()
 end)
 
@@ -222,6 +229,7 @@ function Handler.on_created_entity(event)
     beacon_interface = nil,
     container = nil,
     container_inventory = nil,
+    proxy_container = nil,
     arithmetic_1 = nil, -- each + 0 = S
     arithmetic_2 = nil, -- each + 0 = each
     decider_1 = nil, -- red T != green T | R 1
@@ -323,6 +331,7 @@ local deathrattles = {
       -- struct.entity.destroy()
       struct.beacon_interface.destroy()
       struct.container.destroy()
+      struct.proxy_container.destroy()
       struct.arithmetic_1.destroy()
       struct.arithmetic_2.destroy()
       struct.decider_1.destroy()
@@ -343,6 +352,7 @@ local deathrattles = {
       struct.entity.destroy()
       struct.beacon_interface.destroy()
       -- struct.container.destroy()
+      struct.proxy_container.destroy()
       struct.arithmetic_1.destroy()
       struct.arithmetic_2.destroy()
       struct.decider_1.destroy()

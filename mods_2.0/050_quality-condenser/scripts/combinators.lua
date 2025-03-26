@@ -1,6 +1,30 @@
 local Combinators = {}
 
+function Combinators.migrate_to_2_0_38(struct)
+  struct.proxy_container = storage.surface.create_entity{
+    name = "proxy-container",
+    force = "neutral",
+    position = {0.5 + struct.index, 0.5},
+  }
+  struct.proxy_container.proxy_target_entity = struct.container
+  struct.proxy_container.proxy_target_inventory = defines.inventory.chest
+
+  local old_red_out = struct.container.get_wire_connector(defines.wire_connector_id.circuit_red, true) --[[@as LuaWireConnector]]
+  local new_red_out = struct.proxy_container.get_wire_connector(defines.wire_connector_id.circuit_red, true) --[[@as LuaWireConnector]]
+  local red_in = struct.arithmetic_1.get_wire_connector(defines.wire_connector_id.combinator_input_red, false) --[[@as LuaWireConnector]]
+  assert(old_red_out.disconnect_from(red_in, defines.wire_origin.script))
+  assert(new_red_out.connect_to(red_in, false, defines.wire_origin.player))
+end
+
 function Combinators.create_for_struct(struct)
+  struct.proxy_container = storage.surface.create_entity{
+    name = "proxy-container",
+    force = "neutral",
+    position = {0.5 + struct.index, 0.5},
+  }
+  struct.proxy_container.proxy_target_entity = struct.container
+  struct.proxy_container.proxy_target_inventory = defines.inventory.chest
+
   struct.arithmetic_1 = storage.surface.create_entity{
     name = "arithmetic-combinator",
     force = "neutral",
@@ -31,9 +55,9 @@ function Combinators.create_for_struct(struct)
   }
 
   do
-    local red_out = struct.container.get_wire_connector(defines.wire_connector_id.circuit_red, true) --[[@as LuaWireConnector]]
+    local red_out = struct.proxy_container.get_wire_connector(defines.wire_connector_id.circuit_red, true) --[[@as LuaWireConnector]]
     local red_in = struct.arithmetic_1.get_wire_connector(defines.wire_connector_id.combinator_input_red, false) --[[@as LuaWireConnector]]
-    assert(red_out.connect_to(red_in, false, defines.wire_origin.script))
+    assert(red_out.connect_to(red_in, false, defines.wire_origin.player))
   end
 
   struct.arithmetic_2 = storage.surface.create_entity{
