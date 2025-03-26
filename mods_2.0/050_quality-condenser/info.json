@@ -3,7 +3,7 @@
     "title": "Quality condenser",
     "description": "A recycler that returns the items themselves but a quality higher, success depends on quality modules.",
 
-    "version": "1.1.1",
+    "version": "1.1.2",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -23,6 +23,9 @@
         "? space-age",
 
         "beacon-interface >= 1.0.3",
-        "? change-recipe-quality-without-re-selecting-recipe"
+
+        "? change-recipe-quality-without-re-selecting-recipe",
+
+        "(?) QualityPlus"
     ]
 }

@@ -29,7 +29,7 @@ for _, item in pairs(prototypes.item) do
 end
 
 local function get_spoil_percentage(inventory, item)
-  spoil_percentage = nil
+  local spoil_percentage = nil
 
   for slot = 1, #inventory do
     local stack = inventory[slot]
@@ -46,13 +46,13 @@ local function get_spoil_percentage(inventory, item)
 end
 
 function Condense.trigger(struct)
-  local target_quality = ensure_recipe_is_set(struct.entity).name
-  local quality_points = math.floor(math.min((struct.entity.effects["quality"] or 0) * 100, 1000) + 0.5) -- 0-1000
+  local target_quality = ensure_recipe_is_set(struct.entity)
+  local quality_points = math.floor(math.min((struct.entity.effects["quality"] or 0) * 1000 * target_quality.next_probability, 1000) + 0.5) -- 0-1000
 
   for _, item in ipairs(struct.container_inventory.get_contents()) do
     local next_quality_name = get_next_quality_name[item.quality]
     if next_quality_name and struct.entity.force.is_quality_unlocked(next_quality_name) then
-      if target_quality == "normal" or is_quality_grandchild[target_quality][item.quality] then
+      if target_quality.name == "normal" or is_quality_grandchild[target_quality.name][item.quality] then
 
         local number = quality_points * item.count / 1000
         local integer = math.floor(number)
