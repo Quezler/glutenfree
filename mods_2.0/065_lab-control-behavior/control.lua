@@ -40,6 +40,8 @@ function mod.on_created_entity(event)
   -- game.print("new lab registered: " .. tostring(entity))
 
   local cb_name = mod_prefix .. entity.name .. "-control-behavior"
+  if not prototypes.entity[cb_name] then return end -- data final fixes?
+
   -- in case of a quality upgrade we take on the wire connections just before that entity gets purged by the deathrattle
   local other_wire_proxy = entity.surface.find_entities_filtered{
     name = cb_name,

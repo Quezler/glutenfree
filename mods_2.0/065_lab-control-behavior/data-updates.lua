@@ -23,6 +23,7 @@ local configs = {
 }
 
 for _, lab in pairs(data.raw["lab"]) do
+  if not lab.collision_box then goto continue end
   local config = table.deepcopy(configs[lab.name] or configs["lab"])
 
   local icons = lab.icons and table.deepcopy(lab.icons) or {{icon = lab.icon}}
@@ -62,6 +63,7 @@ for _, lab in pairs(data.raw["lab"]) do
   lab_control_behavior.circuit_connector.sprites.led_blue_off = nil
 
   data:extend{lab_control_behavior}
+  ::continue::
 end
 
 local base_lab = data.raw["lab"]["lab"]
