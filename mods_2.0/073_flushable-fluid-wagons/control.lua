@@ -27,26 +27,26 @@ local function tick_struct(struct)
   local fluid_name, fluid_amount = next(struct.wagon.get_fluid_contents())
   -- game.print(fluid_name .. fluid_amount)
   if fluid_name then
-    -- struct.tank.clear_fluid_inside()
+    struct.tank.clear_fluid_inside()
     struct.tank.insert_fluid({name = fluid_name, amount = fluid_amount})
   end
 
   if struct.tank.position ~= struct.wagon.position then
-    -- struct.tank.teleport(struct.wagon.position)
+    struct.tank.teleport(struct.wagon.position)
   end
 end
 
 local function on_tick(event)
   for unit_number, struct in pairs(storage.structs) do
     local keep, why = tick_struct(struct)
-    -- if keep == false then
-    --   game.print(why)
-    --   struct.tank.destroy()
-    --   storage.tank_number_to_wagon[struct.tank_unit_number] = nil
+    if keep == false then
+      game.print(event.tick .. " on_tick")
+      struct.tank.destroy()
+      storage.tank_number_to_wagon[struct.tank_unit_number] = nil
 
-    --   storage.structs[unit_number] = nil
-    --   storage.structs_count = storage.structs_count - 1
-    -- end
+      storage.structs[unit_number] = nil
+      storage.structs_count = storage.structs_count - 1
+    end
   end
 
   if storage.structs_count == 0 then
@@ -67,6 +67,8 @@ script.on_event("open-fluid-wagon", function(event)
   local entity = player.selected
   if entity == nil then return end
   if entity.type ~= "fluid-wagon" then return end
+
+  game.print(event.tick .. " open-fluid-wagon")
 
   local fluid_name, fluid_amount = next(entity.get_fluid_contents())
   if fluid_name == nil then return end -- empty fluid wagon (to allow access to equipment)
@@ -104,6 +106,7 @@ script.on_event("open-fluid-wagon", function(event)
 end)
 
 script.on_event(defines.events.on_player_main_inventory_changed, function(event)
+  game.print(event.tick .. " on_player_main_inventory_changed")
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
   local tank = _storage.player_should_open[player.index]
