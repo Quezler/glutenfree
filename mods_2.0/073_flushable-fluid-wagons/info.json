@@ -2,10 +2,13 @@
     "name": "flushable-fluid-wagons",
     "title": "Flushable fluid wagons",
     "description": "Don't you wish you could flush fluid wagons?",
-    "version": "1.0.3",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
-        "? base"
+        "? newsletter-for-mods-made-by-quezler",
+
+        "? base",
+        "? space-age"
     ]
 }

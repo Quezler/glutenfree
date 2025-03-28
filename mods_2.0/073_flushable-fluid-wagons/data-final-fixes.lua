@@ -1,13 +1,13 @@
-for _, prototype in pairs(data.raw['fluid-wagon']) do
+for _, prototype in pairs(data.raw["fluid-wagon"]) do
 
   local tank = {
-    type = 'storage-tank',
-    name = prototype.name .. '-flushable',
-    localised_name = {'entity-name.' .. prototype.name},
+    type = "storage-tank",
+    name = prototype.name .. "-flushable",
+    localised_name = {"entity-name." .. prototype.name},
 
     fluid_box = {
       pipe_connections = {},
-      base_area = prototype.capacity / 100,
+      volume = prototype.capacity,
     },
 
     window_bounding_box = {{0, 0}, {0, 0}},
@@ -24,22 +24,23 @@ for _, prototype in pairs(data.raw['fluid-wagon']) do
 
     selection_box = {{ -0.5, -0.5}, {0.5, 0.5}},
     collision_box = {{ -0.5, -0.5}, {0.5, 0.5}},
-    collision_mask = {},
+    collision_mask = {layers = {}},
 
     flags = {
-      'placeable-player',
-      'placeable-off-grid',
-      'not-on-map',
-      'hide-alt-info',
+      "placeable-player",
+      "placeable-off-grid",
+      "not-on-map",
+      "hide-alt-info",
     },
 
     selection_priority = (prototype.selection_priority or 50) + 1,
     selectable_in_game = false,
+    hidden = true,
   }
 
   tank.icons = prototype.icons or {
     {
-      icon = prototype.icon, icon_size = prototype.icon_size, icon_mipmaps = prototype.icon_mipmaps, tint = {1, 0.5, 0.5},
+      icon = prototype.icon, icon_size = prototype.icon_size, tint = {1, 0.5, 0.5},
     },
   }
 

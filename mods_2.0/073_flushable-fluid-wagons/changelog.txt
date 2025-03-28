@@ -1,0 +1,40 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: ????
+  Info:
+    - Ported to 2.0, phase 1
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2024. 02. 04
+  Info:
+    - Prevent crash from opening a fluid wagon with fluid from the map
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2024. 01. 31
+  Info:
+    - Fix loading with editor extensions instead of marking it as incompatible
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024. 01. 28
+  Info:
+    - Teleport the fake tank along to keep it in range
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 01. 28
+  Info:
+    - Create a flushable tank prototype for each fluid wagon
+    - Give the entity a red icon in the editor
+    - Setup flags for the tank prototype
+    - Open the tank when opening the fluid wagon
+    - Only elements in 'gui.screen' can use bring_to_front.
+    - Move the gui to the screen
+    - Attempt to use rendering.draw_sprite
+    - Mess around with the sprite sizes
+    - Discover the no crop flag
+    - Yeet the attempt at rendering a train in the selection box
+    - Flush the wagon when you flush the tank (and sync)
+    - Use a struct to keep track of valids and players
+    - Support all fluid wagons in the control stage
+    - Cleanup and set the thumbnail
+    - Disable on_tick whilst inactive
+    - Mod portal release
