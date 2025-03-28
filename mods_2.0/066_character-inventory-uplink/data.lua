@@ -120,12 +120,13 @@ local technology = {
   prerequisites = {"radar", "circuit-network"},
   unit =
   {
-    count = 100,
+    count = 250,
     ingredients =
     {
-      -- it only costs time
+      {"automation-science-pack", 1},
+      {"logistic-science-pack", 1}
     },
-    time = 60
+    time = 30
   }
 }
 

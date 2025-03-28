@@ -156,12 +156,13 @@ local crafter_technology = {
   prerequisites = {"advanced-circuit"},
   unit =
   {
-    count = 1000,
+    count = 250,
     ingredients =
     {
-      -- it only costs time
+      {"automation-science-pack", 1},
+      {"logistic-science-pack", 1}
     },
-    time = 60
+    time = 30
   }
 }
 

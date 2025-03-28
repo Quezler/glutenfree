@@ -83,12 +83,15 @@ local technology = {
   prerequisites = {"effect-transmission", "automation-3"},
   unit =
   {
-    count = 1000,
+    count = 250,
     ingredients =
     {
-      -- it only costs time
+      {"automation-science-pack", 1},
+      {"logistic-science-pack", 1},
+      {"chemical-science-pack", 1},
+      {"production-science-pack", 1}
     },
-    time = 60
+    time = 30
   }
 }
 

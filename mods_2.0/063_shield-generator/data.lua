@@ -102,12 +102,9 @@ local technology = {
   prerequisites = {"stone-wall", "space-platform"},
   unit =
   {
-    count = 1000,
-    ingredients =
-    {
-      -- it only costs time
-    },
-    time = 60
+    count = 250,
+    ingredients = {{"automation-science-pack", 1}},
+    time = 30
   }
 }
 
