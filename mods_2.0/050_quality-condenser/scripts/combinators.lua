@@ -1,6 +1,7 @@
 local Combinators = {}
 
 function Combinators.migrate_to_2_0_38(struct)
+  if struct.proxy_container then return end
   struct.proxy_container = storage.surface.create_entity{
     name = "proxy-container",
     force = "neutral",
