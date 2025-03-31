@@ -74,5 +74,6 @@ tile_beacon.selection_priority = 51
 tile_beacon.selectable_in_game = debug_mode
 table.insert(entity.flags, "not-on-map")
 tile_beacon.energy_source = {type = "void"}
+tile_beacon.heating_energy = nil
 
 data:extend{tile_beacon}
