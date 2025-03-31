@@ -13,7 +13,7 @@ class InstanceCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('name', InputArgument::REQUIRED);
+        $this->addArgument('name', InputArgument::OPTIONAL);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -22,7 +22,17 @@ class InstanceCommand extends Command
         if (!file_exists($instances_directory))
             mkdir($instances_directory);
 
-        $instance_directory = "{$instances_directory}/{$input->getArgument('name')}";
+        $name = $input->getArgument('name');
+        $instance_directory = "{$instances_directory}/{$name}";
+
+        if ($name == null) {
+            $instance_directory = "/Volumes/Factorio";
+            if (!file_exists($instance_directory)) {
+                exec('open -a /Applications/TmpDisk.app --args -name=Factorio -size=' . (1024 * 10), $lines);
+                sleep(2);
+            }
+        }
+
         if (!file_exists($instance_directory))
             mkdir($instance_directory);
 
@@ -39,7 +49,8 @@ class InstanceCommand extends Command
             mkdir($mods_directory);
 
         $this->syncAuthentication($instance_directory);
-        passthru("(cd {$instance_directory} && /Applications/factorio.app/Contents/MacOS/factorio --config ../../config.ini)");
+        $config_ini_pathname = __DIR__ . '/../../config.ini';
+        passthru("(cd {$instance_directory} && /Applications/factorio.app/Contents/MacOS/factorio --config {$config_ini_pathname})");
 
         return Command::SUCCESS;
     }
