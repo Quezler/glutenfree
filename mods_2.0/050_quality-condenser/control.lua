@@ -145,6 +145,11 @@ function Handler.refresh_gui_for_players()
   end
 end
 
+script.on_event(defines.events.on_player_created, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaEntity]]
+  Handler.refresh_gui_for_player(player)
+end)
+
 script.on_init(function()
   storage.surface = game.planets["quality-condenser"].create_surface()
   storage.surface.generate_with_lab_tiles = true
