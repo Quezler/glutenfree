@@ -39,6 +39,9 @@ local function assembler_set_recipe_and_quality(assembler, recipe, quality)
 end
 
 local function try_change_quality(assembler, increment_quality)
+  -- if the recipe is fixed, the player has no access to change the quality unless done through a mod.
+  if assembler.prototype.fixed_recipe then return end
+
   local recipe_prototype, quality_prototype = assembler.get_recipe()
   if not recipe_has_item_ingredients[recipe_prototype.name] then return end
 
@@ -55,8 +58,17 @@ local function try_change_quality(assembler, increment_quality)
   end
 end
 
+local function get_entity_type(entity)
+  return entity.type == "entity-ghost" and entity.ghost_type or entity.type
+end
+
+local type_is_assembling_machine = {
+  ["assembling-machine"] = true,
+  ["rocket-silo"] = true,
+}
+
 local function entity_is_assembling_machine(entity)
-  return (entity.type == "entity-ghost" and entity.ghost_type or entity.type) == "assembling-machine"
+  return type_is_assembling_machine[get_entity_type(entity)]
 end
 
 local function on_custom_input(event)
@@ -76,7 +88,7 @@ local function on_custom_input(event)
     end
   end
 
-  if prototype.derived_type == "assembling-machine" then
+  if type_is_assembling_machine[prototype.derived_type] then
     local selected = player.selected
     if selected and entity_is_assembling_machine(selected) then
       local recipe = selected.get_recipe()
