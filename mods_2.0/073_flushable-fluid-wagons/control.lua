@@ -1,4 +1,4 @@
-
+require("util")
 
 script.on_init(function()
   storage.playerdata = {}
@@ -9,24 +9,27 @@ script.on_configuration_changed(function()
 end)
 
 local gui_frame_name = "flushable-fluid-wagons--frame"
+local gui_flush_name = "flushable-fluid-wagons--flush"
+
+local localised_name_for_fluid = {}
+for _, prototype in pairs(prototypes.fluid) do
+  localised_name_for_fluid[prototype.name] = prototype.localised_name
+end
 
 local function update_gui(playerdata)
   local fluid = playerdata.entity.get_fluid(1)
+  local has_fluid = fluid ~= nil
 
-  if not fluid then
-    playerdata.contents.visible = false
-    playerdata.table.visible = false
-    return
-  end
-
-  playerdata.contents.visible = true
-  playerdata.table.visible = true
+  playerdata.contents.visible = has_fluid
+  playerdata.table.visible = has_fluid
+  if not has_fluid then return end
 
   playerdata.button.sprite = "fluid/" .. fluid.name
   playerdata.button.elem_tooltip = {type = "fluid", name = fluid.name}
-  playerdata.label.caption = (fluid.amount / 1000) .. "k"
+
+  playerdata.label.caption = util.format_number(fluid.amount, true)
   playerdata.label.tooltip = string.format("%.4f", fluid.amount)
-  playerdata.trash.tooltip = {"gui-pipe.flush-this", fluid.name}
+  playerdata.trash.tooltip = {"gui-pipe.flush-this", localised_name_for_fluid[fluid.name]}
 end
 
 local function open_gui(playerdata)
@@ -97,6 +100,7 @@ local function open_gui(playerdata)
   pusher.style.horizontally_stretchable = true
 
   local trash = gui_table.add{
+    name = gui_flush_name,
     type = "sprite-button",
     sprite = "utility/trash",
     style = "tool_button_flush_fluid",
@@ -111,7 +115,6 @@ local function open_gui(playerdata)
   playerdata.button = sprite_button
   playerdata.label = label
   playerdata.trash = trash
-  update_gui(playerdata)
 end
 
 local function on_tick_playerdata(playerdata)
@@ -125,6 +128,9 @@ local function on_tick_playerdata(playerdata)
     open_gui(playerdata)
     playerdata.opened = true
   end
+
+  if not player.gui.screen[gui_frame_name] then return false end
+  update_gui(playerdata)
 end
 
 local function on_tick(event)
@@ -164,41 +170,17 @@ script.on_event("open-fluid-wagon", function(event)
   script.on_event(defines.events.on_tick, on_tick)
 end)
 
--- script.on_event(defines.events.on_player_main_inventory_changed, function(event)
---   game.print(event.tick .. " on_player_main_inventory_changed")
---   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-
---   local tank = _storage.player_should_open[player.index]
---   if tank == nil then return end
---   _storage.player_should_open[player.index] = nil
-
---   if tank.valid == false then return end
---   player.opened = tank
--- end)
-
--- script.on_event(defines.events.on_player_flushed_fluid, function(event)
---   if storage.is_flushable[event.entity.name] then
---     local wagon = storage.tank_number_to_wagon[event.entity.unit_number]
---     wagon.clear_fluid_inside()
---   end
--- end)
-
--- /c game.print(game.player.opened.get_fluid_contents()["water"])
--- /c game.player.opened.insert_fluid({name = "water", amount = 50000})
-
--- /c script.on_event(defines.events.on_tick, function(event)
---   for _, player in pairs(game.players) do
---     if player.opened and player.opened.name == "storage-tank" then
---       game.print(event.tick)
---       player.opened.clear_fluid_inside()
---       player.opened.insert_fluid({name = "water", amount = 50000})
---     end
---   end
--- end)
-
 script.on_event(defines.events.on_gui_closed, function(event)
   local element = event.element
   if element and element.name == gui_frame_name then
     element.destroy()
+  end
+end)
+
+script.on_event(defines.events.on_gui_click, function(event)
+  if event.element and event.element.name == gui_flush_name then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    local playerdata = storage.playerdata[player.index]
+    playerdata.entity.clear_fluid_inside()
   end
 end)
