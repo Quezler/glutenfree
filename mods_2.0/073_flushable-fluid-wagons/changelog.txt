@@ -1,12 +1,12 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
-Date: ????
+Date: 2024. 04. 02
   Info:
-    - Ported to 2.0, phase 1
+    - Ported to 2.0, phase 1/2
     - Fluke?
     - Design the luagui
     - Extract gui updating code into another method
-    - Ported to 2.0, phase 2
+    - Ported to 2.0, phase 2/2
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2024. 02. 04
