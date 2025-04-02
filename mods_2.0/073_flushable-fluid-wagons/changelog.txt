@@ -5,6 +5,7 @@ Date: ????
     - Ported to 2.0, phase 1
     - Fluke?
     - Design the luagui
+    - Extract gui updating code into another method
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2024. 02. 04

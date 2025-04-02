@@ -10,7 +10,29 @@ end)
 
 local gui_frame_name = "flushable-fluid-wagons--frame"
 
-local function open_gui(player, entity)
+local function update_gui(playerdata)
+  local fluid = playerdata.entity.get_fluid(1)
+
+  if not fluid then
+    playerdata.contents.visible = false
+    playerdata.table.visible = false
+    return
+  end
+
+  playerdata.contents.visible = true
+  playerdata.table.visible = true
+
+  playerdata.button.sprite = "fluid/" .. fluid.name
+  playerdata.button.elem_tooltip = {type = "fluid", name = fluid.name}
+  playerdata.label.caption = (fluid.amount / 1000) .. "k"
+  playerdata.label.tooltip = string.format("%.4f", fluid.amount)
+  playerdata.trash.tooltip = {"gui-pipe.flush-this", fluid.name}
+end
+
+local function open_gui(playerdata)
+  local player = playerdata.player
+  local entity = playerdata.entity
+
   local frame = player.gui.screen[gui_frame_name]
   if frame then frame.destroy() end
 
@@ -32,19 +54,24 @@ local function open_gui(player, entity)
     direction = "vertical",
   }
 
-  local entity_preview = inner.add{
+  local entity_preview_frame = inner.add{
+    type = "frame",
+    style = "deep_frame_in_shallow_frame",
+  }
+
+  local entity_preview = entity_preview_frame.add{
     type = "entity-preview",
     style = "wide_entity_button",
   }
   entity_preview.entity = entity
 
-  local label = inner.add{
+  local contents = inner.add{
     type = "label",
     caption = {"gui-pipe.this-contents", entity.localised_name},
   }
-  label.style.font = "default-semibold"
-  label.style.top_margin = 5
-  label.style.bottom_margin = 5
+  contents.style.font = "default-semibold"
+  contents.style.top_margin = 5
+  contents.style.bottom_margin = 5
 
   local gui_table = inner.add{
     type = "table",
@@ -53,15 +80,15 @@ local function open_gui(player, entity)
 
   local sprite_button = gui_table.add{
     type = "sprite-button",
-    sprite = "fluid/" .. "water",
+    sprite = "fluid/fluid-unknown",
     style = "transparent_slot",
-    elem_tooltip = {type = "fluid", name = "water"},
+    -- elem_tooltip,
   }
 
-  gui_table.add{
+  local label = gui_table.add{
     type = "label",
-    caption = "50k",
-    tooltip = string.format("%.4f", 1),
+    -- caption,
+    -- tooltip,
   }
 
   local pusher = gui_table.add{
@@ -69,15 +96,22 @@ local function open_gui(player, entity)
   }
   pusher.style.horizontally_stretchable = true
 
-  gui_table.add{
+  local trash = gui_table.add{
     type = "sprite-button",
     sprite = "utility/trash",
     style = "tool_button_flush_fluid",
-    tooltip = {"gui-pipe.flush-this", "water"}
+    -- tooltip,
   }
 
   player.opened = frame
   frame.force_auto_center()
+
+  playerdata.contents = contents
+  playerdata.table = gui_table
+  playerdata.button = sprite_button
+  playerdata.label = label
+  playerdata.trash = trash
+  update_gui(playerdata)
 end
 
 local function on_tick_playerdata(playerdata)
@@ -88,7 +122,7 @@ local function on_tick_playerdata(playerdata)
 
   if not playerdata.entity.valid then return false end
   if not playerdata.opened then
-    open_gui(player, playerdata.entity)
+    open_gui(playerdata)
     playerdata.opened = true
   end
 end
