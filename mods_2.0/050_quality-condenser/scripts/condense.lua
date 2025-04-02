@@ -35,7 +35,7 @@ local function get_spoil_percentage(inventory, item)
 
   for slot = 1, #inventory do
     local stack = inventory[slot]
-    if stack.valid_for_read and stack.name == item.name then
+    if stack.valid_for_read and stack.name == item.name and stack.quality.name == item.quality then
       if spoil_percentage == nil then
         spoil_percentage = stack.spoil_percent
       else
