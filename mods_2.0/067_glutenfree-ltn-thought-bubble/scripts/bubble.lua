@@ -1,3 +1,5 @@
+require("util")
+
 local bubble = {}
 
 function bubble.init()
@@ -5,16 +7,17 @@ function bubble.init()
   storage.deliveries_table_was_previously_empty = true
 
   storage.entries = {}
-  rendering.clear('glutenfree-ltn-thought-bubble')
+  rendering.clear("glutenfree-ltn-thought-bubble")
 end
 
 function bubble.on_dispatcher_updated(event)
-  -- game.print('on_dispatcher_updated @ ' .. event.tick)
+  -- game.print("on_dispatcher_updated @ " .. event.tick)
   storage.deliveries = event.deliveries
+  -- log(serpent.block(event.deliveries))
 
   if storage.deliveries_table_was_previously_empty then
     storage.deliveries_table_was_previously_empty = false
-    -- game.print('on_dispatcher_updated @ ' .. event.tick)
+    -- game.print("on_dispatcher_updated @ " .. event.tick)
 
     for _, delivery in pairs(storage.deliveries) do
       if delivery.train.valid then
@@ -31,7 +34,7 @@ function bubble.on_dispatcher_updated(event)
 end
 
 function bubble.on_delivery_created(event)
-  -- game.print('on_delivery_created @ ' .. event.tick)
+  -- game.print("on_delivery_created @ " .. event.tick)
   storage.deliveries[event.train.id] = event
 
   bubble.update_train(event.train)
@@ -57,7 +60,7 @@ function bubble.update_train(train)
     return
   end
 
-  if storage.entries[train.id] then return end -- there's already a thought bubble active
+  if storage.entries[train.id] then return end -- there"s already a thought bubble active
 
   local entry = {
     train = train,
@@ -65,18 +68,17 @@ function bubble.update_train(train)
   }
 
   local what = bubble.pick_one_what_from_shipment(delivery.shipment)
-  if not what then
-    game.print(serpent.block(delivery))
-    return
-  end
-  local shipment_sprite = what:gsub(',','.')
+  if not what then error(serpent.block(delivery)) end
+
+  local shipment_type, shipment_name, shipment_quality = table.unpack(util.split(what, ",")) -- "item.iron-plate.uncommon"
+  shipment_quality = shipment_quality or "normal"
+  local shipment_sprite = shipment_type .. "/" .. shipment_name -- "item/iron-plate"
 
   for _, locomotive in ipairs(bubble.get_locomotives(train)) do
     entry.sprites[#entry.sprites+1] = rendering.draw_sprite{
-      sprite = 'utility.entity_info_dark_background',
-      target = {entity = locomotive, offset = {0, -0.75}},
+      sprite = "utility.entity_info_dark_background",
+      target = {entity = locomotive, offset = {0, -0.75}}, -- data.raw["locomotive"]["locomotive"].alert_icon_shift - 0.2
       surface = locomotive.surface,
-      -- target_offset = {0, -0.75}, -- data.raw['locomotive']['locomotive'].alert_icon_shift - 0.2
       x_scale = 0.75, -- looks good-ish
       y_scale = 0.75, -- looks good-ish
       only_in_alt_mode = true,
@@ -84,9 +86,8 @@ function bubble.update_train(train)
 
     entry.sprites[#entry.sprites+1] = rendering.draw_sprite{
       sprite = shipment_sprite,
-      target = {entity = locomotive, offset = {0, -0.75}},
+      target = {entity = locomotive, offset = {0, -0.75}},  -- data.raw["locomotive"]["locomotive"].alert_icon_shift - 0.2
       surface = locomotive.surface,
-      -- target_offset = {0, -0.75}, -- data.raw['locomotive']['locomotive'].alert_icon_shift - 0.2
       x_scale = 0.80, -- looks good-ish
       y_scale = 0.80, -- looks good-ish
       only_in_alt_mode = true,
@@ -120,7 +121,7 @@ function bubble.get_locomotives(train)
 end
 
 function bubble.train_is_approaching_station(train, station_backer_name)
-  -- can't approach without a schedule
+  -- can"t approach without a schedule
   if not train.schedule then return false end
 
   -- require more than 2 stops (depot + temp + station)
