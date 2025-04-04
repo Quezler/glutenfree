@@ -2,4 +2,4 @@ We all have that one multiplayer friend who is in a rush and forgets to appropri
 
 That and copy pasting a blueprint containing a combinator and accidentally triggering a train prematurely.
 
-(note: this overrides the enabled/disabled circuit condition on a station it needs to disable due to name)
+(note: in order to disable the station the logistic condition is toggled, pre configured ones are skipped)

@@ -2,10 +2,15 @@
     "name": "ltn-disable-stations-with-a-default-name",
     "title": "Logistic Train Network - disable stations with a default name",
     "description": "Disables stations until you change the name to a non-backer one.",
-    "version": "1.0.2",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "? base",
+        "? space-age",
+        
         "LogisticTrainNetwork"
     ]
 }

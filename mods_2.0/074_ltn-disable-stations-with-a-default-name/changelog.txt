@@ -1,0 +1,21 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 04. 04
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2024. 09. 18
+  Info:
+    - Fix typo in description (spotted by KiwiHawk)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2023. 05. 03
+  Info:
+    - Add disclaimer safeguard
+    - Catch "Expected `target_entity`" crash earlier (without actually fixing it)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2023. 05. 03
+  Info:
+    - Publish ltn-disable-stations-with-a-default-name
