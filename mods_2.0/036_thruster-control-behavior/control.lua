@@ -320,7 +320,9 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       local struct = storage.structs[deathrattle.struct_id]
       if struct then
         struct.inserter.held_stack.clear()
-        Handler.on_power_switch_touched(struct.power_switch)
+        if struct.power_switch.valid then
+          Handler.on_power_switch_touched(struct.power_switch)
+        end
       end
     end
 
