@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Support blueprinting them on concrete
+    - Endure minable shenannigans
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 08
