@@ -16,3 +16,6 @@ uranium_235.place_as_tile =
   condition = {layers = {}},
   tile_condition = {"refined-concrete", "frozen-refined-concrete"}
 }
+
+data.raw["tile"]["concrete"].default_cover_tile = "refined-concrete"
+data.raw["tile"]["frozen-concrete"].default_cover_tile = "frozen-refined-concrete"
