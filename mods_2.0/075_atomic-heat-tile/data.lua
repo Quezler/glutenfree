@@ -21,17 +21,21 @@ uranium_green.place_as_tile =
 {
   result = green_tile.name,
   condition_size = 1,
-  condition = {layers = {}},
-  tile_condition = {"refined-concrete", "frozen-refined-concrete"}
+  condition = {layers={water_tile=true}},
+  -- tile_condition = {"refined-concrete", "frozen-refined-concrete"}
 }
 
 uranium_acid.place_as_tile =
 {
   result = acid_tile.name,
   condition_size = 1,
-  condition = {layers = {}},
-  tile_condition = {"refined-concrete", "frozen-refined-concrete"}
+  condition = {layers={water_tile=true}},
+  -- tile_condition = {"refined-concrete", "frozen-refined-concrete"}
 }
 
 -- data.raw["tile"][       "concrete"].default_cover_tile =        "refined-concrete"
 -- data.raw["tile"]["frozen-concrete"].default_cover_tile = "frozen-refined-concrete"
+
+for _, tile_name in ipairs(data.raw["item"]["ice-platform"].place_as_tile.tile_condition) do
+  table.insert(data.raw["item"]["foundation"].place_as_tile.tile_condition, tile_name)
+end

@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Support blueprinting them on concrete
     - Endure minable shenannigans
+    - Make foundations placeable on aquilo
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 08
