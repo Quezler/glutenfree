@@ -21,7 +21,7 @@ end
 local Handler = {}
 
 function Handler.on_init()
-  global.construction_robots = {}
+  storage.construction_robots = {}
 end
 
 function Handler.on_load()
@@ -31,17 +31,17 @@ function Handler.on_load()
 end
 
 function Handler.should_on_tick()
-  return global.construction_robots and #global.construction_robots > 0
+  return storage.construction_robots and #storage.construction_robots > 0
 end
 
 function Handler.on_tick(event)
-  for _, construction_robot in ipairs(global.construction_robots) do
+  for _, construction_robot in ipairs(storage.construction_robots) do
     if construction_robot.valid then
       Handler.after_robot_visited_cargo(construction_robot)
     end
   end
 
-  global.construction_robots = {}
+  storage.construction_robots = {}
   -- if Handler.should_on_tick() then return end
   script.on_event(defines.events.on_tick, nil)
 end
@@ -49,18 +49,18 @@ end
 script.on_event(defines.events.on_robot_pre_mined, function(event)
   if not logistic_network_is_personal_roboport(event.robot.logistic_network) then return end
 
-  table.insert(global.construction_robots, event.robot)
+  table.insert(storage.construction_robots, event.robot)
   script.on_event(defines.events.on_tick, Handler.on_tick)
-end, {{filter = 'name', name = 'logistic-robot-dropped-cargo'}})
+end, {{filter = "name", name = "logistic-robot-dropped-cargo"}})
 
 function Handler.after_robot_visited_cargo(robot)
   local cargo = robot.get_inventory(defines.inventory.robot_cargo)
   if cargo.is_empty() then return end -- picked up an empty parcel
 
-  -- what if a player died in the tick a robot picked up dropped cargo? i guess we'll await the reports
+  -- what if a player died in the tick a robot picked up dropped cargo? i guess we"ll await the reports
   local trash = robot.logistic_network.cells[1].owner.get_inventory(defines.inventory.character_trash)
 
-  -- just teleport the items to the player instantly so we don't have to check each tick if the bot has arrived home yet
+  -- just teleport the items to the player instantly so we don't have to check each tick if the bot has arrived home yet.
   local count = cargo[1].count
   local inserted = trash.insert(cargo[1])
   cargo[1].count = cargo[1].count - inserted
@@ -75,7 +75,7 @@ function Handler.after_robot_visited_cargo(robot)
 
   -- apparently .insert(LuaItemStack) can copy stuff with data like blueprints just fine, so no need to swap stacks.
   cargo[1].clear()
-  error('achievement get! how did we get here?')
+  error("achievement get! how did we get here?")
 end
 
 --
