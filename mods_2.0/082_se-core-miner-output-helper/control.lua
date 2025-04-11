@@ -1,5 +1,5 @@
 script.on_event(defines.events.on_selected_entity_changed, function(event)
-  local player = game.get_player(event.player_index)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   assert(player)
 
   local entity = player.selected
@@ -29,8 +29,8 @@ end)
 
 --
 
-local Util = require('__space-exploration-scripts__.util')
-local Zonelist = require('__space-exploration-scripts__.zonelist')
+local Util = require("__space-exploration-scripts__.util")
+local Zonelist = require("__space-exploration-scripts__.zonelist")
 
 function Zone_get_fragment_name(zone)
   if not (zone.type == "planet" or zone.type == "moon") then return end -- Zone.is_solid(zone)
@@ -44,7 +44,7 @@ function Zone_get_core_seam_count(zone)
 end
 
 function get_mining_time(fragment_name)
-  return game.entity_prototypes[fragment_name].mineable_properties.mining_time
+  return prototypes.entity[fragment_name].mineable_properties.mining_time
 end
 
 function content_ensure_coremining_child(content, should_be_nil)
@@ -64,7 +64,7 @@ function content_ensure_coremining_child(content, should_be_nil)
       style = "se_zonelist_zone_data_content_sub_flow"
     }
   elseif should_be_nil then
-    game.print('Gui element with name coremining-header already present in the parent element.')
+    game.print("Gui element with name coremining-header already present in the parent element.")
   else
     -- the universe explorer was refreshed through a method/event we were not able to discover/handle
   end
@@ -107,7 +107,7 @@ function update_content_for_player(content, player, zone_index)
   local mining_productivity = 1 + player.force.mining_drill_productivity_bonus
   local last_per_second = 0
 
-  local no_diminishing_returns = game.active_mods['se-core-miner-no-diminishing-returns'] ~= nil
+  local no_diminishing_returns = script.active_mods["se-core-miner-no-diminishing-returns"] ~= nil
   local per_second_for_one = nil
 
   for i = 1, Zone_get_core_seam_count(zone) do
@@ -152,7 +152,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
   local zone_index = nil
 
   if event.element.name == "se-map-view-zone-details" then
-    container = event.element['right-flow']['container-frame']
+    container = event.element["right-flow"]["container-frame"]
     zone_index = event.element.tags.zone_index
   elseif event.element.name == Zonelist.name_root then
     local root = event.element
@@ -178,8 +178,8 @@ script.on_event(defines.events.on_gui_click, function(event)
   if event.element.tags and event.element.tags.action and event.element.tags.action == "go-to-zone" then
     -- todo: also check if the "se-map-view-zone-details" is open at all since "go-to-zone" sounds generic?
     local player = game.get_player(event.player_index)
-    if event.element.parent.parent.parent['right-flow'] == nil then return end -- when only 1 satellite has been launched
-    local container = event.element.parent.parent.parent['right-flow']['container-frame']
+    if event.element.parent.parent.parent["right-flow"] == nil then return end -- when only 1 satellite has been launched
+    local container = event.element.parent.parent.parent["right-flow"]["container-frame"]
     local content = container[Zonelist.name_zone_data_content_scroll_pane]
     local zone_index = event.element.tags.zone_index
     update_content_for_player(content, player, zone_index)

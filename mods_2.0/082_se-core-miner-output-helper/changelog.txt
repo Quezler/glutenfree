@@ -1,0 +1,90 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 04. 11
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: 2024. 08. 28
+  Info:
+    - Typo and assert i guess
+---------------------------------------------------------------------------------------------------
+Version: 1.0.15
+Date: 2024. 02. 11
+  Info:
+    - Fix crash when clicking another surface in remote view when only 1 satellite has been launched
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: 2024. 01. 22
+  Info:
+    - Show correct numbers when `se-core-miner-no-diminishing-returns` is installed
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 2024. 01. 08
+  Info:
+    - Fix `'then' expected near 'game'`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 2024. 01. 08
+  Info:
+    - Fix crash when anchoring whilst universe explorer is open
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 2023. 12. 28
+  Info:
+    - Fix spaceships showing core mining
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2023. 12. 24
+  Info:
+    - Fix `Gui element with name coremining-header already present in the parent element.`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2023. 12. 20
+  Info:
+    - Fix `container == nil` error
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2023. 12. 20
+  Info:
+    - Fix star map showing core mining stats for orbits
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2023. 12. 20
+  Info:
+    - Support the star map (currently orbit shows the core mining section too)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2023. 12. 20
+  Info:
+    - Fix crash when opening the universe explorer via keybind or shortcut and then clicking on a zone
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2023. 12. 19
+  Info:
+    - Fix `Unknown key:`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2023. 12. 19
+  Info:
+    - Fix missing style & updated the description
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2023. 12. 19
+  Info:
+    - Show all possible core miner values in the universe explorer so you can see the diminishing returns
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2023. 09. 14
+  Info:
+    - Improve performance upon hovering
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2023. 05. 02
+  Info:
+    - Renamed the mod
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2023. 05. 02
+  Info:
+    - Move the core miner helper mod to this repository
