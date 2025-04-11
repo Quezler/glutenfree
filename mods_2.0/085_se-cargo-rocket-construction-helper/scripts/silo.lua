@@ -12,7 +12,7 @@ function silo.init()
 end
 
 function silo.on_created_entity(event)
-  local entity = event.created_entity or event.entity or event.destination
+  local entity = event.entity or event.destination
 
   silo.register(entity)
 end
@@ -27,6 +27,12 @@ function silo.register(entity)
   -- print("registered silo ["..entity.unit_number.."].")
 end
 
+local delivery_allowed = {
+  [defines.rocket_silo_status.lights_blinking_close] = true,
+  [defines.rocket_silo_status.doors_closing] = true,
+  [defines.rocket_silo_status.building_rocket] = true,
+}
+
 function silo.random_tick(entry)
 
   if not entry.silo or not entry.silo.valid then
@@ -34,30 +40,27 @@ function silo.random_tick(entry)
   end
 
   -- stop here if there is a finished rocked in/on/above the silo
-  if entry.silo.rocket_silo_status ~= defines.rocket_silo_status.building_rocket then
-    return
-  end
+  if not delivery_allowed[entry.silo.rocket_silo_status] then return end
 
   if not entry.combinator or not entry.combinator.valid then
     entry.combinator = entry.container.surface.find_entity("se-rocket-launch-pad-combinator", entry.container.position)
     if not entry.combinator then return end -- called in the same tick the silo was constructed, and SE needing one more?
 
-    local sections_signal = entry.combinator.get_or_create_control_behavior().get_signal(2)
-    local capsules_signal = entry.combinator.get_or_create_control_behavior().get_signal(3)
+    local section = entry.combinator.get_logistic_sections().get_section(1)
+    local sections_filter = section.get_slot(2)
+    local capsules_filter = section.get_slot(3)
 
-    if not sections_signal.signal then game.print('hmm? 1') return end
-    if not capsules_signal.signal then game.print('hmm? 2') return end
-
-    if (sections_signal.signal.name ~= "se-cargo-rocket-section") then error("did not expect the ["..sections_signal.signal.name.."] signal at combinator position 2.") end
-    if (capsules_signal.signal.name ~= "se-space-capsule")        then error("did not expect the ["..capsules_signal.signal.name.."] signal at combinator position 3.") end
+    if (sections_filter.value.name ~= "se-cargo-rocket-section") then error("did not expect the ["..sections_filter.value.name.."] signal at combinator position 2.") end
+    if (capsules_filter.value.name ~= "se-space-capsule")        then error("did not expect the ["..capsules_filter.value.name.."] signal at combinator position 3.") end
   end
 
   --
 
   local container_inventory = entry.container.get_inventory(defines.inventory.chest)
-  
-  local missing_sections = 100 - entry.combinator.get_or_create_control_behavior().get_signal(2).count - container_inventory.get_item_count('se-cargo-rocket-section')
-  local missing_capsules = 1   - entry.combinator.get_or_create_control_behavior().get_signal(3).count - container_inventory.get_item_count('se-space-capsule')
+
+  local section = entry.combinator.get_logistic_sections().get_section(1)
+  local missing_sections = 100 - section.get_slot(2).min - container_inventory.get_item_count("se-cargo-rocket-section")
+  local missing_capsules = 1   - section.get_slot(3).min - container_inventory.get_item_count("se-space-capsule")
 
   if missing_sections > 0 or missing_capsules > 0 then
 
@@ -67,14 +70,32 @@ function silo.random_tick(entry)
         name = "item-request-proxy",
         position = entry.container.position,
         target = entry.container,
-        force =  entry.container.force,
+        force = entry.container.force,
         modules = {}
       }
 
-      if (missing_sections > 0) then to_create.modules["se-cargo-rocket-section"] = missing_sections end
-      if (missing_capsules > 0) then to_create.modules["se-space-capsule"       ] = missing_capsules end
+      if (missing_sections > 0) then
+        local down_from = #container_inventory - 2 +1 -- we start iterating at 1
+        local in_inventory = {}
 
-      -- print(serpent.block(to_create.modules))
+        for i = 1, missing_sections do
+          in_inventory[i] = {inventory = defines.inventory.chest, stack = down_from - i, count = 1}
+        end
+
+        table.insert(to_create.modules, {
+          id = {name = "se-cargo-rocket-section"},
+          items = {in_inventory = in_inventory}
+        })
+      end
+
+      if (missing_capsules > 0) then
+        table.insert(to_create.modules, {
+          id = {name = "se-space-capsule"},
+          items = {in_inventory = {
+            {inventory = defines.inventory.chest, stack = #container_inventory - 1, count = 1}
+          }}
+        })
+      end
 
       entry.container.surface.create_entity(to_create)
     end

@@ -1,0 +1,63 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 04. 11
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 2024. 02. 02
+  Info:
+    - Optimize events & fix overdelivery
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 2023. 05. 08
+  Info:
+    - Remove useless log from init
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2023. 05. 02
+  Info:
+    - Renamed the mod
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2022. 10. 20
+  Info:
+    - Debugging on_tick in the same tick a silo got placed
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2022. 10. 05
+  Info:
+    - Resque the descriptions from the google cache
+    - Recover markdown formatting by visual comparison
+    - Error while running event se-cargo-rocket-construction-helper::on_nth_tick(600)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2022. 09. 28
+  Info:
+    - No longer wait on any fuel before constructing
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2022. 09. 16
+  Info:
+    - Increment minor version(s)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2022. 09. 16
+  Info:
+    - Increment minor version(s)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2022. 09. 16
+  Info:
+    - Increment minor version(s)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2022. 09. 12
+  Info:
+    - Make cargo rocket helper depend on silo events
+    - Final cleanup before bundled launch
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022. 09. 12
+  Info:
+    - Construct the next rocket when the silo doors close

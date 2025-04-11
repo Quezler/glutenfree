@@ -2,11 +2,15 @@
     "name": "se-cargo-rocket-construction-helper",
     "title": "Space Exploration - cargo rocket construction helper",
     "description": "Delivers the capsule and rocket parts to the silo with construction robots.",
-    "version": "1.0.12",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "base",
+
         "space-exploration",
-        "glutenfree-rocket-silo-events"
+        "! glutenfree-rocket-silo-events"
     ]
 }
