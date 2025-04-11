@@ -1,0 +1,51 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 04. 11
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2024. 01. 28
+  Info:
+    - Optimize `on_created_entity` event
+    - Swap the flying text with luarendering
+    - Support "any landing pad with name"
+    - Set the position on the 2nd line correctly
+    - When the destination changes, automatically reset the position
+    - Try to label freshly placed cargo rocket silos
+    - Drop support for zoom scaling
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2023. 12. 08
+  Info:
+    - Move custom zone rich text to space exploration scripts
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2023. 05. 02
+  Info:
+    - Renamed the mod
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022. 10. 05
+  Info:
+    - Capitalize SE
+    - Rename it from the internal name to the human name
+    - Whole grain for everyone!
+    - It looked too tiny, expand SE into Space Exploration
+    - Change silo into rocket
+    - Fix crude oil appearing as yellow text
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022. 10. 05
+  Info:
+    - Cleanup breadcrumbs
+    - Listen to the launchpad destination dropdown changing
+    - Draw the destination on the silo with rendering
+    - Show flying text for the lifetime of the universe
+    - Destroy the label when the silo is demolished
+    - Ensure existing launchpads get a label
+    - Build our own rich text from the retrieved zone
+    - Mimic SE’s zone icon code as a fallback
+    - Final cleanup
+    - Add the thumbnail
+    - Increment the version prior to release
