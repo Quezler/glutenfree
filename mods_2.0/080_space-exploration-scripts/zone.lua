@@ -1,7 +1,5 @@
-local old_mod_prefix = mod_prefix
-local old_event = Event
-
 -- step 1
+local old_mod_prefix = mod_prefix
 mod_prefix = "se-"
 Event = {addListener = function() end}
 
@@ -9,7 +7,7 @@ Event = {addListener = function() end}
 local Zone = require("__space-exploration__.scripts.zone")
 
 -- step 3
-Event = old_event
+Event = nil
 mod_prefix = old_mod_prefix
 
 -- step 4
