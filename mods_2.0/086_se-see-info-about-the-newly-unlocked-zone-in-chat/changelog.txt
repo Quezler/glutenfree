@@ -1,0 +1,30 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 04. 11
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2024. 09. 15
+  Info:
+    - Avoid printing resource & threat info for stars
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024. 01. 31
+  Info:
+    - Prevent nil from appearing in the chat after launching a satellite
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 01. 30
+  Info:
+    - Key with text instead of icons
+    - Settle on a message and a thumbnail
+    - Skip printing if there are several new zones
+    - Fix 〃
+    - Support discovering zones by satellite
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2024. 01. 30
+  Info:
+    - Stash proof of concept
