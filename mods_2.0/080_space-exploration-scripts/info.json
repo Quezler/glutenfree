@@ -2,10 +2,14 @@
     "name": "space-exploration-scripts",
     "title": "Space Exploration - scripts",
     "description": "Bruteforces access to some of the constants and util functions.",
-    "version": "1.1.2",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "base",
+
         "space-exploration",
         "jetpack"
     ]

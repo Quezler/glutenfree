@@ -4,5 +4,5 @@ This mod currently allows me to access those without creating temporary variable
 
 There are currently only a few files supported (since the stuff i needed myself were in those), expect breaking changes if you use it.
 
-- `old require('__space-exploration__.scripts.util')`
-- `new require('__space-exploration-scripts__.util')`
+- `old require("__space-exploration__.scripts.util")`
+- `new require("__space-exploration-scripts__.util")`
