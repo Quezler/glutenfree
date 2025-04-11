@@ -10,14 +10,9 @@ function on_efficiency_updated(event)
     local resource = resource_set.resource
     resource.amount = event.new_amount_for_one
 
-    local entities = resource.surface.find_entities_filtered{
-      position = resource.position,
-      name = 'flying-text',
-    }
-
-    for _, entity in ipairs(entities) do
-      if ends_with(entity.text, ' effective') then
-        entity.destroy()
+    for _, render_object in ipairs(rendering.get_all_objects("space-exploration")) do
+      if render_object.target.entity == resource then
+        render_object.text = "100% effective"
       end
     end
   end

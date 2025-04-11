@@ -2,10 +2,14 @@
     "name": "se-core-miner-no-diminishing-returns",
     "title": "Space Exploration - core miner no diminishing returns",
     "description": "Placing extra core miners on a surface does not lower the effectiveness of others.",
-    "version": "1.1.0",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "base",
+        
         "space-exploration",
         "se-core-miner-efficiency-updated-event"
     ]
