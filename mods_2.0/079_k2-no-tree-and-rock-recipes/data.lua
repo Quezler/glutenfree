@@ -1,4 +1,4 @@
-data.raw['technology']['kr-decorations'] = nil
+data.raw["technology"]["kr-decorations"] = nil
 
 -- allright so apparently krastorio has this check (GNU LGPLv3) in their code,
 -- so all i apparently needed to do was disable the tech, i went into making this mod
