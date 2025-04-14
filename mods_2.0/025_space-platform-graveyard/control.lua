@@ -21,7 +21,13 @@ local function copy_hub_as_ghost(old_surface, new_surface)
   }
 
   local blueprint_entities = inventory[1].get_blueprint_entities() or {}
-  assert(#blueprint_entities == 1)
+  local hub_blueprinted = false
+  for _, blueprint_entity in ipairs(blueprint_entities) do
+    if prototypes.entity[blueprint_entity.name].type == "space-platform-hub" then
+      hub_blueprinted = true
+    end
+  end
+  assert(hub_blueprinted, serpent.line(blueprint_entities))
 
   local built_entities = inventory[1].build_blueprint{
     surface = new_surface,
@@ -81,7 +87,11 @@ script.on_event(defines.events.on_entity_died, function(event)
 
   assert(space_platform)
   space_platform.apply_starter_pack()
-  space_platform.schedule = platform.schedule
+
+  local schedule = platform.schedule
+  if schedule and #schedule.records > 0 then -- if there are no stops but there are interrupts the records are empty and it errors
+    space_platform.schedule = schedule
+  end
 
   local old_surface = event.entity.surface
   local new_surface = space_platform.surface

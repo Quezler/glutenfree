@@ -3,7 +3,7 @@
     "title": "Space platform graveyard",
     "description": "When a platform (suddenly) dies the surface doesn't delete itself so you can see what went wrong and/or grab a blueprint.",
 
-    "version": "1.0.3",
+    "version": "1.0.4",
     "author": "Quezler",
     "factorio_version": "2.0",
 
