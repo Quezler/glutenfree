@@ -11,8 +11,8 @@ data:extend{{
   hidden = true,
 }}
 
-assert(data.raw["furnace"]["kr-air-purifier"], "no mod has defined an kr-air-purifier furnace.")
-assert(data.raw["item"]["pollution-filter"], "no mod has defined an pollution-filter item.")
+assert(data.raw["furnace"]["kr-air-purifier"], "no mod has defined the kr-air-purifier furnace.")
+assert(data.raw["item"]["pollution-filter"] or data.raw["item"]["kr-pollution-filter"], "no mod has defined the kr-pollution-filter item.")
 
 -- data.raw["furnace"]["kr-air-purifier"].crafting_speed = 100
 data.raw["furnace"]["kr-air-purifier"].icons_positioning =

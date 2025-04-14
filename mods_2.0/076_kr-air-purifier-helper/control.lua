@@ -8,6 +8,11 @@ assert( prototypes.recipe["wooden-chest"].ingredients[1].type == "item")
 assert( prototypes.recipe["wooden-chest"].ingredients[1].name == "wood")
 assert( prototypes.recipe["wooden-chest"].ingredients[1].amount == 2)
 
+local pollution_filter_item = "kr-pollution-filter"
+if not prototypes.item["kr-pollution-filter"] then
+  pollution_filter_item = "pollution-filter"
+end
+
 function new_struct(table, struct)
   assert(struct.id, serpent.block(struct))
   assert(table[struct.id] == nil)
@@ -108,7 +113,7 @@ end
 
 local function new_insert_plan()
   return {
-    id = {name = "pollution-filter"},
+    id = {name = pollution_filter_item},
     items = {in_inventory = {
       {inventory = defines.inventory.furnace_source, stack = 0, count = 1},
     }}
@@ -116,7 +121,7 @@ local function new_insert_plan()
 end
 
 local function insert_plan_requests_filters(insert_plan)
-  return insert_plan.id.name == "pollution-filter"
+  return insert_plan.id.name == pollution_filter_item
 end
 
 local function ensure_a_proxy_is_requesting_filters(struct)
