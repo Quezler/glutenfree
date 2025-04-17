@@ -199,7 +199,7 @@ function speaker.announce(entity)
   end
 end
 
-function speaker.register_on_object_destroyed(event)
+function speaker.on_object_destroyed(event)
   if not storage.deathrattles[event.registration_number] then return end
 
   for _, entity in ipairs(storage.deathrattles[event.registration_number]) do
@@ -242,6 +242,9 @@ function speaker.every_10_minutes()
   for unit_number, entry in pairs(storage.entries or {}) do
     if not entry.speakerpole.valid then
       storage.entries[unit_number] = nil
+    elseif not game.get_entity_by_unit_number(unit_number) then
+      storage.entries[unit_number] = nil
+      entry.speakerpole.destroy()
     end
   end
 end

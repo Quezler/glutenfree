@@ -2,7 +2,7 @@
     "name": "glutenfree-ltn-announcer",
     "title": "Logistic Train Network - announcer",
     "description": "Gives a signal for all pending deliveries and/or pickups.",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [
