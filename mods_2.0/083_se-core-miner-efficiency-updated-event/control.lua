@@ -27,7 +27,7 @@ function on_core_miners_equalized(surface_index, prefetched_zone)
 end
 
 function on_created_entity(event)
-  local entity = event.created_entity or event.entity
+  local entity = event.entity or event.destination
   if entity.name ~= CoreMiner.name_core_miner_drill then return end
 
   -- game.print("core miner created.")
@@ -45,8 +45,10 @@ end
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
+  defines.events.on_space_platform_built_entity,
   defines.events.script_raised_built,
   defines.events.script_raised_revive,
+  defines.events.on_entity_cloned,
 }) do
   script.on_event(event, on_created_entity, {
     {filter = "name", name = "se-core-miner-drill"},
