@@ -53,6 +53,7 @@ local platform_cargo_bay_proxy_name = mod_prefix .. "platform-cargo-bay-proxy"
 local planet_cargo_bay_proxy_name = mod_prefix .. "planet-cargo-bay-proxy"
 
 local function assign_new_proxy_to_cargo_bay(entity)
+  -- assert(entity.type == "cargo-bay", entity.type)
   local surfacedata = storage.surfacedata[entity.surface.index]
   local proxy_container = entity.surface.create_entity{
     name = entity.surface.platform and platform_cargo_bay_proxy_name or planet_cargo_bay_proxy_name,
@@ -220,10 +221,9 @@ script.on_event(defines.events.on_entity_died, function(event)
       position = event.entity.position,
       limit = 1,
     }[1]
-    log(serpent.block(cargo_bay))
 
     if cargo_bay then
-      assign_new_proxy_to_cargo_bay(event.entity)
+      assign_new_proxy_to_cargo_bay(cargo_bay)
     end
 
     event.entity.destroy() -- hides the death alert

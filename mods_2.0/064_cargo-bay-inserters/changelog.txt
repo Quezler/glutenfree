@@ -3,6 +3,7 @@ Version: 1.0.3
 Date: ????
   Info:
     - God what rabbit hole am i even falling into
+    - Fix proxy re-assignment
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2025. 02. 09
