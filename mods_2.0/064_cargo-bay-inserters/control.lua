@@ -52,6 +52,19 @@ script.on_event(defines.events.on_surface_deleted, mod.refresh_surfacedata)
 local platform_cargo_bay_proxy_name = mod_prefix .. "platform-cargo-bay-proxy"
 local planet_cargo_bay_proxy_name = mod_prefix .. "planet-cargo-bay-proxy"
 
+local function assign_new_proxy_to_cargo_bay(entity)
+  local surfacedata = storage.surfacedata[entity.surface.index]
+  local proxy_container = entity.surface.create_entity{
+    name = entity.surface.platform and platform_cargo_bay_proxy_name or planet_cargo_bay_proxy_name,
+    force = entity.force,
+    position = entity.position,
+  }
+  proxy_container.destructible = entity.surface.platform ~= nil -- on platforms asteroids should be able to damage the tiles it occupies
+  proxy_container.proxy_target_inventory = entity.surface.platform and defines.inventory.hub_main or defines.inventory.cargo_landing_pad_main
+
+  surfacedata.cargo_bays[entity.unit_number] = {entity = entity, proxy = proxy_container}
+end
+
 function mod.on_created_entity(event)
   local entity = event.entity or event.destination
 
@@ -61,15 +74,7 @@ function mod.on_created_entity(event)
   local surfacedata = storage.surfacedata[entity.surface.index]
 
   if entity.type == "cargo-bay" then
-    local proxy_container = entity.surface.create_entity{
-      name = entity.surface.platform and platform_cargo_bay_proxy_name or planet_cargo_bay_proxy_name,
-      force = entity.force,
-      position = entity.position,
-    }
-    proxy_container.destructible = false
-    proxy_container.proxy_target_inventory = entity.surface.platform and defines.inventory.hub_main or defines.inventory.cargo_landing_pad_main
-
-    surfacedata.cargo_bays[entity.unit_number] = {entity = entity, proxy = proxy_container}
+    assign_new_proxy_to_cargo_bay(entity)
     storage.deathrattles[script.register_on_object_destroyed(entity)] = {
       name = "cargo-bay",
       surface_index = entity.surface_index,
@@ -206,3 +211,23 @@ function mod.mark_surface_dirty(surface)
 
   storage.dirty_surfaces[surface.index] = true
 end
+
+script.on_event(defines.events.on_entity_died, function(event)
+  if event.entity.name == platform_cargo_bay_proxy_name then
+    local cargo_bay = event.entity.surface.find_entities_filtered{
+      type = "cargo-bay",
+      force = event.entity.force,
+      position = event.entity.position,
+      limit = 1,
+    }[1]
+    log(serpent.block(cargo_bay))
+
+    if cargo_bay then
+      assign_new_proxy_to_cargo_bay(event.entity)
+    end
+
+    event.entity.destroy() -- hides the death alert
+  end
+end, {
+  {filter = "name", name = platform_cargo_bay_proxy_name},
+})
