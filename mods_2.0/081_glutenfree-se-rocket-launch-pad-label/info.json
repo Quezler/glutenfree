@@ -11,6 +11,6 @@
         "base",
 
         "space-exploration",
-        "space-exploration-scripts"
+        "space-exploration-scripts >= 2.0.0"
     ]
 }
