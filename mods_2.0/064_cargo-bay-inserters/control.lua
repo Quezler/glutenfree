@@ -180,6 +180,7 @@ function mod.update_proxies_for_surface(surface)
 
   for _, cargo_bay in pairs(surfacedata.cargo_bays) do
     if cargo_bay.entity.valid then
+      cargo_bay.proxy.destructible = surface.platform ~= nil -- pre 1.0.3
       local target = map[cargo_bay.entity.unit_number]
       if target then
         cargo_bay.proxy.proxy_target_entity = target.entity
