@@ -3,6 +3,7 @@ Version: 1.0.3
 Date: ????
   Info:
     - Fix empty leading filters causing a crash
+    - Try to catch the error that breaks the laws of the universe
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2025. 02. 19
