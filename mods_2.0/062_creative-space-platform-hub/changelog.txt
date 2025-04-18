@@ -1,9 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
-Date: ????
+Date: 2025. 04. 18
   Info:
     - Fix empty leading filters causing a crash
     - Try to catch the error that breaks the laws of the universe
+    - Actually, looks like it was already fixed 2 months ago, just never released :|
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2025. 02. 19
