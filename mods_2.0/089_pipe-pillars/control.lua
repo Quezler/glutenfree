@@ -1,5 +1,7 @@
 require("shared")
 
+local render_layer = 144 -- elevated rails use "elevated-higher-object", which at the time of writing uses 143, we sit above it.
+
 function new_struct(table, struct)
   assert(struct.id, serpent.block(struct))
   assert(table[struct.id] == nil)
@@ -34,8 +36,9 @@ function mod.on_created_entity(event)
   local struct = new_struct(surfacedata.structs, {
     id = entity.unit_number,
     entity = entity,
-    occluder = nil,
     connections = {},
+    occluder_top = nil,
+    occluder_tip = nil,
   })
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {
@@ -44,14 +47,24 @@ function mod.on_created_entity(event)
     unit_number = entity.unit_number,
   }
 
-  struct.occluder = rendering.draw_sprite{
-    sprite = "pipe-pillar-occluder",
+  struct.occluder_top = rendering.draw_sprite{
+    sprite = "pipe-pillar-occluder-top",
     scale = 0.5,
     surface = surfacedata.surface,
     target = {
       entity = struct.entity,
     },
-    render_layer = 143 + 1, -- elevated-higher-object + 1,
+    render_layer = render_layer + 0,
+  }
+
+  struct.occluder_tip = rendering.draw_sprite{
+    sprite = "pipe-pillar-occluder-tip",
+    scale = 0.5,
+    surface = surfacedata.surface,
+    target = {
+      entity = struct.entity,
+    },
+    render_layer = render_layer + 2,
   }
 
   mod.mark_surface_dirty(surfacedata.surface)
@@ -167,7 +180,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
                   entity = struct.entity,
                   offset = {-x_offset, -3.5},
                 },
-                render_layer = "elevated-higher-object",
+                render_layer = render_layer + 1,
               })
             end
           else
@@ -179,7 +192,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
                   entity = struct.entity,
                   offset = {0, -y_offset -3.5},
                 },
-                render_layer = "elevated-higher-object",
+                render_layer = render_layer + 1,
               })
             end
           end

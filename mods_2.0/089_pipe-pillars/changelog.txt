@@ -1,9 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
-Date: ????
+Date: 2025. 04. 20
   Info:
     - Fix pillar only forming one outgoing connection
     - Reach over the railings of elevated rails
+    - Enhance render layer interactions with elevated rails
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 04. 20

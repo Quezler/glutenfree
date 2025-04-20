@@ -17,8 +17,16 @@ data:extend{
   },
   {
     type = "sprite",
-    name = "pipe-pillar-occluder",
-    filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-occluder.png",
+    name = "pipe-pillar-occluder-top",
+    filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-occluder-top.png",
+    scale = 0.5,
+    width = 704,
+    height = 704,
+  },
+  {
+    type = "sprite",
+    name = "pipe-pillar-occluder-tip",
+    filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-occluder-tip.png",
     scale = 0.5,
     width = 704,
     height = 704,
