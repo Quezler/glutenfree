@@ -188,8 +188,8 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
         end -- any_diff
 
       end
+      ::continue::
     end
-    ::continue::
   end
 
   -- connections we did not come across stopped existing
