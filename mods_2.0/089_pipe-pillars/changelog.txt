@@ -3,6 +3,7 @@ Version: 0.0.4
 Date: ????
   Info:
     - Setup the luarendering refresh template
+    - Do the visual connecting and disconnecting
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 04. 20

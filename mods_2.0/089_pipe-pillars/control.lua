@@ -34,6 +34,7 @@ function mod.on_created_entity(event)
   local struct = new_struct(surfacedata.structs, {
     id = entity.unit_number,
     entity = entity,
+    connections = {},
   })
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {
@@ -101,7 +102,11 @@ local deathrattles = {
     if surfacedata then
       local struct = surfacedata.structs[deathrattle.unit_number]
       if struct then surfacedata.structs[deathrattle.unit_number] = nil
-        --
+        for _, connection in pairs(struct.connections) do
+          for _, sprite in ipairs(connection.sprites) do
+            sprite.destroy()
+          end
+        end
       end
       mod.mark_surface_dirty(surfacedata.surface)
     end
@@ -116,10 +121,78 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 end)
 
 function mod.update_elevated_pipes_for_surface(surfacedata)
+  local tick = game.tick
+
   for unit_number, struct in pairs(surfacedata.structs) do
-    for _, neighbour in ipairs(struct.entity.neighbours) do
+    local position = struct.entity.position
+    for _, neighbour in ipairs(struct.entity.neighbours[1]) do -- warning: if they are adjacent both the underground & normal connections show up
       if neighbour.name == "pipe-pillar" then
-        -- :3
+
+        local connection = struct.connections[neighbour.unit_number]
+        if connection then -- mark as up-to-date, then continue on
+          connection.updated_at = tick
+          goto continue
+        end
+
+        local x_diff = position.x - neighbour.position.x
+        local y_diff = position.y - neighbour.position.y
+
+
+        -- only one side becomes the sprite parent
+        local any_diff = x_diff > 1 or y_diff > 1
+        if any_diff then
+
+          connection = {
+            updated_at = tick,
+            sprites = {},
+          }
+
+          if x_diff > 1 then
+            for x_offset = 1, x_diff -1 do
+              table.insert(connection.sprites, rendering.draw_sprite{
+                sprite = "pipe-pillar-straight-horizontal",
+                x_scale = 0.5,
+                y_scale = 0.5,
+                surface = surfacedata.surface,
+                target = {
+                  entity = struct.entity,
+                  offset = {-x_offset, -3.5},
+                },
+                render_layer = "elevated-object",
+              })
+            end
+          else
+            for y_offset = 1, y_diff -1 do
+              table.insert(connection.sprites, rendering.draw_sprite{
+                sprite = "pipe-pillar-straight-vertical",
+                x_scale = 0.5,
+                y_scale = 0.5,
+                surface = surfacedata.surface,
+                target = {
+                  entity = struct.entity,
+                  offset = {0, -y_offset -3.5},
+                },
+                render_layer = "elevated-object",
+              })
+            end
+          end
+
+          struct.connections[neighbour.unit_number] = connection
+        end -- any_diff
+
+      end
+    end
+    ::continue::
+  end
+
+  -- connections we did not come across stopped existing
+  for unit_number, struct in pairs(surfacedata.structs) do
+    for other_unit_number, connection in pairs(struct.connections) do
+      if connection.updated_at ~= tick then
+        for _, sprite in ipairs(connection.sprites) do
+          sprite.destroy()
+        end
+        struct.connections[other_unit_number] = nil
       end
     end
   end
