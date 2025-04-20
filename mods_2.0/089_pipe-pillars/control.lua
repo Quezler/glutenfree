@@ -14,20 +14,24 @@ script.on_init(function()
 
   storage.surfacedata = {}
   mod.refresh_surfacedata()
+  storage.dirty_surfaces = {}
 end)
 
 script.on_configuration_changed(function()
   mod.refresh_surfacedata()
 end)
 
+script.on_load(function()
+  if next(storage.dirty_surfaces) then
+    script.on_event(defines.events.on_tick, mod.on_tick)
+  end
+end)
+
 function mod.on_created_entity(event)
   local entity = event.entity or event.destination
+  local surfacedata = storage.surfacedata[entity.surface.index]
 
-  if entity.name == mod_prefix .. "riser" then
-    return entity.destroy()
-  end
-
-  local struct = new_struct(storage.surfacedata[entity.surface.index].structs, {
+  local struct = new_struct(surfacedata.structs, {
     id = entity.unit_number,
     entity = entity,
   })
@@ -37,6 +41,8 @@ function mod.on_created_entity(event)
     surface_index = entity.surface_index,
     unit_number = entity.unit_number,
   }
+
+  mod.mark_surface_dirty(surfacedata.surface)
 end
 
 for _, event in ipairs({
@@ -72,6 +78,23 @@ end
 script.on_event(defines.events.on_surface_created, mod.refresh_surfacedata)
 script.on_event(defines.events.on_surface_deleted, mod.refresh_surfacedata)
 
+function mod.on_tick(event)
+  for surface_index, _ in pairs(storage.dirty_surfaces) do
+    local surfacedata = storage.surfacedata[surface_index]
+    if surfacedata then mod.update_elevated_pipes_for_surface(surfacedata) end
+  end
+  storage.dirty_surfaces = {}
+  script.on_event(defines.events.on_tick, nil)
+end
+
+function mod.mark_surface_dirty(surface)
+  if not next(storage.dirty_surfaces) then
+    script.on_event(defines.events.on_tick, mod.on_tick)
+  end
+
+  storage.dirty_surfaces[surface.index] = true
+end
+
 local deathrattles = {
   ["pipe-pillar"] = function (deathrattle)
     local surfacedata = storage.surfacedata[deathrattle.surface_index]
@@ -80,7 +103,7 @@ local deathrattles = {
       if struct then surfacedata.structs[deathrattle.unit_number] = nil
         --
       end
-      -- mod.mark_surface_dirty(surfacedata.surface)
+      mod.mark_surface_dirty(surfacedata.surface)
     end
   end,
 }
@@ -91,3 +114,13 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     deathrattles[deathrattle.name](deathrattle)
   end
 end)
+
+function mod.update_elevated_pipes_for_surface(surfacedata)
+  for unit_number, struct in pairs(surfacedata.structs) do
+    for _, neighbour in ipairs(struct.entity.neighbours) do
+      if neighbour.name == "pipe-pillar" then
+        -- :3
+      end
+    end
+  end
+end
