@@ -51,7 +51,7 @@ function mod.on_created_entity(event)
     target = {
       entity = struct.entity,
     },
-    render_layer = "elevated-higher-object",
+    render_layer = 143 + 1, -- elevated-higher-object + 1,
   }
 
   mod.mark_surface_dirty(surfacedata.surface)
@@ -167,7 +167,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
                   entity = struct.entity,
                   offset = {-x_offset, -3.5},
                 },
-                render_layer = "elevated-object",
+                render_layer = "elevated-higher-object",
               })
             end
           else
@@ -179,7 +179,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
                   entity = struct.entity,
                   offset = {0, -y_offset -3.5},
                 },
-                render_layer = "elevated-object",
+                render_layer = "elevated-higher-object",
               })
             end
           end

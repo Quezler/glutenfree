@@ -3,6 +3,7 @@ Version: 0.0.5
 Date: ????
   Info:
     - Fix pillar only forming one outgoing connection
+    - Reach over the railings of elevated rails
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025. 04. 20
