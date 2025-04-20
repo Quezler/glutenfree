@@ -1,9 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
-Date: ????
+Date: 2025. 04. 20
   Info:
     - Setup the luarendering refresh template
     - Do the visual connecting and disconnecting
+    - Add an occluder for the top of the tip
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 04. 20

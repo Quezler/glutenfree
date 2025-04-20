@@ -34,6 +34,7 @@ function mod.on_created_entity(event)
   local struct = new_struct(surfacedata.structs, {
     id = entity.unit_number,
     entity = entity,
+    occluder = nil,
     connections = {},
   })
 
@@ -41,6 +42,16 @@ function mod.on_created_entity(event)
     name = "pipe-pillar",
     surface_index = entity.surface_index,
     unit_number = entity.unit_number,
+  }
+
+  struct.occluder = rendering.draw_sprite{
+    sprite = "pipe-pillar-occluder",
+    scale = 0.5,
+    surface = surfacedata.surface,
+    target = {
+      entity = struct.entity,
+    },
+    render_layer = "elevated-higher-object",
   }
 
   mod.mark_surface_dirty(surfacedata.surface)
@@ -151,8 +162,6 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
             for x_offset = 1, x_diff -1 do
               table.insert(connection.sprites, rendering.draw_sprite{
                 sprite = "pipe-pillar-straight-horizontal",
-                x_scale = 0.5,
-                y_scale = 0.5,
                 surface = surfacedata.surface,
                 target = {
                   entity = struct.entity,
@@ -165,8 +174,6 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
             for y_offset = 1, y_diff -1 do
               table.insert(connection.sprites, rendering.draw_sprite{
                 sprite = "pipe-pillar-straight-vertical",
-                x_scale = 0.5,
-                y_scale = 0.5,
                 surface = surfacedata.surface,
                 target = {
                   entity = struct.entity,
