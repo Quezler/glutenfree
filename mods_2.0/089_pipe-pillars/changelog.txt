@@ -5,7 +5,6 @@ Date: ????
     - Adjust selection and colission boxes
     - mark the building as tall
     - Add the riser ontop and control it via scripting
-    - Have the player place the underground instead of the tank
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 04. 20
