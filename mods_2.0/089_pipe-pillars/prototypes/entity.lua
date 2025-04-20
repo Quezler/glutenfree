@@ -67,7 +67,7 @@ local storage_tank = {
       sheets =
       {
         {
-          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar.png",
+          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection.png",
           priority = "extra-high",
           frames = 1,
           width = 704,
@@ -76,7 +76,7 @@ local storage_tank = {
           scale = 0.5
         },
         {
-          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-shadow.png",
+          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection-shadow.png",
           priority = "extra-high",
           frames = 1,
           width = 704,

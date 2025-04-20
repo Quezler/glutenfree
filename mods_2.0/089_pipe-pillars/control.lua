@@ -37,8 +37,7 @@ function mod.on_created_entity(event)
     id = entity.unit_number,
     entity = entity,
     connections = {},
-    occluder_top = nil,
-    occluder_tip = nil,
+    elevated_pipe_cover_occluder = nil,
   })
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {
@@ -47,24 +46,14 @@ function mod.on_created_entity(event)
     unit_number = entity.unit_number,
   }
 
-  struct.occluder_top = rendering.draw_sprite{
-    sprite = "pipe-pillar-occluder-top",
+  struct.elevated_pipe_cover_occluder = rendering.draw_sprite{
+    sprite = "pipe-pillar-elevated-pipe-cover-occluder",
     scale = 0.5,
     surface = surfacedata.surface,
     target = {
       entity = struct.entity,
     },
     render_layer = render_layer + 0,
-  }
-
-  struct.occluder_tip = rendering.draw_sprite{
-    sprite = "pipe-pillar-occluder-tip",
-    scale = 0.5,
-    surface = surfacedata.surface,
-    target = {
-      entity = struct.entity,
-    },
-    render_layer = render_layer + 2,
   }
 
   mod.mark_surface_dirty(surfacedata.surface)
@@ -144,6 +133,23 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   end
 end)
 
+-- note to self: we render render upwards and leftwards
+
+local function elevated_pipe_sprites(x_or_y, max)
+  local prefix = x_or_y == "x" and "pipe-pillar-elevated-horizontal" or "pipe-pillar-elevated-vertical"
+  local suffix_start = x_or_y == "x" and "-left" or "-top"
+  local suffix_end = x_or_y == "x" and "-right" or "-bottom"
+  local sprites = {}
+
+  table.insert(sprites, prefix .. suffix_end)
+  for i = 2, max -1 do
+    table.insert(sprites, prefix .. "-center")
+  end
+  table.insert(sprites, prefix .. suffix_start)
+
+  return sprites
+end
+
 function mod.update_elevated_pipes_for_surface(surfacedata)
   local tick = game.tick
 
@@ -161,7 +167,6 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
         local x_diff = position.x - neighbour.position.x
         local y_diff = position.y - neighbour.position.y
 
-
         -- only one side becomes the sprite parent
         local any_diff = x_diff > 1 or y_diff > 1
         if any_diff then
@@ -172,25 +177,27 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
           }
 
           if x_diff > 1 then
+            local sprites = elevated_pipe_sprites("x", x_diff -1)
             for x_offset = 1, x_diff -1 do
               table.insert(connection.sprites, rendering.draw_sprite{
-                sprite = "pipe-pillar-straight-horizontal",
+                sprite = sprites[x_offset],
                 surface = surfacedata.surface,
                 target = {
                   entity = struct.entity,
-                  offset = {-x_offset, -3.5},
+                  offset = {-x_offset, 0},
                 },
                 render_layer = render_layer + 1,
               })
             end
           else
+            local sprites = elevated_pipe_sprites("y", y_diff -1)
             for y_offset = 1, y_diff -1 do
               table.insert(connection.sprites, rendering.draw_sprite{
-                sprite = "pipe-pillar-straight-vertical",
+                sprite = sprites[y_offset],
                 surface = surfacedata.surface,
                 target = {
                   entity = struct.entity,
-                  offset = {0, -y_offset -3.5},
+                  offset = {0, -y_offset},
                 },
                 render_layer = render_layer + 1,
               })
