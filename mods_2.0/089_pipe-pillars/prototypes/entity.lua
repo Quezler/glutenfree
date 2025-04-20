@@ -23,6 +23,10 @@ local storage_tank = {
     pipe_covers = pipecoverspictures(),
     pipe_connections =
     {
+      { direction = defines.direction.north, position = {0, 0} },
+      { direction = defines.direction.east , position = {0, 0} },
+      { direction = defines.direction.south, position = {0, 0} },
+      { direction = defines.direction.west , position = {0, 0} },
       {
         connection_type = "underground",
         direction = defines.direction.north,
@@ -50,10 +54,6 @@ local storage_tank = {
         position = {0, 0},
         max_underground_distance = 10,
         connection_category = "pipe-pillar",
-      },
-      {
-        connection_type = "linked",
-        linked_connection_id = 0,
       },
     },
     hide_connection_info = true
@@ -152,36 +152,3 @@ local storage_tank = {
 }
 
 data:extend{storage_tank}
-
-local riser = {
-  type = "storage-tank",
-  name = mod_prefix .. "riser",
-  localised_name = {"entity-name.pipe-pillar"},
-  flags = {"not-on-map", "not-rotatable" , "hide-alt-info"},
-  collision_mask = {layers = {}},
-  collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
-  selection_box = {{-0.7, -0.7}, {0.7, 0.7}},
-  selection_priority = 49,
-  fluid_box =
-  {
-    volume = 1,
-    pipe_covers = pipecoverspictures(),
-    pipe_connections =
-    {
-      {
-        connection_type = "linked",
-        linked_connection_id = 0,
-      },
-      { direction = defines.direction.north, position = {0, 0} },
-      { direction = defines.direction.east , position = {0, 0} },
-      { direction = defines.direction.south, position = {0, 0} },
-      { direction = defines.direction.west , position = {0, 0} },
-    },
-    hide_connection_info = true
-  },
-  two_direction_only = true,
-  window_bounding_box = {{-0, -0}, {0, 0}},
-  flow_length_in_ticks = 1,
-}
-
-data:extend{riser}

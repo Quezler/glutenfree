@@ -30,16 +30,7 @@ function mod.on_created_entity(event)
   local struct = new_struct(storage.surfacedata[entity.surface.index].structs, {
     id = entity.unit_number,
     entity = entity,
-    riser = nil,
   })
-
-  struct.riser = entity.surface.create_entity{
-    name = mod_prefix .. "riser",
-    force = entity.force,
-    position = entity.position,
-  }
-  struct.riser.destructible = false
-  struct.riser.fluidbox.add_linked_connection(0, entity, 0)
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {
     name = "pipe-pillar",
@@ -58,7 +49,6 @@ for _, event in ipairs({
 }) do
   script.on_event(event, mod.on_created_entity, {
     {filter = "name", name = "pipe-pillar"},
-    {filter = "name", name = mod_prefix .. "riser"},
   })
 end
 
@@ -88,7 +78,7 @@ local deathrattles = {
     if surfacedata then
       local struct = surfacedata.structs[deathrattle.unit_number]
       if struct then surfacedata.structs[deathrattle.unit_number] = nil
-        struct.riser.destroy()
+        --
       end
       -- mod.mark_surface_dirty(surfacedata.surface)
     end

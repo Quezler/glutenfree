@@ -1,11 +1,12 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: ????
+Date: 2025. 04. 20
   Info:
     - Adjust selection and colission boxes
     - mark the building as tall
     - Add the riser ontop and control it via scripting
     - Actually just swap the pipe connections
+    - Riser begone
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 04. 20
