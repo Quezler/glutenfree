@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Adjust selection and colission boxes
+    - mark the building as tall
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 04. 20

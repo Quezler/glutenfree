@@ -10,6 +10,7 @@ local storage_tank = {
   max_health = 250,
   -- corpse = "storage-tank-remnants",
   -- dying_explosion = "storage-tank-explosion",
+  collision_mask = {layers={item=true, meltable=true, object=true, player=true, water_tile=true, is_object=true, is_lower_object=true, elevated_rail=true}}, -- building_tall()
   collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
   selection_box = {{-0.7, -0.7}, {0.7, 0.7}},
   fast_replaceable_group = "pipe",
