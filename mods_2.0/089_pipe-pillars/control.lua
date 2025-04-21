@@ -1,6 +1,6 @@
 require("shared")
 
-local render_layer = 144 -- elevated rails use "elevated-higher-object", which at the time of writing uses 143, we sit above it.
+local render_layer = 132 -- "under-elevated"
 
 function new_struct(table, struct)
   assert(struct.id, serpent.block(struct))
