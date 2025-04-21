@@ -47,7 +47,18 @@ function mod.on_created_entity(event)
     id = entity.unit_number,
     entity = entity,
     connections = {},
+    occluder_tip = nil,
   })
+
+  struct.occluder_tip = rendering.draw_sprite{
+    sprite = "pipe-pillar-occluder-tip",
+    scale = 0.5,
+    surface = surfacedata.surface,
+    target = {
+      entity = struct.entity,
+    },
+    render_layer = render_layer + 1,
+  }
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {
     name = "pipe-pillar",
