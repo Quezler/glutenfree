@@ -37,23 +37,12 @@ function mod.on_created_entity(event)
     id = entity.unit_number,
     entity = entity,
     connections = {},
-    elevated_pipe_cover_occluder = nil,
   })
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {
     name = "pipe-pillar",
     surface_index = entity.surface_index,
     unit_number = entity.unit_number,
-  }
-
-  struct.elevated_pipe_cover_occluder = rendering.draw_sprite{
-    sprite = "pipe-pillar-elevated-pipe-cover-occluder",
-    scale = 0.5,
-    surface = surfacedata.surface,
-    target = {
-      entity = struct.entity,
-    },
-    render_layer = render_layer + 0,
   }
 
   mod.mark_surface_dirty(surfacedata.surface)

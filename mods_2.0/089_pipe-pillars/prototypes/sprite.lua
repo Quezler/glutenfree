@@ -27,28 +27,28 @@ data:extend{
   sprite_with_shadow("pipe-pillar-elevated-vertical-top"),
   sprite_with_shadow("pipe-pillar-elevated-vertical-bottom"),
   sprite_with_shadow("pipe-pillar-elevated-vertical-center"),
-  {
-    type = "sprite",
-    name = "pipe-pillar-elevated-pipe-cover-occluder",
-    layers = {
-      {
-        filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-elevated-pipe-cover-down.png",
-        scale = 0.5,
-        width = 704,
-        height = 704,
-      },
-      {
-        filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-elevated-pipe-cover-left.png",
-        scale = 0.5,
-        width = 704,
-        height = 704,
-      },
-      {
-        filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-elevated-pipe-cover-right.png",
-        scale = 0.5,
-        width = 704,
-        height = 704,
-      },
-    },
-  },
+  -- {
+  --   type = "sprite",
+  --   name = "pipe-pillar-elevated-pipe-cover-occluder",
+  --   layers = {
+  --     {
+  --       filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-elevated-pipe-cover-down.png",
+  --       scale = 0.5,
+  --       width = 704,
+  --       height = 704,
+  --     },
+  --     {
+  --       filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-elevated-pipe-cover-left.png",
+  --       scale = 0.5,
+  --       width = 704,
+  --       height = 704,
+  --     },
+  --     {
+  --       filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-elevated-pipe-cover-right.png",
+  --       scale = 0.5,
+  --       width = 704,
+  --       height = 704,
+  --     },
+  --   },
+  -- },
 }
