@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
-Date: ????
+Date: 2025. 04. 22
   Info:
     - Add the tip occluder back
     - Import and implement a new batch of graphics
@@ -10,7 +10,7 @@ Date: ????
     - Eliminate the vanilla covers
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
-Date: ????
+Date: 2025. 04. 21
   Info:
     - Import and implement another new batch of graphics
     - Pass the pipes under elevated rails
