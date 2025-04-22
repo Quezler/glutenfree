@@ -147,11 +147,12 @@ end)
 -- note to self: we render render upwards and leftwards
 
 local function elevated_pipe_sprites(x_or_y, max)
+  local prefix = x_or_y == "x" and "pipe-pillar-elevated-horizontal" or "pipe-pillar-elevated-vertical"
+
   if max == 1 then -- if the distance is just 1 tile there is not enough space for both a start and end sprite
-    return {x_or_y == "x" and "pipe-pillar-elevated-horizontal" or "pipe-pillar-elevated-vertical"}
+    return {prefix .. "-single"}
   end
 
-  local prefix = x_or_y == "x" and "pipe-pillar-elevated-horizontal" or "pipe-pillar-elevated-vertical"
   local suffix_start = x_or_y == "x" and "-left" or "-top"
   local suffix_end = x_or_y == "x" and "-right" or "-bottom"
   local sprites = {}
