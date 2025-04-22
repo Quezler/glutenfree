@@ -1,6 +1,8 @@
 local hit_effects = require("__base__.prototypes.entity.hit-effects")
 local sounds = require("__base__.prototypes.entity.sounds")
 
+require("util")
+
 local function pipepillarcoverspictures()
   return {
     east = {
@@ -17,40 +19,12 @@ local function pipepillarcoverspictures()
     },
     north = {
       layers = {
-        {
-          filename = "__base__/graphics/entity/pipe-covers/pipe-cover-north.png",
-          height = 128,
-          priority = "extra-high",
-          scale = 0.5,
-          width = 128
-        },
-        {
-          draw_as_shadow = true,
-          filename = "__base__/graphics/entity/pipe-covers/pipe-cover-north-shadow.png",
-          height = 128,
-          priority = "extra-high",
-          scale = 0.5,
-          width = 128
-        }
+        util.empty_sprite(),
       }
     },
     south = {
       layers = {
-        {
-          filename = "__base__/graphics/entity/pipe-covers/pipe-cover-south.png",
-          height = 128,
-          priority = "extra-high",
-          scale = 0.5,
-          width = 128
-        },
-        {
-          draw_as_shadow = true,
-          filename = "__base__/graphics/entity/pipe-covers/pipe-cover-south-shadow.png",
-          height = 128,
-          priority = "extra-high",
-          scale = 0.5,
-          width = 128
-        }
+        util.empty_sprite(),
       }
     },
     west = {
