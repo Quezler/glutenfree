@@ -1,6 +1,73 @@
 local hit_effects = require("__base__.prototypes.entity.hit-effects")
 local sounds = require("__base__.prototypes.entity.sounds")
 
+local function pipepillarcoverspictures()
+  return {
+    east = {
+      layers = {
+        {
+          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-bottom-pipe-right.png",
+          height = 704,
+          priority = "extra-high",
+          scale = 0.5,
+          width = 704,
+          shift = {-1, 0},
+        },
+      }
+    },
+    north = {
+      layers = {
+        {
+          filename = "__base__/graphics/entity/pipe-covers/pipe-cover-north.png",
+          height = 128,
+          priority = "extra-high",
+          scale = 0.5,
+          width = 128
+        },
+        {
+          draw_as_shadow = true,
+          filename = "__base__/graphics/entity/pipe-covers/pipe-cover-north-shadow.png",
+          height = 128,
+          priority = "extra-high",
+          scale = 0.5,
+          width = 128
+        }
+      }
+    },
+    south = {
+      layers = {
+        {
+          filename = "__base__/graphics/entity/pipe-covers/pipe-cover-south.png",
+          height = 128,
+          priority = "extra-high",
+          scale = 0.5,
+          width = 128
+        },
+        {
+          draw_as_shadow = true,
+          filename = "__base__/graphics/entity/pipe-covers/pipe-cover-south-shadow.png",
+          height = 128,
+          priority = "extra-high",
+          scale = 0.5,
+          width = 128
+        }
+      }
+    },
+    west = {
+      layers = {
+        {
+          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-bottom-pipe-left.png",
+          height = 704,
+          priority = "extra-high",
+          scale = 0.5,
+          width = 704,
+          shift = {1, 0},
+        },
+      }
+    }
+  }
+end
+
 local storage_tank = {
   type = "storage-tank",
   name = "pipe-pillar",
@@ -19,7 +86,7 @@ local storage_tank = {
   fluid_box =
   {
     volume = 500,
-    pipe_covers = pipecoverspictures(),
+    pipe_covers = pipepillarcoverspictures(),
     pipe_connections =
     {
       { direction = defines.direction.north, position = {0, 0} },

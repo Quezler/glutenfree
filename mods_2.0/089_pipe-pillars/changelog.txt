@@ -5,6 +5,7 @@ Date: ????
     - Add the tip occluder back
     - Import and implement a new batch of graphics
     - Properly implement the horizontal/vertical single sprite
+    - Update the left and right pipe covers
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 04. 21
