@@ -33,12 +33,25 @@ function mod.on_created_entity(event)
   local entity = event.entity or event.destination
   local surfacedata = storage.surfacedata[entity.surface.index]
 
+  if entity.name == "pipe-pillar-pipe-connection" then
+    return entity.destroy()
+  end
+
   local struct = new_struct(surfacedata.structs, {
     id = entity.unit_number,
     entity = entity,
     connections = {},
+    furnace = nil,
     occluder_tip = nil,
   })
+
+  struct.furnace = entity.surface.create_entity{
+    name = "pipe-pillar-pipe-connection",
+    force = entity.force,
+    position = entity.position,
+  }
+  struct.furnace.destructible = false
+  struct.furnace.fluidbox.add_linked_connection(0, entity, 0)
 
   struct.occluder_tip = rendering.draw_sprite{
     sprite = "pipe-pillar-occluder-tip",
@@ -69,6 +82,7 @@ for _, event in ipairs({
 }) do
   script.on_event(event, mod.on_created_entity, {
     {filter = "name", name = "pipe-pillar"},
+    {filter = "name", name = "pipe-pillar-pipe-connection"},
   })
 end
 
@@ -115,6 +129,7 @@ local deathrattles = {
     if surfacedata then
       local struct = surfacedata.structs[deathrattle.unit_number]
       if struct then surfacedata.structs[deathrattle.unit_number] = nil
+        struct.furnace.destroy()
         for _, connection in pairs(struct.connections) do
           for _, sprite in ipairs(connection.sprites) do
             sprite.destroy()

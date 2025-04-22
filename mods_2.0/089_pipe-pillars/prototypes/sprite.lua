@@ -10,6 +10,7 @@ local function sprite_with_shadow(name, config)
         scale = 0.5,
         width = 704,
         height = 704,
+        -- flags = {"no-crop", "not-compressed", "linear-mip-level", "linear-minification", "linear-magnification"},
       },
     }
   }

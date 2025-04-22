@@ -3,45 +3,6 @@ local sounds = require("__base__.prototypes.entity.sounds")
 
 require("util")
 
-local function pipepillarcoverspictures()
-  return {
-    east = {
-      layers = {
-        {
-          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-bottom-pipe-right.png",
-          height = 704,
-          priority = "extra-high",
-          scale = 0.5,
-          width = 704,
-          shift = {-1, 0},
-        },
-      }
-    },
-    north = {
-      layers = {
-        util.empty_sprite(),
-      }
-    },
-    south = {
-      layers = {
-        util.empty_sprite(),
-      }
-    },
-    west = {
-      layers = {
-        {
-          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-bottom-pipe-left.png",
-          height = 704,
-          priority = "extra-high",
-          scale = 0.5,
-          width = 704,
-          shift = {1, 0},
-        },
-      }
-    }
-  }
-end
-
 local storage_tank = {
   type = "storage-tank",
   name = "pipe-pillar",
@@ -60,13 +21,8 @@ local storage_tank = {
   fluid_box =
   {
     volume = 500,
-    pipe_covers = pipepillarcoverspictures(),
     pipe_connections =
     {
-      { direction = defines.direction.north, position = {0, 0} },
-      { direction = defines.direction.east , position = {0, 0} },
-      { direction = defines.direction.south, position = {0, 0} },
-      { direction = defines.direction.west , position = {0, 0} },
       {
         connection_type = "underground",
         direction = defines.direction.north,
@@ -95,6 +51,10 @@ local storage_tank = {
         max_underground_distance = 10,
         connection_category = "pipe-pillar",
       },
+      {
+        connection_type = "linked",
+        linked_connection_id = 0,
+      },
     },
     hide_connection_info = true
   },
@@ -107,21 +67,19 @@ local storage_tank = {
       sheets =
       {
         {
-          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection.png",
+          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar.png",
           priority = "extra-high",
           frames = 1,
           width = 704,
           height = 704,
-          shift = util.by_pixel(0, 0),
           scale = 0.5
         },
         {
-          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection-shadow.png",
+          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-shadow.png",
           priority = "extra-high",
           frames = 1,
           width = 704,
           height = 704,
-          shift = util.by_pixel(0, 0),
           scale = 0.5,
           draw_as_shadow = true
         }
@@ -191,4 +149,101 @@ local storage_tank = {
   }
 }
 
-data:extend{storage_tank}
+local recipe_category = {
+  type = "recipe-category",
+  name = "pipe-pillar",
+}
+
+local furnace = {
+  type = "furnace",
+  name = "pipe-pillar-pipe-connection",
+
+  collision_mask = {layers = {}},
+  collision_box = storage_tank.collision_box,
+  selection_box = storage_tank.selection_box,
+  selection_priority = 49,
+  flags = {"not-on-map"},
+
+  energy_usage = "1kW",
+  energy_source = {type = "void"},
+  crafting_speed = 1,
+  crafting_categories = {"pipe-pillar"},
+
+  source_inventory_size = 0,
+  result_inventory_size = 0,
+
+  fluid_boxes =
+  {{
+    volume = 1,
+    pipe_connections =
+    {
+      {
+        connection_type = "linked",
+        linked_connection_id = 0,
+      },
+      { direction = defines.direction.north, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" } },
+      { direction = defines.direction.east , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" } },
+      { direction = defines.direction.south, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" } },
+      { direction = defines.direction.west , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" } },
+    },
+    hide_connection_info = true,
+    production_type = "input",
+    draw_only_when_connected = true,
+    always_draw_covers = false,
+  }},
+
+  graphics_set = {
+    working_visualisations =
+    {
+
+      {
+        always_draw = true,
+        name = "pipe-connection",
+        enabled_by_name = true,
+        secondary_draw_order = 1,
+        animation = {
+          layers = {
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection.png",
+              width = 704,
+              height = 704,
+              scale = 0.5
+            },
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection-shadow.png",
+              width = 704,
+              height = 704,
+              scale = 0.5,
+              draw_as_shadow = true,
+            },
+          }
+        },
+      },
+      {
+        always_draw = true,
+        name = "pipe-covers",
+        enabled_by_name = true,
+        render_layer = "object-under",
+        animation = {
+          layers = {
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-bottom-pipe-left.png",
+              width = 704,
+              height = 704,
+              scale = 0.5
+            },
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-bottom-pipe-right.png",
+              width = 704,
+              height = 704,
+              scale = 0.5
+            },
+          }
+        },
+      },
+
+    },
+  }
+}
+
+data:extend{storage_tank, recipe_category, furnace}
