@@ -6,6 +6,7 @@ Date: ????
     - Import and implement a new batch of graphics
     - Properly implement the horizontal/vertical single sprite
     - Update the left and right pipe covers
+    - Fixed eroneous marked shadowless sprites
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: ????

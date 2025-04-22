@@ -28,8 +28,8 @@ local function sprite_with_shadow(name, config)
 end
 
 data:extend{
-  sprite_with_shadow("pipe-pillar-elevated-horizontal-left", {shadow = false}),
-  sprite_with_shadow("pipe-pillar-elevated-horizontal-right", {shadow = false}),
+  sprite_with_shadow("pipe-pillar-elevated-horizontal-left"),
+  sprite_with_shadow("pipe-pillar-elevated-horizontal-right"),
   sprite_with_shadow("pipe-pillar-elevated-horizontal-center"),
   sprite_with_shadow("pipe-pillar-elevated-horizontal-single"),
   sprite_with_shadow("pipe-pillar-elevated-vertical-top"),
