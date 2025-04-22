@@ -5,6 +5,7 @@ Date: ????
     - Use a hidden furnace for the working visualizations
     - Add thumbnail
     - Fix pipe on the right overlaying the tower
+    - Get rid of the fluid window
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 04. 22
