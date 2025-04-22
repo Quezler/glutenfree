@@ -181,10 +181,10 @@ local furnace = {
         connection_type = "linked",
         linked_connection_id = 0,
       },
-      { direction = defines.direction.north, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" } },
-      { direction = defines.direction.east , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" } },
-      { direction = defines.direction.south, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" } },
-      { direction = defines.direction.west , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" } },
+      { direction = defines.direction.north, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "pipe-covers-occluder" } },
+      { direction = defines.direction.east , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "pipe-covers-occluder" } },
+      { direction = defines.direction.south, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "pipe-covers-occluder" } },
+      { direction = defines.direction.west , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "pipe-covers-occluder" } },
     },
     hide_connection_info = true,
     production_type = "input",
@@ -234,6 +234,22 @@ local furnace = {
             },
             {
               filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-bottom-pipe-right.png",
+              width = 704,
+              height = 704,
+              scale = 0.5
+            },
+          }
+        },
+      },
+      {
+        always_draw = true,
+        name = "pipe-covers-occluder",
+        enabled_by_name = true,
+        render_layer = "cargo-hatch",
+        animation = {
+          layers = {
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-bottom-pipe-right-occluder.png",
               width = 704,
               height = 704,
               scale = 0.5
