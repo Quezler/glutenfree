@@ -3,6 +3,7 @@ Version: 0.0.8
 Date: ????
   Info:
     - Add the tip occluder back
+    - Import and implement a new batch of graphics
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 04. 21
