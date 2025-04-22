@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.7
-Date: ????
+Version: 0.0.9
+Date: 2025. 04. 22
   Info:
     - Use a hidden furnace for the working visualizations
     - Add thumbnail
