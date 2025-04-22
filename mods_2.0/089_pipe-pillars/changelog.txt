@@ -6,6 +6,7 @@ Date: ????
     - Add thumbnail
     - Fix pipe on the right overlaying the tower
     - Get rid of the fluid window
+    - Actualize thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 04. 22
