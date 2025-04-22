@@ -3,6 +3,7 @@ Version: 0.0.7
 Date: ????
   Info:
     - Use a hidden furnace for the working visualizations
+    - Add thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 04. 22
