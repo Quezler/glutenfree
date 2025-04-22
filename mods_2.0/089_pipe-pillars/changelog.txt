@@ -8,11 +8,10 @@ Date: ????
     - Update the left and right pipe covers
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
-Date: 2025. 04. 21
+Date: ????
   Info:
     - Import and implement another new batch of graphics
     - Pass the pipes under elevated rails
-    - Allow placing the pipeless variant by rotating
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 04. 20

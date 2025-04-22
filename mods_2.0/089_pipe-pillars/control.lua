@@ -9,16 +9,6 @@ function new_struct(table, struct)
   return struct
 end
 
-local is_pipe_pillar = {
-  ["pipe-pillar"] = true,
-  ["pipe-pillar-pipe-connection"] = true,
-}
-
-local other_pipe_pillar = {
-  ["pipe-pillar"] = "pipe-pillar-pipe-connection",
-  ["pipe-pillar-pipe-connection"] = "pipe-pillar",
-}
-
 local mod = {}
 
 script.on_init(function()
@@ -79,7 +69,6 @@ for _, event in ipairs({
 }) do
   script.on_event(event, mod.on_created_entity, {
     {filter = "name", name = "pipe-pillar"},
-    {filter = "name", name = "pipe-pillar-pipe-connection"},
   })
 end
 
@@ -170,18 +159,14 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
   local tick = game.tick
 
   for unit_number, struct in pairs(surfacedata.structs) do
-    if not struct.entity.valid then
-      goto next_struct
-    end
-
     local position = struct.entity.position
     for _, neighbour in ipairs(struct.entity.neighbours[1]) do -- warning: if they are adjacent both the underground & normal connections show up
-      if is_pipe_pillar[neighbour.name] then
+      if neighbour.name == "pipe-pillar" then
 
         local connection = struct.connections[neighbour.unit_number]
         if connection then -- mark as up-to-date, then continue on
           connection.updated_at = tick
-          goto next_connection
+          goto continue
         end
 
         local x_diff = position.x - neighbour.position.x
@@ -228,9 +213,8 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
         end -- any_diff
 
       end
-      ::next_connection::
+      ::continue::
     end
-    ::next_struct::
   end
 
   -- connections we did not come across stopped existing
@@ -245,19 +229,3 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
     end
   end
 end
-
-script.on_event(defines.events.on_player_rotated_entity, function(event)
-  local entity = event.entity
-  if is_pipe_pillar[entity.name] then
-    -- game.print(event.tick)
-    entity.surface.create_entity{
-      name = other_pipe_pillar[entity.name],
-      force = entity.force,
-      position = entity.position,
-      create_build_effect_smoke = false,
-      fast_replace = true,
-      spill = false,
-      raise_built = true,
-    }
-  end
-end)

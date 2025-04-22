@@ -133,7 +133,7 @@ local storage_tank = {
       sheets =
       {
         {
-          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar.png",
+          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection.png",
           priority = "extra-high",
           frames = 1,
           width = 704,
@@ -142,7 +142,7 @@ local storage_tank = {
           scale = 0.5
         },
         {
-          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-shadow.png",
+          filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection-shadow.png",
           priority = "extra-high",
           frames = 1,
           width = 704,
@@ -217,18 +217,4 @@ local storage_tank = {
   }
 }
 
-local aquaduct = table.deepcopy(storage_tank)
-aquaduct.name = "pipe-pillar-pipe-connection"
-aquaduct.localised_name = {"entity-name.pipe-pillar"}
-aquaduct.pictures.picture.sheets[1].filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection.png"
-aquaduct.pictures.picture.sheets[2].filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection-shadow.png"
-aquaduct.placeable_by = {item = "pipe-pillar", count = 1}
-
-storage_tank.fluid_box.pipe_covers = nil
-storage_tank.window_bounding_box = {{-0, -0}, {0, 0}}
-storage_tank.pictures.fluid_background = nil
-storage_tank.pictures.window_background = nil
-storage_tank.pictures.flow_sprite = nil
-storage_tank.pictures.gas_flow = nil
-
-data:extend{storage_tank, aquaduct}
+data:extend{storage_tank}
