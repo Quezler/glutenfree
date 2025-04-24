@@ -311,11 +311,12 @@ local deathrattles = {
   ["offering-idle"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
     if struct then
-      reset_offering_idle(struct)
       if struct.entity.crafting_progress == 0 and struct.container_inventory.is_empty() == false then
         ensure_recipe_is_set(struct.entity)
         struct.entity.crafting_progress = 0.001
         reset_offering_done(struct)
+      else
+        reset_offering_idle(struct)
       end
     end
   end,

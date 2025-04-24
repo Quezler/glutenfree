@@ -52,6 +52,9 @@ function Condense.trigger(struct)
   local quality_effect = (struct.entity.effects["quality"] or 0) * 1000
   if 0 >= quality_effect then return end
 
+  local condensed_anything = false
+  local old_item_count = struct.container_inventory.get_item_count()
+
   for _, item in ipairs(struct.container_inventory.get_contents()) do
     local next_quality_name = get_next_quality_name[item.quality]
     if next_quality_name and struct.entity.force.is_quality_unlocked(next_quality_name) then
@@ -85,8 +88,19 @@ function Condense.trigger(struct)
             assert(inserted == to_insert.count, string.format("inserted only %d of %d %s (%s)", inserted, to_insert.count, item.name, item.quality))
           end
 
+          condensed_anything = true
         end
       end
+    end
+  end
+
+  if condensed_anything then
+    local new_item_count = struct.container_inventory.get_item_count()
+    if old_item_count == new_item_count then -- great, someone using 100% quality, what fun :|
+      local arithmetic_1_cb = struct.arithmetic_1.get_control_behavior()
+      local parameters = arithmetic_1_cb.parameters
+      parameters.second_constant = parameters.second_constant + 1
+      arithmetic_1_cb.parameters = parameters
     end
   end
 end
