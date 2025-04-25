@@ -46,7 +46,8 @@ end
 local is_beacon_interface = {}
 for _, entity_prototype in pairs(prototypes.entity) do
   if entity_prototype.type == "beacon" then
-    if (entity_prototype.allowed_module_categories or {})[mod_prefix .. "module-category"] then
+    local allowed_module_categories = entity_prototype.allowed_module_categories or {}
+    if allowed_module_categories[mod_prefix .. "module-category"] and table_size(allowed_module_categories) == 1 then
       is_beacon_interface[entity_prototype.name] = true
     end
   end
