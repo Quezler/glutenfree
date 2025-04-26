@@ -9,10 +9,10 @@ $Shadow = "{$Render}/Shadow";
 $pipe_pillar = __DIR__ . '/graphics/entity/pipe-pillar';
 
 $mapping = [
-  '0000' => 'pipe-pillar',
-  '0001' => 'pipe-pillar-pipe-connection',
-  '0002' => 'pipe-pillar-bottom-pipe-left',
-  '0003' => 'pipe-pillar-bottom-pipe-right',
+  '0000' => 'pipe-pillar-pipe-connection',
+  '0001' => 'pipe-pillar',
+  '0002' => 'pipe-pillar-occluder-bottom',
+  '0003' => 'pipe-pillar-occluder-top',
   '0004' => 'pipe-pillar-elevated-vertical-bottom',
   '0005' => 'pipe-pillar-elevated-horizontal-left',
   '0006' => 'pipe-pillar-elevated-vertical-top',
@@ -20,7 +20,7 @@ $mapping = [
   '0008' => 'pipe-pillar-elevated-vertical-center',
   '0009' => 'pipe-pillar-elevated-horizontal-center',
   '0010' => 'pipe-pillar-pipe-connection-only',
-  '0011' => 'pipe-pillar-occluder-tip',
+  // '0011' => 'pipe-pillar-occluder-tip',
   '0012' => 'pipe-pillar-elevated-horizontal-single',
   '0013' => 'pipe-pillar-elevated-vertical-single',
 ];
