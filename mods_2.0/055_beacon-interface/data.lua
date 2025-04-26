@@ -21,6 +21,7 @@ entity.distribution_effectivity_bonus_per_quality_level = 0
 entity.icons_positioning = {
   {inventory_index = defines.inventory.beacon_modules, scale = 0},
 }
+entity.next_upgrade = nil
 table.insert(entity.flags, "no-automated-item-removal")
 table.insert(entity.flags, "no-automated-item-insertion")
 entity.hidden = true

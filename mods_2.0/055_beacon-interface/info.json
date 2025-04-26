@@ -3,7 +3,7 @@
     "title": "Beacon interface",
     "description": "Can use any module effect at any strength, is configurable via the gui, and has modding support.",
 
-    "version": "1.0.9",
+    "version": "1.0.10",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -25,6 +25,7 @@
         "? EditorExtensions",
 
         "(?) wret-beacon-rebalance-mod",
-        "(?) UnlimitedProductivityFork"
+        "(?) UnlimitedProductivityFork",
+        "(?) bobmodules"
     ]
 }
