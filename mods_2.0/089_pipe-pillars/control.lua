@@ -54,7 +54,7 @@ function mod.on_created_entity(event)
   struct.furnace.fluidbox.add_linked_connection(0, entity, 0)
 
   struct.occluder_tip = rendering.draw_sprite{
-    sprite = "pipe-pillar-occluder-tip",
+    sprite = "pipe-pillar-occluder-top",
     scale = 0.5,
     surface = surfacedata.surface,
     target = {

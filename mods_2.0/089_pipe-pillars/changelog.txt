@@ -3,6 +3,7 @@ Version: 0.0.10
 Date: ????
   Info:
     - Import new batch 1/2
+    - Update lua for new sprite batch
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 04. 22

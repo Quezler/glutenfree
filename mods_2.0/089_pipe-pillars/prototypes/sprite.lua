@@ -37,5 +37,6 @@ data:extend{
   sprite_with_shadow("pipe-pillar-elevated-vertical-bottom"),
   sprite_with_shadow("pipe-pillar-elevated-vertical-center"),
   sprite_with_shadow("pipe-pillar-elevated-vertical-single"),
-  sprite_with_shadow("pipe-pillar-occluder-tip", {shadow = false}),
+  sprite_with_shadow("pipe-pillar-occluder-top", {shadow = false}),
+  sprite_with_shadow("pipe-pillar-occluder-bottom", {shadow = false}),
 }
