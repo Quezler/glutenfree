@@ -26,6 +26,7 @@ end
 function attach_belt_to_struct(belt, struct)
   struct.belt = belt
 
+  assert(storage.unit_number_to_struct_id[belt.unit_number] == nil)
   storage.unit_number_to_struct_id[belt.unit_number] = struct.id
   storage.deathrattles[script.register_on_object_destroyed(belt)] = {}
 

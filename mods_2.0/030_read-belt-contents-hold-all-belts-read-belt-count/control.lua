@@ -170,7 +170,11 @@ function Handler.on_created_entity(event)
     position = entity.position,
     name = "read-belt-contents-hold-all-belts-read-belt-count",
   }
-  assert(#combinators == 1, "expected 1 combinator but found " .. #combinators)
+  for _, combinator in ipairs(combinators) do
+    if combinator.unit_number ~= entity.unit_number then
+      combinator.destroy()
+    end
+  end
 
   -- assert(storage.structs[belt.unit_number] == nil)
   storage.index = storage.index + 1
@@ -189,6 +193,11 @@ function Handler.on_created_entity(event)
   filter.min = 0
   section.set_slot(1, filter)
 
+  -- in case it gets force built from a blueprint with another direction
+  local old_struct_id = storage.unit_number_to_struct_id[belt.unit_number]
+  if old_struct_id then storage.unit_number_to_struct_id[belt.unit_number] = nil
+    delete_struct(storage.structs[old_struct_id])
+  end
   attach_belt_to_struct(belt, struct)
   Combinator.tick_struct(struct)
 end
