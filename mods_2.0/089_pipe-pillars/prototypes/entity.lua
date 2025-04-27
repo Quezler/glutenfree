@@ -31,7 +31,12 @@ require("util")
 --   -- },
 -- }
 
-local storage_tank = {
+local recipe_category = {
+  type = "recipe-category",
+  name = "pipe-pillar",
+}
+
+local furnace = {
   type = "furnace",
   name = "pipe-pillar",
   icon = mod_directory .. "/graphics/icons/pipe-pillar.png",
@@ -54,7 +59,6 @@ local storage_tank = {
   fast_replaceable_group = "pipe",
   damaged_trigger_effect = hit_effects.entity(),
   drawing_box_vertical_extension = 3,
-  icon_draw_specification = {scale = 0.75, shift = {0, -3.8}},
   fluid_boxes =
   {{
     production_type = "input",
@@ -102,8 +106,7 @@ local storage_tank = {
     hide_connection_info = true,
     always_draw_covers = true,
   }},
-  -- two_direction_only = true,
-  -- window_bounding_box = {{0, 0}, {0, 0}},
+
   graphics_set =
   {
     animation =
@@ -130,7 +133,6 @@ local storage_tank = {
       }
     },
   },
-  -- flow_length_in_ticks = 360,
   impact_category = "metal-large",
   open_sound = sounds.metal_large_open,
   close_sound = sounds.metal_large_close,
@@ -160,31 +162,26 @@ local storage_tank = {
   -- }
 }
 
-local recipe_category = {
-  type = "recipe-category",
-  name = "pipe-pillar",
-}
 
-local furnace = {
-  type = "furnace",
-  name = "pipe-pillar-pipe-connection",
+local storage_tank = {
+  type = "storage-tank",
+  name = "pipe-pillar-alt-mode",
+  icon = mod_directory .. "/graphics/icons/pipe-pillar.png",
 
   collision_mask = {layers = {}},
-  collision_box = storage_tank.collision_box,
-  selection_box = storage_tank.selection_box,
+  collision_box = furnace.collision_box,
+  selection_box = furnace.selection_box,
   selection_priority = 49,
+
+  icon_draw_specification = {scale = 0.75, shift = {0, -3.25}},
   flags = {"not-on-map"},
 
-  energy_usage = "1kW",
-  energy_source = {type = "void"},
-  crafting_speed = 1,
-  crafting_categories = {"pipe-pillar"},
+  two_direction_only = true,
+  window_bounding_box = {{0, 0}, {0, 0}},
+  flow_length_in_ticks = 1,
 
-  source_inventory_size = 0,
-  result_inventory_size = 0,
-
-  fluid_boxes =
-  {{
+  fluid_box =
+  {
     volume = 1,
     pipe_connections =
     {
@@ -192,80 +189,8 @@ local furnace = {
         connection_type = "linked",
         linked_connection_id = 0,
       },
-      { direction = defines.direction.north, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "occluder-bottom" } },
-      { direction = defines.direction.east , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "occluder-bottom" } },
-      { direction = defines.direction.south, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "occluder-bottom" } },
-      { direction = defines.direction.west , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "occluder-bottom" } },
     },
-    hide_connection_info = true,
-    production_type = "input",
-    draw_only_when_connected = true,
-    always_draw_covers = false,
-  }},
-
-  graphics_set = {
-    working_visualisations =
-    {
-
-      {
-        always_draw = true,
-        name = "pipe-connection",
-        enabled_by_name = true,
-        secondary_draw_order = 1,
-        animation = {
-          layers = {
-            {
-              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection.png",
-              width = 704,
-              height = 704,
-              scale = 0.5,
-              -- shift = {2, 0}
-            },
-            {
-              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection-shadow.png",
-              width = 704,
-              height = 704,
-              scale = 0.5,
-              draw_as_shadow = true,
-            },
-          }
-        },
-      },
-      {
-        always_draw = true,
-        name = "pipe-covers",
-        enabled_by_name = true,
-        render_layer = "object-under",
-        animation = {
-          layers = {
-            {
-              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-covers.png",
-              width = 704,
-              height = 704,
-              scale = 0.5
-            }
-          }
-        },
-      },
-      {
-        always_draw = true,
-        name = "occluder-bottom",
-        enabled_by_name = true,
-        render_layer = "cargo-hatch",
-        animation = {
-          layers = {
-            {
-              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-occluder-bottom.png",
-              width = 704,
-              height = 704,
-              scale = 0.5
-            },
-          }
-        },
-      },
-
-    },
-  }
+  },
 }
 
-data:extend{storage_tank, recipe_category}
+data:extend{recipe_category, furnace, storage_tank}
