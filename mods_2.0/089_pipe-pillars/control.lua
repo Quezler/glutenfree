@@ -47,13 +47,13 @@ function mod.on_created_entity(event)
     occluder_tip = nil,
   })
 
-  struct.furnace = entity.surface.create_entity{
-    name = "pipe-pillar-pipe-connection",
-    force = entity.force,
-    position = entity.position,
-  }
-  struct.furnace.destructible = false
-  struct.furnace.fluidbox.add_linked_connection(0, entity, 0)
+  -- struct.furnace = entity.surface.create_entity{
+  --   name = "pipe-pillar-pipe-connection",
+  --   force = entity.force,
+  --   position = entity.position,
+  -- }
+  -- struct.furnace.destructible = false
+  -- struct.furnace.fluidbox.add_linked_connection(0, entity, 0)
 
   struct.occluder_tip = rendering.draw_sprite{
     sprite = "pipe-pillar-occluder-top",
@@ -177,7 +177,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
 
   for unit_number, struct in pairs(surfacedata.structs) do
     local position = struct.entity.position
-    for _, neighbour in ipairs(struct.entity.neighbours[1]) do -- warning: if they are adjacent both the underground & normal connections show up
+    for _, neighbour in ipairs({}) do -- warning: if they are adjacent both the underground & normal connections show up
       if neighbour.name == "pipe-pillar" then
 
         local connection = struct.connections[neighbour.unit_number]

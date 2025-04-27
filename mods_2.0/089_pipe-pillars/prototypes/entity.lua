@@ -32,9 +32,18 @@ require("util")
 -- }
 
 local storage_tank = {
-  type = "storage-tank",
+  type = "furnace",
   name = "pipe-pillar",
   icon = mod_directory .. "/graphics/icons/pipe-pillar.png",
+
+  energy_usage = "1kW",
+  energy_source = {type = "void"},
+  crafting_speed = 1,
+  crafting_categories = {"pipe-pillar"},
+
+  source_inventory_size = 0,
+  result_inventory_size = 0,
+
   flags = {"placeable-player", "player-creation"},
   minable = {mining_time = 0.25, result = "pipe-pillar"},
   max_health = 250,
@@ -46,11 +55,16 @@ local storage_tank = {
   damaged_trigger_effect = hit_effects.entity(),
   drawing_box_vertical_extension = 3,
   icon_draw_specification = {scale = 0.75, shift = {0, -3.8}},
-  fluid_box =
-  {
-    volume = 500,
+  fluid_boxes =
+  {{
+    production_type = "input",
+    volume = 1,
     pipe_connections =
     {
+      {
+        connection_type = "linked",
+        linked_connection_id = 0,
+      },
       {
         connection_type = "underground",
         direction = defines.direction.north,
@@ -79,27 +93,22 @@ local storage_tank = {
         max_underground_distance = 10,
         connection_category = "pipe-pillar",
       },
-      {
-        connection_type = "linked",
-        linked_connection_id = 0,
-      },
-      -- {
-      --   direction = defines.direction.south,
-      --   position = {0, 0},
-      --   -- connection_category = "pipe-pillar-cover",
-      -- },
+      { direction = defines.direction.north, position = {0, 0}, enable_working_visualisations = { }},
+      { direction = defines.direction.east , position = {0, 0}, enable_working_visualisations = { }},
+      { direction = defines.direction.south, position = {0, 0}, enable_working_visualisations = { }},
+      { direction = defines.direction.west , position = {0, 0}, enable_working_visualisations = { }},
     },
     -- pipe_covers = local_pipecoverspictures,
     hide_connection_info = true,
     always_draw_covers = true,
-  },
-  two_direction_only = true,
-  window_bounding_box = {{0, 0}, {0, 0}},
-  pictures =
+  }},
+  -- two_direction_only = true,
+  -- window_bounding_box = {{0, 0}, {0, 0}},
+  graphics_set =
   {
-    picture =
+    animation =
     {
-      sheets =
+      layers =
       {
         {
           filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar.png",
@@ -108,7 +117,6 @@ local storage_tank = {
           width = 704,
           height = 704,
           scale = 0.5,
-          -- shift = {2, 0}
         },
         {
           filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-shadow.png",
@@ -117,39 +125,39 @@ local storage_tank = {
           width = 704,
           height = 704,
           scale = 0.5,
-          draw_as_shadow = true
+          draw_as_shadow = true,
         }
       }
     },
   },
-  flow_length_in_ticks = 360,
+  -- flow_length_in_ticks = 360,
   impact_category = "metal-large",
   open_sound = sounds.metal_large_open,
   close_sound = sounds.metal_large_close,
-  working_sound =
-  {
-    sound = {filename = "__base__/sound/storage-tank.ogg", volume = 0.6, audible_distance_modifier = 0.5},
-    match_volume_to_activity = true,
-    max_sounds_per_prototype = 3
-  },
+  -- working_sound =
+  -- {
+  --   sound = {filename = "__base__/sound/storage-tank.ogg", volume = 0.6, audible_distance_modifier = 0.5},
+  --   match_volume_to_activity = true,
+  --   max_sounds_per_prototype = 3
+  -- },
 
-  circuit_connector = circuit_connector_definitions["storage-tank"],
-  circuit_wire_max_distance = default_circuit_wire_max_distance,
-  water_reflection =
-  {
-    pictures =
-    {
-      filename = "__base__/graphics/entity/storage-tank/storage-tank-reflection.png",
-      priority = "extra-high",
-      width = 24,
-      height = 24,
-      shift = util.by_pixel(5, 35),
-      variation_count = 1,
-      scale = 5
-    },
-    rotate = false,
-    orientation_to_variation = false
-  }
+  -- circuit_connector = circuit_connector_definitions["storage-tank"],
+  -- circuit_wire_max_distance = default_circuit_wire_max_distance,
+  -- water_reflection =
+  -- {
+  --   pictures =
+  --   {
+  --     filename = "__base__/graphics/entity/storage-tank/storage-tank-reflection.png",
+  --     priority = "extra-high",
+  --     width = 24,
+  --     height = 24,
+  --     shift = util.by_pixel(5, 35),
+  --     variation_count = 1,
+  --     scale = 5
+  --   },
+  --   rotate = false,
+  --   orientation_to_variation = false
+  -- }
 }
 
 local recipe_category = {
@@ -260,4 +268,4 @@ local furnace = {
   }
 }
 
-data:extend{storage_tank, recipe_category, furnace}
+data:extend{storage_tank, recipe_category}
