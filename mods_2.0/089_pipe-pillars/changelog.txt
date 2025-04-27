@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Import new batch 1/2
     - Update lua for new sprite batch
+    - Try some imagemagik commands
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 04. 22
