@@ -177,7 +177,8 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
 
   for unit_number, struct in pairs(surfacedata.structs) do
     local position = struct.entity.position
-    for _, neighbour in ipairs({}) do -- warning: if they are adjacent both the underground & normal connections show up
+    for _, neighbour in ipairs(struct.entity.fluidbox.get_connections(1)) do
+      neighbour = neighbour.owner -- remnant from using neighbours instead of fluidbox
       if neighbour.name == "pipe-pillar" then
 
         local connection = struct.connections[neighbour.unit_number]

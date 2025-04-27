@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Crude initial player facing furnace
     - Complete the prototype switcharoo
+    - Fix the pipeline rendering
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.10
 Date: 2025. 04. 27
