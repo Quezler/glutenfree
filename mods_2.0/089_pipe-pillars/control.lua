@@ -37,6 +37,8 @@ function mod.on_created_entity(event)
     return entity.destroy()
   end
 
+  entity.direction = defines.direction.north
+
   local struct = new_struct(surfacedata.structs, {
     id = entity.unit_number,
     entity = entity,
@@ -244,3 +246,9 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
     end
   end
 end
+
+script.on_event(defines.events.on_player_rotated_entity, function(event)
+  if event.entity.name == "pipe-pillar" then
+    event.entity.direction = defines.direction.north
+  end
+end)

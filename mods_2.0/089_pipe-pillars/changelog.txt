@@ -10,6 +10,7 @@ Date: ????
     - Update the batch of sprites for the shadow
     - Work on the back legs
     - Play around with the pipe cover pictures
+    - Block rotation so we only need one pipe
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 04. 22

@@ -17,17 +17,18 @@ local local_pipecoverspictures = {
       },
     }
   },
-  west = {
-    layers = {
-      {
-        filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-northwest-leg.png",
-        width = 704,
-        height = 704,
-        scale = 0.5,
-        shift = {1, 0}
-      },
-    }
-  },
+  west = util.empty_sprite(),
+  -- west = {
+  --   layers = {
+  --     {
+  --       filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-northwest-leg.png",
+  --       width = 704,
+  --       height = 704,
+  --       scale = 0.5,
+  --       shift = {1, 0}
+  --     },
+  --   }
+  -- },
 }
 
 local storage_tank = {
