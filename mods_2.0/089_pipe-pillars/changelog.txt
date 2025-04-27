@@ -6,6 +6,7 @@ Date: ????
     - Update lua for new sprite batch
     - Try some imagemagik commands
     - Fix shadow fattening
+    - Prune storage tank graphic set
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 04. 22

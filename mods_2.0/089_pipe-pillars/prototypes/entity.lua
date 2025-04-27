@@ -59,7 +59,7 @@ local storage_tank = {
     hide_connection_info = true
   },
   two_direction_only = true,
-  window_bounding_box = {{-0.125, 0.6875}, {0.1875, 1.1875}},
+  window_bounding_box = {{0, 0}, {0, 0}},
   pictures =
   {
     picture =
@@ -85,39 +85,6 @@ local storage_tank = {
         }
       }
     },
-    -- fluid_background =
-    -- {
-    --   filename = "__base__/graphics/entity/storage-tank/fluid-background.png",
-    --   priority = "extra-high",
-    --   width = 32,
-    --   height = 15
-    -- },
-    -- window_background =
-    -- {
-    --   filename = "__base__/graphics/entity/storage-tank/window-background.png",
-    --   priority = "extra-high",
-    --   width = 34,
-    --   height = 48,
-    --   scale = 0.5
-    -- },
-    -- flow_sprite =
-    -- {
-    --   filename = "__base__/graphics/entity/pipe/fluid-flow-low-temperature.png",
-    --   priority = "extra-high",
-    --   width = 160,
-    --   height = 20
-    -- },
-    -- gas_flow =
-    -- {
-    --   filename = "__base__/graphics/entity/pipe/steam.png",
-    --   priority = "extra-high",
-    --   line_length = 10,
-    --   width = 48,
-    --   height = 30,
-    --   frame_count = 60,
-    --   animation_speed = 0.25,
-    --   scale = 0.5
-    -- }
   },
   flow_length_in_ticks = 360,
   impact_category = "metal-large",
