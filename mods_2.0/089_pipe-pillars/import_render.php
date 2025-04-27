@@ -13,7 +13,8 @@ $mapping = [
   '0001' => 'pipe-pillar',
   '0002' => 'pipe-pillar-occluder-bottom',
   '0003' => 'pipe-pillar-occluder-top',
-  '0004' => 'pipe-pillar-elevated-vertical-bottom',
+  '0004' => 'pipe-pillar-pipe-covers',
+  // '0004' => 'pipe-pillar-elevated-vertical-bottom',
   '0005' => 'pipe-pillar-elevated-horizontal-left',
   '0006' => 'pipe-pillar-elevated-vertical-top',
   '0007' => 'pipe-pillar-elevated-horizontal-right',
@@ -31,7 +32,7 @@ foreach($mapping as $numbered => $named)
     copy("{$Shadow}/{$numbered}.png", "{$pipe_pillar}/{$named}-shadow.png");
 }
 
-// magick composite pipe-pillar-pipe-connection.png pipe-pillar.png -compose Difference difference.png
+// magick composite pipe-pillar.png pipe-pillar-pipe-connection.png -compose Difference difference.png
 
 // magick \
 //   pipe-pillar-pipe-connection.png -alpha extract pipe-connection-alpha.png

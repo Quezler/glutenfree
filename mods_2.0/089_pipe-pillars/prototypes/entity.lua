@@ -181,10 +181,10 @@ local furnace = {
         connection_type = "linked",
         linked_connection_id = 0,
       },
-      { direction = defines.direction.north, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "occluder-bottom" } },
-      { direction = defines.direction.east , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "occluder-bottom" } },
-      { direction = defines.direction.south, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "occluder-bottom" } },
-      { direction = defines.direction.west , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "occluder-bottom" } },
+      { direction = defines.direction.north, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "occluder-bottom" } },
+      { direction = defines.direction.east , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "occluder-bottom" } },
+      { direction = defines.direction.south, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "occluder-bottom" } },
+      { direction = defines.direction.west , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers", "occluder-bottom" } },
     },
     hide_connection_info = true,
     production_type = "input",
@@ -219,28 +219,22 @@ local furnace = {
           }
         },
       },
-      -- {
-      --   always_draw = true,
-      --   name = "pipe-covers",
-      --   enabled_by_name = true,
-      --   render_layer = "object-under",
-      --   animation = {
-      --     layers = {
-      --       {
-      --         filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-bottom-pipe-left.png",
-      --         width = 704,
-      --         height = 704,
-      --         scale = 0.5
-      --       },
-      --       {
-      --         filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-bottom-pipe-right.png",
-      --         width = 704,
-      --         height = 704,
-      --         scale = 0.5
-      --       },
-      --     }
-      --   },
-      -- },
+      {
+        always_draw = true,
+        name = "pipe-covers",
+        enabled_by_name = true,
+        render_layer = "object-under",
+        animation = {
+          layers = {
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-covers.png",
+              width = 704,
+              height = 704,
+              scale = 0.5
+            }
+          }
+        },
+      },
       {
         always_draw = true,
         name = "occluder-bottom",
