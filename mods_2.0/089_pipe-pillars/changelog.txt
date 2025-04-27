@@ -1,8 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.10
-Date: ????
+Date: 2025. 04. 27
   Info:
-    - Import new batch 1/2
+    - Import new batch
     - Update lua for new sprite batch
     - Try some imagemagik commands
     - Fix shadow fattening
