@@ -137,6 +137,20 @@ local furnace = {
     {
       {
         always_draw = true,
+        render_layer = "object-under",
+        animation = {
+          layers = {
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-back-left-leg.png",
+              width = 704,
+              height = 704,
+              scale = 0.5
+            },
+          }
+        },
+      },
+      {
+        always_draw = true,
         name = "pipe-connection",
         enabled_by_name = true,
         secondary_draw_order = 1,
@@ -177,7 +191,6 @@ local furnace = {
       },
       {
         always_draw = true,
-        name = "occluder-bottom",
         render_layer = "cargo-hatch",
         animation = {
           layers = {

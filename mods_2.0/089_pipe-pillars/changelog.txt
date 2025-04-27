@@ -1,11 +1,12 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.11
-Date: ????
+Date: 2025. 04. 27
   Info:
     - Crude initial player facing furnace
     - Complete the prototype switcharoo
     - Fix the pipeline rendering
     - Make the working visualizations operational again
+    - Fix the frame rendering over/under the pipes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.10
 Date: 2025. 04. 27
