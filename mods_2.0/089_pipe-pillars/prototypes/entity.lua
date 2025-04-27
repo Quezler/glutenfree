@@ -203,6 +203,20 @@ local furnace = {
           }
         },
       },
+      {
+        always_draw = true,
+        render_layer = "cargo-hatch",
+        animation = {
+          layers = {
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-occluder-east.png",
+              width = 704,
+              height = 704,
+              scale = 0.5
+            },
+          }
+        },
+      },
     }, -- working_visualisations
   },
   impact_category = "metal-large",

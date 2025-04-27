@@ -3,6 +3,7 @@ Version: 0.0.12
 Date: ????
   Info:
     - Change status from "red, ingredients" to "green, working"
+    - Trial east occluder
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.11
 Date: 2025. 04. 27
