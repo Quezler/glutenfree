@@ -3,33 +3,33 @@ local sounds = require("__base__.prototypes.entity.sounds")
 
 require("util")
 
-local local_pipecoverspictures = {
-  north = util.empty_sprite(),
-  east  = util.empty_sprite(),
-  south = {
-    layers = {
-      {
-        filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-northwest-leg.png",
-        width = 704,
-        height = 704,
-        scale = 0.5,
-        shift = {0, -1}
-      },
-    }
-  },
-  west = util.empty_sprite(),
-  -- west = {
-  --   layers = {
-  --     {
-  --       filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-northwest-leg.png",
-  --       width = 704,
-  --       height = 704,
-  --       scale = 0.5,
-  --       shift = {1, 0}
-  --     },
-  --   }
-  -- },
-}
+-- local local_pipecoverspictures = {
+--   north = util.empty_sprite(),
+--   east  = util.empty_sprite(),
+--   south = {
+--     layers = {
+--       {
+--         filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-northwest-leg.png",
+--         width = 704,
+--         height = 704,
+--         scale = 0.5,
+--         shift = {0, -1}
+--       },
+--     }
+--   },
+--   west = util.empty_sprite(),
+--   -- west = {
+--   --   layers = {
+--   --     {
+--   --       filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-northwest-leg.png",
+--   --       width = 704,
+--   --       height = 704,
+--   --       scale = 0.5,
+--   --       shift = {1, 0}
+--   --     },
+--   --   }
+--   -- },
+-- }
 
 local storage_tank = {
   type = "storage-tank",

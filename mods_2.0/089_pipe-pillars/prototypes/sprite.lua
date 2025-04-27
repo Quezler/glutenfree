@@ -17,7 +17,7 @@ local function sprite_with_shadow(name, config)
 
   if config.shadow ~= false then
     table.insert(sprite.layers, {
-      filename = mod_directory .. "/graphics/entity/pipe-pillar/" .. name .. "-shadow.png",
+      filename = mod_directory .. "/graphics/entity/pipe-pillar/" .. (config.shadow and config.shadow or (name .. "-shadow")) .. ".png",
       scale = 0.5,
       width = 704,
       height = 704,
@@ -28,15 +28,18 @@ local function sprite_with_shadow(name, config)
   return sprite
 end
 
+local horizontal_shadow = {shadow = "pipe-pillar-elevated-horizontal-center-shadow"}
+local vertical_shadow = {shadow = "pipe-pillar-elevated-vertical-center-shadow"}
+
 data:extend{
-  sprite_with_shadow("pipe-pillar-elevated-horizontal-left"),
-  sprite_with_shadow("pipe-pillar-elevated-horizontal-right"),
-  sprite_with_shadow("pipe-pillar-elevated-horizontal-center"),
-  sprite_with_shadow("pipe-pillar-elevated-horizontal-single"),
-  sprite_with_shadow("pipe-pillar-elevated-vertical-top"),
-  sprite_with_shadow("pipe-pillar-elevated-vertical-bottom"),
-  sprite_with_shadow("pipe-pillar-elevated-vertical-center"),
-  sprite_with_shadow("pipe-pillar-elevated-vertical-single"),
+  sprite_with_shadow("pipe-pillar-elevated-horizontal-left", horizontal_shadow),
+  sprite_with_shadow("pipe-pillar-elevated-horizontal-right", horizontal_shadow),
+  sprite_with_shadow("pipe-pillar-elevated-horizontal-center", horizontal_shadow),
+  sprite_with_shadow("pipe-pillar-elevated-horizontal-single", horizontal_shadow),
+  sprite_with_shadow("pipe-pillar-elevated-vertical-top", vertical_shadow),
+  sprite_with_shadow("pipe-pillar-elevated-vertical-bottom", vertical_shadow),
+  sprite_with_shadow("pipe-pillar-elevated-vertical-center", vertical_shadow),
+  sprite_with_shadow("pipe-pillar-elevated-vertical-single", vertical_shadow),
   sprite_with_shadow("pipe-pillar-occluder-top", {shadow = false}),
   sprite_with_shadow("pipe-pillar-occluder-bottom", {shadow = false}),
 }
