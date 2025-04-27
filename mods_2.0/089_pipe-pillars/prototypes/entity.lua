@@ -3,6 +3,33 @@ local sounds = require("__base__.prototypes.entity.sounds")
 
 require("util")
 
+local local_pipecoverspictures = {
+  north = util.empty_sprite(),
+  east  = util.empty_sprite(),
+  south = {
+    layers = {
+      {
+        filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-northwest-leg.png",
+        width = 704,
+        height = 704,
+        scale = 0.5,
+        shift = {0, -1}
+      },
+    }
+  },
+  west = {
+    layers = {
+      {
+        filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-northwest-leg.png",
+        width = 704,
+        height = 704,
+        scale = 0.5,
+        shift = {1, 0}
+      },
+    }
+  },
+}
+
 local storage_tank = {
   type = "storage-tank",
   name = "pipe-pillar",
@@ -16,7 +43,7 @@ local storage_tank = {
   selection_box = {{-0.7, -0.7}, {0.7, 0.7}},
   fast_replaceable_group = "pipe",
   damaged_trigger_effect = hit_effects.entity(),
-  drawing_box_vertical_extension = 3.5,
+  drawing_box_vertical_extension = 3,
   icon_draw_specification = {scale = 0.75, shift = {0, -3.8}},
   fluid_box =
   {
@@ -55,8 +82,15 @@ local storage_tank = {
         connection_type = "linked",
         linked_connection_id = 0,
       },
+      {
+        direction = defines.direction.south,
+        position = {0, 0},
+        -- connection_category = "pipe-pillar-cover",
+      },
     },
-    hide_connection_info = true
+    pipe_covers = local_pipecoverspictures,
+    hide_connection_info = true,
+    always_draw_covers = true,
   },
   two_direction_only = true,
   window_bounding_box = {{0, 0}, {0, 0}},
@@ -72,7 +106,8 @@ local storage_tank = {
           frames = 1,
           width = 704,
           height = 704,
-          scale = 0.5
+          scale = 0.5,
+          -- shift = {2, 0}
         },
         {
           filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-shadow.png",
@@ -174,7 +209,8 @@ local furnace = {
               filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection.png",
               width = 704,
               height = 704,
-              scale = 0.5
+              scale = 0.5,
+              -- shift = {2, 0}
             },
             {
               filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection-shadow.png",

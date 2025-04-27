@@ -9,6 +9,7 @@ Date: ????
     - Prune storage tank graphic set
     - Update the batch of sprites for the shadow
     - Work on the back legs
+    - Play around with the pipe cover pictures
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 04. 22
