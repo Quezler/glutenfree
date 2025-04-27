@@ -8,6 +8,7 @@ Date: ????
     - Fix shadow fattening
     - Prune storage tank graphic set
     - Update the batch of sprites for the shadow
+    - Work on the back legs
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 04. 22
