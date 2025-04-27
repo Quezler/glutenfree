@@ -61,7 +61,6 @@ local furnace = {
   drawing_box_vertical_extension = 3,
   fluid_boxes =
   {{
-    production_type = "input",
     volume = 1,
     pipe_connections =
     {
@@ -97,11 +96,13 @@ local furnace = {
         max_underground_distance = 10,
         connection_category = "pipe-pillar",
       },
-      { direction = defines.direction.north, position = {0, 0}, enable_working_visualisations = { }},
-      { direction = defines.direction.east , position = {0, 0}, enable_working_visualisations = { }},
-      { direction = defines.direction.south, position = {0, 0}, enable_working_visualisations = { }},
-      { direction = defines.direction.west , position = {0, 0}, enable_working_visualisations = { }},
+      { direction = defines.direction.north, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" }},
+      { direction = defines.direction.east , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" }},
+      { direction = defines.direction.south, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" }},
+      { direction = defines.direction.west , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" }},
     },
+    production_type = "input",
+    draw_only_when_connected = true,
     -- pipe_covers = local_pipecoverspictures,
     hide_connection_info = true,
     always_draw_covers = true,
@@ -132,6 +133,64 @@ local furnace = {
         }
       }
     },
+    working_visualisations =
+    {
+      {
+        always_draw = true,
+        name = "pipe-connection",
+        enabled_by_name = true,
+        secondary_draw_order = 1,
+        animation = {
+          layers = {
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection.png",
+              width = 704,
+              height = 704,
+              scale = 0.5,
+              -- shift = {2, 0}
+            },
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection-shadow.png",
+              width = 704,
+              height = 704,
+              scale = 0.5,
+              draw_as_shadow = true,
+            },
+          }
+        },
+      },
+      {
+        always_draw = true,
+        name = "pipe-covers",
+        enabled_by_name = true,
+        render_layer = "object-under",
+        animation = {
+          layers = {
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-covers.png",
+              width = 704,
+              height = 704,
+              scale = 0.5
+            }
+          }
+        },
+      },
+      {
+        always_draw = true,
+        name = "occluder-bottom",
+        render_layer = "cargo-hatch",
+        animation = {
+          layers = {
+            {
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-occluder-bottom.png",
+              width = 704,
+              height = 704,
+              scale = 0.5
+            },
+          }
+        },
+      },
+    }, -- working_visualisations
   },
   impact_category = "metal-large",
   open_sound = sounds.metal_large_open,
