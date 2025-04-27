@@ -39,6 +39,11 @@ function mod.on_created_entity(event)
 
   entity.direction = defines.direction.north
 
+  entity.custom_status = {
+    diode = defines.entity_status_diode.green,
+    label = {"entity-status.working"}
+  }
+
   local struct = new_struct(surfacedata.structs, {
     id = entity.unit_number,
     entity = entity,
