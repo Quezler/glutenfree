@@ -25,7 +25,7 @@ $mapping = [
   '0013' => 'pipe-pillar-elevated-horizontal-single',
   '0014' => 'pipe-pillar-back-left-leg',
 //'0015' => null,
-  '0016' => 'pipe-pillar-pipe-connection-cover-south',
+//'0016' => å'pipe-pillar-pipe-connection-cover-south',
 ];
 
 foreach($mapping as $numbered => $named)

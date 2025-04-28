@@ -217,20 +217,6 @@ local furnace = {
           }
         },
       },
-      {
-        always_draw = true,
-        render_layer = "higher-object-under",
-        animation = {
-          layers = {
-            {
-              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection-cover-south.png",
-              width = 704,
-              height = 704,
-              scale = 0.5
-            },
-          }
-        },
-      },
     }, -- working_visualisations
   },
   impact_category = "metal-large",
