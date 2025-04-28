@@ -37,8 +37,6 @@ function mod.on_created_entity(event)
     return entity.destroy()
   end
 
-  entity.direction = defines.direction.north
-
   entity.custom_status = {
     diode = defines.entity_status_diode.green,
     label = {"entity-status.working"}
@@ -252,9 +250,3 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
     end
   end
 end
-
-script.on_event(defines.events.on_player_rotated_entity, function(event)
-  if event.entity.name == "pipe-pillar" then
-    event.entity.direction = defines.direction.north
-  end
-end)

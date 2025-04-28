@@ -75,7 +75,6 @@ local furnace = {
     },
     production_type = "input",
     draw_only_when_connected = true,
-    -- pipe_covers = local_pipecoverspictures,
     hide_connection_info = true,
     always_draw_covers = true,
   }},
