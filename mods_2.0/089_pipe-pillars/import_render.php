@@ -14,7 +14,7 @@ $mapping = [
   '0002' => 'pipe-pillar-occluder-bottom',
   '0003' => 'pipe-pillar-occluder-top',
   '0004' => 'pipe-pillar-pipe-covers',
-  // '0005' => null,
+//'0005' => null,
   '0006' => 'pipe-pillar-elevated-vertical-top',
   '0007' => 'pipe-pillar-elevated-vertical-center',
   '0008' => 'pipe-pillar-elevated-vertical-bottom',
@@ -24,6 +24,8 @@ $mapping = [
   '0012' => 'pipe-pillar-elevated-horizontal-right',
   '0013' => 'pipe-pillar-elevated-horizontal-single',
   '0014' => 'pipe-pillar-back-left-leg',
+//'0015' => null,
+  '0016' => 'pipe-pillar-pipe-connection-cover-south',
 ];
 
 foreach($mapping as $numbered => $named)
