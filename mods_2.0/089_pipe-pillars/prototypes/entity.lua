@@ -209,7 +209,7 @@ local furnace = {
         animation = {
           layers = {
             {
-              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-occluder-east.png",
+              filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-occluder-top.png",
               width = 704,
               height = 704,
               scale = 0.5

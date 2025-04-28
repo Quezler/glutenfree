@@ -5,6 +5,7 @@ Date: ????
     - Change status from "red, ingredients" to "green, working"
     - Trial east occluder
     - Remove imagemagik commands
+    - Batch 12
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.11
 Date: 2025. 04. 27
