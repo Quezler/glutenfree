@@ -67,7 +67,7 @@ function mod.on_created_entity(event)
     target = {
       entity = struct.entity,
     },
-    render_layer = render_layer + 1,
+    render_layer = tostring(render_layer + 1),
   }
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {
@@ -214,7 +214,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
                   entity = struct.entity,
                   offset = {-x_offset, 0},
                 },
-                render_layer = render_layer + 0,
+                render_layer = tostring(render_layer + 0),
               })
             end
           else
@@ -227,7 +227,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
                   entity = struct.entity,
                   offset = {0, -y_offset},
                 },
-                render_layer = render_layer + 0,
+                render_layer = tostring(render_layer + 0),
               })
             end
           end

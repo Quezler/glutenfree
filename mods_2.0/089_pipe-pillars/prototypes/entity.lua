@@ -3,34 +3,6 @@ local sounds = require("__base__.prototypes.entity.sounds")
 
 require("util")
 
--- local local_pipecoverspictures = {
---   north = util.empty_sprite(),
---   east  = util.empty_sprite(),
---   south = {
---     layers = {
---       {
---         filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-northwest-leg.png",
---         width = 704,
---         height = 704,
---         scale = 0.5,
---         shift = {0, -1}
---       },
---     }
---   },
---   west = util.empty_sprite(),
---   -- west = {
---   --   layers = {
---   --     {
---   --       filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-northwest-leg.png",
---   --       width = 704,
---   --       height = 704,
---   --       scale = 0.5,
---   --       shift = {1, 0}
---   --     },
---   --   }
---   -- },
--- }
-
 local recipe_category = {
   type = "recipe-category",
   name = "pipe-pillar",
@@ -161,7 +133,6 @@ local furnace = {
               width = 704,
               height = 704,
               scale = 0.5,
-              -- shift = {2, 0}
             },
             {
               filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-connection-shadow.png",
@@ -184,7 +155,7 @@ local furnace = {
               filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-pipe-covers.png",
               width = 704,
               height = 704,
-              scale = 0.5
+              scale = 0.5,
             }
           }
         },
@@ -198,7 +169,7 @@ local furnace = {
               filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-occluder-bottom.png",
               width = 704,
               height = 704,
-              scale = 0.5
+              scale = 0.5,
             },
           }
         },
@@ -212,7 +183,7 @@ local furnace = {
               filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-occluder-top.png",
               width = 704,
               height = 704,
-              scale = 0.5
+              scale = 0.5,
             },
           }
         },
@@ -222,30 +193,9 @@ local furnace = {
   impact_category = "metal-large",
   open_sound = sounds.metal_large_open,
   close_sound = sounds.metal_large_close,
-  -- working_sound =
-  -- {
-  --   sound = {filename = "__base__/sound/storage-tank.ogg", volume = 0.6, audible_distance_modifier = 0.5},
-  --   match_volume_to_activity = true,
-  --   max_sounds_per_prototype = 3
-  -- },
 
   -- circuit_connector = circuit_connector_definitions["storage-tank"],
   -- circuit_wire_max_distance = default_circuit_wire_max_distance,
-  -- water_reflection =
-  -- {
-  --   pictures =
-  --   {
-  --     filename = "__base__/graphics/entity/storage-tank/storage-tank-reflection.png",
-  --     priority = "extra-high",
-  --     width = 24,
-  --     height = 24,
-  --     shift = util.by_pixel(5, 35),
-  --     variation_count = 1,
-  --     scale = 5
-  --   },
-  --   rotate = false,
-  --   orientation_to_variation = false
-  -- }
 }
 
 
