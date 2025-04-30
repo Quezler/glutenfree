@@ -16,6 +16,7 @@ Date: ????
     - Comment on usage and non-centered circuit connectors
     - Place an anchor so blueprints render the connector
     - Generate the blueprint book in a command
+    - Render the circuit connector above entities
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 30
