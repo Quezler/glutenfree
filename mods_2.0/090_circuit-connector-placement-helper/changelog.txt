@@ -12,6 +12,7 @@ Date: ????
     - Make the furnace rotatable
     - Cycle between the circuit connectors by rotating
     - Allow nudging with the arrow keys
+    - Nudge further with shift held down
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 30

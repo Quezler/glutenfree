@@ -54,6 +54,10 @@ local input_name_to_nudge = {
   ["circuit-connector-placement-helper--left" ] = util.by_pixel(-0.5,  0.0),
   ["circuit-connector-placement-helper--down" ] = util.by_pixel( 0.0,  0.5),
   ["circuit-connector-placement-helper--up"   ] = util.by_pixel( 0.0, -0.5),
+  ["circuit-connector-placement-helper--shift-right"] = util.by_pixel( 2.0,  0.0),
+  ["circuit-connector-placement-helper--shift-left" ] = util.by_pixel(-2.0,  0.0),
+  ["circuit-connector-placement-helper--shift-down" ] = util.by_pixel( 0.0,  2.0),
+  ["circuit-connector-placement-helper--shift-up"   ] = util.by_pixel( 0.0, -2.0),
 }
 
 script.on_event({
@@ -61,12 +65,16 @@ script.on_event({
   "circuit-connector-placement-helper--left",
   "circuit-connector-placement-helper--down",
   "circuit-connector-placement-helper--up",
+  "circuit-connector-placement-helper--shift-right",
+  "circuit-connector-placement-helper--shift-left",
+  "circuit-connector-placement-helper--shift-down",
+  "circuit-connector-placement-helper--shift-up",
 }, function(event)
-  local nudge = input_name_to_nudge[event.input_name]
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local selected = player.selected
 
   if selected and is_circuit_connector[selected.name] then
+    local nudge = input_name_to_nudge[event.input_name]
     selected.teleport(nudge[1], nudge[2])
   end
 end)

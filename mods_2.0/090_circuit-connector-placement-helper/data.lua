@@ -25,7 +25,7 @@ for i = 0, 39 do
     result_inventory_size = 0,
 
     collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
-    selection_box = {{-0.3, -0.3}, {0.3, 0.3}},
+    selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
 
     minable = {mining_time = 0.2, result = "wood"},
     placeable_by = {item = "wood", count = 1},
@@ -71,5 +71,25 @@ data:extend{
     type = "custom-input",
     key_sequence = "UP",
     name = mod_prefix .. "up",
+  },
+  {
+    type = "custom-input",
+    key_sequence = "SHIFT + RIGHT",
+    name = mod_prefix .. "shift-right",
+  },
+  {
+    type = "custom-input",
+    key_sequence = "SHIFT + LEFT",
+    name = mod_prefix .. "shift-left",
+  },
+  {
+    type = "custom-input",
+    key_sequence = "SHIFT + DOWN",
+    name = mod_prefix .. "shift-down",
+  },
+  {
+    type = "custom-input",
+    key_sequence = "SHIFT + UP",
+    name = mod_prefix .. "shift-up",
   },
 }
