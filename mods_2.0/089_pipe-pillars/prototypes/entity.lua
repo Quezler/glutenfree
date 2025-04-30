@@ -24,7 +24,7 @@ local furnace = {
   flags = {"placeable-player", "player-creation"},
   minable = {mining_time = 0.25, result = "pipe-pillar"},
   max_health = 250,
-  -- corpse = "storage-tank-remnants",
+  corpse = "pipe-pillar-remnants",
   -- dying_explosion = "storage-tank-explosion",
   collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
   selection_box = {{-0.7, -0.7}, {0.7, 0.7}},
@@ -228,4 +228,31 @@ local storage_tank = {
   },
 }
 
-data:extend{recipe_category, furnace, storage_tank}
+local corpse = {
+  type = "corpse",
+  name = "pipe-pillar-remnants",
+  icon = furnace.icon,
+  flags = {"placeable-neutral", "not-on-map"},
+  hidden_in_factoriopedia = true,
+  subgroup = "storage-remnants",
+  order = "a-d-a",
+  selection_box = furnace.selection_box,
+  tile_width = 1,
+  tile_height = 1,
+  selectable_in_game = false,
+  time_before_removed = 60 * 60 * 15, -- 15 minutes
+  expires = false,
+  final_render_layer = "remnants",
+  remove_on_tile_placement = false,
+  animation = make_rotated_animation_variations_from_sheet(1,
+  {
+    filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-remnant-2.png",
+    line_length = 1,
+    width = 704,
+    height = 704,
+    direction_count = 1,
+    scale = 0.5
+  })
+}
+
+data:extend{recipe_category, furnace, storage_tank, corpse}
