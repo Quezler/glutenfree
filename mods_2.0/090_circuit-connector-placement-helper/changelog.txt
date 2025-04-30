@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Setup the furnace prototype
+    - Generate icons for each variation
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 30
