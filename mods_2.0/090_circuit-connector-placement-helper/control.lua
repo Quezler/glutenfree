@@ -171,22 +171,36 @@ end
 
 function mod.open_gui(player, entity)
   local text = {}
+  local entities = {}
 
-  local entities = entity.surface.find_entities_filtered{
+  for _, colliding_entity in ipairs(entity.surface.find_entities_filtered{
     position = entity.position,
-  }
+  }) do
+    entities[colliding_entity.unit_number or ("foo-" .. i)] = colliding_entity
+  end
   for _, nearby_entity in ipairs(entity.surface.find_entities_filtered{
     position = entity.position,
     radius = 3,
   }) do
-    table.insert(entities, nearby_entity)
+    entities[nearby_entity.unit_number or ("bar-" .. i)] = nearby_entity
   end
 
   local variation = circuit_connector_to_variation[entity.name]
+  variation = variation > 10 and tostring(variation) or (" " .. variation)
 
-  for _, entity in ipairs(entities) do
-    if not mod.hide_from_search(entity) then
-      table.insert(text, string.format("{ variation = %d, main_offset = util.by_pixel(0, 0), shadow_offset = util.by_pixel(0, 0), show_shadow = true }, # " .. entity.name, variation))
+  for _, other_entity in pairs(entities) do
+    if not mod.hide_from_search(other_entity) then
+      local x_diff = (entity.position.x - other_entity.position.x) * 32
+      local y_diff = (entity.position.y - other_entity.position.y) * 32
+
+      local by_pixel = ""
+      if x_diff > 0 then by_pixel = by_pixel .. " " end
+      by_pixel = by_pixel .. x_diff .. ", "
+      if y_diff > 0 then by_pixel = by_pixel .. " " end
+      by_pixel = by_pixel .. y_diff
+
+
+      table.insert(text, string.format("{ variation = %s, main_offset = util.by_pixel(%s), shadow_offset = util.by_pixel(%s), show_shadow = true }, # " .. other_entity.name, variation, by_pixel, by_pixel))
     end
   end
 
