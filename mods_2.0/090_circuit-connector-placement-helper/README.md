@@ -7,4 +7,8 @@ once you are satisfied you can grab an export with the variant and offsets which
 The idea was on the backburner for a while, but this message on the Krastorio 2 discord pushed me to get started on it:
 https://discord.com/channels/587417951335088129/587418590744018955/1366812798243311686
 
+Note: this mod is aimed at mod development, this should not be used by normal players and/or in regular playthroughs.
+
+Also, you'll need to set the shadow offset yourself to something pretty, this mod only offers variation and offset.
+
 - thumbnail source: [adventure time](https://youtu.be/xfVssMRb8Wg?t=19)
