@@ -11,8 +11,8 @@ local prerequisites = {"uranium-processing"}
 -- Changes for K2
 
 if mods["Krastorio2"] then
-  table.insert(ingredients, {"matter-tech-card", 1})
-  table.insert(ingredients, {"advanced-tech-card", 1})
+  table.insert(ingredients, {"kr-matter-tech-card", 1})
+  table.insert(ingredients, {"kr-advanced-tech-card", 1})
 
   table.insert(prerequisites, "kr-energy-control-unit")
   table.insert(prerequisites, "kr-advanced-tech-card")

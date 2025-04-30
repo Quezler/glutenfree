@@ -8,7 +8,7 @@ local ingredients = {
 -- Changes for K2
 
 if mods["Krastorio2"] then
-  table.insert(ingredients, {type = "item", name = "energy-control-unit", amount = 20})
+  table.insert(ingredients, {type = "item", name = "kr-energy-control-unit", amount = 20})
 end
 
 -- Changes for SE
