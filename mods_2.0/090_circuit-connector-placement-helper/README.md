@@ -16,6 +16,6 @@ Usage:
 - rotate to cycle between the 40 connectors (both through the book and once placed)
 - use the arrow keys to nudge it into place (hold shift to nudge further)
 
-Edit: oh sad some reasonable connectors already got placedh ttps://codeberg.org/raiguard/Krastorio2/pulls/529 :o
+Edit: oh sad some reasonable connectors already got placed https://codeberg.org/raiguard/Krastorio2/pulls/529 :o
 
 - thumbnail source: [adventure time](https://youtu.be/xfVssMRb8Wg?t=19)
