@@ -25,7 +25,8 @@ $mapping = [
   '0013' => 'pipe-pillar-elevated-horizontal-single',
   '0014' => 'pipe-pillar-back-left-leg',
 //'0015' => null,
-//'0016' => å'pipe-pillar-pipe-connection-cover-south',
+//'0016' => 'pipe-pillar-remnant-1',
+  '0017' => 'pipe-pillar-remnant-2',
 ];
 
 foreach($mapping as $numbered => $named)
@@ -33,3 +34,6 @@ foreach($mapping as $numbered => $named)
     copy("{$Object}/{$numbered}.png", "{$pipe_pillar}/{$named}.png");
     copy("{$Shadow}/{$numbered}.png", "{$pipe_pillar}/{$named}-shadow.png");
 }
+
+copy("{$Render}/Object Icon/icon.png", __DIR__ . '/graphics/icons/pipe-pillar.png');
+copy("{$Render}/Object Icon/tech.png", __DIR__ . '/graphics/technology/pipe-pillar.png');
