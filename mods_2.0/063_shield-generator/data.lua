@@ -1,6 +1,8 @@
 require("util")
 require("shared")
 
+local debug = false
+
 local simple_entity = {
   type = "simple-entity",
   name = mod_prefix .. "simple-entity",
@@ -10,16 +12,18 @@ local simple_entity = {
   },
 
   selection_box = {{0, 0}, {0, 0}},
-  collision_box = {{0, 0}, {0, 0}},
+  collision_box = debug and {{-0.1, -0.1}, {0.1, 0.1}} or {{0, 0}, {0, 0}},
 
   collision_mask = {layers = {empty_space = true}},
   protected_from_tile_building = false,
   resistances = {
     {
       type = "impact",
-        percent = 100
+      percent = 100
     },
   },
+  collision_mask = {layers = {empty_space = true}},
+  protected_from_tile_building = false,
   hidden = true,
 }
 
