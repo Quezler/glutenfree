@@ -14,7 +14,7 @@ for i = 0, 39 do
     icon = mod_directory .. "/graphics/icons/variation-" .. two_character_number .. ".png",
     localised_name = {"entity-name.circuit-connector-placement-helper--furnace-xx", two_character_number},
 
-    flags = {"placeable-player", "placeable-off-grid", "not-on-map"},
+    flags = {"placeable-player", "player-creation", "placeable-off-grid", "not-on-map"},
 
     energy_usage = "1kW",
     energy_source = {type = "void"},
@@ -27,6 +27,10 @@ for i = 0, 39 do
     collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
     selection_box = {{-0.3, -0.3}, {0.3, 0.3}},
 
+    minable = {mining_time = 0.2, result = "wood"},
+    placeable_by = {item = "wood", count = 1},
+
+    circuit_wire_max_distance = default_circuit_wire_max_distance,
     circuit_connector = circuit_connector_definitions.create_vector
     (
       universal_connector_template,

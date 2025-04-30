@@ -8,6 +8,7 @@ Date: ????
     - Make the icons 64x64
     - Avoid 16 color channels
     - Fix furnace prototype typos
+    - Make them blueprintable
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 30
