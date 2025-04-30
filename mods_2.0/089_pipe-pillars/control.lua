@@ -126,6 +126,11 @@ function mod.mark_surface_dirty(surface)
   end
 
   storage.dirty_surfaces[surface.index] = true
+
+  -- if paused we skip debounce and just render it right away
+  if game.tick_paused then
+    mod.on_tick()
+  end
 end
 
 local deathrattles = {
