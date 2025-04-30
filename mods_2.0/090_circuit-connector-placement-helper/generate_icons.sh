@@ -1,27 +1,55 @@
 # (cd ./mods_2.0/090_circuit-connector-placement-helper && sh generate_icons.sh)
 
-# Variables for input images
+# https://chatgpt.com/share/6811bb8e-ebbc-8007-bf64-68387350efd2
+
+# Input spritesheets
 IMG1="/Users/quezler/Documents/Tower/github/wube/Factorio/data/base/graphics/entity/circuit-connector/ccm-universal-04a-base-sequence.png"
 IMG2="/Users/quezler/Documents/Tower/github/wube/Factorio/data/base/graphics/entity/circuit-connector/ccm-universal-04c-wire-sequence.png"
-COMBINED="combined.png"
 
-# Resize IMG2 to match IMG1 (optional, only if needed)
-magick "$IMG2" -resize "$(identify -format '%wx%h' "$IMG1")!" tmp_resized.png
+# Output directory
+OUTDIR="graphics/icons"
+mkdir -p "$OUTDIR"
 
-# Overlay images (IMG2 on top of IMG1)
-magick "$IMG1" tmp_resized.png -gravity northwest -composite "$COMBINED"
+# Temp directories
+TMP1=$(mktemp -d)
+TMP2=$(mktemp -d)
+TMP_COMPOSITE=$(mktemp -d)
 
-# Get dimensions of combined image
-WIDTH=$(identify -format "%w" "$COMBINED")
-HEIGHT=$(identify -format "%h" "$COMBINED")
+# Constants
+COLUMNS=8
+ROWS=5
 
-# Calculate dimensions of each sprite
-TILE_WIDTH=$((WIDTH / 8))
-TILE_HEIGHT=$((HEIGHT / 5))
+# --- Step 1: Slice both spritesheets ---
 
-# Split into 40 tiles (8 columns x 5 rows)
-magick "$COMBINED" -crop ${TILE_WIDTH}x${TILE_HEIGHT} +repage +adjoin "graphics/icons/variation-%02d.png"
+# IMG1 tile size
+WIDTH1=$(identify -format "%w" "$IMG1")
+HEIGHT1=$(identify -format "%h" "$IMG1")
+TILE_W1=$((WIDTH1 / COLUMNS))
+TILE_H1=$((HEIGHT1 / ROWS))
 
-# Clean up
-rm tmp_resized.png
-rm combined.png
+magick "$IMG1" -crop ${TILE_W1}x${TILE_H1} +repage +adjoin "$TMP1/sprite_%02d.png"
+
+# IMG2 tile size
+WIDTH2=$(identify -format "%w" "$IMG2")
+HEIGHT2=$(identify -format "%h" "$IMG2")
+TILE_W2=$((WIDTH2 / COLUMNS))
+TILE_H2=$((HEIGHT2 / ROWS))
+
+magick "$IMG2" -crop ${TILE_W2}x${TILE_H2} +repage +adjoin "$TMP2/sprite_%02d.png"
+
+# --- Step 2: Composite (IMG1 as background, IMG2 on top, centered) ---
+
+for i in $(seq -w 0 39); do
+  BG="$TMP1/sprite_${i}.png"        # IMG1: background
+  TOP="$TMP2/sprite_${i}.png"       # IMG2: top layer
+  OUTPUT="$OUTDIR/variation-${i}.png"
+
+  # Create transparent canvas same size as IMG2 sprite
+  magick -size ${TILE_W2}x${TILE_H2} canvas:none \
+    "$BG" -gravity center -composite \
+    "$TOP" -gravity center -composite \
+    "$OUTPUT"
+done
+
+# --- Clean up ---
+rm -r "$TMP1" "$TMP2" "$TMP_COMPOSITE"

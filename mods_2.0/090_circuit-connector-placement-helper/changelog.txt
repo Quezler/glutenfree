@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Setup the furnace prototype
     - Generate icons for each variation
+    - Fix scale of poles in the generated icons
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 30
