@@ -37,3 +37,5 @@ foreach($mapping as $numbered => $named)
 
 copy("{$Render}/Object Icon/icon.png", __DIR__ . '/graphics/icons/pipe-pillar.png');
 copy("{$Render}/Object Icon/tech.png", __DIR__ . '/graphics/technology/pipe-pillar.png');
+
+passthru(sprintf("magick %s %s -geometry +0+0 -composite %s", "{$pipe_pillar}/pipe-pillar-remnant-2-shadow.png", "{$pipe_pillar}/pipe-pillar-remnant-2.png", "{$pipe_pillar}/pipe-pillar-remnant-2-w-shadow.png"));

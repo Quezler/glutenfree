@@ -13,6 +13,7 @@ Date: ????
     - Unlock rotation since pipe covers are unused
     - Appease the furry
     - Setup remnants
+    - Embed the shadow into the remnant
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.11
 Date: 2025. 04. 27
