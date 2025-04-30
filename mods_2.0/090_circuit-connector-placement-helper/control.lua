@@ -28,6 +28,10 @@ for i = 0, 39 do
   table.insert(mod.on_created_entity_filters, {filter = "ghost_name", name = this_name})
 end
 
+script.on_init(function()
+  storage.deathrattles = {}
+end)
+
 local function copy_wires(from, to)
   for wire_connector_id, from_wire_connector in pairs(from.get_wire_connectors()) do
     to_wire_connector = to.get_wire_connector(wire_connector_id, true)
@@ -56,7 +60,10 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
       position = entity.position,
       create_build_effect_smoke = false,
     }
+    assert(new_entity)
     copy_wires(entity, new_entity)
+    storage.deathrattles[script.register_on_object_destroyed(new_entity)] = storage.deathrattles[script.register_on_object_destroyed(entity)]
+    storage.deathrattles[script.register_on_object_destroyed(entity)] = nil
     entity.destroy()
   end
 end)
@@ -88,6 +95,7 @@ script.on_event({
   if selected and is_circuit_connector[selected.name] then
     local nudge = input_name_to_nudge[event.input_name]
     selected.teleport(nudge[1], nudge[2])
+    storage.deathrattles[script.register_on_object_destroyed(selected)].teleport(selected.position)
   end
 end)
 
@@ -118,6 +126,8 @@ function mod.on_created_entity(event)
   local red_from = entity.get_wire_connector(defines.wire_connector_id.circuit_red, true)
   local red_to = container.get_wire_connector(defines.wire_connector_id.circuit_red, true)
   red_from.connect_to(red_to, false, defines.wire_origin.player)
+
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = container
 end
 
 for _, event in ipairs({
@@ -238,5 +248,12 @@ end)
 script.on_event(defines.events.on_gui_closed, function(event)
   if event.element and event.element.name == mod_prefix .. "frame" then
     event.element.destroy()
+  end
+end)
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    deathrattle.destroy()
   end
 end)

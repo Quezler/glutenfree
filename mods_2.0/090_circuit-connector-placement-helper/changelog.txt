@@ -20,6 +20,7 @@ Date: ????
     - Open a gui with the template for all nearby entities
     - Keep the blueprint book
     - Format the by_pixel offset
+    - Deathrattle them together
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 30
