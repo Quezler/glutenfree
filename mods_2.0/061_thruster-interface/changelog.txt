@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
-Date: ????
+Date: 2025. 04. 30
   Info:
     - Make the infinity pipes unselectable in editor mode
+    - Give the gui a deep frame inside shallow frame
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2025. 02. 20

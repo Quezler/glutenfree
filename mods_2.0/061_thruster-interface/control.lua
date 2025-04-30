@@ -101,7 +101,12 @@ local function open_gui(player, entity)
     direction = "vertical",
   }
 
-  local entity_preview = inner.add{
+  local entity_preview_frame = inner.add{
+    type = "frame",
+    style = "deep_frame_in_shallow_frame",
+  }
+
+  local entity_preview = entity_preview_frame.add{
     type = "entity-preview",
     style = "wide_entity_button",
   }
