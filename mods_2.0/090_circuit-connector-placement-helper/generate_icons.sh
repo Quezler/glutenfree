@@ -46,7 +46,7 @@ for i in $(seq -w 0 39); do
     "$BG" -gravity center -composite \
     "$FG" -gravity center -composite \
     -gravity center -background none -extent $FINAL_SIZE \
-    "$OUT"
+    -depth 8 "$OUT"
 done
 
 # --- Clean up ---
