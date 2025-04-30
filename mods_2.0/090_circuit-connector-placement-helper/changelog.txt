@@ -7,6 +7,7 @@ Date: ????
     - Fix scale of poles in the generated icons
     - Make the icons 64x64
     - Avoid 16 color channels
+    - Fix furnace prototype typos
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 30
