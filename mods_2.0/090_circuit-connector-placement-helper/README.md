@@ -12,7 +12,7 @@ Note: this mod is aimed at mod development, this should not be used by normal pl
 Also, you'll need to set the shadow offset yourself to something pretty, this mod only offers variation and offset.
 
 Usage:
-- grab the blueprint book with `/circuit-connector-placement-helper` (place in inventory to keep it)
+- grab the blueprint book with `/circuit-connector-placement-helper`
 - rotate to cycle between the 40 connectors (both through the book and once placed)
 - use the arrow keys to nudge it into place (hold shift to nudge further)
 

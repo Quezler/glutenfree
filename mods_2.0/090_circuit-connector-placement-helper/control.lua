@@ -138,7 +138,7 @@ commands.add_command(mod_name, nil, function(command)
   local cursor_stack = player.cursor_stack
 
   cursor_stack.set_stack({name = mod_prefix .. "connector-book", count = 1})
-  player.cursor_stack_temporary = true
+  -- player.cursor_stack_temporary = true
   local pages = cursor_stack.get_inventory(defines.inventory.item_main)
 
   for i = 0, 39 do
