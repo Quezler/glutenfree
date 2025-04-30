@@ -24,11 +24,13 @@ for i = 0, 39 do
     source_inventory_size = 0,
     result_inventory_size = 0,
 
+    collision_mask = {layers = {}},
     collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
     selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
+    selection_priority = 255,
 
-    minable = {mining_time = 0.2, result = "wood"},
-    placeable_by = {item = "wood", count = 1},
+    minable = {mining_time = 0.2},
+    placeable_by = {item = "red-wire", count = 1},
 
     circuit_wire_max_distance = default_circuit_wire_max_distance,
     circuit_connector = circuit_connector_definitions.create_vector
@@ -48,6 +50,8 @@ for i = 0, 39 do
       pipe_connections = {},
       production_type = "output",
     }},
+
+    hidden = true,
   }}
 end
 
@@ -93,3 +97,32 @@ data:extend{
     name = mod_prefix .. "shift-up",
   },
 }
+
+local connector_book = table.deepcopy(data.raw["blueprint-book"]["blueprint-book"])
+connector_book.name = mod_prefix .. "connector-book"
+connector_book.icon = mod_directory .. "/graphics/icons/connector-book.png"
+connector_book.hidden = true
+table.insert(connector_book.flags, "only-in-cursor")
+data:extend{connector_book}
+
+data:extend{{
+  type = "container",
+  name = mod_prefix .. "container",
+  icon = mod_directory .. "/graphics/icons/connector-book.png",
+
+  collision_mask = {layers = {}},
+  collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+  selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
+  selection_priority = 0,
+
+  inventory_size = 0,
+  flags = {"player-creation", "no-automated-item-insertion", "no-automated-item-removal", "not-selectable-in-game", "placeable-off-grid", "not-on-map"},
+
+  circuit_wire_max_distance = default_circuit_wire_max_distance,
+  draw_circuit_wires = false,
+
+  minable = {mining_time = 0.2},
+  placeable_by = {item = "green-wire", count = 1},
+
+  hidden = true,
+}}

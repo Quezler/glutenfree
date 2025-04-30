@@ -2,9 +2,16 @@ require("util")
 
 require("shared")
 
+local mod = {}
+
 local is_circuit_connector = {}
 local next_variation = {}
 local previous_variation = {}
+
+mod.on_created_entity_filters = {
+  {filter = "name",       name = mod_prefix .. "container"},
+  {filter = "ghost_name", name = mod_prefix .. "container"},
+}
 
 for i = 0, 39 do
   local this_name = mod_prefix .. "furnace-" .. string.format("%02d", i)
@@ -14,6 +21,9 @@ for i = 0, 39 do
   is_circuit_connector[this_name] = true
   next_variation[this_name] = next_name
   previous_variation[this_name] = previous_name
+
+  table.insert(mod.on_created_entity_filters, {filter = "name",       name = this_name})
+  table.insert(mod.on_created_entity_filters, {filter = "ghost_name", name = this_name})
 end
 
 local function copy_wires(from, to)
@@ -78,3 +88,43 @@ script.on_event({
     selected.teleport(nudge[1], nudge[2])
   end
 end)
+
+local function get_entity_name(entity)
+  return entity.type == "entity-ghost" and entity.ghost_name or entity.name
+end
+
+function mod.on_created_entity(event)
+  local entity = event.entity or event.destination
+  local entity_name = get_entity_name(entity)
+
+  if entity_name == mod_prefix .. "container" then
+    return entity.destroy()
+  end
+
+  if entity.type == "entity-ghost" then
+    return entity.revive({raise_revive = true})
+  end
+
+  local container = entity.surface.create_entity{
+    name = mod_prefix .. "container",
+    force = entity.force,
+    position = entity.position,
+    create_build_effect_smoke = false
+  }
+  container.destructible = false
+
+  local red_from = entity.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+  local red_to = container.get_wire_connector(defines.wire_connector_id.circuit_red, true)
+  red_from.connect_to(red_to, false, defines.wire_origin.player)
+end
+
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.on_space_platform_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+  defines.events.on_entity_cloned,
+}) do
+  script.on_event(event, mod.on_created_entity, mod.on_created_entity_filters)
+end
