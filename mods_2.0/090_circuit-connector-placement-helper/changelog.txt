@@ -13,6 +13,7 @@ Date: ????
     - Cycle between the circuit connectors by rotating
     - Allow nudging with the arrow keys
     - Nudge further with shift held down
+    - Comment on usage and non-centered circuit connectors
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 30
