@@ -128,3 +128,37 @@ for _, event in ipairs({
 }) do
   script.on_event(event, mod.on_created_entity, mod.on_created_entity_filters)
 end
+
+commands.add_command(mod_name, nil, function(command)
+  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+
+  if player.clear_cursor() == false then return end
+  local cursor_stack = player.cursor_stack
+
+  cursor_stack.set_stack({name = mod_prefix .. "connector-book", count = 1})
+  player.cursor_stack_temporary = true
+  local pages = cursor_stack.get_inventory(defines.inventory.item_main)
+
+  for i = 0, 39 do
+    local furnace_name = mod_prefix .. "furnace-" .. string.format("%02d", i)
+    pages.insert({name = "blueprint", count = 1})
+    local blueprint = pages[i+1]
+    blueprint.label = string.format("%02d", i)
+    blueprint.set_blueprint_entities({
+      {
+        entity_number = 1,
+        name = furnace_name,
+        position = {0, 0},
+        wires = {{1, 1, 2, 1}},
+      },
+      {
+        entity_number = 2,
+        name = mod_prefix .. "container",
+        position = {0, 0},
+      },
+    })
+    blueprint.preview_icons = {
+      {index = 1, signal = {type = "entity", name = furnace_name}},
+    }
+  end
+end)

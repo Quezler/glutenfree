@@ -12,7 +12,8 @@ Note: this mod is aimed at mod development, this should not be used by normal pl
 Also, you'll need to set the shadow offset yourself to something pretty, this mod only offers variation and offset.
 
 Usage:
-- rotate to cycle between the 40 connectors
+- grab the blueprint book with `/circuit-connector-placement-helper` (place in inventory to keep it)
+- rotate to cycle between the 40 connectors (both through the book and once placed)
 - use the arrow keys to nudge it into place (hold shift to nudge further)
 
 Edit: oh sad some reasonable connectors already got placedhttps://codeberg.org/raiguard/Krastorio2/pulls/529 :o

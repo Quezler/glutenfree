@@ -102,7 +102,7 @@ local connector_book = table.deepcopy(data.raw["blueprint-book"]["blueprint-book
 connector_book.name = mod_prefix .. "connector-book"
 connector_book.icon = mod_directory .. "/graphics/icons/connector-book.png"
 connector_book.hidden = true
-table.insert(connector_book.flags, "only-in-cursor")
+-- table.insert(connector_book.flags, "only-in-cursor")
 data:extend{connector_book}
 
 data:extend{{
