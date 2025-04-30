@@ -29,7 +29,7 @@ local function offer_proxy(proxy, item_name, item_count)
 end
 
 local function add_to_proxy_for(entity, item_name, item_count)
-  local proxy = entity.surface.find_entity("item-request-proxy", entity.position)
+  local proxy = entity.surface.find_entity("item-request-proxy", entity.position) -- todo: change for 2.0
   if proxy then
     assert(proxy.proxy_target == entity)
     local item_requests = proxy.item_requests

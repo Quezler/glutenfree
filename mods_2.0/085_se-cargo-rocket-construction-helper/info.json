@@ -8,7 +8,7 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "base",
+        "base >= 2.0.46",
 
         "space-exploration",
         "! glutenfree-rocket-silo-events"

@@ -11,7 +11,7 @@ function get_child(parent, name)
 end
 
 function deliver_by_proxy(entity, modules)
-  local proxy = entity.surface.find_entity("item-request-proxy", entity.position)
+  local proxy = entity.surface.find_entity("item-request-proxy", entity.position) -- todo: change for 2.0
 
   if proxy then
     proxy.item_requests = modules

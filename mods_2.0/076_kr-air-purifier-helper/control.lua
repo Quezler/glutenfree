@@ -126,7 +126,7 @@ end
 
 local function ensure_a_proxy_is_requesting_filters(struct)
   local entity = struct.entity
-  local proxy = entity.surface.find_entity("item-request-proxy", entity.position)
+  local proxy = entity.item_request_proxy
 
   if proxy == nil then
     proxy = entity.surface.create_entity{
