@@ -5,6 +5,7 @@ require("shared")
 local mod = {}
 
 local is_circuit_connector = {}
+local circuit_connector_to_variation = {}
 local next_variation = {}
 local previous_variation = {}
 
@@ -19,6 +20,7 @@ for i = 0, 39 do
   local previous_name = mod_prefix .. "furnace-" .. string.format("%02d", (i - 1) % 40)
 
   is_circuit_connector[this_name] = true
+  circuit_connector_to_variation[this_name] = i
   next_variation[this_name] = next_name
   previous_variation[this_name] = previous_name
 
@@ -160,5 +162,67 @@ commands.add_command(mod_name, nil, function(command)
     blueprint.preview_icons = {
       {index = 1, signal = {type = "entity", name = furnace_name}},
     }
+  end
+end)
+
+function mod.hide_from_search(entity)
+  return entity.type == "character" or is_circuit_connector[entity.name] or entity.name == mod_prefix .. "container"
+end
+
+function mod.open_gui(player, entity)
+  local text = {}
+
+  local entities = entity.surface.find_entities_filtered{
+    position = entity.position,
+  }
+  for _, nearby_entity in ipairs(entity.surface.find_entities_filtered{
+    position = entity.position,
+    radius = 3,
+  }) do
+    table.insert(entities, nearby_entity)
+  end
+
+  local variation = circuit_connector_to_variation[entity.name]
+
+  for _, entity in ipairs(entities) do
+    if not mod.hide_from_search(entity) then
+      table.insert(text, string.format("{ variation = %d, main_offset = util.by_pixel(0, 0), shadow_offset = util.by_pixel(0, 0), show_shadow = true }, # " .. entity.name, variation))
+    end
+  end
+
+  if #text == 0 then
+    player.opened = nil
+    return
+  end
+
+  local frame = player.gui.screen.add{
+    type = "frame",
+    name = mod_prefix .. "frame",
+    style = "invisible_frame",
+    direction = "vertical",
+  }
+
+  local textfield = frame.add{
+    type = "text-box",
+    name = mod_prefix .. "frame",
+  }
+  textfield.style.minimal_width = 1000
+
+  textfield.text = table.concat(text, "\n")
+
+  frame.force_auto_center()
+  player.opened = frame
+end
+
+script.on_event(defines.events.on_gui_opened, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  if event.entity and is_circuit_connector[event.entity.name] then
+    mod.open_gui(player, event.entity)
+  end
+end)
+
+script.on_event(defines.events.on_gui_closed, function(event)
+  if event.element and event.element.name == mod_prefix .. "frame" then
+    event.element.destroy()
   end
 end)

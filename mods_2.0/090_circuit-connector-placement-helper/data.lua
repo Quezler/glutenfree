@@ -35,7 +35,7 @@ for i = 0, 39 do
     graphics_set = {
       circuit_connector_layer = "higher-object-under",
     },
-    
+
     circuit_wire_max_distance = default_circuit_wire_max_distance,
     circuit_connector = circuit_connector_definitions.create_vector
     (

@@ -17,6 +17,7 @@ Date: ????
     - Place an anchor so blueprints render the connector
     - Generate the blueprint book in a command
     - Render the circuit connector above entities
+    - Open a gui with the template for all nearby entities
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 30
