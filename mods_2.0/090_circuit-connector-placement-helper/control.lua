@@ -1,3 +1,5 @@
+require("util")
+
 require("shared")
 
 local is_circuit_connector = {}
@@ -44,5 +46,27 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
     }
     copy_wires(entity, new_entity)
     entity.destroy()
+  end
+end)
+
+local input_name_to_nudge = {
+  ["circuit-connector-placement-helper--right"] = util.by_pixel( 0.5,  0.0),
+  ["circuit-connector-placement-helper--left" ] = util.by_pixel(-0.5,  0.0),
+  ["circuit-connector-placement-helper--down" ] = util.by_pixel( 0.0,  0.5),
+  ["circuit-connector-placement-helper--up"   ] = util.by_pixel( 0.0, -0.5),
+}
+
+script.on_event({
+  "circuit-connector-placement-helper--right",
+  "circuit-connector-placement-helper--left",
+  "circuit-connector-placement-helper--down",
+  "circuit-connector-placement-helper--up",
+}, function(event)
+  local nudge = input_name_to_nudge[event.input_name]
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local selected = player.selected
+
+  if selected and is_circuit_connector[selected.name] then
+    selected.teleport(nudge[1], nudge[2])
   end
 end)

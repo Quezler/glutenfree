@@ -50,3 +50,26 @@ for i = 0, 39 do
     }},
   }}
 end
+
+data:extend{
+  {
+    type = "custom-input",
+    key_sequence = "RIGHT",
+    name = mod_prefix .. "right",
+  },
+  {
+    type = "custom-input",
+    key_sequence = "LEFT",
+    name = mod_prefix .. "left",
+  },
+  {
+    type = "custom-input",
+    key_sequence = "DOWN",
+    name = mod_prefix .. "down",
+  },
+  {
+    type = "custom-input",
+    key_sequence = "UP",
+    name = mod_prefix .. "up",
+  },
+}
