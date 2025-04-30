@@ -9,6 +9,7 @@ Date: ????
     - Avoid 16 color channels
     - Fix furnace prototype typos
     - Make them blueprintable
+    - Make the furnace rotatable
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 04. 30

@@ -40,6 +40,13 @@ for i = 0, 39 do
         { variation = i, main_offset = util.by_pixel(0, 0), shadow_offset = util.by_pixel(0, 0), show_shadow = true },
         { variation = i, main_offset = util.by_pixel(0, 0), shadow_offset = util.by_pixel(0, 0), show_shadow = true },
       }
-    )
+    ),
+
+    -- makes it rotatable
+    fluid_boxes = {{
+      volume = 1,
+      pipe_connections = {},
+      production_type = "output",
+    }},
   }}
 end
