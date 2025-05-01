@@ -1,6 +1,6 @@
 -- commands.add_command("cliff-dimension", nil, function(command)
 --   local player = game.get_player(command.player_index)
---   local surface_name = player.surface.name .. '-cliff-reconstruction'
+--   local surface_name = player.surface.name .. "-cliff-reconstruction"
 
 --   game.create_surface(surface_name, player.surface.map_gen_settings)
 
@@ -12,7 +12,7 @@ local function position_equals(a, b)
 end
 
 local function should_clone(cliff, existing_cliffs)
-  -- log('checking against:')
+  -- log("checking against:")
   -- log(cliff.position)
   for _, existing_cliff in ipairs(existing_cliffs) do
     -- log(existing_cliff.position)
@@ -31,7 +31,7 @@ script.on_event(defines.events.on_player_selected_area, function(event)
   if player == nil then return end
 
   if player.admin == false then
-    player.create_local_flying_text({text = 'Cliff reconstruction is only.', create_at_cursor = true})
+    player.create_local_flying_text({text = "Cliff reconstruction is admin only.", create_at_cursor = true})
     return
   end
 
@@ -42,12 +42,17 @@ script.on_event(defines.events.on_player_selected_area, function(event)
     y = (event.area.left_top.y + event.area.right_bottom.y) / 2,
   }
 
-  local surface = game.create_surface(player.surface.name .. '-cliff-reconstruction', player.surface.map_gen_settings)
+  local surface_name = player.surface.name .. "-cliff-reconstruction"
+  if game.get_surface(surface_name) then
+    player.create_local_flying_text({text = "Cliff reconstruction is busy, try again.", create_at_cursor = true})
+  end
+
+  local surface = game.create_surface(surface_name, player.surface.map_gen_settings)
   surface.request_to_generate_chunks(center, 1) -- 3x3
   surface.force_generate_chunk_requests()
 
-  local existing_cliffs = event.surface.find_entities_filtered{area = event.area, type = 'cliff'}
-  local to_clone_cliffs =       surface.find_entities_filtered{area = event.area, type = 'cliff'}
+  local existing_cliffs = event.surface.find_entities_filtered{area = event.area, type = "cliff"}
+  local to_clone_cliffs =       surface.find_entities_filtered{area = event.area, type = "cliff"}
 
   for _, to_clone_cliff in ipairs(to_clone_cliffs) do
     if should_clone(to_clone_cliff, existing_cliffs) then
@@ -69,11 +74,11 @@ script.on_event(defines.events.on_player_reverse_selected_area, function(event)
   if player == nil then return end
 
   if player.admin == false then
-    player.create_local_flying_text({text = 'Cliff reconstruction is only.', create_at_cursor = true})
+    player.create_local_flying_text({text = "Cliff reconstruction is admin only.", create_at_cursor = true})
     return
   end
 
-  local existing_cliffs = event.surface.find_entities_filtered{area = event.area, type = 'cliff'}
+  local existing_cliffs = event.surface.find_entities_filtered{area = event.area, type = "cliff"}
 
   for _, existing_cliff in ipairs(existing_cliffs) do
     existing_cliff.destroy()
