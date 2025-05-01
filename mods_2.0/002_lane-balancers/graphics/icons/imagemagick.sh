@@ -1,4 +1,6 @@
-tiers="emptystring fast- express- turbo-"
+# (cd ./mods_2.0/002_lane-balancers/graphics/icons && sh imagemagick.sh)
+
+tiers="emptystring fast- express- turbo- kr-advanced- kr-superior-"
 
 for tier in $tiers
 do
@@ -13,7 +15,7 @@ do
   magick ${tier}splitter-64x64.png -gravity South -crop 64x24+0+0 ${tier}lane-splitter-bottom.png
 
   magick ${tier}lane-splitter-top.png ${tier}lane-splitter-bottom.png -alpha on -append ${tier}lane-splitter-1x1.png
-  magick ${tier}lane-splitter-1x1.png -gravity center -background none -extent 64x64 ${tier}lane-splitter.png
+  magick ${tier}lane-splitter-1x1.png -gravity center -background none -extent 64x64 -strip ${tier}lane-splitter.png
 done
 
 find . -type f -name "*-64x64.png" -delete

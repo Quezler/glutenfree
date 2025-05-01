@@ -133,3 +133,18 @@ if mods['space-age'] then
     order = 'd',
   })
 end
+
+if mods['Krastorio2'] then
+  handle({
+    prefix = 'kr-advanced-',
+    tech = 'kr-logistic-4',
+    previous_prefix = 'express-',
+    order = 'd',
+  })
+  handle({
+    prefix = 'kr-superior-',
+    tech = 'kr-logistic-5',
+    previous_prefix = 'kr-advanced-',
+    order = 'e',
+  })
+end
