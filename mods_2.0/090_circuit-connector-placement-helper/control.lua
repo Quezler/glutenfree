@@ -179,21 +179,21 @@ function mod.hide_from_search(entity)
   return entity.type == "character" or is_circuit_connector[entity.name] or entity.name == mod_prefix .. "container"
 end
 
+function bounding_box(position, range)
+  local x = position.x
+  local y = position.y
+  return {
+    { x - range, y - range },
+    { x + range, y + range },
+  }
+end
+
 function mod.open_gui(player, entity)
   local text = {}
-  local entities = {}
 
-  for _, colliding_entity in ipairs(entity.surface.find_entities_filtered{
-    position = entity.position,
-  }) do
-    entities[colliding_entity.unit_number or ("foo-" .. i)] = colliding_entity
-  end
-  for _, nearby_entity in ipairs(entity.surface.find_entities_filtered{
-    position = entity.position,
-    radius = 3,
-  }) do
-    entities[nearby_entity.unit_number or ("bar-" .. i)] = nearby_entity
-  end
+  local entities = entity.surface.find_entities_filtered{
+    area = bounding_box(entity.position, 3),
+  }
 
   local variation = circuit_connector_to_variation[entity.name]
   variation = variation > 10 and tostring(variation) or (" " .. variation)
