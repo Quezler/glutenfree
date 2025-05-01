@@ -3,6 +3,7 @@ Version: 1.1.4
 Date: ????
   Info:
     - Extend prismatic belt support to Krastorio 2
+    - Add russian translation contributed by eugenikus8 on discord
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.3
 Date: 2025. 05. 01
