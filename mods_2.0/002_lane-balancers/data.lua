@@ -111,6 +111,9 @@ local function handle(config)
   entity_handled_last = entity
 end
 
+-- unsupported 3rd mod support
+lane_balancers_handle = handle
+
 handle({
   prefix = 'fast-',
   tech = 'logistics-2',
