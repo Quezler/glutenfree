@@ -10,5 +10,5 @@ The recipes are the same as for the splitters but the recipe just crafts two, th
 - third party belt support: submit a pull request with the **splitter texture** that is a recolor of the vanilla style splitter, and modify the data with your tier.
 
 Since i generate the item icons based on the splitter icons you'll find sprites of other mods embedded in here, these are their licences:
-- `kr-advanced-`, GNU LGPLv3, Krastorio 2
-- `kr-superior-`, GNU LGPLv3, Krastorio 2
+- `kr-advanced-, GNU LGPLv3, Krastorio 2`
+- `kr-superior-, GNU LGPLv3, Krastorio 2`
