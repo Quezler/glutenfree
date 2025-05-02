@@ -38,7 +38,7 @@ end
 
 for entity_type in pairs(defines.prototypes["entity"]) do
   for _, prototype in pairs(data.raw[entity_type] or {}) do
-    if prototype.ignored_by_steel_pipes ~= true then
+    if not names_ignored_by_steel_pipes[prototype.name] then
       handle_prototype(prototype)
     end
   end

@@ -1,1 +1,5 @@
-data.raw["pipe"]["pipe"].ignored_by_steel_pipes = true
+require("util")
+
+names_ignored_by_steel_pipes = util.list_to_map({
+  "pipe",
+})
