@@ -5,6 +5,7 @@ Date: ????
     - Avoid touching the pipe's prototype history
     - Leave a note about pipe to ground
     - Override descriptions
+    - Better technology description
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 02
