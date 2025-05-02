@@ -9,6 +9,7 @@ Date: ????
     - Connect steel pipe to grounds to normal pipes
     - Abbreviate the ingame name
     - Add thumbnail
+    - Assert when launching without a k2
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 02

@@ -1,3 +1,5 @@
+assert(data.raw["pipe"]["kr-steel-pipe"], 'No mod enabled that adds ["pipe"]["kr-steel-pipe"].')
+
 require("util")
 
 names_ignored_by_steel_pipes = util.list_to_map({
