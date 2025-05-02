@@ -8,6 +8,7 @@ Date: ????
     - Better technology description
     - Connect steel pipe to grounds to normal pipes
     - Abbreviate the ingame name
+    - Add thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 02
