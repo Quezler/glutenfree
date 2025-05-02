@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Avoid touching the pipe's prototype history
+    - Leave a note about pipe to ground
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 02
