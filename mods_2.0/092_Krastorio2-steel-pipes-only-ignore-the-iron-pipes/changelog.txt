@@ -11,6 +11,7 @@ Date: ????
     - Add thumbnail
     - Assert when launching without a k2
     - Cleanup
+    - More readme
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 02

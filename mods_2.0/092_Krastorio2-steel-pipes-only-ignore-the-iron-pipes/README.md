@@ -3,4 +3,8 @@ whilst honestly 95% of players would likely just prefer them to not connect to n
 
 Underground pipes will be allowed to connect to pipes of the other type since they are directional, which makes it intentional.
 
-Due to unavoidable code similarities the `data-final-fixes.lua` file is to be considered `GNU LGPLv3`, the rest is `MIT`.
+Due to unavoidable code similarities the `data-final-fixes.lua` file is to be considered `GNU LGPLv3`, the rest is `MIT`. (not that its much)
+
+Note: ingame in the mod manager this mod is called "Steel pipes okay" in order to fit "Base mod > Krastorio 2 > Steel pipes okay" in one line.
+
+Other mods can opt their entities into being ignored from forced compatibility by adding their name to the global `names_ignored_by_steel_pipes` map.
