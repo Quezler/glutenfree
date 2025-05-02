@@ -196,7 +196,10 @@ function Handler.on_created_entity(event)
   -- in case it gets force built from a blueprint with another direction
   local old_struct_id = storage.unit_number_to_struct_id[belt.unit_number]
   if old_struct_id then storage.unit_number_to_struct_id[belt.unit_number] = nil
-    delete_struct(storage.structs[old_struct_id])
+    local old_struct = storage.structs[old_struct_id]
+    if old_struct then
+      delete_struct(old_struct)
+    end
   end
   attach_belt_to_struct(belt, struct)
   Combinator.tick_struct(struct)
