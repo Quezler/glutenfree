@@ -3,7 +3,7 @@
     "title": "Krastorio2 steel pipes only ignore the iron pipes",
     "description": "As opposed to also ignoring storage tanks, input-output connections, etc.",
 
-    "version": "0.0.1",
+    "version": "1.0.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
