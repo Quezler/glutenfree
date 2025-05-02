@@ -6,6 +6,7 @@ Date: ????
     - Leave a note about pipe to ground
     - Override descriptions
     - Better technology description
+    - Connect steel pipe to grounds to normal pipes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 02
