@@ -16,7 +16,7 @@ function Combinator.tick_struct(struct)
     -- game.print("nth 60 delete")
     delete_struct(struct)
   else
-    local total_belt_reader_length = (struct.belt.get_transport_line(1).total_segment_length + struct.belt.get_transport_line(2).total_segment_length) / 2
+    local total_belt_reader_length = struct.belt.type == "entity-ghost" and 0 or (struct.belt.get_transport_line(1).total_segment_length + struct.belt.get_transport_line(2).total_segment_length) / 2
     local section = struct.combinator_cb.get_section(1)
     local filter = section.get_slot(1)
     filter.min = total_belt_reader_length
