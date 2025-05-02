@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Fix transport belt connectable crash
     - Fix nil struct error
+    - Fix invalid entity crash
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2025. 04. 30

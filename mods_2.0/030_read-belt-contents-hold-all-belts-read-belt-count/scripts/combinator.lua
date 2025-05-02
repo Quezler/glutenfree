@@ -12,6 +12,8 @@ local Combinator = {}
 -- 6) linked belts are low priority, and the 1x1 and 1x2 splitters even less
 
 function Combinator.tick_struct(struct)
+  if struct.belt.valid == false then return end
+
   if is_belt_read_holding_all_belts(struct.belt) == false then
     -- game.print("nth 60 delete")
     delete_struct(struct)
