@@ -7,6 +7,7 @@ Date: ????
     - Abandon the train idea since render surfaces do not interact
     - Blep
     - Test rotation on a turret
+    - Future proofing
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 04

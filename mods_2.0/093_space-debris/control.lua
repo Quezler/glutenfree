@@ -53,7 +53,7 @@ function mod.cover_me_in_debris(asteroid)
         math.random() - 0.5,
         math.random() - 0.5,
       },
-      orientation_target = {0, 0},
+      orientation_target = asteroid,
       use_target_orientation = true,
     }
   end
