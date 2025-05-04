@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Test covering an asteroid with items
     - Try setting the orientation target to a train doing loops on another surface
+    - Abandon the train idea since render surfaces do not interact
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 04
