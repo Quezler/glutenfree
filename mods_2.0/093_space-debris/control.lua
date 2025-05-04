@@ -46,12 +46,15 @@ function mod.cover_me_in_debris(asteroid)
       sprite = "item/" .. "rail",
       x_scale = 0.5,
       y_scale = 0.5,
-      target = {entity = asteroid, offset = {
-        math.random() - 0.5,
-        math.random() - 0.5,
-      }},
+      target = asteroid,
       surface = asteroid.surface,
       orientation = math.random(),
+      oriented_offset = {
+        math.random() - 0.5,
+        math.random() - 0.5,
+      },
+      orientation_target = {0, 0},
+      use_target_orientation = true,
     }
   end
 end
