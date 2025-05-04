@@ -1,0 +1,41 @@
+local mod = {}
+
+script.on_init(function()
+  storage.platformdata = {}
+  mod.refresh_platformdata()
+end)
+
+script.on_configuration_changed(function()
+  mod.refresh_platformdata()
+end)
+
+function mod.refresh_platformdata()
+  -- deleted old
+  for surface_index, platformdata in pairs(storage.platformdata) do
+    if platformdata.surface.valid == false then
+      storage.platformdata[surface_index] = nil
+    else
+      assert(platformdata.platform.valid)
+    end
+  end
+
+  -- created new
+  for _, surface in pairs(game.surfaces) do
+    if surface.platform then
+      storage.platformdata[surface.index] = storage.platformdata[surface.index] or {
+        surface = surface,
+        platform = surface.platform,
+      }
+    end
+  end
+end
+
+script.on_event(defines.events.on_surface_created, mod.refresh_platformdata)
+script.on_event(defines.events.on_surface_deleted, mod.refresh_platformdata)
+
+script.on_nth_tick(60 * 5, function(event)
+  for _, platformdata in pairs(storage.platformdata) do
+    -- log(serpent.line(platformdata.platform.ejected_items))
+    log(#platformdata.platform.ejected_items)
+  end
+end)
