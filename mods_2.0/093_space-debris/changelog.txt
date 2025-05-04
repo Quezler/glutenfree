@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2025. 05. 04
   Info:
     - Test covering an asteroid with items
     - Try setting the orientation target to a train doing loops on another surface
