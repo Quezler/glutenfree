@@ -9,6 +9,7 @@ Date: ????
     - Test rotation on a turret
     - Future proofing
     - Setup the asteroid prototype
+    - Spawn space debris at all space locations with asteroid spawns
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 04
