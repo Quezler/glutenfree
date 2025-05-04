@@ -11,6 +11,7 @@ Date: ????
     - Setup the asteroid prototype
     - Spawn space debris at all space locations with asteroid spawns
     - Make the items impact your platform
+    - Give the debris a texture and an explosion
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 04

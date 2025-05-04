@@ -32,6 +32,13 @@ local asteroid = {
       }
     }
   },
+
+  dying_trigger_effect = {
+    {
+      type = "create-explosion",
+      entity_name = "carbonic-asteroid-explosion-1", -- a grey "generic" explosion
+    }
+  }
 }
 
 data:extend{asteroid}

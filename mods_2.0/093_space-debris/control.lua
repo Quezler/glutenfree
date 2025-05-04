@@ -74,4 +74,5 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local entity = event.target_entity --[[@as LuaEntity]]
 
   entity.force = "neutral" -- makes your turret unable to shoot "your own" dumped items
+  mod.cover_me_in_debris(entity)
 end)
