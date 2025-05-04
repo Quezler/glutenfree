@@ -76,3 +76,9 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   entity.force = "neutral" -- makes your turret unable to shoot "your own" dumped items
   mod.cover_me_in_debris(entity)
 end)
+
+script.on_event(defines.events.on_entity_died, function(event)
+  game.print(serpent.line(event)) -- fires when colliding, not when it dies due to despawning
+end, {
+  {filter = "name", name = mod_name},
+})
