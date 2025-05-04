@@ -8,6 +8,7 @@ Date: ????
     - Blep
     - Test rotation on a turret
     - Future proofing
+    - Setup the asteroid prototype
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 04
