@@ -1,3 +1,5 @@
+require("shared")
+
 local mod = {}
 
 script.on_init(function()
@@ -65,4 +67,11 @@ commands.add_command("cover-me-in-debris", nil, function(command)
   if selected then
     mod.cover_me_in_debris(selected)
   end
+end)
+
+script.on_event(defines.events.on_script_trigger_effect, function(event)
+  if event.effect_id ~= mod_name .. "-created" then return end
+  local entity = event.target_entity --[[@as LuaEntity]]
+
+  entity.force = "neutral" -- makes your turret unable to shoot "your own" dumped items
 end)

@@ -13,8 +13,25 @@ local asteroid = {
   collision_box = {{-collision_radius, -collision_radius}, {collision_radius, collision_radius}},
   selection_box = {{-selection_radius, -selection_radius}, {selection_radius, selection_radius}},
 
+  -- based on small
+  max_health = 100 / 2,
+  mass = 200000 / 2,
+
   subgroup = "space-environment",
   flags = {"placeable-neutral", "placeable-off-grid", "not-repairable", "not-on-map"},
+
+  created_effect = {
+    type = "direct",
+    action_delivery = {
+      type = "instant",
+      source_effects = {
+        {
+          type = "script",
+          effect_id = mod_name .. "-created",
+        },
+      }
+    }
+  },
 }
 
 data:extend{asteroid}
