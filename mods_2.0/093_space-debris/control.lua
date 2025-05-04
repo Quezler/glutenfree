@@ -41,7 +41,8 @@ script.on_nth_tick(60 * 5, function(event)
 end)
 
 function mod.cover_me_in_debris(asteroid)
-  for i = 1, 100 do
+  local ot = game.train_manager.get_trains({})[1].locomotives.front_movers[1]
+  for i = 1, 10 do
     rendering.draw_sprite{
       sprite = "item/" .. "rail",
       x_scale = 0.5,
@@ -52,6 +53,8 @@ function mod.cover_me_in_debris(asteroid)
       }},
       surface = asteroid.surface,
       orientation = math.random(),
+      orientation_target = {entity = ot},
+      -- use_target_orientation = true,
     }
   end
 end
