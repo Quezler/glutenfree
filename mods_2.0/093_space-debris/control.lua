@@ -39,3 +39,27 @@ script.on_nth_tick(60 * 5, function(event)
     log(#platformdata.platform.ejected_items)
   end
 end)
+
+function mod.cover_me_in_debris(asteroid)
+  for i = 1, 100 do
+    rendering.draw_sprite{
+      sprite = "item/" .. "rail",
+      x_scale = 0.5,
+      y_scale = 0.5,
+      target = {entity = asteroid, offset = {
+        math.random() - 0.5,
+        math.random() - 0.5,
+      }},
+      surface = asteroid.surface,
+      orientation = math.random(),
+    }
+  end
+end
+
+commands.add_command("cover-me-in-debris", nil, function(command)
+  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+  local selected = player.selected
+  if selected and selected.type == "asteroid" then
+    mod.cover_me_in_debris(selected)
+  end
+end)
