@@ -52,8 +52,6 @@ function mod.cover_me_in_debris(asteroid)
       }},
       surface = asteroid.surface,
       orientation = math.random(),
-      orientation_target = {0, 0},
-      -- use_target_orientation = true,
     }
   end
 end
@@ -61,7 +59,7 @@ end
 commands.add_command("cover-me-in-debris", nil, function(command)
   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
   local selected = player.selected
-  if selected and selected.type == "asteroid" then
+  if selected then
     mod.cover_me_in_debris(selected)
   end
 end)
