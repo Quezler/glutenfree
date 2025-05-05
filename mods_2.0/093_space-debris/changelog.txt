@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: ????
+Date: 2025. 05. 05
   Info:
     - Update readme
     - Track and check items dumped at space locations
@@ -19,6 +19,7 @@ Date: ????
     - Log when platforms offload their items
     - Add thumbnail
     - Repeat asteroid items if they don't hit anything
+    - Cleanup the release candidate
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04

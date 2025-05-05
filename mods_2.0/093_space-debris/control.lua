@@ -79,14 +79,14 @@ function mod.refresh_items_cache(items)
 
   items.total = total
   items.names = names
-  log(serpent.line(items))
+  -- log(serpent.line(items))
 end
 
 function mod.add_item_to_contents(item_name, contents)
   contents[item_name] = (contents[item_name] or 0) + 1
 end
 
-script.on_nth_tick(60 * 5, function(event)
+script.on_nth_tick(60 * 25, function(event)
   for _, platformdata in pairs(storage.platformdata) do
     local last_creation_tick = platformdata.last_creation_tick or 0
     platformdata.last_creation_tick = event.tick
@@ -135,18 +135,16 @@ function mod.take_random_item(items)
 end
 
 function mod.decorate_asteroid(asteroid, space_location_data)
-  -- local space_location_items_all = space_location_data.items.all
   local items_total = space_location_data.items.total
   if ITEMS_PER_ASTEROID > items_total then
     return asteroid.destroy()
   end
 
-  -- local item_names_count = #space_location_data.items.names
-
   local asteroid_data = {
     space_location_name = space_location_data.name, -- where to return the items to after no collision
-    items = {},
+    items = {}, -- array of strings
   }
+
   for i = 1, ITEMS_PER_ASTEROID do
     local item_name = mod.take_random_item(space_location_data.items)
     asteroid_data.items[i] = item_name
@@ -180,7 +178,7 @@ function mod.decorate_asteroid(asteroid, space_location_data)
   --   }
   -- end
 
-  asteroid.force = "neutral"
+  asteroid.force = "neutral" -- so it cannot be shot at
 end
 
 script.on_event(defines.events.on_script_trigger_effect, function(event)
@@ -217,9 +215,16 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     -- log(serpent.line(deathrattle))
 
-    local ejected_items = storage.platformdata[deathrattle.space_location_name].ejected_items
+    local items = storage.space_location_data[deathrattle.space_location_name].items
+    local items_all = items.all
     for _, item_name in ipairs(deathrattle.items) do
-      mod.add_item_to_contents(item_name, ejected_items)
+      mod.add_item_to_contents(item_name, items_all)
     end
+    mod.refresh_items_cache(items)
   end
 end)
+
+-- commands.add_command(mod_name, "Show the list of queud space debris.", function(command)
+--   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+--   player.print(serpent.line(storage.space_location_data))
+-- end)
