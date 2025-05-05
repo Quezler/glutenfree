@@ -52,9 +52,18 @@ function mod.refresh_space_location_data()
   -- new prototypes
   for _, prototype in pairs(prototypes.space_location) do
     storage.space_location_data[prototype.name] = storage.space_location_data[prototype.name] or {
-      items = {}
+      items = {},
+      item_names = {},
     }
   end
+end
+
+function mod.refresh_item_names(space_location_data)
+  local item_names = {}
+  for item_name, item_amount in pairs(space_location_data.items) do
+    item_names[#item_names+1] = item_name
+  end
+  space_location_data.item_names = item_names
 end
 
 script.on_nth_tick(60 * 5, function(event)
@@ -63,8 +72,8 @@ script.on_nth_tick(60 * 5, function(event)
     platformdata.last_creation_tick = event.tick
 
     if platformdata.platform.space_location then
-      local space_location = storage.space_location_data[platformdata.platform.space_location.name]
-      local space_location_items = space_location.items
+      local space_location_data = storage.space_location_data[platformdata.platform.space_location.name]
+      local space_location_items = space_location_data.items
 
       for _, ejected_item in ipairs(platformdata.platform.ejected_items) do
         if ejected_item.creation_tick > last_creation_tick then -- is > correct here? gotta close the 1 tick gap properly after all.
@@ -72,6 +81,8 @@ script.on_nth_tick(60 * 5, function(event)
           space_location_items[item_name] = (space_location_items[item_name] or 0) + 1
         end
       end
+
+      mod.refresh_item_names(space_location_data)
     end
   end
 end)
@@ -110,9 +121,9 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local platformdata = storage.platformdata[entity.surface.index]
 
   if platformdata.platform.space_location then
-    local space_location = storage.space_location_data[platformdata.platform.space_location.name]
-    local space_location_items = space_location.items
-    log(serpent.line(space_location))
+    local space_location_data = storage.space_location_data[platformdata.platform.space_location.name]
+    local space_location_items = space_location_data.items
+    log(serpent.line(space_location_data))
   end
 
   entity.force = "neutral" -- makes your turret unable to shoot "your own" dumped items

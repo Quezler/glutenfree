@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Update readme
     - Track and check items dumped at space locations
+    - Cache item names available at space location
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04
