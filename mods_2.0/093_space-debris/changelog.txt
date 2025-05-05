@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Update readme
+    - Track and check items dumped at space locations
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04
