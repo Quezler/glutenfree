@@ -16,6 +16,7 @@ Date: ????
     - Confess about the nearest shortcut
     - Ejected items belong to the closest space location
     - Have platforms hold on to their ejected items for a bit
+    - Log when platforms offload their items
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04

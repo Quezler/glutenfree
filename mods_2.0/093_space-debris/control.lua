@@ -12,7 +12,7 @@ end)
 
 script.on_configuration_changed(function()
   mod.refresh_platformdata()
-  storage.space_location_data = {} -- todo: remove
+  storage.space_location_data = {}
   mod.refresh_space_location_data()
 end)
 
@@ -88,10 +88,12 @@ script.on_nth_tick(60 * 5, function(event)
     -- when at a space location or when the nearest space location changes then offload the ejected items table.
     -- note that this also means that stationairy platforms won't spawn any ejected items until their next cycle.
     local closest_space_location_name = mod.get_closest_space_location_name(platformdata.platform)
-    if platformdata.space_location or platformdata.closest_space_location_name ~= closest_space_location_name then
+    if platformdata.platform.space_location or platformdata.closest_space_location_name ~= closest_space_location_name then
       local space_location_data = storage.space_location_data[platformdata.closest_space_location_name]
       local space_location_items_all = space_location_data.items.all
 
+      log(string.format("ejected items from platform %s moved to space location %s:", platformdata.platform.name, platformdata.closest_space_location_name))
+      log(serpent.line(platformdata.ejected_items))
       for item_name, item_amount in pairs(platformdata.ejected_items) do
         space_location_items_all[item_name] = (space_location_items_all[item_name] or 0) + item_amount
       end
