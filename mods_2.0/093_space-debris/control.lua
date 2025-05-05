@@ -3,6 +3,8 @@ require("shared")
 local mod = {}
 
 script.on_init(function()
+  storage.deathrattles = {}
+
   storage.platformdata = {}
   mod.refresh_platformdata()
 
@@ -12,7 +14,6 @@ end)
 
 script.on_configuration_changed(function()
   mod.refresh_platformdata()
-  storage.space_location_data = {}
   mod.refresh_space_location_data()
 end)
 
@@ -57,6 +58,7 @@ function mod.refresh_space_location_data()
   -- new prototypes
   for _, prototype in pairs(prototypes.space_location) do
     storage.space_location_data[prototype.name] = storage.space_location_data[prototype.name] or {
+      name = prototype.name,
       items = {
         all = {},
         total = 0,
@@ -80,6 +82,10 @@ function mod.refresh_items_cache(items)
   log(serpent.line(items))
 end
 
+function mod.add_item_to_contents(item_name, contents)
+  contents[item_name] = (contents[item_name] or 0) + 1
+end
+
 script.on_nth_tick(60 * 5, function(event)
   for _, platformdata in pairs(storage.platformdata) do
     local last_creation_tick = platformdata.last_creation_tick or 0
@@ -92,8 +98,8 @@ script.on_nth_tick(60 * 5, function(event)
       local space_location_data = storage.space_location_data[platformdata.closest_space_location_name]
       local space_location_items_all = space_location_data.items.all
 
-      log(string.format("ejected items from platform %s moved to space location %s:", platformdata.platform.name, platformdata.closest_space_location_name))
-      log(serpent.line(platformdata.ejected_items))
+      -- log(string.format("ejected items from platform %s moved to space location %s:", platformdata.platform.name, platformdata.closest_space_location_name))
+      -- log(serpent.line(platformdata.ejected_items))
       for item_name, item_amount in pairs(platformdata.ejected_items) do
         space_location_items_all[item_name] = (space_location_items_all[item_name] or 0) + item_amount
       end
@@ -106,38 +112,11 @@ script.on_nth_tick(60 * 5, function(event)
     for _, ejected_item in ipairs(platformdata.platform.ejected_items) do
       if ejected_item.creation_tick > last_creation_tick then -- is > correct here? gotta close the 1 tick gap properly after all.
         local item_name = ejected_item.item.name.name -- item.name is an ItemPrototype apparently
-        platformdata.ejected_items[item_name] = (platformdata.ejected_items[item_name] or 0) + 1
+        mod.add_item_to_contents(item_name, platformdata.ejected_items)
       end
     end
   end
 end)
-
--- function mod.cover_me_in_debris(asteroid)
---   for i = 1, 10 do
---     rendering.draw_sprite{
---       sprite = "item/" .. "rail",
---       x_scale = 0.5,
---       y_scale = 0.5,
---       target = asteroid,
---       surface = asteroid.surface,
---       orientation = math.random(),
---       oriented_offset = {
---         math.random() - 0.5,
---         math.random() - 0.5,
---       },
---       orientation_target = asteroid,
---       use_target_orientation = true,
---     }
---   end
--- end
-
--- commands.add_command("cover-me-in-debris", nil, function(command)
---   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
---   local selected = player.selected
---   if selected then
---     mod.cover_me_in_debris(selected)
---   end
--- end)
 
 local ITEMS_PER_ASTEROID = 10
 
@@ -165,6 +144,7 @@ function mod.decorate_asteroid(asteroid, space_location_data)
   -- local item_names_count = #space_location_data.items.names
 
   local asteroid_data = {
+    space_location_name = space_location_data.name, -- where to return the items to after no collision
     items = {},
   }
   for i = 1, ITEMS_PER_ASTEROID do
@@ -185,6 +165,8 @@ function mod.decorate_asteroid(asteroid, space_location_data)
       use_target_orientation = true,
     }
   end
+
+  storage.deathrattles[script.register_on_object_destroyed(asteroid)] = asteroid_data
 
   -- /c game.player.selected.clone{position = {game.player.selected.position.x + math.random(), game.player.selected.position.y + math.random()}, surface = game.player.surface}
   -- if items_total > 1000 then
@@ -208,12 +190,12 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local platformdata = storage.platformdata[entity.surface.index]
   local space_location_data = storage.space_location_data[mod.get_closest_space_location_name(platformdata.platform)]
 
-  log(serpent.line(space_location_data.items))
+  -- log(serpent.line(space_location_data.items))
   mod.decorate_asteroid(entity, space_location_data)
 end)
 
-script.on_event(defines.events.on_entity_died, function(event)
-  game.print(serpent.line(event)) -- fires when colliding, not when it dies due to despawning
+script.on_event(defines.events.on_entity_died, function(event) -- death through collision only
+  storage.deathrattles[script.register_on_object_destroyed(event.entity)] = nil -- voids items
 end, {
   {filter = "name", name = mod_name},
 })
@@ -229,3 +211,15 @@ function mod.get_closest_space_location_name(platform)
     return platform.space_connection.to.name
   end
 end
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    -- log(serpent.line(deathrattle))
+
+    local ejected_items = storage.platformdata[deathrattle.space_location_name].ejected_items
+    for _, item_name in ipairs(deathrattle.items) do
+      mod.add_item_to_contents(item_name, ejected_items)
+    end
+  end
+end)
