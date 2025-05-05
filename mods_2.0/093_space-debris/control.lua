@@ -165,6 +165,18 @@ function mod.decorate_asteroid(asteroid, space_location_data)
     }
   end
 
+  -- /c game.player.selected.clone{position = {game.player.selected.position.x + math.random(), game.player.selected.position.y + math.random()}, surface = game.player.surface}
+  -- if items_total > 1000 then
+  --   asteroid.clone{
+  --     position = asteroid.position,
+  --     -- position = {
+  --     --   asteroid.position.x + math.random(),
+  --     --   asteroid.position.y + math.random(),
+  --     -- },
+  --     surface = asteroid.surface,
+  --   }
+  -- end
+
   asteroid.force = "neutral"
 end
 

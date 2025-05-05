@@ -11,6 +11,7 @@ Date: ????
     - Start removing the counts of items decorating asteroids
     - Fix the logic
     - Require 10 items per asteroid
+    - Research asteroid clone crash
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04
