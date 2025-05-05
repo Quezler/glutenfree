@@ -7,6 +7,7 @@ Date: ????
     - Cache item names available at space location
     - Cache the amount of items too
     - Put the metadata inside the table
+    - Cover the asteroid with items actually dropped there
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04

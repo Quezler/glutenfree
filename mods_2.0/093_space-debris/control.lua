@@ -95,10 +95,40 @@ script.on_nth_tick(60 * 5, function(event)
   end
 end)
 
-function mod.cover_me_in_debris(asteroid)
+-- function mod.cover_me_in_debris(asteroid)
+--   for i = 1, 10 do
+--     rendering.draw_sprite{
+--       sprite = "item/" .. "rail",
+--       x_scale = 0.5,
+--       y_scale = 0.5,
+--       target = asteroid,
+--       surface = asteroid.surface,
+--       orientation = math.random(),
+--       oriented_offset = {
+--         math.random() - 0.5,
+--         math.random() - 0.5,
+--       },
+--       orientation_target = asteroid,
+--       use_target_orientation = true,
+--     }
+--   end
+-- end
+
+-- commands.add_command("cover-me-in-debris", nil, function(command)
+--   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+--   local selected = player.selected
+--   if selected then
+--     mod.cover_me_in_debris(selected)
+--   end
+-- end)
+
+function mod.decorate_asteroid(asteroid, space_location_data)
+  -- local space_location_items_all = space_location_data.items.all
+  local item_names_count = #space_location_data.items.names
+
   for i = 1, 10 do
     rendering.draw_sprite{
-      sprite = "item/" .. "rail",
+      sprite = "item/" .. space_location_data.items.names[math.random(1, item_names_count)],
       x_scale = 0.5,
       y_scale = 0.5,
       target = asteroid,
@@ -114,14 +144,6 @@ function mod.cover_me_in_debris(asteroid)
   end
 end
 
-commands.add_command("cover-me-in-debris", nil, function(command)
-  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
-  local selected = player.selected
-  if selected then
-    mod.cover_me_in_debris(selected)
-  end
-end)
-
 script.on_event(defines.events.on_script_trigger_effect, function(event)
   if event.effect_id ~= mod_name .. "-created" then return end
   local entity = event.target_entity --[[@as LuaEntity]]
@@ -130,12 +152,10 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 
   if platformdata.platform.space_location then
     local space_location_data = storage.space_location_data[platformdata.platform.space_location.name]
-    local space_location_items_all = space_location_data.items.all
-    log(serpent.line(space_location_data))
+    mod.decorate_asteroid(entity, space_location_data)
   end
 
   entity.force = "neutral" -- makes your turret unable to shoot "your own" dumped items
-  mod.cover_me_in_debris(entity)
 end)
 
 script.on_event(defines.events.on_entity_died, function(event)
