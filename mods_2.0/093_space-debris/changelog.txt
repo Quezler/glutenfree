@@ -12,6 +12,7 @@ Date: ????
     - Fix the logic
     - Require 10 items per asteroid
     - Research asteroid clone crash
+    - Stash pre-lunch asteroid data
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04

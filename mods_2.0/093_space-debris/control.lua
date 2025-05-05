@@ -148,9 +148,14 @@ function mod.decorate_asteroid(asteroid, space_location_data)
 
   -- local item_names_count = #space_location_data.items.names
 
+  local asteroid_data = {
+    items = {},
+  }
   for i = 1, ITEMS_PER_ASTEROID do
+    local item_name = mod.take_random_item(space_location_data.items)
+    asteroid_data.items[i] = item_name
     rendering.draw_sprite{
-      sprite = "item/" .. mod.take_random_item(space_location_data.items),
+      sprite = "item/" .. item_name,
       x_scale = 0.5,
       y_scale = 0.5,
       target = asteroid,
