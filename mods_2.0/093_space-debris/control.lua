@@ -72,6 +72,7 @@ function mod.refresh_items_cache(items)
 
   items.total = total
   items.names = names
+  log(serpent.line(items))
 end
 
 script.on_nth_tick(60 * 5, function(event)
@@ -126,13 +127,13 @@ local MAX_ITEMS_PER_ASTEROID = 10
 
 function mod.take_random_item(items)
   local item_name = items.names[math.random(1, #items.names)]
-  local new_item_count = items.all[item_name] - 1
+  items.all[item_name] = items.all[item_name] - 1
 
-  if new_item_count == 0 then
+  if items.all[item_name] == 0 then
+    items.all[item_name] = nil
     mod.refresh_items_cache(items) -- recompute item names
   else
     items.total = items.total - 1
-    items.all[item_name] = new_item_count
   end
 
   return item_name
@@ -147,7 +148,7 @@ function mod.decorate_asteroid(asteroid, space_location_data)
 
   -- local item_names_count = #space_location_data.items.names
 
-  for i = 1, math.max(items_total, MAX_ITEMS_PER_ASTEROID) do
+  for i = 1, math.min(items_total, MAX_ITEMS_PER_ASTEROID) do
     rendering.draw_sprite{
       sprite = "item/" .. mod.take_random_item(space_location_data.items),
       x_scale = 0.5,
