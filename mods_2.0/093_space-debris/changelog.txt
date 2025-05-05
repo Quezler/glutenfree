@@ -14,6 +14,7 @@ Date: ????
     - Research asteroid clone crash
     - Stash pre-lunch asteroid data
     - Confess about the nearest shortcut
+    - Ejected items belong to the closest space location
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04

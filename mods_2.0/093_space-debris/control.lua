@@ -80,19 +80,17 @@ script.on_nth_tick(60 * 5, function(event)
     local last_creation_tick = platformdata.last_creation_tick or 0
     platformdata.last_creation_tick = event.tick
 
-    if platformdata.platform.space_location then
-      local space_location_data = storage.space_location_data[platformdata.platform.space_location.name]
-      local space_location_items_all = space_location_data.items.all
+    local space_location_data = storage.space_location_data[mod.get_closest_space_location_name(platformdata.platform)]
+    local space_location_items_all = space_location_data.items.all
 
-      for _, ejected_item in ipairs(platformdata.platform.ejected_items) do
-        if ejected_item.creation_tick > last_creation_tick then -- is > correct here? gotta close the 1 tick gap properly after all.
-          local item_name = ejected_item.item.name.name -- item.name is an ItemPrototype apparently
-          space_location_items_all[item_name] = (space_location_items_all[item_name] or 0) + 1
-        end
+    for _, ejected_item in ipairs(platformdata.platform.ejected_items) do
+      if ejected_item.creation_tick > last_creation_tick then -- is > correct here? gotta close the 1 tick gap properly after all.
+        local item_name = ejected_item.item.name.name -- item.name is an ItemPrototype apparently
+        space_location_items_all[item_name] = (space_location_items_all[item_name] or 0) + 1
       end
-
-      mod.refresh_items_cache(space_location_data.items)
     end
+
+    mod.refresh_items_cache(space_location_data.items)
   end
 end)
 
@@ -190,13 +188,10 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local entity = event.target_entity --[[@as LuaEntity]]
 
   local platformdata = storage.platformdata[entity.surface.index]
+  local space_location_data = storage.space_location_data[mod.get_closest_space_location_name(platformdata.platform)]
 
-  if platformdata.platform.space_location then
-    local space_location_data = storage.space_location_data[platformdata.platform.space_location.name]
-    log(serpent.line(space_location_data.items))
-    mod.decorate_asteroid(entity, space_location_data)
-  end
-
+  log(serpent.line(space_location_data.items))
+  mod.decorate_asteroid(entity, space_location_data)
 end)
 
 script.on_event(defines.events.on_entity_died, function(event)
@@ -204,3 +199,15 @@ script.on_event(defines.events.on_entity_died, function(event)
 end, {
   {filter = "name", name = mod_name},
 })
+
+function mod.get_closest_space_location_name(platform)
+  if platform.space_location then
+    return platform.space_location.name
+  end
+
+  if 0.5 > platform.distance then
+    return platform.space_connection.from.name
+  else
+    return platform.space_connection.to.name
+  end
+end
