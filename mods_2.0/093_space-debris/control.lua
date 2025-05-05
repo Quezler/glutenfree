@@ -54,16 +54,20 @@ function mod.refresh_space_location_data()
     storage.space_location_data[prototype.name] = storage.space_location_data[prototype.name] or {
       items = {},
       item_names = {},
+      items_count = 0,
     }
   end
 end
 
-function mod.refresh_item_names(space_location_data)
+function mod.refresh_items_cache(space_location_data)
   local item_names = {}
+  local items_count = 0
   for item_name, item_amount in pairs(space_location_data.items) do
     item_names[#item_names+1] = item_name
+    items_count = items_count + item_amount
   end
   space_location_data.item_names = item_names
+  space_location_data.items_count = items_count
 end
 
 script.on_nth_tick(60 * 5, function(event)
@@ -82,7 +86,7 @@ script.on_nth_tick(60 * 5, function(event)
         end
       end
 
-      mod.refresh_item_names(space_location_data)
+      mod.refresh_items_cache(space_location_data)
     end
   end
 end)
