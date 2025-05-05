@@ -33,6 +33,11 @@ function mod.refresh_platformdata()
         surface = surface,
         platform = surface.platform,
         last_creation_tick = 0,
+
+        -- it would be weird if we encountered items we've just ejected whilst traveling somewhere,
+        -- so whilst in transit we're holding onto those items until another space location is closest.
+        closest_space_location_name = mod.get_closest_space_location_name(surface.platform),
+        ejected_items = {}, -- item_name -> item_count
       }
     end
   end
@@ -80,17 +85,28 @@ script.on_nth_tick(60 * 5, function(event)
     local last_creation_tick = platformdata.last_creation_tick or 0
     platformdata.last_creation_tick = event.tick
 
-    local space_location_data = storage.space_location_data[mod.get_closest_space_location_name(platformdata.platform)]
-    local space_location_items_all = space_location_data.items.all
+    -- when at a space location or when the nearest space location changes then offload the ejected items table.
+    -- note that this also means that stationairy platforms won't spawn any ejected items until their next cycle.
+    local closest_space_location_name = mod.get_closest_space_location_name(platformdata.platform)
+    if platformdata.space_location or platformdata.closest_space_location_name ~= closest_space_location_name then
+      local space_location_data = storage.space_location_data[platformdata.closest_space_location_name]
+      local space_location_items_all = space_location_data.items.all
+
+      for item_name, item_amount in pairs(platformdata.ejected_items) do
+        space_location_items_all[item_name] = (space_location_items_all[item_name] or 0) + item_amount
+      end
+
+      mod.refresh_items_cache(space_location_data.items)
+      platformdata.ejected_items = {}
+      platformdata.closest_space_location_name = closest_space_location_name
+    end
 
     for _, ejected_item in ipairs(platformdata.platform.ejected_items) do
       if ejected_item.creation_tick > last_creation_tick then -- is > correct here? gotta close the 1 tick gap properly after all.
         local item_name = ejected_item.item.name.name -- item.name is an ItemPrototype apparently
-        space_location_items_all[item_name] = (space_location_items_all[item_name] or 0) + 1
+        platformdata.ejected_items[item_name] = (platformdata.ejected_items[item_name] or 0) + 1
       end
     end
-
-    mod.refresh_items_cache(space_location_data.items)
   end
 end)
 

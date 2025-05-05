@@ -15,6 +15,7 @@ Date: ????
     - Stash pre-lunch asteroid data
     - Confess about the nearest shortcut
     - Ejected items belong to the closest space location
+    - Have platforms hold on to their ejected items for a bit
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04
