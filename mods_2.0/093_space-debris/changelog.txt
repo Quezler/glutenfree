@@ -8,6 +8,7 @@ Date: ????
     - Cache the amount of items too
     - Put the metadata inside the table
     - Cover the asteroid with items actually dropped there
+    - Start removing the counts of items decorating asteroids
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04

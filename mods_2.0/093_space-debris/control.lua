@@ -54,24 +54,24 @@ function mod.refresh_space_location_data()
     storage.space_location_data[prototype.name] = storage.space_location_data[prototype.name] or {
       items = {
         all = {},
-        count = 0,
+        total = 0,
         names = {},
       }
     }
   end
 end
 
-function mod.refresh_items_cache(space_location_data)
-  local count = 0
+function mod.refresh_items_cache(items)
+  local total = 0
   local names = {}
 
-  for item_name, item_amount in pairs(space_location_data.items.all) do
-    count = count + item_amount
+  for item_name, item_amount in pairs(items.all) do
+    total = total + item_amount
     table.insert(names, item_name)
   end
 
-  space_location_data.items.count = count
-  space_location_data.items.names = names
+  items.total = total
+  items.names = names
 end
 
 script.on_nth_tick(60 * 5, function(event)
@@ -90,7 +90,7 @@ script.on_nth_tick(60 * 5, function(event)
         end
       end
 
-      mod.refresh_items_cache(space_location_data)
+      mod.refresh_items_cache(space_location_data.items)
     end
   end
 end)
@@ -122,13 +122,34 @@ end)
 --   end
 -- end)
 
+local MAX_ITEMS_PER_ASTEROID = 10
+
+function mod.take_random_item(items)
+  local item_name = items.names[math.random(1, #items.names)]
+  local new_item_count = items.all[item_name] - 1
+
+  if new_item_count == 0 then
+    mod.refresh_items_cache(items) -- recompute item names
+  else
+    items.total = items.total - 1
+    items.all[item_name] = new_item_count
+  end
+
+  return item_name
+end
+
 function mod.decorate_asteroid(asteroid, space_location_data)
   -- local space_location_items_all = space_location_data.items.all
-  local item_names_count = #space_location_data.items.names
+  local items_total = space_location_data.items.total
+  if items_total == 0 then
+    return asteroid.destroy()
+  end
 
-  for i = 1, 10 do
+  -- local item_names_count = #space_location_data.items.names
+
+  for i = 1, math.max(items_total, MAX_ITEMS_PER_ASTEROID) do
     rendering.draw_sprite{
-      sprite = "item/" .. space_location_data.items.names[math.random(1, item_names_count)],
+      sprite = "item/" .. mod.take_random_item(space_location_data.items),
       x_scale = 0.5,
       y_scale = 0.5,
       target = asteroid,
@@ -142,6 +163,8 @@ function mod.decorate_asteroid(asteroid, space_location_data)
       use_target_orientation = true,
     }
   end
+
+  asteroid.force = "neutral"
 end
 
 script.on_event(defines.events.on_script_trigger_effect, function(event)
@@ -152,10 +175,10 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 
   if platformdata.platform.space_location then
     local space_location_data = storage.space_location_data[platformdata.platform.space_location.name]
+    log(serpent.line(space_location_data.items))
     mod.decorate_asteroid(entity, space_location_data)
   end
 
-  entity.force = "neutral" -- makes your turret unable to shoot "your own" dumped items
 end)
 
 script.on_event(defines.events.on_entity_died, function(event)
