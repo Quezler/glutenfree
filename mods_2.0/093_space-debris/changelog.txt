@@ -13,6 +13,7 @@ Date: ????
     - Require 10 items per asteroid
     - Research asteroid clone crash
     - Stash pre-lunch asteroid data
+    - Confess about the nearest shortcut
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04
