@@ -52,22 +52,26 @@ function mod.refresh_space_location_data()
   -- new prototypes
   for _, prototype in pairs(prototypes.space_location) do
     storage.space_location_data[prototype.name] = storage.space_location_data[prototype.name] or {
-      items = {},
-      item_names = {},
-      items_count = 0,
+      items = {
+        all = {},
+        count = 0,
+        names = {},
+      }
     }
   end
 end
 
 function mod.refresh_items_cache(space_location_data)
-  local item_names = {}
-  local items_count = 0
-  for item_name, item_amount in pairs(space_location_data.items) do
-    item_names[#item_names+1] = item_name
-    items_count = items_count + item_amount
+  local count = 0
+  local names = {}
+
+  for item_name, item_amount in pairs(space_location_data.items.all) do
+    count = count + item_amount
+    table.insert(names, item_name)
   end
-  space_location_data.item_names = item_names
-  space_location_data.items_count = items_count
+
+  space_location_data.items.count = count
+  space_location_data.items.names = names
 end
 
 script.on_nth_tick(60 * 5, function(event)
@@ -77,12 +81,12 @@ script.on_nth_tick(60 * 5, function(event)
 
     if platformdata.platform.space_location then
       local space_location_data = storage.space_location_data[platformdata.platform.space_location.name]
-      local space_location_items = space_location_data.items
+      local space_location_items_all = space_location_data.items.all
 
       for _, ejected_item in ipairs(platformdata.platform.ejected_items) do
         if ejected_item.creation_tick > last_creation_tick then -- is > correct here? gotta close the 1 tick gap properly after all.
           local item_name = ejected_item.item.name.name -- item.name is an ItemPrototype apparently
-          space_location_items[item_name] = (space_location_items[item_name] or 0) + 1
+          space_location_items_all[item_name] = (space_location_items_all[item_name] or 0) + 1
         end
       end
 
@@ -126,7 +130,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 
   if platformdata.platform.space_location then
     local space_location_data = storage.space_location_data[platformdata.platform.space_location.name]
-    local space_location_items = space_location_data.items
+    local space_location_items_all = space_location_data.items.all
     log(serpent.line(space_location_data))
   end
 

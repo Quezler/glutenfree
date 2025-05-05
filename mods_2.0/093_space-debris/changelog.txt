@@ -6,6 +6,7 @@ Date: ????
     - Track and check items dumped at space locations
     - Cache item names available at space location
     - Cache the amount of items too
+    - Put the metadata inside the table
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04
