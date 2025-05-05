@@ -10,6 +10,7 @@ Date: ????
     - Cover the asteroid with items actually dropped there
     - Start removing the counts of items decorating asteroids
     - Fix the logic
+    - Require 10 items per asteroid
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 05. 04

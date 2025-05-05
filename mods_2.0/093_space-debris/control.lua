@@ -123,7 +123,7 @@ end)
 --   end
 -- end)
 
-local MAX_ITEMS_PER_ASTEROID = 10
+local ITEMS_PER_ASTEROID = 10
 
 function mod.take_random_item(items)
   local item_name = items.names[math.random(1, #items.names)]
@@ -142,13 +142,13 @@ end
 function mod.decorate_asteroid(asteroid, space_location_data)
   -- local space_location_items_all = space_location_data.items.all
   local items_total = space_location_data.items.total
-  if items_total == 0 then
+  if ITEMS_PER_ASTEROID > items_total then
     return asteroid.destroy()
   end
 
   -- local item_names_count = #space_location_data.items.names
 
-  for i = 1, math.min(items_total, MAX_ITEMS_PER_ASTEROID) do
+  for i = 1, ITEMS_PER_ASTEROID do
     rendering.draw_sprite{
       sprite = "item/" .. mod.take_random_item(space_location_data.items),
       x_scale = 0.5,
