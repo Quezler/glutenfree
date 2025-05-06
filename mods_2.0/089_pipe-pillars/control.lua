@@ -37,6 +37,18 @@ function mod.on_created_entity(event)
     return entity.destroy()
   end
 
+  -- if bottleneck is installed we have no choice but to hide it from all the mods
+  if script.active_mods["Bottleneck"] then
+    local new_entity = entity.surface.create_entity{
+      name = entity.name,
+      force = entity.force,
+      position = entity.position,
+      create_build_effect_smoke = false,
+    }
+    entity.destroy()
+    entity = new_entity
+  end
+
   entity.custom_status = {
     diode = defines.entity_status_diode.green,
     label = {"entity-status.working"}
