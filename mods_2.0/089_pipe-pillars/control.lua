@@ -12,6 +12,7 @@ end
 local mod = {}
 
 script.on_init(function()
+  storage.to_destroy = {}
   storage.deathrattles = {}
 
   storage.surfacedata = {}
@@ -112,6 +113,11 @@ script.on_event(defines.events.on_surface_created, mod.refresh_surfacedata)
 script.on_event(defines.events.on_surface_deleted, mod.refresh_surfacedata)
 
 function mod.on_tick(event)
+  for i = #storage.to_destroy, 1, -1 do
+    storage.to_destroy[i].destroy()
+    storage.to_destroy[i] = nil
+  end
+
   for surface_index, _ in pairs(storage.dirty_surfaces) do
     local surfacedata = storage.surfacedata[surface_index]
     if surfacedata then mod.update_elevated_pipes_for_surface(surfacedata) end
@@ -254,4 +260,20 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
       end
     end
   end
+end
+
+if script.active_mods["Bottleneck"] then
+  script.on_event(defines.events.on_script_trigger_effect, function(event)
+    if event.effect_id ~= "bottleneck-stoplight-created" then return end
+    local entity = event.target_entity --[[@as LuaEntity]]
+
+    local pipe_pillars = entity.surface.find_entities_filtered{
+      position = {entity.position.x + 0.2, entity.position.y - 0.2},
+      name = "pipe-pillar",
+    }
+    if #pipe_pillars > 0 then
+      storage.to_destroy[#storage.to_destroy+1] = entity
+      script.on_event(defines.events.on_tick, mod.on_tick)
+    end
+  end)
 end
