@@ -244,17 +244,28 @@ local corpse = {
   selectable_in_game = false,
   time_before_removed = 60 * 60 * 15, -- 15 minutes
   expires = false,
-  final_render_layer = "remnants",
+  final_render_layer = "object",
+  animation_overlay_final_render_layer = "object",
   remove_on_tile_placement = false,
-  animation = make_rotated_animation_variations_from_sheet(1,
-  {
-    filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-remnant.png",
+  animation = {
+    {
+      filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-remnant.png",
+      line_length = 1,
+      width = 704,
+      height = 704,
+      direction_count = 1,
+      scale = 0.5,
+    },
+  },
+  animation_overlay = {
+    filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-remnant-shadow.png",
     line_length = 1,
     width = 704,
     height = 704,
     direction_count = 1,
-    scale = 0.5
-  })
+    scale = 0.5,
+    tint = {1, 1, 1, 0.5},
+  },
 }
 
 data:extend{recipe_category, furnace, storage_tank, corpse}

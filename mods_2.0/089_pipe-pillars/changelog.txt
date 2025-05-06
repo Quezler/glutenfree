@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Yummy fresh sprites
     - Support bottleneck lite
+    - Fix the corpse shadow
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.12
 Date: 2025. 04. 30
