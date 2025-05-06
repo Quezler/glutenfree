@@ -130,6 +130,10 @@ local technology = {
   }
 }
 
+if mods["Krastorio2"] then
+  technology.prerequisites = {"kr-sentinel", "circuit-network"}
+end
+
 data:extend{entity, proxy, item, recipe, technology}
 
 entity.circuit_connector = circuit_connector_definitions.create_vector
