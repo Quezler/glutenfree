@@ -134,7 +134,10 @@ function mod.open_gui(entity, player)
   if frame then frame.destroy() end
 
   local struct = storage.structs[entity.unit_number]
-  assert(struct)
+  if not struct then
+    log(string.format("The %s bypassed the build events.", entity))
+    return
+  end
 
   frame = player.gui.relative.add{
     type = "frame",
