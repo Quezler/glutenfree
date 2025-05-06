@@ -50,6 +50,7 @@ script.on_event(mod_prefix .. "pipette", function(event)
 
   local selected_prototype = assert(event.selected_prototype)
   if selected_prototype.base_type ~= "entity" then return end
+  if selected_prototype.derived_type == "resource" then return end
 
   -- game.print("decon planner! " .. serpent.line(event))
 
