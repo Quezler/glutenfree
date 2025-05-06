@@ -246,7 +246,7 @@ local corpse = {
   remove_on_tile_placement = false,
   animation = make_rotated_animation_variations_from_sheet(1,
   {
-    filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-remnant-2.png",
+    filename = mod_directory .. "/graphics/entity/pipe-pillar/pipe-pillar-remnant.png",
     line_length = 1,
     width = 704,
     height = 704,
