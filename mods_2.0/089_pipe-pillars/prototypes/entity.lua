@@ -269,18 +269,3 @@ local corpse = {
 }
 
 data:extend{recipe_category, furnace, storage_tank, corpse}
-
-if mods["Bottleneck"] then
-  data.raw["simple-entity-with-force"]["bottleneck-stoplight"].created_effect = {
-    type = "direct",
-    action_delivery = {
-      type = "instant",
-      source_effects = {
-        {
-          type = "script",
-          effect_id = "bottleneck-stoplight-created",
-        },
-      }
-    }
-  }
-end
