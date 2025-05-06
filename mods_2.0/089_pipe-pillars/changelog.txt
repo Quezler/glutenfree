@@ -1,11 +1,12 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.13
-Date: ????
+Date: 2025. 05. 06
   Info:
     - Yummy fresh sprites
     - Support bottleneck lite
     - Fix the corpse shadow
     - Hide the pipe pillar from bottleneck
+    - Prepare to hand the mod over
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.12
 Date: 2025. 04. 30

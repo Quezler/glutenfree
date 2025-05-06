@@ -1,24 +1,14 @@
 {
     "name": "pipe-pillars",
     "title": "Pipe pillars",
-    "description": "It probably has something to do with the title.",
+    "description": "Adds pipes on pillars that can go over anything and make those tight corners.",
 
-    "version": "0.0.12",
-    "author": "Quezler",
+    "version": "0.0.13",
+    "author": "Quezler & Redotix99",
     "factorio_version": "2.0",
 
-    "quality_required": false,
-    "rail_bridges_required": false,
-    "space_travel_required": false,
-    "spoiling_required": false,
-    "freezing_required": false,
-    "segmented_units_required": false,
-    "expansion_shaders_required": false,
-
     "dependencies": [
-        "? newsletter-for-mods-made-by-quezler",
-
-        "? base",
+        "base",
         "? space-age",
 
         "(?) Bottleneck",
