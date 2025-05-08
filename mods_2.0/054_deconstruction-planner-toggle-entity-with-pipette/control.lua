@@ -48,7 +48,7 @@ script.on_event(mod_prefix .. "pipette", function(event)
   if cursor_stack.valid_for_read == false then return end
   if cursor_stack.is_deconstruction_item == false then return end
 
-  selected_prototype = assert(event.selected_prototype)
+  local selected_prototype = event.selected_prototype
   if not selected_prototype then return end -- latency? #darkmoment
   if selected_prototype.base_type ~= "entity" then return end
   if selected_prototype.derived_type == "resource" then return end
