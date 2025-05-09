@@ -262,8 +262,10 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
     if element.name == mod.gui_dropdown_player then
       local player_name = element.selected_index ~= 1 and element.items[element.selected_index] or nil
       mod.entitydata_set_player(entitydata, player_name and game.get_player(tostring(player_name)) or nil)
+      entitydata.proxy.last_user = player
     elseif element.name == mod.gui_dropdown_inventory then
       mod.entitydata_set_inventory(entitydata, mod.roundabout_from_dropdown_index[element.selected_index].inventory_index)
+      entitydata.proxy.last_user = player
     end
   end
 
