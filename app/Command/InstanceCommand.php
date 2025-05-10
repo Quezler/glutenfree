@@ -28,8 +28,9 @@ class InstanceCommand extends Command
         if ($name == null) {
             $instance_directory = "/Volumes/Factorio";
             if (!file_exists($instance_directory)) {
-                exec('open -a /Applications/TmpDisk.app --args -name=Factorio -size=' . (1024 * 10), $lines);
-                sleep(2);
+                exec('open -a /Applications/TmpDisk.app --args -name=Factorio -size=' . (1024 * 16), $lines);
+                while(!file_exists($instance_directory))
+                    sleep(1);
             }
         }
 
