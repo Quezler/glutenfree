@@ -1,0 +1,118 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2025. 05. 11
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
+Version: 0.0.13
+Date: 2025. 05. 06
+  Info:
+    - Yummy fresh sprites
+    - Support bottleneck lite
+    - Fix the corpse shadow
+    - Hide the pipe pillar from bottleneck
+    - Prepare to hand the mod over
+---------------------------------------------------------------------------------------------------
+Version: 0.0.12
+Date: 2025. 04. 30
+  Info:
+    - Change status from "red, ingredients" to "green, working"
+    - Trial east occluder
+    - Remove imagemagik commands
+    - Batch 12
+    - Batch 13
+    - Batch 14
+    - Yeet the pipe cover layer
+    - Cleanup
+    - Unlock rotation since pipe covers are unused
+    - Appease the furry
+    - Setup remnants
+    - Embed the shadow into the remnant
+    - Undo shadow
+    - Connect pillars whilst paused in editor mode
+---------------------------------------------------------------------------------------------------
+Version: 0.0.11
+Date: 2025. 04. 27
+  Info:
+    - Crude initial player facing furnace
+    - Complete the prototype switcharoo
+    - Fix the pipeline rendering
+    - Make the working visualizations operational again
+    - Fix the frame rendering over/under the pipes
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+Date: 2025. 04. 27
+  Info:
+    - Import new batch
+    - Update lua for new sprite batch
+    - Try some imagemagik commands
+    - Fix shadow fattening
+    - Prune storage tank graphic set
+    - Update the batch of sprites for the shadow
+    - Work on the back legs
+    - Play around with the pipe cover pictures
+    - Block rotation so we only need one pipe
+    - Implement the rendered pipes
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+Date: 2025. 04. 22
+  Info:
+    - Use a hidden furnace for the working visualizations
+    - Add thumbnail
+    - Fix pipe on the right overlaying the tower
+    - Get rid of the fluid window
+    - Actualize thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 2025. 04. 22
+  Info:
+    - Add the tip occluder back
+    - Import and implement a new batch of graphics
+    - Properly implement the horizontal/vertical single sprite
+    - Update the left and right pipe covers
+    - Fixed eroneous marked shadowless sprites
+    - Eliminate the vanilla covers
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2025. 04. 21
+  Info:
+    - Import and implement another new batch of graphics
+    - Pass the pipes under elevated rails
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2025. 04. 20
+  Info:
+    - Import and implement the new batch of graphics
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2025. 04. 20
+  Info:
+    - Fix pillar only forming one outgoing connection
+    - Reach over the railings of elevated rails
+    - Enhance render layer interactions with elevated rails
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2025. 04. 20
+  Info:
+    - Setup the luarendering refresh template
+    - Do the visual connecting and disconnecting
+    - Add an occluder for the top of the tip
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2025. 04. 20
+  Info:
+    - Adjust selection and colission boxes
+    - mark the building as tall
+    - Add the riser ontop and control it via scripting
+    - Actually just swap the pipe connections
+    - Riser begone
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2025. 04. 20
+  Info:
+    - Setup the player facing prototypes
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2025. 04. 19
+  Info:
+    - Initial commit
