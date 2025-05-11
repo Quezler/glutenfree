@@ -9,10 +9,12 @@ local bring_your_own_keybind = settings.startup[mod_prefix .. "bring-your-own-ke
 script.on_init(function()
   storage.inventories = {}
   storage.cursor_stack_temporary = {}
+  storage.held_planner_got_used = {}
 end)
 
 script.on_configuration_changed(function()
   storage.cursor_stack_temporary = storage.cursor_stack_temporary or {}
+  storage.held_planner_got_used = storage.held_planner_got_used or {}
 end)
 
 script.on_load(function()
@@ -69,7 +71,13 @@ local function toggle_filter(itemstack, filter)
 end
 
 script.on_event(mod_prefix .. "pipette", function(event)
---game.print(string.format("%d pipette", event.tick))
+  -- game.print(string.format("%d pipette", event.tick))
+
+  if bring_your_own_keybind == false then
+    if storage.held_planner_got_used[event.player_index] then
+      return
+    end
+  end
 
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local cursor_stack = player.cursor_stack
@@ -106,6 +114,7 @@ end)
 
 if bring_your_own_keybind == false then
   script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
+    storage.held_planner_got_used[event.player_index] = nil
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     local cursor_stack = player.cursor_stack
 
@@ -122,3 +131,9 @@ if bring_your_own_keybind == false then
     end
   end)
 end
+
+script.on_event(defines.events.on_marked_for_upgrade, function(event)
+  if event.player_index then
+    storage.held_planner_got_used[event.player_index] = true
+  end
+end)
