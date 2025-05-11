@@ -46,7 +46,7 @@ local function toggle_filter(itemstack, filter)
 
   local next_upgrade = prototypes.entity[filter.name].next_upgrade
   if not next_upgrade then
-    return "Entity has no next upgrade."
+    next_upgrade = prototypes.entity[filter.name] -- make a 1-1 planner for like modules and stuff
   end
 
   local free_mapper_index = itemstack.mapper_count+1
