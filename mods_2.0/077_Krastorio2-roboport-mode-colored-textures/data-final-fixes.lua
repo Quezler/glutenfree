@@ -53,6 +53,9 @@ local function add_tinted_mask_to_icon(mask_name, item_prototype, tint)
 end
 
 local function tint_existing_icon(item_prototype, tint)
+  if item_prototype.icon == nil and item_prototype.icons == nil then
+    return -- "big-electric-pole-roboport-logistic-mode"
+  end
   assert(item_prototype.icon)
   assert(item_prototype.icons == nil)
 
