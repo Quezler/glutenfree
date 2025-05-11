@@ -87,11 +87,7 @@ script.on_event(defines.events.on_entity_died, function(event)
 
   assert(space_platform)
   space_platform.apply_starter_pack()
-
-  local schedule = platform.schedule
-  if schedule and #schedule.records > 0 then -- if there are no stops but there are interrupts the records are empty and it errors
-    space_platform.schedule = schedule
-  end
+  space_platform.schedule = platform.schedule
 
   local old_surface = event.entity.surface
   local new_surface = space_platform.surface
