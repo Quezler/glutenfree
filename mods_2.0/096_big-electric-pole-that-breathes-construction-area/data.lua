@@ -1,32 +1,32 @@
-local util = require('util')
+local util = require("util")
 
-local big_electric_pole = data.raw['electric-pole']['big-electric-pole']
+local big_electric_pole = data.raw["electric-pole"]["big-electric-pole"]
 
 local roboport = {
-  type = 'roboport',
-  name = 'big-electric-pole-roboport',
+  type = "roboport",
+  name = "big-electric-pole-roboport",
 
   base = util.empty_sprite(),
   base_animation = util.empty_sprite(),
   base_patch = util.empty_sprite(),
 
-  charge_approach_distance = data.raw['roboport']['roboport'].charge_approach_distance,
-  charging_energy = data.raw['roboport']['roboport'].charging_energy,
+  charge_approach_distance = data.raw["roboport"]["roboport"].charge_approach_distance,
+  charging_energy = data.raw["roboport"]["roboport"].charging_energy,
 
   construction_radius = big_electric_pole.maximum_wire_distance + 2,
 
   door_animation_up = util.empty_sprite(),
   door_animation_down = util.empty_sprite(),
 
-  energy_source = {type = 'void'},
-  energy_usage = data.raw['roboport']['roboport'].energy_usage,
+  energy_source = {type = "void"},
+  energy_usage = data.raw["roboport"]["roboport"].energy_usage,
 
   logistics_radius = 0,
   logistics_connection_distance = big_electric_pole.maximum_wire_distance + 2,
 
   material_slots_count = 0,
 
-  recharge_minimum = data.raw['roboport']['roboport'].recharge_minimum,
+  recharge_minimum = data.raw["roboport"]["roboport"].recharge_minimum,
   recharging_animation = util.empty_sprite(),
 
   request_to_open_door_timeout = 0,
@@ -34,8 +34,8 @@ local roboport = {
 
   spawn_and_station_height = 0,
 
-  collision_mask = {},
-  flags = {'not-on-map', 'placeable-off-grid'},
+  collision_mask = {layers = {}},
+  flags = {"not-on-map", "placeable-off-grid"},
 
   collision_box = big_electric_pole.collision_box,
   selection_box = big_electric_pole.collision_box,
@@ -46,7 +46,7 @@ local roboport = {
 roboport.base_animation = {
   layers = {
     {
-      filename = "__base__/graphics/entity/roboport/hr-roboport-base-animation.png",
+      filename = "__base__/graphics/entity/roboport/roboport-base-animation.png",
       priority = "medium",
       width = 83,
       height = 59,
