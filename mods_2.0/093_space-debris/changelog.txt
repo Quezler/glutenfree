@@ -1,0 +1,47 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2025. 05. 12
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2025. 05. 05
+  Info:
+    - Update readme
+    - Track and check items dumped at space locations
+    - Cache item names available at space location
+    - Cache the amount of items too
+    - Put the metadata inside the table
+    - Cover the asteroid with items actually dropped there
+    - Start removing the counts of items decorating asteroids
+    - Fix the logic
+    - Require 10 items per asteroid
+    - Research asteroid clone crash
+    - Stash pre-lunch asteroid data
+    - Confess about the nearest shortcut
+    - Ejected items belong to the closest space location
+    - Have platforms hold on to their ejected items for a bit
+    - Log when platforms offload their items
+    - Add thumbnail
+    - Repeat asteroid items if they don't hit anything
+    - Cleanup the release candidate
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2025. 05. 04
+  Info:
+    - Test covering an asteroid with items
+    - Try setting the orientation target to a train doing loops on another surface
+    - Abandon the train idea since render surfaces do not interact
+    - Blep
+    - Test rotation on a turret
+    - Future proofing
+    - Setup the asteroid prototype
+    - Spawn space debris at all space locations with asteroid spawns
+    - Make the items impact your platform
+    - Give the debris a texture and an explosion
+    - Research the entity death event
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2025. 05. 04
+  Info:
+    - Initial commit

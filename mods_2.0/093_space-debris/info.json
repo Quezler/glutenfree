@@ -1,0 +1,24 @@
+{
+    "name": "space-debris",
+    "title": "Space debris",
+    "description": "Items you throw overboard linger at that point in space and clump together.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": true,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "base >= 2.0.48",
+        "? space-age"
+    ]
+}
