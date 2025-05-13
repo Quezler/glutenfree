@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.1
-Date: ????
+Version: 1.1.0
+Date: 2025. 05. 13
   Info:
     - Elevated pipe reworked icon (#39)
     - Allow configuring the max distance
