@@ -8,6 +8,8 @@ local recipe_category = {
   name = "elevated-pipe",
 }
 
+local max_underground_distance = settings.startup[mod_prefix .. "max-underground-distance"].value -- 10
+
 local furnace = {
   type = "furnace",
   name = "elevated-pipe",
@@ -44,28 +46,28 @@ local furnace = {
         connection_type = "underground",
         direction = defines.direction.north,
         position = {0, 0},
-        max_underground_distance = 10,
+        max_underground_distance = max_underground_distance,
         connection_category = "elevated-pipe",
       },
       {
         connection_type = "underground",
         direction = defines.direction.east,
         position = {0, 0},
-        max_underground_distance = 10,
+        max_underground_distance = max_underground_distance,
         connection_category = "elevated-pipe",
       },
       {
         connection_type = "underground",
         direction = defines.direction.south,
         position = {0, 0},
-        max_underground_distance = 10,
+        max_underground_distance = max_underground_distance,
         connection_category = "elevated-pipe",
       },
       {
         connection_type = "underground",
         direction = defines.direction.west,
         position = {0, 0},
-        max_underground_distance = 10,
+        max_underground_distance = max_underground_distance,
         connection_category = "elevated-pipe",
       },
       { direction = defines.direction.north, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" }},

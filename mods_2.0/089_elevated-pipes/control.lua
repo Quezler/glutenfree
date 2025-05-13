@@ -21,6 +21,10 @@ end)
 
 script.on_configuration_changed(function()
   mod.refresh_surfacedata()
+
+  for _, surface in pairs(game.surfaces) do
+    mod.mark_surface_dirty(surface)
+  end
 end)
 
 script.on_load(function()
