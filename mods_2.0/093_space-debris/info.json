@@ -1,7 +1,7 @@
 {
     "name": "space-debris",
     "title": "Space debris",
-    "description": "Items you throw overboard linger at that point in space and clump together.",
+    "description": "Items you throw overboard become asteroids and damage your platforms.",
 
     "version": "1.0.0",
     "author": "Quezler",
