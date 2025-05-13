@@ -211,6 +211,9 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
   local tick = game.ticks_played
 
   for unit_number, struct in pairs(surfacedata.structs) do
+    if not struct.entity.valid then
+      goto next_struct
+    end
     local position = struct.entity.position
     for _, neighbour in ipairs(struct.entity.fluidbox.get_connections(1)) do
       neighbour = neighbour.owner -- remnant from using neighbours instead of fluidbox
@@ -219,7 +222,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
         local connection = struct.connections[neighbour.unit_number]
         if connection then -- mark as up-to-date, then continue on
           connection.updated_at = tick
-          goto continue
+          goto next_connection
         end
 
         local x_diff = position.x - neighbour.position.x
@@ -266,8 +269,9 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
         end -- any_diff
 
       end
-      ::continue::
+      ::next_connection::
     end
+    ::next_struct::
   end
 
   -- connections we did not come across stopped existing
