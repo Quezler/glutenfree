@@ -53,6 +53,15 @@ local entity = {
   door_animation_up = util.empty_sprite(),
   door_animation_down = util.empty_sprite(),
 
+  -- energy_source = {
+  --   type = "electric",
+  --   usage_priority = "secondary-input",
+  --   input_flow_limit = "2GW",
+  --   buffer_capacity = "10GJ"
+  -- },
+  -- energy_usage = "1GW",
+  -- recharge_minimum = "9GW",
+
   energy_source = {
     type = "electric",
     usage_priority = "secondary-input",
@@ -61,6 +70,7 @@ local entity = {
   },
   energy_usage = "250MW",
   recharge_minimum = "750MW",
+
 
   radar_range = 2,
   logistics_radius = 0,
