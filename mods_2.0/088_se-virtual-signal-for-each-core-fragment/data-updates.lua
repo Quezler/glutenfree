@@ -11,7 +11,7 @@ data:extend{{
 
 local signal_background = {
   icon =  "__base__/graphics/icons/signal/signal_blue.png",
-  icon_size = 64, icon_mipmaps = 4,
+  icon_size = 64,
 }
 
 for _, item in pairs(data.raw["item"]) do
