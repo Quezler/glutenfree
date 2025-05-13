@@ -10,6 +10,7 @@ local function sprite_with_shadow(name, config)
         scale = 0.5,
         width = 704,
         height = 704,
+        tint = config.tint,
       },
     }
   }
@@ -27,8 +28,11 @@ local function sprite_with_shadow(name, config)
   return sprite
 end
 
-local horizontal_shadow = {shadow = "elevated-pipe-horizontal-center-shadow"}
-local vertical_shadow = {shadow = "elevated-pipe-vertical-center-shadow"}
+local opacity = settings.startup[mod_prefix .. "opacity"].value -- 1
+local tint = {opacity, opacity, opacity, opacity}
+
+local horizontal_shadow = {shadow = "elevated-pipe-horizontal-center-shadow", tint = tint}
+local vertical_shadow = {shadow = "elevated-pipe-vertical-center-shadow", tint = tint}
 
 data:extend{
   sprite_with_shadow("elevated-pipe-horizontal-left", horizontal_shadow),
