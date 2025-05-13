@@ -5,6 +5,7 @@ Date: ????
     - Elevated pipe reworked icon (#39)
     - Allow configuring the max distance
     - Allow configuring transparency at startup
+    - Remove floating pipes in editor mode whilst mining paused
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 05. 11

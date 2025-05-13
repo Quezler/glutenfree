@@ -167,12 +167,23 @@ local deathrattles = {
   end,
 }
 
-script.on_event(defines.events.on_object_destroyed, function(event)
+function mod.on_object_destroyed(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     deathrattles[deathrattle.name](deathrattle)
   end
-end)
+end
+
+script.on_event(defines.events.on_object_destroyed, mod.on_object_destroyed)
+
+-- script.on_event(defines.events.on_player_mined_entity, function(event)
+--   if game.tick_paused then -- remove floating pipes in paused editor mode
+--     local registration_number = script.register_on_object_destroyed(event.entity)
+--     mod.on_object_destroyed({registration_number = registration_number})
+--   end
+-- end, {
+--   {filter = "name", name = "elevated-pipe"},
+-- })
 
 -- note to self: we render render upwards and leftwards
 
@@ -197,7 +208,7 @@ local function elevated_pipe_sprites(x_or_y, max)
 end
 
 function mod.update_elevated_pipes_for_surface(surfacedata)
-  local tick = game.tick
+  local tick = game.ticks_played
 
   for unit_number, struct in pairs(surfacedata.structs) do
     local position = struct.entity.position
