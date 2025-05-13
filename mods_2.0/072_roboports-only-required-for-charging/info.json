@@ -2,7 +2,7 @@
     "name": "roboports-only-required-for-charging",
     "title": "Roboports only required for charging",
     "description": "Each surface has a map wide construction and logistic zone, but those won't charge robots.",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [

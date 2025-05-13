@@ -20,6 +20,9 @@ local roboport = {
   construction_radius = 1000000,
   logistics_connection_distance = 1000000,
 
+  draw_logistic_radius_visualization = false,
+  draw_construction_radius_visualization = false,
+
   material_slots_count = 0,
 
   recharge_minimum = data.raw["roboport"]["roboport"].recharge_minimum,
@@ -50,5 +53,5 @@ end
 
 data:extend({roboport})
 
-data.raw["utility-sprites"]["default"].construction_radius_visualization = util.empty_sprite()
-data.raw["utility-sprites"]["default"].logistic_radius_visualization = util.empty_sprite()
+-- data.raw["utility-sprites"]["default"].construction_radius_visualization = util.empty_sprite()
+-- data.raw["utility-sprites"]["default"].logistic_radius_visualization = util.empty_sprite()
