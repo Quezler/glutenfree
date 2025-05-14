@@ -5,6 +5,7 @@ local big_electric_pole = data.raw["electric-pole"]["big-electric-pole"]
 local roboport = {
   type = "roboport",
   name = "big-electric-pole-roboport",
+  icon = "__big-electric-pole-that-breathes-construction-area__/graphics/icons/big-electric-pole-roboport.png",
 
   base = util.empty_sprite(),
   base_animation = util.empty_sprite(),

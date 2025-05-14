@@ -2,12 +2,13 @@
     "name": "big-electric-pole-that-breathes-construction-area",
     "title": "Big electric pole that breathes construction area",
     "description": "Magictastical!",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
         
-        "base"
+        "base",
+        "? space-age"
     ]
 }
