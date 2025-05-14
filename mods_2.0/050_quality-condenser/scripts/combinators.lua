@@ -17,6 +17,19 @@ function Combinators.migrate_to_2_0_38(struct)
   assert(new_red_out.connect_to(red_in, false, defines.wire_origin.player))
 end
 
+function Combinators.migrate_to_gte_120(struct)
+  inserter_1_cb = struct.inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
+  inserter_1_cb.circuit_condition = {
+    comparator = "≥",
+    constant = 60 * 2,
+    first_signal = {
+      name = "signal-T",
+      type = "virtual"
+    },
+    fulfilled = false
+  }
+end
+
 function Combinators.create_for_struct(struct)
   struct.proxy_container = storage.surface.create_entity{
     name = "proxy-container",
@@ -225,7 +238,7 @@ function Combinators.create_for_struct(struct)
   inserter_1_cb = struct.inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
   inserter_1_cb.circuit_enable_disable = true
   inserter_1_cb.circuit_condition = {
-    comparator = "=",
+    comparator = "≥",
     constant = 60 * 2,
     first_signal = {
       name = "signal-T",

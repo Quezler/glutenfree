@@ -3,6 +3,7 @@ Version: 1.2.6
 Date: ????
   Info:
     - Unify mining times
+    - Fix a small chance of the inactivity timer going out of bounds
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.5
 Date: 2025. 04. 24

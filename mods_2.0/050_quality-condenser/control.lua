@@ -151,6 +151,9 @@ script.on_event(defines.events.on_player_created, function(event)
 end)
 
 script.on_init(function()
+  storage.migrated_to_2_0_38 = true
+  storage.migrated_to_gte_120 = true
+
   storage.surface = game.planets["quality-condenser"].create_surface()
   storage.surface.generate_with_lab_tiles = true
 
@@ -196,6 +199,13 @@ script.on_configuration_changed(function(data)
       Combinators.migrate_to_2_0_38(struct)
     end
     storage.migrated_to_2_0_38 = true
+  end
+
+  if not storage.migrated_to_gte_120 then
+    for _, struct in pairs(storage.structs) do
+      Combinators.migrate_to_gte_120(struct)
+    end
+    storage.migrated_to_gte_120 = true
   end
 
   Handler.refresh_gui_for_players()
