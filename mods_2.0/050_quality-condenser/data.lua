@@ -104,7 +104,7 @@ local crafter_entity = {
     max_sounds_per_prototype = 3,
   },
 
-  minable = table.deepcopy(a_9x9_entity.minable),
+  minable = {mining_time = 1},
   quality_indicator_shift = {-1, 1},
 
   flags = {"player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
@@ -123,7 +123,7 @@ local crafter_item = {
 }
 
 crafter_item.place_result = crafter_entity.name
-crafter_entity.minable = {mining_time = 0.3, result = crafter_item.name}
+crafter_entity.minable.result = crafter_item.name
 
 local crafter_recipe = {
   type = "recipe",
@@ -182,7 +182,7 @@ local container_entity = {
   collision_mask = {layers = {}},
   max_health = 10,
 
-  minable = table.deepcopy(a_9x9_entity.minable),
+  minable = {mining_time = 1},
 
   circuit_wire_max_distance = default_circuit_wire_max_distance,
   circuit_connector = circuit_connector_definitions.create_single
@@ -195,7 +195,6 @@ local container_entity = {
   quality_indicator_scale = 0,
   hidden = true,
 }
-container_entity.minable.result = nil
 
 data:extend({container_entity})
 
