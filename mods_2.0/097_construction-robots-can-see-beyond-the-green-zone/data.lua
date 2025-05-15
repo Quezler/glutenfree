@@ -74,7 +74,7 @@ local entity = {
 
   radar_range = 2,
   logistics_radius = 0,
-  construction_radius = 2000000, -- can cover the rest of the map from anywhere
+  construction_radius = 1000000, -- can cover the map if placed exactly at the center
 
   draw_logistic_radius_visualization = false,
   draw_construction_radius_visualization = false,
