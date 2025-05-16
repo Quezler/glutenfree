@@ -53,7 +53,7 @@ function mod.tick_cargo_wagon(cargo_wagon)
 
   local default_inventory_size = get_default_inventory_size[entity.name][entity.quality.name]
   local current_inventory_size = entity.get_inventory_size_override(defines.inventory.cargo_wagon) or default_inventory_size
-  local next_inventory_size = default_inventory_size * belt_stack_size_bonus
+  local next_inventory_size = default_inventory_size * (1 + belt_stack_size_bonus)
   if current_inventory_size > next_inventory_size then
     local slot_difference = math.abs(next_inventory_size - current_inventory_size)
     local inventory = game.create_inventory(slot_difference)
