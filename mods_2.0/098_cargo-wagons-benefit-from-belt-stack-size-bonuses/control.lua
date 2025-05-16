@@ -16,7 +16,7 @@ script.on_init(function(event)
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered({type = "cargo-wagon"})) do
-      on_created_entity({entity = entity})
+      mod.on_created_entity({entity = entity})
     end
   end
 end)
