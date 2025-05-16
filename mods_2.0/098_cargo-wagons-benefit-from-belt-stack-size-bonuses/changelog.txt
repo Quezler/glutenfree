@@ -3,6 +3,7 @@ Version: 1.0.0
 Date: ????
   Info:
     - Strip out the remote interface draft
+    - Add thumbnail and readme
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 16
