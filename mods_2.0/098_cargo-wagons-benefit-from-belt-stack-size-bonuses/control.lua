@@ -57,7 +57,7 @@ function mod.tick_cargo_wagon(cargo_wagon)
   if current_inventory_size > next_inventory_size then
     local slot_difference = math.abs(next_inventory_size - current_inventory_size)
     local inventory = game.create_inventory(slot_difference)
-    entity.set_inventory_size_override(defines.inventory.cargo_wagon, default_inventory_size * belt_stack_size_bonus, inventory)
+    entity.set_inventory_size_override(defines.inventory.cargo_wagon, next_inventory_size, inventory)
     for slot = 1, #inventory do
       local stack = inventory[slot]
       if stack.valid_for_read then
@@ -72,7 +72,7 @@ function mod.tick_cargo_wagon(cargo_wagon)
     end
     inventory.destroy()
   else
-    entity.set_inventory_size_override(defines.inventory.cargo_wagon, default_inventory_size * belt_stack_size_bonus)
+    entity.set_inventory_size_override(defines.inventory.cargo_wagon, next_inventory_size)
   end
 end
 
