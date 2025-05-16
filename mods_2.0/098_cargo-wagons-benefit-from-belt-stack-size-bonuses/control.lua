@@ -53,7 +53,27 @@ function mod.tick_cargo_wagon(cargo_wagon)
 
   local default_inventory_size = get_default_inventory_size[entity.name][entity.quality.name]
   local current_inventory_size = entity.get_inventory_size_override(defines.inventory.cargo_wagon) or default_inventory_size
-  entity.set_inventory_size_override(defines.inventory.cargo_wagon, default_inventory_size * belt_stack_size_bonus)
+  local next_inventory_size = default_inventory_size * belt_stack_size_bonus
+  if current_inventory_size > next_inventory_size then
+    local slot_difference = math.abs(next_inventory_size - current_inventory_size)
+    local inventory = game.create_inventory(slot_difference)
+    entity.set_inventory_size_override(defines.inventory.cargo_wagon, default_inventory_size * belt_stack_size_bonus, inventory)
+    for slot = 1, #inventory do
+      local stack = inventory[slot]
+      if stack.valid_for_read then
+        entity.surface.spill_item_stack{
+          position = entity.position,
+          stack = stack,
+          force = entity.force,
+          allow_belts = false,
+          drop_full_stack = true,
+        }
+      end
+    end
+    inventory.destroy()
+  else
+    entity.set_inventory_size_override(defines.inventory.cargo_wagon, default_inventory_size * belt_stack_size_bonus)
+  end
 end
 
 -- /cheat all

@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Strip out the remote interface draft
     - Add thumbnail and readme
+    - Spill if the inventory would lose slots
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 05. 16
