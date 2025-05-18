@@ -320,7 +320,7 @@ local Condense = require("scripts.condense")
 local deathrattles = {
   ["offering-idle"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
-    if struct then
+    if struct and struct.entity.valid then
       if struct.entity.crafting_progress == 0 and struct.container_inventory.is_empty() == false then
         ensure_recipe_is_set(struct.entity)
         struct.entity.crafting_progress = 0.001
