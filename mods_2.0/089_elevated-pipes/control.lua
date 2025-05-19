@@ -92,7 +92,6 @@ function mod.on_created_entity(event)
   }
 
   if script.active_mods["factorissimo-2-notnotmelon"] then
-    game.print('gingarou')
     struct.gingarou_hotel_planned_hotspring_site = entity.surface.create_entity{
       name = mod_prefix .. "gingarou-hotel-planned-hotspring-site",
       force = entity.force,
