@@ -70,6 +70,7 @@ function mod.on_created_entity(event)
     name = "elevated-pipe-alt-mode",
     force = entity.force,
     position = entity.position,
+    create_build_effect_smoke = false,
   }
   struct.alt_mode.destructible = false
   struct.alt_mode.fluidbox.add_linked_connection(0, entity, 0)
@@ -89,6 +90,17 @@ function mod.on_created_entity(event)
     surface_index = entity.surface_index,
     unit_number = entity.unit_number,
   }
+
+  if script.active_mods["factorissimo-2-notnotmelon"] then
+    game.print('gingarou')
+    struct.gingarou_hotel_planned_hotspring_site = entity.surface.create_entity{
+      name = mod_prefix .. "gingarou-hotel-planned-hotspring-site",
+      force = entity.force,
+      position = entity.position,
+      create_build_effect_smoke = false,
+      raise_built = true,
+    }
+  end
 
   mod.mark_surface_dirty(surfacedata.surface)
 end
@@ -160,6 +172,10 @@ local deathrattles = {
           for _, sprite in ipairs(connection.sprites) do
             sprite.destroy()
           end
+        end
+        if struct.gingarou_hotel_planned_hotspring_site then
+          script.raise_event(defines.events.script_raised_destroy, {entity = struct.gingarou_hotel_planned_hotspring_site})
+          struct.gingarou_hotel_planned_hotspring_site.destroy()
         end
       end
       mod.mark_surface_dirty(surfacedata.surface)
