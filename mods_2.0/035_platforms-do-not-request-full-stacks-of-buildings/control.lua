@@ -73,7 +73,7 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 
   local inventory = entity.get_inventory(defines.inventory.cargo_unit) --[[@as LuaInventory]]
   local contents = inventory.get_contents()
-  assert(#contents == 1)
+  assert(#contents == 1, serpent.block(contents))
   local item = contents[1]
 
   local platform = entity.surface.platform --[[@as LuaSpacePlatform]]

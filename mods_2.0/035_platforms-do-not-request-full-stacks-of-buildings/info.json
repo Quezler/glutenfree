@@ -3,7 +3,7 @@
     "title": "Platforms do not request full stacks of buildings",
     "description": "Building materials that are over-delivered are returned to the silo and their rocket parts refunded.",
 
-    "version": "1.0.12",
+    "version": "1.0.13",
     "author": "Quezler",
     "factorio_version": "2.0",
 
