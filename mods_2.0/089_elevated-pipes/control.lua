@@ -25,6 +25,19 @@ script.on_configuration_changed(function()
   for _, surface in pairs(game.surfaces) do
     mod.mark_surface_dirty(surface)
   end
+
+  for _, surfacedata in pairs(storage.surfacedata) do
+    for _, struct in pairs(storage.structs) do
+      for other_unit_number, connection in pairs(struct.connections) do
+        if connection.sprites then -- pre 1.2.0
+          for _, sprite in ipairs(connection.sprites) do
+            sprite.destroy()
+          end
+          connection.sprites = nil
+        end
+      end
+    end
+  end
 end)
 
 script.on_load(function()
@@ -168,8 +181,10 @@ local deathrattles = {
       if struct then surfacedata.structs[deathrattle.unit_number] = nil
         struct.alt_mode.destroy()
         for _, connection in pairs(struct.connections) do
-          for _, sprite in ipairs(connection.sprites) do
-            sprite.destroy()
+          for player_index, sprites in pairs(connection.player_sprites) do
+            for _, sprite in ipairs(sprites) do
+              sprite.destroy()
+            end
           end
         end
         if struct.gingarou_hotel_planned_hotspring_site then
@@ -225,6 +240,8 @@ end
 function mod.update_elevated_pipes_for_surface(surfacedata)
   local tick = game.ticks_played
 
+  local players = game.players
+
   for unit_number, struct in pairs(surfacedata.structs) do
     if not struct.entity.valid then
       goto next_struct
@@ -249,34 +266,42 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
 
           connection = {
             updated_at = tick,
-            sprites = {},
+            player_sprites = {},
           }
 
           if x_diff > 1 then
             local sprites = elevated_pipe_sprites("x", x_diff -1)
-            for x_offset = 1, x_diff -1 do
-              table.insert(connection.sprites, rendering.draw_sprite{
-                sprite = sprites[x_offset],
-                surface = surfacedata.surface,
-                target = {
-                  entity = struct.entity,
-                  offset = {-x_offset, 0},
-                },
-                render_layer = tostring(render_layer + 0),
-              })
+            for player_index, player in pairs(players) do
+              connection.player_sprites[player_index] = {}
+              for x_offset = 1, x_diff -1 do
+                table.insert(connection.player_sprites[player_index], rendering.draw_sprite{
+                  sprite = sprites[x_offset],
+                  surface = surfacedata.surface,
+                  target = {
+                    entity = struct.entity,
+                    offset = {-x_offset, 0},
+                  },
+                  render_layer = tostring(render_layer + 0),
+                  players = {player_index},
+                })
+              end
             end
           else
             local sprites = elevated_pipe_sprites("y", y_diff -1)
-            for y_offset = 1, y_diff -1 do
-              table.insert(connection.sprites, rendering.draw_sprite{
-                sprite = sprites[y_offset],
-                surface = surfacedata.surface,
-                target = {
-                  entity = struct.entity,
-                  offset = {0, -y_offset},
-                },
-                render_layer = tostring(render_layer + 0),
-              })
+            for player_index, player in pairs(players) do
+              connection.player_sprites[player_index] = {}
+              for y_offset = 1, y_diff -1 do
+                table.insert(connection.player_sprites[player_index], rendering.draw_sprite{
+                  sprite = sprites[y_offset],
+                  surface = surfacedata.surface,
+                  target = {
+                    entity = struct.entity,
+                    offset = {0, -y_offset},
+                  },
+                  render_layer = tostring(render_layer + 0),
+                  players = {player_index},
+                })
+              end
             end
           end
 
@@ -293,8 +318,10 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
   for unit_number, struct in pairs(surfacedata.structs) do
     for other_unit_number, connection in pairs(struct.connections) do
       if connection.updated_at ~= tick then
-        for _, sprite in ipairs(connection.sprites) do
-          sprite.destroy()
+        for player_index, sprites in pairs(connection.player_sprites) do
+          for _, sprite in ipairs(sprites) do
+            sprite.destroy()
+          end
         end
         struct.connections[other_unit_number] = nil
       end
