@@ -140,7 +140,7 @@ if mods['space-age'] then
   handle({
     prefix = 'kr-superior-',
     tech = 'kr-logistic-5',
-    previous_prefix = 'kr-advanced-',
+    previous_prefix = 'turbo-',
     order = 'e',
   })
   end
