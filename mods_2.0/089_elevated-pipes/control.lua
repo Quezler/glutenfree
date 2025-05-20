@@ -335,8 +335,12 @@ end
 function mod.render_connection_to(connection, player_index)
   assert(type(player_index) == "number")
   connection.player_sprites[player_index] = {}
+
+  local opacity = settings.get_player_settings(player_index)[mod_prefix .. "opacity"].value
+
   for i, render_config in ipairs(connection.render_configs) do
     connection.player_sprites[player_index][i] = rendering.draw_sprite(render_config)
+    connection.player_sprites[player_index][i].color = {opacity, opacity, opacity, opacity}
     connection.player_sprites[player_index][i].players = {player_index}
   end
 end
@@ -361,4 +365,23 @@ script.on_event(defines.events.on_player_removed, function(event)
       end
     end
   end)
+end)
+
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+  if event.setting == mod_prefix .. "opacity" then
+    assert(event.setting_type == "runtime-per-user")
+
+    local opacity = settings.get_player_settings(event.player_index)[mod_prefix .. "opacity"].value
+
+    mod.foreach_struct(function(struct)
+      for _, connection in pairs(struct.connections) do
+        local player_sprites = connection.player_sprites[event.player_index]
+        if player_sprites then
+          for _, sprite in ipairs(player_sprites) do
+            sprite.color = {opacity, opacity, opacity, opacity}
+          end
+        end
+      end
+    end)
+  end
 end)
