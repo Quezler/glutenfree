@@ -135,6 +135,15 @@ if mods['space-age'] then
     previous_prefix = 'express-',
     order = 'd',
   })
+
+  if mods['Krastorio2-spaced-out'] then
+  handle({
+    prefix = 'kr-superior-',
+    tech = 'kr-logistic-5',
+    previous_prefix = 'kr-advanced-',
+    order = 'e',
+  })
+  end
 end
 
 if mods['Krastorio2'] then

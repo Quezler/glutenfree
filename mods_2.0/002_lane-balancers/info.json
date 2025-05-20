@@ -3,7 +3,7 @@
     "title": "Lane balancers",
     "description": "Adds recipes and tiers for the single tile lane splitters.",
 
-    "version": "1.1.4",
+    "version": "1.1.5",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -23,6 +23,7 @@
 
         "? prismatic-belts",
         "? prismatic-belts-space-age",
-        "? Krastorio2"
+        "? Krastorio2",
+        "? Krastorio2-spaced-out"
     ]
 }
