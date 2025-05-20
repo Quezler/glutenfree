@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Revert "Allow configuring transparency at startup"
     - Render the elevated sprites per player
+    - Handle new players joining
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.3
 Date: 2025. 05. 19

@@ -19,6 +19,14 @@ script.on_init(function()
   storage.dirty_surfaces = {}
 end)
 
+function mod.foreach_struct(callback)
+  for _, surfacedata in pairs(storage.surfacedata) do
+    for _, struct in pairs(surfacedata.structs) do
+      callback(struct)
+    end
+  end
+end
+
 script.on_configuration_changed(function()
   mod.refresh_surfacedata()
 
@@ -26,18 +34,16 @@ script.on_configuration_changed(function()
     mod.mark_surface_dirty(surface)
   end
 
-  for _, surfacedata in pairs(storage.surfacedata) do
-    for _, struct in pairs(storage.structs) do
-      for other_unit_number, connection in pairs(struct.connections) do
-        if connection.sprites then -- pre 1.2.0
-          for _, sprite in ipairs(connection.sprites) do
-            sprite.destroy()
-          end
-          connection.sprites = nil
+  mod.foreach_struct(function(struct)
+    for other_unit_number, connection in pairs(struct.connections) do
+      if connection.sprites then -- pre 1.2.0
+        for _, sprite in ipairs(connection.sprites) do
+          sprite.destroy()
         end
+        connection.sprites = nil
       end
     end
-  end
+  end)
 end)
 
 script.on_load(function()
@@ -266,43 +272,40 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
 
           connection = {
             updated_at = tick,
+            render_configs = {},
             player_sprites = {},
           }
 
           if x_diff > 1 then
             local sprites = elevated_pipe_sprites("x", x_diff -1)
-            for player_index, player in pairs(players) do
-              connection.player_sprites[player_index] = {}
-              for x_offset = 1, x_diff -1 do
-                table.insert(connection.player_sprites[player_index], rendering.draw_sprite{
-                  sprite = sprites[x_offset],
-                  surface = surfacedata.surface,
-                  target = {
-                    entity = struct.entity,
-                    offset = {-x_offset, 0},
-                  },
-                  render_layer = tostring(render_layer + 0),
-                  players = {player_index},
-                })
-              end
+            for x_offset = 1, x_diff -1 do
+              table.insert(connection.render_configs, {
+                sprite = sprites[x_offset],
+                surface = surfacedata.surface,
+                target = {
+                  entity = struct.entity,
+                  offset = {-x_offset, 0},
+                },
+                render_layer = tostring(render_layer + 0),
+              })
             end
           else
             local sprites = elevated_pipe_sprites("y", y_diff -1)
-            for player_index, player in pairs(players) do
-              connection.player_sprites[player_index] = {}
-              for y_offset = 1, y_diff -1 do
-                table.insert(connection.player_sprites[player_index], rendering.draw_sprite{
-                  sprite = sprites[y_offset],
-                  surface = surfacedata.surface,
-                  target = {
-                    entity = struct.entity,
-                    offset = {0, -y_offset},
-                  },
-                  render_layer = tostring(render_layer + 0),
-                  players = {player_index},
-                })
-              end
+            for y_offset = 1, y_diff -1 do
+              table.insert(connection.render_configs, {
+                sprite = sprites[y_offset],
+                surface = surfacedata.surface,
+                target = {
+                  entity = struct.entity,
+                  offset = {0, -y_offset},
+                },
+                render_layer = tostring(render_layer + 0),
+              })
             end
+          end
+
+          for player_index, player in pairs(players) do
+            mod.render_connection_to(connection, player_index)
           end
 
           struct.connections[neighbour.unit_number] = connection
@@ -328,3 +331,34 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
     end
   end
 end
+
+function mod.render_connection_to(connection, player_index)
+  assert(type(player_index) == "number")
+  connection.player_sprites[player_index] = {}
+  for i, render_config in ipairs(connection.render_configs) do
+    connection.player_sprites[player_index][i] = rendering.draw_sprite(render_config)
+    connection.player_sprites[player_index][i].players = {player_index}
+  end
+end
+
+script.on_event(defines.events.on_player_created, function(event)
+  mod.foreach_struct(function(struct)
+    for _, connection in pairs(struct.connections) do
+      mod.render_connection_to(connection, event.player_index)
+    end
+  end)
+end)
+
+script.on_event(defines.events.on_player_removed, function(event)
+  mod.foreach_struct(function(struct)
+    for _, connection in pairs(struct.connections) do
+      local player_sprites = connection.player_sprites[event.player_index]
+      if player_sprites then
+        for _, sprite in ipairs(player_sprites) do
+          sprite.destroy()
+        end
+        connection.player_sprites[event.player_index] = nil
+      end
+    end
+  end)
+end)
