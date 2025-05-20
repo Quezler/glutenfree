@@ -6,6 +6,7 @@ Date: ????
     - Render the elevated sprites per player
     - Handle new players joining
     - Make the opacity configurable per player
+    - Migrate existing structs
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.3
 Date: 2025. 05. 19

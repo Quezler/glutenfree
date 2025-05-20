@@ -30,20 +30,20 @@ end
 script.on_configuration_changed(function()
   mod.refresh_surfacedata()
 
-  for _, surface in pairs(game.surfaces) do
-    mod.mark_surface_dirty(surface)
-  end
-
   mod.foreach_struct(function(struct)
     for other_unit_number, connection in pairs(struct.connections) do
       if connection.sprites then -- pre 1.2.0
         for _, sprite in ipairs(connection.sprites) do
           sprite.destroy()
         end
-        connection.sprites = nil
+        struct.connections[other_unit_number] = nil
       end
     end
   end)
+
+  for _, surface in pairs(game.surfaces) do
+    mod.mark_surface_dirty(surface)
+  end
 end)
 
 script.on_load(function()
