@@ -1,4 +1,4 @@
-local flib_bounding_box = require("__flib__/bounding-box")
+local flib_bounding_box = require("__flib__.bounding-box")
 
 -- local util = require("__core__.lualib.util")
 -- if table_size(util.direction_vectors) ~= 8 then error("util.direction_vectors ~= 8") end
@@ -137,7 +137,7 @@ function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
   local tile = tiles[position.x][position.y]
   if not tile or not tile.valid then
     tile = surface.create_entity({
-      name = "concrete-roboport-tile",
+      name = mod_prefix .. "tile",
       force = force,
       position = position,
     })

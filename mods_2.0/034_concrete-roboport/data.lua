@@ -1,13 +1,17 @@
+require("shared")
+
+local base_roboport = data.raw["roboport"]["roboport"]
+
 local concrete_roboport_tile = {
   type = "roboport",
-  name = "concrete-roboport-tile",
+  name = mod_prefix .. "tile",
 
   base = util.empty_sprite(),
   base_animation = util.empty_sprite(),
   base_patch = util.empty_sprite(),
 
-  charge_approach_distance = data.raw["roboport"]["roboport"].charge_approach_distance,
-  charging_energy = data.raw["roboport"]["roboport"].charging_energy,
+  charge_approach_distance = base_roboport.charge_approach_distance,
+  charging_energy = base_roboport.charging_energy,
 
   construction_radius = 0,
 
@@ -15,14 +19,14 @@ local concrete_roboport_tile = {
   door_animation_down = util.empty_sprite(),
 
   energy_source = {type = "void"},
-  energy_usage = data.raw["roboport"]["roboport"].energy_usage,
+  energy_usage = base_roboport.energy_usage,
 
   logistics_radius = 0.5,
   logistics_connection_distance = 0.5,
 
   material_slots_count = 0,
 
-  recharge_minimum = data.raw["roboport"]["roboport"].recharge_minimum,
+  recharge_minimum = base_roboport.recharge_minimum,
   recharging_animation = util.empty_sprite(),
 
   request_to_open_door_timeout = 0,

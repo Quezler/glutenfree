@@ -2,9 +2,8 @@ concrete_roboport_technology =
 {
 	type = "technology",
 	name = "concrete-roboport",
-	localised_name = { "", {"entity-name.roboport"}, " MK2" },
 	icon_size = 256,
-	icon = "__concrete-roboport__/graphics/technology/concrete-roboport.png",
+	icon = mod_directory .. "/graphics/technology/concrete-roboport.png",
 	effects =
 	{
 		{

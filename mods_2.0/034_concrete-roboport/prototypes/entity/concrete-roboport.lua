@@ -10,7 +10,6 @@ roboport.fast_replaceable_group = "roboport"
 ---------------------------------
 roboportmk2 = table.deepcopy(roboport)
 roboportmk2.name = "concrete-roboport"
-roboportmk2.localised_description = { "entity-description.roboport" }
 roboportmk2.minable.result = "concrete-roboport"
 roboportmk2.fast_replaceable_group = "roboport"
 roboportmk2.corpse = "concrete-roboport-remnants"
@@ -35,13 +34,13 @@ roboportmk2.corpse = "concrete-roboport-remnants"
 -- }
 
 -- new textures
-roboportmk2.base.layers[1].filename = "__concrete-roboport__/graphics/entity/concrete-roboport/concrete-roboport-base.png"
+roboportmk2.base.layers[1].filename = mod_directory .. "/graphics/entity/concrete-roboport/concrete-roboport-base.png"
 
-roboportmk2.base_patch.filename = "__concrete-roboport__/graphics/entity/concrete-roboport/concrete-roboport-base-patch.png"
+roboportmk2.base_patch.filename = mod_directory .. "/graphics/entity/concrete-roboport/concrete-roboport-base-patch.png"
 
-roboportmk2.door_animation_down.filename = "__concrete-roboport__/graphics/entity/concrete-roboport/concrete-roboport-door-down.png"
+roboportmk2.door_animation_down.filename = mod_directory .. "/graphics/entity/concrete-roboport/concrete-roboport-door-down.png"
 
-roboportmk2.door_animation_up.filename = "__concrete-roboport__/graphics/entity/concrete-roboport/concrete-roboport-door-up.png"
+roboportmk2.door_animation_up.filename = mod_directory .. "/graphics/entity/concrete-roboport/concrete-roboport-door-up.png"
 
 data:extend({ roboportmk2 })
 
@@ -54,7 +53,7 @@ roboportmk2_remnants.name = "concrete-roboport-remnants"
 
 -- new textures
 for _, anim in pairs(roboportmk2_remnants.animation) do
-	anim.filename = "__concrete-roboport__/graphics/entity/concrete-roboport/remnants/concrete-roboport-remnants.png"
+	anim.filename = mod_directory .. "/graphics/entity/concrete-roboport/remnants/concrete-roboport-remnants.png"
 end
 
 data:extend({ roboportmk2_remnants })

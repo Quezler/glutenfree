@@ -3,6 +3,7 @@ Version: 0.0.6
 Date: ????
   Info:
     - Clear up warnings
+    - Touch up the localization and yeet the mothballs
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 15
