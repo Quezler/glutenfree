@@ -35,5 +35,5 @@ local created_effect = {
   }
 }
 
-assert(construction_robot.created_effect == nil)
+assert(construction_robot.created_effect == nil, serpent.block(construction_robot.created_effect))
 construction_robot.created_effect = created_effect

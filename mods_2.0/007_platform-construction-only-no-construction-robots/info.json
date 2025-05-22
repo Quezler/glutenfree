@@ -1,9 +1,9 @@
 {
     "name": "platform-construction-only-no-construction-robots",
-    "title": "Platform construction only, no construction robots.",
-    "description": "You get the building scaffolds on every surface.",
+    "title": "Platform construction only, no construction robots",
+    "description": "The construction bots instantly use scaffolds.",
 
-    "version": "1.2.2",
+    "version": "1.2.3",
     "author": "Quezler",
     "factorio_version": "2.0",
 

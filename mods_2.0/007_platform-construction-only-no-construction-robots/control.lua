@@ -39,11 +39,11 @@ function Handler.on_tick_robots(event)
   for unit_number, entity in pairs(storage.construction_robots) do
     if entity.valid then
       local robot_order_queue = entity.robot_order_queue
-      local this_order = robot_order_queue[1]
-
-      if this_order and this_order.target then -- target can sometimes be optional
-        if this_order.type == defines.robot_order_type.construct then
-          Handler.request_platform_animation_for(this_order.target)
+      for _, order in ipairs(robot_order_queue) do
+        if order.target then -- target can sometimes be optional
+          if order.type == defines.robot_order_type.construct then
+            Handler.request_platform_animation_for(order.target)
+          end
         end
       end
     else
