@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Clear up warnings
     - Touch up the localization and yeet the mothballs
+    - Touch up the control stage
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 15

@@ -38,8 +38,7 @@ function ConcreteRoboport.on_surface_deleted(event)
 end
 
 function ConcreteRoboport.on_created_entity(event)
-  local entity = event.created_entity or event.entity or event.destination
-  if entity.name ~= "concrete-roboport" then return end
+  local entity = event.entity or event.destination
   game.print("concrete roboport created")
 
   ConcreteRoboport.mycelium(entity.surface, entity.position, entity.force)
@@ -206,7 +205,7 @@ function ConcreteRoboport.on_object_destroyed(event)
   local tuple = storage.deathrattles[event.registration_number]
   if tuple then storage.deathrattles[event.registration_number] = nil
     local network = storage.surfaces[tuple[1]].networks[tuple[2]]
-    ConcreteNetwork.sub_roboport(network, {unit_number = event.unit_number})
+    ConcreteNetwork.sub_roboport(network, {unit_number = event.useful_id})
     game.print(string.format("network %d destroyed", tuple[2]))
   end
 end
