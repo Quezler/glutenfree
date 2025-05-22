@@ -8,6 +8,7 @@ Date: ????
     - Write #mod-dev-showcase post
     - Restrict to player played tiles
     - Have roboports register a network struct always
+    - Fix crash when placing concrete under two unconnected roboports
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 15

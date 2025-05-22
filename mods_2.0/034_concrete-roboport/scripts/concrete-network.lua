@@ -24,6 +24,7 @@ function ConcreteNetwork.add_roboport(network, roboport)
 end
 
 function ConcreteNetwork.sub_roboport(network, roboport)
+  -- log("removing roboport " .. roboport.unit_number)
   if network.roboport[roboport.unit_number] == nil then error("roboport not part of this network") end
 
   network.roboports = network.roboports - 1
@@ -33,12 +34,14 @@ function ConcreteNetwork.sub_roboport(network, roboport)
 
   -- assert(network.roboports >= 0)
   if network.roboports == 0 then
-    game.print("destroy network")
+    -- log("destroy network " .. network.index)
     ConcreteNetwork.destroy(network)
   end
 end
 
 function ConcreteNetwork.destroy(network)
+  network.valid = false
+
   for _, roboport_tile in pairs(network.tile) do
     roboport_tile.destroy()
   end

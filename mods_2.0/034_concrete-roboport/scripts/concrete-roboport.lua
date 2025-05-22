@@ -92,6 +92,7 @@ function ConcreteRoboport.mycelium(surface, position, force)
 
   -- setup struct
   local network = {
+    valid = true,
     index = network_index,
     surface_index = surface.index,
     force_index = force.index,
@@ -209,9 +210,11 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
   end
 
   for _, network in pairs(encroached) do
-    local roboport = table_first(network.roboport)
-    local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
-    ConcreteRoboport.mycelium(surface, roboport.position, game.forces[network.force_index])
+    if network.valid then
+      local roboport = assert(table_first(network.roboport))
+      local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
+      ConcreteRoboport.mycelium(surface, roboport.position, game.forces[network.force_index])
+    end
   end
 
 end
