@@ -7,6 +7,7 @@ Date: ????
     - Touch up the control stage
     - Write #mod-dev-showcase post
     - Restrict to player played tiles
+    - Have roboports register a network struct always
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2024. 11. 15

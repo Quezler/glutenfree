@@ -60,10 +60,14 @@ function ConcreteRoboport.mycelium(surface, position, force)
   ---@type LuaTile
   ---@diagnostic disable-next-line: param-type-mismatch, missing-parameter
   local origin_tile = surface.get_tile(position)
-  if not allowed_tiles[origin_tile.name] then return end
+
+  local tile_names = {}
+  if allowed_tiles[origin_tile.name] then
+    table.insert(tile_names, origin_tile.name)
+  end
 
   ---@type TilePosition[]
-  local tiles = surface.get_connected_tiles(position, {origin_tile.name}, true)
+  local tiles = surface.get_connected_tiles(position, tile_names, true)
 
   game.print("#tiles " .. #tiles)
 
@@ -77,7 +81,10 @@ function ConcreteRoboport.mycelium(surface, position, force)
   end
 
   game.print("#roboports " .. table_size(roboports))
-  if table_size(roboports) == 0 then return end -- no roboports, cannot create a network here
+  if table_size(roboports) == 0 then
+    local roboport_here = surface.find_entity("concrete-roboport", position)
+    table.insert(roboports, assert(roboport_here))
+  end
 
   -- assign id
   local network_index = storage.next_network_index or 1
@@ -170,7 +177,7 @@ function ConcreteRoboport.on_selected_entity_changed(event)
         name = "highlight-box",
         position = {0, 0},
         -- bounding_box = network.area,
-        bounding_box = {{network.min_x, network.min_y}, {network.max_x + 1, network.max_y + 1}},
+        bounding_box = {{network.min_x-0.2, network.min_y-0.2}, {network.max_x + 1 + 0.2, network.max_y + 1 + 0.2}},
         box_type = "train-visualization",
         render_player_index = player.index,
         time_to_live = 60 * 60 * 60, -- timeout after a minute in case we lose track of it
