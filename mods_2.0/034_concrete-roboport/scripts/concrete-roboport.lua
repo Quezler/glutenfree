@@ -9,6 +9,14 @@ local ConcreteNetwork = require("scripts.concrete-network")
 
 local ConcreteRoboport = {}
 
+local allowed_tiles = {}
+for _, tile in pairs(prototypes.tile) do
+  if tile.mineable_properties.minable then
+    allowed_tiles[tile.name] = true
+  end
+end
+-- log(serpent.block(allowed_tiles))
+
 function ConcreteRoboport.on_init(event)
   storage.surfaces = {}
 
@@ -52,12 +60,12 @@ function ConcreteRoboport.mycelium(surface, position, force)
   ---@type LuaTile
   ---@diagnostic disable-next-line: param-type-mismatch, missing-parameter
   local origin_tile = surface.get_tile(position)
+  if not allowed_tiles[origin_tile.name] then return end
 
   ---@type TilePosition[]
   local tiles = surface.get_connected_tiles(position, {origin_tile.name}, true)
 
   game.print("#tiles " .. #tiles)
-  game.print("minable? ".. tostring(origin_tile.prototype.mineable_properties.minable))
 
   local roboports = {}
 
