@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
-Date: ????
+Date: 2025. 05. 22
   Info:
     - Clear up warnings
     - Touch up the localization and yeet the mothballs

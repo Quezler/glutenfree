@@ -24,8 +24,7 @@ function ConcreteRoboport.on_init(event)
     ConcreteRoboport.on_surface_created({surface_index = surface.index})
   end
 
-  -- storage.next_network_index = 1
-  -- storage.networks = {}
+  storage.next_network_index = 1
 
   storage.unit_number_to_network_index = {}
 
@@ -87,7 +86,7 @@ function ConcreteRoboport.mycelium(surface, position, force)
   end
 
   -- assign id
-  local network_index = storage.next_network_index or 1
+  local network_index = storage.next_network_index
   storage.next_network_index = network_index + 1
 
   -- setup struct
