@@ -176,12 +176,32 @@ function mod.try_to_take_out_used_filters(struct)
     force = entity.force,
     limit = 1,
   }
-  if #nearby_construction_robots == 0 then return end
+  if #nearby_construction_robots > 0 then
+    local cargo = nearby_construction_robots[1].get_inventory(defines.inventory.robot_cargo)
+    if not cargo.is_empty() then return end
 
-  local cargo = nearby_construction_robots[1].get_inventory(defines.inventory.robot_cargo)
-  if not cargo.is_empty() then return end
+    struct.furnace_result_stack.swap_stack(cargo[1])
+  else
+    local removal_plan = {
+      {id = {name = "kr-used-pollution-filter"}, items = {in_inventory = {
+        {inventory = defines.inventory.furnace_result, stack = 0, count = struct.furnace_result_stack.count}
+      }}}
+    }
+    local proxy = entity.item_request_proxy
+    if proxy then
+      proxy.removal_plan = removal_plan
+    else
+      entity.surface.create_entity{
+        name = "item-request-proxy",
+        force = entity.force,
+        position = entity.position,
 
-  struct.furnace_result_stack.swap_stack(cargo[1])
+        target = entity,
+        modules = {},
+        removal_plan = removal_plan
+      }
+    end
+  end
 end
 
 for _, event in ipairs({
