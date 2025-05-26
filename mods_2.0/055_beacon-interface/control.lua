@@ -60,6 +60,8 @@ for entity_name, _ in pairs(is_beacon_interface) do
 end
 -- log(serpent.line(on_created_entity_filters))
 
+assert(#on_created_entity_filters > 0, serpent.block(prototypes.get_history("beacon", mod_prefix .. "beacon")))
+
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
