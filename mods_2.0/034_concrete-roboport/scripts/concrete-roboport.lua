@@ -88,9 +88,6 @@ function ConcreteRoboport.mycelium(surface, position, force)
 
   ---@type TilePosition[]
   local tiles = surface.get_connected_tiles(position, {origin_tile.name}, true)
-
-  log("#tiles " .. #tiles)
-
   local roboports = {}
 
   for _, tile in ipairs(tiles) do
@@ -100,13 +97,11 @@ function ConcreteRoboport.mycelium(surface, position, force)
     if roboport then roboports[roboport.unit_number] = roboport end
   end
 
-  log("#roboports " .. table_size(roboports))
-
   -- assign id
   local network_index = storage.next_network_index
   storage.next_network_index = network_index + 1
 
-  log(string.format('creating network #%d', network_index))
+  log(string.format("creating network #%d with roboports and %d tiles.", network_index, table_size(roboports), #tiles))
 
   -- setup struct
   local network = {

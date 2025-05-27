@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
-Date: ????
+Date: 2025. 05. 27
   Info:
     - Cleanup network creation and deletion
     - Upgrade to surfacedata
