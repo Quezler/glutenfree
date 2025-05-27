@@ -1,10 +1,10 @@
 require("shared")
 
-function table_first(table)
-  for key, value in pairs(table) do
-    return value
-  end
-end
+-- function table_first(table)
+--   for key, value in pairs(table) do
+--     return value
+--   end
+-- end
 
 local ConcreteRoboport = require("scripts.concrete-roboport")
 

@@ -208,7 +208,7 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
 
   for _, network in pairs(encroached) do
     if network.valid then
-      local roboport = assert(table_first(network.roboport))
+      local roboport = assert(next(network.roboport))
       local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
       ConcreteRoboport.mycelium(surface, roboport.position, game.forces[network.force_index]) -- can invalidate networks
     end
