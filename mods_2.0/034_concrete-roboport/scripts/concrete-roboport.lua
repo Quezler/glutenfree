@@ -1,11 +1,16 @@
-local flib_bounding_box = require("__flib__.bounding-box")
-
 -- local util = require("__core__.lualib.util")
 -- if table_size(util.direction_vectors) ~= 8 then error("util.direction_vectors ~= 8") end
 
 local ConcreteNetwork = require("scripts.concrete-network")
 
 --
+
+local function position_inside_area(position, area)
+ return area[1][1] <= position.x
+    and area[1][2] <= position.y
+    and area[2][1] >= position.x
+    and area[2][2] >= position.y
+end
 
 local mod = {}
 local ConcreteRoboport = {}
@@ -28,7 +33,7 @@ function ConcreteRoboport.on_init()
 
   storage.player_index_to_highlight_box = {}
 
-  storage.deathrattles = {} -- [registration_number = {surface_index = #, network_index = #}]
+  storage.deathrattles = {} -- {registration_number = {surface_index = #, network_index = #}}
 end
 
 function ConcreteRoboport.on_configuration_changed(event)
@@ -205,7 +210,7 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
   for _, network in pairs(networks) do
     for _, tile in ipairs(event.tiles) do
       -- one of the new tiles is touching the selection box of the network
-      if flib_bounding_box.contains_position({{network.min_x - 1, network.min_y - 1}, {network.max_x + 1, network.max_y + 1}}, tile.position) then
+      if position_inside_area(tile.position, {{network.min_x - 1, network.min_y - 1}, {network.max_x + 1, network.max_y + 1}}) then
         print(event.tick .. " encroaching on network " .. network.index)
         print("total networks: " .. table_size(networks))
         encroached[network.index] = network

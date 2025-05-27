@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Cleanup network creation and deletion
     - Upgrade to surfacedata
+    - Remove flib dependency
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 05. 22
