@@ -89,6 +89,8 @@ function ConcreteRoboport.mycelium(surface, position, force)
   local network_index = storage.next_network_index
   storage.next_network_index = network_index + 1
 
+  log(string.format('creating network #%d', network_index))
+
   -- setup struct
   local network = {
     valid = true,
@@ -212,18 +214,17 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
     if network.valid then
       local roboport = assert(table_first(network.roboport))
       local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
-      ConcreteRoboport.mycelium(surface, roboport.position, game.forces[network.force_index])
+      ConcreteRoboport.mycelium(surface, roboport.position, game.forces[network.force_index]) -- can invalidate networks
     end
   end
 
 end
 
 function ConcreteRoboport.on_object_destroyed(event)
-  local tuple = storage.deathrattles[event.registration_number]
-  if tuple then storage.deathrattles[event.registration_number] = nil
-    local network = storage.surfaces[tuple[1]].networks[tuple[2]]
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    local network = storage.surfaces[deathrattle.surface_index].networks[deathrattle.network_index]
     ConcreteNetwork.sub_roboport(network, {unit_number = event.useful_id})
-    game.print(string.format("network %d destroyed", tuple[2]))
   end
 end
 

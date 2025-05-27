@@ -20,7 +20,7 @@ function ConcreteNetwork.add_roboport(network, roboport)
 
   storage.unit_number_to_network_index[roboport.unit_number] = network.index
 
-  storage.deathrattles[script.register_on_object_destroyed(roboport)] = {roboport.surface.index, network.index}
+  storage.deathrattles[script.register_on_object_destroyed(roboport)] = {surface_index = roboport.surface.index, network_index = network.index}
 end
 
 function ConcreteNetwork.sub_roboport(network, roboport)
@@ -40,6 +40,7 @@ function ConcreteNetwork.sub_roboport(network, roboport)
 end
 
 function ConcreteNetwork.destroy(network)
+  log(string.format('deleting network #%d', network.index))
   network.valid = false
 
   for _, roboport_tile in pairs(network.tile) do
