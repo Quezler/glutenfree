@@ -7,6 +7,7 @@ local ConcreteNetwork = require("scripts.concrete-network")
 
 --
 
+local mod = {}
 local ConcreteRoboport = {}
 
 local allowed_tiles = {}
@@ -17,12 +18,9 @@ for _, tile in pairs(prototypes.tile) do
 end
 -- log(serpent.block(allowed_tiles))
 
-function ConcreteRoboport.on_init(event)
-  storage.surfaces = {}
-
-  for _, surface in pairs(game.surfaces) do
-    ConcreteRoboport.on_surface_created({surface_index = surface.index})
-  end
+function ConcreteRoboport.on_init()
+  storage.surfacedata = {}
+  mod.refresh_surfacedata()
 
   storage.next_network_index = 1
 
@@ -30,23 +28,37 @@ function ConcreteRoboport.on_init(event)
 
   storage.player_index_to_highlight_box = {}
 
-  storage.deathrattles = {} -- [{surface_index, network_index}]
+  storage.deathrattles = {} -- [registration_number = {surface_index = #, network_index = #}]
 end
 
-function ConcreteRoboport.on_surface_created(event)
-  storage.surfaces[event.surface_index] = {
-    networks = {},
-    tiles = {},
-  }
+function ConcreteRoboport.on_configuration_changed(event)
+  mod.refresh_surfacedata()
 end
 
-function ConcreteRoboport.on_surface_deleted(event)
-  storage.surfaces[event.surface_index] = nil
+function mod.refresh_surfacedata()
+  -- deleted old
+  for surface_index, surfacedata in pairs(storage.surfacedata) do
+    if surfacedata.surface.valid == false then
+      storage.surfacedata[surface_index] = nil
+    end
+  end
+
+  -- created new
+  for _, surface in pairs(game.surfaces) do
+    storage.surfacedata[surface.index] = storage.surfacedata[surface.index] or {
+      surface = surface,
+      networks = {},
+      tiles = {},
+    }
+  end
 end
+
+script.on_event(defines.events.on_surface_created, mod.refresh_surfacedata)
+script.on_event(defines.events.on_surface_deleted, mod.refresh_surfacedata)
 
 function ConcreteRoboport.on_created_entity(event)
   local entity = event.entity or event.destination
-  game.print("concrete roboport created")
+  log("concrete roboport created")
 
   ConcreteRoboport.mycelium(entity.surface, entity.position, entity.force)
 end
@@ -59,16 +71,14 @@ function ConcreteRoboport.mycelium(surface, position, force)
   ---@type LuaTile
   ---@diagnostic disable-next-line: param-type-mismatch, missing-parameter
   local origin_tile = surface.get_tile(position)
-
-  local tile_names = {}
-  if allowed_tiles[origin_tile.name] then
-    table.insert(tile_names, origin_tile.name)
+  if not allowed_tiles[origin_tile.name] then
+    return
   end
 
   ---@type TilePosition[]
-  local tiles = surface.get_connected_tiles(position, tile_names, true)
+  local tiles = surface.get_connected_tiles(position, {origin_tile.name}, true)
 
-  game.print("#tiles " .. #tiles)
+  log("#tiles " .. #tiles)
 
   local roboports = {}
 
@@ -79,11 +89,7 @@ function ConcreteRoboport.mycelium(surface, position, force)
     if roboport then roboports[roboport.unit_number] = roboport end
   end
 
-  game.print("#roboports " .. table_size(roboports))
-  if table_size(roboports) == 0 then
-    local roboport_here = surface.find_entity("concrete-roboport", position)
-    table.insert(roboports, assert(roboport_here))
-  end
+  log("#roboports " .. table_size(roboports))
 
   -- assign id
   local network_index = storage.next_network_index
@@ -133,7 +139,7 @@ function ConcreteRoboport.mycelium(surface, position, force)
   network.max_y = max_y
 
   -- store struct
-  storage.surfaces[surface.index].networks[network_index] = network
+  storage.surfacedata[surface.index].networks[network_index] = network
 
   -- highlight the network boundary on hovering any of its roboports
   for _, roboport in pairs(roboports) do
@@ -147,7 +153,7 @@ end
 ---@param force LuaForce
 ---@return LuaEntity (roboport)
 function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
-  local tiles = storage.surfaces[surface.index].tiles
+  local tiles = storage.surfacedata[surface.index].tiles
 
   if not tiles[position.x] then tiles[position.x] = {} end
   local tile = tiles[position.x][position.y]
@@ -174,7 +180,7 @@ function ConcreteRoboport.on_selected_entity_changed(event)
   if player.selected and player.selected.unit_number then
     local network_index = storage.unit_number_to_network_index[player.selected.unit_number]
     if network_index then
-      local network = storage.surfaces[player.selected.surface.index].networks[network_index]
+      local network = storage.surfacedata[player.selected.surface.index].networks[network_index]
       local entity = player.surface.create_entity{
         name = "highlight-box",
         position = {0, 0},
@@ -192,7 +198,7 @@ end
 
 function ConcreteRoboport.on_built_tile(event) -- player & robot
   -- print("on_built_tile")
-  local networks = storage.surfaces[event.surface_index].networks
+  local networks = storage.surfacedata[event.surface_index].networks
 
   local encroached = {}
 
@@ -223,7 +229,7 @@ end
 function ConcreteRoboport.on_object_destroyed(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    local network = storage.surfaces[deathrattle.surface_index].networks[deathrattle.network_index]
+    local network = storage.surfacedata[deathrattle.surface_index].networks[deathrattle.network_index]
     ConcreteNetwork.sub_roboport(network, {unit_number = event.useful_id})
   end
 end

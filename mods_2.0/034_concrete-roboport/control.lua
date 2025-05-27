@@ -11,12 +11,10 @@ local ConcreteRoboport = require("scripts.concrete-roboport")
 --
 
 script.on_init(ConcreteRoboport.on_init)
+script.on_configuration_changed(ConcreteRoboport.on_configuration_changed)
 
 local events = {
   [defines.events.on_selected_entity_changed] = ConcreteRoboport.on_selected_entity_changed,
-
-  [defines.events.on_surface_created] = ConcreteRoboport.on_surface_created,
-  [defines.events.on_surface_deleted] = ConcreteRoboport.on_surface_deleted,
 
   [defines.events.on_player_built_tile]         = ConcreteRoboport.on_built_tile,
   [defines.events.on_robot_built_tile]          = ConcreteRoboport.on_built_tile,

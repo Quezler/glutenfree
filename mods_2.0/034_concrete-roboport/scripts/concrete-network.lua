@@ -4,7 +4,7 @@ function ConcreteNetwork.add_roboport(network, roboport)
 
   local previous_network_index = storage.unit_number_to_network_index[roboport.unit_number]
   if previous_network_index then
-    local previous_network = storage.surfaces[network.surface_index].networks[previous_network_index]
+    local previous_network = storage.surfacedata[network.surface_index].networks[previous_network_index]
     if previous_network then
 
       -- todo: unbodge this hack
@@ -47,7 +47,7 @@ function ConcreteNetwork.destroy(network)
     roboport_tile.destroy()
   end
 
-  storage.surfaces[network.surface_index].networks[network.index] = nil
+  storage.surfacedata[network.surface_index].networks[network.index] = nil
 end
 
 return ConcreteNetwork
