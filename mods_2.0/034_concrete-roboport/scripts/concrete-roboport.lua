@@ -27,11 +27,14 @@ function ConcreteRoboport.on_init()
   storage.surfacedata = {}
   mod.refresh_surfacedata()
 
+  storage.invalid = game.create_inventory(0)
+  storage.invalid.destroy()
+
   storage.next_network_index = 1
 
   storage.unit_number_to_network_index = {}
 
-  storage.player_index_to_highlight_box = {}
+  -- storage.player_index_to_highlight_box = {}
 
   storage.deathrattles = {} -- {registration_number = {surface_index = #, network_index = #}}
 end
@@ -119,6 +122,8 @@ function ConcreteRoboport.mycelium(surface, position, force)
 
     tiles = 0,
     tile = {},
+
+    bounding_box = storage.invalid,
   }
 
   ConcreteNetwork.increase_bounding_box_to_contain_tiles(network, tiles)
@@ -160,31 +165,31 @@ function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
   return assert(tile)
 end
 
-function ConcreteRoboport.on_selected_entity_changed(event)
-  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+-- function ConcreteRoboport.on_selected_entity_changed(event)
+--   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
-  if storage.player_index_to_highlight_box[player.index] then
-     storage.player_index_to_highlight_box[player.index].destroy()
-     storage.player_index_to_highlight_box[player.index] = nil
-  end
+--   if storage.player_index_to_highlight_box[player.index] then
+--      storage.player_index_to_highlight_box[player.index].destroy()
+--      storage.player_index_to_highlight_box[player.index] = nil
+--   end
 
-  if player.selected and player.selected.unit_number then
-    local network_index = storage.unit_number_to_network_index[player.selected.unit_number]
-    if network_index then
-      local network = storage.surfacedata[player.selected.surface.index].networks[network_index]
-      local entity = player.surface.create_entity{
-        name = "highlight-box",
-        position = {0, 0},
-        bounding_box = {{network.min_x - 0.2, network.min_y - 0.2}, {network.max_x + 1 + 0.2, network.max_y + 1 + 0.2}},
-        box_type = "train-visualization",
-        render_player_index = player.index,
-        time_to_live = 60 * 60 * 60, -- timeout after a minute in case we lose track of it
-      }
+--   if player.selected and player.selected.unit_number then
+--     local network_index = storage.unit_number_to_network_index[player.selected.unit_number]
+--     if network_index then
+--       local network = storage.surfacedata[player.selected.surface.index].networks[network_index]
+--       local entity = player.surface.create_entity{
+--         name = "highlight-box",
+--         position = {0, 0},
+--         bounding_box = {{network.min_x - 0.2, network.min_y - 0.2}, {network.max_x + 1 + 0.2, network.max_y + 1 + 0.2}},
+--         box_type = "train-visualization",
+--         render_player_index = player.index,
+--         time_to_live = 60 * 60 * 60, -- timeout after a minute in case we lose track of it
+--       }
 
-      storage.player_index_to_highlight_box[player.index] = entity
-    end
-  end
-end
+--       storage.player_index_to_highlight_box[player.index] = entity
+--     end
+--   end
+-- end
 
 function ConcreteRoboport.on_built_tile(event) -- player & robot
   -- print("on_built_tile")
@@ -208,7 +213,7 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
 
   for _, network in pairs(encroached) do
     if network.valid then
-      local roboport = assert(next(network.roboport))
+      local _, roboport = assert(next(network.roboport))
       local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
       ConcreteRoboport.mycelium(surface, roboport.position, game.forces[network.force_index]) -- can invalidate networks
     end

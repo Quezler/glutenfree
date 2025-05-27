@@ -42,6 +42,7 @@ end
 function ConcreteNetwork.destroy(network)
   log(string.format('deleting network #%d', network.index))
   network.valid = false
+  network.bounding_box.destroy()
 
   for _, roboport_tile in pairs(network.tile) do
     roboport_tile.destroy()
@@ -67,6 +68,15 @@ function ConcreteNetwork.increase_bounding_box_to_contain_tiles(network, tiles)
   network.max_x = max_x
   network.min_y = min_y
   network.max_y = max_y
+
+  network.bounding_box.destroy() -- probably never called
+  network.bounding_box = game.get_surface(network.surface_index).create_entity{
+    name = "highlight-box",
+    position = {0, 0},
+    bounding_box = {{network.min_x - 0.2, network.min_y - 0.2}, {network.max_x + 1 + 0.2, network.max_y + 1 + 0.2}},
+    box_type = "train-visualization",
+    time_to_live = 60 * 60 * 60,
+  }
 end
 
 return ConcreteNetwork
