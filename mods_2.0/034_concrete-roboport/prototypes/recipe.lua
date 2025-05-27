@@ -8,7 +8,7 @@ concrete_roboport_recipe =
 	ingredients =
 	{
 		{type = "item", name = "roboport", amount = 1},
-		{type = "item", name = "concrete", amount = 20},
+		{type = "item", name = "concrete", amount = 10},
 	},
 	results = {{type = "item", name = "concrete-roboport", amount = 1}},
 }

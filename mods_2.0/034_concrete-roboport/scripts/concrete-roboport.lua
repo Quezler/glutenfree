@@ -68,13 +68,15 @@ function ConcreteRoboport.on_created_entity(event)
   local entity = event.entity or event.destination
   log("concrete roboport created")
 
-  ConcreteRoboport.mycelium(entity.surface, entity.position, entity.force)
+  ConcreteRoboport.mycelium(entity.surface, {x = math.floor(entity.position.x), y = math.floor(entity.position.y)}, entity.force)
 end
 
 ---@param surface LuaSurface
 ---@param position TilePosition
 ---@param force LuaForce
 function ConcreteRoboport.mycelium(surface, position, force)
+  assert(position.x == math.floor(position.x))
+  assert(position.y == math.floor(position.y))
 
   ---@type LuaTile
   ---@diagnostic disable-next-line: param-type-mismatch, missing-parameter
@@ -215,7 +217,7 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
     if network.valid then
       local _, roboport = assert(next(network.roboport))
       local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
-      ConcreteRoboport.mycelium(surface, roboport.position, game.forces[network.force_index]) -- can invalidate networks
+      ConcreteRoboport.mycelium(surface, {x = math.floor(roboport.position.x), y = math.floor(roboport.position.y)}, game.forces[network.force_index]) -- can invalidate networks
     end
   end
 

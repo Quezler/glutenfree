@@ -9,6 +9,7 @@ Date: ????
     - React to tile removal events
     - Replace table_first with next
     - Keep the visualisation on permanently for now
+    - Shrink to 3x3 tiles so the center is obvious
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 05. 22
