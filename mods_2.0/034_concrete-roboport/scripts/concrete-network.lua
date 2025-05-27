@@ -50,4 +50,23 @@ function ConcreteNetwork.destroy(network)
   storage.surfacedata[network.surface_index].networks[network.index] = nil
 end
 
+function ConcreteNetwork.increase_bounding_box_to_contain_tiles(network, tiles)
+  local min_x = network.min_x
+  local max_x = network.max_x
+  local min_y = network.min_y
+  local max_y = network.max_y
+
+  for _, tile in ipairs(tiles) do
+    if tile.x < min_x then min_x = tile.x end
+    if tile.x > max_x then max_x = tile.x end
+    if tile.y < min_y then min_y = tile.y end
+    if tile.y > max_y then max_y = tile.y end
+  end
+
+  network.min_x = min_x
+  network.max_x = max_x
+  network.min_y = min_y
+  network.max_y = max_y
+end
+
 return ConcreteNetwork

@@ -109,10 +109,10 @@ function ConcreteRoboport.mycelium(surface, position, force)
     surface_index = surface.index,
     force_index = force.index,
 
-    min_x = nil,
-    max_x = nil,
-    min_y = nil,
-    max_y = nil,
+    min_x = position.x,
+    max_x = position.x,
+    min_y = position.y,
+    max_y = position.y,
 
     roboports = 0,
     roboport = {},
@@ -121,27 +121,13 @@ function ConcreteRoboport.mycelium(surface, position, force)
     tile = {},
   }
 
-  local min_x = position.x - 2
-  local max_x = position.x + 1
-  local min_y = position.y - 2
-  local max_y = position.y + 1
-
+  ConcreteNetwork.increase_bounding_box_to_contain_tiles(network, tiles)
   for _, tile in ipairs(tiles) do
-    if tile.x < min_x then min_x = tile.x end
-    if tile.x > max_x then max_x = tile.x end
-    if tile.y < min_y then min_y = tile.y end
-    if tile.y > max_y then max_y = tile.y end
-
     local roboport_tile = ConcreteRoboport.get_or_create_roboport_tile(surface, tile, force)
 
     network.tiles = network.tiles + 1
     network.tile[roboport_tile.unit_number] = roboport_tile
   end
-
-  network.min_x = min_x
-  network.max_x = max_x
-  network.min_y = min_y
-  network.max_y = max_y
 
   -- store struct
   storage.surfacedata[surface.index].networks[network_index] = network
