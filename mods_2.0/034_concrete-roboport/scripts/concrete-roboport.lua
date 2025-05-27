@@ -175,8 +175,7 @@ function ConcreteRoboport.on_selected_entity_changed(event)
       local entity = player.surface.create_entity{
         name = "highlight-box",
         position = {0, 0},
-        -- bounding_box = network.area,
-        bounding_box = {{network.min_x-0.2, network.min_y-0.2}, {network.max_x + 1 + 0.2, network.max_y + 1 + 0.2}},
+        bounding_box = {{network.min_x - 0.2, network.min_y - 0.2}, {network.max_x + 1 + 0.2, network.max_y + 1 + 0.2}},
         box_type = "train-visualization",
         render_player_index = player.index,
         time_to_live = 60 * 60 * 60, -- timeout after a minute in case we lose track of it
@@ -197,10 +196,10 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
     for _, tile in ipairs(event.tiles) do
       -- one of the new tiles is touching the selection box of the network
       if position_inside_area(tile.position, {{network.min_x - 1, network.min_y - 1}, {network.max_x + 1, network.max_y + 1}}) then
-        print(event.tick .. " encroaching on network " .. network.index)
-        print("total networks: " .. table_size(networks))
+        log(event.tick .. " encroaching on network " .. network.index)
+        log("total networks: " .. table_size(networks))
         encroached[network.index] = network
-        -- print("skipping network id " .. network.index)
+        -- log("skipping network id " .. network.index)
         goto next_network
       end
     end

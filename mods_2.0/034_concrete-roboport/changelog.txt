@@ -6,6 +6,7 @@ Date: ????
     - Upgrade to surfacedata
     - Remove flib dependency
     - Move bounding box expander into its own function
+    - React to tile removal events
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 05. 22

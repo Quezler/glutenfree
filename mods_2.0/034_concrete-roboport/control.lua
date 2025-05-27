@@ -19,7 +19,12 @@ local events = {
   [defines.events.on_player_built_tile]         = ConcreteRoboport.on_built_tile,
   [defines.events.on_robot_built_tile]          = ConcreteRoboport.on_built_tile,
   [defines.events.on_space_platform_built_tile] = ConcreteRoboport.on_built_tile,
+
   [defines.events.script_raised_set_tiles]      = ConcreteRoboport.on_built_tile,
+
+  [defines.events.on_player_mined_tile]         = ConcreteRoboport.on_built_tile,
+  [defines.events.on_robot_mined_tile]          = ConcreteRoboport.on_built_tile,
+  [defines.events.on_space_platform_mined_tile] = ConcreteRoboport.on_built_tile,
 
   [defines.events.on_object_destroyed] = ConcreteRoboport.on_object_destroyed,
 }
