@@ -10,6 +10,7 @@ Date: ????
     - Replace table_first with next
     - Keep the visualisation on permanently for now
     - Shrink to 3x3 tiles so the center is obvious
+    - Fix some instances where tile roboports got orphaned
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 05. 22

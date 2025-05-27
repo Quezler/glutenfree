@@ -57,6 +57,7 @@ function mod.refresh_surfacedata()
       surface = surface,
       networks = {},
       tiles = {},
+      roboport_tile_owner = {}, -- {unit_number = network_index}
     }
   end
 end
@@ -128,16 +129,18 @@ function ConcreteRoboport.mycelium(surface, position, force)
     bounding_box = storage.invalid,
   }
 
+  local surfacedata = storage.surfacedata[surface.index]
   ConcreteNetwork.increase_bounding_box_to_contain_tiles(network, tiles)
   for _, tile in ipairs(tiles) do
     local roboport_tile = ConcreteRoboport.get_or_create_roboport_tile(surface, tile, force)
+    surfacedata.roboport_tile_owner[roboport_tile.unit_number] = network_index
 
     network.tiles = network.tiles + 1
     network.tile[roboport_tile.unit_number] = roboport_tile
   end
 
   -- store struct
-  storage.surfacedata[surface.index].networks[network_index] = network
+  surfacedata.networks[network_index] = network
 
   -- highlight the network boundary on hovering any of its roboports
   for _, roboport in pairs(roboports) do
