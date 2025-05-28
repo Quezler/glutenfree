@@ -70,7 +70,7 @@ recipe.hidden = true
 recipe.category = crafting_category.name
 recipe.enabled = true
 recipe.energy_required = 0.1
-assert(#recipe.results == 1)
+assert(#recipe.results == 1, serpent.block(recipe.results))
 
 assembler.fixed_recipe = recipe.name
 assembler.fixed_quality = "normal"
