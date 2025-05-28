@@ -52,12 +52,17 @@ script.on_load(function()
   end
 end)
 
+local alt_mode_creation_allowed = false
+
 function mod.on_created_entity(event)
   local entity = event.entity or event.destination
   local surfacedata = storage.surfacedata[entity.surface.index]
 
   if entity.name == "elevated-pipe-alt-mode" then
-    return entity.destroy()
+    if not alt_mode_creation_allowed then
+      entity.destroy()
+    end
+    return
   end
 
   -- if bottleneck is installed we have no choice but to hide it from all the mods
@@ -85,12 +90,16 @@ function mod.on_created_entity(event)
     occluder_tip = nil,
   })
 
+  alt_mode_creation_allowed = true
   struct.alt_mode = entity.surface.create_entity{
     name = "elevated-pipe-alt-mode",
     force = entity.force,
     position = entity.position,
     create_build_effect_smoke = false,
+    raise_built = true,
   }
+  alt_mode_creation_allowed = false
+
   struct.alt_mode.destructible = false
   struct.alt_mode.fluidbox.add_linked_connection(0, entity, 0)
 
@@ -109,16 +118,6 @@ function mod.on_created_entity(event)
     surface_index = entity.surface_index,
     unit_number = entity.unit_number,
   }
-
-  if script.active_mods["factorissimo-2-notnotmelon"] then
-    struct.gingarou_hotel_planned_hotspring_site = entity.surface.create_entity{
-      name = mod_prefix .. "gingarou-hotel-planned-hotspring-site",
-      force = entity.force,
-      position = entity.position,
-      create_build_effect_smoke = false,
-      raise_built = true,
-    }
-  end
 
   mod.mark_surface_dirty(surfacedata.surface)
 end
@@ -185,6 +184,9 @@ local deathrattles = {
     if surfacedata then
       local struct = surfacedata.structs[deathrattle.unit_number]
       if struct then surfacedata.structs[deathrattle.unit_number] = nil
+        if struct.alt_mode.valid then
+          script.raise_script_destroy{entity = struct.alt_mode}
+        end
         struct.alt_mode.destroy()
         for _, connection in pairs(struct.connections) do
           for player_index, sprites in pairs(connection.player_sprites) do
@@ -192,10 +194,6 @@ local deathrattles = {
               sprite.destroy()
             end
           end
-        end
-        if struct.gingarou_hotel_planned_hotspring_site then
-          script.raise_event(defines.events.script_raised_destroy, {entity = struct.gingarou_hotel_planned_hotspring_site})
-          struct.gingarou_hotel_planned_hotspring_site.destroy()
         end
       end
       mod.mark_surface_dirty(surfacedata.surface)
