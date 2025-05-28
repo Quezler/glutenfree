@@ -1,5 +1,16 @@
 require("shared")
 
+local function poles_only(furnace)
+  for _, circuit_connector in ipairs(furnace.circuit_connector) do
+    circuit_connector.sprites.connector_main = nil
+    circuit_connector.sprites.connector_shadow = nil
+    circuit_connector.sprites.led_red = util.empty_sprite()
+    circuit_connector.sprites.led_green = util.empty_sprite()
+    circuit_connector.sprites.led_blue = util.empty_sprite()
+    circuit_connector.sprites.led_blue_off = nil
+  end
+end
+
 data:extend{{
   type = "recipe-category",
   name = mod_name,
@@ -8,7 +19,7 @@ data:extend{{
 for i = 0, 39 do
   local two_character_number = string.format("%02d", i)
 
-  data:extend{{
+  local furnace = {
     type = "furnace",
     name = mod_prefix .. "furnace-" .. two_character_number,
     icon = mod_directory .. "/graphics/icons/variation-" .. two_character_number .. ".png",
@@ -56,7 +67,13 @@ for i = 0, 39 do
     }},
 
     hidden = true,
-  }}
+  }
+
+  if settings.startup[mod_prefix .. "hide-yellow-base"].value then
+    poles_only(furnace)
+  end
+
+  data:extend{furnace}
 end
 
 data:extend{
