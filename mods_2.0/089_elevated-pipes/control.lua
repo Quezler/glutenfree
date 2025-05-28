@@ -25,6 +25,8 @@ function mod.foreach_struct(callback)
       callback(struct)
     end
   end
+
+  if script.active_mods["Bottleneck"] then mod.check_all_stoplights() end
 end
 
 script.on_configuration_changed(function()
@@ -44,6 +46,8 @@ script.on_configuration_changed(function()
   for _, surface in pairs(game.surfaces) do
     mod.mark_surface_dirty(surface)
   end
+
+  if script.active_mods["Bottleneck"] then mod.check_all_stoplights() end
 end)
 
 script.on_load(function()
@@ -63,18 +67,6 @@ function mod.on_created_entity(event)
       entity.destroy()
     end
     return
-  end
-
-  -- if bottleneck is installed we have no choice but to hide it from all the mods
-  if script.active_mods["Bottleneck"] then
-    local new_entity = entity.surface.create_entity{
-      name = entity.name,
-      force = entity.force,
-      position = entity.position,
-      create_build_effect_smoke = false,
-    }
-    entity.destroy()
-    entity = new_entity
   end
 
   entity.custom_status = {
@@ -397,3 +389,32 @@ script.on_event(defines.events.on_gui_opened, function(event)
     end
   end
 end)
+
+if script.active_mods["Bottleneck"] then
+  function mod.check_stoplight(stoplight)
+    local elevated_pipes = stoplight.surface.find_entities_filtered{
+      position = {stoplight.position.x + 0.5,stoplight.position.y - 0.47},
+      radius = 0.1,
+      name = "elevated-pipe",
+    }
+
+    if #elevated_pipes > 0 then
+      stoplight.teleport({1000000, 1000000}) -- you are going to brazil!
+    end
+  end
+
+  function mod.check_all_stoplights()
+    for _, surface in pairs(game.surfaces) do
+      for _, stoplight in ipairs(surface.find_entities_filtered{name = "bottleneck-stoplight"}) do
+        mod.check_stoplight(stoplight)
+      end
+    end
+  end
+
+  ---@param event EventData.on_script_trigger_effect
+  script.on_event(defines.events.on_script_trigger_effect, function(event)
+    if event.effect_id == "bottleneck-stoplight-created" then
+      mod.check_stoplight(event.target_entity)
+    end
+  end)
+end
