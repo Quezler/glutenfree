@@ -383,3 +383,17 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     end)
   end
 end)
+
+script.on_event(defines.events.on_gui_opened, function(event)
+  local entity = event.entity
+  if entity and entity.name == "elevated-pipe" then
+    local surfacedata = storage.surfacedata[entity.surface.index]
+    if surfacedata then
+      local struct = surfacedata.structs[entity.unit_number]
+      if struct and struct.alt_mode.valid then
+        local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+        player.opened = struct.alt_mode
+      end
+    end
+  end
+end)
