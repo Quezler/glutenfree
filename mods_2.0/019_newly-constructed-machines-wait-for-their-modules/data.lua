@@ -12,5 +12,5 @@ local created_effect = {
 }
 
 local proxy = data.raw["item-request-proxy"]["item-request-proxy"]
-assert(proxy.created_effect == nil, "another mod has set a created_effect for the item request proxy, get in touch.")
+assert(proxy.created_effect == nil, serpent.block(proxy.created_effect))
 proxy.created_effect = created_effect
