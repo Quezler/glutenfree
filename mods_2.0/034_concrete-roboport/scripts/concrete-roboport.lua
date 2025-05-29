@@ -32,7 +32,7 @@ function ConcreteRoboport.on_init()
 
   storage.next_network_index = 1
 
-  storage.unit_number_to_network_index = {}
+  -- storage.unit_number_to_network_index = {}
 
   -- storage.player_index_to_highlight_box = {}
 
@@ -57,7 +57,9 @@ function mod.refresh_surfacedata()
       surface = surface,
       networks = {},
       tiles = {},
-      roboport_tile_owner = {}, -- {unit_number = network_index}
+
+      abandoned_roboports = {}, -- {unit_number = LuaEntity}
+      abandoned_tiles = {}, -- {unit_number = LuaEntity}
     }
   end
 end
@@ -128,7 +130,7 @@ function ConcreteRoboport.mycelium(surface, position, force)
   ConcreteNetwork.increase_bounding_box_to_contain_tiles(network, tiles)
   for _, tile in ipairs(tiles) do
     local roboport_tile = ConcreteRoboport.get_or_create_roboport_tile(surface, tile, force)
-    surfacedata.roboport_tile_owner[roboport_tile.unit_number] = network_index
+    surfacedata.abandoned_tiles[roboport_tile.unit_number] = nil
 
     network.tiles = network.tiles + 1
     network.tile[roboport_tile.unit_number] = roboport_tile
@@ -213,21 +215,21 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
     ::next_network::
   end
 
-  local orphaned_roboports = {}
-  local orphaned_tiles = {}
-
   for _, network in pairs(encroached) do
-    for unit_number, roboport in pairs(network.roboport) do
-      orphaned_roboports[unit_number] = roboport
-    end
-    for unit_number, tile in pairs(network.tile) do
-      orphaned_tiles[unit_number] = tile
-    end
-    local _, roboport = assert(next(network.roboport))
-    local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
-    ConcreteRoboport.mycelium(surface, {x = math.floor(roboport.position.x), y = math.floor(roboport.position.y)}, game.forces[network.force_index]) -- can invalidate networks
+    ConcreteNetwork.destroy(network)
   end
 
+  for unit_number, roboport in pairs(surfacedata.abandoned_roboports) do
+    ConcreteRoboport.mycelium(surfacedata.surface, {x = math.floor(roboport.position.x), y = math.floor(roboport.position.y)}, roboport.force)
+  end
+
+  for unit_number, roboport in pairs(surfacedata.abandoned_roboports) do
+    roboport.destroy()
+  end
+
+  for unit_number, tile in pairs(surfacedata.abandoned_tiles) do
+    tile.destroy()
+  end
 end
 
 function ConcreteRoboport.on_object_destroyed(event)

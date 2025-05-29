@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Update icon
     - Draft abandon mechanic
+    - Prototype abandon mechanic
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 05. 27

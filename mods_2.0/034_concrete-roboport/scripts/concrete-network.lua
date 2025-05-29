@@ -1,19 +1,21 @@
 local ConcreteNetwork = {}
 
 function ConcreteNetwork.add_roboport(network, roboport)
+  local surfacedata = storage.surfacedata[network.surface_index]
+  surfacedata.abandoned_roboports[roboport.unit_number] = nil
 
-  local previous_network_index = storage.unit_number_to_network_index[roboport.unit_number]
-  if previous_network_index then
-    local previous_network = storage.surfacedata[network.surface_index].networks[previous_network_index]
-    if previous_network then
-      ConcreteNetwork.sub_roboport(previous_network, roboport)
-    end
-  end
+  -- local previous_network_index = storage.unit_number_to_network_index[roboport.unit_number]
+  -- if previous_network_index then
+  --   local previous_network = storage.surfacedata[network.surface_index].networks[previous_network_index]
+  --   if previous_network then
+  --     ConcreteNetwork.sub_roboport(previous_network, roboport)
+  --   end
+  -- end
 
   network.roboports = network.roboports + 1
   network.roboport[roboport.unit_number] = roboport
 
-  storage.unit_number_to_network_index[roboport.unit_number] = network.index
+  -- storage.unit_number_to_network_index[roboport.unit_number] = network.index
 
   storage.deathrattles[script.register_on_object_destroyed(roboport)] = {surface_index = roboport.surface.index, network_index = network.index}
 end
@@ -40,11 +42,11 @@ function ConcreteNetwork.destroy(network)
 
   local surfacedata = storage.surfacedata[network.surface_index]
 
-  for _, roboport_tile in pairs(network.tile) do
-    if surfacedata.roboport_tile_owner[roboport_tile.unit_number] == network.index then
-      surfacedata.roboport_tile_owner[roboport_tile.unit_number] = nil
-      roboport_tile.destroy()
-    end
+  for unit_number, roboport in pairs(network.roboport) do
+    surfacedata.abandoned_roboports[unit_number] = roboport
+  end
+  for unit_number, tile in pairs(network.tile) do
+    surfacedata.abandoned_tiles[unit_number] = tile
   end
 
   storage.surfacedata[network.surface_index].networks[network.index] = nil
