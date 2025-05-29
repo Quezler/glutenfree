@@ -101,7 +101,7 @@ function ConcreteRoboport.mycelium(surface, position, force)
   local network_index = storage.next_network_index
   storage.next_network_index = network_index + 1
 
-  log(string.format("creating network #%d with roboports and %d tiles.", network_index, table_size(roboports), #tiles))
+  log(string.format("creating network #%d with %d roboports and %d tiles.", network_index, table_size(roboports), #tiles))
 
   -- setup struct
   local network = {
@@ -193,14 +193,16 @@ end
 
 function ConcreteRoboport.on_built_tile(event) -- player & robot
   -- print("on_built_tile")
-  local networks = storage.surfacedata[event.surface_index].networks
+  local surfacedata = storage.surfacedata[event.surface_index]
+  local networks = surfacedata.networks
 
   local encroached = {}
 
   for _, network in pairs(networks) do
+    local advanced_tiles = {{network.min_x - 1, network.min_y - 1}, {network.max_x + 1, network.max_y + 1}}
     for _, tile in ipairs(event.tiles) do
       -- one of the new tiles is touching the selection box of the network
-      if position_inside_area(tile.position, {{network.min_x - 1, network.min_y - 1}, {network.max_x + 1, network.max_y + 1}}) then
+      if position_inside_area(tile.position, advanced_tiles) then
         log(event.tick .. " encroaching on network " .. network.index)
         log("total networks: " .. table_size(networks))
         encroached[network.index] = network
@@ -211,12 +213,19 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
     ::next_network::
   end
 
+  local orphaned_roboports = {}
+  local orphaned_tiles = {}
+
   for _, network in pairs(encroached) do
-    if network.valid then
-      local _, roboport = assert(next(network.roboport))
-      local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
-      ConcreteRoboport.mycelium(surface, {x = math.floor(roboport.position.x), y = math.floor(roboport.position.y)}, game.forces[network.force_index]) -- can invalidate networks
+    for unit_number, roboport in pairs(network.roboport) do
+      orphaned_roboports[unit_number] = roboport
     end
+    for unit_number, tile in pairs(network.tile) do
+      orphaned_tiles[unit_number] = tile
+    end
+    local _, roboport = assert(next(network.roboport))
+    local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
+    ConcreteRoboport.mycelium(surface, {x = math.floor(roboport.position.x), y = math.floor(roboport.position.y)}, game.forces[network.force_index]) -- can invalidate networks
   end
 
 end

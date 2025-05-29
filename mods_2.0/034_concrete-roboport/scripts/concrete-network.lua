@@ -36,7 +36,6 @@ end
 
 function ConcreteNetwork.destroy(network)
   log(string.format('deleting network #%d', network.index))
-  network.valid = false
   network.bounding_box.destroy()
 
   local surfacedata = storage.surfacedata[network.surface_index]
