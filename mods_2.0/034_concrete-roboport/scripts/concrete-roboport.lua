@@ -156,6 +156,7 @@ function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
   if not tiles[position.x] then tiles[position.x] = {} end
   local tile = tiles[position.x][position.y]
   if not tile or not tile.valid then
+    -- log("new tile")
     tile = surface.create_entity({
       name = mod_prefix .. "tile",
       force = force,
@@ -223,6 +224,13 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
     ConcreteRoboport.mycelium(surfacedata.surface, {x = math.floor(roboport.position.x), y = math.floor(roboport.position.y)}, roboport.force)
   end
 
+  ConcreteRoboport.purge_abandoned(surfacedata)
+end
+
+function ConcreteRoboport.purge_abandoned(surfacedata)
+  log('#surfacedata.abandoned_roboports = ' .. table_size(surfacedata.abandoned_roboports))
+  log('#surfacedata.abandoned_tiles = ' .. table_size(surfacedata.abandoned_tiles))
+
   for unit_number, roboport in pairs(surfacedata.abandoned_roboports) do
     roboport.destroy()
   end
@@ -230,6 +238,9 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
   for unit_number, tile in pairs(surfacedata.abandoned_tiles) do
     tile.destroy()
   end
+
+  surfacedata.abandoned_roboports = {}
+  surfacedata.abandoned_tiles = {}
 end
 
 function ConcreteRoboport.on_object_destroyed(event)

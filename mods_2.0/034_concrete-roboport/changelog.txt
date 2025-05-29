@@ -5,6 +5,7 @@ Date: ????
     - Update icon
     - Draft abandon mechanic
     - Prototype abandon mechanic
+    - Debug abandoned purger
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 05. 27
