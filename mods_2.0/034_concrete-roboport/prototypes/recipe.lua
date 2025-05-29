@@ -2,7 +2,6 @@ concrete_roboport_recipe =
 {
 	type = "recipe",
 	name = "concrete-roboport",
-	icon = mod_directory .. "/graphics/icons/concrete-roboport.png",
 	enabled = false,
 	energy_required = 10,
 	ingredients =
