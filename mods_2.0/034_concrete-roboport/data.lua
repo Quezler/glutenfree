@@ -73,12 +73,12 @@ require("prototypes.item")
 require("prototypes.recipe")
 require("prototypes.technology")
 
-data.raw["roboport"]["concrete-roboport"].logistics_radius = 2
-data.raw["roboport"]["concrete-roboport"].logistics_connection_distance = 2
-data.raw["roboport"]["concrete-roboport"].construction_radius = 0
-
 local shrink_roboport = require("prototypes.shrink-roboport")
 shrink_roboport(data.raw["roboport"]["concrete-roboport"])
+
+data.raw["roboport"]["concrete-roboport"].logistics_radius = 0
+data.raw["roboport"]["concrete-roboport"].logistics_connection_distance = 0
+data.raw["roboport"]["concrete-roboport"].construction_radius = 0
 
 data.raw["roboport"]["concrete-roboport"].robots_shrink_when_entering_and_exiting = true
 data.raw["roboport"]["concrete-roboport"].charging_energy = (500 * 0.75) .. "kW"

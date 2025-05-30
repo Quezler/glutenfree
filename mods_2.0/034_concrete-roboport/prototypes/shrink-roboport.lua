@@ -19,9 +19,9 @@ return function(prototype)
     {prototype.collision_box[2][1] * scale, prototype.collision_box[2][2] * scale}
   }
 
-  prototype.logistics_radius = prototype.logistics_radius * scale
-  prototype.logistics_connection_distance = prototype.logistics_connection_distance * scale
-  prototype.construction_radius = prototype.construction_radius * scale
+  -- prototype.logistics_radius = prototype.logistics_radius * scale
+  -- prototype.logistics_connection_distance = prototype.logistics_connection_distance * scale
+  -- prototype.construction_radius = prototype.construction_radius * scale
 
   for _, layer in ipairs(prototype.base.layers) do
     scale_layer(layer)

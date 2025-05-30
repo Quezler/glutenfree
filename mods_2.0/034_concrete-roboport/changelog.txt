@@ -6,6 +6,7 @@ Date: ????
     - Draft abandon mechanic
     - Prototype abandon mechanic
     - Debug abandoned purger
+    - Roboport itself emits nothing
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 05. 27
