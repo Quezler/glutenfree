@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
-Date: ????
+Date: 2025. 05. 30
   Info:
     - Update icon
     - Draft abandon mechanic
@@ -15,6 +15,7 @@ Date: ????
     - Hide the tile from editor mode
     - Cleanup roboport tiles when mining the last roboport
     - After 20 reboots update the icons
+    - Mark as MVP
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 05. 27
