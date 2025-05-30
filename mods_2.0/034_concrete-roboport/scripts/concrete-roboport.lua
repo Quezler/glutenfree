@@ -252,26 +252,24 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
 end
 
 function ConcreteRoboport.purge_abandoned(surfacedata)
-  -- log('#surfacedata.abandoned_roboports = ' .. table_size(surfacedata.abandoned_roboports))
+  log('#surfacedata.abandoned_roboports = ' .. table_size(surfacedata.abandoned_roboports))
   log('#surfacedata.abandoned_tiles = ' .. table_size(surfacedata.abandoned_tiles))
-
-  -- for unit_number, roboport in pairs(surfacedata.abandoned_roboports) do
-  --   roboport.destroy()
-  -- end
 
   for unit_number, tile in pairs(surfacedata.abandoned_tiles) do
     tile.destroy()
   end
 
-  -- surfacedata.abandoned_roboports = {}
+  surfacedata.abandoned_roboports = {}
   surfacedata.abandoned_tiles = {}
 end
 
 function ConcreteRoboport.on_object_destroyed(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    local network = storage.surfacedata[deathrattle.surface_index].networks[deathrattle.network_index]
+    local surfacedata = storage.surfacedata[deathrattle.surface_index]
+    local network = surfacedata.networks[deathrattle.network_index]
     ConcreteNetwork.sub_roboport(network, {unit_number = event.useful_id})
+    ConcreteRoboport.purge_abandoned(surfacedata)
   end
 end
 
