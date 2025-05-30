@@ -14,6 +14,7 @@ Date: ????
     - Detect tiles placed under inactive roboports
     - Hide the tile from editor mode
     - Cleanup roboport tiles when mining the last roboport
+    - After 20 reboots update the icons
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 05. 27

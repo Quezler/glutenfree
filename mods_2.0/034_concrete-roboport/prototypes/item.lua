@@ -3,8 +3,8 @@ concrete_roboport_item =
 	type = "item",
 	name = "concrete-roboport",
 	icons = {
-		{icon = mod_directory .. "/graphics/icons/concrete-roboport.png"},
-		{icon = data.raw["item"]["concrete"].icon, shift = {-8, 8}, scale = 0.25, draw_background = true},
+		{icon = "__core__/graphics/empty.png", icon_size = 1},
+		{icon = mod_directory .. "/graphics/icons/concrete-roboport.png", scale = 0.45, shift = {0, 1.6}},
 	},
 	order = "c[signal]-b[concrete-roboport]",
 	place_result = "concrete-roboport",
