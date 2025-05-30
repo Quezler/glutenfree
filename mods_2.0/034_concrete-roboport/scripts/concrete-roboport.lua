@@ -69,6 +69,8 @@ function mod.refresh_surfacedata()
       networks = {},
       tiles = {},
 
+      roboport_at = {}, -- {positiontokey = LuaEntity}
+
       abandoned_roboports = {}, -- {unit_number = LuaEntity}
       abandoned_tiles = {}, -- {unit_number = LuaEntity}
     }
@@ -87,7 +89,12 @@ function ConcreteRoboport.on_created_entity(event)
     return
   end
 
-  ConcreteRoboport.mycelium(entity.surface, {x = math.floor(entity.position.x), y = math.floor(entity.position.y)}, entity.force)
+  local tile_position = {x = math.floor(entity.position.x), y = math.floor(entity.position.y)}
+
+  local surfacedata = storage.surfacedata[entity.surface.index]
+  surfacedata.roboport_at[positiontokey(tile_position)] = entity
+
+  ConcreteRoboport.mycelium(entity.surface, tile_position, entity.force)
 end
 
 ---@param surface LuaSurface
@@ -230,6 +237,13 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
     ConcreteNetwork.destroy(network)
   end
 
+  for _, tile in ipairs(event.tiles) do
+    local roboport = surfacedata.roboport_at[positiontokey(tile.position)]
+    if roboport and roboport.valid then
+      surfacedata.abandoned_roboports[roboport.unit_number] = roboport
+    end
+  end
+
   for unit_number, roboport in pairs(surfacedata.abandoned_roboports) do
     ConcreteRoboport.mycelium(surfacedata.surface, {x = math.floor(roboport.position.x), y = math.floor(roboport.position.y)}, roboport.force)
   end
@@ -238,18 +252,18 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
 end
 
 function ConcreteRoboport.purge_abandoned(surfacedata)
-  log('#surfacedata.abandoned_roboports = ' .. table_size(surfacedata.abandoned_roboports))
+  -- log('#surfacedata.abandoned_roboports = ' .. table_size(surfacedata.abandoned_roboports))
   log('#surfacedata.abandoned_tiles = ' .. table_size(surfacedata.abandoned_tiles))
 
-  for unit_number, roboport in pairs(surfacedata.abandoned_roboports) do
-    roboport.destroy()
-  end
+  -- for unit_number, roboport in pairs(surfacedata.abandoned_roboports) do
+  --   roboport.destroy()
+  -- end
 
   for unit_number, tile in pairs(surfacedata.abandoned_tiles) do
     tile.destroy()
   end
 
-  surfacedata.abandoned_roboports = {}
+  -- surfacedata.abandoned_roboports = {}
   surfacedata.abandoned_tiles = {}
 end
 
@@ -262,4 +276,3 @@ function ConcreteRoboport.on_object_destroyed(event)
 end
 
 return ConcreteRoboport
-
