@@ -12,6 +12,17 @@ local function position_inside_area(position, area)
     and area[2][2] >= position.y
 end
 
+local function assert_tile_position(position)
+  assert(position.x == math.floor(position.x))
+  assert(position.y == math.floor(position.y))
+  return position
+end
+
+local function positiontokey(position)
+  assert_tile_position(position)
+  return position.x .. "," .. position.y
+end
+
 local mod = {}
 local ConcreteRoboport = {}
 
@@ -83,8 +94,7 @@ end
 ---@param position TilePosition
 ---@param force LuaForce
 function ConcreteRoboport.mycelium(surface, position, force)
-  assert(position.x == math.floor(position.x))
-  assert(position.y == math.floor(position.y))
+  assert_tile_position(position)
 
   ---@type LuaTile
   ---@diagnostic disable-next-line: param-type-mismatch, missing-parameter
@@ -153,20 +163,19 @@ end
 ---@return LuaEntity (roboport)
 function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
   local tiles = storage.surfacedata[surface.index].tiles
+  local key = positiontokey(position)
+  local tile = tiles[key]
 
-  if not tiles[position.x] then tiles[position.x] = {} end
-  local tile = tiles[position.x][position.y]
-  if not tile or not tile.valid then
-    -- log("new tile")
+  if (not tile) or (not tile.valid) then
     tile = surface.create_entity({
       name = mod_prefix .. "tile",
       force = force,
       position = position,
     })
-    tiles[position.x][position.y] = tile
+    tiles[key] = tile
   end
 
-  return assert(tile)
+  return tile --[[@as LuaEntity]]
 end
 
 -- function ConcreteRoboport.on_selected_entity_changed(event)

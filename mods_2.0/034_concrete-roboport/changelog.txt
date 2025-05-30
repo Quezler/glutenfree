@@ -10,6 +10,7 @@ Date: ????
     - Print whitelisted tiles at world load
     - Prevent 3rd party concrete roboport tiles
     - Cleanup
+    - Store roboport tiles by string instead of multidim
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 05. 27
