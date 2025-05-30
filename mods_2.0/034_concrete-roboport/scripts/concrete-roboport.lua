@@ -15,13 +15,13 @@ end
 local mod = {}
 local ConcreteRoboport = {}
 
-local allowed_tiles = {}
+local whitelisted_tiles = {}
 for _, tile in pairs(prototypes.tile) do
   if tile.mineable_properties.minable then
-    allowed_tiles[tile.name] = true
+    whitelisted_tiles[tile.name] = true
   end
 end
--- log(serpent.block(allowed_tiles))
+log("whitelisted_tiles: " .. serpent.block(whitelisted_tiles))
 
 function ConcreteRoboport.on_init()
   storage.surfacedata = {}
@@ -84,7 +84,7 @@ function ConcreteRoboport.mycelium(surface, position, force)
   ---@type LuaTile
   ---@diagnostic disable-next-line: param-type-mismatch, missing-parameter
   local origin_tile = surface.get_tile(position)
-  if not allowed_tiles[origin_tile.name] then
+  if not whitelisted_tiles[origin_tile.name] then
     return
   end
 
