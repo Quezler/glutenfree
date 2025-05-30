@@ -38,6 +38,9 @@ local concrete_roboport_tile = {
   flags = {"not-on-map"},
 
   collision_box = {{-0.5, -0.5}, {0.5, 0.5}},
+  selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+  selectable_in_game = false,
+  selection_priority = 49,
   hidden = true,
 }
 

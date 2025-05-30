@@ -12,6 +12,7 @@ Date: ????
     - Cleanup
     - Store roboport tiles by string instead of multidim
     - Detect tiles placed under inactive roboports
+    - Hide the tile from editor mode
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 05. 27
