@@ -69,7 +69,12 @@ script.on_event(defines.events.on_surface_deleted, mod.refresh_surfacedata)
 
 function ConcreteRoboport.on_created_entity(event)
   local entity = event.entity or event.destination
-  log("concrete roboport created")
+
+  -- ensure the tile is not created or cloned
+  if entity.name == mod_prefix .. "tile" then
+    entity.destroy()
+    return
+  end
 
   ConcreteRoboport.mycelium(entity.surface, {x = math.floor(entity.position.x), y = math.floor(entity.position.y)}, entity.force)
 end

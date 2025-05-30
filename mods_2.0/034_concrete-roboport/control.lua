@@ -43,5 +43,6 @@ for _, event in ipairs({
 }) do
   script.on_event(event, ConcreteRoboport.on_created_entity, {
     {filter = "name", name = "concrete-roboport"},
+    {filter = "name", name = "concrete-roboport--tile"},
   })
 end

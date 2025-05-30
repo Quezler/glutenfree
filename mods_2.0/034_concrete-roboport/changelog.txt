@@ -8,6 +8,7 @@ Date: ????
     - Debug abandoned purger
     - Roboport itself emits nothing
     - Print whitelisted tiles at world load
+    - Prevent 3rd party concrete roboport tiles
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 05. 27
