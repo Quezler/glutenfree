@@ -112,7 +112,6 @@ function ConcreteRoboport.mycelium(surface, position, force)
 
   -- setup struct
   local network = {
-    valid = true,
     index = network_index,
     surface_index = surface.index,
     force_index = force.index,
@@ -132,6 +131,8 @@ function ConcreteRoboport.mycelium(surface, position, force)
   }
 
   local surfacedata = storage.surfacedata[surface.index]
+  surfacedata.networks[network_index] = network
+
   ConcreteNetwork.increase_bounding_box_to_contain_tiles(network, tiles)
   for _, tile in ipairs(tiles) do
     local roboport_tile = ConcreteRoboport.get_or_create_roboport_tile(surface, tile, force)
@@ -141,14 +142,9 @@ function ConcreteRoboport.mycelium(surface, position, force)
     network.tile[roboport_tile.unit_number] = roboport_tile
   end
 
-  -- store struct
-  surfacedata.networks[network_index] = network
-
-  -- highlight the network boundary on hovering any of its roboports
   for _, roboport in pairs(roboports) do
     ConcreteNetwork.add_roboport(network, roboport)
   end
-
 end
 
 ---@param surface LuaSurface
