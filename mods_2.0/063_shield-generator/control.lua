@@ -34,20 +34,22 @@ script.on_load(function()
 end)
 
 function app.on_created_tile(event)
-  if event.tile.name ~= "space-platform-foundation" then return end
+  if event.tile and event.tile.name ~= "space-platform-foundation" then return end -- raise_script_set_tiles has no event.tile
 
   local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
   if not surface.platform then return end
 
   if not storage.platformdata[surface.index] then return end -- no shield generators yet
 
-  for _, tile_and_position in ipairs(event.tiles) do
-    local position = {tile_and_position.position.x + 0.5, tile_and_position.position.y + 0.5}
-    local cover = surface.create_entity{
-      name = mod_prefix .. "simple-entity",
-      force = "neutral",
-      position = position,
-    }
+  for _, tile in ipairs(event.tiles) do
+    if event.tile or tile.name == "space-platform-foundation" then
+      local position = {tile.position.x + 0.5, tile.position.y + 0.5}
+      local cover = surface.create_entity{
+        name = mod_prefix .. "simple-entity",
+        force = "neutral",
+        position = position,
+      }
+    end
   end
 end
 
