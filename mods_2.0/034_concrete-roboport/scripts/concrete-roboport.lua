@@ -266,7 +266,9 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
   end
 
   for unit_number, roboport in pairs(surfacedata.abandoned_roboports) do
-    ConcreteRoboport.mycelium(surfacedata.surface, {x = math.floor(roboport.position.x), y = math.floor(roboport.position.y)}, roboport.force)
+    if roboport.valid then
+      ConcreteRoboport.mycelium(surfacedata.surface, {x = math.floor(roboport.position.x), y = math.floor(roboport.position.y)}, roboport.force)
+    end
   end
 
   ConcreteRoboport.purge_abandoned(surfacedata)

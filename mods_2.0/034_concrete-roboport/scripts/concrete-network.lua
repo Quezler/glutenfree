@@ -66,7 +66,7 @@ function ConcreteNetwork.increase_bounding_box_to_contain_tiles(network, tiles)
     position = {0, 0},
     bounding_box = {{network.min_x - 0.2, network.min_y - 0.2}, {network.max_x + 1 + 0.2, network.max_y + 1 + 0.2}},
     box_type = "train-visualization",
-    time_to_live = 60 * 60 * 60,
+    time_to_live = 60 * 2,
   }
 end
 

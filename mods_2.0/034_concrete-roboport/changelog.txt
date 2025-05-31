@@ -3,6 +3,7 @@ Version: 0.0.9
 Date: ????
   Info:
     - Move roboport deathrattle to surfacedata
+    - Polish
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 05. 30
