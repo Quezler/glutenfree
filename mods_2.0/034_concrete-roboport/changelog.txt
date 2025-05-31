@@ -8,6 +8,7 @@ Date: ????
     - Support frozen tiles
     - Scale the frozen patch
     - Hide lightning warning
+    - Set a thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 05. 30

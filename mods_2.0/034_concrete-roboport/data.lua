@@ -45,7 +45,7 @@ local concrete_roboport_tile = {
 }
 
 -- debug mode
-if true then
+if false then
   concrete_roboport_tile.base = {
     filename = "__core__/graphics/icons/unknown.png",
     priority = "extra-high",
