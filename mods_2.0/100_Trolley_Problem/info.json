@@ -1,0 +1,16 @@
+{
+    "name": "Trolley_Problem",
+    "title": "Trolley problem",
+    "description": "Adds a button to your toolbar to quickly call your personal train to you.",
+
+    "version": "2.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "base",
+        "? space-age"
+    ]
+}
