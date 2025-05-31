@@ -1,6 +1,3 @@
--- local util = require("__core__.lualib.util")
--- if table_size(util.direction_vectors) ~= 8 then error("util.direction_vectors ~= 8") end
-
 local ConcreteNetwork = require("scripts.concrete-network")
 
 --
@@ -50,11 +47,7 @@ function ConcreteRoboport.on_init()
 
   storage.next_network_index = 1
 
-  -- storage.unit_number_to_network_index = {}
-
-  -- storage.player_index_to_highlight_box = {}
-
-  storage.deathrattles = {} -- {registration_number = {surface_index = #, network_index = #}}
+  storage.deathrattles = {}
 end
 
 function ConcreteRoboport.on_configuration_changed(event)
@@ -76,7 +69,7 @@ function mod.refresh_surfacedata()
       networks = {},
       tiles = {},
 
-      roboports = {},
+      roboports = {}, -- {unit_number = struct}
       roboport_at = {}, -- {tile_position_to_key = LuaEntity}
 
       abandoned_roboports = {}, -- {unit_number = LuaEntity}
@@ -137,8 +130,6 @@ function ConcreteRoboport.mycelium(surface, position, force)
   local roboports = {}
 
   for _, tile_position in ipairs(tiles) do
-    -- todo: remove the roboports from any previous networks
-    -- slughter performance to get all the roboports on these tiles
     local roboport = surfacedata.roboport_at[tile_position_to_key(tile_position)]
     if roboport and roboport.valid then roboports[roboport.unit_number] = roboport end
   end
@@ -188,7 +179,7 @@ end
 ---@param surface LuaSurface
 ---@param position TilePosition
 ---@param force LuaForce
----@return LuaEntity (roboport)
+---@return LuaEntity
 function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
   local tiles = storage.surfacedata[surface.index].tiles
   local key = tile_position_to_key(position)
@@ -206,34 +197,7 @@ function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
   return tile --[[@as LuaEntity]]
 end
 
--- function ConcreteRoboport.on_selected_entity_changed(event)
---   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-
---   if storage.player_index_to_highlight_box[player.index] then
---      storage.player_index_to_highlight_box[player.index].destroy()
---      storage.player_index_to_highlight_box[player.index] = nil
---   end
-
---   if player.selected and player.selected.unit_number then
---     local network_index = storage.unit_number_to_network_index[player.selected.unit_number]
---     if network_index then
---       local network = storage.surfacedata[player.selected.surface.index].networks[network_index]
---       local entity = player.surface.create_entity{
---         name = "highlight-box",
---         position = {0, 0},
---         bounding_box = {{network.min_x - 0.2, network.min_y - 0.2}, {network.max_x + 1 + 0.2, network.max_y + 1 + 0.2}},
---         box_type = "train-visualization",
---         render_player_index = player.index,
---         time_to_live = 60 * 60 * 60, -- timeout after a minute in case we lose track of it
---       }
-
---       storage.player_index_to_highlight_box[player.index] = entity
---     end
---   end
--- end
-
-function ConcreteRoboport.on_built_tile(event) -- player & robot
-  -- print("on_built_tile")
+function ConcreteRoboport.on_built_tile(event)
   local surfacedata = storage.surfacedata[event.surface_index]
   local networks = surfacedata.networks
 
@@ -244,10 +208,8 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
     for _, tile in ipairs(event.tiles) do
       -- one of the new tiles is touching the selection box of the network
       if position_inside_area(tile.position, advanced_tiles) then
-        log(event.tick .. " encroaching on network " .. network.index)
-        log("total networks: " .. table_size(networks))
+        log(string.format("encroached on network #%d", network.index))
         encroached[network.index] = network
-        -- log("skipping network id " .. network.index)
         goto next_network
       end
     end
@@ -275,8 +237,8 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
 end
 
 function ConcreteRoboport.purge_abandoned(surfacedata)
-  log('#surfacedata.abandoned_roboports = ' .. table_size(surfacedata.abandoned_roboports))
-  log('#surfacedata.abandoned_tiles = ' .. table_size(surfacedata.abandoned_tiles))
+  -- log('#surfacedata.abandoned_roboports = ' .. table_size(surfacedata.abandoned_roboports))
+  -- log('#surfacedata.abandoned_tiles = ' .. table_size(surfacedata.abandoned_tiles))
 
   for unit_number, tile in pairs(surfacedata.abandoned_tiles) do
     tile.destroy()

@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Move roboport deathrattle to surfacedata
     - Polish
+    - Kitchen gun
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 05. 30

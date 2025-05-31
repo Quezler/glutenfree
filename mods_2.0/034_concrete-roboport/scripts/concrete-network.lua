@@ -1,6 +1,8 @@
 local ConcreteNetwork = {}
 
 function ConcreteNetwork.add_roboport(network, roboport)
+  assert(network.roboport[roboport.unit_number] == nil)
+
   local surfacedata = storage.surfacedata[network.surface_index]
   surfacedata.abandoned_roboports[roboport.unit_number] = nil
 
@@ -11,23 +13,17 @@ function ConcreteNetwork.add_roboport(network, roboport)
 end
 
 function ConcreteNetwork.sub_roboport(network, roboport)
-  -- log("removing roboport " .. roboport.unit_number)
-  if network.roboport[roboport.unit_number] == nil then error("roboport not part of this network") end
+  assert(network.roboport[roboport.unit_number] ~= nil)
 
   network.roboports = network.roboports - 1
   network.roboport[roboport.unit_number] = nil
 
-  -- game.print("now roboports " .. network.roboports)
-
-  -- assert(network.roboports >= 0)
   if network.roboports == 0 then
-    -- log("destroy network " .. network.index)
     ConcreteNetwork.destroy(network)
   end
 end
 
 function ConcreteNetwork.destroy(network)
-  log(string.format('deleting network #%d', network.index))
   network.bounding_box.destroy()
 
   local surfacedata = storage.surfacedata[network.surface_index]
