@@ -18,9 +18,16 @@ local function assert_tile_position(position)
   return position
 end
 
-local function positiontokey(position)
+local function tile_position_to_key(position)
   assert_tile_position(position)
   return position.x .. "," .. position.y
+end
+
+function new_struct(table, struct)
+  assert(struct.id, serpent.block(struct))
+  assert(table[struct.id] == nil)
+  table[struct.id] = struct
+  return struct
 end
 
 local mod = {}
@@ -69,7 +76,8 @@ function mod.refresh_surfacedata()
       networks = {},
       tiles = {},
 
-      roboport_at = {}, -- {positiontokey = LuaEntity}
+      roboports = {},
+      roboport_at = {}, -- {tile_position_to_key = LuaEntity}
 
       abandoned_roboports = {}, -- {unit_number = LuaEntity}
       abandoned_tiles = {}, -- {unit_number = LuaEntity}
@@ -92,9 +100,21 @@ function ConcreteRoboport.on_created_entity(event)
   local tile_position = {x = math.floor(entity.position.x), y = math.floor(entity.position.y)}
 
   local surfacedata = storage.surfacedata[entity.surface.index]
-  surfacedata.roboport_at[positiontokey(tile_position)] = entity
+  local struct = new_struct(surfacedata.roboports, {
+    id = entity.unit_number,
+    tile_position = tile_position,
+    tile_position_key = tile_position_to_key(tile_position),
+    last_network_index = nil, -- is allowed to point at nonexistant networks
+  })
+  surfacedata.roboport_at[struct.tile_position_key] = entity
 
-  ConcreteRoboport.mycelium(entity.surface, tile_position, entity.force)
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {
+    name = "concrete-roboport",
+    surface_index = entity.surface.index,
+    roboport_id = struct.id,
+  }
+
+  ConcreteRoboport.mycelium(entity.surface, struct.tile_position, entity.force)
 end
 
 ---@param surface LuaSurface
@@ -110,15 +130,17 @@ function ConcreteRoboport.mycelium(surface, position, force)
     return
   end
 
+  local surfacedata = storage.surfacedata[surface.index]
+
   ---@type TilePosition[]
   local tiles = surface.get_connected_tiles(position, {origin_tile.name}, true)
   local roboports = {}
 
-  for _, tile in ipairs(tiles) do
+  for _, tile_position in ipairs(tiles) do
     -- todo: remove the roboports from any previous networks
     -- slughter performance to get all the roboports on these tiles
-    local roboport = surface.find_entity("concrete-roboport", tile)
-    if roboport then roboports[roboport.unit_number] = roboport end
+    local roboport = surfacedata.roboport_at[tile_position_to_key(tile_position)]
+    if roboport and roboport.valid then roboports[roboport.unit_number] = roboport end
   end
 
   -- assign id
@@ -147,7 +169,6 @@ function ConcreteRoboport.mycelium(surface, position, force)
     bounding_box = storage.invalid,
   }
 
-  local surfacedata = storage.surfacedata[surface.index]
   surfacedata.networks[network_index] = network
 
   ConcreteNetwork.increase_bounding_box_to_contain_tiles(network, tiles)
@@ -170,7 +191,7 @@ end
 ---@return LuaEntity (roboport)
 function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
   local tiles = storage.surfacedata[surface.index].tiles
-  local key = positiontokey(position)
+  local key = tile_position_to_key(position)
   local tile = tiles[key]
 
   if (not tile) or (not tile.valid) then
@@ -238,7 +259,7 @@ function ConcreteRoboport.on_built_tile(event) -- player & robot
   end
 
   for _, tile in ipairs(event.tiles) do
-    local roboport = surfacedata.roboport_at[positiontokey(tile.position)]
+    local roboport = surfacedata.roboport_at[tile_position_to_key(tile.position)]
     if roboport and roboport.valid then
       surfacedata.abandoned_roboports[roboport.unit_number] = roboport
     end
@@ -266,10 +287,21 @@ end
 function ConcreteRoboport.on_object_destroyed(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    local surfacedata = storage.surfacedata[deathrattle.surface_index]
-    local network = surfacedata.networks[deathrattle.network_index]
-    ConcreteNetwork.sub_roboport(network, {unit_number = event.useful_id})
-    ConcreteRoboport.purge_abandoned(surfacedata)
+    if deathrattle.name == "concrete-roboport" then
+      local surfacedata = storage.surfacedata[deathrattle.surface_index]
+      local roboport = surfacedata.roboports[deathrattle.roboport_id]
+
+      -- a new roboport can occupy this position before the deathrattle triggers
+      if not surfacedata.roboport_at[roboport.tile_position_key].valid then
+        surfacedata.roboport_at[roboport.tile_position_key] = nil
+      end
+
+      local network = surfacedata.networks[roboport.last_network_index]
+      if network then
+        ConcreteNetwork.sub_roboport(network, {unit_number = event.useful_id})
+        ConcreteRoboport.purge_abandoned(surfacedata)
+      end
+    end
   end
 end
 
