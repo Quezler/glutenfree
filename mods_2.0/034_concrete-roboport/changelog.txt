@@ -5,6 +5,7 @@ Date: ????
     - Move roboport deathrattle to surfacedata
     - Polish
     - Kitchen gun
+    - Support frozen tiles
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 05. 30

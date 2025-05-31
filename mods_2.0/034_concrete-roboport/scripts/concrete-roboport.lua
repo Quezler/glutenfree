@@ -33,10 +33,16 @@ local ConcreteRoboport = {}
 local whitelisted_tiles = {}
 for _, tile in pairs(prototypes.tile) do
   if tile.mineable_properties.minable then
-    whitelisted_tiles[tile.name] = true
+    whitelisted_tiles[tile.name] = {tile.name}
+    if tile.frozen_variant then
+      table.insert(whitelisted_tiles[tile.name], tile.frozen_variant.name)
+    end
+    if tile.thawed_variant then
+      table.insert(whitelisted_tiles[tile.name], tile.thawed_variant.name)
+    end
   end
 end
-log("whitelisted_tiles: " .. serpent.block(whitelisted_tiles))
+log("whitelisted_tiles: " .. serpent.line(whitelisted_tiles))
 
 function ConcreteRoboport.on_init()
   storage.surfacedata = {}
@@ -119,14 +125,15 @@ function ConcreteRoboport.mycelium(surface, position, force)
   ---@type LuaTile
   ---@diagnostic disable-next-line: param-type-mismatch, missing-parameter
   local origin_tile = surface.get_tile(position)
-  if not whitelisted_tiles[origin_tile.name] then
+  local tile_group = whitelisted_tiles[origin_tile.name]
+  if not tile_group then
     return
   end
 
   local surfacedata = storage.surfacedata[surface.index]
 
   ---@type TilePosition[]
-  local tiles = surface.get_connected_tiles(position, {origin_tile.name}, true)
+  local tiles = surface.get_connected_tiles(position, tile_group, true)
   local roboports = {}
 
   for _, tile_position in ipairs(tiles) do
