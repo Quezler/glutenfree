@@ -6,6 +6,7 @@ Date: ????
     - Polish
     - Kitchen gun
     - Support frozen tiles
+    - Scale the frozen patch
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 05. 30

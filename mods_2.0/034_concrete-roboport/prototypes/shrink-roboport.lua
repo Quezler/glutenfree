@@ -32,5 +32,9 @@ return function(prototype)
   scale_layer(prototype.door_animation_up)
   scale_layer(prototype.door_animation_down)
 
+  if prototype.frozen_patch then
+    scale_layer(prototype.frozen_patch)
+  end
+
   prototype.max_health = prototype.max_health * scale
 end
