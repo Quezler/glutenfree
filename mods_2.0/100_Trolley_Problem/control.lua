@@ -26,7 +26,7 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
 
         local record = {}
         record.temporary = true
-        record.rail = get_track_below_player(player)
+        record.rail = track_below_player
         record.wait_conditions = {
           {compare_type="or", type = "inactivity", ticks = 60 * 15},
           {compare_type="or", type = "inactivity", ticks = 60 *  5},
