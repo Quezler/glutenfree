@@ -198,6 +198,7 @@ function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
       force = force,
       position = position,
     })
+    tile.destructible = false
     tiles[key] = tile
   end
 
