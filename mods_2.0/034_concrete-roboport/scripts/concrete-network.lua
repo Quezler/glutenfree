@@ -24,6 +24,7 @@ function ConcreteNetwork.sub_roboport(network, roboport)
 end
 
 function ConcreteNetwork.destroy(network)
+  -- log("deleting network #" .. network.index)
   network.bounding_box.destroy()
 
   local surfacedata = storage.surfacedata[network.surface_index]
@@ -32,7 +33,9 @@ function ConcreteNetwork.destroy(network)
     surfacedata.abandoned_roboports[unit_number] = roboport
   end
   for unit_number, tile in pairs(network.tile) do
-    surfacedata.abandoned_tiles[unit_number] = tile
+    if surfacedata.roboport_tile_to_network_id[unit_number] == network.index then
+      surfacedata.abandoned_tiles[unit_number] = tile
+    end
   end
 
   storage.surfacedata[network.surface_index].networks[network.index] = nil

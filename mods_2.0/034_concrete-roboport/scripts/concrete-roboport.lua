@@ -80,6 +80,8 @@ function mod.refresh_surfacedata()
 
       abandoned_roboports = {}, -- {unit_number = LuaEntity}
       abandoned_tiles = {}, -- {unit_number = LuaEntity}
+
+      roboport_tile_to_network_id = {},
     }
   end
 end
@@ -173,6 +175,7 @@ function ConcreteRoboport.mycelium(surface, position, force)
   for _, tile in ipairs(tiles) do
     local roboport_tile = ConcreteRoboport.get_or_create_roboport_tile(surface, tile, force)
     surfacedata.abandoned_tiles[roboport_tile.unit_number] = nil
+    surfacedata.roboport_tile_to_network_id[roboport_tile.unit_number] = network.index
 
     network.tiles = network.tiles + 1
     network.tile[roboport_tile.unit_number] = roboport_tile
@@ -198,11 +201,16 @@ function ConcreteRoboport.get_or_create_roboport_tile(surface, position, force)
       force = force,
       position = position,
     })
+    assert(tile)
     tile.destructible = false
+    storage.deathrattles[script.register_on_object_destroyed(tile)] = {
+      name = "concrete-roboport--tile",
+      surface_index = tile.surface.index,
+    }
     tiles[key] = tile
   end
 
-  return tile --[[@as LuaEntity]]
+  return tile
 end
 
 function ConcreteRoboport.on_built_tile(event)
@@ -259,7 +267,10 @@ end
 function ConcreteRoboport.on_object_destroyed(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    if deathrattle.name == "concrete-roboport" then
+    if deathrattle.name == "concrete-roboport--tile" then
+      local surfacedata = storage.surfacedata[deathrattle.surface_index]
+      surfacedata.roboport_tile_to_network_id[event.useful_id] = nil
+    elseif deathrattle.name == "concrete-roboport" then
       local surfacedata = storage.surfacedata[deathrattle.surface_index]
       local roboport = surfacedata.roboports[deathrattle.roboport_id]
 

@@ -9,6 +9,7 @@ Date: ????
     - Scale the frozen patch
     - Hide lightning warning
     - Set a thumbnail
+    - Fix upgrading the quality of a roboport
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 05. 30
