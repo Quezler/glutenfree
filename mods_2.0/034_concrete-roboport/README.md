@@ -15,4 +15,17 @@ nowadays i can often be found roaming the modding channels and trying to help ou
 
 So yeah, thanks Factorio modding community for making me feel at home, i am here to stay and looking forward to see what the future brings!
 
+(between the days of writing this and finishing the mod up from mere prototype to stable-enough mod i had to rewrite quite a lot, who knew)
+
+=====
+
+Concrete roboports placed on player minable tiles (landfill, stone, concrete, foundations, frozen variants, etc) form an orange zone,
+this allows you to make small logistic subnetworks as long as no normal roboports are nearby enough to connect.
+
+In vanilla roboports only connect if their orange zones touch (so you can have a concrete network within the green construction zone),
+but if mods add roboports with a connection area bigger than the logistic area you might see them connect to your concrete networks.
+
+There can be a small drop in performance when you remove a large concrete roboport network since each tile is a roboport,
+using a tiling algorithm in the future would be nice, but for now each tile needs to go through the disconnecting sequence.
+
 Uses public domain textures from [Dr_Pepper](https://mods.factorio.com/user/Dr_Pepper)
