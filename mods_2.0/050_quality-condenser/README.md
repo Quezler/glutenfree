@@ -40,9 +40,9 @@ Do not forget to put in quality modules, those are what determine the upgrade ch
 Once the machine is full or idle for a few seconds it will start the upgrade cycle process,
 you can leave the result items in to upgrade them more, or extract them for use elsewhere.
 
-In order to limit which quality to upgrade too you can chance the quality of the recipe,
+~~In order to limit which quality to upgrade too you can chance the quality of the recipe,
 it will upgrade up to that quality, save for the normal quality which means uncapped.
-(tip: https://mods.factorio.com/mod/change-recipe-quality-without-re-selecting-recipe)
+(tip: https://mods.factorio.com/mod/change-recipe-quality-without-re-selecting-recipe)~~
 
 Higher qualities of the machine itself are faster and have more upgrade slots,
 note that beyond 100% quality there is no bonus, so you could use speed modules then.

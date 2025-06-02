@@ -24,8 +24,6 @@
 
         "beacon-interface >= 1.0.3",
 
-        "? change-recipe-quality-without-re-selecting-recipe",
-
         "(?) QualityPlus"
     ]
 }

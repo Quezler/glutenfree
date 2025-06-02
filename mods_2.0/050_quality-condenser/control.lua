@@ -211,12 +211,6 @@ script.on_configuration_changed(function(data)
   Handler.refresh_gui_for_players()
 end)
 
-function ensure_recipe_is_set(entity)
-  local recipe, quality = entity.get_recipe()
-  if recipe == nil then entity.set_recipe(mod_prefix .. "a-whole-bunch-of-items") end
-  return quality or prototypes.quality["normal"]
-end
-
 local allow_beacon_interface_creation = false
 
 function Handler.on_created_entity(event)
@@ -233,8 +227,6 @@ function Handler.on_created_entity(event)
     end
     return
   end
-
-  ensure_recipe_is_set(entity)
 
   local struct = new_struct(storage.structs, {
     id = entity.unit_number,
@@ -321,13 +313,7 @@ local deathrattles = {
   ["offering-idle"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
     if struct and struct.entity.valid then
-      if struct.entity.crafting_progress == 0 and struct.container_inventory.is_empty() == false then
-        ensure_recipe_is_set(struct.entity)
-        struct.entity.crafting_progress = 0.001
-        reset_offering_done(struct)
-      else
-        reset_offering_idle(struct)
-      end
+      reset_offering_done(struct)
     end
   end,
   ["offering-done"] = function (deathrattle)
@@ -385,18 +371,6 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     deathrattles[deathrattle[1]](deathrattle)
-  end
-end)
-
-script.on_nth_tick(60 * 60, function(event)
-  for _, struct in pairs(storage.structs) do
-    local signal_T = struct.inserter_1.get_signal({type = "virtual", name = "signal-T"}, defines.wire_connector_id.circuit_green)
-    if signal_T > 300 then -- idle for over 5 seconds
-      if struct.entity.crafting_progress == 0 and struct.container_inventory.is_empty() == false then -- is currently not crafting
-        ensure_recipe_is_set(struct.entity)
-        struct.entity.crafting_progress = 0.001
-      end
-    end
   end
 end)
 

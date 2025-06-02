@@ -5,6 +5,7 @@ Date: ????
     - Drop initial skin
     - Switch from accumulator earrape to recycler noises
     - Shift the texture up a little bit
+    - Make recipe self starting and drop upper quality support
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.7
 Date: 2025. 05. 18

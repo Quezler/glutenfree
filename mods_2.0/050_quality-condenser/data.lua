@@ -14,18 +14,26 @@ local skin = Hurricane.crafter({
   shift = {0, -0.6},
 })
 
+local module_slots = settings.startup[mod_prefix .. "module-slots"].value
+local module_slot_scale = {
+  [1] = 1.75,
+  [2] = 1.50,
+  [3] = 1.25,
+  -- default = 1
+}
+
 local crafter_entity = {
   type = "assembling-machine",
   name = mod_name,
   icon = skin.icon,
 
   selection_priority = 51,
-  drawing_box_vertical_extension = 0.5,
+  drawing_box_vertical_extension = 1,
   selection_box = {{-3.5, -3.5}, {3.5, 3.5}},
   collision_box = table.deepcopy(a_9x9_entity.collision_box),
   max_health = 1000,
 
-  module_slots = settings.startup[mod_prefix .. "module-slots"].value,
+  module_slots = module_slots,
   allowed_effects = {"consumption", "speed", "pollution", "quality"},
 
   crafting_speed = 2,
@@ -38,13 +46,15 @@ local crafter_entity = {
   energy_usage = settings.startup[mod_prefix .. "energy-usage"].value,
 
   crafting_categories = {mod_prefix .. "recipe-category"},
-  -- fixed_recipe = mod_prefix .. "recipe",
-  -- fixed_quality = "normal",
-  return_ingredients_on_change = false,
+  fixed_recipe = mod_prefix .. "recipe",
+  fixed_quality = "normal",
+  -- return_ingredients_on_change = false,
   show_recipe_icon_on_map = false,
-  icon_draw_specification = {shift = {1 - 0.05, -1 + 0.05}, scale = 4},
+  -- icon_draw_specification = {shift = {1 - 0.05, -1 + 0.05}, scale = 4},
+  icon_draw_specification = {scale = 0},
   icons_positioning = {
-    {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 2.0}, scale = 1},
+    {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 1.25}, scale = module_slot_scale[module_slots] or 1},
+    -- {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 1}, scale = 1.75, max_icons_per_row = 3},
   },
 
   graphics_set = skin.graphics_set,
