@@ -2,7 +2,7 @@
     "name": "Krastorio2-roboport-mode-colored-textures",
     "title": "Krastorio2 - roboport mode colored textures",
     "description": "The rings of the roboport will be tinted normal/green/orange based on which mode is selected.",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [
@@ -13,6 +13,7 @@
         "?Krastorio2",
         "?Krastorio2-spaced-out",
 
-        "(?) big-electric-pole-that-breathes-construction-area"
+        "(?) big-electric-pole-that-breathes-construction-area",
+        "(?) maraxsis"
     ]
 }

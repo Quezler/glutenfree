@@ -21,6 +21,8 @@ local item_masks = {
 -- orange_tint = lessen_tint(orange_tint)
 
 local function set_animation_tint(animation, tint)
+  if animation == nil then return end -- optional
+
   if animation.layers then
     for _, layer in ipairs(animation.layers) do
       set_animation_tint(layer, tint)
