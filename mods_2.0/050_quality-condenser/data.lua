@@ -53,30 +53,10 @@ local crafter_entity = {
   close_sound = sounds.machine_close,
   working_sound =
   {
-    main_sounds =
-    {
-      {
-        sound =
-        {
-          filename = "__base__/sound/accumulator-working.ogg",
-          volume = 10,
-        },
-        activity_to_volume_modifiers = {offset = 2, inverted = true},
-        fade_in_ticks = 4,
-        fade_out_ticks = 20
-      },
-      {
-        sound =
-        {
-          filename = "__base__/sound/accumulator-discharging.ogg",
-          volume = 10,
-        },
-        activity_to_volume_modifiers = {offset = 1},
-        fade_in_ticks = 4,
-        fade_out_ticks = 20
-      }
-    },
-    max_sounds_per_prototype = 3,
+    sound = {filename = mod_directory .. "/sound/recycler/recycler-loop.ogg", volume = 0.7 * 2}, -- allowed because of feature flag
+    fade_in_ticks = 4,
+    fade_out_ticks = 20,
+    max_sounds_per_prototype = 2 * 2,
   },
 
   minable = {mining_time = 1},
@@ -151,6 +131,9 @@ local container_entity = {
   inventory_size = 20,
   inventory_type = "normal",
   flags = {"player-creation", "not-on-map", "not-deconstructable"},
+
+  open_sound = sounds.metallic_chest_open,
+  close_sound = sounds.metallic_chest_close,
 
   selection_box = table.deepcopy(a_9x9_entity.selection_box),
   collision_box = table.deepcopy(a_9x9_entity.collision_box),
