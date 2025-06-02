@@ -392,6 +392,13 @@ function Handler.update_one_force_recipe_visibility(event)
   for pipe_to_ground_name, underground_belt_name in pairs(pipe_to_ground_to_underground_belt_map) do
     if force.recipes[pipe_to_ground_name] then
       force.recipes[pipe_to_ground_name].enabled = heat_pipe_enabled and force.recipes[underground_belt_name].enabled
+
+      -- https://mods.factorio.com/mod/underground-heat-pipe/discussion/683c0c411ef76c3df9937a8e
+      if event.name ~= defines.events.on_research_finished then
+        for _, player in ipairs(force.players) do
+          player.clear_recipe_notification(pipe_to_ground_name)
+        end
+      end
     end
   end
 end
