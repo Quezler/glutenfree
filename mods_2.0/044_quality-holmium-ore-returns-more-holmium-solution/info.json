@@ -3,7 +3,7 @@
     "title": "Quality holmium ore returns more holmium solution",
     "description": "Quality holmium ore finally yields you more.",
 
-    "version": "1.1.3",
+    "version": "1.2.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -18,7 +18,7 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "base >= 2.0.35",
+        "base >= 2.0.38",
         "quality",
         "space-age",
 

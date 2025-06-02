@@ -104,22 +104,6 @@ quality_holmium_solution_recipe.results = {
   {type = "fluid", name="holmium-solution", amount = 100},
 }
 
-holmium_chemical_plant.vector_to_place_result = {0, 1.25}
-
-local linked_chest = table.deepcopy(data.raw["linked-container"]["linked-chest"])
-linked_chest.name = "holmium-chemical-plant-linked-chest"
-linked_chest.collision_box = {{-0.25, -0.25}, {0.25, 0.25}}
-linked_chest.collision_mask = {layers = {}}
-linked_chest.picture = util.empty_sprite()
-linked_chest.inventory_size = 1
-linked_chest.inventory_type = "normal"
-linked_chest.gui_mode = "none"
-linked_chest.flags = {"not-on-map", "hide-alt-info"}
-linked_chest.selection_priority = 51
-linked_chest.selectable_in_game = false
-
-data:extend{linked_chest}
-
 data:extend{{
   type = "planet",
   name = "holmium-chemical-plant",
@@ -146,8 +130,6 @@ data:extend{{
 }}
 
 table.insert(holmium_chemical_plant.flags, "no-automated-item-removal")
-table.insert(linked_chest.flags, "no-automated-item-removal")
-table.insert(linked_chest.flags, "no-automated-item-insertion")
 
 local fast_inserter = table.deepcopy(data.raw["inserter"]["fast-inserter"])
 local inserter = {

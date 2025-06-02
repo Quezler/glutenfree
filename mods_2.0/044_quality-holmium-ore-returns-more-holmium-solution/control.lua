@@ -22,6 +22,7 @@ end
 local Handler = {}
 
 script.on_init(function()
+  storage.version = 1
   storage.x_offset = 0
   storage.structs = {}
   storage.deathrattles = {}
@@ -48,6 +49,32 @@ end)
 
 script.on_configuration_changed(function()
   Handler.update_constant_combinator()
+
+  if (storage.version or 0) == 0 then
+    storage.version = 1
+    for _, struct in pairs(storage.structs) do
+      if struct.linked_chest_a then -- prevent the new structs from showing up here as we iterate
+        struct.linked_chest_a.destroy()
+        struct.linked_chest_b.destroy()
+        struct.linked_chest_c.destroy()
+        struct.inserter_3.destroy()
+        if struct.holmium_chemical_plant.valid then -- what? how?
+          struct.position = {"N", "O"} -- skip find_preexisting_struct
+          local clone = struct.holmium_chemical_plant.clone{
+            position = struct.holmium_chemical_plant.position,
+          }
+
+          local invalid = game.create_inventory(0)
+          invalid.destroy()
+
+          struct.proxy_container_a = invalid
+          struct.proxy_container_b = invalid
+
+          struct.holmium_chemical_plant.destroy()
+        end
+      end
+    end
+  end
 end)
 
 function Handler.update_constant_combinator()
@@ -64,14 +91,6 @@ function Handler.update_constant_combinator()
   end
 end
 
-function Handler.get_linked_chest_position(holmium_chemical_plant)
-  return util.moveposition({holmium_chemical_plant.position.x, holmium_chemical_plant.position.y}, holmium_chemical_plant.direction, -1)
-end
-
-function Handler.get_assembling_machine_position(holmium_chemical_plant)
-  return util.moveposition({holmium_chemical_plant.position.x, holmium_chemical_plant.position.y}, holmium_chemical_plant.direction,  1)
-end
-
 function Handler.find_preexisting_struct(surface, position)
   for _, struct in pairs(storage.structs) do
     if struct.surface.index == surface.index then
@@ -84,9 +103,8 @@ end
 
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
-  if event.destination then error("yeah, don't do that yet.") end
 
-  local old_struct = Handler.find_preexisting_struct(event.entity.surface, event.entity.position)
+  local old_struct = Handler.find_preexisting_struct(entity.surface, entity.position)
   if old_struct then
     storage.deathrattles[old_struct.registration_number] = nil
     storage.structs[old_struct.id] = nil
@@ -95,7 +113,6 @@ function Handler.on_created_entity(event)
     old_struct.registration_number = script.register_on_object_destroyed(entity)
     old_struct.holmium_chemical_plant = entity
     storage.deathrattles[old_struct.registration_number] = {type = "holmium-chemical-plant", struct_id = old_struct.id}
-    Handler.on_player_rotated_or_flipped_entity({entity = entity})
     Handler.on_holmium_chemical_plant_changed_quality(old_struct)
     return
   end
@@ -108,36 +125,30 @@ function Handler.on_created_entity(event)
     surface = entity.surface,
     position = entity.position,
 
-    linked_chest_a = nil,
-    linked_chest_b = nil,
+    -- linked_chest_a = nil,
+    -- linked_chest_b = nil,
+    proxy_container_a = nil,
     inserter_1 = nil,
     infinity_chest_1 = nil,
     inserter_2 = nil,
-    linked_chest_c = nil,
+    -- linked_chest_c = nil,
+    proxy_container_b = nil,
     arithmetic_1 = nil,
     arithmetic_2 = nil,
     arithmetic_3 = nil,
-    inserter_3 = nil,
+    -- inserter_3 = nil,
     assembler = nil,
   })
 
   storage.deathrattles[struct.registration_number] = {type = "holmium-chemical-plant", struct_id = struct.id}
 
-  struct.linked_chest_a = entity.surface.create_entity{
-    name = "holmium-chemical-plant-linked-chest",
-    force = "neutral",
-    position = Handler.get_linked_chest_position(entity),
-  }
-  struct.linked_chest_a.destructible = false
-  struct.linked_chest_a.link_id = storage.x_offset
-  entity.drop_target = struct.linked_chest_a
-
-  struct.linked_chest_b = game.surfaces[mod_surface_name].create_entity{
-    name = "holmium-chemical-plant-linked-chest",
+  struct.proxy_container_a = game.surfaces[mod_surface_name].create_entity{
+    name = "proxy-container",
     force = "neutral",
     position = {0.5 + storage.x_offset, -0.5},
   }
-  struct.linked_chest_b.link_id = storage.x_offset
+  struct.proxy_container_a.proxy_target_entity = struct.holmium_chemical_plant
+  struct.proxy_container_a.proxy_target_inventory = defines.inventory.crafter_output
 
   struct.inserter_1 = game.surfaces[mod_surface_name].create_entity{
     name = "holmium-chemical-plant-inserter",
@@ -153,7 +164,6 @@ function Handler.on_created_entity(event)
     name = coin_item_name,
     quality = "normal"
   })
-  struct.inserter_1.pickup_target = struct.linked_chest_b
   struct.inserter_1.inserter_stack_size_override = 1
 
   struct.inserter_1_cb = struct.inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
@@ -195,14 +205,11 @@ function Handler.on_created_entity(event)
   }
   struct.inserter_2.inserter_stack_size_override = 1
 
-  struct.linked_chest_c = game.surfaces[mod_surface_name].create_entity{
-    name = "holmium-chemical-plant-linked-chest",
+  struct.proxy_container_b = game.surfaces[mod_surface_name].create_entity{
+    name = "proxy-container",
     force = "neutral",
     position = {0.5 + storage.x_offset, -4.5},
   }
-  struct.linked_chest_c.link_id = storage.x_offset
-
-  struct.inserter_2.drop_target = struct.linked_chest_c
 
   -- takes in the quality signal and determines the multiplier amount
   struct.arithmetic_1 = game.surfaces[mod_surface_name].create_entity{
@@ -310,22 +317,14 @@ function Handler.on_created_entity(event)
 
   storage.x_offset = storage.x_offset + 1
 
-  struct.inserter_3 = entity.surface.create_entity{
-    name = "holmium-chemical-plant-inserter",
-    force = "neutral",
-    position = entity.position,
-    direction = util.oppositedirection(entity.direction),
-  }
-  struct.inserter_3.destructible = false
-  struct.inserter_3.pickup_target = struct.linked_chest_a
-
   struct.assembler = entity.surface.create_entity{
     name = "holmium-chemical-plant-assembling-machine",
     force = entity.force, -- for production statistics
-    position = Handler.get_assembling_machine_position(entity),
+    position = entity.position,
   }
   struct.assembler.destructible = false
-  struct.inserter_3.drop_target = struct.assembler
+  struct.proxy_container_b.proxy_target_entity = struct.assembler
+  struct.proxy_container_b.proxy_target_inventory = defines.inventory.crafter_input
 
   Handler.on_holmium_chemical_plant_changed_quality(struct)
 end
@@ -348,40 +347,24 @@ function Handler.on_holmium_chemical_plant_changed_quality(struct)
   struct.holmium_chemical_plant.fluidbox.add_linked_connection(4, struct.assembler, 2)
 end
 
-function Handler.on_player_rotated_or_flipped_entity(event)
-  local entity = event.entity
-
-  if entity.name ~= "holmium-chemical-plant" then return end
-  local struct = assert(storage.structs[entity.unit_number])
-
-  struct.linked_chest_a.teleport(Handler.get_linked_chest_position(struct.holmium_chemical_plant))
-  struct.holmium_chemical_plant.drop_target = struct.linked_chest_a
-
-  struct.inserter_3.direction = util.oppositedirection(entity.direction)
-  struct.inserter_3.pickup_target = struct.linked_chest_a
-  struct.assembler.teleport(Handler.get_assembling_machine_position(struct.holmium_chemical_plant))
-  struct.inserter_3.drop_target = struct.assembler
-end
-
-script.on_event(defines.events.on_player_rotated_entity, Handler.on_player_rotated_or_flipped_entity)
-script.on_event(defines.events.on_player_flipped_entity, Handler.on_player_rotated_or_flipped_entity)
-
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
 
     if deathrattle.type == "holmium-chemical-plant" then
       local struct = assert(storage.structs[deathrattle.struct_id])
-      struct.linked_chest_a.destroy()
-      struct.linked_chest_b.destroy()
+      -- struct.linked_chest_a.destroy()
+      -- struct.linked_chest_b.destroy()
+      struct.proxy_container_a.destroy()
       struct.inserter_1.destroy()
       struct.infinity_chest_1.destroy()
       struct.inserter_2.destroy()
-      struct.linked_chest_c.destroy()
+      -- struct.linked_chest_c.destroy()
+      struct.proxy_container_b.destroy()
       struct.arithmetic_1.destroy()
       struct.arithmetic_2.destroy()
       struct.arithmetic_3.destroy()
-      struct.inserter_3.destroy()
+      -- struct.inserter_3.destroy()
       struct.assembler.destroy()
       storage.structs[deathrattle.struct_id] = nil
     else
