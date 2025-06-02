@@ -67,10 +67,11 @@ local crafter_entity = {
     max_sounds_per_prototype = 2 * 2,
   },
 
-  minable = {mining_time = 1},
+  minable = {mining_time = 0.5},
   quality_indicator_shift = {-1, 1},
 
   flags = {"player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
+  -- circuit_wire_max_distance = 1,
 }
 
 local crafter_item = {
@@ -148,7 +149,7 @@ local container_entity = {
   collision_mask = {layers = {}},
   max_health = 10,
 
-  minable = {mining_time = 1},
+  minable = {mining_time = 0.5},
 
   circuit_wire_max_distance = default_circuit_wire_max_distance,
   circuit_connector = circuit_connector_definitions.create_single

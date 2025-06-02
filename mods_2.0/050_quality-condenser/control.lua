@@ -10,9 +10,9 @@ local function new_struct(table, struct)
   return struct
 end
 
-local function reset_offering_idle(struct)
+local function reset_offering_done(struct)
   if struct.inserter_1_offering.valid then return end
-  -- game.print(string.format("resetting offering idle for #%d @ %d", struct.id, game.tick))
+  -- game.print(string.format("resetting offering done for #%d @ %d", struct.id, game.tick))
   struct.inserter_1.held_stack.clear()
   struct.inserter_1_offering = storage.surface.create_entity{
     name = "item-on-ground",
@@ -20,20 +20,7 @@ local function reset_offering_idle(struct)
     position = {0.5 + struct.index, -8.5},
     stack = {name = "wood"},
   }
-  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_1_offering)] = {"offering-idle", struct.id}
-end
-
-local function reset_offering_done(struct)
-  if struct.inserter_2_offering.valid then return end
-  -- game.print(string.format("resetting offering done for #%d @ %d", struct.id, game.tick))
-  struct.inserter_2.held_stack.clear()
-  struct.inserter_2_offering = storage.surface.create_entity{
-    name = "item-on-ground",
-    force = "neutral",
-    position = {0.5 + struct.index, -11.5},
-    stack = {name = "wood"},
-  }
-  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_2_offering)] = {"offering-done", struct.id}
+  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_1_offering)] = {"offering-done", struct.id}
 end
 
 local function spill_entity_inventory(entity, defines_inventory)
@@ -151,8 +138,7 @@ script.on_event(defines.events.on_player_created, function(event)
 end)
 
 script.on_init(function()
-  storage.migrated_to_2_0_38 = true
-  storage.migrated_to_gte_120 = true
+  storage.version = 1
 
   storage.surface = game.planets["quality-condenser"].create_surface()
   storage.surface.generate_with_lab_tiles = true
@@ -194,18 +180,24 @@ script.on_configuration_changed(function(data)
     update_beacon_interface(struct)
   end
 
-  if not storage.migrated_to_2_0_38 then
-    for _, struct in pairs(storage.structs) do
-      Combinators.migrate_to_2_0_38(struct)
+  if (storage.version or 0) == 0 then
+    storage.version = 1
+    for _, entity in ipairs(storage.surface.find_entities_filtered{}) do
+      entity.destroy()
     end
-    storage.migrated_to_2_0_38 = true
-  end
-
-  if not storage.migrated_to_gte_120 then
-    for _, struct in pairs(storage.structs) do
-      Combinators.migrate_to_gte_120(struct)
+    storage.surface.create_entity{
+      name = "electric-energy-interface",
+      force = "neutral",
+      position = {-1, -1},
+    }
+    local structs = {}
+    for struct_id, struct in pairs(storage.structs) do
+      structs[struct_id] = struct
     end
-    storage.migrated_to_gte_120 = true
+    for _, struct in pairs(structs) do
+      struct.entity.clone{position = struct.entity.position}
+      struct.entity.destroy()
+    end
   end
 
   Handler.refresh_gui_for_players()
@@ -216,7 +208,7 @@ local allow_beacon_interface_creation = false
 function Handler.on_created_entity(event)
   local entity = event.entity or event.destination
 
-  -- mods to not get to clone/place the container.
+  -- mods do not get to clone/place the container.
   if entity.name == mod_prefix .. "container" then
     spill_entity_inventory(entity, defines.inventory.chest)
     entity.destroy()
@@ -241,10 +233,8 @@ function Handler.on_created_entity(event)
     arithmetic_2 = nil, -- each + 0 = each
     decider_1 = nil, -- red T != green T | R 1
     decider_2 = nil, -- R == 0 | T = T + 1
-    inserter_1 = nil, -- T = ?
+    inserter_1 = nil, -- F > 0
     inserter_1_offering = storage.invalid,
-    inserter_2 = nil, -- F > 0
-    inserter_2_offering = storage.invalid,
   })
   storage.index = storage.index + 1
 
@@ -289,7 +279,7 @@ function Handler.on_created_entity(event)
   storage.deathrattles[script.register_on_object_destroyed(struct.container)] = {"container", struct.id}
 
   Combinators.create_for_struct(struct)
-  reset_offering_idle(struct)
+  reset_offering_done(struct)
 end
 
 for _, event in ipairs({
@@ -311,16 +301,12 @@ local Condense = require("scripts.condense")
 
 local deathrattles = {
   ["offering-idle"] = function (deathrattle)
-    local struct = storage.structs[deathrattle[2]]
-    if struct and struct.entity.valid then
-      reset_offering_done(struct)
-    end
   end,
   ["offering-done"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
-    if struct then
+    if struct and struct.entity.valid then
       Condense.trigger(struct)
-      reset_offering_idle(struct)
+      reset_offering_done(struct)
     end
   end,
   ["crafter"] = function (deathrattle)
@@ -340,8 +326,6 @@ local deathrattles = {
       struct.decider_2.destroy()
       struct.inserter_1.destroy()
       struct.inserter_1_offering.destroy()
-      struct.inserter_2.destroy()
-      struct.inserter_2_offering.destroy()
     end
   end,
   ["container"] = function (deathrattle)
@@ -361,8 +345,6 @@ local deathrattles = {
       struct.decider_2.destroy()
       struct.inserter_1.destroy()
       struct.inserter_1_offering.destroy()
-      struct.inserter_2.destroy()
-      struct.inserter_2_offering.destroy()
     end
   end,
 }

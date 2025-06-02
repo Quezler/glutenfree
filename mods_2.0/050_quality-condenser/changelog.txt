@@ -7,6 +7,7 @@ Date: ????
     - Shift the texture up a little bit
     - Make recipe self starting and drop upper quality support
     - Make them searchable on the map and only take 10 seconds
+    - Wire inactivity directly to the condenser
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.7
 Date: 2025. 05. 18

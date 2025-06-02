@@ -1,35 +1,5 @@
 local Combinators = {}
 
-function Combinators.migrate_to_2_0_38(struct)
-  if struct.proxy_container then return end
-  struct.proxy_container = storage.surface.create_entity{
-    name = "proxy-container",
-    force = "neutral",
-    position = {0.5 + struct.index, 0.5},
-  }
-  struct.proxy_container.proxy_target_entity = struct.container
-  struct.proxy_container.proxy_target_inventory = defines.inventory.chest
-
-  local old_red_out = struct.container.get_wire_connector(defines.wire_connector_id.circuit_red, true) --[[@as LuaWireConnector]]
-  local new_red_out = struct.proxy_container.get_wire_connector(defines.wire_connector_id.circuit_red, true) --[[@as LuaWireConnector]]
-  local red_in = struct.arithmetic_1.get_wire_connector(defines.wire_connector_id.combinator_input_red, false) --[[@as LuaWireConnector]]
-  assert(old_red_out.disconnect_from(red_in, defines.wire_origin.script))
-  assert(new_red_out.connect_to(red_in, false, defines.wire_origin.player))
-end
-
-function Combinators.migrate_to_gte_120(struct)
-  inserter_1_cb = struct.inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
-  inserter_1_cb.circuit_condition = {
-    comparator = "≥",
-    constant = 60 * 2,
-    first_signal = {
-      name = "signal-T",
-      type = "virtual"
-    },
-    fulfilled = false
-  }
-end
-
 function Combinators.create_for_struct(struct)
   struct.proxy_container = storage.surface.create_entity{
     name = "proxy-container",
@@ -228,6 +198,26 @@ function Combinators.create_for_struct(struct)
     assert(green.connect_to(green_in, false, defines.wire_origin.player))
   end
 
+  do -- idle timer to crafter
+    local green_out = struct.decider_2.get_wire_connector(defines.wire_connector_id.combinator_output_green, false) --[[@as LuaWireConnector]]
+    local green_in = struct.entity.get_wire_connector(defines.wire_connector_id.circuit_green, true) --[[@as LuaWireConnector]]
+    assert(green_out.connect_to(green_in, false, defines.wire_origin.player))
+  end
+
+  local entity_cb = struct.entity.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
+  entity_cb.circuit_read_recipe_finished = true
+  entity_cb.circuit_recipe_finished_signal = {type = "virtual", name = "signal-F"}
+  entity_cb.circuit_enable_disable = true
+  entity_cb.circuit_condition = {
+    comparator = "≥",
+    constant = 60 * 1.5,
+    first_signal = {
+      name = "signal-T",
+      type = "virtual"
+    },
+    fulfilled = false
+  }
+
   struct.inserter_1 = storage.surface.create_entity{
     name = "inserter",
     force = "neutral",
@@ -238,35 +228,6 @@ function Combinators.create_for_struct(struct)
   inserter_1_cb = struct.inserter_1.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
   inserter_1_cb.circuit_enable_disable = true
   inserter_1_cb.circuit_condition = {
-    comparator = "≥",
-    constant = 60 * 2,
-    first_signal = {
-      name = "signal-T",
-      type = "virtual"
-    },
-    fulfilled = false
-  }
-
-  do
-    local green_out = struct.decider_2.get_wire_connector(defines.wire_connector_id.combinator_output_green, false) --[[@as LuaWireConnector]]
-    local green_in = struct.inserter_1.get_wire_connector(defines.wire_connector_id.circuit_green, false) --[[@as LuaWireConnector]]
-    assert(green_out.connect_to(green_in, false, defines.wire_origin.player))
-  end
-
-  local entity_cb = struct.entity.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
-  entity_cb.circuit_read_recipe_finished = true
-  entity_cb.circuit_recipe_finished_signal = {type = "virtual", name = "signal-F"}
-
-  struct.inserter_2 = storage.surface.create_entity{
-    name = "inserter",
-    force = "neutral",
-    position = {0.5 + struct.index, -12.5},
-    direction = defines.direction.south,
-  }
-  assert(struct.inserter_2)
-  inserter_2_cb = struct.inserter_2.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
-  inserter_2_cb.circuit_enable_disable = true
-  inserter_2_cb.circuit_condition = {
     comparator = ">",
     constant = 0,
     first_signal = {
@@ -278,7 +239,7 @@ function Combinators.create_for_struct(struct)
 
   do
     local green_out = struct.entity.get_wire_connector(defines.wire_connector_id.circuit_green, false) --[[@as LuaWireConnector]]
-    local green_in = struct.inserter_2.get_wire_connector(defines.wire_connector_id.circuit_green, false) --[[@as LuaWireConnector]]
+    local green_in = struct.inserter_1.get_wire_connector(defines.wire_connector_id.circuit_green, false) --[[@as LuaWireConnector]]
     assert(green_out.connect_to(green_in, false, defines.wire_origin.script))
   end
 end
