@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
-Date: ????
+Date: 2025. 06. 02
   Info:
     - Drop support for legacy heating radius setting
+    - Add support for the "Farther Heat" mod to the endpoints
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 2025. 06. 02

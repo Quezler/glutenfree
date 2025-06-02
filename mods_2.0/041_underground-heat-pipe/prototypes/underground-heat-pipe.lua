@@ -189,6 +189,7 @@ function UndergroundHeatPipe.make(config)
           selectable_in_game = false,
           hidden = true,
         }
+        underground_heat_pipe_directional_heat_pipe_names[heat_pipe_direction.name] = true
 
         for _, spriteconfig in ipairs({{key = "connection_sprites", prefix = ""}, {key = "heat_glow_sprites", prefix = "heated-"}}) do
           local template_off = {

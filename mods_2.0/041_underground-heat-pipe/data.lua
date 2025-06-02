@@ -1,3 +1,5 @@
+underground_heat_pipe_directional_heat_pipe_names = {}
+
 local UndergroundHeatPipe = require("prototypes.underground-heat-pipe")
 
 UndergroundHeatPipe.make({

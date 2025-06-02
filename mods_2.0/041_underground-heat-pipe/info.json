@@ -3,7 +3,7 @@
     "title": "Underground heat pipe",
     "description": "Not enough space above ground? underground has free real estate.",
 
-    "version": "2.1.1",
+    "version": "2.2.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -21,6 +21,7 @@
         "base >= 2.0.29",
         "? space-age",
 
-        "(?) factorioplus"
+        "(?) factorioplus",
+        "(?) farther-heat"
     ]
 }
