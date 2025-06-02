@@ -1,15 +1,5 @@
 require("shared")
 
-data:extend({
-  {
-    type = "string-setting",
-    name = mod_prefix .. "heating-radius",
-    setting_type = "startup", order = "a",
-    default_value = "Directly above",
-    allowed_values = {"Directly above", "Around too"},
-  },
-})
-
 local underground_belts = {
   {order = "a", prefix = ""},
   {order = "b", prefix = "fast-"},
@@ -33,7 +23,7 @@ for _, underground_belt in ipairs(underground_belts) do
       name = mod_prefix .. "distance-" .. item_name,
       -- localised_name = {"", string.format("[item=%s]", item_name)},
       localised_name = {"mod-setting-name.underground-heat-pipe--distance", string.format("[item=%s]", item_name)},
-      setting_type = "startup", order = "b" .. underground_belt.order,
+      setting_type = "startup", order = "a" .. underground_belt.order,
       minimum_value = -1,
       default_value = -1,
       maximum_value = 100,
