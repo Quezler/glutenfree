@@ -36,7 +36,7 @@ local crafter_entity = {
   module_slots = module_slots,
   allowed_effects = {"consumption", "speed", "pollution", "quality"},
 
-  crafting_speed = 2,
+  crafting_speed = 1,
   energy_source =
   {
     type = "electric",
@@ -48,13 +48,10 @@ local crafter_entity = {
   crafting_categories = {mod_prefix .. "recipe-category"},
   fixed_recipe = mod_prefix .. "recipe",
   fixed_quality = "normal",
-  -- return_ingredients_on_change = false,
-  show_recipe_icon_on_map = false,
   -- icon_draw_specification = {shift = {1 - 0.05, -1 + 0.05}, scale = 4},
   icon_draw_specification = {scale = 0},
   icons_positioning = {
     {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 1.25}, scale = module_slot_scale[module_slots] or 1},
-    -- {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 1}, scale = 1.75, max_icons_per_row = 3},
   },
 
   graphics_set = skin.graphics_set,

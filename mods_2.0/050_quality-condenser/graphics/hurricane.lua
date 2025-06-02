@@ -22,6 +22,7 @@ function Hurricane.crafter(config)
   end
 
   local graphics_set = {
+    animation_progress = 1,
     animation =
     {
       layers =
