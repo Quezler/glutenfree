@@ -5,38 +5,13 @@ local sounds = require("__base__.prototypes.entity.sounds")
 local a_9x9_entity = data.raw["rocket-silo"]["rocket-silo"]
 local a_3x3_entity = data.raw["assembling-machine"]["assembling-machine-2"]
 
-local skins = {
-  ["Disruptor"] = {
-    name = "disruptor",
-    width = 4720, height = 4720,
-    total_frames = 40 + 40,
-    shadow_width = 1200, shadow_height = 700,
-  },
-  ["Research center"] = {
-    name = "research-center",
-    width = 4720, height = 5120,
-    total_frames = 40 + 40,
-    shadow_width = 1200, shadow_height = 700,
-  },
-}
-
 local Hurricane = require("graphics.hurricane")
-local appearance = settings.startup[mod_prefix .. "skin"].value
-local skin = Hurricane.crafter(skins[appearance])
-
--- a manual modification to block some transparency
-if appearance == "Disruptor" then
-  table.insert(skin.graphics_set.animation.layers, 1, {
-    filename = mod_directory .. "/graphics/disruptor/disruptor-hr-animation-bg.png",
-    priority = "high",
-    width = 590,
-    height = 590,
-    frame_count = 1,
-    repeat_count = 80,
-    scale = 0.5,
-    animation_speed = 0.5,
-  })
-end
+local skin = Hurricane.crafter({
+  name = "research-center",
+  width = 4720, height = 5120,
+  total_frames = 40 + 40,
+  shadow_width = 1200, shadow_height = 700,
+})
 
 local crafter_entity = {
   type = "assembling-machine",
