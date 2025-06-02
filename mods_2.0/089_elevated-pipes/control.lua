@@ -79,7 +79,6 @@ function mod.on_created_entity(event)
     entity = entity,
     connections = {},
     alt_mode = nil,
-    occluder_tip = nil,
   })
 
   alt_mode_creation_allowed = true
@@ -94,16 +93,6 @@ function mod.on_created_entity(event)
 
   struct.alt_mode.destructible = false
   struct.alt_mode.fluidbox.add_linked_connection(0, entity, 0)
-
-  struct.occluder_tip = rendering.draw_sprite{
-    sprite = "elevated-pipe-occluder-top",
-    scale = 0.5,
-    surface = surfacedata.surface,
-    target = {
-      entity = struct.entity,
-    },
-    render_layer = tostring(render_layer + 1),
-  }
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {
     name = "elevated-pipe",

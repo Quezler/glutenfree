@@ -39,6 +39,4 @@ data:extend{
   sprite_with_shadow("elevated-pipe-vertical-bottom", vertical_shadow),
   sprite_with_shadow("elevated-pipe-vertical-center", vertical_shadow),
   sprite_with_shadow("elevated-pipe-vertical-single", vertical_shadow),
-  sprite_with_shadow("elevated-pipe-occluder-top", {shadow = false}),
-  sprite_with_shadow("elevated-pipe-occluder-bottom", {shadow = false}),
 }

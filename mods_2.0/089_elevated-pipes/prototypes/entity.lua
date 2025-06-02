@@ -15,6 +15,7 @@ local furnace = {
   name = "elevated-pipe",
   icon = mod_directory .. "/graphics/icons/elevated-pipe.png",
 
+  heating_energy = settings.startup[mod_prefix .. "freezes"].value and "200kW" or nil, -- underground pipe + 50
   energy_usage = "1kW",
   energy_source = {type = "void"},
   crafting_speed = 1,
@@ -177,7 +178,7 @@ local furnace = {
       },
       {
         always_draw = true,
-        render_layer = "cargo-hatch",
+        render_layer = "elevated-rail-stone-path-lower",
         animation = {
           layers = {
             {
