@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Drop initial skin
     - Switch from accumulator earrape to recycler noises
+    - Shift the texture up a little bit
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.7
 Date: 2025. 05. 18

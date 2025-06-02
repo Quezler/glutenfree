@@ -11,6 +11,7 @@ local skin = Hurricane.crafter({
   width = 4720, height = 5120,
   total_frames = 40 + 40,
   shadow_width = 1200, shadow_height = 700,
+  shift = {0, -0.6},
 })
 
 local crafter_entity = {

@@ -33,6 +33,7 @@ function Hurricane.crafter(config)
           frame_count = config.total_frames,
           animation_speed = 0.5,
           scale = 0.5,
+          shift = config.shift,
           stripes = get_stripes(mod_directory .. string.format("/graphics/%s/%s-hr-animation-%%d.png", config.name, config.name))
         },
         {
@@ -44,6 +45,7 @@ function Hurricane.crafter(config)
           repeat_count = config.total_frames,
           draw_as_shadow = true,
           scale = 0.5,
+          shift = config.shift,
         }
       }
     },
@@ -58,6 +60,7 @@ function Hurricane.crafter(config)
           frame_count = config.total_frames,
           animation_speed = 0.5,
           scale = 0.5,
+          shift = config.shift,
           draw_as_glow = true,
           blend_mode = "additive",
           stripes = get_stripes(mod_directory .. string.format("/graphics/%s/%s-hr-emission-%%d.png", config.name, config.name))
