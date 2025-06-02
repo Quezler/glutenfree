@@ -210,7 +210,7 @@ function Combinators.create_for_struct(struct)
   entity_cb.circuit_enable_disable = true
   entity_cb.circuit_condition = {
     comparator = "≥",
-    constant = 60 * 1.5,
+    constant = 60 * 2.5,
     first_signal = {
       name = "signal-T",
       type = "virtual"
