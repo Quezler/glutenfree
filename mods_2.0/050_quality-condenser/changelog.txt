@@ -3,6 +3,7 @@ Version: 1.3.1
 Date: ????
   Info:
     - If the condenser did nothing, pause it
+    - Include the module slot item counts in the idle timer as well
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.0
 Date: 2025. 06. 02

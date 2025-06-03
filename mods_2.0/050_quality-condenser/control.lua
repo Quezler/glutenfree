@@ -183,7 +183,9 @@ script.on_configuration_changed(function(data)
   if 2 > (storage.version or 0) then
     storage.version = 2
     for _, entity in ipairs(storage.surface.find_entities_filtered{}) do
-      entity.destroy()
+      if entity.name ~= "quality-condenser" then -- not a condenser placed on the hidden surface itself during testing
+        entity.destroy()
+      end
     end
     storage.surface.create_entity{
       name = "electric-energy-interface",
@@ -228,7 +230,8 @@ function Handler.on_created_entity(event)
     beacon_interface = nil,
     container = nil,
     container_inventory = nil,
-    proxy_container = nil,
+    proxy_container_a = nil,
+    proxy_container_b = nil,
     arithmetic_1 = nil, -- each + 0 = S
     arithmetic_2 = nil, -- each + 0 = each
     decider_1 = nil, -- red T != green T | R 1
@@ -319,7 +322,8 @@ local deathrattles = {
       -- struct.entity.destroy()
       struct.beacon_interface.destroy()
       struct.container.destroy()
-      struct.proxy_container.destroy()
+      if struct.proxy_container_a then struct.proxy_container_a.destroy() end
+      if struct.proxy_container_b then struct.proxy_container_b.destroy() end
       struct.arithmetic_1.destroy()
       struct.arithmetic_2.destroy()
       struct.decider_1.destroy()
@@ -338,7 +342,8 @@ local deathrattles = {
       struct.entity.destroy()
       struct.beacon_interface.destroy()
       -- struct.container.destroy()
-      struct.proxy_container.destroy()
+      if struct.proxy_container_a then struct.proxy_container_a.destroy() end
+      if struct.proxy_container_b then struct.proxy_container_b.destroy() end
       struct.arithmetic_1.destroy()
       struct.arithmetic_2.destroy()
       struct.decider_1.destroy()

@@ -1,13 +1,21 @@
 local Combinators = {}
 
 function Combinators.create_for_struct(struct)
-  struct.proxy_container = storage.surface.create_entity{
+  struct.proxy_container_a = storage.surface.create_entity{
     name = "proxy-container",
     force = "neutral",
     position = {0.5 + struct.index, 0.5},
   }
-  struct.proxy_container.proxy_target_entity = struct.container
-  struct.proxy_container.proxy_target_inventory = defines.inventory.chest
+  struct.proxy_container_a.proxy_target_entity = struct.container
+  struct.proxy_container_a.proxy_target_inventory = defines.inventory.chest
+
+  struct.proxy_container_b = storage.surface.create_entity{
+    name = "proxy-container",
+    force = "neutral",
+    position = {0.5 + struct.index, 1.5},
+  }
+  struct.proxy_container_b.proxy_target_entity = struct.entity
+  struct.proxy_container_b.proxy_target_inventory = defines.inventory.crafter_modules
 
   struct.arithmetic_1 = storage.surface.create_entity{
     name = "arithmetic-combinator",
@@ -39,7 +47,12 @@ function Combinators.create_for_struct(struct)
   }
 
   do
-    local red_out = struct.proxy_container.get_wire_connector(defines.wire_connector_id.circuit_red, true) --[[@as LuaWireConnector]]
+    local red_out = struct.proxy_container_a.get_wire_connector(defines.wire_connector_id.circuit_red, true) --[[@as LuaWireConnector]]
+    local red_in = struct.arithmetic_1.get_wire_connector(defines.wire_connector_id.combinator_input_red, false) --[[@as LuaWireConnector]]
+    assert(red_out.connect_to(red_in, false, defines.wire_origin.player))
+  end
+  do
+    local red_out = struct.proxy_container_b.get_wire_connector(defines.wire_connector_id.circuit_red, true) --[[@as LuaWireConnector]]
     local red_in = struct.arithmetic_1.get_wire_connector(defines.wire_connector_id.combinator_input_red, false) --[[@as LuaWireConnector]]
     assert(red_out.connect_to(red_in, false, defines.wire_origin.player))
   end
