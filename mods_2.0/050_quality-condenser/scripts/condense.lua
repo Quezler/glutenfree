@@ -36,9 +36,22 @@ local function get_spoil_percentage(inventory, item)
   return spoil_percentage
 end
 
+local function condensed_nothing(struct)
+  local current_s = struct.decider_2.get_circuit_network(defines.wire_connector_id.combinator_input_red).get_signal({type = "virtual", name = "signal-S"})
+  struct.decider_2.get_control_behavior().set_condition(2, {
+    comparator = "≠",
+    compare_type = "and",
+    constant = current_s,
+    first_signal = {
+      name = "signal-S",
+      type = "virtual",
+    },
+  })
+end
+
 function Condense.trigger(struct)
   local quality_effect = (struct.entity.effects["quality"] or 0) * 1000
-  if 0 >= quality_effect then return end
+  if 0 >= quality_effect then return condensed_nothing(struct) end
 
   local condensed_anything = false
   local old_item_count = struct.container_inventory.get_item_count()
@@ -89,6 +102,8 @@ function Condense.trigger(struct)
       parameters.second_constant = parameters.second_constant + 1
       arithmetic_1_cb.parameters = parameters
     end
+  else
+    condensed_nothing(struct)
   end
 end
 

@@ -138,7 +138,7 @@ script.on_event(defines.events.on_player_created, function(event)
 end)
 
 script.on_init(function()
-  storage.version = 1
+  storage.version = 2
 
   storage.surface = game.planets["quality-condenser"].create_surface()
   storage.surface.generate_with_lab_tiles = true
@@ -180,8 +180,8 @@ script.on_configuration_changed(function(data)
     update_beacon_interface(struct)
   end
 
-  if (storage.version or 0) == 0 then
-    storage.version = 1
+  if 2 > (storage.version or 0) then
+    storage.version = 2
     for _, entity in ipairs(storage.surface.find_entities_filtered{}) do
       entity.destroy()
     end

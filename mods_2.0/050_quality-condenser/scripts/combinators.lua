@@ -133,6 +133,11 @@ function Combinators.create_for_struct(struct)
     assert(red.connect_to(red_in, false, defines.wire_origin.player))
     assert(green.connect_to(green_in, false, defines.wire_origin.player))
   end
+  do -- connect own red input to own red output
+    local red_in = struct.decider_1.get_wire_connector(defines.wire_connector_id.combinator_input_red, false) --[[@as LuaWireConnector]]
+    local red_out = struct.decider_1.get_wire_connector(defines.wire_connector_id.combinator_output_red, false) --[[@as LuaWireConnector]]
+    assert(red_in.connect_to(red_out, false, defines.wire_origin.player))
+  end
 
   struct.decider_2 = storage.surface.create_entity{
     name = "decider-combinator",
@@ -188,6 +193,16 @@ function Combinators.create_for_struct(struct)
     }
   }
 
+  decider_2_cb.add_condition({
+    comparator = "≠",
+    compare_type = "and",
+    constant = 0,
+    first_signal = {
+      name = "signal-S",
+      type = "virtual",
+    },
+  })
+
   do
     local red = struct.decider_1.get_wire_connector(defines.wire_connector_id.combinator_output_red, false) --[[@as LuaWireConnector]]
     local red_in = struct.decider_2.get_wire_connector(defines.wire_connector_id.combinator_input_red, false) --[[@as LuaWireConnector]]
@@ -240,7 +255,7 @@ function Combinators.create_for_struct(struct)
   do
     local green_out = struct.entity.get_wire_connector(defines.wire_connector_id.circuit_green, false) --[[@as LuaWireConnector]]
     local green_in = struct.inserter_1.get_wire_connector(defines.wire_connector_id.circuit_green, false) --[[@as LuaWireConnector]]
-    assert(green_out.connect_to(green_in, false, defines.wire_origin.script))
+    assert(green_out.connect_to(green_in, false, defines.wire_origin.player))
   end
 end
 
