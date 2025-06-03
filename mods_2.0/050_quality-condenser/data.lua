@@ -9,7 +9,7 @@ local Hurricane = require("graphics.hurricane")
 local skin = Hurricane.crafter({
   name = "research-center",
   width = 4720, height = 5120,
-  total_frames = 40 + 40,
+  total_frames = 64 + 16,
   shadow_width = 1200, shadow_height = 700,
   shift = {0, -0.6},
 })
@@ -61,10 +61,18 @@ local crafter_entity = {
   close_sound = sounds.machine_close,
   working_sound =
   {
-    sound = {filename = mod_directory .. "/sound/recycler/recycler-loop.ogg", volume = 0.7 * 2}, -- allowed because of feature flag
+    sound =
+    {
+      filename = mod_directory .. "/sound/fusion-generator.ogg",
+      volume = 0.7,
+      speed_smoothing_window_size = 60,
+      advanced_volume_control = {attenuation = "exponential"},
+    },
+    use_doppler_shift = false,
+    match_speed_to_activity = true,
+    max_sounds_per_prototype = 2,
     fade_in_ticks = 4,
-    fade_out_ticks = 20,
-    max_sounds_per_prototype = 2 * 2,
+    fade_out_ticks = 20
   },
 
   minable = {mining_time = 0.5},
