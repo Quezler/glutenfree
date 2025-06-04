@@ -107,6 +107,31 @@ local entity_type_blacklisted = util.list_to_map({
   "offshore-pump",
 })
 
+local item_spoils = {}
+for _, item in pairs(prototypes.item) do
+  if item.get_spoil_ticks() > 0 then
+    item_spoils[item.name] = true
+  end
+end
+
+local recipe_requires_spoiling = {}
+for _, recipe in pairs(prototypes.recipe) do
+  for _, ingredient in ipairs(recipe.ingredients) do
+    if ingredient.type == "item" and item_spoils[ingredient.name] then
+      recipe_requires_spoiling[recipe.name] = true
+      goto next_recipe
+    end
+  end
+  for _, product in ipairs(recipe.products) do
+    if product.type == "item" and item_spoils[product.name] then
+      recipe_requires_spoiling[recipe.name] = true
+      goto next_recipe
+    end
+  end
+  ::next_recipe::
+end
+-- log(serpent.block(recipe_requires_spoiling))
+
 local function add_to_contents(contents, type_name_count_quality)
   for _, content in ipairs(contents) do
     if content.type == type_name_count_quality.type
@@ -149,6 +174,10 @@ local function check_recipe_is_allowed(player, recipe_name)
 
   if recipe.hidden then
     return false, string.format("Recipe \"%s\" is not visible.", recipe_name)
+  end
+
+  if recipe_requires_spoiling[recipe_name] then
+    return false, string.format("Recipe \"%s\" has spoiling items.", recipe_name)
   end
 
   return true

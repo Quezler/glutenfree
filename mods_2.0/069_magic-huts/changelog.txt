@@ -29,6 +29,7 @@ Date: ????
     - Grab the district's space location
     - Fix missing argument for recipe blocked messages
     - Fix crash when there was no pollution
+    - Block recipes that need or make spoiling items
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07
