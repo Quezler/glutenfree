@@ -1,6 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2025. 06. 04
+  Info:
+    - Change how the debug output is shown
+    - Handle machines and modules with quality
+    - The items/m button can move/hide, detect that
+    - Better detect quality from the sprite button
+    - Store power and pollution in the factory table
+    - Grab the district's space location
+    - Fix missing argument for recipe blocked messages
+    - Fix crash when there was no pollution
+    - Block recipes that need or make spoiling items
+    - Finish the factory planner stage
+---------------------------------------------------------------------------------------------------
 Version: 0.0.4
-Date: ????
+Date: 2025. 03. 15
   Info:
     - Grab the products, byproducts & ingredients
     - Default serpent to sort keys
@@ -21,15 +35,6 @@ Date: ????
     - Power pollution comment
     - Get the power and pollution as their true number
     - Check if a recipe is available
-    - Change how the debug output is shown
-    - Handle machines and modules with quality
-    - The items/m button can move/hide, detect that
-    - Better detect quality from the sprite button
-    - Store power and pollution in the factory table
-    - Grab the district's space location
-    - Fix missing argument for recipe blocked messages
-    - Fix crash when there was no pollution
-    - Block recipes that need or make spoiling items
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07

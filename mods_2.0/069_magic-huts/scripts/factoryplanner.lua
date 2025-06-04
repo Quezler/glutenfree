@@ -212,7 +212,6 @@ function Factoryplanner.on_gui_click(event)
 
   local factory = get_selected_factory(root)
   if not factory then return end
-  -- game.print(serpent.line(factory))
 
   factory.space_location = "nauvis"
   local sprite = player.gui.screen["fp_frame_main_dialog"].children[2].children[1].children[1].children[1].children[4]
@@ -260,12 +259,8 @@ function Factoryplanner.on_gui_click(event)
     factory.pollution_prefix  =  pollution_tooltip[3][3][1] or ""
   end
 
-
-  -- log(string.format("%.3f %s (%d)", power, power_prefix, power * prefix_to_multiplier(power_prefix)))
-  -- log(string.format("%.3f %s (%d)", pollution, pollution_prefix, pollution * prefix_to_multiplier(pollution_prefix)))
-
-  -- log("power: " .. tostring(power))
-  -- log("pollution: " .. tostring(pollution))
+  -- log(string.format("%.3f %s (%d)", factory.power, factory.power_prefix, factory.power * prefix_to_multiplier(factory.power_prefix)))
+  -- log(string.format("%.3f %s (%d)", factory.pollution, factory.pollution_prefix, factory.pollution * prefix_to_multiplier(factory.pollution_prefix)))
 
   local production_table = root.children[2].children[2].children[4].children[2].children[1]
   local production_table_column = {}
@@ -348,8 +343,6 @@ function Factoryplanner.on_gui_click(event)
       end
     end
 
-    -- LuaGuiPrettyPrint.dump(cell_recipe)
-    -- LuaGuiPrettyPrint.dump(cell_machine)
   end
 
   if any_subfloors then
@@ -360,4 +353,5 @@ function Factoryplanner.on_gui_click(event)
   end
 
   log(serpent.block(factory, {sortkeys = false}))
+  return player.create_local_flying_text{create_at_cursor = true, text = "exported to magic hut."}
 end
