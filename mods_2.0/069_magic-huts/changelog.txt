@@ -28,6 +28,7 @@ Date: ????
     - Store power and pollution in the factory table
     - Grab the district's space location
     - Fix missing argument for recipe blocked messages
+    - Fix crash when there was no pollution
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07

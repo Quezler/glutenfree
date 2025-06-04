@@ -222,8 +222,15 @@ function Factoryplanner.on_gui_click(event)
   factory.power = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2])
   factory.power_prefix  =  root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][3][1] or ""
 
-  factory.pollution = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][2])
-  factory.pollution_prefix  =  root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][3][1] or ""
+  local pollution_tooltip = assert(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip)
+  if pollution_tooltip[1] == "fp.emissions_none" then
+    factory.pollution = 0
+    factory.pollution_prefix = ""
+  else
+    factory.pollution = tonumber(pollution_tooltip[3][2])
+    factory.pollution_prefix  =  pollution_tooltip[3][3][1] or ""
+  end
+
 
   -- log(string.format("%.3f %s (%d)", power, power_prefix, power * prefix_to_multiplier(power_prefix)))
   -- log(string.format("%.3f %s (%d)", pollution, pollution_prefix, pollution * prefix_to_multiplier(pollution_prefix)))
