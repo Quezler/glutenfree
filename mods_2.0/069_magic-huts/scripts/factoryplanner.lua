@@ -153,6 +153,14 @@ local function get_quality_from_sprite_button(element)
   return string.sub(quality_rich_text, 10, -2)
 end
 
+local function get_active_item_rate_view_button(root)
+  for _, button in ipairs(root.children[2].children[2].children[1].children[6]["table_views"].children) do
+    if button.toggled then
+      return button
+    end
+  end
+end
+
 -- after adding the mod anyone who was on the districts page gets sent back to the main page (on_configuration_changed?),
 -- in either case it means our magic button will always be initialized since even when switching it seems to persist fine.
 function Factoryplanner.on_gui_click(event)
@@ -179,8 +187,8 @@ function Factoryplanner.on_gui_click(event)
   end
 
   -- todo: the order is not guaranteed, and the button can even be hidden
-  local first_rate_button_active = root.children[2].children[2].children[1].children[6]["table_views"].children[1].toggled
-  if not first_rate_button_active then
+  local active_item_rate_view_button = get_active_item_rate_view_button(root)
+  if active_item_rate_view_button.caption[2][1] ~= "fp.pu_item" or active_item_rate_view_button.caption[4][1] ~= "fp.unit_minute" then
     return player.create_local_flying_text{create_at_cursor = true, text = "items/m is required."}
   end
 
