@@ -26,6 +26,7 @@ Date: ????
     - The items/m button can move/hide, detect that
     - Better detect quality from the sprite button
     - Store power and pollution in the factory table
+    - Grab the district's space location
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07

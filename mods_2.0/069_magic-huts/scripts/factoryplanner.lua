@@ -49,6 +49,7 @@ local function get_selected_factory(root)
     if factory.children[2].toggled then
       return {
         name = factory.children[2].caption:gsub("^%[img=fp_trash_red%] ", ""),
+        space_location = "?",
 
         -- multiply with prefix and prefix_to_multiplier before use
         power = 0,
@@ -183,6 +184,12 @@ function Factoryplanner.on_gui_click(event)
   local factory = get_selected_factory(root)
   if not factory then return end
   -- game.print(serpent.line(factory))
+
+  factory.space_location = "nauvis"
+  local sprite = player.gui.screen["fp_frame_main_dialog"].children[2].children[1].children[1].children[1].children[4]
+  if sprite.type == "sprite" then
+    factory.space_location = string.sub(sprite.sprite, #" space-location/")
+  end
 
   local level = tonumber(root.children[2].children[2].children[4].children[1].children[1].children[3].caption[2][4])
   if level > 1 then
