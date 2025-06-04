@@ -24,6 +24,7 @@ Date: ????
     - Change how the debug output is shown
     - Handle machines and modules with quality
     - The items/m button can move/hide, detect that
+    - Better detect quality from the sprite button
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07

@@ -147,7 +147,13 @@ local function check_recipe_is_allowed(player, recipe_name)
 end
 
 local function get_quality_from_sprite_button(element)
-  if element.tooltip == nil then return "normal" end -- why is the tooltip nil here? when i hover the thing its there.
+  if element.tooltip == nil then
+    return "normal" -- not hovered yet
+  end
+
+  if element.tooltip[2][1] == "fp.tt_title" then
+    return "normal" -- not "fp.tt_title_with_note"
+  end
 
   local quality_rich_text = element.tooltip[2][3][2] -- "[quality=legendary]"
   return string.sub(quality_rich_text, 10, -2)
