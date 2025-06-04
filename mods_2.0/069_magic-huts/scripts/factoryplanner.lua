@@ -50,6 +50,13 @@ local function get_selected_factory(root)
       return {
         name = factory.children[2].caption:gsub("^%[img=fp_trash_red%] ", ""),
 
+        -- multiply with prefix and prefix_to_multiplier before use
+        power = 0,
+        power_prefix = "",
+
+        pollution = 0,
+        pollution_prefix = "",
+
         entities = {},
         modules = {},
         recipes = {},
@@ -116,7 +123,7 @@ local function prefix_to_multiplier(locale_key)
   local multiplier = 1
   local prefixes = {"kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta"}
 
-  if locale_key == nil then
+  if locale_key == "" then
     return multiplier
   end
 
@@ -205,14 +212,14 @@ function Factoryplanner.on_gui_click(event)
   -- game.print("byproducts: " .. serpent_line(factory.byproducts))
   -- game.print("ingredients: " .. serpent_line(factory.ingredients))
 
-  local power = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2])
-  local power_prefix  =  root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][3][1]
+  factory.power = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2])
+  factory.power_prefix  =  root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][3][1] or ""
 
-  local pollution = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][2])
-  local pollution_prefix  =  root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][3][1]
+  factory.pollution = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][2])
+  factory.pollution_prefix  =  root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip[3][3][1] or ""
 
-  -- game.print(string.format("%.3f %s (%d)", power, power_prefix, power * prefix_to_multiplier(power_prefix)))
-  -- game.print(string.format("%.3f %s (%d)", pollution, pollution_prefix, pollution * prefix_to_multiplier(pollution_prefix)))
+  -- log(string.format("%.3f %s (%d)", power, power_prefix, power * prefix_to_multiplier(power_prefix)))
+  -- log(string.format("%.3f %s (%d)", pollution, pollution_prefix, pollution * prefix_to_multiplier(pollution_prefix)))
 
   -- log("power: " .. tostring(power))
   -- log("pollution: " .. tostring(pollution))
