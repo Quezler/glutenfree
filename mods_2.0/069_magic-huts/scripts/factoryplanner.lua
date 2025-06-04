@@ -49,6 +49,14 @@ local function get_selected_factory(root)
     if factory.children[2].toggled then
       return {
         name = factory.children[2].caption:gsub("^%[img=fp_trash_red%] ", ""),
+
+        entities = {},
+        modules = {},
+        recipes = {},
+
+        products = {},
+        byproducts = {},
+        ingredients = {},
       }
     end
   end
@@ -146,7 +154,7 @@ function Factoryplanner.on_gui_click(event)
 
   local factory = get_selected_factory(root)
   if not factory then return end
-  game.print(serpent.line(factory))
+  -- game.print(serpent.line(factory))
 
   local level = tonumber(root.children[2].children[2].children[4].children[1].children[1].children[3].caption[2][4])
   if level > 1 then
@@ -169,12 +177,12 @@ function Factoryplanner.on_gui_click(event)
     return player.create_local_flying_text{create_at_cursor = true, text = "items/m is required."}
   end
 
-  local products = get_item_box_contents(item_boxes, 1)
-  local byproducts = get_item_box_contents(item_boxes, 2)
-  local ingredients = get_item_box_contents(item_boxes, 3)
-  -- game.print("products: " .. serpent_line(products))
-  -- game.print("byproducts: " .. serpent_line(byproducts))
-  -- game.print("ingredients: " .. serpent_line(ingredients))
+  factory.products = get_item_box_contents(item_boxes, 1)
+  factory.byproducts = get_item_box_contents(item_boxes, 2)
+  factory.ingredients = get_item_box_contents(item_boxes, 3)
+  -- game.print("products: " .. serpent_line(factory.products))
+  -- game.print("byproducts: " .. serpent_line(factory.byproducts))
+  -- game.print("ingredients: " .. serpent_line(factory.ingredients))
 
   local power = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2])
   local power_prefix  =  root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][3][1]
@@ -200,9 +208,6 @@ function Factoryplanner.on_gui_click(event)
       production_table_column[cell.caption[1]] = i
     end
   end
-
-  local modules = {}
-  local entities = {}
 
   local any_subfloors = false
 
@@ -231,13 +236,13 @@ function Factoryplanner.on_gui_click(event)
       local entity_prototype = prototypes.entity[entity_name]
       entity_type = entity_prototype.type
 
+      factory.recipes[recipe_name] = true
+
       if entity_type_blacklisted[entity_type] then
         return player.create_local_flying_text{create_at_cursor = true, text = entity_type .. "'s are blacklisted."}
       end
 
       local item_to_place_this = entity_prototype.items_to_place_this[1]
-      log(entity_name)
-      log(cell_machine.children[1].number)
       add_to_contents(entities, {
         type = "item",
         name = item_to_place_this.name,
@@ -283,6 +288,5 @@ function Factoryplanner.on_gui_click(event)
     end
   end
 
-  game.print(serpent_block(modules))
-  game.print(serpent_block(entities))
+  log(serpent.block(factory, {sortkeys = false}))
 end
