@@ -27,6 +27,7 @@ Date: ????
     - Better detect quality from the sprite button
     - Store power and pollution in the factory table
     - Grab the district's space location
+    - Fix missing argument for recipe blocked messages
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07

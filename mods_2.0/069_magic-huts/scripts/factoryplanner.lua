@@ -140,15 +140,15 @@ local function check_recipe_is_allowed(player, recipe_name)
   local recipe = player.force.recipes[recipe_name]
 
   if not recipe then
-    return false, string.format("Recipe \"%s\" not found.")
+    return false, string.format("Recipe \"%s\" not found.", recipe_name)
   end
 
   if not recipe.enabled then
-    return false, string.format("Recipe \"%s\" not unlocked.")
+    return false, string.format("Recipe \"%s\" not unlocked.", recipe_name)
   end
 
   if recipe.hidden then
-    return false, string.format("Recipe \"%s\" is not visible.")
+    return false, string.format("Recipe \"%s\" is not visible.", recipe_name)
   end
 
   return true
