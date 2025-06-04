@@ -146,6 +146,13 @@ local function check_recipe_is_allowed(player, recipe_name)
   return true
 end
 
+local function get_quality_from_sprite_button(element)
+  if element.tooltip == nil then return "normal" end -- why is the tooltip nil here? when i hover the thing its there.
+
+  local quality_rich_text = element.tooltip[2][3][2] -- "[quality=legendary]"
+  return string.sub(quality_rich_text, 10, -2)
+end
+
 -- after adding the mod anyone who was on the districts page gets sent back to the main page (on_configuration_changed?),
 -- in either case it means our magic button will always be initialized since even when switching it seems to persist fine.
 function Factoryplanner.on_gui_click(event)
@@ -243,11 +250,11 @@ function Factoryplanner.on_gui_click(event)
       end
 
       local item_to_place_this = entity_prototype.items_to_place_this[1]
-      add_to_contents(entities, {
+      add_to_contents(factory.entities, {
         type = "item",
         name = item_to_place_this.name,
         count = item_to_place_this.count * x_of_this_building,
-        quality = "normal",
+        quality = get_quality_from_sprite_button(cell_machine.children[1]),
       })
 
       -- modules
@@ -255,11 +262,11 @@ function Factoryplanner.on_gui_click(event)
         local module_button = cell_machine.children[i]
         if module_button.sprite ~= "utility/add" then
           local module_type, module_name = split_class_and_name(module_button.sprite)
-          add_to_contents(modules, {
+          add_to_contents(factory.modules, {
             type = "item",
             name = module_name,
             count = module_button.number * x_of_this_building,
-            quality = "normal",
+            quality = get_quality_from_sprite_button(module_button),
           })
         end
       end

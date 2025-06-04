@@ -22,6 +22,7 @@ Date: ????
     - Get the power and pollution as their true number
     - Check if a recipe is available
     - Change how the debug output is shown
+    - Handle machines and modules with quality
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 2025. 03. 07
