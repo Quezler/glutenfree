@@ -52,9 +52,35 @@ mod.on_player_created = function (event)
     }
   }
 
-  frame.add{
+  -- local button = frame.add{
+  --   type = "button",
+  --   style = "list_box_item",
+  -- }
+
+  local flow = frame.add{
+    type = "flow",
+    style = "horizontal_flow",
+  }
+  flow.style.minimal_width = 200
+  flow.style.vertical_align = "center"
+  flow.style.horizontally_stretchable = true
+
+  local factory_name = flow.add{
     type = "label",
-    caption = "hi",
+    caption = "my factory",
+  }
+  local piston = flow.add{
+    type = "flow",
+  }
+  piston.style.horizontally_stretchable = true
+  flow.add{
+    type = "label",
+    caption = "2",
+  }
+  flow.add{
+    type = "sprite-button",
+    style = "tool_button_red",
+    sprite = "utility/trash",
   }
 end
 

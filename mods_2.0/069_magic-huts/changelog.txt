@@ -3,6 +3,7 @@ Version: 0.0.6
 Date: ????
   Info:
     - Commence the left gui phase
+    - Badly recreate the logistic section row
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 06. 04
