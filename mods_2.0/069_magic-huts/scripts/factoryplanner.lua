@@ -211,7 +211,9 @@ function Factoryplanner.on_gui_click(event)
   local root = get_root(event.element)
 
   local factory = get_selected_factory(root)
-  if not factory then return end
+  if not factory then
+    return player.create_local_flying_text{create_at_cursor = true, text = "no factory selected."}
+  end
 
   factory.space_location = "nauvis"
   local sprite = player.gui.screen["fp_frame_main_dialog"].children[2].children[1].children[1].children[1].children[4]
@@ -353,5 +355,6 @@ function Factoryplanner.on_gui_click(event)
   end
 
   log(serpent.block(factory, {sortkeys = false}))
+  table.insert(storage.factories, 1, factory)
   return player.create_local_flying_text{create_at_cursor = true, text = "exported to magic hut."}
 end

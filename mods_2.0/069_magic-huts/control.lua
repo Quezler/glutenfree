@@ -14,3 +14,53 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   log(LuaGuiPrettyPrint.path_to_element(event.element))
 end)
+
+mod = {}
+
+mod.container_names_list = {
+  mod_prefix .. "container-1",
+  mod_prefix .. "container-2",
+  mod_prefix .. "container-3",
+}
+mod.container_names_map = util.list_to_map(mod.container_names_list)
+
+script.on_init(function ()
+  storage.factories = {} -- array, newest first
+
+  storage.playerdata = {}
+  for _, player in pairs(game.players) do
+    mod.on_player_created({player_index = player.index})
+  end
+end)
+
+mod.relative_frame_left_name = mod_prefix .. "frame-left"
+mod.relative_frame_right_name = mod_prefix .. "frame-right"
+
+mod.on_player_created = function (event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  storage.playerdata[player.index] = {
+    player = player,
+  }
+
+  local frame = player.gui.relative.add{
+    type = "frame",
+    name = mod.relative_frame_left_name,
+    anchor = {
+      gui = defines.relative_gui_type.container_gui,
+      position = defines.relative_gui_position.left,
+      names = mod.container_names_list,
+    }
+  }
+
+  frame.add{
+    type = "label",
+    caption = "hi",
+  }
+end
+
+mod.on_player_removed = function (event)
+  storage.playerdata[event.player_index] = nil
+end
+
+script.on_event(defines.events.on_player_created, mod.on_player_created)
+script.on_event(defines.events.on_player_removed, mod.on_player_removed)
