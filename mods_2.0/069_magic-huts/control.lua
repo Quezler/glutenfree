@@ -61,10 +61,16 @@ mod.on_player_created = function (event)
   }
 
   local vertical = inner.add{
-    type = "flow",
-    direction = "vertical",
+    type = "scroll-pane",
+    style = "list_box_scroll_pane"
   }
-  vertical.style.margin = 4
+  vertical.style.padding = 4
+  vertical.style.top_padding = 5
+  vertical.style.bottom_padding = 5
+  vertical.style.vertically_stretchable = true
+
+  -- vertical.style.vertical_spacing = 0
+  -- vertical.style.margin = 4
 
   -- local button = frame.add{
   --   type = "button",
@@ -76,6 +82,9 @@ mod.on_player_created = function (event)
       type = "flow",
       style = "horizontal_flow",
     }
+    -- flow.style.bottom_margin = -2
+    -- flow.style.top_margin = -2
+    flow.style.maximal_height = 24
     flow.style.minimal_width = 200
     flow.style.vertical_align = "center"
     flow.style.horizontally_stretchable = true
@@ -93,7 +102,7 @@ mod.on_player_created = function (event)
       type = "label",
       caption = "2 ",
     }
-    flow.add{
+    local trash = flow.add{
       type = "sprite-button",
       style = "tool_button_red",
       sprite = "utility/trash",

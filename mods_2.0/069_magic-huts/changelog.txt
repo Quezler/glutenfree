@@ -5,6 +5,7 @@ Date: ????
     - Commence the left gui phase
     - Badly recreate the logistic section row
     - Slightly better frame
+    - Scroll pane
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 06. 04
