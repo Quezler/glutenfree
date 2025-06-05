@@ -49,39 +49,56 @@ mod.on_player_created = function (event)
       gui = defines.relative_gui_type.container_gui,
       position = defines.relative_gui_position.left,
       names = mod.container_names_list,
-    }
+    },
   }
+  frame.style.top_padding = 8
+
+  local inner = frame.add{
+    type = "frame",
+    name = "inner",
+    style = "inside_shallow_frame",
+    direction = "vertical",
+  }
+
+  local vertical = inner.add{
+    type = "flow",
+    direction = "vertical",
+  }
+  vertical.style.margin = 4
 
   -- local button = frame.add{
   --   type = "button",
   --   style = "list_box_item",
   -- }
 
-  local flow = frame.add{
-    type = "flow",
-    style = "horizontal_flow",
-  }
-  flow.style.minimal_width = 200
-  flow.style.vertical_align = "center"
-  flow.style.horizontally_stretchable = true
+  for i = 1, 5 do
+    local flow = vertical.add{
+      type = "flow",
+      style = "horizontal_flow",
+    }
+    flow.style.minimal_width = 200
+    flow.style.vertical_align = "center"
+    flow.style.horizontally_stretchable = true
+    flow.style.left_margin = 4
 
-  local factory_name = flow.add{
-    type = "label",
-    caption = "my factory",
-  }
-  local piston = flow.add{
-    type = "flow",
-  }
-  piston.style.horizontally_stretchable = true
-  flow.add{
-    type = "label",
-    caption = "2",
-  }
-  flow.add{
-    type = "sprite-button",
-    style = "tool_button_red",
-    sprite = "utility/trash",
-  }
+    local factory_name = flow.add{
+      type = "label",
+      caption = "my factory",
+    }
+    local piston = flow.add{
+      type = "flow",
+    }
+    piston.style.horizontally_stretchable = true
+    local factory_count = flow.add{
+      type = "label",
+      caption = "2 ",
+    }
+    flow.add{
+      type = "sprite-button",
+      style = "tool_button_red",
+      sprite = "utility/trash",
+    }
+  end
 end
 
 mod.on_player_removed = function (event)

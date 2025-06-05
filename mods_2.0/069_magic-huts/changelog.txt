@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Commence the left gui phase
     - Badly recreate the logistic section row
+    - Slightly better frame
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 06. 04
