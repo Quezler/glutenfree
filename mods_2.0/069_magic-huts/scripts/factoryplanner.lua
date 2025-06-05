@@ -355,6 +355,6 @@ function Factoryplanner.on_gui_click(event)
   end
 
   log(serpent.block(factory, {sortkeys = false}))
-  table.insert(storage.factories, 1, factory)
+  Factories.add(factory)
   return player.create_local_flying_text{create_at_cursor = true, text = "exported to magic hut."}
 end

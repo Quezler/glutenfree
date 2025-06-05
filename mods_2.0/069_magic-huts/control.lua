@@ -3,6 +3,8 @@ require("shared")
 require("scripts.factoryplanner")
 require("scripts.luagui-pretty-print")
 
+Factories = require("scripts.factories")
+
 script.on_event(defines.events.on_gui_opened, function(event)
   Factoryplanner.on_gui_opened(event)
 end)
@@ -60,54 +62,17 @@ mod.on_player_created = function (event)
     direction = "vertical",
   }
 
-  local vertical = inner.add{
+  local scroll_pane = inner.add{
     type = "scroll-pane",
+    name = "scroll-pane",
     style = "list_box_scroll_pane",
     vertical_scroll_policy = "always",
   }
-  vertical.style.padding = 1
-  vertical.style.vertically_stretchable = true
-
-  for i = 1, 25 do
-    local flow = vertical.add{
-      type = "flow",
-      style = "horizontal_flow",
-    }
-    flow.style.minimal_width = 250
-    flow.style.maximal_height = 24
-    flow.style.vertical_align = "center"
-    flow.style.horizontal_spacing = 0
-    flow.style.horizontally_stretchable = true
-
-    local button = flow.add{
-      type = "button",
-      style = "list_box_item",
-    }
-
-    local factory_name = button.add{
-      type = "label",
-      caption = "my factory",
-    }
-
-    local piston = button.add{
-      type = "flow",
-    }
-    piston.style.horizontally_stretchable = true -- the piston is still needed even though it does jack shit
-
-    local factory_count = button.add{
-      type = "label",
-      caption = "2",
-    }
-    factory_count.style.minimal_width = 200
-    factory_count.style.horizontal_align = "right"
-
-    local trash = flow.add{
-      type = "sprite-button",
-      style = "tool_button_red",
-      sprite = "utility/trash",
-      tooltip = "Delete factory",
-    }
-  end
+  scroll_pane.style.padding = 1
+  scroll_pane.style.top_padding = 4
+  scroll_pane.style.bottom_padding = 4
+  scroll_pane.style.vertically_stretchable = true
+  scroll_pane.style.minimal_width = 280 + 14 -- to make sure it is not thin when empty
 end
 
 mod.on_player_removed = function (event)
