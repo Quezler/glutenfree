@@ -56,17 +56,12 @@ script.on_load(function()
   end
 end)
 
-local alt_mode_creation_allowed = false
-
 function mod.on_created_entity(event)
   local entity = event.entity or event.destination
   local surfacedata = storage.surfacedata[entity.surface.index]
 
   if entity.name == "elevated-pipe-alt-mode" then
-    if not alt_mode_creation_allowed then
-      entity.destroy()
-    end
-    return
+    return entity.destroy()
   end
 
   entity.custom_status = {
@@ -81,15 +76,12 @@ function mod.on_created_entity(event)
     alt_mode = nil,
   })
 
-  alt_mode_creation_allowed = true
   struct.alt_mode = entity.surface.create_entity{
     name = "elevated-pipe-alt-mode",
     force = entity.force,
     position = entity.position,
     create_build_effect_smoke = false,
-    raise_built = true,
   }
-  alt_mode_creation_allowed = false
 
   struct.alt_mode.destructible = false
   struct.alt_mode.fluidbox.add_linked_connection(0, entity, 0)
@@ -165,9 +157,6 @@ local deathrattles = {
     if surfacedata then
       local struct = surfacedata.structs[deathrattle.unit_number]
       if struct then surfacedata.structs[deathrattle.unit_number] = nil
-        if struct.alt_mode.valid then
-          script.raise_script_destroy{entity = struct.alt_mode}
-        end
         struct.alt_mode.destroy()
         for _, connection in pairs(struct.connections) do
           for player_index, sprites in pairs(connection.player_sprites) do
