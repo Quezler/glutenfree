@@ -10,11 +10,15 @@ script.on_event(defines.events.on_gui_opened, function(event)
 end)
 
 script.on_event(defines.events.on_gui_click, function(event)
+  log(LuaGuiPrettyPrint.path_to_element(event.element))
+
   if event.element.name == mod_prefix .. "summon-magic-hut" then
     Factoryplanner.on_gui_click(event)
   end
 
-  log(LuaGuiPrettyPrint.path_to_element(event.element))
+  if event.element.tags.action then
+    Factories.on_gui_click(event)
+  end
 end)
 
 mod = {}
@@ -26,7 +30,15 @@ mod.container_names_list = {
 }
 mod.container_names_map = util.list_to_map(mod.container_names_list)
 
+mod.next_index_for = function(key)
+  local id = (storage.index[key] or 0) + 1
+  storage.index[key] = id
+  return id
+end
+
 script.on_init(function ()
+  storage.index = {} -- {string -> number}
+
   storage.factories = {} -- array, newest first
 
   storage.playerdata = {}

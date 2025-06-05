@@ -2,6 +2,7 @@ local Factories = {}
 
 Factories.add = function (factory)
   table.insert(storage.factories, 1, {
+    index = mod.next_index_for("factory"),
     export = factory,
     count = math.random(0, 10),
   })
@@ -51,7 +52,26 @@ Factories.refresh_list = function ()
         style = "tool_button_red",
         sprite = "utility/trash",
         tooltip = "Delete factory",
+        tags = {
+          action = mod_prefix .. "delete-factory",
+          factory_index = factory.index,
+        }
       }
+    end
+  end
+end
+
+Factories.on_gui_click = function (event)
+  if not event.element.tags.action then return end
+
+  if event.element.tags.action == mod_prefix .. "delete-factory" then
+    for i = #storage.factories, 1, -1 do
+      local factory = storage.factories[i]
+      if factory.index == event.element.tags.factory_index then
+        table.remove(storage.factories, i)
+        Factories.refresh_list()
+        return
+      end
     end
   end
 end

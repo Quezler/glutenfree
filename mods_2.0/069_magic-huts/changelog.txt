@@ -9,6 +9,7 @@ Date: ????
     - Get close enough
     - Cleanup styles
     - Populate the list with actual factories
+    - Support deleting factories
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 06. 04
