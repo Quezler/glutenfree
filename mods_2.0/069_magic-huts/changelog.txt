@@ -6,6 +6,7 @@ Date: ????
     - Badly recreate the logistic section row
     - Slightly better frame
     - Scroll pane
+    - Get close enough
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 06. 04

@@ -62,11 +62,13 @@ mod.on_player_created = function (event)
 
   local vertical = inner.add{
     type = "scroll-pane",
-    style = "list_box_scroll_pane"
+    style = "list_box_scroll_pane",
+    vertical_scroll_policy = "always",
   }
-  vertical.style.padding = 4
-  vertical.style.top_padding = 5
-  vertical.style.bottom_padding = 5
+  vertical.style.left_padding = 1
+  vertical.style.right_padding = 2
+  vertical.style.top_padding = 4
+  vertical.style.bottom_padding = 3
   vertical.style.vertically_stretchable = true
 
   -- vertical.style.vertical_spacing = 0
@@ -77,31 +79,34 @@ mod.on_player_created = function (event)
   --   style = "list_box_item",
   -- }
 
-  for i = 1, 5 do
+  for i = 1, 25 do
     local flow = vertical.add{
       type = "flow",
       style = "horizontal_flow",
     }
-    -- flow.style.bottom_margin = -2
-    -- flow.style.top_margin = -2
     flow.style.maximal_height = 24
     flow.style.minimal_width = 200
     flow.style.vertical_align = "center"
     flow.style.horizontally_stretchable = true
-    flow.style.left_margin = 4
+    flow.style.horizontal_spacing = 0
 
-    local factory_name = flow.add{
+    local button = flow.add{
+      type = "button",
+      style = "list_box_item",
+    }
+
+    local factory_name = button.add{
       type = "label",
       caption = "my factory",
     }
-    local piston = flow.add{
-      type = "flow",
-    }
-    piston.style.horizontally_stretchable = true
-    local factory_count = flow.add{
+
+    local factory_count = button.add{
       type = "label",
       caption = "2 ",
     }
+    factory_count.style.horizontal_align = "right"
+    factory_count.style.minimal_width = 150
+
     local trash = flow.add{
       type = "sprite-button",
       style = "tool_button_red",
