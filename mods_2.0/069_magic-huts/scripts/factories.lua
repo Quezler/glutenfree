@@ -9,6 +9,17 @@ Factories.add = function (factory)
   Factories.refresh_list()
 end
 
+Factories.delete_by_index = function(index)
+  assert(index)
+  for i = #storage.factories, 1, -1 do
+    if storage.factories[i].index == index then
+      table.remove(storage.factories, i)
+      Factories.refresh_list()
+      return
+    end
+  end
+end
+
 Factories.refresh_list = function ()
   for _, playerdata in pairs(storage.playerdata) do
     local scroll_pane = playerdata.player.gui.relative[mod.relative_frame_left_name]["inner"]["scroll-pane"]
@@ -65,14 +76,7 @@ Factories.on_gui_click = function (event)
   if not event.element.tags.action then return end
 
   if event.element.tags.action == mod_prefix .. "delete-factory" then
-    for i = #storage.factories, 1, -1 do
-      local factory = storage.factories[i]
-      if factory.index == event.element.tags.factory_index then
-        table.remove(storage.factories, i)
-        Factories.refresh_list()
-        return
-      end
-    end
+    Factories.delete_by_index(event.element.tags.factory_index)
   end
 end
 

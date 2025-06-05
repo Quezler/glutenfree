@@ -10,6 +10,7 @@ Date: ????
     - Cleanup styles
     - Populate the list with actual factories
     - Support deleting factories
+    - Cleanup factory deleter
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 06. 04
