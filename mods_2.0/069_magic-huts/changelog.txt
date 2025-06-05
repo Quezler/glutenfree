@@ -7,6 +7,7 @@ Date: ????
     - Slightly better frame
     - Scroll pane
     - Get close enough
+    - Cleanup styles
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 06. 04

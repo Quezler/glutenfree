@@ -65,30 +65,19 @@ mod.on_player_created = function (event)
     style = "list_box_scroll_pane",
     vertical_scroll_policy = "always",
   }
-  vertical.style.left_padding = 1
-  vertical.style.right_padding = 2
-  vertical.style.top_padding = 4
-  vertical.style.bottom_padding = 3
+  vertical.style.padding = 1
   vertical.style.vertically_stretchable = true
-
-  -- vertical.style.vertical_spacing = 0
-  -- vertical.style.margin = 4
-
-  -- local button = frame.add{
-  --   type = "button",
-  --   style = "list_box_item",
-  -- }
 
   for i = 1, 25 do
     local flow = vertical.add{
       type = "flow",
       style = "horizontal_flow",
     }
+    flow.style.minimal_width = 250
     flow.style.maximal_height = 24
-    flow.style.minimal_width = 200
     flow.style.vertical_align = "center"
-    flow.style.horizontally_stretchable = true
     flow.style.horizontal_spacing = 0
+    flow.style.horizontally_stretchable = true
 
     local button = flow.add{
       type = "button",
@@ -100,17 +89,23 @@ mod.on_player_created = function (event)
       caption = "my factory",
     }
 
+    local piston = button.add{
+      type = "flow",
+    }
+    piston.style.horizontally_stretchable = true -- the piston is still needed even though it does jack shit
+
     local factory_count = button.add{
       type = "label",
-      caption = "2 ",
+      caption = "2",
     }
+    factory_count.style.minimal_width = 200
     factory_count.style.horizontal_align = "right"
-    factory_count.style.minimal_width = 150
 
     local trash = flow.add{
       type = "sprite-button",
       style = "tool_button_red",
       sprite = "utility/trash",
+      tooltip = "Delete factory",
     }
   end
 end
