@@ -39,6 +39,14 @@ Factories.delete_by_index = function(index)
   end
 end
 
+Factories.from_index = function(index)
+  for _, factory in ipairs(storage.factories) do
+    if factory.index == index then
+      return factory
+    end
+  end
+end
+
 Factories.refresh_list = function ()
   for _, playerdata in pairs(storage.playerdata) do
     local scroll_pane = playerdata.player.gui.relative[mod.relative_frame_left_name]["inner"]["scroll-pane"]

@@ -24,6 +24,12 @@ end)
 
 mod = {}
 
+mod.container_name_to_tier = {
+  [mod_prefix .. "container-1"] = 1,
+  [mod_prefix .. "container-2"] = 2,
+  [mod_prefix .. "container-3"] = 3,
+}
+
 mod.container_names_list = {
   mod_prefix .. "container-1",
   mod_prefix .. "container-2",
@@ -47,6 +53,7 @@ script.on_init(function ()
   storage.index = {} -- {string -> number}
 
   storage.factories = {} -- array, newest first
+  storage.buildings = {} -- {unit_number -> struct}
 
   storage.playerdata = {}
   for _, player in pairs(game.players) do
