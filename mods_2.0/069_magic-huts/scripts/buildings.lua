@@ -91,6 +91,9 @@ Buildings.on_created_entity = function(event)
     scale = 0.5,
   }
 
+  building.line_3.text = "[img=utility/status_not_working] no factory"
+  building.line_4.text = "head into factory planner and export a factory"
+
   if factory_index then
     Buildings.set_factory(building, Factories.from_index(factory_index))
   end

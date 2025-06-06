@@ -6,6 +6,7 @@ Date: ????
     - Persist factory index in ghosts
     - Make the factory index guesser more elaborate
     - Setup the 4 lines of luarendering
+    - Set default luarendering text
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 06. 06
