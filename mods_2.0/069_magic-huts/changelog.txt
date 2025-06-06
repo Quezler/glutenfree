@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Listen for the build events
     - Persist factory index in ghosts
+    - Make the factory index guesser more elaborate
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 06. 06
