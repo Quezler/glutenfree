@@ -14,6 +14,7 @@ Date: ????
     - Match fp factory name width and ... wrapping
     - Always show space location name
     - Pipette the factory item and remember the index
+    - Delete old factories of the same name during exporting
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 06. 04

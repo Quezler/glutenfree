@@ -4,17 +4,34 @@ Factories.add = function (factory)
   local struct = {
     index = mod.next_index_for("factory"),
     export = factory,
-    count = math.random(0, 10),
+    count = 0,
   }
+  log(string.format("creating factory #%d (%s)", struct.index, struct.export.name))
+
+  -- delete unused factories of the same name for the same planet
+  Factories.each(function(factory)
+    if factory.count == 0 and factory.export.name == struct.export.name and factory.export.space_location == struct.export.space_location then
+      Factories.delete_by_index(factory.index)
+    end
+  end)
+
   table.insert(storage.factories, 1, struct)
   Factories.refresh_list()
   return struct
 end
 
+Factories.each = function(callback)
+  for i = #storage.factories, 1, -1 do
+    callback(storage.factories[i], i)
+  end
+end
+
 Factories.delete_by_index = function(index)
   assert(index)
-  for i = #storage.factories, 1, -1 do
-    if storage.factories[i].index == index then
+
+  for i, factory in ipairs(storage.factories) do
+    if factory.index == index then
+      log(string.format("removing factory #%d (%s)", factory.index, factory.export.name))
       table.remove(storage.factories, i)
       Factories.refresh_list()
       return
