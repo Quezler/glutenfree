@@ -355,6 +355,21 @@ function Factoryplanner.on_gui_click(event)
   end
 
   log(serpent_block(factory))
-  Factories.add(factory)
+  local struct = Factories.add(factory)
+
+  player.pipette_entity(mod.mouse_button_to_container_name[event.button], true)
+  storage.playerdata[player.index].held_factory_index = struct.index
+
   return player.create_local_flying_text{create_at_cursor = true, text = "exported to magic hut."}
 end
+
+script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
+  local held_factory_index = storage.playerdata[event.player_index].held_factory_index
+  if not held_factory_index then return end
+
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local held_item = (player.cursor_stack.valid_for_read and player.cursor_stack) or (player.cursor_ghost and player.cursor_ghost.name)
+  if held_item and mod.container_names_map[held_item.name] then return end -- still holding a factory
+
+  storage.playerdata[event.player_index].held_factory_index = nil
+end)

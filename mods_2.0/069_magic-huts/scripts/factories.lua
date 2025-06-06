@@ -1,12 +1,14 @@
 local Factories = {}
 
 Factories.add = function (factory)
-  table.insert(storage.factories, 1, {
+  local struct = {
     index = mod.next_index_for("factory"),
     export = factory,
     count = math.random(0, 10),
-  })
+  }
+  table.insert(storage.factories, 1, struct)
   Factories.refresh_list()
+  return struct
 end
 
 Factories.delete_by_index = function(index)
@@ -40,12 +42,20 @@ Factories.refresh_list = function ()
         type = "button",
         style = "list_box_item",
       }
+      -- button.auto_toggle = true
+      -- button.style.hovered_font_color = {0, 0, 0}
+      -- button.style.clicked_font_color = {0, 0, 0}
+      -- button.style.disabled_font_color = {0, 0, 0}
+      -- button.style.selected_font_color = {0, 0, 0}
+      -- button.style.selected_hovered_font_color = {0, 0, 0}
+      -- button.style.selected_clicked_font_color = {0, 0, 0}
 
       local factory_name = button.add{
         type = "label",
         caption = string.format("[space-location=%s] %s", factory.export.space_location, factory.export.name),
       }
       factory_name.style.maximal_width = flow.style.minimal_width - 60
+      -- factory_name.style.font_color = {0, 0, 0}
 
       local piston = button.add{
         type = "flow",

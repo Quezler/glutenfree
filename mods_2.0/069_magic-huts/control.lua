@@ -30,6 +30,12 @@ mod.container_names_list = {
 }
 mod.container_names_map = util.list_to_map(mod.container_names_list)
 
+mod.mouse_button_to_container_name = {
+  [defines.mouse_button_type.left  ] = mod_prefix .. "container-1",
+  [defines.mouse_button_type.middle] = mod_prefix .. "container-2",
+  [defines.mouse_button_type.right ] = mod_prefix .. "container-3",
+}
+
 mod.next_index_for = function(key)
   local id = (storage.index[key] or 0) + 1
   storage.index[key] = id
@@ -54,6 +60,7 @@ mod.on_player_created = function (event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   storage.playerdata[player.index] = {
     player = player,
+    held_factory_index = nil,
   }
 
   local frame = player.gui.relative.add{
