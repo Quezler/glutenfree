@@ -4,6 +4,7 @@ require("scripts.factoryplanner")
 require("scripts.luagui-pretty-print")
 
 Factories = require("scripts.factories")
+Buildings = require("scripts.buildings")
 
 script.on_event(defines.events.on_gui_opened, function(event)
   Factoryplanner.on_gui_opened(event)
@@ -100,3 +101,18 @@ end
 
 script.on_event(defines.events.on_player_created, mod.on_player_created)
 script.on_event(defines.events.on_player_removed, mod.on_player_removed)
+
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.on_space_platform_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+  defines.events.on_entity_cloned,
+}) do
+  script.on_event(event, Buildings.on_created_entity, {
+    {filter = "name", name = mod_prefix .. "container-1"},
+    {filter = "name", name = mod_prefix .. "container-2"},
+    {filter = "name", name = mod_prefix .. "container-3"},
+  })
+end
