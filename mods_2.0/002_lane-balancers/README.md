@@ -12,3 +12,16 @@ The recipes are the same as for the splitters but the recipe just crafts two, th
 Since i generate the item icons based on the splitter icons you'll find sprites of other mods embedded in here, these are their licences:
 - `kr-advanced-, GNU LGPLv3, Krastorio 2`
 - `kr-superior-, GNU LGPLv3, Krastorio 2`
+- `extreme-, MIT, AdvancedBeltsSA`
+- `ultimate-, MIT, AdvancedBeltsSA`
+- `high-speed-, MIT, AdvancedBeltsSA`
+
+Note to self, steps to add a new tier:
+- check if the other mod's sprite matches the vanilla style
+- copy their images into the graphics directory
+- modify the imagemagick.sh file and add their prefixes at the top, then run it
+- edit the .gitignore in there and whitelist the regular sprites, and then the balancer ones
+- head into the data stage to define and gate the new balancers behind a mod check
+- add the locale entries
+- add their licence notice to the readme
+- optional: don't forget to add them to data-updates too for prismatic belt compat

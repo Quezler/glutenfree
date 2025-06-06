@@ -1,6 +1,6 @@
 # (cd ./mods_2.0/002_lane-balancers/graphics/icons && sh imagemagick.sh)
 
-tiers="emptystring fast- express- turbo- kr-advanced- kr-superior-"
+tiers="emptystring fast- express- turbo- kr-advanced- kr-superior- extreme- ultimate- high-speed-"
 
 for tier in $tiers
 do

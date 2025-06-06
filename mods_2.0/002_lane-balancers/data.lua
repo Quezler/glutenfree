@@ -29,6 +29,7 @@ local function create_recipe(config)
   local balancer = table.deepcopy(splitter)
 
   balancer.name = config.prefix .. 'lane-splitter'
+  balancer.main_product = config.prefix .. 'lane-splitter'
 
   for _, ingredient in ipairs(balancer.ingredients) do
     if ingredient.name == config.previous_prefix .. 'splitter' then
@@ -54,15 +55,21 @@ create_recipe({
   previous_prefix = 'this value does nothing since the yellow splitter is crafted from belts',
 })
 
+local function scale_down_sprite(sprite)
+  sprite.scale = (sprite.scale or 1) / 2
+  if sprite.shift then -- some of the structure path are util.empty_sprite(), which has no shift
+    sprite.shift = {sprite.shift[1] / 2, sprite.shift[2] / 2}
+  end
+end
+
 local function apply_splitter_texture_to_balancer(splitter, balancer)
   balancer.structure = table.deepcopy(splitter.structure)
   balancer.structure_patch = table.deepcopy(splitter.structure_patch)
 
   for _, animation_4_way in ipairs({balancer.structure, balancer.structure_patch}) do
     for _, direction in ipairs({"north", "east", "south", "west"}) do
-      animation_4_way[direction].scale = (animation_4_way[direction].scale or 1) / 2
-      if animation_4_way[direction].shift then -- some of the structure path are util.empty_sprite(), which has no shift
-        animation_4_way[direction].shift = {animation_4_way[direction].shift[1] / 2, animation_4_way[direction].shift[2] / 2}
+      for _, layer in ipairs(animation_4_way[direction].layers or {animation_4_way[direction]}) do
+        scale_down_sprite(layer)
       end
     end
   end
@@ -136,13 +143,36 @@ if mods['space-age'] then
     order = 'd',
   })
 
+  local previous = 'turbo-'
   if mods['Krastorio2-spaced-out'] then
-  handle({
-    prefix = 'kr-superior-',
-    tech = 'kr-logistic-5',
-    previous_prefix = 'turbo-',
-    order = 'e',
-  })
+    handle({
+      prefix = 'kr-superior-',
+      tech = 'kr-logistic-5',
+      previous_prefix = 'turbo-',
+      order = 'e',
+    })
+    previous = 'kr-superior-'
+  end
+
+  if mods['AdvancedBeltsSA'] then
+    handle({
+      prefix = 'extreme-',
+      tech = 'extreme-logistics',
+      previous_prefix = previous,
+      order = 'e',
+    })
+    handle({
+      prefix = 'ultimate-',
+      tech = 'ultimate-logistics',
+      previous_prefix = 'extreme-',
+      order = 'f',
+    })
+    handle({
+      prefix = 'high-speed-',
+      tech = 'high-speed-logistics',
+      previous_prefix = 'ultimate-',
+      order = 'g',
+    })
   end
 end
 
