@@ -91,7 +91,7 @@ Buildings.on_created_entity = function(event)
     scale = 0.5,
   }
 
-  building.line_3.text = "[img=utility/status_not_working] no factory"
+  building.line_3.text = "[img=utility/status_inactive] not configured"
   building.line_4.text = "head into factory planner and export a factory"
 
   if factory_index then
@@ -129,6 +129,10 @@ Buildings.set_factory = function (building, factory)
   building.line_2.text = get_description(factory)
   building.line_3.text = "[img=utility/status_not_working] not yet implemented"
   building.line_4.text = "Quezler is still working hard on the rest"
+
+  factory.count = factory.count + 1
+  building.factory_index = factory.index
+  Factories.refresh_list()
 end
 
 return Buildings
