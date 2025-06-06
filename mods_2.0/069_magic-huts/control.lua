@@ -114,5 +114,8 @@ for _, event in ipairs({
     {filter = "name", name = mod_prefix .. "container-1"},
     {filter = "name", name = mod_prefix .. "container-2"},
     {filter = "name", name = mod_prefix .. "container-3"},
+    {filter = "ghost_name", name = mod_prefix .. "container-1"},
+    {filter = "ghost_name", name = mod_prefix .. "container-2"},
+    {filter = "ghost_name", name = mod_prefix .. "container-3"},
   })
 end
