@@ -30,7 +30,7 @@ Factories.refresh_list = function ()
         type = "flow",
         style = "horizontal_flow",
       }
-      flow.style.minimal_width = 320
+      flow.style.minimal_width = 340
       flow.style.maximal_height = 24
       flow.style.vertical_align = "center"
       flow.style.horizontal_spacing = 0
@@ -43,7 +43,7 @@ Factories.refresh_list = function ()
 
       local factory_name = button.add{
         type = "label",
-        caption = factory.export.name,
+        caption = string.format("[space-location=%s] %s", factory.export.space_location, factory.export.name),
       }
       factory_name.style.maximal_width = flow.style.minimal_width - 60
 

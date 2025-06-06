@@ -130,7 +130,7 @@ for _, recipe in pairs(prototypes.recipe) do
   end
   ::next_recipe::
 end
--- log(serpent.block(recipe_requires_spoiling))
+-- log(serpent_block(recipe_requires_spoiling))
 
 local function add_to_contents(contents, type_name_count_quality)
   for _, content in ipairs(contents) do
@@ -354,7 +354,7 @@ function Factoryplanner.on_gui_click(event)
     end
   end
 
-  log(serpent.block(factory, {sortkeys = false}))
+  log(serpent_block(factory))
   Factories.add(factory)
   return player.create_local_flying_text{create_at_cursor = true, text = "exported to magic hut."}
 end

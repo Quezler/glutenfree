@@ -12,6 +12,7 @@ Date: ????
     - Support deleting factories
     - Cleanup factory deleter
     - Match fp factory name width and ... wrapping
+    - Always show space location name
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 2025. 06. 04

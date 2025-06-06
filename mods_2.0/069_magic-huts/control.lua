@@ -84,7 +84,7 @@ mod.on_player_created = function (event)
   scroll_pane.style.top_padding = 4
   scroll_pane.style.bottom_padding = 4
   scroll_pane.style.vertically_stretchable = true
-  scroll_pane.style.minimal_width = 320 + 14 -- to make sure it is not thin when empty
+  scroll_pane.style.minimal_width = 340 + 14 -- to make sure it is not thin when empty
 end
 
 mod.on_player_removed = function (event)
