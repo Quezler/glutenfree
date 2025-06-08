@@ -94,6 +94,8 @@ Buildings.on_created_entity = function(event)
   building.line_3.text = "[img=utility/status_inactive] not configured"
   building.line_4.text = "head into factory planner and export a factory"
 
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "building", building_index = building.index}
+
   if factory_index then
     Buildings.set_factory(building, Factories.from_index(factory_index))
   end
@@ -133,6 +135,24 @@ Buildings.set_factory = function (building, factory)
   factory.count = factory.count + 1
   building.factory_index = factory.index
   Factories.refresh_list()
+end
+
+Buildings.on_object_destroyed = function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    if deathrattle.name == "building" then
+      local building = storage.buildings[event.useful_id]
+      if building then storage.buildings[event.useful_id] = nil
+        if building.factory_index then
+          local factory = Factories.from_index(building.factory_index)
+          if factory then
+            factory.count = factory.count - 1
+            Factories.refresh_list()
+          end
+        end
+      end
+    end
+  end
 end
 
 return Buildings

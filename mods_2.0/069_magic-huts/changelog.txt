@@ -8,6 +8,7 @@ Date: ????
     - Setup the 4 lines of luarendering
     - Set default luarendering text
     - Increment factory count upon placement
+    - Decrement factory count when removing a factory
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 06. 06

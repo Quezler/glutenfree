@@ -55,6 +55,8 @@ script.on_init(function ()
   storage.factories = {} -- array, newest first
   storage.buildings = {} -- {unit_number -> struct}
 
+  storage.deathrattles = {}
+
   storage.playerdata = {}
   for _, player in pairs(game.players) do
     mod.on_player_created({player_index = player.index})
@@ -126,3 +128,5 @@ for _, event in ipairs({
     {filter = "ghost_name", name = mod_prefix .. "container-3"},
   })
 end
+
+script.on_event(defines.events.on_object_destroyed, Buildings.on_object_destroyed)
