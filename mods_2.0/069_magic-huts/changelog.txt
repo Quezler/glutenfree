@@ -10,6 +10,7 @@ Date: ????
     - Increment factory count upon placement
     - Decrement factory count when removing a factory
     - Mark the factories exempt from lightning
+    - Support blueprinting
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 06. 06
