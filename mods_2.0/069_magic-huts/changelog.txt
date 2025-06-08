@@ -19,6 +19,7 @@ Date: ????
     - Change factories from reversed array to indexed
     - Slight refresh optimizations
     - Allow selecting a factory from the sidebar
+    - Prevent counter going haywire
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 06. 06

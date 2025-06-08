@@ -113,6 +113,12 @@ Factories.on_gui_click = function (event)
     if player.opened_gui_type == defines.gui_type.entity then
       if mod.container_names_map[player.opened.name] then
         local building = storage.buildings[player.opened.unit_number]
+
+        local old_factory = storage.factories[building.factory_index]
+        if old_factory then
+          old_factory.count = old_factory.count - 1
+        end
+
         Buildings.set_factory(building, factory)
         Factories.refresh_list()
       end
