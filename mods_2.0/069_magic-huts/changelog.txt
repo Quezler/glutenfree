@@ -17,6 +17,7 @@ Date: ????
     - Override serpent better
     - Allow copy pasting between tiers and ghosts
     - Change factories from reversed array to indexed
+    - Slight refresh optimizations
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 06. 06

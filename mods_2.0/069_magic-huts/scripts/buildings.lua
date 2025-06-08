@@ -148,7 +148,6 @@ Buildings.set_factory = function (building, factory)
 
   factory.count = factory.count + 1
   building.factory_index = factory.index
-  Factories.refresh_list()
 end
 
 Buildings.on_object_destroyed = function(event)
@@ -204,6 +203,8 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     local building_a = storage.buildings[event.source.unit_number]
     local building_b = storage.buildings[event.destination.unit_number]
 
+    if building_a.factory_index == building_b.factory_index then return end -- early bail to avoid unnecessary work
+
     local factory_a = storage.factories[building_a.factory_index]
     local factory_b = storage.factories[building_b.factory_index]
 
@@ -216,8 +217,8 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     else
       Buildings.set_status_not_configured(building_b)
       building_b.factory_index = nil
-      Factories.refresh_list()
     end
+    Factories.refresh_list()
   end
 end)
 
