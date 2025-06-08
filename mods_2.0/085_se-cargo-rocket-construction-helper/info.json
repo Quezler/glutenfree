@@ -2,7 +2,7 @@
     "name": "se-cargo-rocket-construction-helper",
     "title": "Space Exploration - cargo rocket construction helper",
     "description": "Delivers the capsule and rocket parts to the silo with construction robots.",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [

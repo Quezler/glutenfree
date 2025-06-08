@@ -1,7 +1,7 @@
 local silo = {}
 
 function silo.init()
-  global.cargo_silo_entries = {}
+  storage.cargo_silo_entries = {}
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered({ type = "container", name = "se-rocket-launch-pad" })) do
@@ -18,7 +18,7 @@ function silo.on_created_entity(event)
 end
 
 function silo.register(entity)
-  global.cargo_silo_entries[entity.unit_number] = {
+  storage.cargo_silo_entries[entity.unit_number] = {
     container = entity,
     combinator = nil,
     silo = nil,
@@ -103,12 +103,12 @@ function silo.random_tick(entry)
 end
 
 function silo.every_10_seconds()
-  for unit_number, entry in pairs(global.cargo_silo_entries) do
+  for unit_number, entry in pairs(storage.cargo_silo_entries) do
 
     if entry.container and entry.container.valid then
       silo.random_tick(entry)
     else
-      global.cargo_silo_entries[unit_number] = nil
+      storage.cargo_silo_entries[unit_number] = nil
     end
 
   end
@@ -119,7 +119,7 @@ function silo.on_rocket_silo_status_changed(event)
   if event.old_status ~= defines.rocket_silo_status.doors_closing then return end
 
   local container = event.rocket_silo.surface.find_entity("se-rocket-launch-pad", event.rocket_silo.position)
-  local entry = global.cargo_silo_entries[container.unit_number]
+  local entry = storage.cargo_silo_entries[container.unit_number]
 
   silo.random_tick(entry)
 end
