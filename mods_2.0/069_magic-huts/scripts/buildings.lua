@@ -177,4 +177,18 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
   end
 end)
 
+-- script.on_event(defines.events.on_player_pipette, function(event)
+--   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+--   local selected = player.selected
+--   if not selected then return end
+
+--   local entity_name = selected.type == "entity-ghost" and selected.ghost_name or selected.name
+--   if not mod.container_names_map[entity_name] then return end
+
+--   local factory_index = storage.buildings[selected.unit_number].factory_index
+--   if factory_index then
+--     storage.playerdata[player.index].held_factory_index = factory_index
+--   end
+-- end)
+
 return Buildings
