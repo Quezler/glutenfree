@@ -91,14 +91,20 @@ Buildings.on_created_entity = function(event)
     scale = 0.5,
   }
 
-  building.line_3.text = "[img=utility/status_inactive] not configured"
-  building.line_4.text = "head into factory planner and export a factory"
+  Buildings.set_status_not_configured(building)
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "building", building_index = building.index}
 
   if factory_index then
     Buildings.set_factory(building, Factories.from_index(factory_index))
   end
+end
+
+Buildings.set_status_not_configured = function(building)
+  building.line_1.text = ""
+  building.line_2.text = ""
+  building.line_3.text = "[img=utility/status_inactive] not configured"
+  building.line_4.text = "head into factory planner and export a factory"
 end
 
 local function get_description(factory)

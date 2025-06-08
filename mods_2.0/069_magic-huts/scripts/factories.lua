@@ -33,6 +33,14 @@ Factories.delete_by_index = function(index)
     if factory.index == index then
       log(string.format("removing factory #%d (%s)", factory.index, factory.export.name))
       table.remove(storage.factories, i)
+
+      for _, building in pairs(storage.buildings) do
+        if building.factory_index == index then
+          building.factory_index = nil
+          Buildings.set_status_not_configured(building)
+        end
+      end
+
       Factories.refresh_list()
       return
     end

@@ -11,6 +11,7 @@ Date: ????
     - Decrement factory count when removing a factory
     - Mark the factories exempt from lightning
     - Support blueprinting
+    - Unconfigure buildings when factory gets deleted
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 06. 06
