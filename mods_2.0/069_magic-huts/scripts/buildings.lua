@@ -104,6 +104,7 @@ Buildings.on_created_entity = function(event)
     local factory = storage.factories[factory_index]
     if factory then
       Buildings.set_factory(building, factory)
+      Factories.refresh_list()
     end
   end
 end

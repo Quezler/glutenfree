@@ -56,6 +56,10 @@ Factories.refresh_list = function ()
       local button = flow.add{
         type = "button",
         style = "list_box_item",
+        tags = {
+          action = mod_prefix .. "select-factory",
+          factory_index = factory.index,
+        }
       }
       -- button.auto_toggle = true
       -- button.style.hovered_font_color = {0, 0, 0}
@@ -103,6 +107,16 @@ Factories.on_gui_click = function (event)
 
   if event.element.tags.action == mod_prefix .. "delete-factory" then
     Factories.delete_by_index(event.element.tags.factory_index)
+  elseif event.element.tags.action == mod_prefix .. "select-factory" then
+    local factory = storage.factories[event.element.tags.factory_index]
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    if player.opened_gui_type == defines.gui_type.entity then
+      if mod.container_names_map[player.opened.name] then
+        local building = storage.buildings[player.opened.unit_number]
+        Buildings.set_factory(building, factory)
+        Factories.refresh_list()
+      end
+    end
   end
 end
 
