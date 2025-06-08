@@ -21,6 +21,7 @@ Date: ????
     - Allow selecting a factory from the sidebar
     - Prevent counter going haywire
     - Another early return
+    - Select the selected to deselect
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 06. 06

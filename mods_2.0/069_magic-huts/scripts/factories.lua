@@ -114,14 +114,18 @@ Factories.on_gui_click = function (event)
       if mod.container_names_map[player.opened.name] then
         local building = storage.buildings[player.opened.unit_number]
 
-        if building.factory_index == factory.index then return end
+        if building.factory_index == factory.index then
+          factory.count = factory.count - 1
+          building.factory_index = nil
+          Buildings.set_status_not_configured(building)
+        else
+          local old_factory = storage.factories[building.factory_index]
+          if old_factory then
+            old_factory.count = old_factory.count - 1
+          end
 
-        local old_factory = storage.factories[building.factory_index]
-        if old_factory then
-          old_factory.count = old_factory.count - 1
-        end
-
-        Buildings.set_factory(building, factory)
+          Buildings.set_factory(building, factory)
+      end
         Factories.refresh_list()
       end
     end
