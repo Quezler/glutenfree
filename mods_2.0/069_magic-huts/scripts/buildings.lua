@@ -199,4 +199,26 @@ end)
 --   end
 -- end)
 
+script.on_event(defines.events.on_entity_settings_pasted, function(event)
+  if mod.container_names_map[get_entity_name(event.source)] and mod.container_names_map[get_entity_name(event.destination)] then
+    local building_a = storage.buildings[event.source.unit_number]
+    local building_b = storage.buildings[event.destination.unit_number]
+
+    local factory_a = Factories.from_index(building_a.factory_index)
+    local factory_b = Factories.from_index(building_b.factory_index)
+
+    if factory_b then
+      factory_b.count = factory_b.count - 1
+    end
+
+    if factory_a then
+      Buildings.set_factory(building_b, factory_a)
+    else
+      Buildings.set_status_not_configured(building_b)
+      building_b.factory_index = nil
+      Factories.refresh_list()
+    end
+  end
+end)
+
 return Buildings
