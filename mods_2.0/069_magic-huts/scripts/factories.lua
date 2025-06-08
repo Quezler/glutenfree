@@ -114,6 +114,8 @@ Factories.on_gui_click = function (event)
       if mod.container_names_map[player.opened.name] then
         local building = storage.buildings[player.opened.unit_number]
 
+        if building.factory_index == factory.index then return end
+
         local old_factory = storage.factories[building.factory_index]
         if old_factory then
           old_factory.count = old_factory.count - 1
