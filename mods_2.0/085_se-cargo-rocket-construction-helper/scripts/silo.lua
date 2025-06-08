@@ -64,7 +64,7 @@ function silo.random_tick(entry)
 
   if missing_sections > 0 or missing_capsules > 0 then
 
-    local proxy = entry.container.item_request_proxy
+    local proxy = entry.container.surface.find_entity("item-request-proxy", entry.container.position)
     if not proxy then
       local to_create = {
         name = "item-request-proxy",
