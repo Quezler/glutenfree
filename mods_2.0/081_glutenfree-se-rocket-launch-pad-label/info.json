@@ -2,7 +2,7 @@
     "name": "glutenfree-se-rocket-launch-pad-label",
     "title": "Space Exploration - cargo rocket label",
     "description": "Shows the selected destination above the doorway.",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [

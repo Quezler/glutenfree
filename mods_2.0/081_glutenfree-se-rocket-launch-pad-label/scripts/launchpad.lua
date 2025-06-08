@@ -115,15 +115,11 @@ end
 function launchpad.on_gui_selection_state_changed(event)
   if event.element.name == "launchpad-list-zones" then
     local unit_number = event.element.parent.parent.parent.tags.unit_number
-    if not unit_number then error("could not get this silo\"s unit number.") end
-
     launchpad.update_by_unit_number(unit_number, launchpad.get_destination(event.element) or "Any landing pad with name", "None - General vicinity")
   end
 
   if event.element.name == "launchpad-list-landing-pad-names" then
     local unit_number = event.element.parent.parent.parent.tags.unit_number
-    if not unit_number then error("could not get this silo\"s unit number.") end
-
     launchpad.update_by_unit_number(unit_number, nil, launchpad.get_position(event.element) or "None - General vicinity")
   end
 end
@@ -156,6 +152,7 @@ end
 
 function launchpad.update_by_unit_number(unit_number, destination, position)
   local entry = storage.entries[unit_number]
+  if not entry then return end -- sattellite rocket silo?
 
   if destination then
     if entry.destination == nil then
