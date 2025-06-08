@@ -1,58 +1,39 @@
 local Factories = {}
 
-Factories.add = function (factory)
-  local struct = {
-    index = mod.next_index_for("factory"),
-    export = factory,
-    count = 0,
-  }
-  log(string.format("creating factory #%d (%s)", struct.index, struct.export.name))
-
+Factories.add = function (export)
   -- delete unused factories of the same name for the same planet
-  Factories.each(function(factory)
-    if factory.count == 0 and factory.export.name == struct.export.name and factory.export.space_location == struct.export.space_location then
+  for _, factory in pairs(storage.factories) do
+    if factory.count == 0 and factory.export.name == export.name and factory.export.space_location == export.space_location then
       Factories.delete_by_index(factory.index)
     end
-  end)
+  end
 
-  table.insert(storage.factories, 1, struct)
+  local struct = new_struct(storage.factories, {
+    index = mod.next_index_for("factory"),
+    export = export,
+    count = 0,
+  })
+  log(string.format("creating factory #%d (%s)", struct.index, struct.export.name))
+
   Factories.refresh_list()
   return struct
-end
-
-Factories.each = function(callback)
-  for i = #storage.factories, 1, -1 do
-    callback(storage.factories[i], i)
-  end
 end
 
 Factories.delete_by_index = function(index)
   assert(index)
 
-  for i, factory in ipairs(storage.factories) do
-    if factory.index == index then
-      log(string.format("removing factory #%d (%s)", factory.index, factory.export.name))
-      table.remove(storage.factories, i)
+  local factory = storage.factories[index]
+  storage.factories[index] = nil
+  log(string.format("removing factory #%d (%s)", factory.index, factory.export.name))
 
-      for _, building in pairs(storage.buildings) do
-        if building.factory_index == index then
-          building.factory_index = nil
-          Buildings.set_status_not_configured(building)
-        end
-      end
-
-      Factories.refresh_list()
-      return
+  for _, building in pairs(storage.buildings) do
+    if building.factory_index == index then
+      building.factory_index = nil
+      Buildings.set_status_not_configured(building)
     end
   end
-end
 
-Factories.from_index = function(index)
-  for _, factory in ipairs(storage.factories) do
-    if factory.index == index then
-      return factory
-    end
-  end
+  Factories.refresh_list()
 end
 
 Factories.refresh_list = function ()
@@ -60,10 +41,11 @@ Factories.refresh_list = function ()
     local scroll_pane = playerdata.player.gui.relative[mod.relative_frame_left_name]["inner"]["scroll-pane"]
     scroll_pane.clear()
 
-    for _, factory in ipairs(storage.factories) do
+    for _, factory in pairs(storage.factories) do
       local flow = scroll_pane.add{
         type = "flow",
         style = "horizontal_flow",
+        index = 1,
       }
       flow.style.minimal_width = 340
       flow.style.maximal_height = 24

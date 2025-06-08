@@ -31,3 +31,10 @@ end
 function serpent.block(value, options)
   return serpent_block(value, merge({sortkeys = false}, options))
 end
+
+function new_struct(table, struct)
+  assert(struct.index, serpent.block(struct))
+  assert(table[struct.index] == nil)
+  table[struct.index] = struct
+  return struct
+end

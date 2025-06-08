@@ -52,7 +52,7 @@ end
 script.on_init(function ()
   storage.index = {} -- {string -> number}
 
-  storage.factories = {} -- array, newest first
+  storage.factories = {} -- {number -> struct}
   storage.buildings = {} -- {unit_number -> struct}
 
   storage.deathrattles = {}

@@ -43,7 +43,8 @@ Buildings.on_created_entity = function(event)
   -- local factory = storage.factories[factory_index]
   -- if not factory then return end
 
-  local building = {
+  local building = new_struct(storage.buildings, {
+    index = entity.unit_number,
     entity = entity,
     is_ghost = entity.type == "entity-ghost",
 
@@ -51,8 +52,7 @@ Buildings.on_created_entity = function(event)
     line_2 = nil,
     line_3 = nil,
     line_4 = nil,
-  }
-  storage.buildings[entity.unit_number] = building
+  })
 
   local factory_config = config.factories[mod.container_name_to_tier[get_entity_name(entity)]]
 
@@ -101,9 +101,9 @@ Buildings.on_created_entity = function(event)
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "building", building_index = building.index}
 
   if factory_index then
-    local factory = Factories.from_index(factory_index)
+    local factory = storage.factories[factory_index]
     if factory then
-      Buildings.set_factory(building, Factories.from_index(factory_index))
+      Buildings.set_factory(building, factory)
     end
   end
 end
@@ -158,7 +158,7 @@ Buildings.on_object_destroyed = function(event)
       local building = storage.buildings[event.useful_id]
       if building then storage.buildings[event.useful_id] = nil
         if building.factory_index then
-          local factory = Factories.from_index(building.factory_index)
+          local factory = storage.factories[building.factory_index]
           if factory then
             factory.count = factory.count - 1
             Factories.refresh_list()
@@ -204,8 +204,8 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     local building_a = storage.buildings[event.source.unit_number]
     local building_b = storage.buildings[event.destination.unit_number]
 
-    local factory_a = Factories.from_index(building_a.factory_index)
-    local factory_b = Factories.from_index(building_b.factory_index)
+    local factory_a = storage.factories[building_a.factory_index]
+    local factory_b = storage.factories[building_b.factory_index]
 
     if factory_b then
       factory_b.count = factory_b.count - 1
