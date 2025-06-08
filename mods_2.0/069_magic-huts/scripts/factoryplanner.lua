@@ -130,7 +130,7 @@ for _, recipe in pairs(prototypes.recipe) do
   end
   ::next_recipe::
 end
--- log(serpent_block(recipe_requires_spoiling))
+-- log(serpent.block(recipe_requires_spoiling))
 
 local function add_to_contents(contents, type_name_count_quality)
   for _, content in ipairs(contents) do
@@ -245,9 +245,9 @@ function Factoryplanner.on_gui_click(event)
   factory.products = get_item_box_contents(item_boxes, 1)
   factory.byproducts = get_item_box_contents(item_boxes, 2)
   factory.ingredients = get_item_box_contents(item_boxes, 3)
-  -- game.print("products: " .. serpent_line(factory.products))
-  -- game.print("byproducts: " .. serpent_line(factory.byproducts))
-  -- game.print("ingredients: " .. serpent_line(factory.ingredients))
+  -- game.print("products: " .. serpent.line(factory.products))
+  -- game.print("byproducts: " .. serpent.line(factory.byproducts))
+  -- game.print("ingredients: " .. serpent.line(factory.ingredients))
 
   factory.power = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2])
   factory.power_prefix  =  root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][3][1] or ""
@@ -354,7 +354,7 @@ function Factoryplanner.on_gui_click(event)
     end
   end
 
-  log(serpent_block(factory))
+  log(serpent.block(factory))
   local struct = Factories.add(factory)
 
   player.pipette_entity(mod.mouse_button_to_container_name[event.button], true)

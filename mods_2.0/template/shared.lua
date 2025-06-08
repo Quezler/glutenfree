@@ -21,3 +21,23 @@ end
 function get_entity_prototype(entity)
   return entity.type == "entity-ghost" and entity.ghost_prototype or entity.prototype
 end
+
+local function merge(a, b) for k, v in pairs(b or {}) do a[k] = v end return a end
+local serpent_line = serpent.line
+local serpent_block = serpent.block
+
+--- @param value any
+--- @param options? serpent.options
+--- @return string
+--- @diagnostic disable-next-line: duplicate-set-field
+function serpent.line(value, options)
+  return serpent_line(value, merge({sortkeys = false}, options))
+end
+
+--- @param value any
+--- @param options? serpent.options
+--- @return string
+--- @diagnostic disable-next-line: duplicate-set-field
+function serpent.block(value, options)
+  return serpent_block(value, merge({sortkeys = false}, options))
+end

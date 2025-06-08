@@ -50,7 +50,7 @@ function LuaGuiPrettyPrint.dump(element, silent)
   end
 
   if not silent then
-    log(serpent_block(node))
+    log(serpent.block(node))
   end
 
   return node
