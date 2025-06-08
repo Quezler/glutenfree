@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
-Date: ????
+Date: 2025. 06. 08
   Info:
     - Listen for the build events
     - Persist factory index in ghosts
