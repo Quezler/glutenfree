@@ -1,8 +1,16 @@
-local short_src = debug.getinfo(1, 'S').short_src
+local source = debug.getinfo(1, "S").source
 
-mod_name = short_src:sub(3, short_src:find("/") - 3)
+mod_name = source:sub(4, source:find("/") - 3)
 mod_prefix = mod_name .. "--"
 mod_directory = "__" .. mod_name .. "__"
+
+function get_entity_type(entity)
+  return entity.type == "entity-ghost" and entity.ghost_type or entity.type
+end
+
+function get_entity_name(entity)
+  return entity.type == "entity-ghost" and entity.ghost_name or entity.name
+end
 
 ---@param value any
 ---@param options? serpent.options

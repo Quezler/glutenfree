@@ -13,6 +13,7 @@ Date: ????
     - Support blueprinting
     - Unconfigure buildings when factory gets deleted
     - Have code ready to support copying by pipette
+    - Render text for factory ghosts too
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 2025. 06. 06

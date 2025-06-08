@@ -16,6 +16,10 @@ local function get_factory_index(event)
     return event.tags[mod_prefix .. "factory-index"]
   end
 
+  if entity.tags and entity.tags[mod_prefix .. "factory-index"] then
+    return entity.tags[mod_prefix .. "factory-index"]
+  end
+
   if entity.last_user and storage.playerdata[entity.last_user.index] then
     return storage.playerdata[entity.last_user.index].held_factory_index
   end
@@ -33,7 +37,6 @@ Buildings.on_created_entity = function(event)
       tags[mod_prefix .. "factory-index"] = factory_index
       entity.tags = tags
     end
-    return
   end
 
   -- if not factory_index then return end
@@ -42,6 +45,8 @@ Buildings.on_created_entity = function(event)
 
   local building = {
     entity = entity,
+    is_ghost = entity.type == "entity-ghost",
+
     line_1 = nil,
     line_2 = nil,
     line_3 = nil,
@@ -49,7 +54,7 @@ Buildings.on_created_entity = function(event)
   }
   storage.buildings[entity.unit_number] = building
 
-  local factory_config = config.factories[mod.container_name_to_tier[entity.name]]
+  local factory_config = config.factories[mod.container_name_to_tier[get_entity_name(entity)]]
 
   building.line_1 = rendering.draw_text{
     text = "",
@@ -96,7 +101,10 @@ Buildings.on_created_entity = function(event)
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "building", building_index = building.index}
 
   if factory_index then
-    Buildings.set_factory(building, Factories.from_index(factory_index))
+    local factory = Factories.from_index(factory_index)
+    if factory then
+      Buildings.set_factory(building, Factories.from_index(factory_index))
+    end
   end
 end
 
