@@ -81,7 +81,7 @@ local function get_item_box_contents(item_boxes, item_box_index)
   for _, sprite_button in ipairs(sprite_buttons) do
     if sprite_button.sprite ~= "utility/add" then
       local class, name = split_class_and_name(sprite_button.sprite)
-      table.insert(contents, {type = class, name = name, amount = sprite_button.number, quality = "normal"})
+      table.insert(contents, {type = class, name = name, count = sprite_button.number, quality = "normal"})
     end
   end
   return contents

@@ -149,6 +149,10 @@ Buildings.set_factory = function (building, factory)
 
   factory.count = factory.count + 1
   building.factory_index = factory.index
+
+  local filters = Buildings.get_filters(building)
+  log(string.format("filtering %d slots for factory #%d (%s)", #filters, factory.index, factory.export.name))
+  Buildings.set_filters(building, filters)
 end
 
 Buildings.on_object_destroyed = function(event)
@@ -222,5 +226,30 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     Factories.refresh_list()
   end
 end)
+
+Buildings.get_filters = function(building)
+  local factory = storage.factories[building.factory_index]
+  if not factory then return {} end
+
+  local filters = {}
+  for _, key in ipairs({"entities", "modules", "ingredients", "byproducts", "products"}) do
+    for _, item in ipairs(factory.export[key]) do
+      if item.type == "item" then
+        local slots = math.ceil(item.count / prototypes.item[item.name].stack_size)
+        for i = 1, slots do
+          table.insert(filters, {name = item.name, quality = item.quality})
+        end
+      end
+    end
+  end
+  return filters
+end
+
+Buildings.set_filters = function (building, filters)
+  local inventory = building.entity.get_inventory(defines.inventory.chest)
+  for slot = 1, #inventory do
+    inventory.set_filter(slot, filters[slot])
+  end
+end
 
 return Buildings
