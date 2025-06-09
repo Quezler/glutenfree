@@ -3,6 +3,7 @@ Version: 0.0.8
 Date: ????
   Info:
     - Calculate the amount of slots needed and filter them
+    - Set the bar too, and skip the crashing ghosts
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 06. 08

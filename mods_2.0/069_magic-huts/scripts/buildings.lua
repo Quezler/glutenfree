@@ -43,10 +43,14 @@ Buildings.on_created_entity = function(event)
   -- local factory = storage.factories[factory_index]
   -- if not factory then return end
 
+  local entity_name = get_entity_name(entity)
   local building = new_struct(storage.buildings, {
     index = entity.unit_number,
     entity = entity,
     is_ghost = entity.type == "entity-ghost",
+
+    inventory = entity.get_inventory(defines.inventory.chest),
+    -- inventory_size = prototypes.entity[entity_name].get_inventory_size(defines.inventory.chest, entity.quality),
 
     line_1 = nil,
     line_2 = nil,
@@ -54,7 +58,7 @@ Buildings.on_created_entity = function(event)
     line_4 = nil,
   })
 
-  local factory_config = config.factories[mod.container_name_to_tier[get_entity_name(entity)]]
+  local factory_config = config.factories[mod.container_name_to_tier[entity_name]]
 
   building.line_1 = rendering.draw_text{
     text = "",
@@ -246,10 +250,19 @@ Buildings.get_filters = function(building)
 end
 
 Buildings.set_filters = function (building, filters)
-  local inventory = building.entity.get_inventory(defines.inventory.chest)
-  for slot = 1, #inventory do
-    inventory.set_filter(slot, filters[slot])
+  if not building.inventory then return end
+
+  local bar = nil
+
+  for slot = 1, #building.inventory do
+    local filter = filters[slot]
+    building.inventory.set_filter(slot, filter)
+    if filter == nil and bar == nil then
+      bar = slot
+    end
   end
+
+  building.inventory.set_bar(bar)
 end
 
 return Buildings
