@@ -25,6 +25,7 @@ Planet.setup_combinators = function(building)
     position = {-0.5 + building.x_offset, -1.5},
     direction = defines.direction.north,
   }
+  Planet.update_constant_combinator_1(building)
 
   building.decider_combinator_1 = storage.surface.create_entity{
     name = "decider-combinator",
@@ -35,6 +36,26 @@ Planet.setup_combinators = function(building)
 
   connect(building.proxy_container_1, connector.circuit_red, building.decider_combinator_1, connector.combinator_input_red)
   connect(building.constant_combinator_1, connector.circuit_green, building.decider_combinator_1, connector.combinator_input_green)
+end
+
+Planet.update_constant_combinator_1 = function(building)
+  local sections = building.constant_combinator_1.get_logistic_sections()
+  while sections.remove_section(1) do end
+
+  local factory = storage.factories[building.factory_index]
+  if not factory then return end
+
+  for _, key in ipairs({"entities", "modules", "ingredients"}) do
+    local section = sections.add_section()
+    for i, item in ipairs(factory.export[key]) do
+      if item.type == "item" then
+        section.set_slot(i, {
+          value = item,
+          min = item.count,
+        })
+      end
+    end
+  end
 end
 
 return Planet

@@ -105,11 +105,10 @@ Buildings.on_created_entity = function(event)
     scale = 0.5,
   }
 
-  Buildings.set_status_not_configured(building)
-
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "building", building_index = building.index}
 
   Planet.setup_combinators(building)
+  Buildings.set_status_not_configured(building)
 
   if factory_index then
     local factory = storage.factories[factory_index]
@@ -125,6 +124,8 @@ Buildings.set_status_not_configured = function(building)
   building.line_2.text = ""
   building.line_3.text = "[img=utility/status_inactive] not configured"
   building.line_4.text = "head into factory planner and export a factory"
+
+  Planet.update_constant_combinator_1(building)
 end
 
 local function get_description(factory)
@@ -164,6 +165,7 @@ Buildings.set_factory = function (building, factory)
   local filters = Buildings.get_filters(building)
   log(string.format("filtering %d slots for factory #%d (%s)", #filters, factory.index, factory.export.name))
   Buildings.set_filters(building, filters)
+  Planet.update_constant_combinator_1(building)
 end
 
 Buildings.on_object_destroyed = function(event)

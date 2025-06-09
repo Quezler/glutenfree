@@ -6,6 +6,7 @@ Date: ????
     - Set the bar too, and skip the crashing ghosts
     - Setup the initial hidden surface
     - Setup the constant and decider combinators
+    - Fill the constant combinator with the requirements
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 06. 08
