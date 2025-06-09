@@ -5,6 +5,7 @@ require("scripts.luagui-pretty-print")
 
 Factories = require("scripts.factories")
 Buildings = require("scripts.buildings")
+Planet = require("scripts.planet")
 
 script.on_event(defines.events.on_gui_opened, function(event)
   Factoryplanner.on_gui_opened(event)
@@ -50,12 +51,25 @@ mod.next_index_for = function(key)
 end
 
 script.on_init(function ()
+  storage.invalid = game.create_inventory(0)
+  storage.invalid.destroy()
+
   storage.index = {} -- {string -> number}
 
   storage.factories = {} -- {number -> struct}
   storage.buildings = {} -- {unit_number -> struct}
 
   storage.deathrattles = {}
+
+  storage.surface = game.planets[mod_name].create_surface()
+  storage.surface.generate_with_lab_tiles = true
+
+  storage.surface.create_global_electric_network()
+  storage.surface.create_entity{
+    name = "electric-energy-interface",
+    force = "neutral",
+    position = {-1, -1},
+  }
 
   storage.playerdata = {}
   for _, player in pairs(game.players) do

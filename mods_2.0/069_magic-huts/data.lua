@@ -3,6 +3,7 @@ local item_tints = require("__base__.prototypes.item-tints")
 local sounds = require("__base__.prototypes.entity.sounds")
 
 require("shared")
+require("prototypes.planet")
 
 local factories = {
   {

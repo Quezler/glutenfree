@@ -46,6 +46,7 @@ Buildings.on_created_entity = function(event)
   local entity_name = get_entity_name(entity)
   local building = new_struct(storage.buildings, {
     index = entity.unit_number,
+    x_offset = mod.next_index_for("x_offset"),
     entity = entity,
     is_ghost = entity.type == "entity-ghost",
 
@@ -56,6 +57,8 @@ Buildings.on_created_entity = function(event)
     line_2 = nil,
     line_3 = nil,
     line_4 = nil,
+
+    proxy_container_1 = storage.invalid,
   })
 
   local factory_config = config.factories[mod.container_name_to_tier[entity_name]]
@@ -103,6 +106,8 @@ Buildings.on_created_entity = function(event)
   Buildings.set_status_not_configured(building)
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "building", building_index = building.index}
+
+  Planet.setup_combinators(building)
 
   if factory_index then
     local factory = storage.factories[factory_index]
