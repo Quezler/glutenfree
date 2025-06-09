@@ -33,9 +33,44 @@ Planet.setup_combinators = function(building)
     position = {-0.5 + building.x_offset, -3.0},
     direction = defines.direction.north,
   }
+  building.decider_combinator_1.get_control_behavior().parameters = {
+    conditions = {
+      {
+        first_signal = {
+          type = "virtual",
+          name = "signal-everything"
+        },
+        constant = 0,
+        comparator = "≥",
+        first_signal_networks = {
+          red = true,
+          green = true
+        },
+        second_signal_networks = {
+          red = true,
+          green = true
+        },
+        compare_type = "or"
+      }
+    },
+    outputs = {
+      {
+        signal = {
+          type = "virtual",
+          name = "signal-check"
+        },
+        copy_count_from_input = false,
+        networks = {
+          red = true,
+          green = true
+        }
+      }
+    }
+  }
 
   connect(building.proxy_container_1, connector.circuit_red, building.decider_combinator_1, connector.combinator_input_red)
   connect(building.constant_combinator_1, connector.circuit_green, building.decider_combinator_1, connector.combinator_input_green)
+  connect(building.constant_combinator_1, connector.circuit_red, building.entity, connector.circuit_red)
 end
 
 Planet.update_constant_combinator_1 = function(building)
@@ -47,6 +82,7 @@ Planet.update_constant_combinator_1 = function(building)
 
   for _, key in ipairs({"entities", "modules", "ingredients"}) do
     local section = sections.add_section()
+    section.multiplier = -1
     for i, item in ipairs(factory.export[key]) do
       if item.type == "item" then
         section.set_slot(i, {
