@@ -59,6 +59,8 @@ Buildings.on_created_entity = function(event)
     line_4 = nil,
 
     proxy_container_1 = storage.invalid,
+    constant_combinator_1 = storage.invalid,
+    decider_combinator_1 = storage.invalid,
   })
 
   local factory_config = config.factories[mod.container_name_to_tier[entity_name]]

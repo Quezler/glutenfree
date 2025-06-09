@@ -5,6 +5,7 @@ Date: ????
     - Calculate the amount of slots needed and filter them
     - Set the bar too, and skip the crashing ghosts
     - Setup the initial hidden surface
+    - Setup the constant and decider combinators
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 06. 08
