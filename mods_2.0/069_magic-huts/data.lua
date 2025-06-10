@@ -153,28 +153,6 @@ for _, factory in ipairs(factories) do
 
     energy_usage = "1kW",
     energy_source = {type = "electric", usage_priority = "secondary-input"},
-
-    graphics_set = {
-      working_visualisations = {
-        {
-          render_layer = "cargo-hatch",
-          fadeout = true,
-          animation = {
-            priority = "high",
-            width = factory.picture_properties.width,
-            height = factory.picture_properties.height,
-            frame_count = 1,
-            animation_speed = 0.5,
-            scale = factory.picture_properties.scale,
-            shift = factory.picture_properties.shift,
-            draw_as_glow = true,
-            -- blend_mode = "additive",
-            tint = {0.5, 0.5, 0.5, 0.5},
-            filename = string.format(mod_directory .. "/graphics/factory/factory-%d-glow.png", factory.i),
-          },
-        },
-      }
-    }
   }
 
   data:extend{container, item, recipe, crafter}

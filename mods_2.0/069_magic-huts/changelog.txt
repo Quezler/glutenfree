@@ -9,6 +9,7 @@ Date: ????
     - Fill the constant combinator with the requirements
     - Check if all the starting items are present with circuits
     - Create crafter prototype with door light
+    - Drop the glow visualization
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 06. 08
