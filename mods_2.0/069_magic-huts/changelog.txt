@@ -11,6 +11,7 @@ Date: ????
     - Create crafter prototype with door light
     - Drop the glow visualization
     - Give each factory a 60s crafter
+    - Kill all children when the parent dies
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 06. 08

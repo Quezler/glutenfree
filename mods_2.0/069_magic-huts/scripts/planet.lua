@@ -11,15 +11,15 @@ end
 Planet.setup_combinators = function(building)
   assert(building.is_ghost == false)
 
-  building.proxy_container_1 = storage.surface.create_entity{
+  building.children.proxy_container_1 = storage.surface.create_entity{
     name = "proxy-container",
     force = "neutral",
     position = {-0.5 + building.x_offset, -0.5}
   }
-  building.proxy_container_1.proxy_target_entity = building.entity
-  building.proxy_container_1.proxy_target_inventory = defines.inventory.chest
+  building.children.proxy_container_1.proxy_target_entity = building.entity
+  building.children.proxy_container_1.proxy_target_inventory = defines.inventory.chest
 
-  building.constant_combinator_1 = storage.surface.create_entity{
+  building.children.constant_combinator_1 = storage.surface.create_entity{
     name = "constant-combinator",
     force = "neutral",
     position = {-0.5 + building.x_offset, -1.5},
@@ -27,13 +27,13 @@ Planet.setup_combinators = function(building)
   }
   Planet.update_constant_combinator_1(building)
 
-  building.decider_combinator_1 = storage.surface.create_entity{
+  building.children.decider_combinator_1 = storage.surface.create_entity{
     name = "decider-combinator",
     force = "neutral",
     position = {-0.5 + building.x_offset, -3.0},
     direction = defines.direction.north,
   }
-  building.decider_combinator_1.get_control_behavior().parameters = {
+  building.children.decider_combinator_1.get_control_behavior().parameters = {
     conditions = {
       {
         first_signal = {
@@ -68,13 +68,13 @@ Planet.setup_combinators = function(building)
     }
   }
 
-  connect(building.proxy_container_1, connector.circuit_red, building.decider_combinator_1, connector.combinator_input_red)
-  connect(building.constant_combinator_1, connector.circuit_green, building.decider_combinator_1, connector.combinator_input_green)
-  connect(building.constant_combinator_1, connector.circuit_red, building.entity, connector.circuit_red)
+  connect(building.children.proxy_container_1, connector.circuit_red, building.children.decider_combinator_1, connector.combinator_input_red)
+  connect(building.children.constant_combinator_1, connector.circuit_green, building.children.decider_combinator_1, connector.combinator_input_green)
+  connect(building.children.constant_combinator_1, connector.circuit_red, building.entity, connector.circuit_red)
 end
 
 Planet.update_constant_combinator_1 = function(building)
-  local sections = building.constant_combinator_1.get_logistic_sections()
+  local sections = building.children.constant_combinator_1.get_logistic_sections()
   while sections.remove_section(1) do end
 
   local factory = storage.factories[building.factory_index]

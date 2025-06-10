@@ -58,11 +58,7 @@ Buildings.on_created_entity = function(event)
     line_3 = nil,
     line_4 = nil,
 
-    crafter = storage.invalid,
-
-    proxy_container_1 = storage.invalid,
-    constant_combinator_1 = storage.invalid,
-    decider_combinator_1 = storage.invalid,
+    children = {},
   })
 
   local factory_config = config.factories[mod.container_name_to_tier[entity_name]]
@@ -108,13 +104,13 @@ Buildings.on_created_entity = function(event)
   }
 
   if not building.is_ghost then
-    building.crafter = entity.surface.create_entity{
+    building.children.crafter = entity.surface.create_entity{
       name = mod.container_name_to_crafter_name[entity.name],
       force = entity.force,
       position = entity.position,
       create_build_effect_smoke = false,
     }
-    building.crafter.destructible = false
+    building.children.crafter.destructible = false
   end
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "building", building_index = building.index}
@@ -192,6 +188,9 @@ Buildings.on_object_destroyed = function(event)
             factory.count = factory.count - 1
             Factories.refresh_list()
           end
+        end
+        for _, child in pairs(building.children) do
+          child.destroy() -- compound entity & hidden surface
         end
       end
     end
