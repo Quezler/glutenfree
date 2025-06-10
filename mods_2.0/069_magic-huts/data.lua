@@ -136,5 +136,46 @@ for _, factory in ipairs(factories) do
     results = {{type="item", name=item.name, amount=1}}
   }
 
-  data:extend{container, item, recipe}
+  local crafter = {
+    type = "assembling-machine",
+    name = mod_prefix .. "crafter-" .. factory.i,
+    localised_name = {"entity-name.magic-huts--crafter-i", tostring(factory.i)},
+    icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
+    order = factory.order,
+
+    selection_priority = 51,
+    selection_box = factory.selection_box,
+    collision_box = factory.collision_box,
+    collision_mask = {layers = {}},
+
+    crafting_speed = 1,
+    crafting_categories = {"crafting"},
+
+    energy_usage = "1kW",
+    energy_source = {type = "electric", usage_priority = "secondary-input"},
+
+    graphics_set = {
+      working_visualisations = {
+        {
+          render_layer = "cargo-hatch",
+          fadeout = true,
+          animation = {
+            priority = "high",
+            width = factory.picture_properties.width,
+            height = factory.picture_properties.height,
+            frame_count = 1,
+            animation_speed = 0.5,
+            scale = factory.picture_properties.scale,
+            shift = factory.picture_properties.shift,
+            draw_as_glow = true,
+            -- blend_mode = "additive",
+            tint = {0.5, 0.5, 0.5, 0.5},
+            filename = string.format(mod_directory .. "/graphics/factory/factory-%d-glow.png", factory.i),
+          },
+        },
+      }
+    }
+  }
+
+  data:extend{container, item, recipe, crafter}
 end

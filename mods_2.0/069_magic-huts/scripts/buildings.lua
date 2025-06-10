@@ -58,6 +58,8 @@ Buildings.on_created_entity = function(event)
     line_3 = nil,
     line_4 = nil,
 
+    crafter = storage.invalid,
+
     proxy_container_1 = storage.invalid,
     constant_combinator_1 = storage.invalid,
     decider_combinator_1 = storage.invalid,
@@ -104,6 +106,15 @@ Buildings.on_created_entity = function(event)
     use_rich_text = true,
     scale = 0.5,
   }
+
+  if not building.is_ghost then
+    building.crafter = entity.surface.create_entity{
+      name = mod.container_name_to_crafter_name[entity.name],
+      force = entity.force,
+      position = entity.position,
+      create_build_effect_smoke = false,
+    }
+  end
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "building", building_index = building.index}
 
