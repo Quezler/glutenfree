@@ -67,6 +67,12 @@ if mods["factorissimo-2-notnotmelon"] and settings.startup["Factorissimo2-alt-gr
   alt_graphics = ""
 end
 
+local recipe_category = {
+  type = "recipe-category",
+  name = mod_prefix .. "recipe-category",
+}
+data:extend{recipe_category}
+
 for _, factory in ipairs(factories) do
   local container = {
     type = "container",
@@ -136,6 +142,21 @@ for _, factory in ipairs(factories) do
     results = {{type="item", name=item.name, amount=1}}
   }
 
+  local crafter_recipe = {
+    type = "recipe",
+    name = mod_prefix .. "recipe-" .. factory.i,
+    localised_name = {"recipe-name.magic-huts--recipe-i", tostring(factory.i)},
+    icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
+    category = recipe_category.name,
+    enabled = true,
+    auto_recycle = false,
+    energy_required = 60,
+    ingredients = {},
+    results = {},
+    hide_from_player_crafting = true,
+    hidden_in_factoriopedia = true,
+  }
+
   local crafter = {
     type = "assembling-machine",
     name = mod_prefix .. "crafter-" .. factory.i,
@@ -149,11 +170,17 @@ for _, factory in ipairs(factories) do
     collision_mask = {layers = {}},
 
     crafting_speed = 1,
-    crafting_categories = {"crafting"},
+    crafting_categories = {recipe_category.name},
 
     energy_usage = "1kW",
     energy_source = {type = "electric", usage_priority = "secondary-input"},
+
+    fixed_recipe = crafter_recipe.name,
+    fixed_quality = "normal",
+
+    icon_draw_specification = {scale = 0},
+    hidden = true,
   }
 
-  data:extend{container, item, recipe, crafter}
+  data:extend{container, item, recipe, crafter_recipe, crafter}
 end

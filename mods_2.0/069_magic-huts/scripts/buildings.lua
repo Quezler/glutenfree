@@ -114,6 +114,7 @@ Buildings.on_created_entity = function(event)
       position = entity.position,
       create_build_effect_smoke = false,
     }
+    building.crafter.destructible = false
   end
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "building", building_index = building.index}

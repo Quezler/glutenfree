@@ -1,18 +1,18 @@
 require("shared")
 
+local entity_names = {
+  mod_prefix .. "container-1",
+  mod_prefix .. "container-2",
+  mod_prefix .. "container-3",
+  mod_prefix .. "crafter-1",
+  mod_prefix .. "crafter-2",
+  mod_prefix .. "crafter-3",
+}
+
 for _, planet in pairs(data.raw["planet"]) do
   if planet.lightning_properties and planet.lightning_properties.exemption_rules then
-    table.insert(planet.lightning_properties.exemption_rules, {
-      type = "id",
-      string = mod_prefix .. "container-1",
-    })
-    table.insert(planet.lightning_properties.exemption_rules, {
-      type = "id",
-      string = mod_prefix .. "container-2",
-    })
-    table.insert(planet.lightning_properties.exemption_rules, {
-      type = "id",
-      string = mod_prefix .. "container-3",
-    })
+    for _, entity_name in ipairs(entity_names) do
+      table.insert(planet.lightning_properties.exemption_rules, {type = "id", string = entity_name})
+    end
   end
 end
