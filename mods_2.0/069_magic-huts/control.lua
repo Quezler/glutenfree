@@ -37,6 +37,12 @@ mod.container_name_to_crafter_name = {
   [mod_prefix .. "container-3"] = mod_prefix .. "crafter-3",
 }
 
+mod.container_name_to_eei_name = {
+  [mod_prefix .. "container-1"] = mod_prefix .. "eei-1",
+  [mod_prefix .. "container-2"] = mod_prefix .. "eei-2",
+  [mod_prefix .. "container-3"] = mod_prefix .. "eei-3",
+}
+
 mod.container_names_list = {
   mod_prefix .. "container-1",
   mod_prefix .. "container-2",

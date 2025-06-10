@@ -23,6 +23,7 @@ local factories = {
       {type = "item", name = "wooden-chest", amount = 1},
     },
     per_rocket = 4,
+    eei_shift = {0, 2.1},
   },
   {
     i = 2,
@@ -41,6 +42,7 @@ local factories = {
       {type = "item", name = "iron-chest", amount = 1},
     },
     per_rocket = 2,
+    eei_shift = {0, 3.6},
   },
   {
     i = 3,
@@ -59,6 +61,7 @@ local factories = {
       {type = "item", name = "steel-chest", amount = 1},
     },
     per_rocket = 1,
+    eei_shift = {0, 5.5},
   },
 }
 
@@ -165,6 +168,7 @@ for _, factory in ipairs(factories) do
     order = factory.order,
 
     selection_priority = 51,
+    selectable_in_game = false,
     selection_box = factory.selection_box,
     collision_box = factory.collision_box,
     collision_mask = {layers = {}},
@@ -182,5 +186,36 @@ for _, factory in ipairs(factories) do
     hidden = true,
   }
 
-  data:extend{container, item, recipe, crafter_recipe, crafter}
+  local eei = {
+    type = "electric-energy-interface",
+    name = mod_prefix .. "eei-" .. factory.i,
+    localised_name = {"entity-name.magic-huts--eei-i", tostring(factory.i)},
+    icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
+
+    selection_priority = 51,
+    selection_box = {{-0.4, -0.3 + factory.eei_shift[2]}, {0.4, 0.3 + factory.eei_shift[2]}},
+    collision_box = factory.collision_box,
+    collision_mask = {layers = {}},
+
+    gui_mode = "all",
+    energy_source =
+    {
+      type = "electric",
+      usage_priority = "secondary-input",
+      render_no_power_icon = false,
+      render_no_network_icon = false,
+    },
+
+    render_layer = "cargo-hatch",
+    picture = {
+      filename = mod_directory .. '/graphics/entity/amongus-electric-energy-interface.png',
+      width = 30,
+      height = 20,
+      scale = 0.5,
+      shift = factory.eei_shift,
+    },
+    hidden = true,
+  }
+
+  data:extend{container, item, recipe, crafter_recipe, crafter, eei}
 end

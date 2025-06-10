@@ -111,6 +111,14 @@ Buildings.on_created_entity = function(event)
       create_build_effect_smoke = false,
     }
     building.children.crafter.destructible = false
+
+    building.children.eei = entity.surface.create_entity{
+      name = mod.container_name_to_eei_name[entity.name],
+      force = entity.force,
+      position = entity.position,
+      create_build_effect_smoke = false,
+    }
+    building.children.eei.destructible = false
   end
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "building", building_index = building.index}
