@@ -26,6 +26,8 @@ end)
 function mod.on_created_entity(event)
   local entity = event.entity or event.destination
 
+  if storage.structs[entity.unit_number] then return end -- initialized through on_station_renamed race condition
+
   local struct = {
     entity = entity,
     text = storage.invalid,
@@ -58,6 +60,9 @@ mod.offset_for_direction = {
 
 function mod.on_station_renamed(entity)
   local struct = storage.structs[entity.unit_number]
+  if not struct then
+    return mod.on_created_entity({entity = entity}) -- calls on_station_renamed independently
+  end
 
   if struct.text.valid then
     struct.text.text = struct.entity.backer_name

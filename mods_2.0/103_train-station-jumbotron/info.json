@@ -3,7 +3,7 @@
     "title": "Train station jumbotron",
     "description": "Their name is visible above them.",
 
-    "version": "0.0.1",
+    "version": "0.0.2",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -19,6 +19,8 @@
         "? newsletter-for-mods-made-by-quezler",
 
         "? base",
-        "? space-age"
+        "? space-age",
+
+        "(?) SourceSinkPushPull"
     ]
 }
