@@ -186,6 +186,8 @@ for _, factory in ipairs(factories) do
 
     icon_draw_specification = {scale = 0},
     hidden = true,
+
+    flags = {"no-automated-item-insertion", "no-automated-item-removal"},
   }
 
   local eei = {
