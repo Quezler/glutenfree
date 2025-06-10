@@ -13,6 +13,7 @@ Date: ????
     - Give each factory a 60s crafter
     - Kill all children when the parent dies
     - Setup the eei
+    - Make the doorframes selectable for progress
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 06. 08

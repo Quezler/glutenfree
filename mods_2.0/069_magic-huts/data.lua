@@ -10,6 +10,7 @@ local factories = {
     i = 1,
     order = "c-a",
     selection_box = {{-4.0, -4.0}, {4.0, 4.0}},
+    selection_box_door = {{-1.0, 2.1}, {1.0, 4.0}},
     collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
     max_health = 2000,
     container_size = 30,
@@ -29,6 +30,7 @@ local factories = {
     i = 2,
     order = "c-b",
     selection_box = {{-6.0, -6.0}, {6.0, 6.0}},
+    selection_box_door = {{-1.5, 3.8}, {1.5, 6.0}},
     collision_box = {{-5.8, -5.8}, {5.8, 5.8}},
     max_health = 3500,
     container_size = 60,
@@ -48,6 +50,7 @@ local factories = {
     i = 3,
     order = "c-c",
     selection_box = {{-8.0, -8.0}, {8.0, 8.0}},
+    selection_box_door = {{-1.8, 5.5}, {1.8, 8.0}},
     collision_box = {{-7.8, -7.8}, {7.8, 7.8}},
     max_health = 5000,
     container_size = 120,
@@ -168,8 +171,7 @@ for _, factory in ipairs(factories) do
     order = factory.order,
 
     selection_priority = 51,
-    selectable_in_game = false,
-    selection_box = factory.selection_box,
+    selection_box = factory.selection_box_door,
     collision_box = factory.collision_box,
     collision_mask = {layers = {}},
 
@@ -192,7 +194,7 @@ for _, factory in ipairs(factories) do
     localised_name = {"entity-name.magic-huts--eei-i", tostring(factory.i)},
     icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
 
-    selection_priority = 51,
+    selection_priority = 52,
     selection_box = {{-0.4, -0.3 + factory.eei_shift[2]}, {0.4, 0.3 + factory.eei_shift[2]}},
     collision_box = factory.collision_box,
     collision_mask = {layers = {}},
