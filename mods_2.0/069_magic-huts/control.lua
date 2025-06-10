@@ -155,4 +155,9 @@ for _, event in ipairs({
   })
 end
 
+mod.player_holding_hut = function(player)
+  local held_item = (player.cursor_stack.valid_for_read and player.cursor_stack) or (player.cursor_ghost and player.cursor_ghost.name)
+  return held_item and mod.container_names_map[held_item.name]
+end
+
 script.on_event(defines.events.on_object_destroyed, Buildings.on_object_destroyed)

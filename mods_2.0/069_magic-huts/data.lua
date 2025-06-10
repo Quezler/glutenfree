@@ -223,3 +223,12 @@ for _, factory in ipairs(factories) do
 
   data:extend{container, item, recipe, crafter_recipe, crafter, eei}
 end
+
+data:extend({
+  {
+    type = "custom-input", key_sequence = "",
+    name = mod_prefix .. "build",
+    linked_game_control = "build",
+    include_selected_prototype = true,
+  }
+})

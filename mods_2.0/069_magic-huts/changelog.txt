@@ -15,6 +15,7 @@ Date: ????
     - Setup the eei
     - Make the doorframes selectable for progress
     - Disable inserters on the crafter
+    - Detect trying to place a factory over another factory
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 2025. 06. 08

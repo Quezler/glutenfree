@@ -293,4 +293,13 @@ Buildings.set_filters = function (building, filters)
   building.inventory.set_bar(bar)
 end
 
+script.on_event(mod_prefix .. "build", function(event)
+  if event.selected_prototype and mod.container_names_map[event.selected_prototype.name] then
+    local playerdata = storage.playerdata[event.player_index]
+    if mod.player_holding_hut(playerdata.player) then
+      game.print(playerdata.held_factory_index)
+    end
+  end
+end)
+
 return Buildings
