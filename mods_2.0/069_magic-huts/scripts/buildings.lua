@@ -59,6 +59,8 @@ Buildings.on_created_entity = function(event)
     line_4 = nil,
 
     children = {},
+    factory_new = true,
+    factory_index = nil,
   })
 
   local factory_config = config.factories[mod.container_name_to_tier[entity_name]]
@@ -165,7 +167,8 @@ local function get_description(factory)
 end
 
 Buildings.set_factory_index = function (building, factory_index)
-  if building.factory_index == factory_index then return end
+  if building.factory_index == factory_index and not building.factory_new then return end
+  building.factory_new = false
 
   if building.factory_index then
     local old_factory = storage.factories[building.factory_index]
@@ -173,16 +176,17 @@ Buildings.set_factory_index = function (building, factory_index)
   end
 
   building.factory_index = factory_index
-  Factories.refresh_list()
 
   if building.factory_index == nil then
     Buildings.set_status_not_configured(building)
     Planet.update_constant_combinator_1(building)
+    Factories.refresh_list()
     return
   end
 
   local factory = storage.factories[building.factory_index]
   factory.count = factory.count + 1
+  Factories.refresh_list()
 
   building.line_1.text = factory.export.name
   building.line_2.text = get_description(factory)
@@ -201,7 +205,11 @@ Buildings.on_object_destroyed = function(event)
     if deathrattle.name == "building" then
       local building = storage.buildings[event.useful_id]
       if building then storage.buildings[event.useful_id] = nil
-        Buildings.set_factory_index(building, nil)
+        local factory = storage.factories[building.factory_index]
+        if factory then
+          factory.count = factory.count - 1
+          Factories.refresh_list()
+        end
         for _, child in pairs(building.children) do
           child.destroy() -- compound entity & hidden surface
         end

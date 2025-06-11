@@ -9,7 +9,7 @@ local function connect(entity_a, connector_a, entity_b, connector_b)
 end
 
 Planet.setup_combinators = function(building)
-  assert(building.is_ghost == false)
+  if building.is_ghost then return end
 
   building.children.proxy_container_1 = storage.surface.create_entity{
     name = "proxy-container",
@@ -74,6 +74,8 @@ Planet.setup_combinators = function(building)
 end
 
 Planet.update_constant_combinator_1 = function(building)
+  if building.is_ghost then return end
+
   local sections = building.children.constant_combinator_1.get_logistic_sections()
   while sections.remove_section(1) do end
 

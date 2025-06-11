@@ -10,6 +10,7 @@ Date: ????
     - Simplify localization
     - Route factory index changes through Buildings.set_factory_index
     - Fix building held factory over existing factory
+    - Bug squashing
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10
