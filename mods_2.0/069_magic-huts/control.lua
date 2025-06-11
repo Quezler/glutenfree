@@ -167,4 +167,24 @@ mod.player_holding_hut = function(player)
   return held_item and mod.container_names_map[held_item.name]
 end
 
-script.on_event(defines.events.on_object_destroyed, Buildings.on_object_destroyed)
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    if deathrattle.name == "trigger-2" then
+      game.print("60 seconds")
+      Planet.arm_trigger_2(storage.buildings[deathrattle.building_index])
+    elseif deathrattle.name == "building" then
+      local building = storage.buildings[event.useful_id]
+      if building then storage.buildings[event.useful_id] = nil
+        local factory = storage.factories[building.factory_index]
+        if factory then
+          factory.count = factory.count - 1
+          Factories.refresh_list()
+        end
+        for _, child in pairs(building.children) do
+          child.destroy() -- compound entity & hidden surface
+        end
+      end
+    end
+  end
+end)

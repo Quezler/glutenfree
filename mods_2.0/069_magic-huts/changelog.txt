@@ -13,6 +13,7 @@ Date: ????
     - Bug squashing
     - Prepare the triggers for ingredients & done
     - Run the minute crafter only when fulfilled
+    - Fire a lua event each time the recipe completes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10

@@ -147,6 +147,8 @@ Planet.setup_combinators = function(building)
     },
   }
   connect(building.children.crafter_a, connector.circuit_green, building.children.trigger_2, connector.circuit_green)
+
+  Planet.arm_trigger_2(building)
 end
 
 Planet.update_constant_combinator_1 = function(building)
@@ -170,6 +172,16 @@ Planet.update_constant_combinator_1 = function(building)
       end
     end
   end
+end
+
+Planet.arm_trigger_2 = function(building)
+  building.trigger_2_output_stack.clear()
+  building.trigger_2_input_stack.set_stack({
+    name = "wood",
+    count = 2,
+    health = 0.5,
+  })
+  storage.deathrattles[script.register_on_object_destroyed(building.trigger_2_input_stack.item)] = {name = "trigger-2", building_index = building.index}
 end
 
 return Planet

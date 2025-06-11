@@ -199,25 +199,6 @@ Buildings.set_factory_index = function (building, factory_index)
   Planet.update_constant_combinator_1(building)
 end
 
-Buildings.on_object_destroyed = function(event)
-  local deathrattle = storage.deathrattles[event.registration_number]
-  if deathrattle then storage.deathrattles[event.registration_number] = nil
-    if deathrattle.name == "building" then
-      local building = storage.buildings[event.useful_id]
-      if building then storage.buildings[event.useful_id] = nil
-        local factory = storage.factories[building.factory_index]
-        if factory then
-          factory.count = factory.count - 1
-          Factories.refresh_list()
-        end
-        for _, child in pairs(building.children) do
-          child.destroy() -- compound entity & hidden surface
-        end
-      end
-    end
-  end
-end
-
 script.on_event(defines.events.on_player_setup_blueprint, function(event)
   local blueprint = event.stack
   if blueprint == nil then return end
