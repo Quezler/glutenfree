@@ -8,6 +8,7 @@ Date: ????
     - Allow pipe to grounds to be placed against the factory
     - Add a compound entity for the fluidboxes
     - Simplify localization
+    - Route factory index changes through Buildings.set_factory_index
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10

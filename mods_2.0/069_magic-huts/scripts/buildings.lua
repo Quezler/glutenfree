@@ -132,15 +132,7 @@ Buildings.on_created_entity = function(event)
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "building", building_index = building.index}
 
   Planet.setup_combinators(building)
-  Buildings.set_status_not_configured(building)
-
-  if factory_index then
-    local factory = storage.factories[factory_index]
-    if factory then
-      Buildings.set_factory(building, factory)
-      Factories.refresh_list()
-    end
-  end
+  Buildings.set_factory_index(building, factory_index)
 end
 
 Buildings.set_status_not_configured = function(building)
@@ -148,8 +140,6 @@ Buildings.set_status_not_configured = function(building)
   building.line_2.text = ""
   building.line_3.text = "[img=utility/status_inactive] not configured"
   building.line_4.text = "head into factory planner and export a factory"
-
-  Planet.update_constant_combinator_1(building)
 end
 
 local function get_description(factory)
@@ -174,17 +164,30 @@ local function get_description(factory)
   return description
 end
 
-Buildings.set_factory = function (building, factory)
-  assert(building)
-  assert(factory)
+Buildings.set_factory_index = function (building, factory_index)
+  if building.factory_index == factory_index then return end
+
+  if building.factory_index then
+    local old_factory = storage.factories[building.factory_index]
+    old_factory.count = old_factory.count - 1
+  end
+
+  building.factory_index = factory_index
+  Factories.refresh_list()
+
+  if building.factory_index == nil then
+    Buildings.set_status_not_configured(building)
+    Planet.update_constant_combinator_1(building)
+    return
+  end
+
+  local factory = storage.factories[building.factory_index]
+  factory.count = factory.count + 1
 
   building.line_1.text = factory.export.name
   building.line_2.text = get_description(factory)
   building.line_3.text = "[img=utility/status_not_working] not yet implemented"
   building.line_4.text = "Quezler is still working hard on the rest"
-
-  factory.count = factory.count + 1
-  building.factory_index = factory.index
 
   local filters = Buildings.get_filters(building)
   log(string.format("filtering %d slots for factory #%d (%s)", #filters, factory.index, factory.export.name))
@@ -198,13 +201,7 @@ Buildings.on_object_destroyed = function(event)
     if deathrattle.name == "building" then
       local building = storage.buildings[event.useful_id]
       if building then storage.buildings[event.useful_id] = nil
-        if building.factory_index then
-          local factory = storage.factories[building.factory_index]
-          if factory then
-            factory.count = factory.count - 1
-            Factories.refresh_list()
-          end
-        end
+        Buildings.set_factory_index(building, nil)
         for _, child in pairs(building.children) do
           child.destroy() -- compound entity & hidden surface
         end
@@ -248,22 +245,7 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     local building_a = storage.buildings[event.source.unit_number]
     local building_b = storage.buildings[event.destination.unit_number]
 
-    if building_a.factory_index == building_b.factory_index then return end -- early bail to avoid unnecessary work
-
-    local factory_a = storage.factories[building_a.factory_index]
-    local factory_b = storage.factories[building_b.factory_index]
-
-    if factory_b then
-      factory_b.count = factory_b.count - 1
-    end
-
-    if factory_a then
-      Buildings.set_factory(building_b, factory_a)
-    else
-      Buildings.set_status_not_configured(building_b)
-      building_b.factory_index = nil
-    end
-    Factories.refresh_list()
+    Buildings.set_factory_index(building_a, building_b.factory_index)
   end
 end)
 
@@ -304,8 +286,13 @@ end
 script.on_event(mod_prefix .. "build", function(event)
   if event.selected_prototype and mod.container_names_map[event.selected_prototype.name] then
     local playerdata = storage.playerdata[event.player_index]
-    if mod.player_holding_hut(playerdata.player) then
-      game.print(playerdata.held_factory_index)
+    local selected = playerdata.player
+
+    if selected and mod.container_names_map[get_entity_name(selected.name)] then
+      if mod.player_holding_hut(playerdata.player) then
+        local building = storage.building[selected.unit_number]
+        Buildings.set_factory_index(building, playerdata.held_factory_index)
+      end
     end
   end
 end)

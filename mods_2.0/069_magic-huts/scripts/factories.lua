@@ -109,24 +109,16 @@ Factories.on_gui_click = function (event)
     Factories.delete_by_index(event.element.tags.factory_index)
   elseif event.element.tags.action == mod_prefix .. "select-factory" then
     local factory = storage.factories[event.element.tags.factory_index]
-    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    if player.opened_gui_type == defines.gui_type.entity then
-      if mod.container_names_map[player.opened.name] then
+    if factory then
+      local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+      if player.opened_gui_type == defines.gui_type.entity and mod.container_names_map[player.opened.name] then
         local building = storage.buildings[player.opened.unit_number]
 
         if building.factory_index == factory.index then
-          factory.count = factory.count - 1
-          building.factory_index = nil
-          Buildings.set_status_not_configured(building)
+          Buildings.set_factory_index(building, nil) -- select active factory to unconfigure it
         else
-          local old_factory = storage.factories[building.factory_index]
-          if old_factory then
-            old_factory.count = old_factory.count - 1
-          end
-
-          Buildings.set_factory(building, factory)
-      end
-        Factories.refresh_list()
+          Buildings.set_factory_index(building, factory.index)
+        end
       end
     end
   end
