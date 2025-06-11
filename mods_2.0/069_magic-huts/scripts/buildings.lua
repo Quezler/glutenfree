@@ -286,11 +286,11 @@ end
 script.on_event(mod_prefix .. "build", function(event)
   if event.selected_prototype and mod.container_names_map[event.selected_prototype.name] then
     local playerdata = storage.playerdata[event.player_index]
-    local selected = playerdata.player
+    local selected = playerdata.player.selected
 
-    if selected and mod.container_names_map[get_entity_name(selected.name)] then
+    if selected and mod.container_names_map[get_entity_name(selected)] then
       if mod.player_holding_hut(playerdata.player) then
-        local building = storage.building[selected.unit_number]
+        local building = storage.buildings[selected.unit_number]
         Buildings.set_factory_index(building, playerdata.held_factory_index)
       end
     end
