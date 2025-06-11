@@ -11,10 +11,12 @@ end
 Planet.setup_combinators = function(building)
   if building.is_ghost then return end
 
+  building.x_offset = mod.next_index_for("x_offset") * 3
+
   building.children.proxy_container_1 = storage.surface.create_entity{
     name = "proxy-container",
     force = "neutral",
-    position = {-0.5 + building.x_offset, -0.5}
+    position = {-2.5 + building.x_offset, -0.5}
   }
   building.children.proxy_container_1.proxy_target_entity = building.entity
   building.children.proxy_container_1.proxy_target_inventory = defines.inventory.chest
@@ -22,7 +24,7 @@ Planet.setup_combinators = function(building)
   building.children.constant_combinator_1 = storage.surface.create_entity{
     name = "constant-combinator",
     force = "neutral",
-    position = {-0.5 + building.x_offset, -1.5},
+    position = {-2.5 + building.x_offset, -1.5},
     direction = defines.direction.north,
   }
   Planet.update_constant_combinator_1(building)
@@ -30,7 +32,7 @@ Planet.setup_combinators = function(building)
   building.children.decider_combinator_1 = storage.surface.create_entity{
     name = "decider-combinator",
     force = "neutral",
-    position = {-0.5 + building.x_offset, -3.0},
+    position = {-2.5 + building.x_offset, -3.0},
     direction = defines.direction.north,
   }
   building.children.decider_combinator_1.get_control_behavior().parameters = {
@@ -71,6 +73,50 @@ Planet.setup_combinators = function(building)
   connect(building.children.proxy_container_1, connector.circuit_red, building.children.decider_combinator_1, connector.combinator_input_red)
   connect(building.children.constant_combinator_1, connector.circuit_green, building.children.decider_combinator_1, connector.combinator_input_green)
   connect(building.children.constant_combinator_1, connector.circuit_red, building.entity, connector.circuit_red)
+
+  building.children.trigger_1 = storage.surface.create_entity{
+    name = "assembling-machine-1",
+    force = "neutral",
+    position = {-1.5 + building.x_offset, -5.5}
+  }
+  building.children.trigger_1.set_recipe("wooden-chest")
+  building.trigger_1_input_stack  = building.children.trigger_1.get_inventory(defines.inventory.crafter_input)[1]
+  building.trigger_1_output_stack = building.children.trigger_1.get_inventory(defines.inventory.crafter_output)[1]
+  local cb_a = building.children.trigger_1.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
+  cb_a.circuit_enable_disable = true
+  cb_a.circuit_condition = {
+    comparator = ">",
+    constant = 0,
+    first_signal = {
+      name = "signal-check",
+      type = "virtual"
+    },
+  }
+  connect(building.children.decider_combinator_1, connector.combinator_output_green, building.children.trigger_1, connector.circuit_green)
+
+  building.children.trigger_2 = storage.surface.create_entity{
+    name = "assembling-machine-1",
+    force = "neutral",
+    position = {-1.5 + building.x_offset, -8.5}
+  }
+  building.children.trigger_2.set_recipe("wooden-chest")
+  building.trigger_2_input_stack  = building.children.trigger_2.get_inventory(defines.inventory.crafter_input)[1]
+  building.trigger_2_output_stack = building.children.trigger_2.get_inventory(defines.inventory.crafter_output)[1]
+  local cb_b = building.children.trigger_2.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
+  cb_b.circuit_enable_disable = true
+  cb_b.circuit_condition = {
+    comparator = ">",
+    constant = 0,
+    first_signal = {
+      name = "signal-F",
+      type = "virtual"
+    },
+  }
+
+  local crafter_a_cb = building.children.crafter_a.get_or_create_control_behavior()
+  crafter_a_cb.circuit_read_recipe_finished = true
+  crafter_a_cb.circuit_recipe_finished_signal = {type = "virtual", name = "signal-F"}
+  connect(building.children.crafter_a, connector.circuit_green, building.children.trigger_2, connector.circuit_green)
 end
 
 Planet.update_constant_combinator_1 = function(building)

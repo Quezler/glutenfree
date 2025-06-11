@@ -46,7 +46,7 @@ Buildings.on_created_entity = function(event)
   local entity_name = get_entity_name(entity)
   local building = new_struct(storage.buildings, {
     index = entity.unit_number,
-    x_offset = mod.next_index_for("x_offset"),
+    x_offset = nil,
     entity = entity,
     is_ghost = entity.type == "entity-ghost",
 

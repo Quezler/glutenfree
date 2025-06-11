@@ -81,6 +81,7 @@ script.on_init(function ()
 
   storage.surface = game.planets[mod_name].create_surface()
   storage.surface.generate_with_lab_tiles = true
+  storage.surface.global_effect = {speed = 60}
 
   storage.surface.create_global_electric_network()
   storage.surface.create_entity{
