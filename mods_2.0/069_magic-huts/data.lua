@@ -5,15 +5,40 @@ local sounds = require("__base__.prototypes.entity.sounds")
 require("shared")
 require("prototypes.planet")
 
+local function iterate_edge_positions(side_length)
+  local positions = {}
+  local half = side_length / 2
+
+  local min = -half + 0.5
+  local max = half - 0.5
+
+  -- Top edge (left to right)
+  for x = min, max do
+    table.insert(positions, {x = x, y = -half, direction = defines.direction.north})
+  end
+
+  -- Bottom edge (left to right)
+  for x = min, max do
+    table.insert(positions, {x = x, y = half, direction = defines.direction.south})
+  end
+
+  -- Left edge (top to bottom)
+  for y = min, max do
+    table.insert(positions, {x = -half, y = y, direction = defines.direction.west})
+  end
+
+  -- Right edge (top to bottom)
+  for y = min, max do
+    table.insert(positions, {x = half, y = y, direction = defines.direction.east})
+  end
+
+  return positions
+end
+
 local function get_fluidboxes(side_length)
   local fluidboxes = {}
 
-  for _, direction in ipairs({
-    defines.direction.north,
-    defines.direction.east,
-    defines.direction.south,
-    defines.direction.west,
-  }) do
+  for _, position in ipairs(iterate_edge_positions(7)) do
     table.insert(fluidboxes, {
       production_type = "output",
       volume = 1,
@@ -21,17 +46,10 @@ local function get_fluidboxes(side_length)
       pipe_connections = {
         {
           flow_direction = "input-output",
-          direction = direction,
-          position = {0, 3.5},
+          direction = position.direction,
+          position = position,
           connection_type = "underground",
           max_underground_distance = 10,
-        },
-        {
-          flow_direction = "input-output",
-          pipe_picture = assembler2pipepictures(),
-          pipe_covers = pipecoverspictures(),
-          direction = direction,
-          position = {0, 3.5},
         },
       },
     })
@@ -211,7 +229,7 @@ for _, factory in ipairs(factories) do
     selection_priority = 51,
     selection_box = factory.selection_box_door,
     collision_box = factory.collision_box,
-    -- collision_mask = {layers = {}},
+    collision_mask = {layers = {}},
 
     crafting_speed = 1,
     crafting_categories = {recipe_category.name},
@@ -219,8 +237,8 @@ for _, factory in ipairs(factories) do
     energy_usage = "1kW",
     energy_source = {type = "electric", usage_priority = "secondary-input"},
 
-    fixed_recipe = crafter_recipe.name,
-    fixed_quality = "normal",
+    -- fixed_recipe = crafter_recipe.name,
+    -- fixed_quality = "normal",
 
     icon_draw_specification = {scale = 0},
     hidden = true,
@@ -272,5 +290,3 @@ data:extend({
     include_selected_prototype = true,
   }
 })
-
-data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes_off_when_no_fluid_recipe = false
