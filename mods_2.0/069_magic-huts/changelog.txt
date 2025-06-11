@@ -5,6 +5,7 @@ Date: ????
     - Get stuck trying to connect fluidboxes from everywhere
     - chatgtp my ass
     - Get the fluid positions code to behave
+    - Allow pipe to grounds to be placed against the factory
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10

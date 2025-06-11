@@ -5,32 +5,32 @@ local sounds = require("__base__.prototypes.entity.sounds")
 require("shared")
 require("prototypes.planet")
 
-local function each_tile_edge_position(side_length)
+local function each_tile_edge_position(side_length, social_distancing)
   local positions = {}
   local half = side_length / 2
 
   for i = 1, side_length do
     local x = -half + 0.5 + (i - 1)
     local y = -half + 0.5
-    table.insert(positions, {x = x, y = y, direction = defines.direction.north})
+    table.insert(positions, {x = x, y = y + social_distancing, direction = defines.direction.north})
   end
 
   for i = 1, side_length do
     local x = -half + 0.5 + (i - 1)
     local y = half - 0.5
-    table.insert(positions, {x = x, y = y, direction = defines.direction.south})
+    table.insert(positions, {x = x, y = y - social_distancing, direction = defines.direction.south})
   end
 
   for i = 1, side_length do
     local y = -half + 0.5 + (i - 1)
     local x = half - 0.5
-    table.insert(positions, {x = x, y = y, direction = defines.direction.east})
+    table.insert(positions, {x = x - social_distancing, y = y, direction = defines.direction.east})
   end
 
   for i = 1, side_length do
     local y = -half + 0.5 + (i - 1)
     local x = -half + 0.5
-    table.insert(positions, {x = x, y = y, direction = defines.direction.west})
+    table.insert(positions, {x = x + social_distancing, y = y, direction = defines.direction.west})
   end
 
   return positions
@@ -39,18 +39,18 @@ end
 local function get_fluidboxes(side_length)
   local fluidboxes = {}
 
-  for _, position in ipairs(each_tile_edge_position(side_length)) do
+  for _, position in ipairs(each_tile_edge_position(side_length, 1)) do
     table.insert(fluidboxes, {
-      production_type = "output",
+      production_type = "input",
       volume = 1,
-      always_draw_covers = true,
+      hide_connection_info = true,
       pipe_connections = {
         {
           flow_direction = "input-output",
           position = position,
           direction = position.direction,
           connection_type = "underground",
-          max_underground_distance = 1,
+          max_underground_distance = 2,
         },
       },
     })
