@@ -140,7 +140,7 @@ for _, factory in ipairs(factories) do
   local container = {
     type = "container",
     name = mod_prefix .. "container-" .. factory.i,
-    localised_name = {"entity-name.magic-huts--container-i", tostring(factory.i)},
+    localised_name = {"entity-name.magic-hut", tostring(factory.i)},
     icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
     order = factory.order,
 
@@ -208,7 +208,7 @@ for _, factory in ipairs(factories) do
   local crafter_recipe = {
     type = "recipe",
     name = mod_prefix .. "recipe-" .. factory.i,
-    localised_name = {"recipe-name.magic-huts--recipe-i", tostring(factory.i)},
+    localised_name = {"entity-name.magic-hut", tostring(factory.i)},
     icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
     category = recipe_category.name,
     enabled = true,
@@ -223,7 +223,7 @@ for _, factory in ipairs(factories) do
   local crafter_a = {
     type = "assembling-machine",
     name = mod_prefix .. "crafter-a-" .. factory.i,
-    localised_name = {"entity-name.magic-huts--crafter-i", tostring(factory.i)},
+    localised_name = {"entity-name.magic-hut", tostring(factory.i)},
     icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
     order = factory.order,
 
@@ -260,7 +260,7 @@ for _, factory in ipairs(factories) do
   local eei = {
     type = "electric-energy-interface",
     name = mod_prefix .. "eei-" .. factory.i,
-    localised_name = {"entity-name.magic-huts--eei-i", tostring(factory.i)},
+    localised_name = {"entity-name.magic-hut", tostring(factory.i)},
     icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
 
     selection_priority = 52,

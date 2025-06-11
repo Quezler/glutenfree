@@ -4,9 +4,12 @@ local entity_names = {
   mod_prefix .. "container-1",
   mod_prefix .. "container-2",
   mod_prefix .. "container-3",
-  mod_prefix .. "crafter-1",
-  mod_prefix .. "crafter-2",
-  mod_prefix .. "crafter-3",
+  mod_prefix .. "crafter-a-1",
+  mod_prefix .. "crafter-a-2",
+  mod_prefix .. "crafter-a-3",
+  mod_prefix .. "crafter-b-1",
+  mod_prefix .. "crafter-b-2",
+  mod_prefix .. "crafter-b-3",
 }
 
 for _, planet in pairs(data.raw["planet"]) do

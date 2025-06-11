@@ -25,7 +25,7 @@ function Factoryplanner.on_gui_opened(event)
     type = "sprite-button",
     name = mod_prefix .. "summon-magic-hut",
     sprite = "entity/" .. mod_prefix .. "container-1",
-    tooltip = {"fp.summon-magic-hut"},
+    tooltip = {"fp.su_summon-magic-hut"},
     mouse_button_filter = {"left", "middle", "right"},
   }
   button.style.size = 24
