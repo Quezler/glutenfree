@@ -5,6 +5,41 @@ local sounds = require("__base__.prototypes.entity.sounds")
 require("shared")
 require("prototypes.planet")
 
+local function get_fluidboxes(side_length)
+  local fluidboxes = {}
+
+  for _, direction in ipairs({
+    defines.direction.north,
+    defines.direction.east,
+    defines.direction.south,
+    defines.direction.west,
+  }) do
+    table.insert(fluidboxes, {
+      production_type = "output",
+      volume = 1,
+      always_draw_covers = true,
+      pipe_connections = {
+        {
+          flow_direction = "input-output",
+          direction = direction,
+          position = {0, 3.5},
+          connection_type = "underground",
+          max_underground_distance = 10,
+        },
+        {
+          flow_direction = "input-output",
+          pipe_picture = assembler2pipepictures(),
+          pipe_covers = pipecoverspictures(),
+          direction = direction,
+          position = {0, 3.5},
+        },
+      },
+    })
+  end
+
+  return fluidboxes
+end
+
 local factories = {
   {
     i = 1,
@@ -25,6 +60,7 @@ local factories = {
     },
     per_rocket = 4,
     eei_shift = {0, 2.1},
+    side_length = 8,
   },
   {
     i = 2,
@@ -45,6 +81,7 @@ local factories = {
     },
     per_rocket = 2,
     eei_shift = {0, 3.6},
+    side_length = 12,
   },
   {
     i = 3,
@@ -65,6 +102,7 @@ local factories = {
     },
     per_rocket = 1,
     eei_shift = {0, 5.5},
+    side_length = 16,
   },
 }
 
@@ -173,7 +211,7 @@ for _, factory in ipairs(factories) do
     selection_priority = 51,
     selection_box = factory.selection_box_door,
     collision_box = factory.collision_box,
-    collision_mask = {layers = {}},
+    -- collision_mask = {layers = {}},
 
     crafting_speed = 1,
     crafting_categories = {recipe_category.name},
@@ -188,6 +226,8 @@ for _, factory in ipairs(factories) do
     hidden = true,
 
     flags = {"no-automated-item-insertion", "no-automated-item-removal"},
+    fluid_boxes = get_fluidboxes(factory.side_length),
+    fluid_boxes_off_when_no_fluid_recipe = false,
   }
 
   local eei = {
@@ -232,3 +272,5 @@ data:extend({
     include_selected_prototype = true,
   }
 })
+
+data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes_off_when_no_fluid_recipe = false
