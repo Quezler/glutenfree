@@ -5,31 +5,32 @@ local sounds = require("__base__.prototypes.entity.sounds")
 require("shared")
 require("prototypes.planet")
 
-local function iterate_edge_positions(side_length)
+local function each_tile_edge_position(side_length)
   local positions = {}
   local half = side_length / 2
 
-  local min = -half + 0.5
-  local max = half - 0.5
-
-  -- Top edge (left to right)
-  for x = min, max do
-    table.insert(positions, {x = x, y = -half, direction = defines.direction.north})
+  for i = 1, side_length do
+    local x = -half + 0.5 + (i - 1)
+    local y = -half + 0.5
+    table.insert(positions, {x = x, y = y, direction = defines.direction.north})
   end
 
-  -- Bottom edge (left to right)
-  for x = min, max do
-    table.insert(positions, {x = x, y = half, direction = defines.direction.south})
+  for i = 1, side_length do
+    local x = -half + 0.5 + (i - 1)
+    local y = half - 0.5
+    table.insert(positions, {x = x, y = y, direction = defines.direction.south})
   end
 
-  -- Left edge (top to bottom)
-  for y = min, max do
-    table.insert(positions, {x = -half, y = y, direction = defines.direction.west})
+  for i = 1, side_length do
+    local y = -half + 0.5 + (i - 1)
+    local x = half - 0.5
+    table.insert(positions, {x = x, y = y, direction = defines.direction.east})
   end
 
-  -- Right edge (top to bottom)
-  for y = min, max do
-    table.insert(positions, {x = half, y = y, direction = defines.direction.east})
+  for i = 1, side_length do
+    local y = -half + 0.5 + (i - 1)
+    local x = -half + 0.5
+    table.insert(positions, {x = x, y = y, direction = defines.direction.west})
   end
 
   return positions
@@ -38,7 +39,7 @@ end
 local function get_fluidboxes(side_length)
   local fluidboxes = {}
 
-  for _, position in ipairs(iterate_edge_positions(7)) do
+  for _, position in ipairs(each_tile_edge_position(side_length)) do
     table.insert(fluidboxes, {
       production_type = "output",
       volume = 1,
@@ -46,10 +47,10 @@ local function get_fluidboxes(side_length)
       pipe_connections = {
         {
           flow_direction = "input-output",
-          direction = position.direction,
           position = position,
+          direction = position.direction,
           connection_type = "underground",
-          max_underground_distance = 10,
+          max_underground_distance = 1,
         },
       },
     })
