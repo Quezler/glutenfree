@@ -35,6 +35,7 @@ Planet.setup_combinators = function(building)
     position = {-2.5 + building.x_offset, -3.0},
     direction = defines.direction.north,
   }
+  -- /c log(serpent.block(game.player.selected.get_control_behavior().parameters, {sortkeys = false}))
   building.children.decider_combinator_1.get_control_behavior().parameters = {
     conditions = {
       {
@@ -43,7 +44,7 @@ Planet.setup_combinators = function(building)
           name = "signal-everything"
         },
         constant = 0,
-        comparator = "≥",
+        comparator = ">",
         first_signal_networks = {
           red = true,
           green = true
@@ -53,6 +54,23 @@ Planet.setup_combinators = function(building)
           green = true
         },
         compare_type = "or"
+      },
+      {
+        first_signal = {
+          type = "virtual",
+          name = "signal-anything"
+        },
+        constant = 0,
+        comparator = "<",
+        first_signal_networks = {
+          red = false,
+          green = true
+        },
+        second_signal_networks = {
+          red = true,
+          green = true
+        },
+        compare_type = "and"
       }
     },
     outputs = {
@@ -113,9 +131,21 @@ Planet.setup_combinators = function(building)
     },
   }
 
-  local crafter_a_cb = building.children.crafter_a.get_or_create_control_behavior()
+  -- sharing the green wire because it causes no conflict, will get the check signal from the decider to the crafter_a
+  connect(building.children.trigger_1, connector.circuit_green, building.children.trigger_2, connector.circuit_green)
+
+  local crafter_a_cb = building.children.crafter_a.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
   crafter_a_cb.circuit_read_recipe_finished = true
   crafter_a_cb.circuit_recipe_finished_signal = {type = "virtual", name = "signal-F"}
+  crafter_a_cb.circuit_enable_disable = true
+  crafter_a_cb.circuit_condition = {
+    comparator = ">",
+    constant = 0,
+    first_signal = {
+      name = "signal-check",
+      type = "virtual"
+    },
+  }
   connect(building.children.crafter_a, connector.circuit_green, building.children.trigger_2, connector.circuit_green)
 end
 

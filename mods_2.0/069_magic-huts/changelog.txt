@@ -12,6 +12,7 @@ Date: ????
     - Fix building held factory over existing factory
     - Bug squashing
     - Prepare the triggers for ingredients & done
+    - Run the minute crafter only when fulfilled
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10
