@@ -104,13 +104,21 @@ Buildings.on_created_entity = function(event)
   }
 
   if not building.is_ghost then
-    building.children.crafter = entity.surface.create_entity{
-      name = mod.container_name_to_crafter_name[entity.name],
+    building.children.crafter_a = entity.surface.create_entity{
+      name = mod.container_name_to_crafter_a_name[entity.name],
       force = entity.force,
       position = entity.position,
       create_build_effect_smoke = false,
     }
-    building.children.crafter.destructible = false
+    building.children.crafter_a.destructible = false
+
+    building.children.crafter_b = entity.surface.create_entity{
+      name = mod.container_name_to_crafter_b_name[entity.name],
+      force = entity.force,
+      position = entity.position,
+      create_build_effect_smoke = false,
+    }
+    building.children.crafter_b.destructible = false
 
     building.children.eei = entity.surface.create_entity{
       name = mod.container_name_to_eei_name[entity.name],

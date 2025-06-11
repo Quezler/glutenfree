@@ -39,7 +39,7 @@ end
 local function get_fluidboxes(side_length)
   local fluidboxes = {}
 
-  for _, position in ipairs(each_tile_edge_position(side_length, 1)) do
+  for _, position in ipairs(each_tile_edge_position(side_length, 0.001)) do
     table.insert(fluidboxes, {
       production_type = "input",
       volume = 1,
@@ -50,7 +50,7 @@ local function get_fluidboxes(side_length)
           position = position,
           direction = position.direction,
           connection_type = "underground",
-          max_underground_distance = 2,
+          max_underground_distance = 1,
         },
       },
     })
@@ -220,9 +220,9 @@ for _, factory in ipairs(factories) do
     hidden_in_factoriopedia = true,
   }
 
-  local crafter = {
+  local crafter_a = {
     type = "assembling-machine",
-    name = mod_prefix .. "crafter-" .. factory.i,
+    name = mod_prefix .. "crafter-a-" .. factory.i,
     localised_name = {"entity-name.magic-huts--crafter-i", tostring(factory.i)},
     icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
     order = factory.order,
@@ -238,16 +238,24 @@ for _, factory in ipairs(factories) do
     energy_usage = "1kW",
     energy_source = {type = "electric", usage_priority = "secondary-input"},
 
-    -- fixed_recipe = crafter_recipe.name,
-    -- fixed_quality = "normal",
+    fixed_recipe = crafter_recipe.name,
+    fixed_quality = "normal",
 
     icon_draw_specification = {scale = 0},
     hidden = true,
 
     flags = {"no-automated-item-insertion", "no-automated-item-removal"},
-    fluid_boxes = get_fluidboxes(factory.side_length),
-    fluid_boxes_off_when_no_fluid_recipe = false,
   }
+
+  -- a crafter with a recipe set force-disables all unused fluidboxes
+  local crafter_b = table.deepcopy(crafter_a)
+  crafter_b.name = mod_prefix .. "crafter-b-" .. factory.i
+  crafter_b.selection_box = factory.selection_box
+  crafter_b.fixed_recipe = nil
+  crafter_b.fixed_quality = nil
+  crafter_b.fluid_boxes = get_fluidboxes(factory.side_length)
+  crafter_b.selection_priority = 49
+  crafter_b.energy_source = {type = "void"}
 
   local eei = {
     type = "electric-energy-interface",
@@ -280,7 +288,7 @@ for _, factory in ipairs(factories) do
     hidden = true,
   }
 
-  data:extend{container, item, recipe, crafter_recipe, crafter, eei}
+  data:extend{container, item, recipe, crafter_recipe, crafter_a, crafter_b, eei}
 end
 
 data:extend({

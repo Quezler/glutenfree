@@ -6,6 +6,7 @@ Date: ????
     - chatgtp my ass
     - Get the fluid positions code to behave
     - Allow pipe to grounds to be placed against the factory
+    - Add a compound entity for the fluidboxes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10

@@ -31,10 +31,16 @@ mod.container_name_to_tier = {
   [mod_prefix .. "container-3"] = 3,
 }
 
-mod.container_name_to_crafter_name = {
-  [mod_prefix .. "container-1"] = mod_prefix .. "crafter-1",
-  [mod_prefix .. "container-2"] = mod_prefix .. "crafter-2",
-  [mod_prefix .. "container-3"] = mod_prefix .. "crafter-3",
+mod.container_name_to_crafter_a_name = {
+  [mod_prefix .. "container-1"] = mod_prefix .. "crafter-a-1",
+  [mod_prefix .. "container-2"] = mod_prefix .. "crafter-a-2",
+  [mod_prefix .. "container-3"] = mod_prefix .. "crafter-a-3",
+}
+
+mod.container_name_to_crafter_b_name = {
+  [mod_prefix .. "container-1"] = mod_prefix .. "crafter-b-1",
+  [mod_prefix .. "container-2"] = mod_prefix .. "crafter-b-2",
+  [mod_prefix .. "container-3"] = mod_prefix .. "crafter-b-3",
 }
 
 mod.container_name_to_eei_name = {
