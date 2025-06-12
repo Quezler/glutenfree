@@ -21,6 +21,7 @@ Date: ????
     - Show the slot requirement/availability during exporting
     - Eject items when filter/bar no longer allows that slot
     - Fix copy paste getting the order wrong
+    - Block triggers from changing status of inactive factory
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10

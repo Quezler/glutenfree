@@ -380,4 +380,11 @@ script.on_event(mod_prefix .. "build", function(event)
   end
 end)
 
+-- prevents the triggers from updating the status
+Buildings.set_status = function(building, status)
+  if building.factory_index == nil then return end
+
+  building.line_3.text = status
+end
+
 return Buildings

@@ -177,15 +177,15 @@ script.on_event(defines.events.on_object_destroyed, function(event)
         if n == 1 then
           game.print("working")
           Planet.arm_trigger_n(building, 2)
-          building.line_3.text = "[img=utility/status_working] working"
+          Buildings.set_status(building, "[img=utility/status_working] working")
         elseif n == 2 then
           game.print("waiting for items")
           Planet.arm_trigger_n(building, 1)
-          building.line_3.text = "[img=utility/status_not_working] item ingredient shortage"
+          Buildings.set_status(building, "[img=utility/status_not_working] item ingredient shortage")
         elseif n == 3 then
           game.print("recipe finished")
           Planet.arm_trigger_n(building, 3)
-          building.line_3.text = "[img=utility/status_yellow] output full"
+          Buildings.set_status(building, "[img=utility/status_yellow] output full")
         end
       end
     elseif deathrattle.name == "building" then
