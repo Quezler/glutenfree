@@ -1,9 +1,13 @@
 local Crafter = {}
 
+local function get_name_quality_key(item)
+  return assert(item.quality) .. " " .. assert(item.name)
+end
+
 local function add_contents_to_map(contents, map)
   for _, content in ipairs(contents) do
     if content.type ~= "fluid" then
-      local key = assert(content.quality) .. " " .. content.name
+      local key = get_name_quality_key(content)
       local mapped = map[key]
       if mapped then
         mapped.count = mapped.count + content.count
@@ -77,6 +81,45 @@ Crafter.craft = function(building)
   end
 
   Buildings.set_status(building, "[img=utility/status_working] working")
+end
+
+-- ensure the buffers exist so we do not need to check for their prescence first each time,
+-- unused buffers persist for as long as the building does, lost completely upon deconstruction.
+Crafter.inflate_buffers = function(building)
+  local factory = storage.factories[building.factory_index]
+
+  for _, ingredient in ipairs(factory.export.ingredients) do
+    if ingredient.type == "fluid" then
+      building.fluid_input_buffer[ingredient.name] = (building.fluid_input_buffer[ingredient.name] or 0)
+    else
+      local key = get_name_quality_key(ingredient)
+      if not building.item_input_buffer[key] then
+        building.item_input_buffer[key] = {name = ingredient.name, count = 0}
+      end
+    end
+  end
+
+  for _, product in ipairs(factory.export.products) do
+    if product.type == "fluid" then
+      building.fluid_output_buffer[product.name] = (building.fluid_output_buffer[product.name] or 0)
+    else
+      local key = get_name_quality_key(product)
+      if not building.item_output_buffer[key] then
+        building.item_output_buffer[key] = {name = product.name, count = 0}
+      end
+    end
+  end
+
+  for _, byproduct in ipairs(factory.export.byproducts) do
+    if byproduct.type == "fluid" then
+      building.fluid_output_buffer[byproduct.name] = (building.fluid_output_buffer[byproduct.name] or 0)
+    else
+      local key = get_name_quality_key(byproduct)
+      if not building.item_output_buffer[key] then
+        building.item_output_buffer[key] = {name = byproduct.name, count = 0}
+      end
+    end
+  end
 end
 
 return Crafter

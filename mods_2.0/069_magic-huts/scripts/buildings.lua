@@ -61,6 +61,11 @@ Buildings.on_created_entity = function(event)
     children = {},
     factory_new = true,
     factory_index = nil,
+
+    item_input_buffer = {},
+    fluid_input_buffer = {},
+    item_output_buffer = {},
+    fluid_output_buffer = {},
   })
 
   local factory_config = config.factories[mod.container_name_to_tier[entity_name]]
@@ -199,6 +204,7 @@ Buildings.set_factory_index = function (building, factory_index)
   Buildings.set_filters(building, filters)
   Buildings.set_insert_plan(building, Buildings.get_insert_plan(building))
   Planet.update_constant_combinator_1(building)
+  Crafter.inflate_buffers(building)
 end
 
 script.on_event(defines.events.on_player_setup_blueprint, function(event)
