@@ -29,6 +29,13 @@ local function map_subtract(map_a, map_b)
   return true
 end
 
+local function map_has(map_a, map_b)
+  for key, item_b in pairs(map_b) do
+    local item_a = map_a[key]
+    if item_a then return true end
+  end
+end
+
 Crafter.craft = function(building)
   local factory = storage.factories[building.factory_index]
 
@@ -44,9 +51,19 @@ Crafter.craft = function(building)
   -- circuits only trigger this method when all item requests are fulfilled,
   -- but we do have to confirm everything is here, we'll start with the buildings:
   -- (we're also subtracting them from the contents to avoid using them as ingredients)
-  if not map_subtract(contents_map, buildings_map) then return end
+  if not map_subtract(contents_map, buildings_map) then return end -- (should not fail)
+
+  local output_map = {}
+  add_contents_to_map(factory.export.products, output_map)
+  add_contents_to_map(factory.export.byproducts, output_map)
+
+  if map_has(contents_map, output_map) then
+    Buildings.set_status(building, "[img=utility/status_yellow] output full")
+    return
+  end
 
   log("crafting")
+  Buildings.set_status(building, "[img=utility/status_working] working")
 end
 
 return Crafter

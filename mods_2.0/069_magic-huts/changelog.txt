@@ -24,6 +24,7 @@ Date: ????
     - Block triggers from changing status of inactive factory
     - Consume power whilst crafting
     - Start writing the crafting logic
+    - Detect when not all of the output was removed yet
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10
