@@ -6,6 +6,7 @@ require("scripts.luagui-pretty-print")
 Factories = require("scripts.factories")
 Buildings = require("scripts.buildings")
 Planet = require("scripts.planet")
+Crafter = require("scripts.crafter")
 
 script.on_event(defines.events.on_gui_opened, function(event)
   Factoryplanner.on_gui_opened(event)
@@ -187,7 +188,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
         elseif n == 3 then
           game.print("recipe finished")
           Planet.arm_trigger_n(building, 3)
-          Buildings.set_status(building, "[img=utility/status_yellow] output full")
+          Crafter.craft(building)
         end
       end
     elseif deathrattle.name == "building" then

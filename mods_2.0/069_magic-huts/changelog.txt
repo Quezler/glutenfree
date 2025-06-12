@@ -23,6 +23,7 @@ Date: ????
     - Fix copy paste getting the order wrong
     - Block triggers from changing status of inactive factory
     - Consume power whilst crafting
+    - Start writing the crafting logic
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10
