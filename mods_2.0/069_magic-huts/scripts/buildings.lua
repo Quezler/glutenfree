@@ -176,6 +176,7 @@ Buildings.set_factory_index = function (building, factory_index)
   end
 
   building.factory_index = factory_index
+  Buildings.turn_eei_off(building)
 
   if building.factory_index == nil then
     Buildings.set_status_not_configured(building)
@@ -385,6 +386,18 @@ Buildings.set_status = function(building, status)
   if building.factory_index == nil then return end
 
   building.line_3.text = status
+  building.line_4.text = ""
+end
+
+Buildings.turn_eei_on = function(building)
+  local factory = storage.factories[building.factory_index]
+  local watts = factory.export.power * prefix_to_multiplier(factory.export.power_prefix)
+  building.children.eei.electric_buffer_size = math.max(1, watts) -- buffer for 1 second
+  building.children.eei.power_usage = watts / 60
+end
+
+Buildings.turn_eei_off = function(building)
+  building.children.eei.power_usage = 0
 end
 
 return Buildings

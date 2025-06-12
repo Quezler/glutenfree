@@ -145,7 +145,7 @@ local function add_to_contents(contents, type_name_count_quality)
   table.insert(contents, type_name_count_quality)
 end
 
-local function prefix_to_multiplier(locale_key)
+function prefix_to_multiplier(locale_key)
   local multiplier = 1
   local prefixes = {"kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta"}
 

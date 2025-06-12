@@ -273,7 +273,7 @@ for _, factory in ipairs(factories) do
     collision_box = factory.collision_box,
     collision_mask = {layers = {}},
 
-    gui_mode = "all",
+    -- gui_mode = "all",
     energy_source =
     {
       type = "electric",
