@@ -170,15 +170,24 @@ end
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    if deathrattle.name == "trigger-1" then
-      game.print("working")
-      Planet.arm_trigger_n(storage.buildings[deathrattle.building_index], 2)
-    elseif deathrattle.name == "trigger-2" then
-      game.print("waiting for items")
-      Planet.arm_trigger_n(storage.buildings[deathrattle.building_index], 1)
-    elseif deathrattle.name == "trigger-3" then
-      game.print("recipe finished")
-      Planet.arm_trigger_n(storage.buildings[deathrattle.building_index], 3)
+    if deathrattle.name == "trigger" then
+      local building = storage.buildings[deathrattle.building_index]
+      if building then
+        local n = deathrattle.n
+        if n == 1 then
+          game.print("working")
+          Planet.arm_trigger_n(building, 2)
+          building.line_3.text = "[img=utility/status_working] working"
+        elseif n == 2 then
+          game.print("waiting for items")
+          Planet.arm_trigger_n(building, 1)
+          building.line_3.text = "[img=utility/status_not_working] item ingredient shortage"
+        elseif n == 3 then
+          game.print("recipe finished")
+          Planet.arm_trigger_n(building, 3)
+          building.line_3.text = "[img=utility/status_yellow] output full"
+        end
+      end
     elseif deathrattle.name == "building" then
       local building = storage.buildings[event.useful_id]
       if building then storage.buildings[event.useful_id] = nil

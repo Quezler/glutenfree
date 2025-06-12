@@ -196,14 +196,13 @@ Planet.update_constant_combinator_1 = function(building)
 end
 
 Planet.arm_trigger_n = function(building, n)
-  if not building then return end
   building["trigger_" .. n .. "_output_stack"].clear()
   building["trigger_" .. n .. "_input_stack"].set_stack({
     name = "wood",
     count = 2,
     health = 0.5,
   })
-  storage.deathrattles[script.register_on_object_destroyed(building["trigger_" .. n .. "_input_stack"].item)] = {name = "trigger-" .. n, building_index = building.index}
+  storage.deathrattles[script.register_on_object_destroyed(building["trigger_" .. n .. "_input_stack"].item)] = {name = "trigger", building_index = building.index, n = n}
 end
 
 return Planet

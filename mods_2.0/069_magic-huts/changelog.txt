@@ -15,6 +15,7 @@ Date: ????
     - Run the minute crafter only when fulfilled
     - Fire a lua event each time the recipe completes
     - Setup the working & waiting toggle detection
+    - Update the status text on the factory
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10
