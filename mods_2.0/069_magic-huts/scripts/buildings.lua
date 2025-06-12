@@ -235,7 +235,7 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     local building_a = storage.buildings[event.source.unit_number]
     local building_b = storage.buildings[event.destination.unit_number]
 
-    Buildings.set_factory_index(building_a, building_b.factory_index)
+    Buildings.set_factory_index(building_b, building_a.factory_index)
   end
 end)
 
