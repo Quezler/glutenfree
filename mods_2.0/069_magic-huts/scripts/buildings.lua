@@ -317,6 +317,35 @@ Buildings.set_filters = function (building, filters)
   else
     building.inventory.set_bar(bar)
   end
+
+  Buildings.yeet_squatters(building.inventory)
+end
+
+local function filter_rejects(filter, stack)
+  if filter == nil then return end
+
+  if filter.name ~= stack.name then return true end
+  if filter.quality ~= stack.quality.name then return true end
+end
+
+Buildings.yeet_squatters = function (inventory)
+  local bar = inventory.get_bar()
+
+  for slot = 1, #inventory do
+    local stack = inventory[slot]
+    if stack.valid_for_read then
+      if slot >= bar or filter_rejects(inventory.get_filter(slot), stack) then
+        inventory.entity_owner.surface.spill_item_stack{
+          stack = stack,
+          position = inventory.entity_owner.position,
+          force = inventory.entity_owner.force,
+          allow_belts = false,
+          drop_full_stack = true,
+        }
+        stack.clear()
+      end
+    end
+  end
 end
 
 Buildings.set_insert_plan = function(building, insert_plan)
