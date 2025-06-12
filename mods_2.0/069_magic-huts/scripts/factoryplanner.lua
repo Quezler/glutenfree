@@ -356,11 +356,17 @@ function Factoryplanner.on_gui_click(event)
 
   log(serpent.block(factory))
   local struct = Factories.add(factory)
-
-  player.pipette_entity(mod.mouse_button_to_container_name[event.button], true)
   storage.playerdata[player.index].held_factory_index = struct.index
 
-  return player.create_local_flying_text{create_at_cursor = true, text = "exported to magic hut."}
+  local container_name = mod.mouse_button_to_container_name[event.button]
+  local slots_required = #Buildings.get_filters_from_export(factory)
+  local slots_available = prototypes.entity[container_name].get_inventory_size(defines.inventory.chest, "normal")
+
+  player.pipette_entity(container_name, true)
+  player.create_local_flying_text{
+    text = string.format("[item=%s] %d/%d", container_name, slots_required, slots_available),
+    create_at_cursor = true
+  }
 end
 
 script.on_event(defines.events.on_player_cursor_stack_changed, function(event)

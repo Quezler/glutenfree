@@ -18,6 +18,7 @@ Date: ????
     - Update the status text on the factory
     - Hide container contents from alt mode
     - Create an insert plan for the buildings and modules
+    - Show the slot requirement/availability during exporting
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10

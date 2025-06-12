@@ -239,14 +239,11 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
   end
 end)
 
-Buildings.get_filters = function(building)
-  local factory = storage.factories[building.factory_index]
-  if not factory then return {} end
-
+Buildings.get_filters_from_export = function(export)
   local filters = {}
 
   for _, key in ipairs({"entities", "modules", "ingredients", "byproducts", "products"}) do
-    for _, item in ipairs(factory.export[key]) do
+    for _, item in ipairs(export[key]) do
       if item.type == "item" then
         local slots = math.ceil(item.count / prototypes.item[item.name].stack_size)
         for i = 1, slots do
@@ -257,6 +254,13 @@ Buildings.get_filters = function(building)
   end
 
   return filters
+end
+
+Buildings.get_filters = function(building)
+  local factory = storage.factories[building.factory_index]
+  if not factory then return {} end
+
+  return Buildings.get_filters_from_export(factory.export)
 end
 
 Buildings.get_insert_plan = function(building)
@@ -308,7 +312,11 @@ Buildings.set_filters = function (building, filters)
     end
   end
 
-  building.inventory.set_bar(bar or #building.inventory+1)
+  if bar == nil then
+    building.inventory.set_bar()
+  else
+    building.inventory.set_bar(bar)
+  end
 end
 
 Buildings.set_insert_plan = function(building, insert_plan)
