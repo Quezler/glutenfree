@@ -17,6 +17,7 @@ Date: ????
     - Setup the working & waiting toggle detection
     - Update the status text on the factory
     - Hide container contents from alt mode
+    - Create an insert plan for the buildings and modules
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10

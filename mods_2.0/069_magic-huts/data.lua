@@ -174,6 +174,9 @@ for _, factory in ipairs(factories) do
     impact_category = "metal",
 
     icon_draw_specification = {scale = 0, scale_for_many = 0},
+    icons_positioning = {
+      {inventory_index = defines.inventory.chest, shift = util.by_pixel(0, -70), max_icons_per_row = 1, max_icon_rows = 1, scale = 1, separation_multiplier = 0},
+    }
   }
 
   for key, value in pairs(factory.picture_properties) do

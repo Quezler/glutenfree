@@ -196,6 +196,7 @@ Buildings.set_factory_index = function (building, factory_index)
   local filters = Buildings.get_filters(building)
   log(string.format("filtering %d slots for factory #%d (%s)", #filters, factory.index, factory.export.name))
   Buildings.set_filters(building, filters)
+  Buildings.set_insert_plan(building, Buildings.get_insert_plan(building))
   Planet.update_constant_combinator_1(building)
 end
 
@@ -243,6 +244,7 @@ Buildings.get_filters = function(building)
   if not factory then return {} end
 
   local filters = {}
+
   for _, key in ipairs({"entities", "modules", "ingredients", "byproducts", "products"}) do
     for _, item in ipairs(factory.export[key]) do
       if item.type == "item" then
@@ -253,7 +255,44 @@ Buildings.get_filters = function(building)
       end
     end
   end
+
   return filters
+end
+
+Buildings.get_insert_plan = function(building)
+  local factory = storage.factories[building.factory_index]
+  if not factory then return {} end
+
+  local insert_plan = {}
+  local slot = 0
+
+  for _, key in ipairs({"entities", "modules"}) do
+    for _, item in ipairs(factory.export[key]) do
+      if item.type == "item" then
+        local count = item.count
+        local stack_size = prototypes.item[item.name].stack_size
+        local ip = {
+          id = {name = item.name, quality = item.quality},
+          items = {in_inventory = {
+            --
+          }}
+        }
+        while count > 0 do
+          local subtract = math.min(count, stack_size)
+          table.insert(ip.items.in_inventory, {
+            inventory = defines.inventory.chest,
+            stack = slot,
+            count = subtract,
+          })
+          slot = slot + 1
+          count = count - subtract
+        end
+        table.insert(insert_plan, ip)
+      end
+    end
+  end
+
+  return insert_plan
 end
 
 Buildings.set_filters = function (building, filters)
@@ -269,7 +308,25 @@ Buildings.set_filters = function (building, filters)
     end
   end
 
-  building.inventory.set_bar(bar)
+  building.inventory.set_bar(bar or #building.inventory+1)
+end
+
+Buildings.set_insert_plan = function(building, insert_plan)
+  if not building.inventory then return end
+
+  -- cancels any deliveries
+  if building.entity.item_request_proxy then
+    building.entity.item_request_proxy.destroy()
+  end
+
+  -- log(serpent.block(insert_plan))
+  building.entity.surface.create_entity{
+    name = "item-request-proxy",
+    force = building.entity.force,
+    position = building.entity.position,
+    target = building.entity,
+    modules = insert_plan,
+  }
 end
 
 script.on_event(mod_prefix .. "build", function(event)
