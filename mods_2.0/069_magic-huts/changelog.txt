@@ -16,6 +16,7 @@ Date: ????
     - Fire a lua event each time the recipe completes
     - Setup the working & waiting toggle detection
     - Update the status text on the factory
+    - Hide container contents from alt mode
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10

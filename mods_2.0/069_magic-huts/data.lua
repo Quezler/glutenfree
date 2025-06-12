@@ -172,6 +172,8 @@ for _, factory in ipairs(factories) do
     open_sound = sounds.machine_open,
     close_sound = sounds.machine_close,
     impact_category = "metal",
+
+    icon_draw_specification = {scale = 0, scale_for_many = 0},
   }
 
   for key, value in pairs(factory.picture_properties) do
