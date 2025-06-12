@@ -2,16 +2,18 @@ local Crafter = {}
 
 local function add_contents_to_map(contents, map)
   for _, content in ipairs(contents) do
-    local key = assert(content.quality) .. " " .. content.name
-    local mapped = map[key]
-    if mapped then
-      mapped.count = mapped.count + content.count
-    else
-      map[key] = {
-        name = content.name,
-        quality = content.quality,
-        count = content.count,
-      }
+    if content.type ~= "fluid" then
+      local key = assert(content.quality) .. " " .. content.name
+      local mapped = map[key]
+      if mapped then
+        mapped.count = mapped.count + content.count
+      else
+        map[key] = {
+          name = content.name,
+          quality = content.quality,
+          count = content.count,
+        }
+      end
     end
   end
 end
@@ -62,7 +64,18 @@ Crafter.craft = function(building)
     return
   end
 
-  log("crafting")
+  local ingredients_map = {}
+  add_contents_to_map(factory.export.ingredients, ingredients_map)
+
+  for _, item in pairs(output_map) do
+    local inserted = building.inventory.insert(item)
+    assert(inserted == math.floor(item.count), string.format("failed to insert %d × %s (%s), only %d succeeded", item.count, item.name, item.quality, inserted))
+  end
+  for _, item in pairs(ingredients_map) do
+    local removed = building.inventory.remove(item)
+    assert(removed == math.floor(item.count), string.format("failed to remove %d × %s (%s), only %d succeeded", item.count, item.name, item.quality, removed))
+  end
+
   Buildings.set_status(building, "[img=utility/status_working] working")
 end
 

@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
-Date: ????
+Date: 2025. 06. 12
   Info:
     - Get stuck trying to connect fluidboxes from everywhere
     - chatgtp my ass
@@ -25,6 +25,7 @@ Date: ????
     - Consume power whilst crafting
     - Start writing the crafting logic
     - Detect when not all of the output was removed yet
+    - Reach bare minimum state
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2025. 06. 10
