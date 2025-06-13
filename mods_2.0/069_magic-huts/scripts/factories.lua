@@ -53,13 +53,52 @@ Factories.refresh_list = function ()
       flow.style.horizontal_spacing = 0
       flow.style.horizontally_stretchable = true
 
+      local tooltip = {""}
+
+      table.insert(tooltip, "exporter: " .. factory.export.exported_by)
+
+      local entities_string = "\nbuildings:"
+      for _, entity in ipairs(factory.export.entities) do
+        entities_string = entities_string .. string.format("\n[%s=%s] × %g", entity.type, entity.name, entity.count)
+      end
+      table.insert(tooltip, entities_string)
+
+      local modules_string = "\nmodules:"
+      for _, module in ipairs(factory.export.modules) do
+        modules_string = modules_string .. string.format("\n[%s=%s] × %g", module.type, module.name, module.count)
+      end
+      if next(factory.export.modules) then
+        table.insert(tooltip, modules_string)
+      end
+
+      local products_string = "\nproducts:"
+      for _, product in ipairs(factory.export.products) do
+        products_string = products_string .. string.format("\n[%s=%s] × %g", product.type, product.name, product.count)
+      end
+      table.insert(tooltip, products_string)
+
+      local byproducts_string = "\nbyproducts:"
+      for _, byproduct in ipairs(factory.export.byproducts) do
+        byproducts_string = byproducts_string .. string.format("\n[%s=%s] × %g", byproduct.type, byproduct.name, byproduct.count)
+      end
+      if next(factory.export.byproducts) then
+        table.insert(tooltip, byproducts_string)
+      end
+
+      local ingredients_string = "\ningredients:"
+      for _, ingredient in ipairs(factory.export.ingredients) do
+        ingredients_string = ingredients_string .. string.format("\n[%s=%s] × %g", ingredient.type, ingredient.name, ingredient.count)
+      end
+      table.insert(tooltip, ingredients_string)
+
       local button = flow.add{
         type = "button",
         style = "list_box_item",
         tags = {
           action = mod_prefix .. "select-factory",
           factory_index = factory.index,
-        }
+        },
+        tooltip = tooltip
       }
       -- button.auto_toggle = true
       -- button.style.hovered_font_color = {0, 0, 0}

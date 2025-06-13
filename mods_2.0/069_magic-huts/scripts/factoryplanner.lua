@@ -206,6 +206,9 @@ function Factoryplanner.on_gui_click(event)
   if not factory then
     return player.create_local_flying_text{create_at_cursor = true, text = "no factory selected."}
   end
+
+  factory.exported_by = player.name
+
   local sprite = player.gui.screen["fp_frame_main_dialog"].children[2].children[1].children[1].children[1].children[4]
   if sprite.type == "sprite" then
     if sprite.sprite == "fp_universal_planet" then
