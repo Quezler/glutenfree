@@ -66,6 +66,9 @@ Buildings.on_created_entity = function(event)
     fluid_input_buffer = {},
     item_output_buffer = {},
     fluid_output_buffer = {},
+
+    item_statistics = entity.force.get_item_production_statistics(entity.surface),
+    fluid_statistics = entity.force.get_fluid_production_statistics(entity.surface),
   })
 
   local factory_config = config.factories[mod.container_name_to_tier[entity_name]]

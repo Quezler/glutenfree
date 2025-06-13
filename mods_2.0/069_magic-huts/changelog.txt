@@ -10,6 +10,7 @@ Date: ????
     - Allow quality factories and force exports to fit
     - Fix copy paste crash when source is unconfigured
     - Disable fluid support pending implementation concerns
+    - Cache statistics
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 06. 12
