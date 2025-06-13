@@ -13,6 +13,7 @@ Date: ????
     - Cache statistics
     - Require factory planner version with quality buttons
     - Restrict factory districts
+    - Cleanup factory district icon renderer
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 06. 12

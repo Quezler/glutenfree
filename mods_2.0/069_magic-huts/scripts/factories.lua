@@ -69,10 +69,9 @@ Factories.refresh_list = function ()
       -- button.style.selected_hovered_font_color = {0, 0, 0}
       -- button.style.selected_clicked_font_color = {0, 0, 0}
 
-      local prefix = factory.export.space_location and string.format("[space-location=%s] ", factory.export.space_location) or "[img=fp_universal_planet] "
       local factory_name = button.add{
         type = "label",
-        caption = prefix .. factory.export.name,
+        caption = string.format("[img=%s] %s", factory.export.space_location_icon, factory.export.name),
       }
       factory_name.style.maximal_width = flow.style.minimal_width - 60
       -- factory_name.style.font_color = {0, 0, 0}
