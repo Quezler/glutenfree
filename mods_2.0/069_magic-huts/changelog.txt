@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Inflate the io buffers
     - Use the tried and tested item io buffers
+    - Swap the bar for fake filters
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 06. 12

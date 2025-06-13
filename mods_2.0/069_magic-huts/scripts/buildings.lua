@@ -309,22 +309,12 @@ end
 Buildings.set_filters = function (building, filters)
   if not building.inventory then return end
 
-  local bar = nil
-
   for slot = 1, #building.inventory do
-    local filter = filters[slot]
+    local filter = filters[slot] or {name = mod_prefix .. "empty-filter", quality = "normal"}
     building.inventory.set_filter(slot, filter)
-    if filter == nil and bar == nil then
-      bar = slot
-    end
   end
 
-  if bar == nil then
-    building.inventory.set_bar()
-  else
-    building.inventory.set_bar(bar)
-  end
-
+  building.inventory.set_bar()
   Buildings.yeet_squatters(building.inventory)
 end
 
@@ -396,6 +386,8 @@ Buildings.set_status = function(building, status)
 end
 
 Buildings.turn_eei_on = function(building)
+  if building.is_ghost then return end
+
   local factory = storage.factories[building.factory_index]
   local watts = factory.export.power * prefix_to_multiplier(factory.export.power_prefix)
   building.children.eei.electric_buffer_size = math.max(1, watts) -- buffer for 1 second
@@ -403,6 +395,8 @@ Buildings.turn_eei_on = function(building)
 end
 
 Buildings.turn_eei_off = function(building)
+  if building.is_ghost then return end
+
   building.children.eei.power_usage = 0
 end
 

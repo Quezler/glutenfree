@@ -304,3 +304,12 @@ data:extend({
     include_selected_prototype = true,
   }
 })
+
+data:extend{{
+  type = "item",
+  name = mod_prefix .. "empty-filter",
+  icon = "__core__/graphics/empty.png",
+  icon_size = 1,
+  stack_size = 1,
+  hidden = true,
+}}
