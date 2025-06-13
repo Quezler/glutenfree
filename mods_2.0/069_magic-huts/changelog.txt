@@ -5,6 +5,7 @@ Date: ????
     - Inflate the io buffers
     - Use the tried and tested item io buffers
     - Swap the bar for fake filters
+    - Support copy pasting onto requesting chests
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 06. 12
