@@ -154,7 +154,7 @@ for _, factory in ipairs(factories) do
     flags = {"player-creation", "placeable-player"},
 
     -- the factory does not benefit from any quality bonuses
-    quality_affects_inventory_size = false,
+    -- quality_affects_inventory_size = false,
 
     picture = {
       layers = {

@@ -51,7 +51,7 @@ Buildings.on_created_entity = function(event)
     is_ghost = entity.type == "entity-ghost",
 
     inventory = entity.get_inventory(defines.inventory.chest),
-    -- inventory_size = prototypes.entity[entity_name].get_inventory_size(defines.inventory.chest, entity.quality),
+    inventory_size = prototypes.entity[entity_name].get_inventory_size(defines.inventory.chest, entity.quality),
 
     line_1 = nil,
     line_2 = nil,
@@ -174,6 +174,15 @@ end
 Buildings.set_factory_index = function (building, factory_index)
   if building.factory_index == factory_index and not building.factory_new then return end
   building.factory_new = false
+
+  if factory_index then
+    local new_factory = storage.factories[factory_index]
+    local required_slots = #Buildings.get_filters_from_export(new_factory.export)
+    if required_slots > building.inventory_size then
+      building.line_4.text = string.format("export (%d) too big for building (%d)", required_slots, building.inventory_size)
+      return
+    end
+  end
 
   if building.factory_index then
     local old_factory = storage.factories[building.factory_index]
@@ -321,7 +330,7 @@ Buildings.get_insert_plan = function(building)
   for _, key in ipairs({"entities", "modules"}) do
     for _, item in ipairs(factory.export[key]) do
       if item.type == "item" then
-        local count = item.count - building.inventory.get_item_count(item)
+        local count = item.count - (building.inventory and building.inventory.get_item_count(item) or 0)
         local stack_size = prototypes.item[item.name].stack_size
         local ip = {
           id = {name = item.name, quality = item.quality},
