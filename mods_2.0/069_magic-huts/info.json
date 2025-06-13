@@ -21,7 +21,7 @@
         "base >= 2.0.48",
         "? space-age",
 
-        "factoryplanner",
+        "factoryplanner >= 2.0.21",
         
         "(?) factorissimo-2-notnotmelon",
         "(?) GUI_Unifyer"

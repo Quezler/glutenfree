@@ -187,19 +187,6 @@ local function check_recipe_is_allowed(player, recipe_name)
   return true
 end
 
-local function get_quality_from_sprite_button(element)
-  if element.tooltip == nil then
-    return "normal" -- not hovered yet
-  end
-
-  if element.tooltip[2][1] == "fp.tt_title" then
-    return "normal" -- not "fp.tt_title_with_note"
-  end
-
-  local quality_rich_text = element.tooltip[2][3][2] -- "[quality=legendary]"
-  return string.sub(quality_rich_text, 10, -2)
-end
-
 local function get_active_item_rate_view_button(root)
   for _, button in ipairs(root.children[2].children[2].children[1].children[6]["table_views"].children) do
     if button.toggled then
@@ -323,7 +310,7 @@ function Factoryplanner.on_gui_click(event)
         type = "item",
         name = item_to_place_this.name,
         count = item_to_place_this.count * x_of_this_building,
-        quality = get_quality_from_sprite_button(cell_machine.children[1]),
+        quality = cell_machine.children[1].quality.name,
       })
 
       -- modules
@@ -335,7 +322,7 @@ function Factoryplanner.on_gui_click(event)
             type = "item",
             name = module_name,
             count = module_button.number * x_of_this_building,
-            quality = get_quality_from_sprite_button(module_button),
+            quality = module_button.quality.name,
           })
         end
       end
