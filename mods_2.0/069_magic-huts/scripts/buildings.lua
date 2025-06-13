@@ -263,15 +263,17 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     local building_a = storage.buildings[event.source.unit_number]
     local factory_a = storage.factories[building_a.factory_index]
 
-    local sections = event.destination.get_logistic_sections() --[[@as LuaLogisticSections]]
-    for i = sections.sections_count, 1, -1 do -- in reverse so the circuit controlled gets skipped (though it gets disabled)
-      sections.remove_section(i)
-    end
-    local section = sections.add_section() --[[@as LuaLogisticSection]]
-    for _, key in ipairs({"ingredients"}) do
-      for _, item in ipairs(factory_a.export[key]) do
-        if item.type == "item" then
-          section.set_slot(section.filters_count+1, {value = item, min = item.count})
+    if factory_a then
+      local sections = event.destination.get_logistic_sections() --[[@as LuaLogisticSections]]
+      for i = sections.sections_count, 1, -1 do -- in reverse so the circuit controlled gets skipped (though it gets disabled)
+        sections.remove_section(i)
+      end
+      local section = sections.add_section() --[[@as LuaLogisticSection]]
+      for _, key in ipairs({"ingredients"}) do
+        for _, item in ipairs(factory_a.export[key]) do
+          if item.type == "item" then
+            section.set_slot(section.filters_count+1, {value = item, min = item.count})
+          end
         end
       end
     end
@@ -279,20 +281,22 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     local building_a = storage.buildings[event.source.unit_number]
     local factory_a = storage.factories[building_a.factory_index]
 
-    local infinity_container_filters = {}
-    for _, key in ipairs({"ingredients"}) do
-      for _, item in ipairs(factory_a.export[key]) do
-        if item.type == "item" then
-          table.insert(infinity_container_filters, {
-            name = item.name,
-            quality = item.quality,
-            count = item.count,
-            index = #infinity_container_filters+1,
-          })
+    if factory_a then
+      local infinity_container_filters = {}
+      for _, key in ipairs({"ingredients"}) do
+        for _, item in ipairs(factory_a.export[key]) do
+          if item.type == "item" then
+            table.insert(infinity_container_filters, {
+              name = item.name,
+              quality = item.quality,
+              count = item.count,
+              index = #infinity_container_filters+1,
+            })
+          end
         end
       end
+      event.destination.infinity_container_filters = infinity_container_filters
     end
-    event.destination.infinity_container_filters = infinity_container_filters
   end
 end)
 

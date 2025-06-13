@@ -8,6 +8,7 @@ Date: ????
     - Support copy pasting onto requesting chests
     - Fix requesting already present buildings/modules
     - Allow quality factories and force exports to fit
+    - Fix copy paste crash when source is unconfigured
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 06. 12
