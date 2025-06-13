@@ -321,7 +321,7 @@ Buildings.get_insert_plan = function(building)
   for _, key in ipairs({"entities", "modules"}) do
     for _, item in ipairs(factory.export[key]) do
       if item.type == "item" then
-        local count = item.count
+        local count = item.count - building.inventory.get_item_count(item)
         local stack_size = prototypes.item[item.name].stack_size
         local ip = {
           id = {name = item.name, quality = item.quality},
@@ -339,7 +339,9 @@ Buildings.get_insert_plan = function(building)
           slot = slot + 1
           count = count - subtract
         end
-        table.insert(insert_plan, ip)
+        if #ip.items.in_inventory > 0 then
+          table.insert(insert_plan, ip)
+        end
       end
     end
   end
@@ -393,6 +395,8 @@ Buildings.set_insert_plan = function(building, insert_plan)
   if building.entity.item_request_proxy then
     building.entity.item_request_proxy.destroy()
   end
+
+  if #insert_plan == 0 then return end
 
   -- log(serpent.block(insert_plan))
   building.entity.surface.create_entity{
