@@ -57,6 +57,18 @@ class ExpansionMod
         $source = __GLUTENFREE__ . '/mods_2.0/' . $this->directory;
         $dest = '/Users/quezler/Library/Application\ Support/factorio/mods/' . $this->name; // public
         // $dest = '/Users/quezler/Documents/Tower/github/wube/Factorio/mods/' . $this->name; // private
+        // $dest = '/Users/quezler/Documents/Tower/github/Quezler/glutenfree/instances/magic-huts/mods/' . $this->name; // instance
+        // $dest = '/Users/quezler/Documents/Tower/github/Quezler/glutenfree/instances/belt-count/mods/' . $this->name; // instance
+        // $dest = '/Users/quezler/Documents/Tower/github/Quezler/glutenfree/instances/silo/mods/' . $this->name; // instance
+        $dest = '/Volumes/Factorio/mods/' . $this->name; // tmp
+        // $dest = '/Users/quezler/Desktop/krastorio-2-2.0/mods/' . $this->name; // k2-2.0
+        // $dest = '/Users/quezler/Documents/Tower/github/Quezler/glutenfree/instances/purifier/mods/' . $this->name;
+        // $dest = '/Users/quezler/Documents/Tower/github/Quezler/glutenfree/instances/space-exploration/mods/' . $this->name;
+        // $dest = '/Users/quezler/Desktop/krastorio-2-spaced-out/mods/' . $this->name;
+
+        $lock = file_get_contents(__GLUTENFREE__ . '/instance.lock');
+        if ($lock != "")
+            $dest = "/Users/quezler/Documents/Tower/github/Quezler/glutenfree/instances/{$lock}/mods/{$this->name}";
 
         passthru(sprintf("rsync -avr --delete %s/ %s", $source, $dest));
     }

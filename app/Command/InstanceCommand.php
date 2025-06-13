@@ -23,6 +23,7 @@ class InstanceCommand extends Command
             mkdir($instances_directory);
 
         $name = $input->getArgument('name');
+        file_put_contents(__GLUTENFREE__ . '/instance.lock', $name);
         $instance_directory = "{$instances_directory}/{$name}";
 
         if ($name == null) {
@@ -51,7 +52,10 @@ class InstanceCommand extends Command
 
         $this->syncAuthentication($instance_directory);
         $config_ini_pathname = __DIR__ . '/../../config.ini';
-        passthru("(cd {$instance_directory} && /Applications/factorio.app/Contents/MacOS/factorio --config {$config_ini_pathname})");
+
+        $factorio_binary = "/Applications/factorio.app/Contents/MacOS/factorio";
+        // $factorio_binary = "/Users/quezler/Documents/Tower/github/wube/Factorio/bin/Releasearm64Clang/factorio-run";
+        passthru("(cd {$instance_directory} && {$factorio_binary} --config {$config_ini_pathname})");
 
         return Command::SUCCESS;
     }
