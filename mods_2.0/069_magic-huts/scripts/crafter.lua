@@ -68,17 +68,40 @@ Crafter.craft = function(building)
     return
   end
 
+  local item_statistics = building.entity.force.get_item_production_statistics(building.entity.surface)
+  local fluid_statistics = building.entity.force.get_fluid_production_statistics(building.entity.surface)
+
   local ingredients_map = {}
   add_contents_to_map(factory.export.ingredients, ingredients_map)
 
-  for _, item in pairs(output_map) do
-    local inserted = building.inventory.insert(item)
-    assert(inserted == math.floor(item.count), string.format("failed to insert %d × %s (%s), only %d succeeded", item.count, item.name, item.quality, inserted))
+  -- item ingredients
+  for _, ingredient in pairs(ingredients_map) do
+    local buffer = building.item_input_buffer[get_name_quality_key(ingredient)]
+    local top_up_with = math.ceil(ingredient.count - buffer.count)
+
+    if top_up_with > 0 then
+      local removed = building.inventory.remove({name = ingredient.name, count = top_up_with, quality = ingredient.quality})
+      assert(removed == top_up_with, string.format("failed to remove %d × %s (%s), only %d succeeded", ingredient.count, ingredient.name, ingredient.quality, removed))
+      item_statistics.on_flow(ingredient.name, -top_up_with)
+      buffer.count = buffer.count + removed - ingredient.count
+    end
   end
-  for _, item in pairs(ingredients_map) do
-    local removed = building.inventory.remove(item)
-    assert(removed == math.floor(item.count), string.format("failed to remove %d × %s (%s), only %d succeeded", item.count, item.name, item.quality, removed))
+
+  -- item products
+  for _, product in pairs(output_map) do
+    local buffer = building.item_output_buffer[get_name_quality_key(product)]
+    buffer.count = buffer.count + product.count
+
+    local payout = math.floor(buffer.count)
+    if payout > 0 then
+      local inserted = building.inventory.insert({name = product.name, count = payout, quality = product.quality})
+      assert(inserted == payout, string.format("failed to insert %d × %s (%s), only %d succeeded", payout, product.name, product.quality, inserted))
+      item_statistics.on_flow(product, payout)
+      buffer.count = buffer.count - payout
+    end
   end
+
+  building.entity.surface.pollute(building.entity.position, factory.export.pollution * prefix_to_multiplier(factory.export.pollution_prefix))
 
   Buildings.set_status(building, "[img=utility/status_working] working")
 end

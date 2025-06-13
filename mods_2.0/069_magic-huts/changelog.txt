@@ -3,6 +3,7 @@ Version: 0.0.10
 Date: ????
   Info:
     - Inflate the io buffers
+    - Use the tried and tested item io buffers
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 06. 12
