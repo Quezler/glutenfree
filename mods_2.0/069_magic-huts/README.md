@@ -2,7 +2,7 @@
 > **[Factory Planner - exportable to fake factorissimo](https://mods.factorio.com/mod/factoryplanner-is-exportable-to-fake-factorissimo)**
 
 Factory Planner itself does not support outputting quality, and additionally recipes that require spoiling input/output won't work either,
-and just like the 1.1 version beacons are supported for the simple fact that the math of how to share them would be too hard to calculate.
+and just like the 1.1 version beacons are not supported because figuring how the zone overlaps and distrubution modifiers is quite a pain.
 
 - this mod uses MIT licenced content from [Factorissimo 3](https://mods.factorio.com/mod/factorissimo-2-notnotmelon) by various authors.
 
