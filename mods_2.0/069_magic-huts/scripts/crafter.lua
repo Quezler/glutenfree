@@ -68,6 +68,20 @@ Crafter.craft = function(building)
     return
   end
 
+  -- for _, ingredient in pairs(factory.export.ingredients) do
+  --   if ingredient.type == "fluid" then
+  --     print(ingredient.name)
+  --     local fluidbox = building.children.crafter_b.fluidbox
+  --     for index = 1, #fluidbox do
+  --       local fluid = fluidbox.get_fluid_segment_contents(index)
+  --       if next(fluid) and fluid[ingredient.name] then
+  --         log(string.format("index %d has %g %s", index, fluid[ingredient.name], ingredient.name))
+  --       end
+  --     end
+  --     return
+  --   end
+  -- end
+
   local item_statistics = building.entity.force.get_item_production_statistics(building.entity.surface)
   local fluid_statistics = building.entity.force.get_fluid_production_statistics(building.entity.surface)
 

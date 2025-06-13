@@ -258,7 +258,7 @@ for _, factory in ipairs(factories) do
   crafter_b.selection_box = factory.selection_box
   crafter_b.fixed_recipe = nil
   crafter_b.fixed_quality = nil
-  crafter_b.fluid_boxes = get_fluidboxes(factory.side_length)
+  -- crafter_b.fluid_boxes = get_fluidboxes(factory.side_length)
   crafter_b.selection_priority = 49
   crafter_b.energy_source = {type = "void"}
 
