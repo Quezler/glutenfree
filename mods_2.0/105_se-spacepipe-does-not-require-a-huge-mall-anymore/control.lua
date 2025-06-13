@@ -7,7 +7,7 @@ local map = {
 }
 
 script.on_event(defines.events.on_player_pipette, function(event)
-  local player = game.get_player(event.player_index)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local selected = player.selected
 
   if not selected then return end
