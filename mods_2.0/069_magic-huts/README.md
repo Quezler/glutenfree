@@ -5,3 +5,5 @@ Factory Planner itself does not support outputting quality, and additionally rec
 and just like the 1.1 version beacons are supported for the simple fact that the math of how to share them would be too hard to calculate.
 
 - this mod uses MIT licenced content from [Factorissimo 3](https://mods.factorio.com/mod/factorissimo-2-notnotmelon) by various authors.
+
+Release notice: 1.0.0 does not support fluids yet so barrel them, some bugs / crashes / exploits are to be expected, preview build.

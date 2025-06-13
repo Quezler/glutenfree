@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.10
-Date: ????
+Version: 1.0.0
+Date: 2025. 06. 13
   Info:
     - Inflate the io buffers
     - Use the tried and tested item io buffers
@@ -15,6 +15,7 @@ Date: ????
     - Restrict factory districts
     - Cleanup factory district icon renderer
     - Provide factory info in the tooltip
+    - Mod portal release
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 06. 12
