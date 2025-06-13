@@ -180,6 +180,12 @@ Buildings.set_factory_index = function (building, factory_index)
 
   if factory_index then
     local new_factory = storage.factories[factory_index]
+
+    if not Factories.allowed_on_surface(new_factory, building.entity.surface) then
+      building.line_4.text = string.format("factories from that district cannot be built here")
+      return
+    end
+
     local required_slots = #Buildings.get_filters_from_export(new_factory.export)
     if required_slots > building.inventory_size then
       building.line_4.text = string.format("export (%d) too big for building (%d)", required_slots, building.inventory_size)

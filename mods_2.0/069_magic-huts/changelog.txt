@@ -12,6 +12,7 @@ Date: ????
     - Disable fluid support pending implementation concerns
     - Cache statistics
     - Require factory planner version with quality buttons
+    - Restrict factory districts
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2025. 06. 12

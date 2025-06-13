@@ -69,9 +69,10 @@ Factories.refresh_list = function ()
       -- button.style.selected_hovered_font_color = {0, 0, 0}
       -- button.style.selected_clicked_font_color = {0, 0, 0}
 
+      local prefix = factory.export.space_location and string.format("[space-location=%s] ", factory.export.space_location) or "[img=fp_universal_planet] "
       local factory_name = button.add{
         type = "label",
-        caption = string.format("[space-location=%s] %s", factory.export.space_location, factory.export.name),
+        caption = prefix .. factory.export.name,
       }
       factory_name.style.maximal_width = flow.style.minimal_width - 60
       -- factory_name.style.font_color = {0, 0, 0}
@@ -122,6 +123,22 @@ Factories.on_gui_click = function (event)
       end
     end
   end
+end
+
+Factories.allowed_on_surface = function(factory, surface)
+  if factory.export.space_location == nil then
+    return true
+  end
+
+  if surface.planet and surface.planet.name == factory.export.space_location then
+    return true
+  end
+
+  if surface.platform and "space-platform" == factory.export.space_location then
+    return true
+  end
+
+  return false
 end
 
 return Factories

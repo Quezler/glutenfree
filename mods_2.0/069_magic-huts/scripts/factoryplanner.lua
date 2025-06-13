@@ -49,7 +49,7 @@ local function get_selected_factory(root)
     if factory.children[2].toggled then
       return {
         name = factory.children[2].caption:gsub("^%[img=fp_trash_red%] ", ""),
-        space_location = "?",
+        space_location = nil, -- nil means universal
 
         -- multiply with prefix and prefix_to_multiplier before use
         power = 0,
@@ -205,11 +205,15 @@ function Factoryplanner.on_gui_click(event)
   if not factory then
     return player.create_local_flying_text{create_at_cursor = true, text = "no factory selected."}
   end
-
-  factory.space_location = "nauvis"
   local sprite = player.gui.screen["fp_frame_main_dialog"].children[2].children[1].children[1].children[1].children[4]
   if sprite.type == "sprite" then
-    factory.space_location = string.sub(sprite.sprite, #" space-location/")
+    if sprite.sprite == "fp_universal_planet" then
+      factory.space_location = nil
+      -- note: this is only when universal renders an icon, if there are no other surfaces it'll still be nil by default
+      return player.create_local_flying_text{create_at_cursor = true, text = "universal factories are not allowed."}
+    else
+      factory.space_location = util.split(sprite.sprite, '/')[2]
+    end
   end
 
   local level = tonumber(root.children[2].children[2].children[4].children[1].children[1].children[3].caption[2][4])
