@@ -1,0 +1,24 @@
+{
+    "name": "freshly-handcrafted-equipment-straight-into-armor",
+    "title": "Freshly handcrafted equipment straight into armor",
+    "description": "When handcrafting equipment it'll try to fulfill ghosts in your personal armor.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "? base",
+        "? space-age"
+    ]
+}
