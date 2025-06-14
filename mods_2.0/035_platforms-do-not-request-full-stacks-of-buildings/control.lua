@@ -1,3 +1,15 @@
+local trigger_found = false
+for _, trigger in ipairs(prototypes.entity["cargo-pod"].created_effect) do
+  for _, delivery in ipairs(trigger.action_delivery or {}) do
+    for _, source_effect in ipairs(delivery.source_effects or {}) do
+      if source_effect.effect_id == "cargo-pod-created" then
+        trigger_found = true
+      end
+    end
+  end
+end
+assert(trigger_found, serpent.block(prototypes.get_history("cargo-pod", "cargo-pod")) .."\n\n".. serpent.block(prototypes.entity["cargo-pod"].created_effect))
+
 require("util")
 
 local setting_name_debug_logging = "platforms-do-not-request-full-stacks-of-buildings--enable-debug-logging"
