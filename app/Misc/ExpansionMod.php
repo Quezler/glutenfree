@@ -121,7 +121,7 @@ class ExpansionMod
     public function getReadmePrefix()
     {
         $directory = urlencode(str_replace('_', '__', str_replace('-', '--', "mods_2.0/$this->directory")));
-        return "[![shield](https://img.shields.io/badge/{$directory}-white?logo=github&label=git)](https://github.com/Quezler/glutenfree/tree/main/mods_2.0/{$this->directory})\n\n";
+        return "[![shield](https://img.shields.io/badge/{$directory}-white?logo=github&label=github)](https://github.com/Quezler/glutenfree/tree/main/mods_2.0/{$this->directory})\n\n";
     }
 
     public function editDetails(): ResponseInterface
