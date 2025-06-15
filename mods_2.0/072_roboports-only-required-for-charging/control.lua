@@ -4,11 +4,12 @@ local function on_surface_created(event)
 
   assert(surface.find_entity("rorfc-roboport", {0, 0}) == nil)
 
-  surface.create_entity{
+  local roboport = surface.create_entity{
     name = "rorfc-roboport",
     position = {0, 0},
     force = "player",
   }
+  roboport.destructible = false
 
   assert(surface.find_entity("rorfc-roboport", {0, 0}) ~= nil)
 end
