@@ -14,6 +14,7 @@ class InstanceCommand extends Command
     protected function configure(): void
     {
         $this->addArgument('name', InputArgument::OPTIONAL);
+        $this->addOption('client');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -50,17 +51,21 @@ class InstanceCommand extends Command
         if (!file_exists($mods_directory))
             mkdir($mods_directory);
 
-        $this->syncAuthentication($instance_directory);
+        $this->syncAuthentication($instance_directory, $input->getOption('client'));
         $config_ini_pathname = __DIR__ . '/../../config.ini';
 
+        if ($input->getOption('client')) {
+            unlink("{$instance_directory}/.lock");
+        }
+
         $factorio_binary = "/Applications/factorio.app/Contents/MacOS/factorio";
-        // $factorio_binary = "/Users/quezler/Documents/Tower/github/wube/Factorio/bin/Releasearm64Clang/factorio-run";
+//        $factorio_binary = "/Users/quezler/Documents/Tower/github/wube/Factorio/bin/Releasearm64Clang/factorio-run";
         passthru("(cd {$instance_directory} && {$factorio_binary} --config {$config_ini_pathname})");
 
         return Command::SUCCESS;
     }
 
-    private function syncAuthentication($instance_directory): void
+    private function syncAuthentication($instance_directory, bool $client): void
     {
         $source = "/Users/quezler/Library/Application Support/factorio/player-data.json";
         $dest = "{$instance_directory}/player-data.json";
@@ -68,8 +73,8 @@ class InstanceCommand extends Command
         $source_json = json_decode(file_get_contents($source), true);
         $dest_json = file_exists($dest) ? json_decode(file_get_contents($dest), true) : [];
 
-        $dest_json["service-username"] = $source_json["service-username"];
-        $dest_json["service-token"] = $source_json["service-token"];
+        $dest_json["service-username"] = $client ? "Compilatron" : $source_json["service-username"];
+        $dest_json["service-token"] = $client ? "" : $source_json["service-token"];
 
         file_put_contents($dest, json_encode($dest_json, JSON_PRETTY_PRINT));
     }
