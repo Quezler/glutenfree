@@ -1,3 +1,5 @@
+require("shared")
+
 local recipe_category = {
   type = "recipe-category",
   name = mod_prefix .. "pumping-speed",

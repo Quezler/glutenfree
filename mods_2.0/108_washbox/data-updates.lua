@@ -1,3 +1,5 @@
+require("shared")
+
 local debug = false
 
 if debug then
@@ -29,7 +31,7 @@ end
 if data.raw["item"]["kr-used-pollution-filter"] and data.raw["item"]["kr-pollution-filter"] and data.raw["technology"]["kr-air-purification"] then
   data:extend{{
     type = "recipe",
-    name = "washbox--kr-restore-used-pollution-filter",
+    name = mod_prefix .. "kr-restore-used-pollution-filter",
     localised_name = {"recipe-name.kr-restore-used-pollution-filter"},
     icon = "__Krastorio2Assets__/icons/recipes/restore-used-pollution-filter.png",
     icon_size = 128,
@@ -54,6 +56,6 @@ if data.raw["item"]["kr-used-pollution-filter"] and data.raw["item"]["kr-polluti
   }}
 
   table.insert(data.raw["technology"]["kr-air-purification"].effects, {
-    type = "unlock-recipe", recipe = "washbox--kr-restore-used-pollution-filter",
+    type = "unlock-recipe", recipe = mod_prefix .. "kr-restore-used-pollution-filter",
   })
 end
