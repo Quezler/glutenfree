@@ -19,6 +19,7 @@ Date: ????
     - Add thumbnail
     - Add directional arrow
     - Setup the shadows
+    - Readme touchup
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17
