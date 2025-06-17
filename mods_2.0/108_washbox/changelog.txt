@@ -16,6 +16,7 @@ Date: ????
     - Finalize the compound entity
     - Fix stray transparent pixels
     - Setup deathrattle tech
+    - Add thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17
