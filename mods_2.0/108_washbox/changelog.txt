@@ -6,6 +6,7 @@ Date: ????
     - Align washbox icon vertically to the pump
     - Test the colored working visualizations
     - Setup the masks properly
+    - Disable the alt mode recipe icon
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17

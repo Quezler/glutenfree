@@ -25,6 +25,8 @@ local furnace = {
   energy_usage = "1kW",
   energy_source = {type = "void"},
 
+  icon_draw_specification = {scale = 0},
+
   fluid_boxes =
   {
     {
