@@ -82,14 +82,15 @@ local furnace = {
 
         north_animation =
         {
-          filename = mod_directory .. "/graphics/entity/washbox/flamethrower-turret-base-west-mask.png",
+          filename = mod_directory .. "/graphics/entity/washbox/washbox-vertical-mask.png",
           width = 64,
           height = 74,
           scale = 0.5,
+          shift = util.by_pixel(0, -3)
         },
         south_animation =
         {
-          filename = mod_directory .. "/graphics/entity/washbox/flamethrower-turret-base-west-mask.png",
+          filename = mod_directory .. "/graphics/entity/washbox/washbox-vertical-mask.png",
           width = 64,
           height = 74,
           scale = 0.5,
@@ -97,7 +98,7 @@ local furnace = {
         },
         east_animation =
         {
-          filename = mod_directory .. "/graphics/entity/washbox/flamethrower-turret-base-north-mask.png",
+          filename = mod_directory .. "/graphics/entity/washbox/washbox-horizontal-mask.png",
           width = 74,
           height = 70,
           scale = 0.5,
@@ -105,10 +106,11 @@ local furnace = {
         },
         west_animation =
         {
-          filename = mod_directory .. "/graphics/entity/washbox/flamethrower-turret-base-north-mask.png",
+          filename = mod_directory .. "/graphics/entity/washbox/washbox-horizontal-mask.png",
           width = 74,
           height = 70,
           scale = 0.5,
+          shift = util.by_pixel(-1, 1),
         },
       }
     },
