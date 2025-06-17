@@ -11,7 +11,6 @@ local vertical_animation = {layers = {
     width = 206,
     height = 88,
     scale = 0.5,
-    -- shift = util.by_pixel(-25, -5),
     shift = util.by_pixel(-17, 4),
     draw_as_shadow = true,
   },

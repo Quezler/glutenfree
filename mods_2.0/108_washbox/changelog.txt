@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2025. 06. 17
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2025. 06. 17
   Info:
     - Add the k2 pollution filter washing recipe
     - Align washbox icon vertically to the pump
