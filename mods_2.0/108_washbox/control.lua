@@ -16,7 +16,7 @@ mod.on_created_entity = function(event)
     position = entity.position,
     create_build_effect_smoke = false,
   }
-  valve_in.teleport(-0.5, 0)
+  -- valve_in.teleport(-0.5, 0)
 
   local valve_out = entity.surface.create_entity{
     name = mod_prefix .. "valve-out",
@@ -24,7 +24,7 @@ mod.on_created_entity = function(event)
     position = entity.position,
     create_build_effect_smoke = false,
   }
-  valve_out.teleport( 0.5, 0)
+  -- valve_out.teleport( 0.5, 0)
 
   local pumping_speed = entity.surface.create_entity{
     name = mod_prefix .. "pumping-speed",

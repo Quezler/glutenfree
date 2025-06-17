@@ -177,7 +177,7 @@ local valve_in = {
   -- selection_priority = 51,
   selection_priority = 49,
   selectable_in_game = false,
-  selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
+  selection_box = {{-0.2, -0.2}, {0.2, 0.2}},
   collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
   collision_mask = {layers = {}},
 

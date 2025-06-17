@@ -49,7 +49,7 @@ local furnace = {
   circuit_wire_max_distance = 9,
   default_recipe_finished_signal = {type = "virtual", name = "signal-S"}, -- 960 / 60 = 16
 
-  flags = {"not-on-map", "placeable-off-grid"},
+  flags = {"not-on-map", "placeable-off-grid", "no-automated-item-insertion", "no-automated-item-removal"},
   hidden = true,
 }
 
