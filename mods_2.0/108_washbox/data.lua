@@ -5,6 +5,43 @@ local recipe_category = {
   name = "washbox",
 }
 
+local vertical_animation = {layers = {
+  {
+    filename = mod_directory .. "/graphics/entity/washbox/washbox-vertical-shadow.png",
+    width = 206,
+    height = 88,
+    scale = 0.5,
+    -- shift = util.by_pixel(-25, -5),
+    shift = util.by_pixel(-17, 4),
+    draw_as_shadow = true,
+  },
+  {
+    filename = mod_directory .. "/graphics/entity/washbox/washbox-vertical.png",
+    width = 208,
+    height = 160,
+    scale = 0.5,
+    shift = util.by_pixel(-25, -5),
+  },
+}}
+
+local horizontal_animation = {layers = {
+  {
+    filename = mod_directory .. "/graphics/entity/washbox/washbox-horizontal-shadow.png",
+    width = 134,
+    height = 152,
+    scale = 0.5,
+    shift = util.by_pixel(-5, -17),
+    draw_as_shadow = true,
+  },
+  {
+    filename = mod_directory .. "/graphics/entity/washbox/washbox-horizontal.png",
+    width = 158,
+    height = 196,
+    scale = 0.5,
+    shift = util.by_pixel(-1, -19),
+  },
+}}
+
 local furnace = {
   type = "furnace",
   name = "washbox",
@@ -53,34 +90,10 @@ local furnace = {
 
   graphics_set = {
     animation = {
-      north = {
-        filename = mod_directory .. "/graphics/entity/washbox/washbox-vertical.png",
-        width = 208,
-        height = 160,
-        scale = 0.5,
-        shift = util.by_pixel(-25, -5),
-      },
-      south = {
-        filename = mod_directory .. "/graphics/entity/washbox/washbox-vertical.png",
-        width = 208,
-        height = 160,
-        scale = 0.5,
-        shift = util.by_pixel(-25, -5),
-      },
-      east = {
-        filename = mod_directory .. "/graphics/entity/washbox/washbox-horizontal.png",
-        width = 158,
-        height = 196,
-        scale = 0.5,
-        shift = util.by_pixel(-1, -19),
-      },
-      west = {
-        filename = mod_directory .. "/graphics/entity/washbox/washbox-horizontal.png",
-        width = 158,
-        height = 196,
-        scale = 0.5,
-        shift = util.by_pixel(-1, -19),
-      }
+      north = vertical_animation,
+      south = vertical_animation,
+      east = horizontal_animation,
+      west = horizontal_animation,
     },
     working_visualisations =
     {

@@ -18,6 +18,7 @@ Date: ????
     - Setup deathrattle tech
     - Add thumbnail
     - Add directional arrow
+    - Setup the shadows
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17
