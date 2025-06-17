@@ -47,7 +47,7 @@ local furnace = {
     },
   },
 
-  circuit_wire_max_distance = 9,
+  circuit_wire_max_distance = washbox_debug and default_circuit_wire_max_distance or nil,
   default_recipe_finished_signal = {type = "virtual", name = "signal-S"}, -- 960 / 60 = 16
 
   flags = {"not-on-map", "placeable-off-grid", "no-automated-item-insertion", "no-automated-item-removal"},
