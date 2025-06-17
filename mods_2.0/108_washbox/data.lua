@@ -33,14 +33,20 @@ local furnace = {
       production_type = "output",
       pipe_covers = pipecoverspictures(),
       volume = 100,
-      pipe_connections = {{ flow_direction="output", direction = defines.direction.north, position = {0, -0.5} }},
+      pipe_connections = {
+        {flow_direction="output", direction = defines.direction.north, position = {0, -0.5}},
+        {connection_type = "linked", linked_connection_id = 0},
+      },
       secondary_draw_orders = { north = -1 }
     },
     {
       production_type = "input",
       pipe_covers = pipecoverspictures(),
       volume = 100,
-      pipe_connections = {{ flow_direction="input", direction = defines.direction.south, position = {0, 0.5} }},
+      pipe_connections = {
+        {flow_direction="input", direction = defines.direction.south, position = {0, 0.5}},
+        {connection_type = "linked", linked_connection_id = 1},
+      },
       secondary_draw_orders = { north = -1 }
     },
   },
@@ -158,5 +164,35 @@ for i, effect in ipairs(technology.effects) do
   end
 end
 
+local valve_in = {
+  type = "valve",
+  name = mod_prefix .. "valve-in",
 
-data:extend{recipe_category, furnace, item, recipe}
+  mode = "overflow",
+  threshold = 0.9,
+
+  flow_rate = data.raw["pump"]["pump"].pumping_speed, -- 20, times 60 = 1200
+
+  selection_priority = 51,
+  -- selection_priority = 49,
+  -- selectable_in_game = false,
+  selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
+  collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
+  collision_mask = {layers = {}},
+
+  fluid_box =
+  {
+    volume = 100,
+    pipe_connections = {
+      {flow_direction = "input-output", connection_type = "linked", linked_connection_id = 1},
+      {flow_direction = "output", connection_type = "linked", linked_connection_id = 0},
+    },
+  },
+}
+
+local valve_out = table.deepcopy(valve_in)
+valve_out.name = mod_prefix .. "valve-out"
+valve_out.mode = "top-up"
+valve_out.threshold = 0.8
+
+data:extend{recipe_category, furnace, item, recipe, valve_in, valve_out}

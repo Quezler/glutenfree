@@ -7,6 +7,7 @@ Date: ????
     - Test the colored working visualizations
     - Setup the masks properly
     - Disable the alt mode recipe icon
+    - Attempt to link some valves to the furnace
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17
