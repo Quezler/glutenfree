@@ -2,7 +2,7 @@
     "name": "supply-labs-with-construction-robots",
     "title": "Supply labs with construction robots",
     "description": "Deliver science packs without the need for sushi belts and/or inserters.",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [

@@ -37,7 +37,7 @@ function labs.init()
 
   storage.current_research_ingredients = {}
   for _, force in pairs(game.forces) do
-    labs.on_research_changed({research = {force = force}})
+    labs.on_research_changed({force = force})
   end
 
   labs.every_minute()
