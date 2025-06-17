@@ -15,6 +15,7 @@ Date: ????
     - Hook up the furnace to only run with enough flow
     - Finalize the compound entity
     - Fix stray transparent pixels
+    - Setup deathrattle tech
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17

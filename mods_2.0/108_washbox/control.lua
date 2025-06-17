@@ -2,6 +2,11 @@ require("shared")
 
 local mod = {}
 
+script.on_init(function()
+  storage.deathrattles = {}
+  storage.structs = {}
+end)
+
 mod.on_created_entity = function(event)
   local entity = event.entity or event.destination
 
@@ -48,6 +53,13 @@ mod.on_created_entity = function(event)
   local red_out = pumping_speed.get_wire_connector(defines.wire_connector_id.circuit_red, true)
   local red_in = entity.get_wire_connector(defines.wire_connector_id.circuit_red, true)
   assert(red_out.connect_to(red_in, false, defines.wire_origin.script))
+
+  storage.structs[entity.unit_number] = {
+    valve_in = valve_in,
+    valve_out = valve_out,
+    pumping_speed = pumping_speed,
+  }
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = true
 end
 
 for _, event in ipairs({
@@ -65,3 +77,15 @@ for _, event in ipairs({
     {filter = "name", name = mod_prefix .. "pumping-speed"},
   })
 end
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    local struct = storage.structs[event.useful_id]
+    if struct then storage.structs[event.useful_id] = nil
+      struct.valve_in.destroy()
+      struct.valve_out.destroy()
+      struct.pumping_speed.destroy()
+    end
+  end
+end)
