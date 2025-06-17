@@ -19,6 +19,10 @@ if data.raw["item"]["kr-used-pollution-filter"] and data.raw["item"]["kr-polluti
       { type = "item", name = "kr-pollution-filter", amount = 1 },
       { type = "fluid", name = "water", amount = 25 },
     },
+
+    crafting_machine_tint = {
+      primary = {r=000, g=145, b=255, a=127}, -- https://mods.factorio.com/mod/Automatic_Train_Painter > Factorio > water
+    }
   }}
 
   table.insert(data.raw["technology"]["kr-air-purification"].effects, {

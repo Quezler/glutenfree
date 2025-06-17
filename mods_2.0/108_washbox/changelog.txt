@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Add the k2 pollution filter washing recipe
     - Align washbox icon vertically to the pump
+    - Test the colored working visualizations
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17

@@ -11,6 +11,7 @@ local furnace = {
   icon = mod_directory .. "/graphics/icons/washbox.png",
 
   flags = {"placeable-player", "player-creation"},
+  max_health = 250,
 
   selection_box = {{-0.5, -1.0}, {0.5, 1.0}},
   collision_box = {{-0.4, -0.9}, {0.4, 0.9}},
@@ -72,7 +73,45 @@ local furnace = {
         scale = 0.5,
         shift = util.by_pixel(-1, -19),
       }
-    }
+    },
+    working_visualisations =
+    {
+      {
+        apply_recipe_tint = "primary",
+        always_draw = true,
+
+        north_animation =
+        {
+          filename = mod_directory .. "/graphics/entity/washbox/flamethrower-turret-base-west-mask.png",
+          width = 64,
+          height = 74,
+          scale = 0.5,
+        },
+        south_animation =
+        {
+          filename = mod_directory .. "/graphics/entity/washbox/flamethrower-turret-base-west-mask.png",
+          width = 64,
+          height = 74,
+          scale = 0.5,
+          shift = util.by_pixel(0, -3),
+        },
+        east_animation =
+        {
+          filename = mod_directory .. "/graphics/entity/washbox/flamethrower-turret-base-north-mask.png",
+          width = 74,
+          height = 70,
+          scale = 0.5,
+          shift = util.by_pixel(-1, 1),
+        },
+        west_animation =
+        {
+          filename = mod_directory .. "/graphics/entity/washbox/flamethrower-turret-base-north-mask.png",
+          width = 74,
+          height = 70,
+          scale = 0.5,
+        },
+      }
+    },
   }
 }
 
