@@ -35,7 +35,9 @@ local furnace = {
       volume = 100,
       pipe_connections = {
         {flow_direction = "input", direction = defines.direction.south, position = {0, 0.5}},
-        {connection_type = "linked", linked_connection_id = 1},
+        {flow_direction = "input-output", connection_type = "linked", linked_connection_id = 1}, -- does not work
+        -- {flow_direction = "input", connection_type = "linked", linked_connection_id = 1}, -- does work
+        -- {flow_direction = "output", connection_type = "linked", linked_connection_id = 1}, -- does work
       },
       secondary_draw_orders = { north = -1 }
     },
