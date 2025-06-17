@@ -313,6 +313,9 @@ function Factoryplanner.on_gui_click(event)
         return player.create_local_flying_text{create_at_cursor = true, text = entity_type .. "'s are blacklisted."}
       end
 
+      if not entity_prototype.items_to_place_this then
+        return player.create_local_flying_text{create_at_cursor = true, text = entity_name .. "s cannot be placed."}
+      end
       local item_to_place_this = entity_prototype.items_to_place_this[1]
       add_to_contents(factory.entities, {
         type = "item",

@@ -13,7 +13,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
 end)
 
 script.on_event(defines.events.on_gui_click, function(event)
-  log(LuaGuiPrettyPrint.path_to_element(event.element))
+  -- log(LuaGuiPrettyPrint.path_to_element(event.element))
 
   if event.element.name == mod_prefix .. "summon-magic-hut" then
     Factoryplanner.on_gui_click(event)
