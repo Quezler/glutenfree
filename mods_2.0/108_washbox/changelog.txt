@@ -14,6 +14,7 @@ Date: ????
     - Detect the flow speed through lots of crafts
     - Hook up the furnace to only run with enough flow
     - Finalize the compound entity
+    - Fix stray transparent pixels
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17
