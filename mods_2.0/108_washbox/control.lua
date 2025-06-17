@@ -16,7 +16,7 @@ mod.on_created_entity = function(event)
     position = entity.position,
     create_build_effect_smoke = false,
   }
-  valve_in.teleport(-1, 0)
+  valve_in.teleport(-0.5, 0)
 
   local valve_out = entity.surface.create_entity{
     name = mod_prefix .. "valve-out",
@@ -24,10 +24,19 @@ mod.on_created_entity = function(event)
     position = entity.position,
     create_build_effect_smoke = false,
   }
+  valve_out.teleport( 0.5, 0)
+
+  local pumping_speed = entity.surface.create_entity{
+    name = mod_prefix .. "pumping-speed",
+    force = entity.force,
+    position = entity.position,
+    create_build_effect_smoke = false,
+  }
 
   entity.fluidbox.add_linked_connection(1, valve_in, 1)
   entity.fluidbox.add_linked_connection(0, valve_out, 0)
-  valve_in.fluidbox.add_linked_connection(0, valve_out, 1)
+  valve_in.fluidbox.add_linked_connection(0, pumping_speed, 1)
+  valve_out.fluidbox.add_linked_connection(1, pumping_speed, 0)
 end
 
 for _, event in ipairs({
@@ -42,5 +51,6 @@ for _, event in ipairs({
     {filter = "name", name = "washbox"},
     {filter = "name", name = mod_prefix .. "valve-in"},
     {filter = "name", name = mod_prefix .. "valve-out"},
+    {filter = "name", name = mod_prefix .. "pumping-speed"},
   })
 end

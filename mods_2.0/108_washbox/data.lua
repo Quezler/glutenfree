@@ -169,7 +169,7 @@ local valve_in = {
   name = mod_prefix .. "valve-in",
 
   mode = "overflow",
-  threshold = 0.9,
+  threshold = 0.8,
 
   flow_rate = data.raw["pump"]["pump"].pumping_speed, -- 20, times 60 = 1200
 
@@ -188,11 +188,14 @@ local valve_in = {
       {flow_direction = "output", connection_type = "linked", linked_connection_id = 0},
     },
   },
+
+  flags = {"not-on-map", "placeable-off-grid"},
+  hidden = true,
 }
 
 local valve_out = table.deepcopy(valve_in)
 valve_out.name = mod_prefix .. "valve-out"
 valve_out.mode = "top-up"
-valve_out.threshold = 0.8
+valve_out.threshold = 0.75
 
 data:extend{recipe_category, furnace, item, recipe, valve_in, valve_out}

@@ -11,6 +11,7 @@ Date: ????
     - Put the furnace input fluidbox above the output one
     - Prepare wube debug build
     - Overcome the limitations
+    - Detect the flow speed through lots of crafts
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17
