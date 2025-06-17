@@ -3,6 +3,7 @@ Version: 1.0.1
 Date: ????
   Info:
     - Fix the washbox icon being searched in other mods
+    - Put the selection debug mode in a shared variable
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 06. 17

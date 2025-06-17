@@ -135,7 +135,7 @@ local furnace = {
       }
     },
   },
-  -- circuit_wire_max_distance = 9,
+  circuit_wire_max_distance = 9,
   vector_to_place_result = {0, -0.3},
 }
 
@@ -187,9 +187,8 @@ local valve_in = {
 
   flow_rate = data.raw["pump"]["pump"].pumping_speed, -- 20, times 60 = 1200
 
-  -- selection_priority = 51,
-  selection_priority = 49,
-  selectable_in_game = false,
+  selection_priority = washbox_debug and 51 or 49,
+  selectable_in_game = washbox_debug,
   selection_box = {{-0.2, -0.2}, {0.2, 0.2}},
   collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
   collision_mask = {layers = {}},

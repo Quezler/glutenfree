@@ -4,6 +4,8 @@ mod_name = source:sub(4, source:find("/") - 3)
 mod_prefix = mod_name .. "--"
 mod_directory = "__" .. mod_name .. "__"
 
+washbox_debug = false
+
 --- @param entity LuaEntity
 --- @return string
 function get_entity_type(entity)
