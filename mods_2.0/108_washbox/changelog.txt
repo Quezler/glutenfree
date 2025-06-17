@@ -8,6 +8,7 @@ Date: ????
     - Setup the masks properly
     - Disable the alt mode recipe icon
     - Attempt to link some valves to the furnace
+    - Put the furnace input fluidbox above the output one
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17
