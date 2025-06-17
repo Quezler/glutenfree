@@ -10,24 +10,24 @@ mod.on_created_entity = function(event)
     return entity.destroy()
   end
 
-  -- local valve_in = entity.surface.create_entity{
-  --   name = mod_prefix .. "valve-in",
-  --   force = entity.force,
-  --   position = entity.position,
-  --   create_build_effect_smoke = false,
-  -- }
-  -- valve_in.teleport(-1, 0)
+  local valve_in = entity.surface.create_entity{
+    name = mod_prefix .. "valve-in",
+    force = entity.force,
+    position = entity.position,
+    create_build_effect_smoke = false,
+  }
+  valve_in.teleport(-1, 0)
 
-  -- local valve_out = entity.surface.create_entity{
-  --   name = mod_prefix .. "valve-out",
-  --   force = entity.force,
-  --   position = entity.position,
-  --   create_build_effect_smoke = false,
-  -- }
+  local valve_out = entity.surface.create_entity{
+    name = mod_prefix .. "valve-out",
+    force = entity.force,
+    position = entity.position,
+    create_build_effect_smoke = false,
+  }
 
-  -- entity.fluidbox.add_linked_connection(1, valve_in, 1)
-  -- entity.fluidbox.add_linked_connection(0, valve_out, 0)
-  -- valve_in.fluidbox.add_linked_connection(0, valve_out, 1)
+  entity.fluidbox.add_linked_connection(1, valve_in, 1)
+  entity.fluidbox.add_linked_connection(0, valve_out, 0)
+  valve_in.fluidbox.add_linked_connection(0, valve_out, 1)
 end
 
 for _, event in ipairs({

@@ -10,6 +10,7 @@ Date: ????
     - Attempt to link some valves to the furnace
     - Put the furnace input fluidbox above the output one
     - Prepare wube debug build
+    - Overcome the limitations
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17

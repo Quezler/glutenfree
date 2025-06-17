@@ -1,4 +1,4 @@
-local debug = true
+local debug = false
 
 if debug then
   data:extend{{
