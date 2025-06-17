@@ -12,6 +12,7 @@ Date: ????
     - Prepare wube debug build
     - Overcome the limitations
     - Detect the flow speed through lots of crafts
+    - Hook up the furnace to only run with enough flow
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17

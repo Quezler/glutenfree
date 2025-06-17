@@ -122,7 +122,8 @@ local furnace = {
         },
       }
     },
-  }
+  },
+  -- circuit_wire_max_distance = 9,
 }
 
 local item = {
@@ -173,9 +174,9 @@ local valve_in = {
 
   flow_rate = data.raw["pump"]["pump"].pumping_speed, -- 20, times 60 = 1200
 
-  selection_priority = 51,
-  -- selection_priority = 49,
-  -- selectable_in_game = false,
+  -- selection_priority = 51,
+  selection_priority = 49,
+  selectable_in_game = false,
   selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
   collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
   collision_mask = {layers = {}},

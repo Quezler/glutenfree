@@ -8,9 +8,9 @@ local furnace = {
   name = mod_prefix .. "pumping-speed",
   icon = mod_directory .. "/graphics/icons/washbox.png",
 
-  selection_priority = 51,
-  -- selection_priority = 49,
-  -- selectable_in_game = false,
+  -- selection_priority = 51,
+  selection_priority = 49,
+  selectable_in_game = false,
   selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
   collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
   collision_mask = {layers = {}},
