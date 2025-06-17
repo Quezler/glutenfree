@@ -17,6 +17,7 @@ Date: ????
     - Fix stray transparent pixels
     - Setup deathrattle tech
     - Add thumbnail
+    - Add directional arrow
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 17

@@ -124,6 +124,7 @@ local furnace = {
     },
   },
   -- circuit_wire_max_distance = 9,
+  vector_to_place_result = {0, -0.3},
 }
 
 local item = {
