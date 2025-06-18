@@ -188,7 +188,7 @@ Planet.update_constant_combinator_1 = function(building)
       if item.type == "item" then
         section.set_slot(i, {
           value = item,
-          min = item.count,
+          min = math.ceil(item.count),
         })
       end
     end

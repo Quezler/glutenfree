@@ -57,7 +57,10 @@ Crafter.craft = function(building)
   -- circuits only trigger this method when all item requests are fulfilled,
   -- but we do have to confirm everything is here, we'll start with the buildings:
   -- (we're also subtracting them from the contents to avoid using them as ingredients)
-  if not map_subtract(contents_map, buildings_map) then return end -- (should not fail)
+  if not map_subtract(contents_map, buildings_map) then
+    Buildings.set_status(building, "[img=utility/status_not_working] suddenly not enough buildings")
+    return
+  end
 
   local output_map = {}
   add_contents_to_map(factory.export.products, output_map)
@@ -84,6 +87,10 @@ Crafter.craft = function(building)
 
   local ingredients_map = {}
   add_contents_to_map(factory.export.ingredients, ingredients_map)
+  if not map_subtract(contents_map, ingredients_map) then
+    Buildings.set_status(building, "[img=utility/status_not_working] suddenly not enough ingredients")
+    return
+  end
 
   -- item ingredients
   for _, ingredient in pairs(ingredients_map) do
