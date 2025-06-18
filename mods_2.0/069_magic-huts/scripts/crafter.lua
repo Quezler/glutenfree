@@ -92,7 +92,7 @@ Crafter.craft = function(building)
 
     if top_up_with > 0 then
       local removed = building.inventory.remove({name = ingredient.name, count = top_up_with, quality = ingredient.quality})
-      assert(removed == top_up_with, string.format("failed to remove %d × %s (%s), only %d succeeded", ingredient.count, ingredient.name, ingredient.quality, removed))
+      assert(removed == top_up_with, string.format("failed to remove %g × %s (%s), only %g succeeded", ingredient.count, ingredient.name, ingredient.quality, removed))
       building.item_statistics.on_flow(ingredient.name, -top_up_with)
       buffer.count = buffer.count + removed - ingredient.count
     end
@@ -106,7 +106,7 @@ Crafter.craft = function(building)
     local payout = math.floor(buffer.count)
     if payout > 0 then
       local inserted = building.inventory.insert({name = product.name, count = payout, quality = product.quality})
-      assert(inserted == payout, string.format("failed to insert %d × %s (%s), only %d succeeded", payout, product.name, product.quality, inserted))
+      assert(inserted == payout, string.format("failed to insert %g × %s (%s), only %g succeeded", payout, product.name, product.quality, inserted))
       building.item_statistics.on_flow(product, payout)
       buffer.count = buffer.count - payout
     end
