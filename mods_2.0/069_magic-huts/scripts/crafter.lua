@@ -92,7 +92,7 @@ Crafter.craft = function(building)
 
     if top_up_with > 0 then
       local removed = building.inventory.remove({name = ingredient.name, count = top_up_with, quality = ingredient.quality})
-      assert(removed == top_up_with, string.format("failed to remove %g × %s (%s), only %g succeeded", ingredient.count, ingredient.name, ingredient.quality, removed))
+      assert(removed == top_up_with, string.format("failed to remove %g × %s (%s), only %g succeeded", top_up_with, ingredient.name, ingredient.quality, removed))
       building.item_statistics.on_flow(ingredient.name, -top_up_with)
       buffer.count = buffer.count + removed - ingredient.count
     end
