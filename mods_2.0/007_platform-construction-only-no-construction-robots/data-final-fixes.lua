@@ -1,5 +1,3 @@
-require("utility-constants")
-
 local construction_robot = data.raw["construction-robot"]["construction-robot"]
 
 local function turn_construction_robots_invisible()

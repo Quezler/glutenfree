@@ -1,9 +1,9 @@
 {
-    "name": "platform-construction-only-no-construction-robots",
-    "title": "Platform construction only, no construction robots",
-    "description": "The construction bots instantly use scaffolds.",
+    "name": "space-platform-entity-build-animation-lib",
+    "title": "Space platform entity build animation lib",
+    "description": "Allows triggering the animation anywhere through the remote interface.",
 
-    "version": "1.3.0",
+    "version": "1.0.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -18,11 +18,7 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "base",
-        "? space-age",
-        
-        "space-platform-entity-build-animation-lib",
-
-        "(?) lignumis"
+        "? base >= 2.0.56",
+        "? space-age"
     ]
 }
