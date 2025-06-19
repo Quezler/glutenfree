@@ -1,3 +1,4 @@
+require("util")
 require("shared")
 
 local mod = {}
@@ -86,6 +87,13 @@ function mod.add_item_to_contents(item_name, contents)
   contents[item_name] = (contents[item_name] or 0) + 1
 end
 
+local blacklisted = util.list_to_map({
+  "carbonic-asteroid-chunk",
+  "metallic-asteroid-chunk",
+  "oxide-asteroid-chunk",
+  "promethium-asteroid-chunk",
+})
+
 script.on_nth_tick(60 * 25, function(event)
   for _, platformdata in pairs(storage.platformdata) do
     local last_creation_tick = platformdata.last_creation_tick or 0
@@ -101,7 +109,9 @@ script.on_nth_tick(60 * 25, function(event)
       -- log(string.format("ejected items from platform %s moved to space location %s:", platformdata.platform.name, platformdata.closest_space_location_name))
       -- log(serpent.line(platformdata.ejected_items))
       for item_name, item_amount in pairs(platformdata.ejected_items) do
-        space_location_items_all[item_name] = (space_location_items_all[item_name] or 0) + item_amount
+        if not blacklisted[item_name] then
+          space_location_items_all[item_name] = (space_location_items_all[item_name] or 0) + item_amount
+        end
       end
 
       mod.refresh_items_cache(space_location_data.items)
