@@ -26,6 +26,5 @@ local platform_cargo_bay = {
 local planet_cargo_bay = table.deepcopy(platform_cargo_bay)
 planet_cargo_bay.name = mod_prefix .. "planet-cargo-bay-proxy"
 planet_cargo_bay.icons[1].icon = "__base__/graphics/icons/cargo-landing-pad.png"
-table.insert(planet_cargo_bay.flags, "no-automated-item-insertion")
 
 data:extend{platform_cargo_bay, planet_cargo_bay}
