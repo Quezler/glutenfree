@@ -4,14 +4,14 @@ local poles = {}
 
 function poles.init()
   for _, surface in pairs(game.surfaces) do
-    for _, entity in pairs(surface.find_entities_filtered({ name = 'se-addon-power-pole' })) do
+    for _, entity in pairs(surface.find_entities_filtered({name = "se-addon-power-pole"})) do -- skips ghosts, not on purpose
       poles.random_tick(entity)
     end
   end
 end
 
 function poles.on_created_entity(event)
-  local entity = event.created_entity or event.entity or event.destination
+  local entity = event.entity or event.destination
 
   poles.random_tick(entity)
 end
@@ -34,7 +34,7 @@ function poles.random_tick(entity)
     x = math.floor(x)
     teleport = true
   end
- 
+
   -- snap y
   if (y % 1) > 0.5 then
     y = math.ceil(y)

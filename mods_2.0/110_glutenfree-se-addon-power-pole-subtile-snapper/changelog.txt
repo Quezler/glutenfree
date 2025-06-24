@@ -1,0 +1,45 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 06. 24
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2024. 02. 14
+  Info:
+    - Fix the mod being completely nonfunctional
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2024. 01. 26
+  Info:
+    - Improve performance by only listening to events of the one entity it cares about
+    - Bump the version
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2022. 10. 05
+  Info:
+    - Resque the descriptions from the google cache
+    - Renamed the mod
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2022. 09. 16
+  Info:
+    - Increment minor version(s)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022. 09. 16
+  Info:
+    - Increment minor version(s)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022. 09. 10
+  Info:
+    - Fill in the addon powerpole mod’s description
+    - Snap the addon power poles to my satisfaction
+    - Set space exploration as it’s dependency
+    - Increment minor version(s)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2022. 09. 10
+  Info:
+    - Use init to setup the addon power pole mod

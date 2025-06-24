@@ -2,10 +2,14 @@
     "name": "glutenfree-se-addon-power-pole-subtile-snapper",
     "title": "Space Exploration - addon power pole subtile snapper",
     "description": "Snaps the Space Exploration addon power poles to a subgrid.",
-    "version": "1.0.6",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "base",
+
         "space-exploration"
     ]
 }
