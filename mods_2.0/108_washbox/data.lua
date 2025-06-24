@@ -70,7 +70,7 @@ local furnace = {
       pipe_covers = pipecoverspictures(),
       volume = 100,
       pipe_connections = {
-        {direction = defines.direction.south, position = {0, 0.5}},
+        {flow_direction = "input", direction = defines.direction.south, position = {0, 0.5}},
         {connection_type = "linked", linked_connection_id = 1},
       },
       secondary_draw_orders = { north = -1 }
@@ -80,7 +80,7 @@ local furnace = {
       pipe_covers = pipecoverspictures(),
       volume = 100,
       pipe_connections = {
-        {direction = defines.direction.north, position = {0, -0.5}},
+        {flow_direction = "output", direction = defines.direction.north, position = {0, -0.5}},
         {connection_type = "linked", linked_connection_id = 0},
       },
       secondary_draw_orders = { north = -1 }
@@ -136,7 +136,7 @@ local furnace = {
     },
   },
   circuit_wire_max_distance = washbox_debug and default_circuit_wire_max_distance or nil,
-  vector_to_place_result = {0, -0.3},
+  -- vector_to_place_result = {0, -0.3},
 }
 
 local item = {
