@@ -58,14 +58,18 @@ local function tint_existing_icon(item_prototype, tint)
   if item_prototype.icon == nil and item_prototype.icons == nil then
     return -- "big-electric-pole-roboport-logistic-mode"
   end
-  assert(item_prototype.icon)
-  assert(item_prototype.icons == nil)
 
-  item_prototype.icons = {
-    {icon = item_prototype.icon, tint = tint},
-  }
+  if item_prototype.icon then
+    assert(item_prototype.icons == nil)
+    item_prototype.icons = {
+      {icon = item_prototype.icon},
+    }
+    item_prototype.icon = nil
+  end
 
-  item_prototype.icon = nil
+  for _, icon in ipairs(item_prototype.icons) do
+    icon.tint = tint
+  end
 end
 
 for _, roboport in pairs(data.raw["roboport"]) do
