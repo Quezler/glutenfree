@@ -1,4 +1,4 @@
-local gluten = 'se-core-fragment-omni'
+local gluten = "se-core-fragment-omni"
 
 -- removes one instance of gluten from the output
 local function remove_gluten_from_recipe(recipe)
@@ -17,7 +17,7 @@ local function remove_gluten_from_recipe(recipe)
   return false
 end
 
-for _, recipe in pairs(data.raw['recipe']) do
+for _, recipe in pairs(data.raw["recipe"]) do
   if recipe.category == "core-fragment-processing" then
     if remove_gluten_from_recipe(recipe) then
       print("✔ removed " .. gluten .. " from " .. recipe.name)
