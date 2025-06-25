@@ -1,0 +1,39 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 06. 25
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2023. 12. 28
+  Info:
+    - Count new chunks whilst the universe explorer is open (note: not to be confused with scanning/charting)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2023. 05. 17
+  Info:
+    - Move se variable fakery into the new se scripts mod
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2023. 05. 16
+  Info:
+    - Fix the chunks count going negative with a new mod
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2023. 05. 09
+  Info:
+    - Fix surface being nil crash when trimming any zone
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2023. 05. 08
+  Info:
+    - Fix event handler thingie on server join
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2023. 05. 08
+  Info:
+    - Cleanup code
+    - Add thumbnail
+    - Cache which surface indexes belong to which zones
+    - Disable sorting on the robot inteference column
+    - Prepare for release
