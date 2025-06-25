@@ -1,18 +1,18 @@
 local function get_nauvis()
   local surface = game.get_surface(1)
-  assert(surface and surface.name == 'nauvis')
+  assert(surface and surface.name == "nauvis")
 
   local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface.index})
-  assert(zone and zone.name == 'Nauvis')
+  assert(zone and zone.name == "Nauvis")
 
   return surface, zone
 end
 
 local function on_chunk_generated(event)
-  if global.disabled then return end
+  if storage.disabled then return end
 
   local surface = event.surface
-  if surface.name ~= 'nauvis' then return end
+  if surface.name ~= "nauvis" then return end
 
   local _, zone = get_nauvis()
 
@@ -55,7 +55,13 @@ local function enable()
   end
 
   for _, spill_position in ipairs(spill_positions) do
-    surface.spill_item_stack(spill_position, 'se-core-miner', true, 'player', false)
+    surface.spill_item_stack{
+      position = spill_position,
+      stack = "se-core-miner",
+      enable_looted = true,
+      force = "player",
+      allow_belts = false,
+    }
   end
 
   for _, force in pairs(game.forces) do
@@ -75,7 +81,7 @@ local function disable()
     core_seam_resource.resource.destroy() -- registration_number removes and recreates the seam
   end
 
-  local force = game.forces['player']
+  local force = game.forces["player"]
 
   -- instead of doing it the sensible way we'll trigger on_chunk_charted and let SE recreate any/all map tags :3
   for x, ys in pairs(zone.core_seam_chunks) do
@@ -95,10 +101,10 @@ script.on_init(function(event)
 end)
 
 script.on_event(defines.events.on_chart_tag_added, function(event)
-  if global.disabled then return end
+  if storage.disabled then return end
 
   local chart_tag = event.tag
-  if chart_tag.surface.name ~= 'nauvis' then return end
+  if chart_tag.surface.name ~= "nauvis" then return end
 
   if chart_tag.icon and chart_tag.icon.name == "se-core-seam" then
     chart_tag.destroy()
@@ -106,32 +112,32 @@ script.on_event(defines.events.on_chart_tag_added, function(event)
 
 end)
 
-commands.add_command('se-no-core-fragments-on-nauvis', nil, function(command)
+commands.add_command("se-no-core-fragments-on-nauvis", nil, function(command)
   local player = game.get_player(command.player_index)
   assert(player)
 
   if command.parameter == nil then
-    return player.print('/se-no-core-fragments-on-nauvis <enable/disable>')
+    return player.print("/se-no-core-fragments-on-nauvis <enable/disable>")
   end
 
   if player.admin == false then
-    return player.print('You are not an admin!')
+    return player.print("You are not an admin!")
   end
 
   if command.parameter == "enable" then
-    if global.disabled == nil then
-      return player.print('Already enabled.')
+    if storage.disabled == nil then
+      return player.print("Already enabled.")
     else
-      global.disabled = nil
+      storage.disabled = nil
       enable()
     end
   end
 
   if command.parameter == "disable" then
-    if global.disabled then
-      return player.print('Already disabled.')
+    if storage.disabled then
+      return player.print("Already disabled.")
     else
-      global.disabled = true
+      storage.disabled = true
       disable()
     end
   end
