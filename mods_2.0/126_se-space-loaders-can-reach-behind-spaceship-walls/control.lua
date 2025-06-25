@@ -1,15 +1,15 @@
-local util = require('util')
+local util = require("util")
 
 local Handler = {}
 
 function Handler.on_init()
-  global.surfacedata = {}
-  global.deathrattles = {}
+  storage.surfacedata = {}
+  storage.deathrattles = {}
 
   for _, surface in pairs(game.surfaces) do
     Handler.on_surface_created({surface_index = surface.index})
 
-    for _, entity in pairs(surface.find_entities_filtered{name = {'kr-se-loader', 'kr-se-loader-spaceship'}}) do
+    for _, entity in pairs(surface.find_entities_filtered{name = {"kr-se-loader", "kr-se-loader-spaceship"}}) do
       Handler.on_created_entity({entity = entity})
     end
   end
@@ -18,13 +18,13 @@ end
 script.on_init(Handler.on_init)
 
 function Handler.on_surface_created(event)
-  global.surfacedata[event.surface_index] = {
+  storage.surfacedata[event.surface_index] = {
     loaders_pointed_at = {},
   }
 end
 
 function Handler.on_surface_deleted(event)
-  global.surfacedata[event.surface_index] = nil
+  storage.surfacedata[event.surface_index] = nil
 end
 
 script.on_event(defines.events.on_surface_created, Handler.on_surface_created)
@@ -42,8 +42,8 @@ function Handler.point_loader_at(surfacedata, loader, wall_position)
   surfacedata.loaders_pointed_at[wall_key] = surfacedata.loaders_pointed_at[wall_key] or {}
   surfacedata.loaders_pointed_at[wall_key][loader.unit_number] = loader
 
-  global.deathrattles[script.register_on_entity_destroyed(loader)] = {
-    type = 'loader',
+  storage.deathrattles[script.register_on_object_destroyed(loader)] = {
+    type = "loader",
     wall_position = wall_position,
     loader_entity = loader,
     loader_surface = loader.surface,
@@ -63,21 +63,21 @@ function Handler.wakeup_loaders_pointed_at(surfacedata, position)
 end
 
 function Handler.on_created_entity(event)
-  local entity = event.created_entity or event.entity or event.destination
+  local entity = event.entity or event.destination
   local surface = entity.surface
-  local surfacedata = global.surfacedata[surface.index]
+  local surfacedata = storage.surfacedata[surface.index]
 
-  if entity.name == 'se-spaceship-wall' then
+  if entity.name == "se-spaceship-wall" then
     return Handler.wakeup_loaders_pointed_at(surfacedata, entity.position)
   end
 
   local wall_position = Handler.get_wall_position(entity)
 
-  if entity.name == 'kr-se-loader-spaceship' then
-    local wall_entity = surface.find_entity('se-spaceship-wall', wall_position)
+  if entity.name == "kr-se-loader-spaceship" then
+    local wall_entity = surface.find_entity("se-spaceship-wall", wall_position)
     if wall_entity then
-      global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
-        type = 'wall',
+      storage.deathrattles[script.register_on_object_destroyed(wall_entity)] = {
+        type = "wall",
         wall_entity = wall_entity,
         wall_surface = wall_entity.surface,
         wall_position = wall_position,
@@ -85,17 +85,17 @@ function Handler.on_created_entity(event)
 
       Handler.point_loader_at(surfacedata, entity, wall_position)
     else
-      local loader_entity = Handler.fast_replace_loader(entity, 'kr-se-loader')
+      local loader_entity = Handler.fast_replace_loader(entity, "kr-se-loader")
       Handler.point_loader_at(surfacedata, loader_entity, wall_position)
     end
-  elseif entity.name == 'kr-se-loader' then
-    local wall_entity = surface.find_entity('se-spaceship-wall', wall_position)
+  elseif entity.name == "kr-se-loader" then
+    local wall_entity = surface.find_entity("se-spaceship-wall", wall_position)
     if wall_entity then
-      local loader_entity = Handler.fast_replace_loader(entity, 'kr-se-loader-spaceship')
+      local loader_entity = Handler.fast_replace_loader(entity, "kr-se-loader-spaceship")
       Handler.point_loader_at(surfacedata, loader_entity, wall_position)
 
-      global.deathrattles[script.register_on_entity_destroyed(wall_entity)] = {
-        type = 'wall',
+      storage.deathrattles[script.register_on_object_destroyed(wall_entity)] = {
+        type = "wall",
         wall_entity = wall_entity,
         wall_surface = wall_entity.surface,
         wall_position = wall_position,
@@ -109,30 +109,31 @@ end
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
+  defines.events.on_space_platform_built_entity,
   defines.events.script_raised_built,
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
   script.on_event(event, Handler.on_created_entity, {
-    {filter = 'name', name = 'kr-se-loader'},
-    {filter = 'name', name = 'kr-se-loader-spaceship'},
-    {filter = 'name', name = 'se-spaceship-wall'},
+    {filter = "name", name = "kr-se-loader"},
+    {filter = "name", name = "kr-se-loader-spaceship"},
+    {filter = "name", name = "se-spaceship-wall"},
   })
 end
 
 function Handler.on_entity_destroyed(event)
-  local deathrattle = global.deathrattles[event.registration_number]
-  if deathrattle then global.deathrattles[event.registration_number] = nil
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
 
-    if deathrattle.type == 'wall' then
+    if deathrattle.type == "wall" then
       local wall_surface = deathrattle.wall_surface
       if wall_surface.valid then
-        Handler.wakeup_loaders_pointed_at(global.surfacedata[wall_surface.index], deathrattle.wall_position)
+        Handler.wakeup_loaders_pointed_at(storage.surfacedata[wall_surface.index], deathrattle.wall_position)
       end
-    elseif deathrattle.type == 'loader' then
+    elseif deathrattle.type == "loader" then
       local loader_surface = deathrattle.loader_surface
       if loader_surface.valid then
-        local surfacedata = global.surfacedata[loader_surface.index]
+        local surfacedata = storage.surfacedata[loader_surface.index]
         local wall_key = util.positiontostr(deathrattle.wall_position)
 
         surfacedata.loaders_pointed_at[wall_key][deathrattle.loader_unit_number] = nil
@@ -156,7 +157,7 @@ function Handler.fast_replace_loader(loader, new_name)
   }
 end
 
-script.on_event(defines.events.on_entity_destroyed, Handler.on_entity_destroyed)
+script.on_event(defines.events.on_object_destroyed, Handler.on_entity_destroyed)
 
 -- loaders cannot teleport because they have a belt
 -- spaceship walls should not ever be teleported by other mods
@@ -173,8 +174,8 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
   if entities == nil then return end
 
   for _, entity in ipairs(entities) do
-    if entity.name == 'kr-se-loader-spaceship' then
-      entity.name = 'kr-se-loader'
+    if entity.name == "kr-se-loader-spaceship" then
+      entity.name = "kr-se-loader"
     end
   end
 
