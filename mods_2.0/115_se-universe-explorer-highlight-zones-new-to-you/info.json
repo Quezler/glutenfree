@@ -2,11 +2,13 @@
     "name": "se-universe-explorer-highlight-zones-new-to-you",
     "title": "Space Exploration - universe explorer highlight zones new to you",
     "description": "Researching new zones is fun and all, but how do you know which ones are new in the list?",
-    "version": "1.0.4",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
         "space-exploration",
-        "space-exploration-scripts >= 1.1.0"
+        "space-exploration-scripts >= 2.3.0"
     ]
 }
