@@ -1,0 +1,92 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 06. 25
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.17
+Date: 2023. 12. 27
+  Info:
+    - Fix crash when you delete a surface right after you unlocked it via research
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: 2023. 11. 16
+  Info:
+    - Fix crash related to viewing ruin planets
+---------------------------------------------------------------------------------------------------
+Version: 1.0.15
+Date: 2023. 11. 09
+  Info:
+    - Fix recursive lagspike when adding the mod to a save that already has a large amount of discovered planets
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: 2023. 11. 09
+  Info:
+    - Fix util.positiontostr crash
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 2023. 05. 17
+  Info:
+    - Move se variable fakery into the new se scripts mod
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 2023. 05. 02
+  Info:
+    - Renamed the mod
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 2023. 04. 18
+  Info:
+    - Fix toggling flags temporarily uncoloring pyramids
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2023. 04. 18
+  Info:
+    - Force generate zones with pyramids
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2023. 04. 17
+  Info:
+    - Tint the pyramid flag in the universe explorer too
+    - Cleanup
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2022. 10. 21
+  Info:
+    - Fix control.lua always registering the event
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2022. 10. 21
+  Info:
+    - Seriously what is wrong with you?
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2022. 10. 20
+  Info:
+    - Fix on_load crashing due to game being nil then
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2022. 10. 20
+  Info:
+    - Avoid messing with sattelite mode and jetpacks
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2022. 10. 18
+  Info:
+    - Prepare another debug build
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2022. 10. 18
+  Info:
+    - Attempt 2 at preventing a load desync
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022. 10. 17
+  Info:
+    - Add a personal note to the readme
+    - Fix an event handler desync on loading
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022. 10. 17
+  Info:
+    - Change from guessing the module to generating it

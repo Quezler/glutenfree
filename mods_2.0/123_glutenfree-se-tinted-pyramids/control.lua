@@ -1,4 +1,4 @@
-local Handler = require('scripts.handler')
+local Handler = require("scripts.handler")
 
 script.on_init(Handler.on_init)
 script.on_load(Handler.on_load)
