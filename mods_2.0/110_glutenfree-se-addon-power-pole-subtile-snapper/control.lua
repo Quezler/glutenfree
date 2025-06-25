@@ -2,7 +2,7 @@ local poles = require("scripts.poles")
 
 --
 
-
+script.on_init(poles.init)
 script.on_configuration_changed(poles.init)
 
 --
