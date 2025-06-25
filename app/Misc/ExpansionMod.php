@@ -264,4 +264,11 @@ class ExpansionMod
     {
         return $this->info()['version'] == $this->getVersionFromChangelog();
     }
+
+    public function addNewsletterDependency(): void
+    {
+        $info_json_text = file_get_contents($info_json_path = "{$this->get_pathname()}/info.json");
+        $info_json_text = str_replace('"dependencies": [', implode(PHP_EOL, ['"dependencies": [', '        "? newsletter-for-mods-made-by-quezler",', '']), $info_json_text);
+        file_put_contents($info_json_path, $info_json_text);
+    }
 }

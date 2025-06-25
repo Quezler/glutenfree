@@ -49,6 +49,7 @@ class PortModCommand extends Command
         $next_version = $expansionMod->getNextMajorVersion() . '.0.0';
         $expansionMod->setInfoJsonVersion($next_version);
         $expansionMod->setInfoJsonFactorioVersion("2.0");
+        $expansionMod->addNewsletterDependency();
 
         $lines = array_merge([
             '---------------------------------------------------------------------------------------------------',
