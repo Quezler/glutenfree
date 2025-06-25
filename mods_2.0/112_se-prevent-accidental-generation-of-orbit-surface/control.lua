@@ -1,7 +1,7 @@
 script.on_event(defines.events.on_gui_click, function(event)
-  -- if event.element.style ~= 'se_remote_view_hierarchy_button' then return end
-  if event.element.parent.name ~= 'hierarchy-flow' then return end
-  if event.element.tags.action ~= 'go-to-zone' then return end -- ignore the interstellar map
+  -- if event.element.style ~= "se_remote_view_hierarchy_button" then return end
+  if event.element.parent.name ~= "hierarchy-flow" then return end
+  if event.element.tags.action ~= "go-to-zone" then return end -- ignore the interstellar map
 
   local surface_exists = remote.call("space-exploration", "zone_get_surface", {zone_index = event.element.tags.zone_index}) ~= nil
   if surface_exists == true then return end
@@ -14,7 +14,7 @@ script.on_event(defines.events.on_gui_click, function(event)
     tooltip = event.element.tooltip,
     tags = event.element.tags,
     style = "se_remote_view_hierarchy_button",
-    
+
     index = event.element.get_index_in_parent(),
   }
 

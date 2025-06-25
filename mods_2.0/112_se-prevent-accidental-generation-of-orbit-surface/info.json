@@ -2,10 +2,12 @@
     "name": "se-prevent-accidental-generation-of-orbit-surface",
     "title": "Space Exploration - prevent accidental generation of orbit surface",
     "description": "When you are in remote view on another planet you might click on orbit or star out of habbit, this mod adds a confirmation.",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
         "~ space-exploration"
     ]
 }
