@@ -1,0 +1,21 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 06. 25
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+  Info:
+    - Clearing the textfield (rightclick or backspace when everything is selected) now triggers the mod the same way `Default` does
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+  Info:
+    - Fix `attempt to index global 'opened' (a nil value)`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+  Info:
+    - Fix `LuaEquipmentGrid doesn't contain key type.`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+  Info:
+    - Prevent a crash on freshly placed transmitters (and receivers)
