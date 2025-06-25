@@ -57,7 +57,7 @@ local function enable()
   for _, spill_position in ipairs(spill_positions) do
     surface.spill_item_stack{
       position = spill_position,
-      stack = "se-core-miner",
+      stack = "se-core-miner-drill",
       enable_looted = true,
       force = "player",
       allow_belts = false,
