@@ -1,50 +1,24 @@
 local Util = require("__aai-signal-transmission__.scripts.util")
 
-local mod = {}
-
-mod.get_as_blueprint_entity = function(entity)
-  local inventory = game.create_inventory(1)
-  local stack = inventory[1]
-
-  stack.set_stack({name = "blueprint"})
-  stack.create_blueprint{
-    surface = entity.surface,
-    force = entity.force,
-    area = entity.bounding_box,
-  }
-
-  local blueprint_entities = stack.get_blueprint_entities() or {}
-  inventory.destroy()
-
-  for _, blueprint_entity in ipairs(blueprint_entities) do
-    if blueprint_entity.name == entity.name then
-      return blueprint_entity
+function try_open_gui_with_someone(entity)
+  for _, player in ipairs(entity.force.connected_players) do
+    if not player.opened then
+      player.opened = entity
+      player.opened = nil
+      return
     end
   end
-
-  error(serpent.block({'get_as_blueprint_entity failed:', entity, blueprint_entities}))
 end
 
-mod.update_text_by_entity = function(entity)
-  local channel = "Default"
-  local blueprint_entity = mod.get_as_blueprint_entity(entity)
-  game.print(serpent.line(blueprint_entity))
-  if blueprint_entity.tags and blueprint_entity.tags.channel then
-    channel = blueprint_entity.tags.channel --[[@as string]]
-  end
-  mod.update_text(entity.unit_number, channel)
-end
-
-local function on_created_entity(event)
+function on_created_entity(event)
   local entity = event.entity or event.destination
   storage.structs[entity.unit_number] = {
     unit_number = entity.unit_number,
     entity = entity,
-    opened = false,
     text = nil,
   }
 
-  mod.update_text_by_entity(entity)
+  try_open_gui_with_someone(entity)
 end
 
 script.on_init(function(event)
@@ -71,13 +45,12 @@ for _, event in ipairs({
   })
 end
 
-mod.update_text = function(unit_number, channel)
+function update_text(unit_number, channel)
   local struct = storage.structs[unit_number]
   if not struct then return end
 
   if Util.string_trim(channel) == "" then channel = "Default" end
 
-  struct.opened = true
   -- if struct.text then text.destroy() end
   if struct.text == nil then
     local entity = struct.entity
@@ -96,10 +69,35 @@ mod.update_text = function(unit_number, channel)
   end
 end
 
-remote.add_interface("aai-signal-transmission-luarendered-channel-label", {update_text = mod.update_text})
+script.on_event(defines.events.on_gui_opened, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  local opened = player.opened
+
+  if not opened then return end
+  if opened.object_name ~= "LuaGuiElement" then return end -- "LuaEquipmentGrid doesn"t contain key name."
+  if opened.name ~= "aai-signal-sender" then return end
+
+  if not opened.children[2] then return end -- first time this element shows up its empty, so wait for the 2nd time.
+  local unit_number = tonumber(opened.children[1].children[1].name)
+  local channel = opened.children[2].children[2].children[1].children[1].caption
+
+  update_text(unit_number, channel)
+end)
+
+remote.add_interface("aai-signal-transmission-luarendered-channel-label", {update_text = update_text})
+
+commands.add_command("aai-signal-transmission-luarendered-channel-label", nil, function(command)
+  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+  for unit_number, struct in pairs(storage.structs) do
+    if struct.entity.valid then
+      player.opened = struct.entity
+    end
+  end
+  player.opened = nil
+end)
 
 script.on_event(defines.events.on_entity_settings_pasted, function (event)
   if event.destination.name == "aai-signal-sender" or event.destination.name == "aai-signal-receiver" then
-    mod.update_text_by_entity(event.destination)
+    try_open_gui_with_someone(event.destination)
   end
 end)

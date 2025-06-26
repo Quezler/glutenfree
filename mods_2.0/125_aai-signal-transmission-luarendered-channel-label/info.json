@@ -2,7 +2,7 @@
     "name": "aai-signal-transmission-luarendered-channel-label",
     "title": "AAI Signal Transmission - luarendered channel label",
     "description": "Shows the selected channel on transmitters and receivers in-world.",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [
