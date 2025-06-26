@@ -19,18 +19,21 @@ function launchpad.on_configuration_changed()
   storage.deathrattles = nil
 end
 
+function try_open_gui_with_someone(entity)
+  for _, player in ipairs(entity.force.connected_players) do
+    if not player.opened then
+      player.opened = entity
+      player.opened = nil
+      return
+    end
+  end
+end
+
 function launchpad.on_created_entity(event)
   local entity = event.entity or event.destination
 
   launchpad.register_silo(entity)
-
-  for _, connected_player in ipairs(game.connected_players) do
-    if connected_player.force == entity.force and connected_player.opened == nil then
-      connected_player.opened = entity
-      connected_player.opened = nil
-      break
-    end
-  end
+  try_open_gui_with_someone(entity)
 end
 
 function launchpad.register_silo(entity)
@@ -188,5 +191,11 @@ function launchpad.update_by_unit_number(unit_number, destination, position)
     end
   end
 end
+
+script.on_event(defines.events.on_entity_settings_pasted, function (event)
+  if event.destination.name == "se-rocket-launch-pad" then
+    try_open_gui_with_someone(event.destination)
+  end
+end)
 
 return launchpad
