@@ -3,7 +3,7 @@ local bounding_box = require("__flib__.bounding-box")
 local flib_direction = require("__flib__.direction")
 
 local function on_selected_entity_changed_whilst_holding(player, prototype)
-  assert(prototype.object_name == "LuaItemPrototype")
+  assert(prototype.object_name == "LuaItemPrototype", serpent.line(prototype))
 
   if prototype.place_result == nil then return end
   if prototype.place_result.type ~= "assembling-machine" then return end
@@ -77,7 +77,7 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   if player.cursor_stack.valid_for_read then
     on_selected_entity_changed_whilst_holding(player, player.cursor_stack.prototype)
   elseif player.cursor_ghost then
-    on_selected_entity_changed_whilst_holding(player, player.cursor_ghost)
+    on_selected_entity_changed_whilst_holding(player, player.cursor_ghost.name)
   else
     -- empty hand
   end
