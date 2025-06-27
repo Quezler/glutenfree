@@ -46,8 +46,8 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
     if ignored[cache_key] == nil then
       ignored[cache_key] = true
 
-      local armor_stack = player.get_inventory(defines.inventory.character_armor)[1]
-      if armor_stack.valid_for_read and armor_stack.name ~= "empty-ish-armor-slot" then
+      local armor = player.get_inventory(defines.inventory.character_armor)
+      if armor and armor[1].valid_for_read and armor[1].name ~= "empty-ish-armor-slot" then
         return -- refund everything by default, but if the player *wears* any armor other than the empty ish slot: minus one.
       end
     end
