@@ -209,7 +209,7 @@ function Factoryplanner.on_gui_click(event)
 
   factory.exported_by = player.name
 
-  local sprite = player.gui.screen["fp_frame_main_dialog"].children[2].children[1].children[1].children[1].children[4]
+  local sprite = root.children[2].children[1].children[1].children[1].children[4]
   if sprite.type == "sprite" then
     if sprite.sprite == "fp_universal_planet" then
       -- note: this is only when universal renders an icon, if there are no other surfaces it'll still be nil by default
