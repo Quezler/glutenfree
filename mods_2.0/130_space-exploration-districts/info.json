@@ -9,7 +9,7 @@
 
     "quality_required": false,
     "rail_bridges_required": false,
-    "space_travel_required": false,
+    "space_travel_required": true,
     "spoiling_required": false,
     "freezing_required": false,
     "segmented_units_required": false,
