@@ -16,13 +16,53 @@ local function open_gui(player)
     direction = "vertical",
     caption = {"mod-name." .. mod_name},
   }
+  frame.style.maximal_height = 500
 
   local inner = frame.add{
     type = "frame",
     name = "inner",
-    style = "inside_shallow_frame_with_padding",
+    style = "inside_shallow_frame",
     direction = "vertical",
   }
+
+  local textfield = inner.add{
+    type = "textfield",
+    caption = "search",
+  }
+  textfield.style.minimal_width = 300
+
+  local scroll_pane = inner.add{
+    type = "scroll-pane",
+    -- name = "scroll-pane",
+    style = "list_box_scroll_pane",
+    vertical_scroll_policy = "always",
+  }
+  scroll_pane.style.horizontally_stretchable = true
+  scroll_pane.style.minimal_width = 300
+  scroll_pane.style.bottom_padding = 4
+
+  for _, technology in pairs(prototypes.technology) do
+    local flow = scroll_pane.add{
+      type = "flow",
+      style = "horizontal_flow",
+    }
+    flow.style.maximal_height = 24
+
+    local button = flow.add{
+      type = "button",
+      style = "list_box_item",
+      tags = {
+        action = mod_prefix .. "select-technology",
+        technology_name = technology.name,
+      },
+    }
+    button.style.horizontally_stretchable = true
+
+    button.add{
+      type = "label",
+      caption = {"", string.format("[technology=%s] ", technology.name), technology.localised_name},
+    }
+  end
 
   player.opened = frame
   frame.force_auto_center()

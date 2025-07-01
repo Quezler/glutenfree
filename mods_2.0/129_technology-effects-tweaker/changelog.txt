@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Initial effects gathering and empty gui
+    - Add a technology list to the gui
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 30
