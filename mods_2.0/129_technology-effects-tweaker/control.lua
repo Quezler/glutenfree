@@ -10,7 +10,9 @@ local function last_touched_by_this_mod(prototype)
   return history.changed[#history.changed] == mod_name
 end
 
-local gui_frame_name = mod_prefix .. "frame"
+local function technology_passes_search(technology_name, search)
+  return technology_name:find(search, 1, true) ~= nil
+end
 
 local technology_names = {}
 for technology_name, _ in pairs(prototypes.mod_data[mod_prefix .. "original-technology-effects"].data) do
@@ -27,6 +29,8 @@ for technology_name, _ in pairs(technology_names) do
   table.insert(sorted_technology_names, technology_name)
 end
 table.sort(sorted_technology_names)
+
+local gui_frame_name = mod_prefix .. "frame"
 
 local function open_gui(player)
   local frame = player.gui.screen[gui_frame_name]
@@ -54,19 +58,20 @@ local function open_gui(player)
 
   local textfield = inner.add{
     type = "textfield",
-    caption = "search",
+    name = mod_prefix .. "textfield",
   }
   textfield.style.minimal_width = 300
 
   local scroll_pane = inner.add{
     type = "scroll-pane",
-    -- name = "scroll-pane",
+    name = "scroll-pane",
     style = "list_box_scroll_pane",
     vertical_scroll_policy = "always",
   }
   scroll_pane.style.horizontally_stretchable = true
   scroll_pane.style.minimal_width = 300
   scroll_pane.style.bottom_padding = 4
+  scroll_pane.style.minimal_height = frame.style.maximal_height - 80
 
   for _, technology_name in pairs(sorted_technology_names) do
     local from_data_stage = technology_names[technology_name]
@@ -74,6 +79,7 @@ local function open_gui(player)
 
     local flow = scroll_pane.add{
       type = "flow",
+      name = technology_name,
       style = "horizontal_flow",
     }
     flow.style.maximal_height = 24
@@ -119,5 +125,16 @@ end)
 script.on_event(defines.events.on_gui_closed, function(event)
   if event.element and event.element.name == gui_frame_name then
     event.element.destroy()
+  end
+end)
+
+script.on_event(defines.events.on_gui_text_changed, function(event)
+  if event.element.name == mod_prefix .. "textfield" then
+    local root = event.element.parent.parent --[[@as LuaGuiElement]]
+    assert(root.name == gui_frame_name)
+    local query = event.element.text
+    for _, element in pairs(root["inner"]["scroll-pane"].children) do
+      element.visible = technology_passes_search(element.name, query)
+    end
   end
 end)
