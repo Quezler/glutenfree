@@ -25,6 +25,11 @@ local function open_gui(player)
     direction = "vertical",
   }
 
+  -- inner.add{
+  --   type = "button",
+  --   style = "available_technology_slot",
+  -- }
+
   local textfield = inner.add{
     type = "textfield",
     caption = "search",
@@ -41,7 +46,7 @@ local function open_gui(player)
   scroll_pane.style.minimal_width = 300
   scroll_pane.style.bottom_padding = 4
 
-  for _, technology in pairs(prototypes.technology) do
+  for technology_name, effects in pairs(prototypes.mod_data[mod_prefix .. "original-technology-effects"].data) do
     local flow = scroll_pane.add{
       type = "flow",
       style = "horizontal_flow",
@@ -53,14 +58,16 @@ local function open_gui(player)
       style = "list_box_item",
       tags = {
         action = mod_prefix .. "select-technology",
-        technology_name = technology.name,
+        technology_name = technology_name,
       },
     }
     button.style.horizontally_stretchable = true
 
+    local rich_text = helpers.is_valid_sprite_path('technology.' .. technology_name) and string.format("[technology=%s] ", technology_name) or "[item=item-unknown] "
+    local localized_name = prototypes.technology[technology_name] and prototypes.technology[technology_name].localised_name or {"technology-name." .. technology_name}
     button.add{
       type = "label",
-      caption = {"", string.format("[technology=%s] ", technology.name), technology.localised_name},
+      caption = {"", rich_text, localized_name},
     }
   end
 
