@@ -6,6 +6,7 @@ Date: ????
     - Add a technology list to the gui
     - Loop the data stage prototypes vs the control prototypes
     - Red = removed, orange = modified, green = created
+    - Explain the colors
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 30
