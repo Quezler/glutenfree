@@ -8,6 +8,7 @@ Date: ????
     - Red = removed, orange = modified, green = created
     - Explain the colors
     - Add search functionality
+    - Clear filter after clicking a technology
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 30

@@ -42,7 +42,7 @@ local function open_gui(player)
     direction = "vertical",
     caption = {"mod-name." .. mod_name},
   }
-  frame.style.maximal_height = 500
+  frame.style.maximal_height = 500 + 1
 
   local inner = frame.add{
     type = "frame",
@@ -128,13 +128,29 @@ script.on_event(defines.events.on_gui_closed, function(event)
   end
 end)
 
+local function filter_technologies(root, query)
+  for _, element in pairs(root["inner"]["scroll-pane"].children) do
+    element.visible = technology_passes_search(element.name, query)
+  end
+end
+
 script.on_event(defines.events.on_gui_text_changed, function(event)
   if event.element.name == mod_prefix .. "textfield" then
     local root = event.element.parent.parent --[[@as LuaGuiElement]]
     assert(root.name == gui_frame_name)
-    local query = event.element.text
-    for _, element in pairs(root["inner"]["scroll-pane"].children) do
-      element.visible = technology_passes_search(element.name, query)
+    filter_technologies(root, event.element.text)
+  end
+end)
+
+script.on_event(defines.events.on_gui_click, function(event)
+  if event.element.tags and event.element.tags.action == mod_prefix .. "select-technology" then
+    game.print(event.element.tags.technology_name)
+    local root = event.element.parent.parent.parent.parent --[[@as LuaGuiElement]]
+    assert(root.name == gui_frame_name)
+    local textfield = root["inner"][mod_prefix .. "textfield"]
+    if textfield.text ~= "" then
+      textfield.text = ""
+      filter_technologies(root, "")
     end
   end
 end)
