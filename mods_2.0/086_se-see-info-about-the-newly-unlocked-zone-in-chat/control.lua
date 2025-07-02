@@ -59,7 +59,7 @@ end)
 -- todo: validate if this works too with the new rockets, at least the research one works.
 script.on_event(defines.events.on_rocket_launched, function(event)
   if event.rocket and event.rocket.valid then
-    if event.rocket.get_item_count("satellite") > 0 then
+    if event.rocket.attached_cargo_pod.get_item_count("satellite") > 0 then
       tick_force(event.rocket.force)
     end
   end

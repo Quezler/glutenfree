@@ -2,7 +2,7 @@
     "name": "se-see-info-about-the-newly-unlocked-zone-in-chat",
     "title": "Space Exploration - see info about the newly unlocked zone in chat",
     "description": "The chat only tells you the name, you used to have to open the universe explorer to get more details.",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [
