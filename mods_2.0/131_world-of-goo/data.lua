@@ -54,9 +54,16 @@ data:extend{{
   scale = 0.25,
 }}
 
-data.raw["tile"]["water"].variants.main[1].picture = mod_directory .. "/graphics/terrain/crude-oil/crude-oil1.png"
-data.raw["tile"]["water"].variants.main[2].picture = mod_directory .. "/graphics/terrain/crude-oil/crude-oil2.png"
-data.raw["tile"]["water"].variants.main[3].picture = mod_directory .. "/graphics/terrain/crude-oil/crude-oil4.png"
-data.raw["tile"]["water"].effect_color = {0.1, 0.1, 0.1, 1}
-data.raw["tile"]["water"].effect_color_secondary = {0.1, 0.1, 0.1, 1}
--- data.raw["tile"]["water"].tint = {1, 1, 1, 1}
+data.raw["tile"]["water"].variants.main[1].picture = mod_directory .. "/graphics/terrain/water/crude-oil1.png"
+data.raw["tile"]["water"].variants.main[2].picture = mod_directory .. "/graphics/terrain/water/crude-oil2.png"
+data.raw["tile"]["water"].variants.main[3].picture = mod_directory .. "/graphics/terrain/water/crude-oil4.png"
+data.raw["tile"]["water"].effect_color = {0.2, 0.2, 0.2, 1}
+data.raw["tile"]["water"].effect_color_secondary = {0.2, 0.2, 0.2, 1}
+data.raw["tile"]["water"].map_color = {0.2, 0.2, 0.2, 1}
+
+data.raw["tile"]["deepwater"].variants.main[1].picture = mod_directory .. "/graphics/terrain/deepwater/crude-oil1.png"
+data.raw["tile"]["deepwater"].variants.main[2].picture = mod_directory .. "/graphics/terrain/deepwater/crude-oil2.png"
+data.raw["tile"]["deepwater"].variants.main[3].picture = mod_directory .. "/graphics/terrain/deepwater/crude-oil4.png"
+data.raw["tile"]["deepwater"].effect_color = {0.1, 0.1, 0.1, 1}
+data.raw["tile"]["deepwater"].effect_color_secondary = {0.1, 0.1, 0.1, 1}
+data.raw["tile"]["deepwater"].map_color = {0.1, 0.1, 0.1, 1}
