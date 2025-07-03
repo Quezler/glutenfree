@@ -6,6 +6,7 @@ Date: ????
     - Color the water black
     - Give deepwater the same black texture treatment
     - use our own entity and item
+    - Render them on the surface layer
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03

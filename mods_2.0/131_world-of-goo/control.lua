@@ -5,12 +5,14 @@ end
 
 local function render_goo_ball(fish)
   rendering.draw_sprite{
+    render_layer = "resource",
     surface = fish.surface,
     target = {entity = fish},
     sprite = "common-body",
   }
 
   rendering.draw_sprite{
+    render_layer = "resource",
     surface = fish.surface,
     target = {entity = fish},
     sprite = get_random_eye_name(),
@@ -20,6 +22,7 @@ local function render_goo_ball(fish)
   }
 
   rendering.draw_sprite{
+    render_layer = "resource",
     surface = fish.surface,
     target = {entity = fish},
     sprite = get_random_eye_name(),
@@ -29,6 +32,7 @@ local function render_goo_ball(fish)
   }
 
   rendering.draw_sprite{
+    render_layer = "resource",
     surface = fish.surface,
     target = {entity = fish},
     sprite = "generic-pupil",
@@ -38,6 +42,7 @@ local function render_goo_ball(fish)
   }
 
   rendering.draw_sprite{
+    render_layer = "resource",
     surface = fish.surface,
     target = {entity = fish},
     sprite = "generic-pupil",
