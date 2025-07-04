@@ -2,13 +2,18 @@
     "name": "se-interstellar-construction-requests-fulfillment",
     "title": "Space Exploration - interstellar construction requests fulfillment",
     "description": "Keeping building equipment stocked at every planet is tedious, just shoot it there from nauvis.",
-    "version": "1.2.4",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
         "space-exploration",
-        "space-exploration-scripts >= 1.0.8",
+        "space-exploration-scripts >= 2.5.0",
+
         "? factoryplanner-is-exportable-to-fake-factorissimo",
-        "? glutenfree-equipment-train-stop"
+        "? glutenfree-equipment-train-stop",
+
+        "! quality"
     ]
 }

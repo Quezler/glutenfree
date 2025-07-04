@@ -1,24 +1,23 @@
 local tint = {r=244, g=209, b=6}
 
-local buffer_chest = table.deepcopy(data.raw['logistic-container']['logistic-chest-buffer'])
-buffer_chest.name = 'interstellar-construction-turret--buffer-chest'
+local buffer_chest = table.deepcopy(data.raw["logistic-container"]["buffer-chest"])
+buffer_chest.name = "interstellar-construction-turret--buffer-chest"
 
 buffer_chest.selection_box = {{-1.50, -1.50}, { 1.50,  1.50}}
 buffer_chest.collision_box = {{-1.35, -1.35}, { 1.35,  1.35}}
-buffer_chest.drawing_box   = {{-1.35, -4.35}, { 1.35,  1.35}}
+buffer_chest.drawing_box_vertical_extension = 2.85
 
 buffer_chest.icon = nil
-buffer_chest.icons = table.deepcopy(data.raw['item']['se-meteor-point-defence'].icons)
+buffer_chest.icons = table.deepcopy(data.raw["item"]["se-meteor-point-defence"].icons)
 buffer_chest.icons[2].tint = tint
 
-buffer_chest.animation = table.deepcopy(data.raw['ammo-turret']['se-meteor-point-defence-container'].base_picture)
+buffer_chest.animation = table.deepcopy(data.raw["ammo-turret"]["se-meteor-point-defence-container"].graphics_set.base_visualisation.animation.north)
 buffer_chest.animation.layers[2].tint = tint
-buffer_chest.animation.layers[2].hr_version.tint = tint
 
 buffer_chest.inventory_size = 30
-buffer_chest.enable_inventory_bar = false
+buffer_chest.inventory_type = "normal"
 
-buffer_chest.circuit_wire_connection_point = nil
+buffer_chest.circuit_connector = nil
 buffer_chest.circuit_wire_max_distance = nil
 buffer_chest.corpse = "medium-remnants"
 buffer_chest.dying_explosion = "medium-explosion"
@@ -38,15 +37,15 @@ table.insert(buffer_chest.flags, "no-automated-item-insertion")
 --
 
 local item = {
-  type = 'item',
-  name = 'se-interstellar-construction-requests-fulfillment--item',
-  order = 'k-a', -- weapon delivery cannon is `j-`
-  subgroup = 'surface-defense',
+  type = "item",
+  name = "se-interstellar-construction-requests-fulfillment--item",
+  order = "k-a", -- weapon delivery cannon is `j-`
+  subgroup = "surface-defense",
   stack_size = 50,
-  flags = {'draw-logistic-overlay'},
+  flags = {"draw-logistic-overlay"},
 }
 
-item.icons = table.deepcopy(data.raw['item']['se-meteor-point-defence']).icons
+item.icons = table.deepcopy(data.raw["item"]["se-meteor-point-defence"]).icons
 item.icons[2].tint = tint
 
 item.place_result = buffer_chest.name
@@ -55,15 +54,15 @@ buffer_chest.minable.result = item.name
 --
 
 local recipe = {
-  type = 'recipe',
-  name = 'se-interstellar-construction-requests-fulfillment--recipe',
-  result = item.name,
+  type = "recipe",
+  name = "se-interstellar-construction-requests-fulfillment--recipe",
   enabled = false,
   energy_required = 5,
   ingredients = {
-    { 'se-meteor-point-defence', 1 },
-    { 'sulfur', 12 },
+    {type = "item", name = "se-meteor-point-defence", amount = 1},
+    {type = "item", name = "sulfur", amount = 12},
   },
+  results = {{type = "item", name = item.name, amount = 1}},
   requester_paste_multiplier = 1,
   always_show_made_in = false,
 }
@@ -72,7 +71,7 @@ local recipe = {
 
 local technology = {
   type = "technology",
-  name = 'se-interstellar-construction-requests-fulfillment--technology',
+  name = "se-interstellar-construction-requests-fulfillment--technology",
   effects = {
     { type = "unlock-recipe", recipe = recipe.name }
   },
@@ -95,7 +94,7 @@ local technology = {
   }
 }
 
-technology.icons = table.deepcopy(data.raw['technology']['se-meteor-point-defence']).icons
+technology.icons = table.deepcopy(data.raw["technology"]["se-meteor-point-defence"]).icons
 technology.icons[2].tint = tint
 
 --

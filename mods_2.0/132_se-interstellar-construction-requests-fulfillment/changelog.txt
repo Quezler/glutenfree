@@ -1,0 +1,327 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 07. 04
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 2024. 09. 15
+  Info:
+    - Fix crash when alerts have a nil target
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2024. 09. 12
+  Info:
+    - Support delivering items to fake factorissimo tiers 2 and 3
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2024. 09. 12
+  Info:
+    - Support cliff explosives
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2024. 09. 09
+  Info:
+    - Fix delivering to players directly
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2024. 03. 06
+  Info:
+    - Support shooting basegame repair packs
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2024. 02. 02
+  Info:
+    - Support fulfilling equipment train stop proxies
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2024. 01. 26
+  Info:
+    - Do not alert networks with no storage chests (cut off networks)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2024. 01. 26
+  Info:
+    - Show alert on closest roboport if storage is full
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2024. 01. 26
+  Info:
+    - Only deliver to storage chests
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2024. 01. 14
+  Info:
+    - Support delivering buildings for fake factorissimo factories
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2023. 12. 21
+  Info:
+    - Fix `Item stack count has to be a positive integer.`
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2023. 12. 21
+  Info:
+    - Reworked the mod to be faster & simpeler (pickup pre-existing cannons before updating or you'll lose them)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.22
+Date: 2023. 12. 16
+  Info:
+    - Avoid fulfilling construction requests on the same surface as the turret
+---------------------------------------------------------------------------------------------------
+Version: 1.0.21
+Date: 2023. 12. 14
+  Info:
+    - Support tile ghosts
+---------------------------------------------------------------------------------------------------
+Version: 1.0.20
+Date: 2023. 12. 14
+  Info:
+    - Fix proxies not expiring after 10-20 minutes
+---------------------------------------------------------------------------------------------------
+Version: 1.0.19
+Date: 2023. 12. 14
+  Info:
+    - Support upgrade requests
+---------------------------------------------------------------------------------------------------
+Version: 1.0.18
+Date: 2023. 12. 13
+  Info:
+    - Fix the uncached destination rich text defaulting to "nil"
+---------------------------------------------------------------------------------------------------
+Version: 1.0.17
+Date: 2023. 12. 13
+  Info:
+    - Fix `table_size(colliding_items)` crashing if `nil`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: 2023. 12. 13
+  Info:
+    - Print colliding items to the chat in order to determine how important it is to handle them
+---------------------------------------------------------------------------------------------------
+Version: 1.0.15
+Date: 2023. 12. 13
+  Info:
+    - Cache `remote.call("space-exploration", "get_zone_from_surface_index")`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: 2023. 12. 12
+  Info:
+    - Remove power prioritization
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 2023. 12. 12
+  Info:
+    - Fix `handler.lua:298: could not remove enough of this item from the proxy.`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 2023. 12. 12
+  Info:
+    - Support delivering modules
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 2023. 12. 11
+  Info:
+    - Fix infinite loop by persisting `already_shuffled`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2023. 12. 11
+  Info:
+    - Infinite loop debug build
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2023. 12. 11
+  Info:
+    - Only spend item if reviving succeeds (cliffs or unremoved rocks could void building materials)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2023. 12. 11
+  Info:
+    - Add flashing logistics icon and lookup the logistic network through there
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2023. 12. 11
+  Info:
+    - Optimize the while loop exit condition & check for a proxy before finding and checking network contents
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2023. 12. 10
+  Info:
+    - Fix `control.lua:32: attempt to compare number with nil`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2023. 12. 10
+  Info:
+    - Log when white loop becomes infinite
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2023. 12. 10
+  Info:
+    - Spread processing out over 600 ticks (to avoid lag spikes every 10 seconds)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2023. 12. 08
+  Info:
+    - Fix `attempt to index field 'target' (a nil value)`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2023. 12. 08
+  Info:
+    - Fix all interstellar construction turrets being invalidated by GC
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2023. 12. 08
+  Info:
+    - Raise revive for other mods
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2023. 12. 08
+  Info:
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
+Version: 0.0.28
+Date: 2023. 12. 08
+  Info:
+    - Mod portal MVP release imminent
+---------------------------------------------------------------------------------------------------
+Version: 0.0.27
+Date: 2023. 12. 08
+  Info:
+    - Checking force just once, expiring proxies, data.raw cleanup
+---------------------------------------------------------------------------------------------------
+Version: 0.0.26
+Date: 2023. 12. 08
+  Info:
+    - Thumbnail and some tidying up
+---------------------------------------------------------------------------------------------------
+Version: 0.0.25
+Date: 2023. 12. 08
+  Info:
+    - Load meteor.lua through space-exploration-scripts
+---------------------------------------------------------------------------------------------------
+Version: 0.0.24
+Date: 2023. 12. 08
+  Info:
+    - Simplify attack parameters
+    - Only consider networks that have the item we're after
+---------------------------------------------------------------------------------------------------
+Version: 0.0.23
+Date: 2023. 12. 08
+  Info:
+    - Cancel the proxy if the ghost is no longer undead
+---------------------------------------------------------------------------------------------------
+Version: 0.0.22
+Date: 2023. 12. 08
+  Info:
+    - Support shooting 4 times before energy runs out
+---------------------------------------------------------------------------------------------------
+Version: 0.0.21
+Date: 2023. 12. 08
+  Info:
+    - Garbage collection and code cleanup
+---------------------------------------------------------------------------------------------------
+Version: 0.0.20
+Date: 2023. 12. 08
+  Info:
+    - Shoot and revive the moment a construction bot delivers
+---------------------------------------------------------------------------------------------------
+Version: 0.0.19
+Date: 2023. 12. 08
+  Info:
+    - Draw a random card to deal with unhandled alerts
+---------------------------------------------------------------------------------------------------
+Version: 0.0.18
+Date: 2023. 12. 08
+  Info:
+    - Add rich text to proxies
+    - Move custom zone rich text to space exploration scripts
+---------------------------------------------------------------------------------------------------
+Version: 0.0.17
+Date: 2023. 12. 08
+  Info:
+    - Cleanup draw_random_card()
+---------------------------------------------------------------------------------------------------
+Version: 0.0.16
+Date: 2023. 12. 08
+  Info:
+    - Use a deck mechanic to pick a random turret to use
+---------------------------------------------------------------------------------------------------
+Version: 0.0.15
+Date: 2023. 12. 07
+  Info:
+    - Poorly assign item request proxies as proof of concept
+---------------------------------------------------------------------------------------------------
+Version: 0.0.14
+Date: 2023. 12. 07
+  Info:
+    - Check which things wouldn't support simple proxies
+---------------------------------------------------------------------------------------------------
+Version: 0.0.13
+Date: 2023. 12. 07
+  Info:
+    - Have interstellar construction turrets shoot when charged
+---------------------------------------------------------------------------------------------------
+Version: 0.0.12
+Date: 2023. 12. 07
+  Info:
+    - Move logic into scripts.handler
+---------------------------------------------------------------------------------------------------
+Version: 0.0.11
+Date: 2023. 12. 07
+  Info:
+    - Register interstellar construction turrets in global
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+Date: 2023. 12. 07
+  Info:
+    - Set the readme
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+Date: 2023. 12. 07
+  Info:
+    - Setup recipe and research
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 2023. 12. 07
+  Info:
+    - Make the entity minable and return itself
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2023. 12. 07
+  Info:
+    - Hardcode the energy source
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2023. 12. 07
+  Info:
+    - Increase the electric flow and required power
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2023. 12. 07
+  Info:
+    - use the laser turret as the base
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2023. 12. 07
+  Info:
+    - Switch to electric turret whilst preserving the ammo turret source
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2023. 12. 07
+  Info:
+    - Tint the icon mask properly
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2023. 12. 07
+  Info:
+    - Switch to an ammo turret since it has the right properties
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2023. 12. 07
+  Info:
+    - Replicate the constructable entity
+---------------------------------------------------------------------------------------------------
+Version: 0.0.0
+Date: 2023. 12. 07
+  Info:
+    - Stash se-interstellar-construction-requests-fulfillment draft
