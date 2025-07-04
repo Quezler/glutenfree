@@ -1,5 +1,7 @@
 require("namespace")
 
+require("prototypes.planet")
+
 local sounds = require("__base__.prototypes.entity.sounds")
 local item_sounds = require("__base__.prototypes.item_sounds")
 

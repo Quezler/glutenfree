@@ -1,6 +1,6 @@
 {
     "name": "world-of-goo",
-    "title": "World of goo",
+    "title": "World of Goo",
     "description": "It probably has something to do with the title.",
 
     "version": "0.0.1",
@@ -19,6 +19,8 @@
         "? newsletter-for-mods-made-by-quezler",
 
         "? base",
-        "? space-age"
+        "? space-age",
+
+        "(?) PlanetsLib"
     ]
 }
