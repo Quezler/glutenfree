@@ -8,5 +8,4 @@ data:extend{{
 
   starmap_icon = "__core__/graphics/empty.png",
   starmap_icon_size = 1,
-  magnitude = 0.1,
 }}
