@@ -9,6 +9,7 @@ Date: ????
     - Render them on the surface layer
     - Attempt 1 at drawing the planet upright
     - Attempt 2 at drawing the planet upright
+    - Starmap icon
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03
