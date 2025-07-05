@@ -17,7 +17,7 @@ data:extend{{
 data:extend{{
   type = "sprite",
   name = "common-body",
-  filename = mod_directory .. "/graphics/balls/common/body.png",
+  filename = mod_directory .. "/graphics/common-body.png",
   width = 64,
   height = 64,
   scale = 0.25,
@@ -76,7 +76,7 @@ data.raw["tile"]["deepwater"].map_color = {0.1, 0.1, 0.1, 1}
 local fish = {
   type = "fish",
   name = "goo-ball",
-  icon = mod_directory .. "/graphics/balls/common/body.png",
+  icon = mod_directory .. "/graphics/common-body.png",
   flags = {"placeable-neutral", "not-on-map"},
   minable = {mining_time = 0.25, result = "goo-ball", count = 1},
   mined_sound = sounds.mine_fish,
@@ -89,7 +89,7 @@ local fish = {
   pictures =
   {
     {
-      filename = mod_directory .. "/graphics/balls/common/body.png",
+      filename = mod_directory .. "/graphics/common-body.png",
       priority = "extra-high",
       width = 64,
       height = 64,
@@ -116,7 +116,7 @@ local fish = {
 local item = {
   type = "item",
   name = "goo-ball",
-  icon = mod_directory .. "/graphics/balls/common/body.png",
+  icon = mod_directory .. "/graphics/common-body.png",
   subgroup = "raw-resource",
   order = "i[goo-ball]",
   inventory_move_sound = item_sounds.raw_fish_inventory_move,

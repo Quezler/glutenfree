@@ -1,14 +1,14 @@
 data:extend{{
   type = "planet",
   name = "world-of-goo",
-  icon = mod_directory .. "/graphics/balls/common/body.png",
+  icon = mod_directory .. "/graphics/common-body.png",
 
   distance = 15,
   orientation = 0.32,
 
   starmap_icon = "blep",
   starmap_icons = {
-    {icon = mod_directory .. "/graphics/balls/common/body.png", size = 64, scale = 1},
+    {icon = mod_directory .. "/graphics/common-body.png", size = 64, scale = 1},
 
     {icon = mod_directory .. "/graphics/balls/_generic/eye_glass_2.png", icon_size = 23, shift = {-0.50 * 32, -0.10 * 32}, scale = 1, floating = true},
     {icon = mod_directory .. "/graphics/balls/_generic/pupil1.png"     , icon_size =  8, shift = {-0.45 * 32, -0.15 * 32}, scale = 1, floating = true},
