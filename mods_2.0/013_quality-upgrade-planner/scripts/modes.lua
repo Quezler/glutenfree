@@ -48,7 +48,7 @@ local type_is_a_splitter = {
 
 local function mode_filters(event, playerdata)
   for _, entity in ipairs(event.entities) do
-    if filter_support_for_entity_type[entity.type] then
+    if filter_support_for_entity_type[get_entity_type(entity)] then
       for i = 1, entity.filter_slot_count do
         local filter = entity.get_filter(i)
         if filter then
@@ -57,7 +57,7 @@ local function mode_filters(event, playerdata)
         end
       end
 
-      if type_is_a_splitter[entity.type] then
+      if type_is_a_splitter[get_entity_type(entity)] then
         local filter = entity.splitter_filter
         if filter then
           filter.quality = event.quality
@@ -70,7 +70,7 @@ end
 
 local function mode_storage(event, playerdata)
   for _, entity in ipairs(event.entities) do
-    if entity.type == "logistic-container" and entity.filter_slot_count == 1 then
+    if get_entity_type(entity) == "logistic-container" and entity.filter_slot_count == 1 then
       assert(entity.prototype.logistic_mode == "storage")
       local filter = entity.get_filter(1)
         if filter then
@@ -99,7 +99,7 @@ end
 
 local function mode_recipes(event, playerdata)
   for _, entity in ipairs(event.entities) do
-    if is_assembling_machine[entity.type] then
+    if is_assembling_machine[get_entity_name(entity)] then
       local recipe, quality = entity.get_recipe()
       if recipe and recipe_has_item_ingredients[recipe.name] and entity.prototype.fixed_recipe == nil then
         local items = entity.set_recipe(recipe, event.quality)
