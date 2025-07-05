@@ -12,6 +12,7 @@ Date: ????
     - Starmap icon
     - Fix stray transparent pixels in common body
     - Space connections and icon extravaganza
+    - Experiment with changing where the goo balls look on the fly
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03
