@@ -1,3 +1,3 @@
 local planet = data.raw["planet"]["world-of-goo"]
 
-planet.orientation = 0.5
+-- planet.orientation = 0.5

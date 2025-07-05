@@ -14,8 +14,10 @@ data:extend{{
     {icon = mod_directory .. "/graphics/balls/_generic/pupil1.png"     , icon_size =  8, shift = { 0.35 * 32, -0.35 * 32}, scale = 1, floating = true},
   },
 
-  distance = 15,
+  draw_orbit = false,
+  distance = 13,
   orientation = 0.32,
+  magnitude = 0.5,
 
   starmap_icon = "blep",
   starmap_icons = {
@@ -28,6 +30,7 @@ data:extend{{
 
     {icon = mod_directory .. "/graphics/telescope-19x19.png", icon_size = 19, shift = { 0.7 * 32, -1.2 * 32}, scale = 1.5, floating = true},
   },
+  starmap_icon_orientation = 1,
 
   subgroup = data.raw["planet"]["nauvis"].subgroup,
   asteroid_spawn_influence = data.raw["planet"]["nauvis"].asteroid_spawn_influence,

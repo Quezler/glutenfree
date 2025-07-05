@@ -14,6 +14,7 @@ Date: ????
     - Space connections and icon extravaganza
     - Experiment with changing where the goo balls look on the fly
     - More lifelike goo ball movement
+    - World of goo is smol
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03
