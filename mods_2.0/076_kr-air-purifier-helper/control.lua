@@ -154,7 +154,9 @@ end
 
 function mod.tick_struct(struct)
   if not struct.furnace_source_stack.valid_for_read then
-    ensure_a_proxy_is_requesting_filters(struct)
+      if struct.entity.valid_for_read then
+        ensure_a_proxy_is_requesting_filters(struct)
+      end
     else
       struct.assembling_machine_output_stack.clear()
       struct.assembling_machine_input_stack.set_stack({
