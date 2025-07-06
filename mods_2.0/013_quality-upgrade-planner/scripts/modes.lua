@@ -5,6 +5,14 @@ for _, item_prototype in pairs(prototypes.item) do
   end
 end
 
+local function get_entity_name(entity)
+  return entity.type == "entity-ghost" and entity.ghost_name or entity.name
+end
+
+local function get_entity_type(entity)
+  return entity.type == "entity-ghost" and entity.ghost_type or entity.type
+end
+
 local function mode_entities(event, playerdata)
   local inventory = game.create_inventory(1)
   inventory[1].set_stack({name = "upgrade-planner"})
@@ -135,14 +143,6 @@ local function mode_modules(event, playerdata)
   }
 
   inventory.destroy()
-end
-
-local function get_entity_name(entity)
-  return entity.type == "entity-ghost" and entity.ghost_name or entity.name
-end
-
-local function get_entity_type(entity)
-  return entity.type == "entity-ghost" and entity.ghost_type or entity.type
 end
 
 function string_starts_with(str, prefix)
