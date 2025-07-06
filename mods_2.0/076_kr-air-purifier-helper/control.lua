@@ -154,7 +154,7 @@ end
 
 function mod.tick_struct(struct)
   if not struct.furnace_source_stack.valid_for_read then
-      if struct.entity.valid_for_read then
+      if struct.entity.valid then
         ensure_a_proxy_is_requesting_filters(struct)
       end
     else
