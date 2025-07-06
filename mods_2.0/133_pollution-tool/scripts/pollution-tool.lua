@@ -15,12 +15,12 @@ function pollution_tool.per_minute(entity)
   local energy_multiplier, pollution_multiplier = 1, 1
 
   if entity.effects then
-    if entity.effects["consumption"] then energy_multiplier = 1 + entity.effects["consumption"].bonus end
-    if entity.effects["pollution"] then pollution_multiplier = 1 + entity.effects["pollution"].bonus end
+    if entity.effects["consumption"] then energy_multiplier = 1 + entity.effects["consumption"] end
+    if entity.effects["pollution"] then pollution_multiplier = 1 + entity.effects["pollution"] end
   end
 
   if entity.prototype.electric_energy_source_prototype then
-    return (entity.prototype.electric_energy_source_prototype.emissions * pollution_multiplier) * (entity.prototype.max_energy_usage * energy_multiplier) * (ticks_per_second * seconds_per_minute)
+    return (entity.prototype.electric_energy_source_prototype.emissions_per_joule["pollution"] * pollution_multiplier) * (entity.prototype.get_max_energy_usage("normal") * energy_multiplier) * (ticks_per_second * seconds_per_minute)
   else
     game.print("Cannot determine the pollution of: " .. entity.name)
     return 0
@@ -29,7 +29,7 @@ end
 
 function pollution_tool.on_player_selected_area(event)
 
-  local purifier_pollution = game.entity_prototypes["kr-air-purifier"].electric_energy_source_prototype.emissions * game.entity_prototypes["kr-air-purifier"].max_energy_usage * (ticks_per_second * seconds_per_minute)
+  local purifier_pollution = prototypes.entity["kr-air-purifier"].electric_energy_source_prototype.emissions_per_joule["pollution"] * prototypes.entity["kr-air-purifier"].get_max_energy_usage("normal") * (ticks_per_second * seconds_per_minute)
 
   local pollution = 0
   for _, entity in pairs(event.entities) do
@@ -42,7 +42,7 @@ function pollution_tool.on_player_selected_area(event)
     if purifiers == -0 then purifiers = 0 end
   end
 
-  local player = game.get_player(event.player_index)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local text = {}
   text[1] = "[item=kr-air-purifier]"
   text[2] = round(pollution, 2)
