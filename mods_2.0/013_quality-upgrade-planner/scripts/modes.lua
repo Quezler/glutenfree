@@ -107,7 +107,7 @@ end
 
 local function mode_recipes(event, playerdata)
   for _, entity in ipairs(event.entities) do
-    if is_assembling_machine[get_entity_name(entity)] then
+    if is_assembling_machine[get_entity_type(entity)] then
       local recipe, quality = entity.get_recipe()
       if recipe and recipe_has_item_ingredients[recipe.name] and entity.prototype.fixed_recipe == nil then
         local items = entity.set_recipe(recipe, event.quality)
