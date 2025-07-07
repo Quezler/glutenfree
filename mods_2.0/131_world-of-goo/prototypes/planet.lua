@@ -1,5 +1,7 @@
 local asteroid_util = require("__space-age__.prototypes.planet.asteroid-spawn-definitions")
 
+local planet_map_gen = require("prototypes/planet-map-gen")
+
 data:extend{{
   type = "planet",
   name = "world-of-goo",
@@ -35,6 +37,8 @@ data:extend{{
   subgroup = data.raw["planet"]["nauvis"].subgroup,
   asteroid_spawn_influence = data.raw["planet"]["nauvis"].asteroid_spawn_influence,
   asteroid_spawn_definitions = data.raw["planet"]["nauvis"].asteroid_spawn_definitions,
+
+  map_gen_settings = planet_map_gen.world_of_goo(),
 }}
 
 data:extend{

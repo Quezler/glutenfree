@@ -16,6 +16,7 @@ Date: ????
     - More lifelike goo ball movement
     - World of goo is smol
     - Human facing information
+    - Mimic fulgora worldgen
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03
