@@ -109,3 +109,8 @@ local deep =
 }
 
 data:extend{shallow, deep}
+
+-- data.raw["tile"]["fulgoran-rock"].tint = {0.3, 0.3, 0.3, 1}
+-- data.raw["tile"]["fulgoran-dust"].tint = {0.3, 0.3, 0.3, 1}
+-- data.raw["tile"]["fulgoran-sand"].tint = {0.3, 0.3, 0.3, 1}
+-- data.raw["tile"]["fulgoran-dunes"].tint = {0.3, 0.3, 0.3, 1}

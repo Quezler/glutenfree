@@ -30,7 +30,7 @@ planet_map_gen.world_of_goo = function()
     {
       -- ["scrap"] = {},
       ["fulgora_islands"] = {},
-      ["fulgora_cliff"] = {},
+      -- ["fulgora_cliff"] = {},
     },
     autoplace_settings =
     {

@@ -18,6 +18,7 @@ Date: ????
     - Human facing information
     - Mimic fulgora worldgen
     - Move the goo balls to their designated planet
+    - There are no cliffs in ba sing se
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03
