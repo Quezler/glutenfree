@@ -26,7 +26,7 @@ function UndergroundHeatPipe.make(config)
     icons = {
       {draw_background = false, icon = "__core__/graphics/empty.png"},
       {draw_background = false, icon = heat_pipe_item.icon, scale = 0.3, shift = {-4, 0}},
-      {draw_background = true,  icon = underground_belt.icon, scale = 0.4}
+      {draw_background = true,  icon = underground_belt.icon or underground_belt.icons[1].icon, scale = 0.4}
     },
     fluid_box = {
       volume = 1,
