@@ -1,0 +1,111 @@
+local tile_sounds = require("__base__/prototypes/tile/tile-sounds")
+local tile_collision_masks = require("__base__/prototypes/tile/tile-collision-masks")
+local tile_graphics = require("__base__/prototypes/tile/tile-graphics")
+local tile_pollution = require("__base__/prototypes/tile/tile-pollution-values")
+
+local shallow =
+{
+  type = "tile",
+  name = mod_prefix .. "crude-oil-shallow",
+  order = "a[water]-a[water]",
+  collision_mask = tile_collision_masks.water(),
+  subgroup = "nauvis-tiles",
+  fluid = "crude-oil",
+  autoplace = data.raw["tile"]["oil-ocean-shallow"].autoplace,
+  effect = "water",
+  effect_color = {0.2, 0.2, 0.2, 1},
+  effect_color_secondary = {0.2, 0.2, 0.2, 1},
+  particle_tints = tile_graphics.water_particle_tints,
+  layer_group = "water",
+  layer = 3,
+  variants =
+  {
+    main =
+    {
+      {
+        picture = mod_directory .. "/graphics/terrain/water/crude-oil1.png",
+        count = 1,
+        scale = 0.5,
+        size = 1
+      },
+      {
+        picture = mod_directory .. "/graphics/terrain/water/crude-oil2.png",
+        count = 1,
+        scale = 0.5,
+        size = 2
+      },
+      {
+        picture = mod_directory .. "/graphics/terrain/water/crude-oil4.png",
+        count = 1,
+        scale = 0.5,
+        size = 4
+      }
+    },
+    empty_transitions = true
+  },
+  -- transitions = { water_to_out_of_map_transition },
+  map_color = {0.2, 0.2, 0.2, 1},
+  absorptions_per_second = tile_pollution.water,
+
+  -- trigger_effect = tile_trigger_effects.water_trigger_effect(),
+
+  default_cover_tile = "landfill",
+
+  ambient_sounds = tile_sounds.ambient.water({volume = 0.6}),
+}
+
+local deep =
+{
+  type = "tile",
+  name = mod_prefix .. "crude-oil-deep",
+  order = "a[water]-b[deep-water]",
+  subgroup = "nauvis-tiles",
+  transition_merges_with_tile = "water",
+  collision_mask = tile_collision_masks.water(),
+  fluid = "crude-oil",
+  autoplace = data.raw["tile"]["oil-ocean-deep"].autoplace,
+  effect = "water",
+  effect_color = {0.1, 0.1, 0.1, 1},
+  effect_color_secondary = {0.1, 0.1, 0.1, 1},
+  particle_tints = tile_graphics.deepwater_particle_tints,
+  layer_group = "water",
+  layer = 3,
+  variants =
+  {
+    main =
+    {
+      {
+        picture = mod_directory .. "/graphics/terrain/deepwater/crude-oil1.png",
+        count = 1,
+        scale = 0.5,
+        size = 1
+      },
+      {
+        picture = mod_directory .. "/graphics/terrain/deepwater/crude-oil2.png",
+        count = 1,
+        scale = 0.5,
+        size = 2
+      },
+      {
+        picture = mod_directory .. "/graphics/terrain/deepwater/crude-oil4.png",
+        count = 1,
+        scale = 0.5,
+        size = 4
+      }
+    },
+    empty_transitions = true
+  },
+  --transitions = { deepwater_out_of_map_transition },
+  --transitions_between_transitions = deepwater_transitions_between_transitions,
+  -- allowed_neighbors = { "water" },
+  map_color = {0.1, 0.1, 0.1, 1},
+  absorptions_per_second = tile_pollution.water,
+
+  -- trigger_effect = tile_trigger_effects.water_trigger_effect(),
+
+  default_cover_tile = "landfill",
+
+  ambient_sounds = tile_sounds.ambient.water({}),
+}
+
+data:extend{shallow, deep}

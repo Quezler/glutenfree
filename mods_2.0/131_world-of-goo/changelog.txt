@@ -17,6 +17,7 @@ Date: ????
     - World of goo is smol
     - Human facing information
     - Mimic fulgora worldgen
+    - Move the goo balls to their designated planet
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03

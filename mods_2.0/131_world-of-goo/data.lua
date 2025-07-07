@@ -1,6 +1,7 @@
 require("namespace")
 
 require("prototypes.planet")
+require("prototypes.tiles")
 
 local sounds = require("__base__.prototypes.entity.sounds")
 local item_sounds = require("__base__.prototypes.item_sounds")
@@ -59,20 +60,6 @@ data:extend{{
   scale = 0.25,
 }}
 
-data.raw["tile"]["water"].variants.main[1].picture = mod_directory .. "/graphics/terrain/water/crude-oil1.png"
-data.raw["tile"]["water"].variants.main[2].picture = mod_directory .. "/graphics/terrain/water/crude-oil2.png"
-data.raw["tile"]["water"].variants.main[3].picture = mod_directory .. "/graphics/terrain/water/crude-oil4.png"
-data.raw["tile"]["water"].effect_color = {0.2, 0.2, 0.2, 1}
-data.raw["tile"]["water"].effect_color_secondary = {0.2, 0.2, 0.2, 1}
-data.raw["tile"]["water"].map_color = {0.2, 0.2, 0.2, 1}
-
-data.raw["tile"]["deepwater"].variants.main[1].picture = mod_directory .. "/graphics/terrain/deepwater/crude-oil1.png"
-data.raw["tile"]["deepwater"].variants.main[2].picture = mod_directory .. "/graphics/terrain/deepwater/crude-oil2.png"
-data.raw["tile"]["deepwater"].variants.main[3].picture = mod_directory .. "/graphics/terrain/deepwater/crude-oil4.png"
-data.raw["tile"]["deepwater"].effect_color = {0.1, 0.1, 0.1, 1}
-data.raw["tile"]["deepwater"].effect_color_secondary = {0.1, 0.1, 0.1, 1}
-data.raw["tile"]["deepwater"].map_color = {0.1, 0.1, 0.1, 1}
-
 local fish = {
   type = "fish",
   name = "goo-ball",
@@ -96,7 +83,7 @@ local fish = {
       scale = 0.2, -- 0.5 smaller so its behind the lua rendering
     }
   },
-  autoplace = { probability_expression = 0.1 },
+  autoplace = { probability_expression = 0.01 },
   protected_from_tile_building = false,
 
   created_effect = {
@@ -126,6 +113,3 @@ local item = {
 }
 
 data:extend{fish, item}
-
-data.raw["planet"]["nauvis"].map_gen_settings.autoplace_settings.entity.settings["goo-ball"] = {}
-data.raw["planet"]["nauvis"].map_gen_settings.autoplace_settings.entity.settings["fish"] = nil

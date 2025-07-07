@@ -38,16 +38,18 @@ planet_map_gen.world_of_goo = function()
       {
         settings =
         {
-          ["oil-ocean-shallow"] = {},
-          ["oil-ocean-deep"] = {},
+          -- ["oil-ocean-shallow"] = {},
+          -- ["oil-ocean-deep"] = {},
           ["fulgoran-rock"] = {},
           ["fulgoran-dust"] = {},
           ["fulgoran-sand"] = {},
           ["fulgoran-dunes"] = {},
-          ["fulgoran-walls"] = {},
+          -- ["fulgoran-walls"] = {},
           -- ["fulgoran-paving"] = {},
           -- ["fulgoran-conduit"] = {},
           -- ["fulgoran-machinery"] = {},
+          [mod_prefix .. "crude-oil-shallow"] = {},
+          [mod_prefix .. "crude-oil-deep"] = {},
         }
       },
       ["decorative"] =
@@ -55,8 +57,8 @@ planet_map_gen.world_of_goo = function()
         settings =
         {
           -- ["fulgoran-ruin-tiny"] = {},
-          ["fulgoran-gravewort"] = {},
-          ["urchin-cactus"] = {},
+          -- ["fulgoran-gravewort"] = {},
+          -- ["urchin-cactus"] = {},
           ["medium-fulgora-rock"] = {},
           ["small-fulgora-rock"] = {},
           ["tiny-fulgora-rock"] = {},
@@ -77,6 +79,7 @@ planet_map_gen.world_of_goo = function()
           -- ["fulgoran-ruin-small"] = {},
           -- ["fulgurite"] = {},
           -- ["big-fulgora-rock"] = {}
+          ["goo-ball"] = {}
         }
       }
     }
