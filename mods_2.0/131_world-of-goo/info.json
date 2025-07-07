@@ -1,7 +1,7 @@
 {
     "name": "world-of-goo",
     "title": "World of Goo",
-    "description": "It probably has something to do with the title.",
+    "description": "Fulgora: fluid edition, gameplay and graphics inspired by said game.",
 
     "version": "0.0.1",
     "author": "Quezler",
@@ -18,8 +18,8 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "? base",
-        "? space-age",
+        "base",
+        "space-age",
 
         "(?) PlanetsLib"
     ]
