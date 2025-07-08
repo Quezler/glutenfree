@@ -1,0 +1,2 @@
+black water: saturation 0, brightness-contrast -127
+fulgora tiles: hue 70, saturation 25

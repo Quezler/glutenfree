@@ -3,13 +3,20 @@ local tile_collision_masks = require("__base__/prototypes/tile/tile-collision-ma
 local tile_graphics = require("__base__/prototypes/tile/tile-graphics")
 local tile_pollution = require("__base__/prototypes/tile/tile-pollution-values")
 
+data:extend{{
+  type = "item-subgroup",
+  name = mod_prefix .. "tiles",
+  group = "tiles",
+  order = "e"
+}}
+
 local shallow =
 {
   type = "tile",
   name = mod_prefix .. "crude-oil-shallow",
   order = "a[water]-a[water]",
   collision_mask = tile_collision_masks.water(),
-  subgroup = "nauvis-tiles",
+  subgroup = mod_prefix .. "tiles",
   fluid = "crude-oil",
   autoplace = data.raw["tile"]["oil-ocean-shallow"].autoplace,
   effect = "water",
@@ -59,7 +66,7 @@ local deep =
   type = "tile",
   name = mod_prefix .. "crude-oil-deep",
   order = "a[water]-b[deep-water]",
-  subgroup = "nauvis-tiles",
+  subgroup = mod_prefix .. "tiles",
   transition_merges_with_tile = "water",
   collision_mask = tile_collision_masks.water(),
   fluid = "crude-oil",
@@ -114,3 +121,18 @@ data:extend{shallow, deep}
 -- data.raw["tile"]["fulgoran-dust"].tint = {0.3, 0.3, 0.3, 1}
 -- data.raw["tile"]["fulgoran-sand"].tint = {0.3, 0.3, 0.3, 1}
 -- data.raw["tile"]["fulgoran-dunes"].tint = {0.3, 0.3, 0.3, 1}
+
+local tiles_to_mimic = {
+  ["fulgoran-rock" ] = "goo-filled-rock" ,
+  ["fulgoran-dust" ] = "goo-filled-dust" ,
+  ["fulgoran-sand" ] = "goo-filled-sand" ,
+  ["fulgoran-dunes"] = "goo-filled-dunes",
+}
+
+for from_name, to_name in pairs(tiles_to_mimic) do
+  local tile = table.deepcopy(data.raw["tile"][from_name])
+  tile.name = mod_prefix .. to_name
+  tile.subgroup = mod_prefix .. "tiles"
+  tile.variants.material_background.picture = mod_directory .. "/graphics/terrain/fulgoran/" .. to_name .. ".png"
+  data:extend{tile}
+end
