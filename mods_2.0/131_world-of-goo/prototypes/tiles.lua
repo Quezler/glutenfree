@@ -123,16 +123,17 @@ data:extend{shallow, deep}
 -- data.raw["tile"]["fulgoran-dunes"].tint = {0.3, 0.3, 0.3, 1}
 
 local tiles_to_mimic = {
-  ["fulgoran-rock" ] = "goo-filled-rock" ,
-  ["fulgoran-dust" ] = "goo-filled-dust" ,
-  ["fulgoran-sand" ] = "goo-filled-sand" ,
-  ["fulgoran-dunes"] = "goo-filled-dunes",
+  ["fulgoran-rock" ] = {name = "goo-filled-rock" , map_color = {103, 140,  58}},
+  ["fulgoran-dust" ] = {name = "goo-filled-dust" , map_color = { 89, 123,  41}},
+  ["fulgoran-sand" ] = {name = "goo-filled-sand" , map_color = { 96, 122,  51}},
+  ["fulgoran-dunes"] = {name = "goo-filled-dunes", map_color = {104, 131,  50}},
 }
 
-for from_name, to_name in pairs(tiles_to_mimic) do
+for from_name, to in pairs(tiles_to_mimic) do
   local tile = table.deepcopy(data.raw["tile"][from_name])
-  tile.name = mod_prefix .. to_name
+  tile.name = mod_prefix .. to.name
   tile.subgroup = mod_prefix .. "tiles"
-  tile.variants.material_background.picture = mod_directory .. "/graphics/terrain/fulgoran/" .. to_name .. ".png"
+  tile.variants.material_background.picture = mod_directory .. "/graphics/terrain/fulgoran/" .. to.name .. ".png"
+  tile.map_color = to.map_color
   data:extend{tile}
 end

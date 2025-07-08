@@ -20,6 +20,7 @@ Date: ????
     - Move the goo balls to their designated planet
     - There are no cliffs in ba sing se
     - Use green variants of fulgora tiles
+    - Greenify the map colors of those tiles
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03
