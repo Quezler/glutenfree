@@ -119,8 +119,10 @@ local function generate_pool_around_pipe(pipe)
     end
     if 6 > distance then
       table.insert(to_set, {position = tile_position, name = "deepwater"})
-    elseif 9 > distance then
+    elseif 8 > distance then
       table.insert(to_set, {position = tile_position, name = "water"})
+    elseif 9 > distance then
+      table.insert(to_set, {position = tile_position, name = mod_prefix .. "goo-filled-dunes"})
     end
   end
 
