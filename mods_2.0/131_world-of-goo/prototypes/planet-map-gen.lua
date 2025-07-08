@@ -73,7 +73,7 @@ planet_map_gen.world_of_goo = function()
         settings =
         {
           -- ["scrap"] = {},
-          ["fulgoran-ruin-vault"] = {},
+          -- ["fulgoran-ruin-vault"] = {},
           -- ["fulgoran-ruin-attractor"] = {},
           -- ["fulgoran-ruin-colossal"] = {},
           -- ["fulgoran-ruin-huge"] = {},
@@ -83,7 +83,8 @@ planet_map_gen.world_of_goo = function()
           -- ["fulgoran-ruin-small"] = {},
           -- ["fulgurite"] = {},
           -- ["big-fulgora-rock"] = {}
-          ["goo-ball"] = {}
+          ["goo-ball"] = {},
+          [mod_prefix .. "pipe-cap"] = {},
         }
       }
     }

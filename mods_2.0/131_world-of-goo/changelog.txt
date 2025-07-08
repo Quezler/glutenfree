@@ -22,6 +22,7 @@ Date: ????
     - Use green variants of fulgora tiles
     - Greenify the map colors of those tiles
     - Prevent cliffs from showing under "contains"
+    - Replace the vaults with pipe caps
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03
