@@ -84,15 +84,15 @@ local function render_goo_ball(fish)
   -- }
 end
 
-commands.add_command("goo-balls", nil, function(command)
-  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
-  local fishes = player.surface.find_entities_filtered{type = "fish"}
-  game.print(#fishes)
+-- commands.add_command("goo-balls", nil, function(command)
+--   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+--   local fishes = player.surface.find_entities_filtered{type = "fish"}
+--   game.print(#fishes)
 
-  for _, fish in ipairs(fishes) do
-    render_goo_ball(fish)
-  end
-end)
+--   for _, fish in ipairs(fishes) do
+--     render_goo_ball(fish)
+--   end
+-- end)
 
 local function generate_pool_around_pipe(pipe)
   local tiles = pipe.surface.get_connected_tiles(
@@ -125,7 +125,7 @@ local function generate_pool_around_pipe(pipe)
   end
 
   pipe.surface.set_tiles(to_set)
-  game.players[1].teleport(pipe.position)
+  -- game.players[1].teleport(pipe.position)
 
   for i = 1, math.random(10, 30) do
     pipe.surface.create_entity{

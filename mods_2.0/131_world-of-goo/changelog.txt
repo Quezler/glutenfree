@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: ????
+Date: 2025. 07. 08
   Info:
     - Use the og sprites
     - Color the water black
@@ -27,6 +27,7 @@ Date: ????
     - Generate pools where the pipe caps generate
     - Ball shadows
     - Quickly squeeze in the glass goo balls
+    - End of chapter 1
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03
