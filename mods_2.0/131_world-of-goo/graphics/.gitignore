@@ -10,3 +10,7 @@ balls/**
 !balls/_generic/eye_glass_3.png
 !balls/_generic/pupil1.png
 !balls/_generic/shadowCircle59.png
+
+!balls/water/
+!balls/water/body.png
+!balls/water/shad.png

@@ -6,13 +6,24 @@ local function get_random_eye_name()
   return "generic-eye-glass-" .. tostring(math.random(1, 3))
 end
 
+local is_water = util.list_to_map({"water", "deepwater"})
+
 local function render_goo_ball(fish)
+  local body = "common-body"
+
+  -- log(fish.surface.get_tile(fish.position).name)
+  if is_water[fish.surface.get_tile(fish.position).name] then
+    body = "drool-body"
+  end
+
   rendering.draw_sprite{
     render_layer = "resource",
     surface = fish.surface,
     target = {entity = fish},
-    sprite = "common-body",
+    sprite = body,
   }
+
+  if body == "drool-body" then return end -- those have no eyes
 
   local use_target_orientation = false
   local orientation_target = fish.position
@@ -113,6 +124,9 @@ local function generate_pool_around_pipe(pipe)
     end
   end
 
+  pipe.surface.set_tiles(to_set)
+  game.players[1].teleport(pipe.position)
+
   for i = 1, math.random(10, 30) do
     pipe.surface.create_entity{
       name = "goo-ball",
@@ -120,9 +134,6 @@ local function generate_pool_around_pipe(pipe)
       position = {center[1] + math.random(-5, 5), center[2] + math.random(-5, 5)}
     }
   end
-
-  pipe.surface.set_tiles(to_set)
-  game.players[1].teleport(pipe.position)
 end
 
 -- does not trigger for the spawning pool, caught by on_init instead, weird right?

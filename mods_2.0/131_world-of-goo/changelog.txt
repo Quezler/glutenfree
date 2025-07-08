@@ -26,6 +26,7 @@ Date: ????
     - Spawn on the world of goo during testing
     - Generate pools where the pipe caps generate
     - Ball shadows
+    - Quickly squeeze in the glass goo balls
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03

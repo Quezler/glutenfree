@@ -38,6 +38,26 @@ data:extend{{
 
 data:extend{{
   type = "sprite",
+  name = "drool-body",
+  layers = {
+    {
+      filename = mod_directory .. "/graphics/balls/water/shad.png",
+      priority = "extra-high",
+      width = 59,
+      height = 59,
+      scale = 0.4,
+    },
+    {
+      filename = mod_directory .. "/graphics/balls/water/body.png",
+      width = 64,
+      height = 64,
+      scale = 0.25,
+    },
+  }
+}}
+
+data:extend{{
+  type = "sprite",
   name = "generic-eye-glass-1",
   filename = mod_directory .. "/graphics/balls/_generic/eye_glass_1.png",
   width = 32,
@@ -93,6 +113,7 @@ local fish = {
       width = 64,
       height = 64,
       scale = 0.2, -- 0.5 smaller so its behind the lua rendering
+      tint = {0, 0, 0, 0} -- todo: deepcopy for drool ball
     }
   },
   autoplace = { probability_expression = 0.01 },
