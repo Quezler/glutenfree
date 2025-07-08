@@ -1,3 +1,6 @@
+require("util")
+require("namespace")
+
 local function get_random_eye_name()
   -- return "generic-eye-glass-2"
   return "generic-eye-glass-" .. tostring(math.random(1, 3))
@@ -80,11 +83,55 @@ commands.add_command("goo-balls", nil, function(command)
   end
 end)
 
+local function generate_pool_around_pipe(pipe)
+  local tiles = pipe.surface.get_connected_tiles(
+    --[[position = --]] pipe.position,
+    --[[tiles = --]] {
+      mod_prefix .. "goo-filled-rock" ,
+      mod_prefix .. "goo-filled-dust" ,
+      mod_prefix .. "goo-filled-sand" ,
+      mod_prefix .. "goo-filled-dunes",
+    },
+    --[[include_diagonal = --]] true,
+    --[[area = --]] {{pipe.position.x - 10, pipe.position.y - 10}, {pipe.position.x + 10, pipe.position.y + 10}}
+  )
+
+  if #tiles == 0 then return end -- pipe not placed on the green tiles over at the world of goo
+
+  local to_set = {}
+  local center = {pipe.position.x - 0.5, pipe.position.y - 0.5}
+
+  for _, tile_position in ipairs(tiles) do
+    local distance = util.distance(center, tile_position)
+    if math.random() > 0.8 then
+      distance = math.random(distance, distance + 1)
+    end
+    if 6 > distance then
+      table.insert(to_set, {position = tile_position, name = "deepwater"})
+    elseif 9 > distance then
+      table.insert(to_set, {position = tile_position, name = "water"})
+    end
+  end
+
+  for i = 1, math.random(10, 30) do
+    pipe.surface.create_entity{
+      name = "goo-ball",
+      force = "neutral",
+      position = {center[1] + math.random(-5, 5), center[2] + math.random(-5, 5)}
+    }
+  end
+
+  pipe.surface.set_tiles(to_set)
+  game.players[1].teleport(pipe.position)
+end
+
 -- does not trigger for the spawning pool, caught by on_init instead, weird right?
 script.on_event(defines.events.on_script_trigger_effect, function(event)
-  if event.effect_id ~= "goo-ball-created" then return end
-
-  render_goo_ball(event.source_entity)
+  if event.effect_id == "goo-ball-created" then
+    render_goo_ball(event.source_entity)
+  elseif event.effect_id == mod_prefix .. "pipe-cap-created" then
+    generate_pool_around_pipe(event.source_entity)
+  end
 end)
 
 script.on_init(function()

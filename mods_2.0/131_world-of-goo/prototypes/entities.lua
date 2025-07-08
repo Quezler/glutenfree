@@ -20,7 +20,7 @@ local pipe_cap = {
   selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
   -- collision_box = {{-1.4, -1.4}, {1.4, 1.4}},
   collision_box = {{-7, -7}, {7, 7}},
-  collision_mask = {layers = {resource = true}},
+  collision_mask = {layers = {empty_space = true}},
 
   map_color = {255, 255, 255, 128},
   autoplace = {
@@ -29,6 +29,18 @@ local pipe_cap = {
   },
 
   max_health = 1000,
+  created_effect = {
+    type = "direct",
+    action_delivery = {
+      type = "instant",
+      source_effects = {
+        {
+          type = "script",
+          effect_id = mod_prefix .. "pipe-cap-created",
+        },
+      }
+    }
+  },
 }
 
 data:extend{pipe_cap}

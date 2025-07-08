@@ -24,6 +24,7 @@ Date: ????
     - Prevent cliffs from showing under "contains"
     - Replace the vaults with pipe caps
     - Spawn on the world of goo during testing
+    - Generate pools where the pipe caps generate
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03
