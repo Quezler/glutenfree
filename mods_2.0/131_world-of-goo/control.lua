@@ -110,10 +110,10 @@ local function generate_pool_around_pipe(pipe)
   if #tiles == 0 then return end -- pipe not placed on the green tiles over at the world of goo
 
   local to_set = {}
-  local center = {pipe.position.x - 0.5, pipe.position.y - 0.5}
+  local pipe_position = {x = pipe.position.x - 0.5, y = pipe.position.y - 0.5}
 
   for _, tile_position in ipairs(tiles) do
-    local distance = util.distance(center, tile_position)
+    local distance = util.distance(pipe_position, tile_position)
     if math.random() > 0.8 then
       distance = math.random(distance, distance + 1)
     end
@@ -126,6 +126,7 @@ local function generate_pool_around_pipe(pipe)
     end
   end
 
+  table.insert(to_set, {position = pipe_position, name = mod_prefix .. "pipe-cap-tile"})
   pipe.surface.set_tiles(to_set)
   -- game.players[1].teleport(pipe.position)
 
@@ -133,7 +134,7 @@ local function generate_pool_around_pipe(pipe)
     pipe.surface.create_entity{
       name = "goo-ball",
       force = "neutral",
-      position = {center[1] + math.random(-5, 5), center[2] + math.random(-5, 5)}
+      position = {pipe_position.x + math.random(-5, 5), pipe_position.y + math.random(-5, 5)}
     }
   end
 end

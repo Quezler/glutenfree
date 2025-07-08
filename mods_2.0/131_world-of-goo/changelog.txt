@@ -3,6 +3,7 @@ Version: 0.0.3
 Date: ????
   Info:
     - Ensure the pool shore consists of dunes
+    - Prevent goo balls from floating through the pipe
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 07. 08

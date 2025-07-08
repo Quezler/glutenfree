@@ -137,3 +137,14 @@ for from_name, to in pairs(tiles_to_mimic) do
   tile.map_color = to.map_color
   data:extend{tile}
 end
+
+-- purely to prevent the goo balls from clipping into the texture
+-- not colliding based on entity since with that many fish the tile only check is cheaper
+local pipe_cap_tile = table.deepcopy(data.raw["tile"]["deepwater"])
+pipe_cap_tile.name = mod_prefix .. "pipe-cap-tile"
+pipe_cap_tile.subgroup = mod_prefix .. "tiles"
+pipe_cap_tile.collision_mask.layers.ground_tile = true
+pipe_cap_tile.icon = mod_directory .. "/graphics/entity/pipe-cap.png"
+pipe_cap_tile.icon_size = 100
+pipe_cap_tile.hidden = true
+data:extend{pipe_cap_tile}

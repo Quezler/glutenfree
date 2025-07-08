@@ -19,7 +19,7 @@ local pipe_cap = {
 
   selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
   -- collision_box = {{-1.4, -1.4}, {1.4, 1.4}},
-  collision_box = {{-7, -7}, {7, 7}},
+  collision_box = {{-7.5, -7.5}, {7.5, 7.5}},
   collision_mask = {layers = {empty_space = true}},
 
   map_color = {255, 255, 255, 128},
