@@ -19,10 +19,21 @@ data:extend{{
 data:extend{{
   type = "sprite",
   name = "common-body",
-  filename = mod_directory .. "/graphics/common-body.png",
-  width = 64,
-  height = 64,
-  scale = 0.25,
+  layers = {
+    {
+      filename = mod_directory .. "/graphics/balls/_generic/shadowCircle59.png",
+      priority = "extra-high",
+      width = 59,
+      height = 59,
+      scale = 0.4,
+    },
+    {
+      filename = mod_directory .. "/graphics/common-body.png",
+      width = 64,
+      height = 64,
+      scale = 0.25,
+    },
+  }
 }}
 
 data:extend{{

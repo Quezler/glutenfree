@@ -25,6 +25,7 @@ Date: ????
     - Replace the vaults with pipe caps
     - Spawn on the world of goo during testing
     - Generate pools where the pipe caps generate
+    - Ball shadows
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 03
