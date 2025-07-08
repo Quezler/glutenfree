@@ -118,3 +118,14 @@ end)
 --     end
 --   end
 -- end)
+
+script.on_event(defines.events.on_player_created, function(event)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+
+  if player.controller_type == defines.controllers.cutscene then
+    player.exit_cutscene()
+  end
+
+  game.planets["world-of-goo"].create_surface()
+  player.teleport({0, 0}, "world-of-goo")
+end)
