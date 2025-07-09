@@ -1,5 +1,5 @@
-local Lifesupport = require('__space-exploration-scripts__.lifesupport')
-local Jetpack = require('__space-exploration-scripts__.jetpack')
+local Lifesupport = require("__space-exploration-scripts__.lifesupport")
+local Jetpack = require("__space-exploration-scripts__.jetpack")
 
 local JetpackGUI = {}
 
@@ -8,18 +8,18 @@ function JetpackGUI.on_init(event)
 end
 
 function JetpackGUI.on_configuration_changed(event)
-  local fluid = game.fluid_prototypes['se-liquid-rocket-fuel']
-  global.flow_color = fluid.flow_color
+  local fluid = prototypes.fluid["se-liquid-rocket-fuel"]
+  storage.flow_color = fluid.flow_color
 
   local compatible_fuels = remote.call("jetpack", "get_fuels")
-  global.compatible_fuels = {}
+  storage.compatible_fuels = {}
   if not compatible_fuels then return end -- why?
 
   if compatible_fuels["solid-fuel"] then
-    global.compatible_fuels = compatible_fuels
+    storage.compatible_fuels = compatible_fuels
   else
     for _, compatible_fuel in pairs(compatible_fuels) do
-      global.compatible_fuels[compatible_fuel.fuel_name] = {thrust = compatible_fuel.thrust}
+      storage.compatible_fuels[compatible_fuel.fuel_name] = {thrust = compatible_fuel.thrust}
     end
   end
 
@@ -51,9 +51,9 @@ function JetpackGUI.on_configuration_changed(event)
   -- }
 
   -- cache their energy values instead of calling it each time akin to get_fuel_from_inventory
-  for fuel_name, compatible_fuel in pairs(global.compatible_fuels) do
-    if game.item_prototypes[fuel_name] then
-      global.compatible_fuels[fuel_name].energy = game.item_prototypes[fuel_name].fuel_value
+  for fuel_name, compatible_fuel in pairs(storage.compatible_fuels) do
+    if prototypes.item[fuel_name] then
+      storage.compatible_fuels[fuel_name].energy = prototypes.item[fuel_name].fuel_value
     else
       compatible_fuel[fuel_name] = nil -- item prototype does not exist for this combination of mods (e.g. petrochem's rocket booster)
     end
@@ -65,7 +65,7 @@ function JetpackGUI.on_nth_tick(event)
   for _, player in pairs(game.connected_players) do
     -- every 240 ticks (every 4 seconds) per player (jetpack native)
     -- but since it looks better to update every second: added `% 1`
-    if (event.tick/60 + player.index) % tick_interval % 1 == 0 then
+    if (event.tick / 60 + player.index) % tick_interval % 1 == 0 then
       JetpackGUI.on_lifesupport_gui_refreshed({player = player})
     end
   end
@@ -91,11 +91,11 @@ function JetpackGUI.gui_update(player)
   if current_fuel then
 
     -- change the life support blue to a fuel-ish color
-    root.panel.lifesupport_bar.style.color = global.flow_color
+    root.panel.lifesupport_bar.style.color = storage.flow_color
 
     -- the bar showing how much of the current fuel is still left
-    if not global.compatible_fuels then error("global.compatible_fuels is nil.") end
-    root.panel["lifesupport_bar"].value = math.max(0, current_fuel.energy / global.compatible_fuels[current_fuel.name].energy)
+    if not storage.compatible_fuels then error("storage.compatible_fuels is nil.") end
+    root.panel["lifesupport_bar"].value = math.max(0, current_fuel.energy / storage.compatible_fuels[current_fuel.name].energy)
 
     local fuel_consumption_rate = settings.global["jetpack-fuel-consumption"].value / 100
     local fuel_consumption_per_tick = Jetpack.fuel_use_base * fuel_consumption_rate
@@ -106,7 +106,7 @@ function JetpackGUI.gui_update(player)
       fuel_consumption_per_tick = fuel_consumption_per_tick + Jetpack.fuel_use_thrust * fuel_consumption_rate
     end
 
-    -- i wonder if we'll ever run into integer overflow issues if there's an absurd amount of fuel stored in the inventory
+    -- i wonder if we"ll ever run into integer overflow issues if there's an absurd amount of fuel stored in the inventory
     root.panel["lifesupport_bar"].caption = Lifesupport.seconds_to_clock(math.max(0, current_fuel.energy / fuel_consumption_per_tick / 60))
     root.panel["lifesupport_bar"].tooltip = {"space-exploration.jetpack_suit_tooltip"}
     root.panel["time_reserves_flow"]["lifesupport_reserves"].caption = Lifesupport.seconds_to_clock(math.max(0, (current_fuel.energy + JetpackGUI.sum_fuel_energy_from_inventory(player.character)) / fuel_consumption_per_tick / 60))
@@ -130,7 +130,7 @@ function JetpackGUI.gui_update(player)
 
     -- just put some vaguely interesting information in the info dot
     local x = (Jetpack.fuel_use_base + Jetpack.fuel_use_thrust) / Jetpack.fuel_use_base
-    root.panel.time_reserves_flow.info.tooltip = "Flying takes "..x.."x more fuel than hovering"
+    root.panel.time_reserves_flow.info.tooltip = "Flying takes " .. x .. "x more fuel than hovering."
   end
 end
 
@@ -139,8 +139,8 @@ function JetpackGUI.sum_fuel_energy_from_inventory(character)
 
   local inventory = character.get_main_inventory()
   if inventory and inventory.valid then
-    for fuel_name, fuel_stats in pairs(global.compatible_fuels) do
-      if game.item_prototypes[fuel_name] then
+    for fuel_name, fuel_stats in pairs(storage.compatible_fuels) do
+      if prototypes.item[fuel_name] then
         local count = inventory.get_item_count(fuel_name)
         if count > 0 then
           energy = energy + fuel_stats.energy * count
