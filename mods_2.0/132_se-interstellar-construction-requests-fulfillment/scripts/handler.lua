@@ -138,9 +138,10 @@ function Handler.handle_construction_alert(alert_target)
 
       local available = v1_struct.entity.get_item_count(itemstack.name)
       if available > 0 then
+        local count = math.min(itemstack.count, available)
         for _, network in ipairs(networks) do
           if logistic_network_is_personal(network) == false then
-            local inserted = network.insert({name = itemstack.name, count = math.min(itemstack.count, available)}, "storage")
+            local inserted = network.insert({name = itemstack.name, count = count}, "storage")
             if inserted > 0 then
               Handler.shoot(v1_struct)
               v1_struct.entity.remove_item({name = itemstack.name, count = inserted})
@@ -149,14 +150,19 @@ function Handler.handle_construction_alert(alert_target)
               break -- succesfully delivered any amount to a network providing construction coverage
             end
 
-            if inserted == 0 and #network.storages > 0 then
+            if inserted == 0 --[[and #network.storages > 0]] then
               -- local cell = network.cells[math.random(1, #network.cells)]
-              local cell = network.find_cell_closest_to(v1_struct.entity.position)
-              for _, connected_player in ipairs(game.connected_players) do
-                if connected_player.force == alert_target_force then
-                  connected_player.add_alert(cell.owner, defines.alert_type.no_storage)
-                end
-              end
+              -- local cell = network.find_cell_closest_to(v1_struct.entity.position)
+              -- for _, connected_player in ipairs(alert_target_force.connected_players) do
+              --   connected_player.add_alert(cell.owner, defines.alert_type.no_storage)
+              -- end
+              alert_target.surface.spill_item_stack{
+                stack = {name = itemstack.name, count = count},
+                position = alert_target.position,
+                force = alert_target_force,
+                allow_belts = false
+              }
+              v1_struct.entity.remove_item({name = itemstack.name, count = count})
             end
           end
         end
