@@ -4,7 +4,7 @@ Event = {addListener = function() end}
 -- step 2
 local oed = script.get_event_handler(defines.events.on_entity_damaged)
 local odst = script.get_event_handler(defines.events.on_player_driving_changed_state)
-local Jetpack = require('__jetpack__.scripts.jetpack')
+local Jetpack = require("__jetpack__.scripts.jetpack")
 script.on_event(defines.events.on_player_driving_changed_state, odst)
 script.on_event(defines.events.on_entity_damaged, oed)
 
@@ -12,4 +12,5 @@ script.on_event(defines.events.on_entity_damaged, oed)
 Event = nil
 
 -- step 4
+--- @since 2.6.0
 return Jetpack
