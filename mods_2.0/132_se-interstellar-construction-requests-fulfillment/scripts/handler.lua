@@ -105,10 +105,10 @@ function Handler.shuffle_array_in_place(t)
   end
 end
 
-local function logistic_network_is_personal(logistic_network)
-  local cells = logistic_network.cells
-  return #cells == 1 and cells[1].owner.type == "character"
-end
+-- local function logistic_network_is_personal(logistic_network)
+--   local cells = logistic_network.cells
+--   return #cells == 1 and cells[1].owner.type == "character"
+-- end
 
 function Handler.handle_construction_alert(alert_target)
   local items_to_place_this = Handler.items_to_place_this(alert_target)
@@ -116,9 +116,6 @@ function Handler.handle_construction_alert(alert_target)
 
   local alert_target_force = alert_target.force
   if alert_target.force.name == "neutral" and alert_target.type == "cliff" then alert_target_force = game.forces["player"] end
-
-  local networks = alert_target.surface.find_logistic_networks_by_construction_area(alert_target.position, alert_target_force)
-  if #networks == 0 then goto undeliverable end
 
   Handler.shuffle_array_in_place(storage.v1_unit_numbers)
 
@@ -139,39 +136,17 @@ function Handler.handle_construction_alert(alert_target)
       local available = v1_struct.entity.get_item_count(itemstack.name)
       if available > 0 then
         local count = math.min(itemstack.count, available)
-        for _, network in ipairs(networks) do
-          if logistic_network_is_personal(network) == false then
-            local inserted = network.insert({name = itemstack.name, count = count}, "storage")
-            if inserted > 0 then
-              Handler.shoot(v1_struct)
-              v1_struct.entity.remove_item({name = itemstack.name, count = inserted})
-              -- available = available - inserted
-              itemstack.count = itemstack.count - inserted
-              break -- succesfully delivered any amount to a network providing construction coverage
-            end
-
-            if inserted == 0 --[[and #network.storages > 0]] then
-              -- local cell = network.cells[math.random(1, #network.cells)]
-              -- local cell = network.find_cell_closest_to(v1_struct.entity.position)
-              -- for _, connected_player in ipairs(alert_target_force.connected_players) do
-              --   connected_player.add_alert(cell.owner, defines.alert_type.no_storage)
-              -- end
-              alert_target.surface.spill_item_stack{
-                stack = {name = itemstack.name, count = count},
-                position = alert_target.position,
-                force = alert_target_force,
-                allow_belts = false
-              }
-              v1_struct.entity.remove_item({name = itemstack.name, count = count})
-            end
-          end
-        end
+        local disposable_construction_robot = alert_target.surface.create_entity{
+          name = "disposable-construction-robot",
+          force = alert_target_force,
+          position = alert_target.position,
+        }
+        local cargo = disposable_construction_robot.get_inventory(defines.inventory.robot_cargo)[1]
+        cargo.set_stack({name = itemstack.name, count = count})
+        v1_struct.entity.remove_item({name = itemstack.name, count = count})
       end
-
     end
   end
-
-  ::undeliverable::
 
   -- any items we were not able to satisfy from the buffer chest will move onto the next cycle
   for _, itemstack in ipairs(items_to_place_this) do
