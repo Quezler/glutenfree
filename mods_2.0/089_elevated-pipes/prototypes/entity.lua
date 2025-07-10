@@ -213,7 +213,7 @@ local storage_tank = {
   selection_box = furnace.selection_box,
   selection_priority = 49,
 
-  icon_draw_specification = {scale = 0.75, shift = {0, -3.25}},
+  icon_draw_specification = {scale = 0.5, shift = {0, -3.25}},
   flags = {"not-on-map"},
 
   two_direction_only = true,
