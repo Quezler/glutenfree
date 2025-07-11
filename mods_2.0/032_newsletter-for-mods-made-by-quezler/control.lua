@@ -77,6 +77,13 @@ local function open_for_player(player)
     direction = "vertical",
   }
 
+  local installed_count = 0
+  for i, mod in ipairs(my_mods) do
+    if script.active_mods[mod.name] then
+      installed_count = installed_count + 1
+    end
+  end
+
   local year, month, day = get_human_calendar_date()
 
   local frame = main_frame.add{
@@ -88,7 +95,7 @@ local function open_for_player(player)
       " ",
       {"newsletter-for-mods-made-by-quezler.month-" .. month},
       " ",
-      day .. get_ordinal_suffix(tonumber(day)) .. "[/color][/font]"
+      day .. get_ordinal_suffix(tonumber(day)) .. ", of which you have installed " .. installed_count .. " <3[/color][/font]"
     },
     direction = "vertical",
   }
