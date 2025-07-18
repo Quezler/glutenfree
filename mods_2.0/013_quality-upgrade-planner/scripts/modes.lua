@@ -236,6 +236,82 @@ local function mode_conditions(event, playerdata)
   end
 end
 
+local function mode_combinator_inputs(event, playerdata)
+  for _, entity in ipairs(event.entities) do
+    local entity_type = get_entity_type(entity)
+    if entity_type == "decider-combinator" or
+       entity_type == "arithmetic-combinator" or
+       entity_type == "selector-combinator" then
+      local control_behavior = entity.get_control_behavior()
+      local parameters = control_behavior.parameters
+      -- Decider inputs
+      if parameters.conditions then
+        for k=1,#parameters.conditions do
+          local circuit_condition = parameters.conditions[k] 
+          if circuit_condition.first_signal then
+            circuit_condition.first_signal.quality = event.quality
+          end
+          if circuit_condition.second_signal then
+            circuit_condition.second_signal.quality = event.quality
+          end
+        end
+      end
+      -- Arithmetic inputs
+      if parameters.first_signal then
+        parameters.first_signal.quality = event.quality
+      end
+      if parameters.second_signal then
+        parameters.second_signal.quality = event.quality
+      end
+      -- Selector inputs
+      if parameters.index_signal then
+        parameters.index_signal.quality = event.quality
+      end
+      if parameters.quality_filter and parameters.quality_filter.quality then
+        parameters.quality_filter.quality = event.quality
+      end
+      if parameters.quality_source_static then
+        parameters.quality_source_static = {name=event.quality}
+      end
+      -- Store result
+      control_behavior.parameters = parameters
+    end
+  end
+end
+
+local function mode_combinator_outputs(event, playerdata)
+  for _, entity in ipairs(event.entities) do
+    local entity_type = get_entity_type(entity)
+    if entity_type == "decider-combinator" or
+       entity_type == "arithmetic-combinator" or
+       entity_type == "selector-combinator" then
+      local control_behavior = entity.get_control_behavior()
+      local parameters = control_behavior.parameters
+      -- Decider outputs
+      if parameters.outputs then
+        for k=1,#parameters.outputs do
+          if parameters.outputs[k].signal then
+            parameters.outputs[k].signal.quality = event.quality
+          end
+        end
+      end
+      -- Arithmetic outputs
+      if parameters.output_signal then
+        parameters.output_signal.quality = event.quality
+      end
+      -- Selector outputs
+      if parameters.count_signal then
+        parameters.count_signal.quality = event.quality
+      end
+      if parameters.quality_destination_signal then
+        parameters.quality_destination_signal.quality = event.quality
+      end
+      -- Store result
+      control_behavior.parameters = parameters
+    end
+  end
+end
+
 return {
   entities = mode_entities,
   filters = mode_filters,
@@ -245,4 +321,6 @@ return {
   requests = mode_requests,
   constants = mode_constants,
   conditions = mode_conditions,
+  inputs = mode_combinator_inputs,
+  outputs = mode_combinator_outputs,
 }
