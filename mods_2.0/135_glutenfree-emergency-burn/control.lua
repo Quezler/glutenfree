@@ -1,4 +1,4 @@
-local handler = require('scripts.capsule')
+local handler = require("scripts.capsule")
 
 local events = {
   [defines.events.on_gui_opened] = handler.on_gui_opened,
@@ -6,7 +6,7 @@ local events = {
 
   [defines.events.on_player_driving_changed_state] = handler.on_player_driving_changed_state,
 
-  [defines.events.on_entity_destroyed] = handler.on_entity_destroyed,
+  [defines.events.on_object_destroyed] = handler.on_object_destroyed,
 }
 
 for event, handler in pairs(events) do
@@ -18,7 +18,6 @@ end
 script.on_init(handler.on_init)
 script.on_load(handler.on_load)
 
-script.on_event(defines.events.script_raised_built, handler.script_raised_built, {{
-  filter = 'name',
-  name = 'se-space-capsule-scorched-_-vehicle',
-}})
+script.on_event(defines.events.script_raised_built, handler.script_raised_built, {
+  {filter = "name", name = "se-space-capsule-scorched-_-vehicle"},
+})
