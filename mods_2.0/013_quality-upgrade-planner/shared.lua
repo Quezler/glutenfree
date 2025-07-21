@@ -32,5 +32,13 @@ return {
       name = "conditions",
       sprite = "entity/power-switch",
     },
+    {
+      name = "inputs",
+      sprite = "entity/decider-combinator",
+    },
+    {
+      name = "outputs",
+      sprite = "entity/arithmetic-combinator",
+    },
   }
 }

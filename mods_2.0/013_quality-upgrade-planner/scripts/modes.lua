@@ -41,6 +41,21 @@ local function mode_entities(event, playerdata)
   inventory.destroy()
 end
 
+
+local function is_signal_quality_allowed(signal)
+  if signal.type=="virtual" then
+    if signal.name=="signal-each" or signal.name=="signal-everything" or signal.name=="signal-anything" then
+      return false
+    else
+      return settings.global["quality-upgrade-planner-virtual"].value
+    end
+  elseif signal.type=="fluid" then
+    return settings.global["quality-upgrade-planner-fluid"].value
+  else
+    return true
+  end
+end
+
 local filter_support_for_entity_type = { -- drills, asteroid collectors & storage chests have filters too, but it makes little sense to touch them.
   ["inserter"] = true,
   ["loader"] = true,
@@ -59,7 +74,7 @@ local function mode_filters(event, playerdata)
     if filter_support_for_entity_type[get_entity_type(entity)] then
       for i = 1, entity.filter_slot_count do
         local filter = entity.get_filter(i)
-        if filter then
+        if filter and is_signal_quality_allowed(filter) then
           filter.quality = event.quality
           entity.set_filter(i, filter)
         end
@@ -67,7 +82,7 @@ local function mode_filters(event, playerdata)
 
       if type_is_a_splitter[get_entity_type(entity)] then
         local filter = entity.splitter_filter
-        if filter then
+        if filter and is_signal_quality_allowed(filter) then
           filter.quality = event.quality
           entity.splitter_filter = filter
         end
@@ -81,7 +96,7 @@ local function mode_storage(event, playerdata)
     if get_entity_type(entity) == "logistic-container" and entity.filter_slot_count == 1 then
       assert(entity.prototype.logistic_mode == "storage")
       local filter = entity.get_filter(1)
-        if filter then
+        if filter and is_signal_quality_allowed(filter) then
           filter.quality = event.quality
           entity.set_filter(1, filter)
         end
@@ -153,7 +168,7 @@ local function set_logistic_sections_quality(logistic_sections, quality_name)
   for _, section in ipairs(logistic_sections.sections) do
     if section.is_manual and section.group == "" then
       for slot, filter in ipairs(section.filters) do
-        if filter.value then
+        if filter.value and is_signal_quality_allowed(filter.value) then
           filter.value.quality = quality_name
           local success, message = pcall(section.set_slot, slot, filter)
           if success == false then
@@ -215,23 +230,99 @@ local function mode_conditions(event, playerdata)
     if control_behavior and get_extends_generic_on_off_control_behavior(control_behavior) then
 
       local circuit_condition = control_behavior.circuit_condition
-      if circuit_condition.first_signal then
+      if circuit_condition.first_signal and is_signal_quality_allowed(circuit_condition.first_signal) then
         circuit_condition.first_signal.quality = event.quality
       end
-      if circuit_condition.second_signal then
+      if circuit_condition.second_signal and is_signal_quality_allowed(circuit_condition.second_signal) then
         circuit_condition.second_signal.quality = event.quality
       end
       control_behavior.circuit_condition = circuit_condition
 
       local logistic_condition = control_behavior.logistic_condition
-      if logistic_condition.first_signal then
+      if logistic_condition.first_signal and is_signal_quality_allowed(logistic_condition.first_signal) then
         logistic_condition.first_signal.quality = event.quality
       end
-      if logistic_condition.second_signal then
+      if logistic_condition.second_signal and is_signal_quality_allowed(logistic_condition.second_signal) then
         logistic_condition.second_signal.quality = event.quality
       end
       control_behavior.logistic_condition = logistic_condition
 
+    end
+  end
+end
+
+local function mode_combinator_inputs(event, playerdata)
+  for _, entity in ipairs(event.entities) do
+    local entity_type = get_entity_type(entity)
+    if entity_type == "decider-combinator" or
+       entity_type == "arithmetic-combinator" or
+       entity_type == "selector-combinator" then
+      local control_behavior = entity.get_control_behavior()
+      local parameters = control_behavior.parameters
+      -- Decider inputs
+      if parameters.conditions then
+        for k=1,#parameters.conditions do
+          local circuit_condition = parameters.conditions[k] 
+          if circuit_condition.first_signal and is_signal_quality_allowed(circuit_condition.first_signal) then
+            circuit_condition.first_signal.quality = event.quality
+          end
+          if circuit_condition.second_signal and is_signal_quality_allowed(circuit_condition.second_signal) then
+            circuit_condition.second_signal.quality = event.quality
+          end
+        end
+      end
+      -- Arithmetic inputs
+      if parameters.first_signal and is_signal_quality_allowed(parameters.first_signal) then
+        parameters.first_signal.quality = event.quality
+      end
+      if parameters.second_signal and is_signal_quality_allowed(parameters.second_signal) then
+        parameters.second_signal.quality = event.quality
+      end
+      -- Selector inputs
+      if parameters.index_signal and is_signal_quality_allowed(parameters.index_signal) then
+        parameters.index_signal.quality = event.quality
+      end
+      if parameters.quality_filter and parameters.quality_filter.quality then
+        parameters.quality_filter.quality = event.quality
+      end
+      if parameters.quality_source_static then
+        parameters.quality_source_static = {name=event.quality}
+      end
+      -- Store result
+      control_behavior.parameters = parameters
+    end
+  end
+end
+
+local function mode_combinator_outputs(event, playerdata)
+  for _, entity in ipairs(event.entities) do
+    local entity_type = get_entity_type(entity)
+    if entity_type == "decider-combinator" or
+       entity_type == "arithmetic-combinator" or
+       entity_type == "selector-combinator" then
+      local control_behavior = entity.get_control_behavior()
+      local parameters = control_behavior.parameters
+      -- Decider outputs
+      if parameters.outputs then
+        for k=1,#parameters.outputs do
+          if parameters.outputs[k].signal and is_signal_quality_allowed(parameters.outputs[k].signal) then
+            parameters.outputs[k].signal.quality = event.quality
+          end
+        end
+      end
+      -- Arithmetic outputs
+      if parameters.output_signal and is_signal_quality_allowed(parameters.output_signal) then
+        parameters.output_signal.quality = event.quality
+      end
+      -- Selector outputs
+      if parameters.count_signal and is_signal_quality_allowed(parameters.count_signal) then
+        parameters.count_signal.quality = event.quality
+      end
+      if parameters.quality_destination_signal and is_signal_quality_allowed(parameters.quality_destination_signal) then
+        parameters.quality_destination_signal.quality = event.quality
+      end
+      -- Store result
+      control_behavior.parameters = parameters
     end
   end
 end
@@ -245,4 +336,6 @@ return {
   requests = mode_requests,
   constants = mode_constants,
   conditions = mode_conditions,
+  inputs = mode_combinator_inputs,
+  outputs = mode_combinator_outputs,
 }
