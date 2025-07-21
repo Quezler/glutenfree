@@ -41,15 +41,20 @@ local function mode_entities(event, playerdata)
   inventory.destroy()
 end
 
+local is_special_signal = {
+  ["signal-each"] = true,
+  ["signal-everything"] = true,
+  ["signal-anything"] = true,
+}
 
 local function is_signal_quality_allowed(signal)
-  if signal.type=="virtual" then
-    if signal.name=="signal-each" or signal.name=="signal-everything" or signal.name=="signal-anything" then
+  if signal.type == "virtual" then
+    if is_special_signal[signal.name] then
       return false
     else
       return settings.global["quality-upgrade-planner-virtual"].value
     end
-  elseif signal.type=="fluid" then
+  elseif signal.type == "fluid" then
     return settings.global["quality-upgrade-planner-fluid"].value
   else
     return true
@@ -251,12 +256,15 @@ local function mode_conditions(event, playerdata)
   end
 end
 
+local is_combinator = {
+  ["decider-combinator"] = true,
+  ["arithmetic-combinator"] = true,
+  ["selector-combinator"] = true,
+}
+
 local function mode_combinator_inputs(event, playerdata)
   for _, entity in ipairs(event.entities) do
-    local entity_type = get_entity_type(entity)
-    if entity_type == "decider-combinator" or
-       entity_type == "arithmetic-combinator" or
-       entity_type == "selector-combinator" then
+    if is_combinator[get_entity_type(entity)] then
       local control_behavior = entity.get_control_behavior()
       local parameters = control_behavior.parameters
       -- Decider inputs
@@ -296,10 +304,7 @@ end
 
 local function mode_combinator_outputs(event, playerdata)
   for _, entity in ipairs(event.entities) do
-    local entity_type = get_entity_type(entity)
-    if entity_type == "decider-combinator" or
-       entity_type == "arithmetic-combinator" or
-       entity_type == "selector-combinator" then
+    if is_combinator[get_entity_type(entity)] then
       local control_behavior = entity.get_control_behavior()
       local parameters = control_behavior.parameters
       -- Decider outputs
