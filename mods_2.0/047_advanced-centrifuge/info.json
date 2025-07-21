@@ -1,6 +1,6 @@
 {
   "name": "advanced-centrifuge",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "title": "Advanced Centrifuge",
   "description": "An advanced centrifuge, to fill in the gap of advanced buildings for Krastorio 2",
   "author": "kiratu11",
@@ -11,6 +11,7 @@
     "base",
     "? space-age",
     "? Krastorio2",
+    "? Krastorio2-spaced-out",
     "? space-exploration",
     "? Cerys-Moon-of-Fulgora",
     "? atan-nuclear-science"

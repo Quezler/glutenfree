@@ -10,7 +10,7 @@ local prerequisites = {"uranium-processing"}
 
 -- Changes for K2
 
-if mods["Krastorio2"] then
+if mods["Krastorio2"] or mods["Krastorio2-spaced-out"] then
   table.insert(ingredients, {"kr-matter-tech-card", 1})
   table.insert(ingredients, {"kr-advanced-tech-card", 1})
 
@@ -31,7 +31,7 @@ if mods["space-exploration"] then
   }
   prerequisites = {"uranium-processing", "se-heavy-bearing"}
 
-  if mods["Krastorio2"] then
+  if mods["Krastorio2"] or mods["Krastorio2-spaced-out"] then
     table.insert(prerequisites, "kr-energy-control-unit")
   end
 end

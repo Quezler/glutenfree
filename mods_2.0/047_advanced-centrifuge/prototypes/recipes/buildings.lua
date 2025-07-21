@@ -7,7 +7,7 @@ local ingredients = {
 
 -- Changes for K2
 
-if mods["Krastorio2"] then
+if mods["Krastorio2"] or mods["Krastorio2-spaced-out"] then
   table.insert(ingredients, {type = "item", name = "kr-energy-control-unit", amount = 20})
 end
 
