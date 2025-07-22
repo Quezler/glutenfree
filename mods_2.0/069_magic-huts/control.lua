@@ -206,3 +206,42 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     end
   end
 end)
+
+local function fh_add_items_drop_target_entity(target, items)
+  local building = storage.buildings[target.unit_number]
+  local factory = storage.factories[building.factory_index]
+
+  if factory then
+    for _, key in ipairs({"ingredients"}) do
+      for _, item in ipairs(factory.export[key]) do
+        if item.type == "item" then
+          table.insert(items, {name = item.name, quality = item.quality})
+        end
+      end
+    end
+  end
+
+  return items
+end
+
+local function fh_add_items_pickup_target_entity(target, items)
+  local building = storage.buildings[target.unit_number]
+  local factory = storage.factories[building.factory_index]
+
+  if factory then
+    for _, key in ipairs({"products", "byproducts"}) do
+      for _, item in ipairs(factory.export[key]) do
+        if item.type == "item" then
+          table.insert(items, {name = item.name, quality = item.quality})
+        end
+      end
+    end
+  end
+
+  return items
+end
+
+remote.add_interface("magic-huts", {
+  fh_add_items_drop_target_entity = fh_add_items_drop_target_entity,
+  fh_add_items_pickup_target_entity = fh_add_items_pickup_target_entity,
+})

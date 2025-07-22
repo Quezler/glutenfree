@@ -313,3 +313,13 @@ data:extend{{
   stack_size = 1,
   hidden = true,
 }}
+
+if mods["FilterHelper"] and data.raw["mod-data"]["fh_add_items_drop_target_entity"] and data.raw["mod-data"]["fh_add_items_pickup_target_entity"] then
+  data.raw["mod-data"]["fh_add_items_drop_target_entity"].data[mod_prefix .. "container-" .. 1] = {"magic-huts", "fh_add_items_drop_target_entity"}
+  data.raw["mod-data"]["fh_add_items_drop_target_entity"].data[mod_prefix .. "container-" .. 2] = {"magic-huts", "fh_add_items_drop_target_entity"}
+  data.raw["mod-data"]["fh_add_items_drop_target_entity"].data[mod_prefix .. "container-" .. 3] = {"magic-huts", "fh_add_items_drop_target_entity"}
+
+  data.raw["mod-data"]["fh_add_items_pickup_target_entity"].data[mod_prefix .. "container-" .. 1] = {"magic-huts", "fh_add_items_pickup_target_entity"}
+  data.raw["mod-data"]["fh_add_items_pickup_target_entity"].data[mod_prefix .. "container-" .. 2] = {"magic-huts", "fh_add_items_pickup_target_entity"}
+  data.raw["mod-data"]["fh_add_items_pickup_target_entity"].data[mod_prefix .. "container-" .. 3] = {"magic-huts", "fh_add_items_pickup_target_entity"}
+end

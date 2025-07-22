@@ -3,7 +3,7 @@
     "title": "Magic huts",
     "description": "Can export your Factory Planner factory into a convenient all-in-one building.",
 
-    "version": "1.0.6",
+    "version": "1.0.7",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -24,6 +24,7 @@
         "factoryplanner >= 2.0.21",
         
         "(?) factorissimo-2-notnotmelon",
-        "(?) GUI_Unifyer"
+        "(?) GUI_Unifyer",
+        "(?) FilterHelper >= 0.2.21"
     ]
 }
