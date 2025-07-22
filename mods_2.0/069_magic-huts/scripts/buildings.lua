@@ -281,7 +281,7 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
       for _, key in ipairs({"ingredients"}) do
         for _, item in ipairs(factory_a.export[key]) do
           if item.type == "item" then
-            section.set_slot(section.filters_count+1, {value = item, min = item.count})
+            section.set_slot(section.filters_count+1, {value = item, min = math.ceil(item.count)})
           end
         end
       end
@@ -298,7 +298,7 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
             table.insert(infinity_container_filters, {
               name = item.name,
               quality = item.quality,
-              count = item.count,
+              count = math.ceil(item.count),
               index = #infinity_container_filters+1,
             })
           end
