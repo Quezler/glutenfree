@@ -3,19 +3,21 @@ local sounds = require("__base__.prototypes.entity.sounds")
 
 require("util")
 
-local recipe_category = {
+data:extend{{
   type = "recipe-category",
   name = "elevated-pipe",
-}
+}}
 
-local max_underground_distance = settings.startup[mod_prefix .. "max-underground-distance"].value -- 10
+local collision_box = {{-0.4, -0.4}, {0.4, 0.4}}
+local selection_box = {{-0.7, -0.7}, {0.7, 0.7}}
 
-local furnace = {
+elevated_pipes.new_furnace = function(config)
+return {
   type = "furnace",
-  name = "elevated-pipe",
-  icon = mod_directory .. "/graphics/icons/elevated-pipe.png",
+  name = config.name,
+  icon = config.icon,
 
-  heating_energy = settings.startup[mod_prefix .. "freezes"].value and "200kW" or nil, -- underground pipe + 50
+  heating_energy = settings.startup["elevated-pipes--freezes"].value and "200kW" or nil, -- underground pipe + 50
   energy_usage = "1kW",
   energy_source = {type = "void"},
   crafting_speed = 1,
@@ -25,15 +27,24 @@ local furnace = {
   result_inventory_size = 0,
 
   flags = {"placeable-player", "player-creation"},
-  minable = {mining_time = 0.25, result = "elevated-pipe"},
+  minable = {mining_time = 0.25, result = config.name},
   max_health = 250,
-  corpse = "elevated-pipe-remnants",
+  corpse = config.name .. "-remnants",
   -- dying_explosion = "storage-tank-explosion",
-  collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
-  selection_box = {{-0.7, -0.7}, {0.7, 0.7}},
+  collision_box = collision_box,
+  selection_box = selection_box,
   fast_replaceable_group = "pipe",
   damaged_trigger_effect = hit_effects.entity(),
   drawing_box_vertical_extension = 3,
+
+  custom_tooltip_fields = {
+    {
+      name = {"description.maximum-length"},
+      value = tostring(config.max_underground_distance),
+      order = 99,
+      show_in_tooltip = false,
+    }
+  },
   fluid_boxes =
   {{
     volume = 1,
@@ -47,29 +58,29 @@ local furnace = {
         connection_type = "underground",
         direction = defines.direction.north,
         position = {0, 0},
-        max_underground_distance = max_underground_distance,
-        connection_category = "elevated-pipe",
+        max_underground_distance = config.max_underground_distance,
+        connection_category = config.name,
       },
       {
         connection_type = "underground",
         direction = defines.direction.east,
         position = {0, 0},
-        max_underground_distance = max_underground_distance,
-        connection_category = "elevated-pipe",
+        max_underground_distance = config.max_underground_distance,
+        connection_category = config.name,
       },
       {
         connection_type = "underground",
         direction = defines.direction.south,
         position = {0, 0},
-        max_underground_distance = max_underground_distance,
-        connection_category = "elevated-pipe",
+        max_underground_distance = config.max_underground_distance,
+        connection_category = config.name,
       },
       {
         connection_type = "underground",
         direction = defines.direction.west,
         position = {0, 0},
-        max_underground_distance = max_underground_distance,
-        connection_category = "elevated-pipe",
+        max_underground_distance = config.max_underground_distance,
+        connection_category = config.name,
       },
       { direction = defines.direction.north, position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" }},
       { direction = defines.direction.east , position = {0, 0}, enable_working_visualisations = { "pipe-connection", "pipe-covers" }},
@@ -89,7 +100,7 @@ local furnace = {
       layers =
       {
         {
-          filename = mod_directory .. "/graphics/entity/elevated-pipe/elevated-pipe.png",
+          filename = config.graphics .. ".png",
           priority = "extra-high",
           frames = 1,
           width = 704,
@@ -97,7 +108,7 @@ local furnace = {
           scale = 0.5,
         },
         {
-          filename = mod_directory .. "/graphics/entity/elevated-pipe/elevated-pipe-shadow.png",
+          filename = config.graphics .. "-shadow.png",
           priority = "extra-high",
           frames = 1,
           width = 704,
@@ -115,7 +126,7 @@ local furnace = {
         animation = {
           layers = {
             {
-              filename = mod_directory .. "/graphics/entity/elevated-pipe/elevated-pipe-back-left-leg.png",
+              filename = config.graphics .. "-back-left-leg.png",
               width = 704,
               height = 704,
               scale = 0.5
@@ -131,13 +142,13 @@ local furnace = {
         animation = {
           layers = {
             {
-              filename = mod_directory .. "/graphics/entity/elevated-pipe/elevated-pipe-pipe-connection.png",
+              filename = config.graphics .. "-pipe-connection.png",
               width = 704,
               height = 704,
               scale = 0.5,
             },
             {
-              filename = mod_directory .. "/graphics/entity/elevated-pipe/elevated-pipe-pipe-connection-shadow.png",
+              filename = config.graphics .. "-shadow.png",
               width = 704,
               height = 704,
               scale = 0.5,
@@ -154,7 +165,7 @@ local furnace = {
         animation = {
           layers = {
             {
-              filename = mod_directory .. "/graphics/entity/elevated-pipe/elevated-pipe-pipe-covers.png",
+              filename = config.graphics .. "-pipe-covers.png",
               width = 704,
               height = 704,
               scale = 0.5,
@@ -168,7 +179,7 @@ local furnace = {
         animation = {
           layers = {
             {
-              filename = mod_directory .. "/graphics/entity/elevated-pipe/elevated-pipe-occluder-bottom.png",
+              filename = config.graphics .. "-occluder-bottom.png",
               width = 704,
               height = 704,
               scale = 0.5,
@@ -182,7 +193,7 @@ local furnace = {
         animation = {
           layers = {
             {
-              filename = mod_directory .. "/graphics/entity/elevated-pipe/elevated-pipe-occluder-top.png",
+              filename = config.graphics .. "-occluder-top.png",
               width = 704,
               height = 704,
               scale = 0.5,
@@ -201,19 +212,21 @@ local furnace = {
 
   bottleneck_ignore = true,
 }
+end
 
-
-local storage_tank = {
+elevated_pipes.new_storage_tank = function(config)
+return {
   type = "storage-tank",
-  name = "elevated-pipe-alt-mode",
-  icon = mod_directory .. "/graphics/icons/elevated-pipe.png",
+  name = config.name .. "-alt-mode",
+  localised_name = {"entity-name." .. config.name},
+  icon = config.icon,
 
   collision_mask = {layers = {}},
-  collision_box = furnace.collision_box,
-  selection_box = furnace.selection_box,
+  collision_box = collision_box,
+  selection_box = selection_box,
   selection_priority = 49,
 
-  icon_draw_specification = {scale = 0.5, shift = {0, -3.25}},
+  icon_draw_specification = {scale = 0.5, shift = {0, -3.1}},
   flags = {"not-on-map"},
 
   two_direction_only = true,
@@ -232,16 +245,18 @@ local storage_tank = {
     },
   },
 }
+end
 
-local corpse = {
+elevated_pipes.new_corpse = function (config)
+return {
   type = "corpse",
-  name = "elevated-pipe-remnants",
-  icon = furnace.icon,
+  name = config.name .. "-remnants",
+  icon = config.icon,
   flags = {"placeable-neutral", "not-on-map"},
   hidden_in_factoriopedia = true,
   subgroup = "storage-remnants",
   order = "a-d-a",
-  selection_box = furnace.selection_box,
+  selection_box = selection_box,
   tile_width = 1,
   tile_height = 1,
   selectable_in_game = false,
@@ -252,7 +267,7 @@ local corpse = {
   remove_on_tile_placement = false,
   animation = {
     {
-      filename = mod_directory .. "/graphics/entity/elevated-pipe/elevated-pipe-remnant.png",
+      filename = config.graphics .. "-remnant.png",
       line_length = 1,
       width = 704,
       height = 704,
@@ -261,7 +276,7 @@ local corpse = {
     },
   },
   animation_overlay = {
-    filename = mod_directory .. "/graphics/entity/elevated-pipe/elevated-pipe-remnant-shadow.png",
+    filename = config.graphics .. "-shadow.png",
     line_length = 1,
     width = 704,
     height = 704,
@@ -270,8 +285,7 @@ local corpse = {
     tint = {1, 1, 1, 0.5},
   },
 }
-
-data:extend{recipe_category, furnace, storage_tank, corpse}
+end
 
 if mods["Bottleneck"] then
   data.raw["simple-entity-with-force"]["bottleneck-stoplight"].created_effect = {

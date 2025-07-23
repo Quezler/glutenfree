@@ -1,5 +1,23 @@
 require("shared")
 
+local is_elevated_pipe = {}
+local is_elevated_pipe_alt_mode = {}
+local on_created_entity_filters = {}
+local elevated_pipe_names = {}
+local alt_mode_name_for = {}
+
+for elevated_pipe_name, _ in pairs(prototypes.mod_data[mod_name].data) do
+  local elevated_pipe_alt_mode_name = elevated_pipe_name .. "-alt-mode"
+
+  is_elevated_pipe[elevated_pipe_name] = true
+  is_elevated_pipe_alt_mode[elevated_pipe_alt_mode_name] = true
+
+  table.insert(on_created_entity_filters, {filter = "name", name = elevated_pipe_name})
+  table.insert(on_created_entity_filters, {filter = "name", name = elevated_pipe_alt_mode_name})
+  table.insert(elevated_pipe_names, elevated_pipe_name)
+  alt_mode_name_for[elevated_pipe_name] = elevated_pipe_alt_mode_name
+end
+
 local render_layer = 132 -- "under-elevated"
 
 function new_struct(table, struct)
@@ -60,7 +78,7 @@ function mod.on_created_entity(event)
   local entity = event.entity or event.destination
   local surfacedata = storage.surfacedata[entity.surface.index]
 
-  if entity.name == "elevated-pipe-alt-mode" then
+  if is_elevated_pipe_alt_mode[entity.name] then
     return entity.destroy()
   end
 
@@ -77,7 +95,7 @@ function mod.on_created_entity(event)
   })
 
   struct.alt_mode = entity.surface.create_entity{
-    name = "elevated-pipe-alt-mode",
+    name = alt_mode_name_for[entity.name],
     force = entity.force,
     position = entity.position,
     create_build_effect_smoke = false,
@@ -95,6 +113,8 @@ function mod.on_created_entity(event)
   mod.mark_surface_dirty(surfacedata.surface)
 end
 
+
+
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
@@ -103,10 +123,7 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, mod.on_created_entity, {
-    {filter = "name", name = "elevated-pipe"},
-    {filter = "name", name = "elevated-pipe-alt-mode"},
-  })
+  script.on_event(event, mod.on_created_entity, on_created_entity_filters)
 end
 
 function mod.refresh_surfacedata()
@@ -191,8 +208,8 @@ script.on_event(defines.events.on_object_destroyed, mod.on_object_destroyed)
 
 -- note to self: we render render upwards and leftwards
 
-local function elevated_pipe_sprites(x_or_y, max)
-  local prefix = x_or_y == "x" and "elevated-pipe-horizontal" or "elevated-pipe-vertical"
+local function elevated_pipe_sprites(entity_name, x_or_y, max)
+  local prefix = x_or_y == "x" and (entity_name .. "-horizontal") or (entity_name .. "-vertical")
 
   if max == 1 then -- if the distance is just 1 tile there is not enough space for both a start and end sprite
     return {prefix .. "-single"}
@@ -223,7 +240,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
     local position = struct.entity.position
     for _, neighbour in ipairs(struct.entity.fluidbox.get_connections(1)) do
       neighbour = neighbour.owner -- remnant from using neighbours instead of fluidbox
-      if neighbour.name == "elevated-pipe" then
+      if is_elevated_pipe[neighbour.name] then
 
         local connection = struct.connections[neighbour.unit_number]
         if connection then -- mark as up-to-date, then continue on
@@ -245,7 +262,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
           }
 
           if x_diff > 1 then
-            local sprites = elevated_pipe_sprites("x", x_diff -1)
+            local sprites = elevated_pipe_sprites(struct.entity.name, "x", x_diff -1)
             for x_offset = 1, x_diff -1 do
               table.insert(connection.render_configs, {
                 sprite = sprites[x_offset],
@@ -258,7 +275,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
               })
             end
           else
-            local sprites = elevated_pipe_sprites("y", y_diff -1)
+            local sprites = elevated_pipe_sprites(struct.entity.name, "y", y_diff -1)
             for y_offset = 1, y_diff -1 do
               table.insert(connection.render_configs, {
                 sprite = sprites[y_offset],
@@ -356,7 +373,7 @@ end)
 
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
-  if entity and entity.name == "elevated-pipe" then
+  if entity and is_elevated_pipe[entity.name] then
     local surfacedata = storage.surfacedata[entity.surface.index]
     if surfacedata then
       local struct = surfacedata.structs[entity.unit_number]
@@ -373,7 +390,7 @@ if script.active_mods["Bottleneck"] then
     local elevated_pipes = stoplight.surface.find_entities_filtered{
       position = {stoplight.position.x + 0.5,stoplight.position.y - 0.47},
       radius = 0.1,
-      name = "elevated-pipe",
+      name = elevated_pipe_names,
     }
 
     if #elevated_pipes > 0 then

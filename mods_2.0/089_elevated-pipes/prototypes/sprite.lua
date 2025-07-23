@@ -1,42 +1,39 @@
-local function sprite_with_shadow(name, config)
-  config = config or {}
-
+local function sprite_with_shadow(config, variation, shadow)
   local sprite = {
     type = "sprite",
-    name = name,
+    name = config.name .. variation,
     layers = {
       {
-        filename = mod_directory .. "/graphics/entity/elevated-pipe/" .. name .. ".png",
+        filename = config.graphics .. variation .. ".png",
         scale = 0.5,
         width = 704,
         height = 704,
       },
+      {
+        filename = config.graphics .. shadow .. ".png",
+        scale = 0.5,
+        width = 704,
+        height = 704,
+        draw_as_shadow = true,
+      },
     }
   }
-
-  if config.shadow ~= false then
-    table.insert(sprite.layers, {
-      filename = mod_directory .. "/graphics/entity/elevated-pipe/" .. (config.shadow and config.shadow or (name .. "-shadow")) .. ".png",
-      scale = 0.5,
-      width = 704,
-      height = 704,
-      draw_as_shadow = true,
-    })
-  end
 
   return sprite
 end
 
-local horizontal_shadow = {shadow = "elevated-pipe-horizontal-center-shadow"}
-local vertical_shadow = {shadow = "elevated-pipe-vertical-center-shadow"}
+elevated_pipes.new_sprites = function (config)
+local horizontal_shadow = "-horizontal-center-shadow"
+local vertical_shadow = "-vertical-center-shadow"
 
 data:extend{
-  sprite_with_shadow("elevated-pipe-horizontal-left", horizontal_shadow),
-  sprite_with_shadow("elevated-pipe-horizontal-right", horizontal_shadow),
-  sprite_with_shadow("elevated-pipe-horizontal-center", horizontal_shadow),
-  sprite_with_shadow("elevated-pipe-horizontal-single", horizontal_shadow),
-  sprite_with_shadow("elevated-pipe-vertical-top", vertical_shadow),
-  sprite_with_shadow("elevated-pipe-vertical-bottom", vertical_shadow),
-  sprite_with_shadow("elevated-pipe-vertical-center", vertical_shadow),
-  sprite_with_shadow("elevated-pipe-vertical-single", vertical_shadow),
+  sprite_with_shadow(config, "-horizontal-left"  , horizontal_shadow),
+  sprite_with_shadow(config, "-horizontal-right" , horizontal_shadow),
+  sprite_with_shadow(config, "-horizontal-center", horizontal_shadow),
+  sprite_with_shadow(config, "-horizontal-single", horizontal_shadow),
+  sprite_with_shadow(config, "-vertical-top"     , vertical_shadow),
+  sprite_with_shadow(config, "-vertical-bottom"  , vertical_shadow),
+  sprite_with_shadow(config, "-vertical-center"  , vertical_shadow),
+  sprite_with_shadow(config, "-vertical-single"  , vertical_shadow),
 }
+end
