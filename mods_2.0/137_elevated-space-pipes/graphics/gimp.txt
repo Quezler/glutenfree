@@ -1,0 +1,9 @@
+channel mixer:
+1 0 0
+0 1 0
+0 0 1
+[ ] preserve luminosity
+
+exposure: 1.250, blend level replace
+
+tech icon only: shadow highlights 75
