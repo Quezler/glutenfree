@@ -18,6 +18,7 @@ class InstanceCommand extends Command
     {
         $this->addArgument('name', InputArgument::OPTIONAL);
         $this->addOption('client');
+        $this->addOption('master');
     }
 
     public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
@@ -72,7 +73,9 @@ class InstanceCommand extends Command
         }
 
         $factorio_binary = "/Applications/factorio.app/Contents/MacOS/factorio";
-//        $factorio_binary = "/Users/quezler/Documents/Tower/github/wube/Factorio/bin/Releasearm64Clang/factorio-run";
+        if ($input->getOption('master'))
+            $factorio_binary = "/Users/quezler/Documents/Tower/github/wube/Factorio/bin/Releasearm64Clang/factorio-run";
+        
         passthru("(cd {$instance_directory} && {$factorio_binary} --config {$config_ini_pathname})");
 
         return Command::SUCCESS;
