@@ -1,24 +1,49 @@
 require("shared")
 
-if washbox_debug then
+if mods["base"] and washbox_debug then
   data:extend{{
     type = "recipe",
-    name = "washbox--iron-plate-to-copper-plate",
-    localised_name = {"recipe-name.washbox-washing"},
-    icon = "__base__/graphics/icons/electric-mining-drill.png",
+    name = "washbox--barrel-to-water-barrel",
+    localised_name = {"recipe-name.fill-barrel", {"fluid-name.water"}},
+    icons = data.raw["recipe"]["water-barrel"].icons,
 
     enabled = true,
     category = "washbox",
     energy_required = 1,
 
     ingredients = {
-      { type = "item", name = "iron-plate", amount = 1 },
-      { type = "fluid", name = "water", amount = 50 },
+      { type = "item", name = "barrel", amount = 1 },
+      { type = "fluid", name = "water", amount = 100 },
     },
 
     results = {
-      { type = "item", name = "copper-plate", amount = 1 },
-      { type = "fluid", name = "water", amount = 25 },
+      { type = "item", name = "water-barrel", amount = 1 },
+      { type = "fluid", name = "water", amount = 0 },
+    },
+
+    crafting_machine_tint = {
+      primary = {r=000, g=145, b=255, a=127}, -- https://mods.factorio.com/mod/Automatic_Train_Painter > Factorio > water
+    }
+  }}
+
+  data:extend{{
+    type = "recipe",
+    name = "washbox--water-barrel-to-barrel",
+    localised_name = {"recipe-name.empty-filled-barrel", {"fluid-name.water"}},
+    icons = data.raw["recipe"]["empty-water-barrel"].icons,
+
+    enabled = true,
+    category = "washbox",
+    energy_required = 1,
+
+    ingredients = {
+      { type = "item", name = "water-barrel", amount = 1 },
+      { type = "fluid", name = "water", amount = 100 },
+    },
+
+    results = {
+      { type = "item", name = "barrel", amount = 1 },
+      { type = "fluid", name = "water", amount = 200 },
     },
 
     crafting_machine_tint = {
@@ -41,12 +66,12 @@ if data.raw["item"]["kr-used-pollution-filter"] and data.raw["item"]["kr-polluti
 
     ingredients = {
       { type = "item", name = "kr-used-pollution-filter", amount = 1 },
-      { type = "fluid", name = "water", amount = 50 },
+      { type = "fluid", name = "water", amount = 100 },
     },
 
     results = {
       { type = "item", name = "kr-pollution-filter", amount = 1 },
-      { type = "fluid", name = "water", amount = 25 },
+      { type = "fluid", name = "water", amount = 50 },
     },
 
     crafting_machine_tint = {

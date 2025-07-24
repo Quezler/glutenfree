@@ -12,6 +12,7 @@ Date: ????
     - Instead keep track of the input & output of segments caused by pumps
     - Measure only on the input side
     - Each pump gives you 1 speed (first one 0.8)
+    - Replace the built-in recipe with barrels
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
