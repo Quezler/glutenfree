@@ -29,7 +29,23 @@ mod.on_created_entity = function(event)
   beacon.destructible = false
 
   remote.call("beacon-interface", "set_effects", beacon.unit_number, {
-    speed = -100,
+    speed = -50,
+    productivity = 0,
+    consumption = 0,
+    pollution = 0,
+    quality = 0,
+  })
+
+  local beacon_overload = entity.surface.create_entity{
+    name = mod_prefix .. "beacon-interface-overload",
+    force = entity.force,
+    position = entity.position,
+    raise_built = true,
+  }
+
+  beacon_overload.destructible = false
+  remote.call("beacon-interface", "set_effects", beacon_overload.unit_number, {
+    speed = -10000,
     productivity = 0,
     consumption = 0,
     pollution = 0,
@@ -65,6 +81,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if struct then storage.structs[event.useful_id] = nil
       if struct.pipe then struct.pipe.destroy() end
       if struct.beacon then struct.beacon.destroy() end
+      if struct.beacon_overload then struct.beacon_overload.destroy() end
     end
   end
 end)

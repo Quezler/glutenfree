@@ -218,3 +218,10 @@ local beacon_interface = table.deepcopy(data.raw["beacon"]["beacon-interface--be
 beacon_interface.name = mod_prefix .. "beacon-interface"
 table.insert(beacon_interface.flags, "placeable-off-grid")
 data:extend{beacon_interface}
+
+local beacon_interface_overload = table.deepcopy(data.raw["beacon"]["beacon-interface--beacon-tile"])
+beacon_interface_overload.name = mod_prefix .. "beacon-interface-overload"
+table.insert(beacon_interface_overload.flags, "placeable-off-grid")
+beacon_interface_overload.profile = {0, 0, 1} -- when a third beacon enters the mix this beacon disables everything
+beacon_interface_overload.beacon_counter = "total"
+data:extend{beacon_interface_overload}

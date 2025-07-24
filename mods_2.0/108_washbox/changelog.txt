@@ -5,6 +5,7 @@ Date: ????
     - Begin rewriting for the new pump api
     - Use an intermediary pipe entity
     - Trial using beacon interface
+    - Figure out a way to prevent player beacons
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
