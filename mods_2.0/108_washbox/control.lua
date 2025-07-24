@@ -169,7 +169,7 @@ script.on_nth_tick(60 * 2.5, function()
 
       local input_pumping_speed = fluid_segment_map[struct.entity.surface_index][struct.entity.fluidbox.get_fluid_segment_id(1)] or 0
       local output_pumping_speed = fluid_segment_map[struct.entity.surface_index][struct.entity.fluidbox.get_fluid_segment_id(2)] or 0
-      local total_pumping_speed = math.min(input_pumping_speed, -output_pumping_speed)
+      local total_pumping_speed = math.min(math.abs(input_pumping_speed), math.abs(output_pumping_speed))
       remote.call("beacon-interface", "set_effects", struct.beacon.unit_number, {
         speed = math.ceil(total_pumping_speed * 5) - 100,
         productivity = 0,
