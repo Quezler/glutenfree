@@ -152,29 +152,30 @@ end
 script.on_nth_tick(60 * 2.5, function()
   local fluid_segment_map = {}
 
-  -- to only measure the input side we need to split the segments
-  for _, struct in pairs(storage.structs) do
+  local storage_structs = {}
+  for unit_number, struct in pairs(storage.structs) do
     if struct.entity.valid then
-      struct.entity.fluidbox.remove_linked_connection(1)
-      struct.entity.fluidbox.remove_linked_connection(2)
+      storage_structs[unit_number] = struct
     end
+  end
+
+  -- to only measure the input side we need to split the segments
+  for _, struct in pairs(storage_structs) do
+    struct.entity.fluidbox.remove_linked_connection(1)
+    struct.entity.fluidbox.remove_linked_connection(2)
   end
 
   local inputting_from_fluid_segment = {}
 
-  for _, struct in pairs(storage.structs) do
-    if struct.entity.valid then
-      local inputting_from = struct.entity.fluidbox.get_fluid_segment_id(1)
+  for _, struct in pairs(storage_structs) do
+    local inputting_from = struct.entity.fluidbox.get_fluid_segment_id(1)
 
-      if inputting_from then
-        inputting_from_fluid_segment[inputting_from] = (inputting_from_fluid_segment[inputting_from] or 0) + 1
-      end
+    if inputting_from then
+      inputting_from_fluid_segment[inputting_from] = (inputting_from_fluid_segment[inputting_from] or 0) + 1
     end
   end
 
-  for _, struct in pairs(storage.structs) do
-    if struct.entity.valid then
-
+  for _, struct in pairs(storage_structs) do
       if not fluid_segment_map[struct.entity.surface_index] then
         populate_fluid_segment_map(fluid_segment_map, struct.entity.surface_index)
       end
@@ -188,15 +189,12 @@ script.on_nth_tick(60 * 2.5, function()
         pollution = 0,
         quality = 0,
       })
-    end
   end
 
   -- measurements done, now we can merge the fluid segments again
-  for _, struct in pairs(storage.structs) do
-    if struct.entity.valid then
-      struct.entity.fluidbox.add_linked_connection(1, struct.pipe, 1)
-      struct.entity.fluidbox.add_linked_connection(2, struct.pipe, 2)
-    end
+  for _, struct in pairs(storage_structs) do
+    struct.entity.fluidbox.add_linked_connection(1, struct.pipe, 1)
+    struct.entity.fluidbox.add_linked_connection(2, struct.pipe, 2)
   end
 end)
 

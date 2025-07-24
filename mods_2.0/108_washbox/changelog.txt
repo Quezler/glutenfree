@@ -20,6 +20,7 @@ Date: ????
     - Undo broken overcomplicated parralel detector
     - Undo needing pumps on the output side
     - Simplify the parralel detector
+    - Skip repeated valid checks
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
