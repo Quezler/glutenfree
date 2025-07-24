@@ -51,7 +51,7 @@ mod.on_created_entity = function(event)
   beacon.destructible = false
 
   remote.call("beacon-interface", "set_effects", beacon.unit_number, {
-    speed = -50,
+    speed = -100,
     productivity = 0,
     consumption = 0,
     pollution = 0,
@@ -193,7 +193,7 @@ script.on_nth_tick(60 * 2.5, function()
       local inputting_from = struct.entity.fluidbox.get_fluid_segment_id(1)
       local total_pumping_speed = (inputting_from and (fluid_segment_map[struct.entity.surface_index][inputting_from] or 0) / inputting_from_fluid_segment[inputting_from]) or 0
       struct.last_written_speed = math.ceil(total_pumping_speed * 5) - 100
-      fluid_segment_id_to_speed[washbox_to_fluid_segment_id[struct.entity.unit_number]] = math.max(struct.last_written_speed, fluid_segment_id_to_speed[washbox_to_fluid_segment_id[struct.entity.unit_number]] or 0)
+      fluid_segment_id_to_speed[washbox_to_fluid_segment_id[struct.entity.unit_number]] = math.max(struct.last_written_speed, fluid_segment_id_to_speed[washbox_to_fluid_segment_id[struct.entity.unit_number]] or -100)
       remote.call("beacon-interface", "set_effects", struct.beacon.unit_number, {
         speed = struct.last_written_speed,
         productivity = 0,

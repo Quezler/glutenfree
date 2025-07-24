@@ -22,6 +22,7 @@ Date: ????
     - Simplify the parralel detector
     - Skip repeated valid checks
     - Get parralel and inline to behave as intended
+    - Fix standalone washing boxes having 1 speed
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
