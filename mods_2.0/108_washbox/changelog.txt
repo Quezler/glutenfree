@@ -15,6 +15,7 @@ Date: ????
     - Replace the built-in recipe with barrels
     - Check if the output side is actually moving the fluids away
     - Make them omnidirectional
+    - Attempt to divide the flow between paralel washboxes
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24

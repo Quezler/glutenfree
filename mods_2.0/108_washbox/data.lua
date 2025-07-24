@@ -143,6 +143,7 @@ local furnace = {
     },
   },
   circuit_wire_max_distance = washbox_debug and default_circuit_wire_max_distance or nil,
+  vector_to_place_result = washbox_debug {0, -0.3} or nil,
 }
 
 local item = {
