@@ -18,6 +18,7 @@ Date: ????
     - Attempt to divide the flow between paralel washboxes
     - Return orientation since it breaks parralel detectionaq
     - Undo broken overcomplicated parralel detector
+    - Undo needing pumps on the output side
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
