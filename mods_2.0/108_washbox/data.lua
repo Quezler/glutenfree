@@ -68,23 +68,22 @@ local furnace = {
     {
       production_type = "input",
       pipe_covers = pipecoverspictures(),
-      volume = 100,
+      volume = 10,
       pipe_connections = {
-        {flow_direction = "input", direction = defines.direction.south, position = {0, 0.5}},
-        {connection_type = "linked", linked_connection_id = 1},
+        --
       },
       secondary_draw_orders = { north = -1 }
     },
     {
       production_type = "output",
       pipe_covers = pipecoverspictures(),
-      volume = 100,
+      volume = 10,
       pipe_connections = {
-        {flow_direction = "output", direction = defines.direction.north, position = {0, -0.5}},
-        {connection_type = "linked", linked_connection_id = 0},
+        {flow_direction = "input-output", direction = defines.direction.south, position = {0, 0.5}},
+        {flow_direction = "input-output", direction = defines.direction.north, position = {0, -0.5}},
       },
       secondary_draw_orders = { north = -1 }
-    },
+    }
   },
 
   graphics_set = {
@@ -136,7 +135,6 @@ local furnace = {
     },
   },
   circuit_wire_max_distance = washbox_debug and default_circuit_wire_max_distance or nil,
-  -- vector_to_place_result = {0, -0.3},
 }
 
 local item = {
@@ -178,37 +176,4 @@ for i, effect in ipairs(technology.effects) do
   end
 end
 
-local valve_in = {
-  type = "valve",
-  name = mod_prefix .. "valve-in",
-
-  mode = "overflow",
-  threshold = 0.8,
-
-  flow_rate = data.raw["pump"]["pump"].pumping_speed, -- 20, times 60 = 1200
-
-  selection_priority = washbox_debug and 51 or 49,
-  selectable_in_game = washbox_debug,
-  selection_box = {{-0.2, -0.2}, {0.2, 0.2}},
-  collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
-  collision_mask = {layers = {}},
-
-  fluid_box =
-  {
-    volume = 100,
-    pipe_connections = {
-      {flow_direction = "input-output", connection_type = "linked", linked_connection_id = 1},
-      {flow_direction = "output", connection_type = "linked", linked_connection_id = 0},
-    },
-  },
-
-  flags = {"not-on-map", "placeable-off-grid"},
-  hidden = true,
-}
-
-local valve_out = table.deepcopy(valve_in)
-valve_out.name = mod_prefix .. "valve-out"
-valve_out.mode = "top-up"
-valve_out.threshold = 0.75
-
-data:extend{recipe_category, furnace, item, recipe, valve_in, valve_out}
+data:extend{recipe_category, furnace, item, recipe}

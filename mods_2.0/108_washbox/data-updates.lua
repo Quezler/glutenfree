@@ -1,11 +1,10 @@
 require("shared")
 
-local debug = false
-
-if debug then
+if washbox_debug then
   data:extend{{
     type = "recipe",
     name = "washbox--iron-plate-to-copper-plate",
+    localised_name = {"recipe-name.washbox-washing"},
     icon = "__base__/graphics/icons/electric-mining-drill.png",
 
     enabled = true,
@@ -14,12 +13,11 @@ if debug then
 
     ingredients = {
       { type = "item", name = "iron-plate", amount = 1 },
-      { type = "fluid", name = "water", amount = 50 },
+      { type = "fluid", name = "water", amount = 1 },
     },
 
     results = {
       { type = "item", name = "copper-plate", amount = 1 },
-      { type = "fluid", name = "water", amount = 25 },
     },
 
     crafting_machine_tint = {
@@ -47,7 +45,6 @@ if data.raw["item"]["kr-used-pollution-filter"] and data.raw["item"]["kr-polluti
 
     results = {
       { type = "item", name = "kr-pollution-filter", amount = 1 },
-      { type = "fluid", name = "water", amount = 25 },
     },
 
     crafting_machine_tint = {
