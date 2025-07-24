@@ -8,11 +8,8 @@ script.on_init(function()
 
   for _, surface in pairs(game.surfaces) do
     local surfacedata = storage.surfacedata[surface.index]
-    for _, entity in ipairs(surface.find_entities_filtered{{filter = "type", type = "pump"}}) do
+    for _, entity in ipairs(surface.find_entities_filtered{{filter = "type", type = {"pump", "offshore-pump"}}}) do
       surfacedata.pumps[entity.unit_number] = entity
-    end
-    for _, entity in ipairs(surface.find_entities_filtered{{filter = "type", type = "offshore-pump"}}) do
-      surfacedata.offshore_pumps[entity.unit_number] = entity
     end
   end
 
@@ -30,11 +27,8 @@ mod.on_created_entity = function(event)
   local entity = event.entity or event.destination
   local surfacedata = storage.surfacedata[entity.surface.index]
 
-  if entity.type == "pump" then
+  if entity.type == "pump" or entity.type == "offshore-pump" then
     surfacedata.pumps[entity.unit_number] = entity
-    return
-  elseif entity.type == "offshore-pump" then
-    surfacedata.offshore_pumps[entity.unit_number] = entity
     return
   end
 
@@ -125,9 +119,7 @@ end)
 
 local function populate_fluid_segment_map(fluid_segment_map, surface_index)
   surface_fluid_segment_map = {
-    ["input-output"] = {}, -- unused
-    output = {}, -- outputs into
-    input = {},
+    -- id to amount pumped, negative for out
   }
   local surfacedata = storage.surfacedata[surface_index]
 
@@ -135,39 +127,17 @@ local function populate_fluid_segment_map(fluid_segment_map, surface_index)
     if not pump.valid then
       surfacedata.pumps[unit_number] = nil
     else
+      local pumped_last_tick = pump.pumped_last_tick
       for _, pipe_connection in ipairs(pump.fluidbox.get_pipe_connections(1)) do
         if pipe_connection.target then
 
           local fluid_segment_id = pipe_connection.target.get_fluid_segment_id(pipe_connection.target_fluidbox_index)
           if fluid_segment_id then
-            local flow_direction_map = surface_fluid_segment_map[pipe_connection.flow_direction]
-            flow_direction_map[fluid_segment_id] = flow_direction_map[fluid_segment_id] or {}
-            table.insert(flow_direction_map[fluid_segment_id], pump)
-          end
-
-          -- log(pipe_connection.target.get_fluid_segment_id(pipe_connection.target_fluidbox_index))
-          -- log(serpent.line(pipe_connection))
-        end
-
-        -- if pipe_connection.flow_direction == "output" then
-
-        -- end
-      end
-    end
-  end
-
-  for unit_number, offshore_pump in pairs(surfacedata.offshore_pumps) do
-    if not offshore_pump.valid then
-      surfacedata.pumps[unit_number] = nil
-    else
-      for _, pipe_connection in ipairs(offshore_pump.fluidbox.get_pipe_connections(1)) do
-        if pipe_connection.target then
-
-          local fluid_segment_id = pipe_connection.target.get_fluid_segment_id(pipe_connection.target_fluidbox_index)
-          if fluid_segment_id then
-            local flow_direction_map = surface_fluid_segment_map[pipe_connection.flow_direction]
-            flow_direction_map[fluid_segment_id] = flow_direction_map[fluid_segment_id] or {}
-            table.insert(flow_direction_map[fluid_segment_id], offshore_pump)
+            if pipe_connection.flow_direction == "output" then
+              surface_fluid_segment_map[fluid_segment_id] = (surface_fluid_segment_map[fluid_segment_id] or 0) + pumped_last_tick
+            else -- input & input-output
+              surface_fluid_segment_map[fluid_segment_id] = (surface_fluid_segment_map[fluid_segment_id] or 0) - pumped_last_tick
+            end
           end
 
         end
@@ -188,11 +158,7 @@ script.on_nth_tick(60 * 2.5, function()
         populate_fluid_segment_map(fluid_segment_map, struct.entity.surface_index)
       end
 
-      local total_pumping_speed = 0
-      -- log(serpent.line(fluid_segment_map[struct.entity.surface_index].output))
-      for _, a_pump in ipairs(fluid_segment_map[struct.entity.surface_index].output[struct.pipe.fluidbox.get_fluid_segment_id(1)] or {}) do
-        total_pumping_speed = total_pumping_speed + a_pump.pumped_last_tick
-      end
+      local total_pumping_speed = fluid_segment_map[struct.entity.surface_index][struct.pipe.fluidbox.get_fluid_segment_id(1)] or 0
       log(total_pumping_speed)
     end
   end
@@ -213,8 +179,6 @@ function mod.refresh_surfacedata()
       surface = surface,
 
       pumps = {},
-      offshore_pumps = {},
-
       structs = {},
     }
   end

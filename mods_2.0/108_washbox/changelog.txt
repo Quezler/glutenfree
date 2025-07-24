@@ -9,6 +9,7 @@ Date: ????
     - Attempt to walk the fluid segment
     - Keep track of the (offshore) pump output fluidboxes
     - Sum the speed of pumps pushing into that fluidbox
+    - Instead keep track of the input & output of segments caused by pumps
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
