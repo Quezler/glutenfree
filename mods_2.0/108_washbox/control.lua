@@ -151,6 +151,15 @@ end
 
 script.on_nth_tick(60 * 2.5, function()
   local fluid_segment_map = {}
+
+  -- to only measure the input side we need to split the segments
+  for _, struct in pairs(storage.structs) do
+    if struct.entity.valid then
+      struct.entity.fluidbox.remove_linked_connection(1)
+      struct.entity.fluidbox.remove_linked_connection(2)
+    end
+  end
+
   for _, struct in pairs(storage.structs) do
     if struct.entity.valid then
 
@@ -158,8 +167,16 @@ script.on_nth_tick(60 * 2.5, function()
         populate_fluid_segment_map(fluid_segment_map, struct.entity.surface_index)
       end
 
-      local total_pumping_speed = fluid_segment_map[struct.entity.surface_index][struct.pipe.fluidbox.get_fluid_segment_id(1)] or 0
+      local total_pumping_speed = fluid_segment_map[struct.entity.surface_index][struct.entity.fluidbox.get_fluid_segment_id(1)] or 0
       log(total_pumping_speed)
+    end
+  end
+
+  -- measurements done, now we can merge the fluid segments again
+  for _, struct in pairs(storage.structs) do
+    if struct.entity.valid then
+      struct.entity.fluidbox.add_linked_connection(1, struct.pipe, 1)
+      struct.entity.fluidbox.add_linked_connection(2, struct.pipe, 2)
     end
   end
 end)

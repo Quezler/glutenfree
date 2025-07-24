@@ -10,6 +10,7 @@ Date: ????
     - Keep track of the (offshore) pump output fluidboxes
     - Sum the speed of pumps pushing into that fluidbox
     - Instead keep track of the input & output of segments caused by pumps
+    - Measure only on the input side
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
