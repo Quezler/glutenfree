@@ -17,6 +17,7 @@ Date: ????
     - Make them omnidirectional
     - Attempt to divide the flow between paralel washboxes
     - Return orientation since it breaks parralel detectionaq
+    - Undo broken overcomplicated parralel detector
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24

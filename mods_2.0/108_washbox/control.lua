@@ -149,7 +149,7 @@ local function populate_fluid_segment_map(fluid_segment_map, surface_index)
   fluid_segment_map[surface_index] = surface_fluid_segment_map
 end
 
-script.on_nth_tick(60 * 5, function()
+script.on_nth_tick(60 * 2.5, function()
   local fluid_segment_map = {}
 
   -- to only measure the input side we need to split the segments
@@ -160,23 +160,6 @@ script.on_nth_tick(60 * 5, function()
     end
   end
 
-  local inputting_into_fluid_segment = {}
-  local outputting_into_fluid_segment = {}
-
-  for _, struct in pairs(storage.structs) do
-    if struct.entity.valid then
-      local inputting_into = struct.entity.fluidbox.get_fluid_segment_id(1)
-      local outputting_into = struct.entity.fluidbox.get_fluid_segment_id(2)
-
-      if inputting_into then
-        inputting_into_fluid_segment[inputting_into] = (inputting_into_fluid_segment[inputting_into] or 0) + 1
-      end
-      if outputting_into then
-        outputting_into_fluid_segment[outputting_into] = (outputting_into_fluid_segment[outputting_into] or 0) + 1
-      end
-    end
-  end
-
   for _, struct in pairs(storage.structs) do
     if struct.entity.valid then
 
@@ -184,15 +167,9 @@ script.on_nth_tick(60 * 5, function()
         populate_fluid_segment_map(fluid_segment_map, struct.entity.surface_index)
       end
 
-      local inputting_into = struct.entity.fluidbox.get_fluid_segment_id(1)
-      local outputting_into = struct.entity.fluidbox.get_fluid_segment_id(2)
-
-      -- log(inputting_into)
-      -- log(fluid_segment_map[struct.entity.surface_index][inputting_into])
-      -- log(inputting_into_fluid_segment[inputting_into])
-      local input_pumping_speed = (inputting_into and (fluid_segment_map[struct.entity.surface_index][inputting_into] or 0) / (inputting_into_fluid_segment[inputting_into] or 1)) or 0
-      local output_pumping_speed = (outputting_into and (fluid_segment_map[struct.entity.surface_index][outputting_into] or 0) / (inputting_into_fluid_segment[outputting_into] or 1)) or 0
-      local total_pumping_speed = math.min(input_pumping_speed, -output_pumping_speed)
+      local input_pumping_speed = fluid_segment_map[struct.entity.surface_index][struct.entity.fluidbox.get_fluid_segment_id(1)] or 0
+      local output_pumping_speed = fluid_segment_map[struct.entity.surface_index][struct.entity.fluidbox.get_fluid_segment_id(2)] or 0
+      local total_pumping_speed = math.min(math.abs(input_pumping_speed), math.abs(output_pumping_speed))
       remote.call("beacon-interface", "set_effects", struct.beacon.unit_number, {
         speed = math.ceil(total_pumping_speed * 5) - 100,
         productivity = 0,
