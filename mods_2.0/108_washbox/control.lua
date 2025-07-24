@@ -3,12 +3,40 @@ require("shared")
 local mod = {}
 
 script.on_init(function()
-  storage.deathrattles = {}
+  storage.surfacedata = {}
+  mod.refresh_surfacedata()
+
+  for _, surface in pairs(game.surfaces) do
+    local surfacedata = storage.surfacedata[surface.index]
+    for _, entity in ipairs(surface.find_entities_filtered{{filter = "type", type = "pump"}}) do
+      surfacedata.pumps[entity.unit_number] = entity
+    end
+    for _, entity in ipairs(surface.find_entities_filtered{{filter = "type", type = "offshore-pump"}}) do
+      surfacedata.offshore_pumps[entity.unit_number] = entity
+    end
+  end
+
   storage.structs = {}
+  storage.deathrattles = {}
+end)
+
+script.on_configuration_changed(function()
+  assert(storage.surfacedata == nil, "not compatible with washbox <= 2.0.0, remove the previous version first.")
+
+  mod.refresh_surfacedata()
 end)
 
 mod.on_created_entity = function(event)
   local entity = event.entity or event.destination
+  local surfacedata = storage.surfacedata[entity.surface.index]
+
+  if entity.type == "pump" then
+    surfacedata.pumps[entity.unit_number] = entity
+    return
+  elseif entity.type == "offshore-pump" then
+    surfacedata.offshore_pumps[entity.unit_number] = entity
+    return
+  end
 
   local pipe = entity.surface.create_entity{
     name = mod_prefix .. "pipe",
@@ -52,6 +80,7 @@ mod.on_created_entity = function(event)
     quality = 0,
   })
 
+  -- surfacedata.structs[entity.unit_number] = {
   storage.structs[entity.unit_number] = {
     entity = entity,
     pipe = pipe,
@@ -59,7 +88,7 @@ mod.on_created_entity = function(event)
     beacon_overload = beacon_overload,
   }
 
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = true
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {surface_index = surfacedata.index}
 end
 
 for _, event in ipairs({
@@ -72,46 +101,119 @@ for _, event in ipairs({
 }) do
   script.on_event(event, mod.on_created_entity, {
     {filter = "name", name = "washbox"},
+    {filter = "type", type = "pump"},
+    {filter = "type", type = "offshore-pump"},
   })
 end
 
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    local struct = storage.structs[event.useful_id]
-    if struct then storage.structs[event.useful_id] = nil
-      if struct.pipe then struct.pipe.destroy() end
-      if struct.beacon then struct.beacon.destroy() end
-      if struct.beacon_overload then struct.beacon_overload.destroy() end
-    end
+    -- local surfacedata = storage.surfacedata[deathrattle.surface_index]
+    -- if surfacedata then
+    --   local struct = surfacedata.structs[event.useful_id]
+    --   if struct then surfacedata.structs[event.useful_id] = nil
+      local struct = storage.structs[event.useful_id]
+      if struct then storage.structs[event.useful_id] = nil
+        if struct.pipe then struct.pipe.destroy() end
+        if struct.beacon then struct.beacon.destroy() end
+        if struct.beacon_overload then struct.beacon_overload.destroy() end
+      end
+    -- end
   end
 end)
 
-local function get_fluid_segment_members(pipe_connection, members)
-  if not pipe_connection.target then return members end
-  local owner = pipe_connection.target.owner
-  if members[owner.unit_number] then return members end
-  members[owner.unit_number] = owner
+local function populate_fluid_segment_map(fluid_segment_map, surface_index)
+  surface_fluid_segment_map = {
+    ["input-output"] = {}, -- unused
+    output = {}, -- outputs into
+    input = {},
+  }
+  local surfacedata = storage.surfacedata[surface_index]
 
-  local target_connections = pipe_connection.target.get_pipe_connections(pipe_connection.target_fluidbox_index)
-  for _, target_connection in ipairs(target_connections) do
-    get_fluid_segment_members(target_connection, members)
+  for unit_number, pump in pairs(surfacedata.pumps) do
+    if not pump.valid then
+      surfacedata.pumps[unit_number] = nil
+    else
+      for _, pipe_connection in ipairs(pump.fluidbox.get_pipe_connections(1)) do
+        if pipe_connection.target then
+
+          local fluid_segment_id = pipe_connection.target.get_fluid_segment_id(pipe_connection.target_fluidbox_index)
+          if fluid_segment_id then
+            local flow_direction_map = surface_fluid_segment_map[pipe_connection.flow_direction]
+            flow_direction_map[fluid_segment_id] = flow_direction_map[fluid_segment_id] or {}
+            table.insert(flow_direction_map[fluid_segment_id], pump)
+          end
+
+          -- log(pipe_connection.target.get_fluid_segment_id(pipe_connection.target_fluidbox_index))
+          -- log(serpent.line(pipe_connection))
+        end
+
+        -- if pipe_connection.flow_direction == "output" then
+
+        -- end
+      end
+    end
   end
 
-  return members
+  for unit_number, offshore_pump in pairs(surfacedata.offshore_pumps) do
+    if not offshore_pump.valid then
+      surfacedata.pumps[unit_number] = nil
+    else
+      for _, pipe_connection in ipairs(offshore_pump.fluidbox.get_pipe_connections(1)) do
+        if pipe_connection.target then
+
+          local fluid_segment_id = pipe_connection.target.get_fluid_segment_id(pipe_connection.target_fluidbox_index)
+          if fluid_segment_id then
+            local flow_direction_map = surface_fluid_segment_map[pipe_connection.flow_direction]
+            flow_direction_map[fluid_segment_id] = flow_direction_map[fluid_segment_id] or {}
+            table.insert(flow_direction_map[fluid_segment_id], offshore_pump)
+          end
+
+        end
+      end
+    end
+  end
+
+  log(serpent.line(surface_fluid_segment_map))
+  fluid_segment_map[surface_index] = surface_fluid_segment_map
 end
 
 script.on_nth_tick(60 * 2.5, function()
+  local fluid_segment_map = {}
   for _, struct in pairs(storage.structs) do
     if struct.entity.valid then
 
-      local total_pumping_speed = 0
-      for _, pipe_connection in ipairs(struct.entity.fluidbox.get_pipe_connections(1)) do
-        if pipe_connection.target and pipe_connection.target.owner.name ~= mod_prefix .. "pipe" then
-          game.print(serpent.line(get_fluid_segment_members(pipe_connection, {})))
-        end
+      if not fluid_segment_map[struct.entity.surface_index] then
+        populate_fluid_segment_map(fluid_segment_map, struct.entity.surface_index)
       end
 
+      local total_pumping_speed = 0
     end
   end
 end)
+
+function mod.refresh_surfacedata()
+  -- deleted old
+  for surface_index, surfacedata in pairs(storage.surfacedata) do
+    if not surfacedata.surface.valid then
+      storage.surfacedata[surface_index] = nil
+    end
+  end
+
+  -- created new
+  for _, surface in pairs(game.surfaces) do
+    storage.surfacedata[surface.index] = storage.surfacedata[surface.index] or {
+      index = surface.index,
+      surface = surface,
+
+      pumps = {},
+      offshore_pumps = {},
+
+      structs = {},
+    }
+  end
+end
+
+script.on_event(defines.events.on_surface_created, mod.refresh_surfacedata)
+script.on_event(defines.events.on_surface_deleted, mod.refresh_surfacedata)

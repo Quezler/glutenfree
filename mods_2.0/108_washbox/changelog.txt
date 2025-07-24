@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.1.0
+Version: 2.0.0
 Date: ????
   Info:
     - Begin rewriting for the new pump api
@@ -7,6 +7,7 @@ Date: ????
     - Trial using beacon interface
     - Figure out a way to prevent player beacons
     - Attempt to walk the fluid segment
+    - Keep track of the (offshore) pump output fluidboxes
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
