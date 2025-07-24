@@ -10,8 +10,19 @@ end)
 mod.on_created_entity = function(event)
   local entity = event.entity or event.destination
 
+  local pipe = entity.surface.create_entity{
+    name = mod_prefix .. "pipe",
+    position = entity.position,
+    force = entity.force,
+  }
+  pipe.destructible = false
+
+  entity.fluidbox.add_linked_connection(1, pipe, 1)
+  entity.fluidbox.add_linked_connection(2, pipe, 2)
+
   storage.structs[entity.unit_number] = {
     entity = entity,
+    pipe = pipe,
   }
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = true
@@ -35,7 +46,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   if deathrattle then storage.deathrattles[event.registration_number] = nil
     local struct = storage.structs[event.useful_id]
     if struct then storage.structs[event.useful_id] = nil
-      --
+      if struct.pipe then struct.pipe.destroy() end
     end
   end
 end)

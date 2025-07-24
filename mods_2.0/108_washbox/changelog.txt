@@ -3,6 +3,7 @@ Version: 1.1.0
 Date: ????
   Info:
     - Begin rewriting for the new pump api
+    - Use an intermediary pipe entity
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24

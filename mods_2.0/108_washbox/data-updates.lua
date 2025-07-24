@@ -13,11 +13,12 @@ if washbox_debug then
 
     ingredients = {
       { type = "item", name = "iron-plate", amount = 1 },
-      { type = "fluid", name = "water", amount = 1 },
+      { type = "fluid", name = "water", amount = 50 },
     },
 
     results = {
       { type = "item", name = "copper-plate", amount = 1 },
+      { type = "fluid", name = "water", amount = 25 },
     },
 
     crafting_machine_tint = {
@@ -45,6 +46,7 @@ if data.raw["item"]["kr-used-pollution-filter"] and data.raw["item"]["kr-polluti
 
     results = {
       { type = "item", name = "kr-pollution-filter", amount = 1 },
+      { type = "fluid", name = "water", amount = 25 },
     },
 
     crafting_machine_tint = {

@@ -68,19 +68,20 @@ local furnace = {
     {
       production_type = "input",
       pipe_covers = pipecoverspictures(),
-      volume = 10,
+      volume = 50,
       pipe_connections = {
-        --
+        {flow_direction = "input-output", direction = defines.direction.south, position = {0, 0.5}},
+        {connection_type = "linked", linked_connection_id = 1},
       },
       secondary_draw_orders = { north = -1 }
     },
     {
       production_type = "output",
       pipe_covers = pipecoverspictures(),
-      volume = 10,
+      volume = 50,
       pipe_connections = {
-        {flow_direction = "input-output", direction = defines.direction.south, position = {0, 0.5}},
         {flow_direction = "input-output", direction = defines.direction.north, position = {0, -0.5}},
+        {connection_type = "linked", linked_connection_id = 2},
       },
       secondary_draw_orders = { north = -1 }
     }
@@ -176,4 +177,32 @@ for i, effect in ipairs(technology.effects) do
   end
 end
 
-data:extend{recipe_category, furnace, item, recipe}
+-- linking the input and output fluidboxes of the furnace does not really work,
+-- so we need to have a secondary fluidbox to which the furnace can connect to.
+local pipe = {
+  type = "pipe",
+  name = mod_prefix .. "pipe",
+
+  selection_priority = washbox_debug and 51 or 49,
+  selectable_in_game = washbox_debug,
+  selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
+  collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
+  collision_mask = {layers = {}},
+  flags = {"hide-alt-info", "not-on-map", "placeable-off-grid"},
+
+  horizontal_window_bounding_box = {{0, 0}, {0, 0}},
+  vertical_window_bounding_box = {{0, 0}, {0, 0}},
+
+  fluid_box = {
+    volume = 50,
+    pipe_connections =
+    {
+      {connection_type = "linked", linked_connection_id = 1},
+      {connection_type = "linked", linked_connection_id = 2},
+    },
+  },
+
+  hidden = true,
+}
+
+data:extend{recipe_category, furnace, item, recipe, pipe}
