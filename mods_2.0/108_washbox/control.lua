@@ -56,6 +56,7 @@ mod.on_created_entity = function(event)
     entity = entity,
     pipe = pipe,
     beacon = beacon,
+    beacon_overload = beacon_overload,
   }
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = true
@@ -82,6 +83,35 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       if struct.pipe then struct.pipe.destroy() end
       if struct.beacon then struct.beacon.destroy() end
       if struct.beacon_overload then struct.beacon_overload.destroy() end
+    end
+  end
+end)
+
+local function get_fluid_segment_members(pipe_connection, members)
+  if not pipe_connection.target then return members end
+  local owner = pipe_connection.target.owner
+  if members[owner.unit_number] then return members end
+  members[owner.unit_number] = owner
+
+  local target_connections = pipe_connection.target.get_pipe_connections(pipe_connection.target_fluidbox_index)
+  for _, target_connection in ipairs(target_connections) do
+    get_fluid_segment_members(target_connection, members)
+  end
+
+  return members
+end
+
+script.on_nth_tick(60 * 2.5, function()
+  for _, struct in pairs(storage.structs) do
+    if struct.entity.valid then
+
+      local total_pumping_speed = 0
+      for _, pipe_connection in ipairs(struct.entity.fluidbox.get_pipe_connections(1)) do
+        if pipe_connection.target and pipe_connection.target.owner.name ~= mod_prefix .. "pipe" then
+          game.print(serpent.line(get_fluid_segment_members(pipe_connection, {})))
+        end
+      end
+
     end
   end
 end)
