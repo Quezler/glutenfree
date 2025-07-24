@@ -160,6 +160,18 @@ script.on_nth_tick(60 * 2.5, function()
     end
   end
 
+  local inputting_from_fluid_segment = {}
+
+  for _, struct in pairs(storage.structs) do
+    if struct.entity.valid then
+      local inputting_from = struct.entity.fluidbox.get_fluid_segment_id(1)
+
+      if inputting_from then
+        inputting_from_fluid_segment[inputting_from] = (inputting_from_fluid_segment[inputting_from] or 0) + 1
+      end
+    end
+  end
+
   for _, struct in pairs(storage.structs) do
     if struct.entity.valid then
 
@@ -167,7 +179,8 @@ script.on_nth_tick(60 * 2.5, function()
         populate_fluid_segment_map(fluid_segment_map, struct.entity.surface_index)
       end
 
-      local total_pumping_speed = fluid_segment_map[struct.entity.surface_index][struct.entity.fluidbox.get_fluid_segment_id(1)] or 0
+      local inputting_from = struct.entity.fluidbox.get_fluid_segment_id(1)
+      local total_pumping_speed = (inputting_from and (fluid_segment_map[struct.entity.surface_index][inputting_from] or 0) / inputting_from_fluid_segment[inputting_from]) or 0
       remote.call("beacon-interface", "set_effects", struct.beacon.unit_number, {
         speed = math.ceil(total_pumping_speed * 5) - 100,
         productivity = 0,
