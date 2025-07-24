@@ -18,7 +18,7 @@ script.on_init(function()
 end)
 
 script.on_configuration_changed(function()
-  assert(storage.surfacedata == nil, "not compatible with washbox <= 2.0.0, remove the previous version first.")
+  assert(storage.surfacedata ~= nil, "\nnot compatible with washbox <= 2.0.0, remove the previous version first.")
 
   mod.refresh_surfacedata()
 end)
@@ -145,7 +145,7 @@ local function populate_fluid_segment_map(fluid_segment_map, surface_index)
     end
   end
 
-  log(serpent.line(surface_fluid_segment_map))
+  -- log(serpent.line(surface_fluid_segment_map))
   fluid_segment_map[surface_index] = surface_fluid_segment_map
 end
 
@@ -168,7 +168,14 @@ script.on_nth_tick(60 * 2.5, function()
       end
 
       local total_pumping_speed = fluid_segment_map[struct.entity.surface_index][struct.entity.fluidbox.get_fluid_segment_id(1)] or 0
-      log(total_pumping_speed)
+      -- log(total_pumping_speed)
+      remote.call("beacon-interface", "set_effects", struct.beacon.unit_number, {
+        speed = (total_pumping_speed * 5) - 100,
+        productivity = 0,
+        consumption = 0,
+        pollution = 0,
+        quality = 0,
+      })
     end
   end
 
