@@ -13,6 +13,7 @@ Date: ????
     - Measure only on the input side
     - Each pump gives you 1 speed (first one 0.8)
     - Replace the built-in recipe with barrels
+    - Check if the output side is actually moving the fluids away
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
