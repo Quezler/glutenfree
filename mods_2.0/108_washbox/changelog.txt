@@ -8,6 +8,7 @@ Date: ????
     - Figure out a way to prevent player beacons
     - Attempt to walk the fluid segment
     - Keep track of the (offshore) pump output fluidboxes
+    - Sum the speed of pumps pushing into that fluidbox
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24

@@ -189,6 +189,11 @@ script.on_nth_tick(60 * 2.5, function()
       end
 
       local total_pumping_speed = 0
+      -- log(serpent.line(fluid_segment_map[struct.entity.surface_index].output))
+      for _, a_pump in ipairs(fluid_segment_map[struct.entity.surface_index].output[struct.pipe.fluidbox.get_fluid_segment_id(1)] or {}) do
+        total_pumping_speed = total_pumping_speed + a_pump.pumped_last_tick
+      end
+      log(total_pumping_speed)
     end
   end
 end)
