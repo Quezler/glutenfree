@@ -152,10 +152,20 @@ end
 script.on_nth_tick(60 * 2.5, function()
   local fluid_segment_map = {}
 
+  -- try to track the inline washboxes
+  local washbox_to_fluid_segment_id = {}
+  local fluid_segment_id_to_washboxes = {}
+  local fluid_segment_id_to_speed = {}
+
   local storage_structs = {}
   for unit_number, struct in pairs(storage.structs) do
     if struct.entity.valid then
       storage_structs[unit_number] = struct
+
+      local fluid_segment_id = struct.pipe.fluidbox.get_fluid_segment_id(1)
+      washbox_to_fluid_segment_id[struct.entity.unit_number] = fluid_segment_id
+      fluid_segment_id_to_washboxes[fluid_segment_id] = fluid_segment_id_to_washboxes[fluid_segment_id] or {}
+      fluid_segment_id_to_washboxes[fluid_segment_id][struct.entity.unit_number] = struct.entity
     end
   end
 
@@ -182,8 +192,10 @@ script.on_nth_tick(60 * 2.5, function()
 
       local inputting_from = struct.entity.fluidbox.get_fluid_segment_id(1)
       local total_pumping_speed = (inputting_from and (fluid_segment_map[struct.entity.surface_index][inputting_from] or 0) / inputting_from_fluid_segment[inputting_from]) or 0
+      struct.last_written_speed = math.ceil(total_pumping_speed * 5) - 100
+      fluid_segment_id_to_speed[washbox_to_fluid_segment_id[struct.entity.unit_number]] = math.max(struct.last_written_speed, fluid_segment_id_to_speed[washbox_to_fluid_segment_id[struct.entity.unit_number]] or 0)
       remote.call("beacon-interface", "set_effects", struct.beacon.unit_number, {
-        speed = math.ceil(total_pumping_speed * 5) - 100,
+        speed = struct.last_written_speed,
         productivity = 0,
         consumption = 0,
         pollution = 0,
@@ -195,6 +207,16 @@ script.on_nth_tick(60 * 2.5, function()
   for _, struct in pairs(storage_structs) do
     struct.entity.fluidbox.add_linked_connection(1, struct.pipe, 1)
     struct.entity.fluidbox.add_linked_connection(2, struct.pipe, 2)
+
+    if struct.last_written_speed == -100 then
+      remote.call("beacon-interface", "set_effects", struct.beacon.unit_number, {
+        speed = fluid_segment_id_to_speed[washbox_to_fluid_segment_id[struct.entity.unit_number]],
+        productivity = 0,
+        consumption = 0,
+        pollution = 0,
+        quality = 0,
+      })
+    end
   end
 end)
 
