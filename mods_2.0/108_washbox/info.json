@@ -21,6 +21,8 @@
         "? base >= 2.0.60",
         "? space-age",
 
+        "beacon-interface",
+
         "? Krastorio2"
     ]
 }

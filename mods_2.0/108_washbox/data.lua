@@ -63,6 +63,13 @@ local furnace = {
 
   icon_draw_specification = {scale = 0},
 
+  allowed_effects = {"speed"},
+  effect_receiver = {
+    uses_module_effects = false,
+    uses_beacon_effects = true,
+    uses_surface_effects = false,
+  },
+
   fluid_boxes =
   {
     {
@@ -206,3 +213,8 @@ local pipe = {
 }
 
 data:extend{recipe_category, furnace, item, recipe, pipe}
+
+local beacon_interface = table.deepcopy(data.raw["beacon"]["beacon-interface--beacon-tile"])
+beacon_interface.name = mod_prefix .. "beacon-interface"
+table.insert(beacon_interface.flags, "placeable-off-grid")
+data:extend{beacon_interface}

@@ -20,9 +20,26 @@ mod.on_created_entity = function(event)
   entity.fluidbox.add_linked_connection(1, pipe, 1)
   entity.fluidbox.add_linked_connection(2, pipe, 2)
 
+  local beacon = entity.surface.create_entity{
+    name = mod_prefix .. "beacon-interface",
+    force = entity.force,
+    position = entity.position,
+    raise_built = true,
+  }
+  beacon.destructible = false
+
+  remote.call("beacon-interface", "set_effects", beacon.unit_number, {
+    speed = -100,
+    productivity = 0,
+    consumption = 0,
+    pollution = 0,
+    quality = 0,
+  })
+
   storage.structs[entity.unit_number] = {
     entity = entity,
     pipe = pipe,
+    beacon = beacon,
   }
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = true
@@ -47,6 +64,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     local struct = storage.structs[event.useful_id]
     if struct then storage.structs[event.useful_id] = nil
       if struct.pipe then struct.pipe.destroy() end
+      if struct.beacon then struct.beacon.destroy() end
     end
   end
 end)

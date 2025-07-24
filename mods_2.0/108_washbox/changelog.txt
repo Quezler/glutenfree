@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Begin rewriting for the new pump api
     - Use an intermediary pipe entity
+    - Trial using beacon interface
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
