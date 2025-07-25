@@ -19,18 +19,24 @@ script.on_event(defines.events.on_player_driving_changed_state, function(event)
         sprite = "utility/indication_arrow",
         tint = {1, 1, 1, 0.5},
         orientation = 0.75, -- left
-        target = {entity = entity, offset = {-0.7, i - tank_count - 0.5}},
+        target = {entity = entity},
         players = {player},
         only_in_alt_mode = true,
+        orientation_target = {entity = entity},
+        use_target_orientation = true,
+        oriented_offset = {-0.7, i - tank_count - 0.5},
       }
       local right = rendering.draw_sprite{
         surface = surface,
         sprite = "utility/indication_arrow",
         tint = {1, 1, 1, 0.5},
         orientation = 0.25, -- right
-        target = {entity = entity, offset = { 0.7, i - tank_count - 0.5}},
+        target = {entity = entity},
         players = {player},
         only_in_alt_mode = true,
+        orientation_target = {entity = entity},
+        use_target_orientation = true,
+        oriented_offset = { 0.7, i - tank_count - 0.5},
       }
       table.insert(sprites_for_player, left)
       table.insert(sprites_for_player, right)

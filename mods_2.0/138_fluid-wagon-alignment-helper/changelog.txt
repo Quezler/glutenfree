@@ -5,6 +5,7 @@ Date: ????
     - Use the yellow indication arrows
     - Visual enhancements
     - Clear renderings when the exiting vehicle
+    - Figure out how to rotate along with the wagon
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 25
