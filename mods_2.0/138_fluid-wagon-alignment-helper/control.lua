@@ -9,12 +9,17 @@ script.on_event(defines.events.on_player_driving_changed_state, function(event)
     local surface = entity.surface
 
     for i = 1, tank_count * 2 do
-      rendering.draw_circle{
+      rendering.draw_sprite{
         surface = surface,
-        target = {entity = entity, offset = {-0.75, i - 3 - 0.5}},
-        color = {1, 1, 0},
-        filled = true,
-        radius = 0.1,
+        sprite = "utility/indication_arrow",
+        orientation = 0.75, -- left
+        target = {entity = entity, offset = {-0.7, i - 3 - 0.5}},
+      }
+      rendering.draw_sprite{
+        surface = surface,
+        sprite = "utility/indication_arrow",
+        orientation = 0.25, -- right
+        target = {entity = entity, offset = { 0.7, i - 3 - 0.5}},
       }
     end
   end
