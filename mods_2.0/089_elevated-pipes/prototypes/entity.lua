@@ -226,7 +226,7 @@ return {
   selection_box = selection_box,
   selection_priority = 49,
 
-  icon_draw_specification = {scale = 0.5, shift = {0, -3.1}},
+  icon_draw_specification = {scale = 0.5, shift = {0, -3}},
   flags = {"not-on-map"},
 
   two_direction_only = true,
