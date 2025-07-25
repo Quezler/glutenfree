@@ -51,5 +51,5 @@ end
 --   return remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface_index})
 -- end
 
---- @since 1.2.0
+--- @since 2.0.0
 return Zone
