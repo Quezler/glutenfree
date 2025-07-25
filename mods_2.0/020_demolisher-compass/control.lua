@@ -5,47 +5,16 @@ local flib_math = require("__flib__.math")
 local Handler = {}
 
 script.on_init(function()
-  storage.demolishers = {}
-  storage.deathrattles = {}
-  storage.show_debug_for = {}
-
   storage.player_needle_pointing_at = {}
   storage.players_holding_compasses = {}
   storage.any_player_holding_compass = false
-
-  storage.last_chunk_of_player = {}
-
-  if game.surfaces["vulcanus"] then
-    local demolishers = game.surfaces["vulcanus"].find_entities_filtered{
-      type = "segmented-unit"
-    }
-
-    for _, demolisher in ipairs(demolishers) do
-      Handler.register_demolisher(demolisher)
-    end
-  end
-
-  -- game.print(table_size(storage.demolishers))
 end)
 
 script.on_configuration_changed(function()
-  storage.last_chunk_of_player = {}
-end)
-
-function Handler.register_demolisher(entity)
-  -- game.print(string.format("registered demolisher #%d", entity.unit_number))
-  storage.demolishers[entity.unit_number] = {
-    entity = entity,
-    territory = {},
-  }
-
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = true
-end
-
-script.on_event(defines.events.on_script_trigger_effect, function(event)
-  if event.effect_id ~= "demolisher-compass-demolisher-created" then return end
-  assert(event.target_entity.type == "segmented-unit") -- some mod added this effect_id to random triggers?
-  Handler.register_demolisher(event.target_entity)
+  storage.demolishers = nil
+  storage.deathrattles = nil
+  storage.show_debug_for = nil
+  storage.last_chunk_of_player = nil
 end)
 
 local function position_key(position)
@@ -53,106 +22,6 @@ local function position_key(position)
   assert(position.y)
   return string.format("[%g, %g]", position.x, position.y)
 end
-
--- demolishers move slow, so every 10 seconds we check which chunk every demolisher is in,
--- instead of flagging we're counting since demolishers can arc outside their territory for a bit,
--- so the higher the number is the more likely it is that the demolisher is wandering its own territory.
-script.on_nth_tick(600, function(event)
-  for _, demolisher in pairs(storage.demolishers) do
-    local chunk_position = flib_position.to_chunk(demolisher.entity.position)
-    local chunk_key = position_key(chunk_position)
-
-    local chunk = demolisher.territory[chunk_key]
-    if chunk == nil then
-      local left_top = flib_position.from_chunk(chunk_position)
-      local right_bottom = {left_top.x + 32, left_top.y + 32}
-
-      demolisher.territory[chunk_key] = {
-        position = chunk_position,
-
-        center = {left_top.x + 16, left_top.y + 16},
-        left_top = flib_position.from_chunk(chunk_position),
-        right_bottom = {left_top.x + 32, left_top.y + 32},
-
-        visits = 1,
-      }
-    else
-      chunk.visits = chunk.visits + 1
-    end
-  end
-
-  Handler.visualize()
-end)
-
-script.on_event(defines.events.on_object_destroyed, function(event)
-  local deathrattle = storage.deathrattles[event.registration_number]
-  if deathrattle then storage.deathrattles[event.registration_number] = nil
-    local demolisher = storage.demolishers[event.useful_id]
-    if demolisher then storage.demolishers[event.useful_id] = nil
-      -- kill any render objects
-    end
-  end
-end)
-
-function Handler.visualize(player_identification)
-  local surface = game.surfaces["vulcanus"]
-  if surface == nil then return end
-
-  for player_index, player in pairs(storage.show_debug_for) do
-    if player.connected == false then
-      storage.show_debug_for[player_index] = nil
-    end
-  end
-
-  -- avoid creating the debug objects if there are no (online) players to see it.
-  if next(storage.show_debug_for) == nil then return end
-
-  for _, demolisher in pairs(storage.demolishers) do
-    for _, chunk in pairs(demolisher.territory) do
-
-      rendering.draw_rectangle{
-        surface = surface,
-
-        left_top = chunk.left_top,
-        right_bottom = chunk.right_bottom,
-
-        color = {0.25, 0, 0, 0.1},
-        filled = true,
-        players = storage.show_debug_for,
-        time_to_live = 600,
-      }
-
-      rendering.draw_text{
-        surface = surface,
-        target = chunk.center,
-
-        text = chunk.visits,
-        color = {1, 1, 1},
-
-        scale = 5,
-        alignment = "center",
-        vertical_alignment = "middle",
-
-        players = storage.show_debug_for,
-        time_to_live = 600,
-      }
-
-    end
-  end
-end
-
-commands.add_command("demolisher-compass", "Toggle rendering debug objects.", function(command)
-  local player = game.get_player(command.player_index)
-  assert(player)
-
-  if storage.show_debug_for[command.player_index] then
-    storage.show_debug_for[command.player_index] = nil
-    player.print("[demolisher-compass] debug visuals disabled.")
-  else
-    storage.show_debug_for[command.player_index] = player
-    player.print("[demolisher-compass] debug visuals enabled.")
-  end
-end)
 
 local is_demolisher_compass = {}
 for i = 0, 27 do
@@ -167,15 +36,6 @@ end
 local function request_needle_direction(player, new_direction)
   local old_direction = (storage.player_needle_pointing_at[player.index] or 16)
   local next_direction = old_direction
-
-  -- -- if math.random(1, 2) > 1 then
-  --   if new_direction > old_direction then
-  --     next_direction = next_direction + 1
-  --   end
-  --   if new_direction < old_direction then
-  --     next_direction = next_direction - 1
-  --   end
-  -- -- end
 
   local diff = (new_direction - old_direction) % 28
   if diff == 0 then return end
@@ -198,45 +58,6 @@ local function request_needle_direction(player, new_direction)
   player.cursor_stack.set_stack({name = string.format("demolisher-compass-%02d", next_direction)})
 end
 
--- this lookup isn't very performant, but hey there are usually only like 20 demolishers a the time.
-function Handler.get_demolisher_from_chunk_key(chunk_key, chunk_position)
-  local flatmap = {}
-
-  -- local i = 0
-  for _, demolisher in pairs(storage.demolishers) do
-    -- i = i + 1
-    if demolisher.territory[chunk_key] then
-      -- log(string.format("found a demolisher in this chunk after %d tries.", i))
-      return demolisher.entity
-    end
-
-    for other_chunk_key, _ in pairs(demolisher.territory) do
-      flatmap[other_chunk_key] = demolisher.entity
-    end
-  end
-
-  -- log(string.format("found no demolisher in this chunk after %d tries.", i))
-
-  for x = 1, 20 do
-    local try_chunk_key = position_key({x = chunk_position.x + x - 10, y = chunk_position.y})
-    -- log(try_chunk_key)
-    local demolisher = flatmap[try_chunk_key]
-    if demolisher then
-      -- game.print("demolisher found at i " .. i)
-
-      for y = 1, 20 do
-        try_chunk_key = position_key({x = chunk_position.x, y = chunk_position.y + y - 10})
-        -- log(try_chunk_key)
-        if demolisher == flatmap[try_chunk_key] then
-          -- game.print("im inside a territory")
-          return demolisher
-        end
-      end
-
-    end
-  end
-end
-
 function Handler.on_nth_tick_10(event)
   for player_index, player in pairs(storage.players_holding_compasses) do
     if player.connected == false then
@@ -248,17 +69,18 @@ function Handler.on_nth_tick_10(event)
     if player_is_holding_compass(player) == false then goto continue end
 
     local chunk_position = flib_position.to_chunk(player.position)
-    local chunk_key = position_key(chunk_position)
-    local last_chunk_of_player = storage.last_chunk_of_player[player_index] -- todo: surface check
-    if last_chunk_of_player == nil or last_chunk_of_player.chunk_key ~= chunk_key then
-      storage.last_chunk_of_player[player_index] = {
-        chunk_key = chunk_key,
-        demolisher = Handler.get_demolisher_from_chunk_key(chunk_key, chunk_position),
-      }
-    end
+    local territory = player.surface.get_territory_for_chunk(chunk_position)
+    local demolisher, sprite_nr
 
-    local demolisher = storage.last_chunk_of_player[player_index].demolisher
-    local sprite_nr
+    if territory then
+      local segmented_unit = territory.get_segmented_units()[1]
+      if segmented_unit then
+        local head = segmented_unit.segments[1]
+        if head and head.entity then
+          demolisher = head.entity
+        end
+      end
+    end
 
     if demolisher and demolisher.valid then
       local zero_to_16 = flib_direction.from_positions(player.position, demolisher.position, false)
@@ -294,7 +116,6 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
   else
     storage.players_holding_compasses[player.index] = nil
     storage.player_needle_pointing_at[player.index] = nil
-    storage.last_chunk_of_player[player.index] = nil
   end
 end)
 
