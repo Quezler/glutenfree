@@ -23,7 +23,7 @@ local function update_zonelist_for_player(player, root)
       local renamed = forcedata[row.tags.zone_index]
       local caption = name_cell.caption
       if type(caption) == "string" then
-        caption = {"space-exploration.zonelist-renamed-zone", caption, renamed}
+        caption = {"space-exploration.zonelist-renamed-zone", caption, renamed and (" " .. renamed) or ""}
       else
         assert(caption[1] == "space-exploration.zonelist-renamed-zone")
         caption[3] = renamed and (" " .. renamed) or ""
