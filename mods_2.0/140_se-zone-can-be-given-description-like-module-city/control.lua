@@ -1,35 +1,35 @@
-local util = require('__space-exploration-scripts__.util')
-local Zonelist = require('__space-exploration-scripts__.zonelist')
-local GuiCommon = require('__space-exploration-scripts__.gui-common')
+local util = require("__space-exploration-scripts__.util")
+local Zonelist = require("__space-exploration-scripts__.zonelist")
+local GuiCommon = require("__space-exploration-scripts__.gui-common")
 
-local textfield_name = 'se-zone-rename'
--- local print_gui = require('print_gui')
+local textfield_name = "se-zone-rename"
+-- local print_gui = require("print_gui")
 
 local mod = {}
 
 local function update_zonelist_for_player(player, root)
   -- log(print_gui.serpent(root))
-  
+
   local scroll_pane = util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
   if not scroll_pane then return end
 
-  local forcedata = global.forcedata[player.force.name] or {}
+  local forcedata = storage.forcedata[player.force.name] or {}
 
   for _, row in pairs(scroll_pane.children) do
-    if row.tags.zone_type ~= 'spaceship' then
+    if row.tags.zone_type ~= "spaceship" then
       local name_cell = row.row_flow.children[3]
 
       local renamed = forcedata[row.tags.zone_index]
       local caption = name_cell.caption
-      if type(caption) == "string" then 
-        if renamed == nil then renamed = caption caption = '' end
+      if type(caption) == "string" then
+        if renamed == nil then renamed = caption caption = "" end
         caption = {"space-exploration.zonelist-renamed-zone", renamed, caption}
       else
-        assert(caption[1] == 'space-exploration.zonelist-renamed-zone')
-        if renamed ~= nil and caption[3] == '' then caption[3] = caption[2] end
+        assert(caption[1] == "space-exploration.zonelist-renamed-zone")
+        if renamed ~= nil and caption[3] == "" then caption[3] = caption[2] end
 
-        if renamed == nil and caption[3] ~= '' then renamed = caption[3] caption[3] = '' end
-        if renamed == nil and caption[3] == '' then renamed = caption[2] end
+        if renamed == nil and caption[3] ~= "" then renamed = caption[3] caption[3] = "" end
+        if renamed == nil and caption[3] == "" then renamed = caption[2] end
 
         caption[2] = renamed
       end
@@ -50,23 +50,23 @@ local function update_zonelist_for_player(player, root)
   local rename = content[textfield_name]
   if rename == nil then
     local name_horizontal_flow = content.add{
-      type = 'flow',
+      type = "flow",
       name = textfield_name,
-      direction = 'horizontal',
+      direction = "horizontal",
       index = 1,
     }
     name_horizontal_flow.add{
-      type = 'textfield',
+      type = "textfield",
       name = GuiCommon.rename_textfield_name,
       lose_focus_on_confirm = true,
-      style = 'se_textfield_maximum_stretchable',
+      style = "se_textfield_maximum_stretchable",
     }
     name_horizontal_flow.add{
       type = "choose-elem-button",
       elem_type = "signal",
       signal = {
         type = "virtual",
-        name = (mod_prefix or 'se-') .. "select-icon"
+        name = (mod_prefix or "se-") .. "select-icon"
       },
       name = GuiCommon.icon_selector_name,
       style = "se_icon_selector_button",
@@ -74,15 +74,15 @@ local function update_zonelist_for_player(player, root)
     rename = content[textfield_name]
   end
 
-  rename[GuiCommon.rename_textfield_name].enabled = view_button.tags.zone_type ~= 'spaceship'
+  rename[GuiCommon.rename_textfield_name].enabled = view_button.tags.zone_type ~= "spaceship"
   rename[GuiCommon.icon_selector_name].enabled = rename[GuiCommon.rename_textfield_name].enabled
 
-  rename[GuiCommon.rename_textfield_name].tags = {action = 'rename-zone', zone_index = zone_index, zone_type = view_button.tags.zone_type}
-  rename[GuiCommon.rename_textfield_name].text = forcedata[zone_index] or ''
+  rename[GuiCommon.rename_textfield_name].tags = {action = "rename-zone", zone_index = zone_index, zone_type = view_button.tags.zone_type}
+  rename[GuiCommon.rename_textfield_name].text = forcedata[zone_index] or ""
 
-  global.action_zone_link_triggers[player.index] = {
+  storage.action_zone_link_triggers[player.index] = {
     player = player,
-    element = content['details'].children[1],
+    element = content["details"].children[1],
   }
   script.on_event(defines.events.on_tick, mod.on_tick)
 end
@@ -102,11 +102,11 @@ local function register_events(event)
 end
 
 local function on_init(event)
-  global.forcedata = {}
+  storage.forcedata = {}
 
   -- in a zone's sidebar you can click on parents/spaceships to quickly go there,
   -- but since those delete the element other mods cannot receive their click event.
-  global.action_zone_link_triggers = {}
+  storage.action_zone_link_triggers = {}
 
   register_events(event)
 end
@@ -130,24 +130,24 @@ script.on_event(defines.events.on_gui_confirmed, function(event)
 
   -- we require the zone type to be present, as well as not a spaceship, to ensure forcedata does not get tainted.
   assert(event.element.tags.zone_type)
-  assert(event.element.tags.zone_type ~= 'spaceship')
+  assert(event.element.tags.zone_type ~= "spaceship")
 
-  local player = game.get_player(event.player_index)
-  if global.forcedata[player.force.name] == nil then global.forcedata[player.force.name] = {} end
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+  if storage.forcedata[player.force.name] == nil then storage.forcedata[player.force.name] = {} end
 
   if event.element.text == "" then
-    global.forcedata[player.force.name][event.element.tags.zone_index] = nil
+    storage.forcedata[player.force.name][event.element.tags.zone_index] = nil
   else
-    global.forcedata[player.force.name][event.element.tags.zone_index] = event.element.text
+    storage.forcedata[player.force.name][event.element.tags.zone_index] = event.element.text
   end
 
   update_zonelist_for_player(player, Zonelist.get(player))
 end)
 
 function mod.on_tick(event)
-  for _, action_zone_link_trigger in pairs(global.action_zone_link_triggers) do
+  for _, action_zone_link_trigger in pairs(storage.action_zone_link_triggers) do
     if action_zone_link_trigger.element.valid == false then
-      global.action_zone_link_triggers[_] = nil
+      storage.action_zone_link_triggers[_] = nil
 
       local root = Zonelist.get(action_zone_link_trigger.player)
       if root then
@@ -157,14 +157,14 @@ function mod.on_tick(event)
   end
 
   -- effectively when no-one has the universe explorer open
-  if table_size(global.action_zone_link_triggers) == 0 then
-    -- game.print('triggers emptied')
+  if table_size(storage.action_zone_link_triggers) == 0 then
+    -- game.print("triggers emptied")
     script.on_event(defines.events.on_tick, nil)
   end
 end
 
 function mod.on_load(event)
-  if table_size(global.action_zone_link_triggers) > 0 then
+  if table_size(storage.action_zone_link_triggers) > 0 then
     script.on_event(defines.events.on_tick, mod.on_tick)
   end
 

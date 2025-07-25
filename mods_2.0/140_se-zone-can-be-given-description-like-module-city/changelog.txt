@@ -1,0 +1,41 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 07. 25
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024. 03. 04
+  Info:
+    - Fix multiplayer event handler issue (why has no one reported this yet?)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 02. 23
+  Info:
+    - Fill the textarea with the zones rename on select
+    - Drop rightclick clear support, flashes because of the click update refresh
+    - Disable the textfield whilst a spaceship is selected
+    - Support clicking on parents/spaceships in the sidebar
+    - Setup readme and thumbnail
+    - Support the commongui icon picker
+    - Require space-exploration-scripts >= 1.1.1
+    - Mod portal release
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2024. 02. 15
+  Info:
+    - Add initial readme text
+    - Print the zonelist's structure upon opening it
+    - Experiment with overriding the zone name caption
+    - Refresh the zonelist whenever a button is clicked
+    - Cleanup + concat via localization
+    - Add a text box for the rename
+    - Get which zone was renamed on submitting
+    - Store zone index on the element for simplicity
+    - Test adding, changing & removing the name
+    - Mark MVP as done
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2024. 02. 14
+  Info:
+    - Stash idea
