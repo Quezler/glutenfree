@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Use the yellow indication arrows
+    - Visual enhancements
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 25
