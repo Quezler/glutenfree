@@ -2,7 +2,7 @@
     "name": "se-zone-can-be-given-description-like-module-city",
     "title": "Space Exploration - zones can be given a description like Module City",
     "description": "Zones cannot be renamed, but this is the next best thing.",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [

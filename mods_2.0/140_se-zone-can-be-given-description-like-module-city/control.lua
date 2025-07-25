@@ -144,7 +144,7 @@ script.on_event(defines.events.on_gui_confirmed, function(event)
   end
 
   local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = event.element.tags.zone_index})
-  if zone.surface_index then
+  if zone.surface_index and player.force.name == "player" then
     local surface = game.get_surface(zone.surface_index) --[[@as LuaSurface]]
     surface.localised_name = {"space-exploration.zonelist-renamed-zone", Zone._get_rich_text_name(zone), event.element.text == "" and "" or (" " .. event.element.text)}
   end
@@ -178,3 +178,26 @@ function mod.on_load(event)
 
   register_events(event)
 end
+
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+  if event.setting ~= "se-zone-can-be-given-description-like-module-city--uninstall" then return end
+
+  local uninstall = settings.global["se-zone-can-be-given-description-like-module-city--uninstall"].value
+
+  if uninstall then
+    for _, surface in pairs(game.surfaces) do
+      local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface.index})
+      if zone then
+        surface.localised_name = nil
+      end
+    end
+  else
+    for _, surface in pairs(game.surfaces) do
+      local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface.index})
+      if zone and storage.forcedata["player"] then
+        local main_rename = storage.forcedata["player"][zone.index]
+        surface.localised_name = {"space-exploration.zonelist-renamed-zone", Zone._get_rich_text_name(zone), main_rename and (" " .. main_rename) or ""}
+      end
+    end
+  end
+end)

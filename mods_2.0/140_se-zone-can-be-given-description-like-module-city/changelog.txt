@@ -1,10 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
-Date: ????
+Date: 2025. 07. 25
   Info:
     - Move the rename to the right of the original name
     - Give zones in alerts their rich text icon
     - Drop the auto hyphen
+    - Add toggle/uninstall for edited surface names in alerts
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025. 07. 25
