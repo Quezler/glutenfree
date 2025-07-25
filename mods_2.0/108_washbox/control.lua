@@ -50,14 +50,6 @@ mod.on_created_entity = function(event)
   }
   beacon.destructible = false
 
-  remote.call("beacon-interface", "set_effects", beacon.unit_number, {
-    speed = -100,
-    productivity = 0,
-    consumption = 0,
-    pollution = 0,
-    quality = 0,
-  })
-
   local beacon_overload = entity.surface.create_entity{
     name = mod_prefix .. "beacon-interface-overload",
     force = entity.force,
@@ -74,15 +66,32 @@ mod.on_created_entity = function(event)
     quality = 0,
   })
 
-  -- surfacedata.structs[entity.unit_number] = {
   storage.structs[entity.unit_number] = {
     entity = entity,
+
     pipe = pipe,
     beacon = beacon,
     beacon_overload = beacon_overload,
+
+    last_written_speed = 0,
   }
 
+  mod.set_washbox_speed(storage.structs[entity.unit_number], -100)
+
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {surface_index = surfacedata.index}
+end
+
+mod.set_washbox_speed = function(struct, speed)
+  if struct.last_written_speed == speed then return end
+  struct.last_written_speed = speed
+
+  remote.call("beacon-interface", "set_effects", struct.beacon.unit_number, {
+    speed = speed,
+    productivity = 0,
+    consumption = 0,
+    pollution = 0,
+    quality = 0,
+  })
 end
 
 for _, event in ipairs({
@@ -103,17 +112,12 @@ end
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]
   if deathrattle then storage.deathrattles[event.registration_number] = nil
-    -- local surfacedata = storage.surfacedata[deathrattle.surface_index]
-    -- if surfacedata then
-    --   local struct = surfacedata.structs[event.useful_id]
-    --   if struct then surfacedata.structs[event.useful_id] = nil
-      local struct = storage.structs[event.useful_id]
-      if struct then storage.structs[event.useful_id] = nil
-        if struct.pipe then struct.pipe.destroy() end
-        if struct.beacon then struct.beacon.destroy() end
-        if struct.beacon_overload then struct.beacon_overload.destroy() end
-      end
-    -- end
+    local struct = storage.structs[event.useful_id]
+    if struct then storage.structs[event.useful_id] = nil
+      if struct.pipe then struct.pipe.destroy() end
+      if struct.beacon then struct.beacon.destroy() end
+      if struct.beacon_overload then struct.beacon_overload.destroy() end
+    end
   end
 end)
 
@@ -157,12 +161,12 @@ script.on_nth_tick(60 * 2.5, function()
   local fluid_segment_id_to_washboxes = {}
   local fluid_segment_id_to_speed = {}
 
-  local storage_structs = {}
+  local storage_structs = {} -- to avoid needing to valid check each loop
   for unit_number, struct in pairs(storage.structs) do
     if struct.entity.valid then
       storage_structs[unit_number] = struct
 
-      local fluid_segment_id = struct.pipe.fluidbox.get_fluid_segment_id(1)
+      local fluid_segment_id = struct.entity.fluidbox.get_fluid_segment_id(1)
       washbox_to_fluid_segment_id[struct.entity.unit_number] = fluid_segment_id
       fluid_segment_id_to_washboxes[fluid_segment_id] = fluid_segment_id_to_washboxes[fluid_segment_id] or {}
       fluid_segment_id_to_washboxes[fluid_segment_id][struct.entity.unit_number] = struct.entity
@@ -172,16 +176,15 @@ script.on_nth_tick(60 * 2.5, function()
   -- to only measure the input side we need to split the segments
   for _, struct in pairs(storage_structs) do
     struct.entity.fluidbox.remove_linked_connection(1)
-    struct.entity.fluidbox.remove_linked_connection(2)
   end
 
-  local inputting_from_fluid_segment = {}
-
+  -- washboxes that share a segment will get the speed boost divided between them
+  local washboxes_sharing_this_segment = {}
   for _, struct in pairs(storage_structs) do
-    local inputting_from = struct.entity.fluidbox.get_fluid_segment_id(1)
+    local fluid_segment_id = struct.entity.fluidbox.get_fluid_segment_id(1)
 
-    if inputting_from then
-      inputting_from_fluid_segment[inputting_from] = (inputting_from_fluid_segment[inputting_from] or 0) + 1
+    if fluid_segment_id then
+      washboxes_sharing_this_segment[fluid_segment_id] = (washboxes_sharing_this_segment[fluid_segment_id] or 0) + 1
     end
   end
 
@@ -190,32 +193,22 @@ script.on_nth_tick(60 * 2.5, function()
         populate_fluid_segment_map(fluid_segment_map, struct.entity.surface_index)
       end
 
-      local inputting_from = struct.entity.fluidbox.get_fluid_segment_id(1)
-      local total_pumping_speed = (inputting_from and (fluid_segment_map[struct.entity.surface_index][inputting_from] or 0) / inputting_from_fluid_segment[inputting_from]) or 0
-      struct.last_written_speed = math.ceil(total_pumping_speed * 5) - 100
+      local fluid_segment_id = struct.entity.fluidbox.get_fluid_segment_id(1)
+      local total_pumping_speed = (fluid_segment_id and (fluid_segment_map[struct.entity.surface_index][fluid_segment_id] or 0) / washboxes_sharing_this_segment[fluid_segment_id]) or 0
+
+      -- 1200/s = 20 * 60, 20 * 5 = 100, so each 1200/s gives 1 crafting speed
+      mod.set_washbox_speed(struct, math.ceil(total_pumping_speed * 5) - 100)
       fluid_segment_id_to_speed[washbox_to_fluid_segment_id[struct.entity.unit_number]] = math.max(struct.last_written_speed, fluid_segment_id_to_speed[washbox_to_fluid_segment_id[struct.entity.unit_number]] or -100)
-      remote.call("beacon-interface", "set_effects", struct.beacon.unit_number, {
-        speed = struct.last_written_speed,
-        productivity = 0,
-        consumption = 0,
-        pollution = 0,
-        quality = 0,
-      })
   end
 
   -- measurements done, now we can merge the fluid segments again
   for _, struct in pairs(storage_structs) do
     struct.entity.fluidbox.add_linked_connection(1, struct.pipe, 1)
-    struct.entity.fluidbox.add_linked_connection(2, struct.pipe, 2)
 
+    -- washboxes that got no speed but shared a segment with other washboxes are determined to be inline,
+    -- inline washboxes match the speed of the washboxes that did get a speed, since its different than parralel.
     if struct.last_written_speed == -100 then
-      remote.call("beacon-interface", "set_effects", struct.beacon.unit_number, {
-        speed = fluid_segment_id_to_speed[washbox_to_fluid_segment_id[struct.entity.unit_number]],
-        productivity = 0,
-        consumption = 0,
-        pollution = 0,
-        quality = 0,
-      })
+      mod.set_washbox_speed(struct, fluid_segment_id_to_speed[washbox_to_fluid_segment_id[struct.entity.unit_number]])
     end
   end
 end)
@@ -235,7 +228,6 @@ function mod.refresh_surfacedata()
       surface = surface,
 
       pumps = {},
-      structs = {},
     }
   end
 end
