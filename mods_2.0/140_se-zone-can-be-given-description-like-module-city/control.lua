@@ -26,7 +26,7 @@ local function update_zonelist_for_player(player, root)
         caption = {"space-exploration.zonelist-renamed-zone", caption, renamed}
       else
         assert(caption[1] == "space-exploration.zonelist-renamed-zone")
-        caption[3] = renamed and (" - " .. renamed) or ""
+        caption[3] = renamed and (" " .. renamed) or ""
       end
       name_cell.caption = caption
     end
@@ -146,7 +146,7 @@ script.on_event(defines.events.on_gui_confirmed, function(event)
   local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = event.element.tags.zone_index})
   if zone.surface_index then
     local surface = game.get_surface(zone.surface_index) --[[@as LuaSurface]]
-    surface.localised_name = {"space-exploration.zonelist-renamed-zone", Zone._get_rich_text_name(zone), event.element.text == "" and "" or (" - " .. event.element.text)}
+    surface.localised_name = {"space-exploration.zonelist-renamed-zone", Zone._get_rich_text_name(zone), event.element.text == "" and "" or (" " .. event.element.text)}
   end
 
   update_zonelist_for_player(player, Zonelist.get(player))
