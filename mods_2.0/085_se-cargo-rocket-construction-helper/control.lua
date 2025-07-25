@@ -3,7 +3,7 @@ local silo = require('scripts.silo')
 --
 
 local function init()
-  global = {}
+  storage = {}
 
   silo.init()
 end
