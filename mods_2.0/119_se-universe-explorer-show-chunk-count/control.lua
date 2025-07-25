@@ -8,3 +8,4 @@ script.on_event(defines.events.on_surface_deleted, Handler.on_surface_deleted)
 
 script.on_configuration_changed(Handler.on_configuration_changed)
 script.on_event(defines.events.on_chunk_generated, Handler.on_chunk_generated)
+script.on_event(defines.events.on_chunk_deleted, Handler.on_chunk_deleted)

@@ -115,6 +115,10 @@ function Handler.on_chunk_generated(event)
   update_captions_for_surface(event.surface.index)
 end
 
+function Handler.on_chunk_deleted(event)
+  update_captions_for_surface(event.surface_index, remote.call("chunk-count", "get", {surface_index = event.surface_index}))
+end
+
 --
 
 return Handler
