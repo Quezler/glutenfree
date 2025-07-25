@@ -1,12 +1,13 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.2
-Date: ????
+Version: 1.0.0
+Date: 2025. 07. 25
   Info:
     - Use the yellow indication arrows
     - Visual enhancements
     - Clear renderings when the exiting vehicle
     - Figure out how to rotate along with the wagon
     - Use config based rendering
+    - Mod portal release
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 25
