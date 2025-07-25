@@ -15,12 +15,13 @@ data:extend({
       width = 64,
       height = 64,
     },
-    emissions_per_second = -1000 * 1000,
-    collision_mask = {},
+    emissions_per_second = {pollution = -1000 * 1000},
+    collision_mask = {layers = {}},
+    hidden = true,
   }
 })
 
 -- invisible
 if true then
-  data.raw['simple-entity']['se-little-inferno'].animations = util.empty_sprite()
+  data.raw["simple-entity"]["se-little-inferno"].animations = util.empty_sprite()
 end

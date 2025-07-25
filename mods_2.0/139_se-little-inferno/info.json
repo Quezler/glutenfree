@@ -2,11 +2,13 @@
     "name": "se-little-inferno",
     "title": "Space Exploration - little inferno",
     "description": "Pollution on biterless planets does not generate new chunks.",
-    "version": "1.1.2",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
         "space-exploration",
-        "space-exploration-scripts >= 1.0.10"
+        "space-exploration-scripts >= 2.0.0"
     ]
 }
