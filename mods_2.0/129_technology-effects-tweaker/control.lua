@@ -50,6 +50,7 @@ local function open_gui(player)
     style = "inside_shallow_frame",
     direction = "vertical",
   }
+  frame.style.minimal_width = 500
 
   -- inner.add{
   --   type = "button",
@@ -68,8 +69,8 @@ local function open_gui(player)
     style = "list_box_scroll_pane",
     vertical_scroll_policy = "always",
   }
-  scroll_pane.style.horizontally_stretchable = true
   scroll_pane.style.minimal_width = 300
+  scroll_pane.style.maximal_width = 300
   scroll_pane.style.bottom_padding = 4
   scroll_pane.style.minimal_height = frame.style.maximal_height - 80
 

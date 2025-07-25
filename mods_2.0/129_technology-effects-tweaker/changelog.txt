@@ -9,6 +9,7 @@ Date: ????
     - Explain the colors
     - Add search functionality
     - Clear filter after clicking a technology
+    - Stash leftover changes
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 06. 30
