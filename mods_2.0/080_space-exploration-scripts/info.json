@@ -2,7 +2,7 @@
     "name": "space-exploration-scripts",
     "title": "Space Exploration - scripts",
     "description": "Bruteforces access to some of the constants and util functions.",
-    "version": "2.7.0",
+    "version": "2.7.1",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [

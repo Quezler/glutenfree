@@ -41,7 +41,7 @@ function Zone._get_rich_text_name(zone)
   end
 
   -- because these make sense to me personally
-  if zone.name == "Nauvis"       then rich_text = "[item=landfill]"  end
+  if zone.name == "Nauvis"       then rich_text = "[planet=nauvis]"  end
   if zone.name == "Nauvis Orbit" then rich_text = "[item=satellite]" end
 
   return rich_text .. " " .. zone.name
