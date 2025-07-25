@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Use the yellow indication arrows
     - Visual enhancements
+    - Clear renderings when the exiting vehicle
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 25
