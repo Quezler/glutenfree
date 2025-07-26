@@ -156,7 +156,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       if struct then
         if struct.cargo.valid_for_read then
           arm_for_nothing(struct)
-        else
+        elseif struct.entity.valid then
           struct.entity.die(struct.entity.force)
         end
       end
