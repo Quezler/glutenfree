@@ -25,6 +25,7 @@ Date: ????
     - Fix standalone washing boxes having 1 speed
     - Cleanup the working code
     - Fix filter format being wrong
+    - Require 2.0.61 for pumped_last_tick
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
