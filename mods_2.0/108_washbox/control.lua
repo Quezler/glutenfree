@@ -8,7 +8,7 @@ script.on_init(function()
 
   for _, surface in pairs(game.surfaces) do
     local surfacedata = storage.surfacedata[surface.index]
-    for _, entity in ipairs(surface.find_entities_filtered{{filter = "type", type = {"pump", "offshore-pump"}}}) do
+    for _, entity in ipairs(surface.find_entities_filtered{type = {"pump", "offshore-pump"}}) do
       surfacedata.pumps[entity.unit_number] = entity
     end
   end
