@@ -21,6 +21,7 @@
         "base >= 2.0.61",
         "space-age",
 
-        "(?) PlanetsLib"
+        "sign-post",
+        "washbox >= 2.0.0"
     ]
 }
