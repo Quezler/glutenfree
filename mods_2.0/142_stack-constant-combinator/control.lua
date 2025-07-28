@@ -21,13 +21,11 @@ end)
 
 mod.on_created_entity = function(event)
   local entity = event.entity or event.destination
-  storage.x_offset = (storage.x_offset or 0) + 2
 
   local json = helpers.json_to_table(blueprint) --[[@as table]]
   local entity_number = {}
   for _, blueprint_entity in ipairs(json.blueprint.entities) do
     blueprint_entity.position.x = blueprint_entity.position.x + storage.x_offset
-    blueprint_entity.position.y = blueprint_entity.position.y - 6
     blueprint_entity.force = entity.force
     entity_number[blueprint_entity.entity_number] = storage.surface.create_entity(blueprint_entity)
   end
@@ -38,10 +36,12 @@ mod.on_created_entity = function(event)
   end
 
   -- connect the green wire on the combinator to the input side of the blueprint
-  entity.get_wire_connector(defines.wire_connector_id.circuit_green).connect_to(entity_number[5].get_wire_connector(defines.wire_connector_id.circuit_green), false, defines.wire_origin.player)
+  entity.get_wire_connector(defines.wire_connector_id.circuit_green).connect_to(entity_number[4].get_wire_connector(defines.wire_connector_id.combinator_input_green), false, defines.wire_origin.player)
+  -- and the red output signal back to the constant combinator
+  entity.get_wire_connector(defines.wire_connector_id.circuit_red).connect_to(entity_number[2].get_wire_connector(defines.wire_connector_id.combinator_output_red), false, defines.wire_origin.player)
 
-  storage.deathrattles = storage.deathrattles or {}
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {children = entity_number}
+  storage.x_offset = storage.x_offset + 2
 end
 
 for _, event in ipairs({

@@ -11,6 +11,14 @@ return [[
           "name": "arithmetic-combinator"
         },
         "index": 1
+      },
+      
+      {
+        "signal": 
+        {
+          "name": "decider-combinator"
+        },
+        "index": 2
       }
     ],
     "entities": 
@@ -21,8 +29,8 @@ return [[
         "name": "arithmetic-combinator",
         "position": 
         {
-          "x": -0.5,
-          "y": 1
+          "x": 1.5,
+          "y": -3
         },
         "control_behavior": 
         {
@@ -60,11 +68,53 @@ return [[
       
       {
         "entity_number": 2,
+        "name": "arithmetic-combinator",
+        "position": 
+        {
+          "x": 0.5,
+          "y": -3
+        },
+        "control_behavior": 
+        {
+          "arithmetic_conditions": 
+          {
+            "first_signal": 
+            {
+              "type": "virtual",
+              "name": "signal-each"
+            },
+            "second_constant": -1,
+            "operation": "*",
+            "output_signal": 
+            {
+              "type": "virtual",
+              "name": "signal-each"
+            }
+          }
+        }
+      },
+      
+      {
+        "entity_number": 3,
+        "name": "selector-combinator",
+        "position": 
+        {
+          "x": 1.5,
+          "y": -1
+        },
+        "control_behavior": 
+        {
+          "operation": "stack-size"
+        }
+      },
+      
+      {
+        "entity_number": 4,
         "name": "decider-combinator",
         "position": 
         {
-          "x": -1.5,
-          "y": 1
+          "x": 0.5,
+          "y": -1
         },
         "control_behavior": 
         {
@@ -85,6 +135,11 @@ return [[
                   "name": "signal-each"
                 },
                 "comparator": "=",
+                "first_signal_networks": 
+                {
+                  "red": true,
+                  "green": false
+                },
                 "second_signal_networks": 
                 {
                   "red": true,
@@ -100,107 +155,14 @@ return [[
                 {
                   "type": "virtual",
                   "name": "signal-each"
+                },
+                "networks": 
+                {
+                  "red": false,
+                  "green": true
                 }
               }
             ]
-          }
-        }
-      },
-      
-      {
-        "entity_number": 3,
-        "name": "selector-combinator",
-        "position": 
-        {
-          "x": -0.5,
-          "y": 3
-        },
-        "control_behavior": 
-        {
-          "operation": "stack-size"
-        }
-      },
-      
-      {
-        "entity_number": 4,
-        "name": "arithmetic-combinator",
-        "position": 
-        {
-          "x": -1.5,
-          "y": 3
-        },
-        "control_behavior": 
-        {
-          "arithmetic_conditions": 
-          {
-            "first_signal": 
-            {
-              "type": "virtual",
-              "name": "signal-each"
-            },
-            "second_constant": 0,
-            "operation": "+",
-            "output_signal": 
-            {
-              "type": "virtual",
-              "name": "signal-each"
-            }
-          }
-        }
-      },
-      
-      {
-        "entity_number": 5,
-        "name": "arithmetic-combinator",
-        "position": 
-        {
-          "x": -0.5,
-          "y": 5
-        },
-        "control_behavior": 
-        {
-          "arithmetic_conditions": 
-          {
-            "first_signal": 
-            {
-              "type": "virtual",
-              "name": "signal-each"
-            },
-            "second_constant": 0,
-            "operation": "+",
-            "output_signal": 
-            {
-              "type": "virtual",
-              "name": "signal-each"
-            }
-          }
-        }
-      },
-      
-      {
-        "entity_number": 6,
-        "name": "arithmetic-combinator",
-        "position": 
-        {
-          "x": -1.5,
-          "y": 5
-        },
-        "control_behavior": 
-        {
-          "arithmetic_conditions": 
-          {
-            "first_signal": 
-            {
-              "type": "virtual",
-              "name": "signal-each"
-            },
-            "second_constant": 0,
-            "operation": "+",
-            "output_signal": 
-            {
-              "type": "virtual",
-              "name": "signal-each"
-            }
           }
         }
       }
@@ -211,7 +173,7 @@ return [[
       [
         1,
         1,
-        5,
+        3,
         3
       ],
       
@@ -219,7 +181,7 @@ return [[
         1,
         2,
         3,
-        4
+        2
       ],
       
       [
@@ -233,34 +195,20 @@ return [[
         2,
         1,
         4,
-        1
-      ],
-      
-      [
-        2,
-        2,
-        3,
-        4
-      ],
-      
-      [
-        3,
-        2,
-        5,
-        4
-      ],
-      
-      [
-        4,
-        1,
-        6,
         3
       ],
       
       [
-        5,
         3,
-        6,
+        2,
+        4,
+        2
+      ],
+      
+      [
+        3,
+        3,
+        4,
         1
       ]
     ],

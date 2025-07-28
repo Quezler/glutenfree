@@ -41,9 +41,10 @@ local recipe = table.deepcopy(data.raw["recipe"]["constant-combinator"])
 recipe.name = "stack-constant-combinator"
 recipe.results = {{type = "item", name = "stack-constant-combinator", amount = 1}}
 recipe.ingredients = {
-  {type = "item", name = "arithmetic-combinator", amount = 4},
+  {type = "item", name = "arithmetic-combinator", amount = 2},
   {type = "item", name = "decider-combinator", amount = 1},
   {type = "item", name = "constant-combinator", amount = 1},
+  {type = "item", name = "selector-combinator", amount = 1},
 }
 
 do_search_n_replace(recipe)
