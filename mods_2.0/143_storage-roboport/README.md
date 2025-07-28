@@ -6,6 +6,10 @@ since if buffers request items they still report as available even though they a
 
 This mod contains a roboport reskin that outputs just the contents of storage chests on any wire you connect.
 
+The current update rate is once every 2.5 seconds, this should be plenty for pretty much all restocking usecases.
+
+Note to self, the contending names:
+
 roboport-read-logistic-network-contents-storage-only
 roboport-that-only-reads-logistic-storage-contents
 roboport-that-only-reads-what-is-in-storage-chests

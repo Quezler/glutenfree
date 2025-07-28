@@ -1,9 +1,9 @@
 {
-    "name": "yellow-roboport-that-only-counts-storage-contents",
-    "title": "Yellow roboport that only counts storage contents",
-    "description": "It probably has something to do with the title.",
+    "name": "storage-roboport",
+    "title": "Storage roboport",
+    "description": "Circuit wires only output the contents of yellow chests.",
 
-    "version": "0.0.1",
+    "version": "1.0.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
