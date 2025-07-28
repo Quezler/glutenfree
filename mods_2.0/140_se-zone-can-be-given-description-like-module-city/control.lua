@@ -91,9 +91,20 @@ local function on_zonelist_opened(event)
   update_zonelist_for_player(player, root)
 end
 
+function on_zone_surface_created(event)
+  local uninstall = settings.global["se-zone-can-be-given-description-like-module-city--uninstall"].value
+  if uninstall then return end
+
+  local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = event.zone_index})
+  game.get_surface(event.surface_index).localised_name = {"space-exploration.zonelist-renamed-zone", Zone._get_rich_text_name(zone), ""}
+end
 
 local function register_events(event)
   script.on_event(remote.call("space-exploration-scripts", "on_zonelist_opened"), on_zonelist_opened)
+
+  if remote.interfaces["space-exploration"]["get_on_zone_surface_created_event"] then
+    script.on_event(remote.call("space-exploration", "get_on_zone_surface_created_event"), on_zone_surface_created)
+  end
 end
 
 local function on_init(event)
@@ -114,7 +125,6 @@ local function on_init(event)
 end
 
 script.on_init(on_init)
-script.on_load(mod.on_load)
 
 script.on_event(defines.events.on_gui_click, function(event)
   if event.element.name == GuiCommon.icon_selector_name then return end -- it would erase any typed-yet-not-confirmed stuff when picking an icon
@@ -178,6 +188,8 @@ function mod.on_load(event)
 
   register_events(event)
 end
+
+script.on_load(mod.on_load)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
   if event.setting ~= "se-zone-can-be-given-description-like-module-city--uninstall" then return end
