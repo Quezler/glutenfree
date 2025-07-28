@@ -2,10 +2,12 @@
     "name": "stack-constant-combinator",
     "title": "Stack constant combinator",
     "description": "The values you set in this constant combinator get multiplied with their stack size on the output wires.",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
         "base"
     ]
 }
