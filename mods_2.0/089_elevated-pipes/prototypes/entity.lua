@@ -12,7 +12,7 @@ local collision_box = {{-0.4, -0.4}, {0.4, 0.4}}
 local selection_box = {{-0.7, -0.7}, {0.7, 0.7}}
 
 elevated_pipes.new_furnace = function(config)
-return {
+local furnace = {
   type = "furnace",
   name = config.name,
   icon = config.icon,
@@ -212,6 +212,14 @@ return {
 
   bottleneck_ignore = true,
 }
+
+  if mods["maraxsis"] then
+    local can_be_placed_anywhere = {water = true, dome = true, coral = true, trench = true, trench_entrance = true, trench_lava = true}
+    furnace.maraxsis_buildability_rules = can_be_placed_anywhere
+    data.raw["mod-data"]["maraxsis-constants"].data["DOME_EXCLUDED_FROM_DISABLE"][config.name] = true
+  end
+
+  return furnace
 end
 
 elevated_pipes.new_storage_tank = function(config)
