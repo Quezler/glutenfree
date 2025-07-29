@@ -94,10 +94,12 @@ function update_content_for_player(content, player, zone_index)
   local fragment_name = Zone_get_fragment_name(zone) -- nil if not a planet or moon
   if not fragment_name then
     coremining_header.visible = false
+    coremining_header.tooltip = nil
     coremining.visible = false
     return
   else
     coremining_header.visible = true
+    coremining_header.tooltip = zone.name
     coremining.visible = not coremining_header.state and true or false
   end
 
