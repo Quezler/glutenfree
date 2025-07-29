@@ -36,7 +36,7 @@ mod.open_gui = function(player, entity, surface_output)
   local inner = frame.add{
     type = "frame",
     name = gui_inner_name,
-    style = "inside_shallow_frame_with_padding",
+    style = "inside_shallow_frame_with_padding_and_vertical_spacing",
     direction = "vertical",
   }
 
@@ -55,6 +55,11 @@ mod.open_gui = function(player, entity, surface_output)
   local rate_label = inner.add{
     type = "label",
     caption = string.format("[entity=se-core-miner-drill] %.2f/s", tostring(surface_output)),
+  }
+
+  inner.add{
+    type = "line",
+    style = "inside_shallow_frame_with_padding_line"
   }
 end
 
