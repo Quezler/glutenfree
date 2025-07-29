@@ -1,0 +1,31 @@
+{
+    "name": "se-core-miner-able-to-mine-every-seam-surfacewide",
+    "title": "Space Exploration - core miner able to mine every seam surfacewide",
+    "description": "So you do not need a surface full of chunks to inflate your save size.",
+
+    "version": "0.0.1",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "? base",
+        "? space-age",
+
+        "space-exploration",
+        "se-core-miner-efficiency-updated-event",
+        
+        "? se-core-miner-no-diminishing-returns",
+        
+        "! se-core-miner-drill-output-inventories-are-linked"
+    ]
+}
