@@ -13,6 +13,51 @@ mod.get_core_fragments_per_second = function(fragment_name, zone_radius, mining_
   return ((100 / mod.get_core_fragment_mining_time(fragment_name)) * ((zone_radius + 5000) / 5000) * mining_productivity * core_miners) / math.sqrt(core_miners)
 end
 
+local gui_frame_name = "se-core-miner-fragments-frame"
+local gui_inner_name = "se-core-miner-fragments-inner"
+
+mod.open_gui = function(player, entity, surface_output)
+  local frame = player.gui.relative[gui_frame_name]
+  if frame then frame.destroy() end
+
+  local fragment_name = entity.mining_target.name
+
+  frame = player.gui.relative.add{
+    type = "frame",
+    name = gui_frame_name,
+    caption = "Fragment rate",
+    anchor = {
+      gui = defines.relative_gui_type.mining_drill_gui,
+      position = defines.relative_gui_position.right,
+      name = "se-core-miner-drill",
+    }
+  }
+
+  local inner = frame.add{
+    type = "frame",
+    name = gui_inner_name,
+    style = "inside_shallow_frame_with_padding",
+    direction = "vertical",
+  }
+
+  local surface_label = inner.add{
+    type = "label",
+    caption = entity.surface.localised_name or entity.surface.name,
+  }
+  surface_label.style.font = "default-bold"
+
+  local fragment_label = inner.add{
+    type = "label",
+    caption = {"", string.format("[entity=%s] ", fragment_name), entity.mining_target.localised_name[2]},
+  }
+  fragment_label.style.font = "default-semibold"
+
+  local rate_label = inner.add{
+    type = "label",
+    caption = string.format("[entity=se-core-miner-drill] %.2f/s", tostring(surface_output)),
+  }
+end
+
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
   if entity and entity.name == "se-core-miner-drill" then
@@ -31,6 +76,8 @@ script.on_event(defines.events.on_gui_opened, function(event)
       surface_output = mod.get_core_fragments_per_second(fragment_name, zone.radius, mining_productivity, 1) * core_miners
       log(surface_output) -- core miners on every seam without diminishing returns
     end
+
+    mod.open_gui(game.get_player(event.player_index), entity, surface_output)
   end
 end)
 

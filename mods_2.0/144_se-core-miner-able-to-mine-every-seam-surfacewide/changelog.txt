@@ -3,6 +3,7 @@ Version: 0.0.2
 Date: ????
   Info:
     - Figure out the secret sauce
+    - Show planet, fragment name & rate in relative gui
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 29
