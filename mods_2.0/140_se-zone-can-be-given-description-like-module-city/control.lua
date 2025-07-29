@@ -206,8 +206,8 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
   else
     for _, surface in pairs(game.surfaces) do
       local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface.index})
-      if zone and storage.forcedata["player"] then
-        local main_rename = storage.forcedata["player"][zone.index]
+      if zone then
+        local main_rename = storage.forcedata["player"] and storage.forcedata["player"][zone.index]
         surface.localised_name = {"space-exploration.zonelist-renamed-zone", Zone._get_rich_text_name(zone), main_rename and (" " .. main_rename) or ""}
       end
     end
