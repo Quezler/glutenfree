@@ -1,5 +1,7 @@
-A core miner will output as though every seam on the surface right under it.
+In the core miner drill gui you'll see a new configurable slider at the bottom,
+you can set it anywhere from 0 to the maximum amount of core seams on that planet/moon.
 
-If you have multiple core miners on a surface you can split how much goes where.
+The output, power usage & pollution will scale accordingly,
+you can "underclock" drills in order to have multiple setups.
 
-(like a setup only able to handle x fragments per second, and the rest to a big plant)
+Slider value is not preserved through blueprints, just so you know.

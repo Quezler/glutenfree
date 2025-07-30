@@ -74,7 +74,6 @@ mod.on_created_entity = function(event)
     beacon = beacon,
   }
 
-  storage.deathrattles = storage.deathrattles or {} -- todo: remove
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {surface_index = entity.surface.index, unit_number = entity.unit_number}
   mod.set_multiplier(surfacedata, surfacedata.structs[entity.unit_number], multiplier)
 end
