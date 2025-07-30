@@ -7,6 +7,7 @@ Date: ????
     - Horizontal line
     - Redesign the gui
     - Tweak the new gui
+    - Require beacon interface and hook up the slider
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 29

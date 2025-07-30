@@ -1,22 +1,102 @@
 local mod = {}
 
+require("namespace")
+require("scripts.surfacedata")(mod)
+
+script.on_init(function()
+  storage.surfacedata = {}
+  mod.refresh_surfacedata()
+
+  for _, surface in pairs(game.surfaces) do
+    for _, core_miner in ipairs(surface.find_entities_filtered{name = "se-core-miner-drill"}) do
+      mod.on_created_entity({entity = core_miner})
+    end
+  end
+end)
+
+script.on_configuration_changed(function()
+  mod.refresh_surfacedata()
+end)
+
+mod.on_created_entity = function(event)
+  local entity = event.entity or event.destination
+  local surfacedata = storage.surfacedata[entity.surface_index]
+
+  local beacon = entity.surface.create_entity{
+    name = mod_prefix .. "beacon-interface",
+    force = entity.force,
+    position = entity.position,
+    raise_built = true,
+  }
+  beacon.destructible = false
+
+  surfacedata.total_miners = surfacedata.total_miners + 1
+  surfacedata.structs[entity.unit_number] = {
+    entity = entity,
+
+    multiplier = 1,
+    beacon = beacon,
+  }
+end
+
+for _, event in ipairs({
+  defines.events.on_built_entity,
+  defines.events.on_robot_built_entity,
+  defines.events.on_space_platform_built_entity,
+  defines.events.script_raised_built,
+  defines.events.script_raised_revive,
+  defines.events.on_entity_cloned,
+}) do
+  script.on_event(event, mod.on_created_entity, {
+    {filter = "name", name = "se-core-miner-drill"},
+  })
+end
+
+mod.set_multiplier = function(surfacedata, struct, multiplier)
+  surfacedata.total_miners = surfacedata.total_miners - struct.multiplier
+  struct.multiplier = multiplier
+  surfacedata.total_miners = surfacedata.total_miners + struct.multiplier
+
+  remote.call("beacon-interface", "set_effects", struct.beacon.unit_number, {
+    speed = 0,
+    productivity = 0,
+    consumption = (100 * multiplier) - 100,
+    pollution = 0,
+    quality = 0,
+  })
+end
+
 --- @return number
 mod.get_core_seams_for_radius = function(radius)
   return 5 + math.floor(95 * radius / 10000)
 end
 
+--- @return string?
+mod.get_core_fragment_name = function(zone)
+  if not (zone.type == "planet" or zone.type == "moon") then return end -- Zone.is_solid(zone)
+  if zone.fragment_name then return zone.fragment_name end
+  return "se-core-fragment-" .. zone.primary_resource
+end
+
+--- @return number
 mod.get_core_fragment_mining_time = function(fragment_name)
   return prototypes.entity[fragment_name].mineable_properties.mining_time
 end
 
+--- @return number
 mod.get_core_fragments_per_second = function(fragment_name, zone_radius, mining_productivity, core_miners)
+  if core_miners == 0 then return 0 end -- or this function returns nan
   return ((100 / mod.get_core_fragment_mining_time(fragment_name)) * ((zone_radius + 5000) / 5000) * mining_productivity * core_miners) / math.sqrt(core_miners)
 end
 
 local gui_frame_name = "se-core-miner-fragments-frame"
 local gui_inner_name = "se-core-miner-fragments-inner"
+local gui_slider_name = "se-core-miner-fragments-slider"
 
-mod.open_gui = function(player, entity, surface_output)
+mod.open_gui = function(player, entity)
+  local surfacedata = storage.surfacedata[entity.surface.index]
+  local struct = surfacedata.structs[entity.unit_number]
+
   local frame = player.gui.relative[gui_frame_name]
   if frame then frame.destroy() end
 
@@ -30,6 +110,10 @@ mod.open_gui = function(player, entity, surface_output)
       gui = defines.relative_gui_type.mining_drill_gui,
       position = defines.relative_gui_position.bottom,
       name = "se-core-miner-drill",
+    },
+    tags = {
+      surface_index = entity.surface_index,
+      unit_number = entity.unit_number,
     }
   }
 
@@ -44,22 +128,17 @@ mod.open_gui = function(player, entity, surface_output)
 
   local slider = inner.add{
     type = "slider",
+    name = gui_slider_name,
     style = "notched_slider",
     minimum_value = 0,
-    maximum_value = 100,
+    value = struct.multiplier,
+    maximum_value = surfacedata.total_seams,
   }
   slider.style.horizontally_stretchable = true
-  -- slider.style.top_margin = 2 -- line_2 changes the parent from 44 to 48
-
-  -- local line = inner.add{
-  --   type = "line",
-  --   direction = "vertical",
-  -- }
-  -- line.style.top_margin = -9
-  -- line.style.bottom_margin = -9
 
   local texts = inner.add{
     type = "flow",
+    name = "texts",
     direction = "vertical",
   }
   texts.style.vertical_spacing = 0
@@ -68,15 +147,27 @@ mod.open_gui = function(player, entity, surface_output)
 
   local line_1 = texts.add{
     type = "label",
-    caption = string.format("[entity=se-core-miner-drill] %03d/%03d", 4, 68)
+    name = "line-1",
+    caption = string.format("[entity=se-core-miner-drill] %03d/%03d", struct.multiplier, surfacedata.total_seams)
   }
   line_1.style.minimal_width = 78
 
   local line_2 = texts.add{
     type = "label",
-    caption = string.format("[item=%s] %06.2f/s", fragment_name, surface_output)
+    name = "line-2",
+    caption = string.format("[item=%s] %06.2f/s", fragment_name, mod.get_surface_output(surfacedata, entity.force, struct.multiplier))
   }
   line_2.style.minimal_width = 78
+end
+
+mod.get_surface_output = function(surfacedata, force, total_drills)
+  local mining_productivity = 1 + force.mining_drill_productivity_bonus
+
+  if script.active_mods["se-core-miner-no-diminishing-returns"] then
+    return mod.get_core_fragments_per_second(surfacedata.fragment_name, surfacedata.zone_radius, mining_productivity, 1) * total_drills
+  else
+    return mod.get_core_fragments_per_second(surfacedata.fragment_name, surfacedata.zone_radius, mining_productivity, total_drills)
+  end
 end
 
 script.on_event(defines.events.on_gui_opened, function(event)
@@ -85,20 +176,13 @@ script.on_event(defines.events.on_gui_opened, function(event)
     local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = entity.surface.index})
     if not zone then return end -- how did you even place this outside a zone?
 
-    if not entity.mining_target then return end
-    local fragment_name = entity.mining_target.name
+    -- cache some zone information on the surfacedata object
+    local surfacedata = storage.surfacedata[entity.surface.index]
+    surfacedata.fragment_name = mod.get_core_fragment_name(zone)
+    surfacedata.zone_radius = zone.radius
+    surfacedata.total_seams = mod.get_core_seams_for_radius(zone.radius)
 
-    local mining_productivity = 1 + entity.force.mining_drill_productivity_bonus
-    local core_miners = mod.get_core_seams_for_radius(zone.radius)
-    local surface_output = mod.get_core_fragments_per_second(fragment_name, zone.radius, mining_productivity, core_miners)
-
-    log(surface_output) -- core miners on every seam with diminishing returns
-    if script.active_mods["se-core-miner-no-diminishing-returns"] then
-      surface_output = mod.get_core_fragments_per_second(fragment_name, zone.radius, mining_productivity, 1) * core_miners
-      log(surface_output) -- core miners on every seam without diminishing returns
-    end
-
-    mod.open_gui(game.get_player(event.player_index), entity, surface_output)
+    mod.open_gui(game.get_player(event.player_index), entity)
   end
 end)
 
@@ -110,5 +194,22 @@ commands.add_command("se-core-miner-set-output", nil, function(command)
     local fragment_name = entity.mining_target.name
     local fragment_mining_time = mod.get_core_fragment_mining_time(fragment_name)
     entity.mining_target.amount = 10000 * fragment_mining_time * (tonumber(command.parameter) or 1) -- 1/s
+  end
+end)
+
+script.on_event(defines.events.on_gui_value_changed, function(event)
+  local element = event.element
+
+  if element.name == gui_slider_name then
+    local root = assert(element.parent.parent)
+    assert(root.name == gui_frame_name)
+
+    local surfacedata = storage.surfacedata[root.tags.surface_index]
+    local struct = surfacedata.structs[root.tags.unit_number]
+    mod.set_multiplier(surfacedata, struct, element.slider_value)
+
+    local surface_output = mod.get_surface_output(surfacedata, struct.entity.force, struct.multiplier)
+    element.parent["texts"]["line-1"].caption = string.format("[entity=se-core-miner-drill] %03d/%03d", struct.multiplier, surfacedata.total_seams)
+    element.parent["texts"]["line-2"].caption = string.format("[item=%s] %06.2f/s", surfacedata.fragment_name, surface_output)
   end
 end)
