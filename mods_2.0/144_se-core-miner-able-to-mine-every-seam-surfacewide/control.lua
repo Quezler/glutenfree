@@ -123,8 +123,8 @@ mod.open_gui = function(player, entity)
     style = "inside_shallow_frame_with_padding_and_vertical_spacing",
     direction = "horizontal",
   }
-  inner.style.left_padding = 8
-  inner.style.right_padding = 8
+  inner.style.left_padding = 6
+  inner.style.right_padding = 6
 
   local slider = inner.add{
     type = "slider",
@@ -213,3 +213,7 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
     element.parent["texts"]["line-2"].caption = string.format("[item=%s] %06.2f/s", surfacedata.fragment_name, surface_output)
   end
 end)
+
+remote.add_interface(mod_name, {
+  get_total_miners_from_surface_index = function(surface_index) return storage.surfacedata[surface_index].total_miners end,
+})
