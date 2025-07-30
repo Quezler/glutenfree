@@ -2,7 +2,7 @@
     "name": "se-core-miner-output-helper",
     "title": "Space Exploration - core miner output helper",
     "description": "Hover over any core miner (or look in the universe explorer) to get the fragments per second for that surface.",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [
@@ -13,6 +13,7 @@
         "space-exploration",
         "space-exploration-scripts >= 2.1.0",
         
-        "? se-core-miner-no-diminishing-returns"
+        "? se-core-miner-no-diminishing-returns",
+        "? se-core-miner-able-to-mine-every-seam-surfacewide"
     ]
 }

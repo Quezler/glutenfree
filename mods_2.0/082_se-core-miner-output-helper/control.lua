@@ -1,3 +1,11 @@
+function get_core_miners_on_this_surface(zone)
+  if zone.surface_index and script.active_mods["se-core-miner-able-to-mine-every-seam-surfacewide"] then
+    return remote.call("se-core-miner-able-to-mine-every-seam-surfacewide", "get_total_miners_from_surface_index", zone.surface_index)
+  end
+
+  return zone.core_mining and table_size(zone.core_mining) or 0
+end
+
 script.on_event(defines.events.on_selected_entity_changed, function(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   assert(player)
@@ -7,9 +15,13 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
   if entity and entity.name == "se-core-miner-drill" and entity.mining_target then
 
     local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = entity.surface.index})
-    local core_miners_on_this_surface = table_size(zone.core_mining)
+    local core_miners_on_this_surface = get_core_miners_on_this_surface(zone)
     local fragment_name = entity.mining_target.prototype.mineable_properties.products[1].name
     local fragments_per_second = (entity.prototype.mining_speed / entity.mining_target.prototype.mineable_properties.mining_time) * entity.mining_target.amount / entity.mining_target.prototype.normal_resource_amount
+
+    if script.active_mods["se-core-miner-able-to-mine-every-seam-surfacewide"] then
+      fragments_per_second = fragments_per_second / remote.call("se-core-miner-able-to-mine-every-seam-surfacewide", "get_total_miners_from_surface_index", zone.surface_index)
+    end
 
     local text = {}
     text[1] = "[item="..fragment_name.."]"
@@ -105,7 +117,7 @@ function update_content_for_player(content, player, zone_index)
 
   coremining.clear()
 
-  local actual_core_miners = zone.core_mining and table_size(zone.core_mining) or 0 -- probably not pvp safe
+  local actual_core_miners = get_core_miners_on_this_surface(zone)
   local mining_productivity = 1 + player.force.mining_drill_productivity_bonus
   local last_per_second = 0
 
