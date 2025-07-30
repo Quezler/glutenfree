@@ -39,14 +39,17 @@ mod.open_gui = function(player, entity, surface_output)
     style = "inside_shallow_frame_with_padding_and_vertical_spacing",
     direction = "horizontal",
   }
+  inner.style.left_padding = 8
+  inner.style.right_padding = 8
 
   local slider = inner.add{
     type = "slider",
     style = "notched_slider",
-    minimum_value = 1,
+    minimum_value = 0,
     maximum_value = 100,
   }
   slider.style.horizontally_stretchable = true
+  -- slider.style.top_margin = 2 -- line_2 changes the parent from 44 to 48
 
   -- local line = inner.add{
   --   type = "line",
@@ -60,21 +63,20 @@ mod.open_gui = function(player, entity, surface_output)
     direction = "vertical",
   }
   texts.style.vertical_spacing = 0
-  texts.style.top_margin = -8
-  texts.style.bottom_margin = -8
+  texts.style.top_margin = -10
+  texts.style.bottom_margin = -10
 
-  texts.add{
+  local line_1 = texts.add{
     type = "label",
-    caption = string.format("[entity=se-core-miner-drill] %d/%d", 4, 68)
+    caption = string.format("[entity=se-core-miner-drill] %03d/%03d", 4, 68)
   }
-  -- texts.add{
-  --   type = "label",
-  --   caption = string.format("%d MW", 25 * 4)
-  -- }
-  texts.add{
+  line_1.style.minimal_width = 78
+
+  local line_2 = texts.add{
     type = "label",
-    caption = string.format("[item=%s] %.2f/s", fragment_name, surface_output)
+    caption = string.format("[item=%s] %06.2f/s", fragment_name, surface_output)
   }
+  line_2.style.minimal_width = 78
 end
 
 script.on_event(defines.events.on_gui_opened, function(event)

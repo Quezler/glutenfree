@@ -6,6 +6,7 @@ Date: ????
     - Show planet, fragment name & rate in relative gui
     - Horizontal line
     - Redesign the gui
+    - Tweak the new gui
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 29
