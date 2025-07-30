@@ -12,11 +12,26 @@ script.on_init(function()
       mod.on_created_entity({entity = core_miner, multiplier_override = 1})
     end
   end
+
+  mod.register_events()
 end)
 
 script.on_configuration_changed(function()
   mod.refresh_surfacedata()
 end)
+
+script.on_load(function()
+  mod.register_events()
+end)
+
+mod.register_events = function()
+  script.on_event(remote.call("se-core-miner-efficiency-updated-event", "on_efficiency_updated"), function(event)
+    local surfacedata = storage.surfacedata[event.surface_index]
+    for _, struct in pairs(surfacedata.structs) do
+      mod.update_amount(surfacedata, struct)
+    end
+  end)
+end
 
 mod.on_created_entity = function(event)
   local entity = event.entity or event.destination
@@ -30,21 +45,21 @@ mod.on_created_entity = function(event)
   }
   beacon.destructible = false
 
+  local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = entity.surface.index})
+  mod.cache_zone_on_surfacedata(zone, surfacedata)
+
   -- newly placed drills get a muliplier of 1 if there's still allication left, otherwise they just get 0
   local multiplier = event.multiplier_override or math.min(1, surfacedata.total_seams - surfacedata.total_miners)
   assert(multiplier >= 0)
 
-  surfacedata.total_miners = surfacedata.total_miners + multiplier
   surfacedata.structs[entity.unit_number] = {
     entity = entity,
 
-    multiplier = multiplier,
+    multiplier = 0,
     beacon = beacon,
   }
 
-  if multiplier ~= 1 then
-    mod.set_multiplier(surfacedata, surfacedata.structs[entity.unit_number], multiplier)
-  end
+  mod.set_multiplier(surfacedata, surfacedata.structs[entity.unit_number], multiplier)
 end
 
 for _, event in ipairs({
@@ -72,6 +87,18 @@ mod.set_multiplier = function(surfacedata, struct, multiplier)
     pollution = 0,
     quality = 0,
   })
+
+  mod.update_amount(surfacedata, struct)
+end
+
+mod.get_mining_target = function(entity)
+  return entity.mining_target or entity.surface.find_entities_filtered{position = entity.position, radius = 0, type = "resource"}[1]
+end
+
+mod.update_amount = function(surfacedata, struct)
+  local fragment_mining_time = mod.get_core_fragment_mining_time(surfacedata.fragment_name)
+  local fragments_per_second = mod.get_surface_output(surfacedata, {mining_drill_productivity_bonus = 0}, struct.multiplier)
+  mod.get_mining_target(struct.entity).amount = math.max(1, 10000 * fragment_mining_time * fragments_per_second)
 end
 
 --- @return number
@@ -108,7 +135,7 @@ mod.open_gui = function(player, entity)
   local frame = player.gui.relative[gui_frame_name]
   if frame then frame.destroy() end
 
-  local fragment_name = entity.mining_target.name
+  local fragment_name = mod.get_mining_target(entity).name
 
   frame = player.gui.relative.add{
     type = "frame",
@@ -178,6 +205,12 @@ mod.get_surface_output = function(surfacedata, force, total_drills)
   end
 end
 
+mod.cache_zone_on_surfacedata = function(zone, surfacedata)
+  surfacedata.fragment_name = mod.get_core_fragment_name(zone)
+  surfacedata.zone_radius = zone.radius
+  surfacedata.total_seams = mod.get_core_seams_for_radius(zone.radius)
+end
+
 script.on_event(defines.events.on_gui_opened, function(event)
   local entity = event.entity
   if entity and entity.name == "se-core-miner-drill" then
@@ -186,24 +219,22 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
     -- cache some zone information on the surfacedata object
     local surfacedata = storage.surfacedata[entity.surface.index]
-    surfacedata.fragment_name = mod.get_core_fragment_name(zone)
-    surfacedata.zone_radius = zone.radius
-    surfacedata.total_seams = mod.get_core_seams_for_radius(zone.radius)
+    mod.cache_zone_on_surfacedata(zone, surfacedata)
 
     mod.open_gui(game.get_player(event.player_index), entity)
   end
 end)
 
-commands.add_command("se-core-miner-set-output", nil, function(command)
-  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
-  local entity = player.selected
+-- commands.add_command("se-core-miner-set-output", nil, function(command)
+--   local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
+--   local entity = player.selected
 
-  if entity and entity.name == "se-core-miner-drill" then
-    local fragment_name = entity.mining_target.name
-    local fragment_mining_time = mod.get_core_fragment_mining_time(fragment_name)
-    entity.mining_target.amount = 10000 * fragment_mining_time * (tonumber(command.parameter) or 1) -- 1/s
-  end
-end)
+--   if entity and entity.name == "se-core-miner-drill" then
+--     local fragment_name = entity.mining_target.name
+--     local fragment_mining_time = mod.get_core_fragment_mining_time(fragment_name)
+--     entity.mining_target.amount = 10000 * fragment_mining_time * (tonumber(command.parameter) or 1) -- 1/s
+--   end
+-- end)
 
 script.on_event(defines.events.on_gui_value_changed, function(event)
   local element = event.element

@@ -11,6 +11,7 @@ Date: ????
     - Add remote interface to get the total core miners for this surface
     - Allocate newly placed core miners
     - Clamp slider output to actually available seams
+    - Set the mining amount and keep it steady
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 29
