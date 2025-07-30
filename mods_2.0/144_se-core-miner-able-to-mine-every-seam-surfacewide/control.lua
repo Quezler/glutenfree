@@ -25,10 +25,10 @@ mod.open_gui = function(player, entity, surface_output)
   frame = player.gui.relative.add{
     type = "frame",
     name = gui_frame_name,
-    caption = "Fragment rate",
+    style = "frame_with_even_paddings",
     anchor = {
       gui = defines.relative_gui_type.mining_drill_gui,
-      position = defines.relative_gui_position.right,
+      position = defines.relative_gui_position.bottom,
       name = "se-core-miner-drill",
     }
   }
@@ -37,29 +37,43 @@ mod.open_gui = function(player, entity, surface_output)
     type = "frame",
     name = gui_inner_name,
     style = "inside_shallow_frame_with_padding_and_vertical_spacing",
+    direction = "horizontal",
+  }
+
+  local slider = inner.add{
+    type = "slider",
+    style = "notched_slider",
+    minimum_value = 1,
+    maximum_value = 100,
+  }
+  slider.style.horizontally_stretchable = true
+
+  -- local line = inner.add{
+  --   type = "line",
+  --   direction = "vertical",
+  -- }
+  -- line.style.top_margin = -9
+  -- line.style.bottom_margin = -9
+
+  local texts = inner.add{
+    type = "flow",
     direction = "vertical",
   }
+  texts.style.vertical_spacing = 0
+  texts.style.top_margin = -8
+  texts.style.bottom_margin = -8
 
-  local surface_label = inner.add{
+  texts.add{
     type = "label",
-    caption = entity.surface.localised_name or entity.surface.name,
+    caption = string.format("[entity=se-core-miner-drill] %d/%d", 4, 68)
   }
-  surface_label.style.font = "default-bold"
-
-  local fragment_label = inner.add{
+  -- texts.add{
+  --   type = "label",
+  --   caption = string.format("%d MW", 25 * 4)
+  -- }
+  texts.add{
     type = "label",
-    caption = {"", string.format("[entity=%s] ", fragment_name), entity.mining_target.localised_name[2]},
-  }
-  fragment_label.style.font = "default-semibold"
-
-  local rate_label = inner.add{
-    type = "label",
-    caption = string.format("[entity=se-core-miner-drill] %.2f/s", tostring(surface_output)),
-  }
-
-  inner.add{
-    type = "line",
-    style = "inside_shallow_frame_with_padding_line"
+    caption = string.format("[item=%s] %.2f/s", fragment_name, surface_output)
   }
 end
 
