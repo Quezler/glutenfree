@@ -214,7 +214,15 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
 
     local surfacedata = storage.surfacedata[root.tags.surface_index]
     local struct = surfacedata.structs[root.tags.unit_number]
-    mod.set_multiplier(surfacedata, struct, element.slider_value)
+    local new_multiplier = math.min(surfacedata.total_seams - surfacedata.total_miners + struct.multiplier, element.slider_value)
+    mod.set_multiplier(surfacedata, struct, new_multiplier)
+
+    -- there were not enough available seams
+    if new_multiplier ~= element.slider_value then
+      element.slider_value = new_multiplier -- visual mess
+      -- local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+      -- player.create_local_flying_text{create_at_cursor = true, text = "not enough available seams."}
+    end
 
     local surface_output = mod.get_surface_output(surfacedata, struct.entity.force, struct.multiplier)
     element.parent["texts"]["line-1"].caption = string.format("[entity=se-core-miner-drill] %03d/%03d", struct.multiplier, surfacedata.total_seams)
