@@ -9,7 +9,7 @@ script.on_init(function()
 
   for _, surface in pairs(game.surfaces) do
     for _, core_miner in ipairs(surface.find_entities_filtered{name = "se-core-miner-drill"}) do
-      mod.on_created_entity({entity = core_miner})
+      mod.on_created_entity({entity = core_miner, multiplier_override = 1})
     end
   end
 end)
@@ -30,13 +30,21 @@ mod.on_created_entity = function(event)
   }
   beacon.destructible = false
 
-  surfacedata.total_miners = surfacedata.total_miners + 1
+  -- newly placed drills get a muliplier of 1 if there's still allication left, otherwise they just get 0
+  local multiplier = event.multiplier_override or math.min(1, surfacedata.total_seams - surfacedata.total_miners)
+  assert(multiplier >= 0)
+
+  surfacedata.total_miners = surfacedata.total_miners + multiplier
   surfacedata.structs[entity.unit_number] = {
     entity = entity,
 
-    multiplier = 1,
+    multiplier = multiplier,
     beacon = beacon,
   }
+
+  if multiplier ~= 1 then
+    mod.set_multiplier(surfacedata, surfacedata.structs[entity.unit_number], multiplier)
+  end
 end
 
 for _, event in ipairs({

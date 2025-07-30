@@ -9,6 +9,7 @@ Date: ????
     - Tweak the new gui
     - Require beacon interface and hook up the slider
     - Add remote interface to get the total core miners for this surface
+    - Allocate newly placed core miners
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 29
