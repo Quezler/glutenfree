@@ -1,4 +1,32 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: ????
+  Info:
+    - Begin rewriting for the new pump api
+    - Use an intermediary pipe entity
+    - Trial using beacon interface
+    - Figure out a way to prevent player beacons
+    - Attempt to walk the fluid segment
+    - Keep track of the (offshore) pump output fluidboxes
+    - Sum the speed of pumps pushing into that fluidbox
+    - Instead keep track of the input & output of segments caused by pumps
+    - Measure only on the input side
+    - Each pump gives you 1 speed (first one 0.8)
+    - Replace the built-in recipe with barrels
+    - Check if the output side is actually moving the fluids away
+    - Make them omnidirectional
+    - Attempt to divide the flow between paralel washboxes
+    - Return orientation since it breaks parralel detectionaq
+    - Undo broken overcomplicated parralel detector
+    - Undo needing pumps on the output side
+    - Simplify the parralel detector
+    - Skip repeated valid checks
+    - Get parralel and inline to behave as intended
+    - Fix standalone washing boxes having 1 speed
+    - Cleanup the working code
+    - Fix filter format being wrong
+    - Require 2.0.61 for pumped_last_tick
+---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025. 06. 24
   Info:

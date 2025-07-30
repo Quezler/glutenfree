@@ -149,7 +149,7 @@ local function open_gui(entity, player)
   for _, effect in ipairs(shared.effects) do
     local flow = inner.add{
       type = "flow",
-      name = effect,
+      name = mod_prefix .. effect,
       style = "horizontal_flow",
     }
     flow.style.vertical_align = "center"
@@ -281,7 +281,7 @@ script.on_event(defines.events.on_gui_value_changed, function(event)
       elseif event.element.slider_value > 0 then
         step = slider_steps[event.element.slider_value]
       end
-      frame.inner[tags.effect].textfield.text = tostring(step)
+      frame.inner[mod_prefix .. tags.effect].textfield.text = tostring(step)
       Interface.set_effect(frame.tags.unit_number, tags.effect, step)
     end
   end
@@ -301,7 +301,7 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
         strength = shared.min_strength
         event.element.text = tostring(shared.min_strength)
       end
-      frame.inner[tags.effect].slider.slider_value = get_slider_step_from_number(strength)
+      frame.inner[mod_prefix .. tags.effect].slider.slider_value = get_slider_step_from_number(strength)
       Interface.set_effect(frame.tags.unit_number, tags.effect, strength)
     end
   end

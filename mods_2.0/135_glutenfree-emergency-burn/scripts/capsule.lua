@@ -103,7 +103,7 @@ function Capsule.script_raised_built(event)
         se_util.swap_inventories(from, to) -- already sorted & merged
       end
 
-      enderchest.passenger.get_logistic_point(defines.logistic_member_index.character_storage).enabled = enderchest.character_personal_logistic_requests_was_enabled
+      enderchest.passenger.get_logistic_point(defines.logistic_member_index.character_requester).enabled = enderchest.character_personal_logistic_requests_was_enabled
     end
   end
 end
@@ -153,11 +153,11 @@ function Capsule.on_object_destroyed(event)
             passenger = passenger,
             from_surface = passenger.surface,
             inventories = {},
-            character_personal_logistic_requests_was_enabled = passenger.get_logistic_point(defines.logistic_member_index.character_storage).enabled,
+            character_personal_logistic_requests_was_enabled = passenger.get_logistic_point(defines.logistic_member_index.character_requester).enabled,
           }
 
           -- prevent logistic bots resupplying the now empty inventories
-          passenger.get_logistic_point(defines.logistic_member_index.character_storage).enabled = false
+          passenger.get_logistic_point(defines.logistic_member_index.character_requester).enabled = false
 
           for _, inventory_type in ipairs(inventory_types) do
             local from = passenger.get_inventory(inventory_type)

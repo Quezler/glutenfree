@@ -6,7 +6,6 @@ data:extend{{
   type = "planet",
   name = "world-of-goo",
   order = "a[world-of-goo]",
-  -- icon = mod_directory .. "/graphics/common-body.png",
   icons = {
     {icon = mod_directory .. "/graphics/common-body.png", size = 64, scale = 1},
 
@@ -19,9 +18,7 @@ data:extend{{
   draw_orbit = false,
   distance = 13,
   orientation = 0.32,
-  magnitude = 0.5,
 
-  starmap_icon = "blep",
   starmap_icons = {
     {icon = mod_directory .. "/graphics/common-body.png", size = 64, scale = 1},
 

@@ -63,14 +63,21 @@ local furnace = {
 
   icon_draw_specification = {scale = 0},
 
+  allowed_effects = {"speed"},
+  effect_receiver = {
+    uses_module_effects = false,
+    uses_beacon_effects = true,
+    uses_surface_effects = false,
+  },
+
   fluid_boxes =
   {
     {
       production_type = "input",
       pipe_covers = pipecoverspictures(),
-      volume = 100,
+      volume = 200,
       pipe_connections = {
-        {flow_direction = "input", direction = defines.direction.south, position = {0, 0.5}},
+        {flow_direction = "input-output", direction = defines.direction.south, position = {0, 0.5}},
         {connection_type = "linked", linked_connection_id = 1},
       },
       secondary_draw_orders = { north = -1 }
@@ -78,13 +85,13 @@ local furnace = {
     {
       production_type = "output",
       pipe_covers = pipecoverspictures(),
-      volume = 100,
+      volume = 200,
       pipe_connections = {
-        {flow_direction = "output", direction = defines.direction.north, position = {0, -0.5}},
-        {connection_type = "linked", linked_connection_id = 0},
+        {flow_direction = "input-output", direction = defines.direction.north, position = {0, -0.5}},
+        {connection_type = "linked", linked_connection_id = 2},
       },
       secondary_draw_orders = { north = -1 }
-    },
+    }
   },
 
   graphics_set = {
@@ -136,7 +143,7 @@ local furnace = {
     },
   },
   circuit_wire_max_distance = washbox_debug and default_circuit_wire_max_distance or nil,
-  -- vector_to_place_result = {0, -0.3},
+  vector_to_place_result = {0, -0.3},
 }
 
 local item = {
@@ -178,37 +185,44 @@ for i, effect in ipairs(technology.effects) do
   end
 end
 
-local valve_in = {
-  type = "valve",
-  name = mod_prefix .. "valve-in",
-
-  mode = "overflow",
-  threshold = 0.8,
-
-  flow_rate = data.raw["pump"]["pump"].pumping_speed, -- 20, times 60 = 1200
+-- linking the input and output fluidboxes of the furnace does not really work,
+-- so we need to have a secondary fluidbox to which the furnace can connect to.
+local pipe = {
+  type = "pipe",
+  name = mod_prefix .. "pipe",
 
   selection_priority = washbox_debug and 51 or 49,
   selectable_in_game = washbox_debug,
-  selection_box = {{-0.2, -0.2}, {0.2, 0.2}},
+  selection_box = {{-0.4, -0.4}, {0.4, 0.4}},
   collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
   collision_mask = {layers = {}},
+  flags = {"hide-alt-info", "not-on-map", "placeable-off-grid"},
 
-  fluid_box =
-  {
-    volume = 100,
-    pipe_connections = {
-      {flow_direction = "input-output", connection_type = "linked", linked_connection_id = 1},
-      {flow_direction = "output", connection_type = "linked", linked_connection_id = 0},
+  horizontal_window_bounding_box = {{0, 0}, {0, 0}},
+  vertical_window_bounding_box = {{0, 0}, {0, 0}},
+
+  fluid_box = {
+    volume = 50,
+    pipe_connections =
+    {
+      {connection_type = "linked", linked_connection_id = 1},
+      {connection_type = "linked", linked_connection_id = 2},
     },
   },
 
-  flags = {"not-on-map", "placeable-off-grid"},
   hidden = true,
 }
 
-local valve_out = table.deepcopy(valve_in)
-valve_out.name = mod_prefix .. "valve-out"
-valve_out.mode = "top-up"
-valve_out.threshold = 0.75
+data:extend{recipe_category, furnace, item, recipe, pipe}
 
-data:extend{recipe_category, furnace, item, recipe, valve_in, valve_out}
+local beacon_interface = table.deepcopy(data.raw["beacon"]["beacon-interface--beacon-tile"])
+beacon_interface.name = mod_prefix .. "beacon-interface"
+table.insert(beacon_interface.flags, "placeable-off-grid")
+data:extend{beacon_interface}
+
+local beacon_interface_overload = table.deepcopy(data.raw["beacon"]["beacon-interface--beacon-tile"])
+beacon_interface_overload.name = mod_prefix .. "beacon-interface-overload"
+table.insert(beacon_interface_overload.flags, "placeable-off-grid")
+beacon_interface_overload.profile = {0, 0, 1} -- when a third beacon enters the mix this beacon disables everything
+beacon_interface_overload.beacon_counter = "total"
+data:extend{beacon_interface_overload}

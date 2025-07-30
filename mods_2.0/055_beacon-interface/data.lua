@@ -26,6 +26,10 @@ table.insert(entity.flags, "no-automated-item-removal")
 table.insert(entity.flags, "no-automated-item-insertion")
 entity.hidden = true
 
+if mods["space-exploration"] then
+  entity.se_allow_in_space = true
+end
+
 local item = table.deepcopy(data.raw["item"]["beacon"])
 item.name = mod_prefix .. "beacon"
 item.icon = nil

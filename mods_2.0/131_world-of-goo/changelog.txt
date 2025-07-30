@@ -4,6 +4,8 @@ Date: ????
   Info:
     - Ensure the pool shore consists of dunes
     - Prevent goo balls from floating through the pipe
+    - Require 2.0.61 for starmap_icon_orientation
+    - Cleanup and dependencies
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 07. 08
