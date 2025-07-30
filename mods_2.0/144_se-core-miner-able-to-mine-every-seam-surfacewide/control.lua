@@ -7,6 +7,8 @@ script.on_init(function()
   storage.surfacedata = {}
   mod.refresh_surfacedata()
 
+  storage.deathrattles = {}
+
   for _, surface in pairs(game.surfaces) do
     for _, core_miner in ipairs(surface.find_entities_filtered{name = "se-core-miner-drill"}) do
       mod.on_created_entity({entity = core_miner, multiplier_override = 1})
@@ -59,6 +61,8 @@ mod.on_created_entity = function(event)
     beacon = beacon,
   }
 
+  storage.deathrattles = storage.deathrattles or {} -- todo: remove
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {surface_index = entity.surface.index, unit_number = entity.unit_number}
   mod.set_multiplier(surfacedata, surfacedata.structs[entity.unit_number], multiplier)
 end
 
@@ -264,3 +268,16 @@ end)
 remote.add_interface(mod_name, {
   get_total_miners_from_surface_index = function(surface_index) return storage.surfacedata[surface_index].total_miners end,
 })
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    local surfacedata = storage.surfacedata[deathrattle.surface_index]
+    if surfacedata then
+      local struct = surfacedata.structs[deathrattle.unit_number]
+      surfacedata.structs[deathrattle.unit_number] = nil
+      struct.beacon.destroy()
+      surfacedata.total_miners = surfacedata.total_miners - struct.multiplier -- release reservation
+    end
+  end
+end)

@@ -12,6 +12,7 @@ Date: ????
     - Allocate newly placed core miners
     - Clamp slider output to actually available seams
     - Set the mining amount and keep it steady
+    - Cleanup after miner removal
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2025. 07. 29
