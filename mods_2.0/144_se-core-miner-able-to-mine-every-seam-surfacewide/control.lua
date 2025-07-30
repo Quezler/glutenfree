@@ -32,6 +32,19 @@ mod.register_events = function()
     for _, struct in pairs(surfacedata.structs) do
       mod.update_amount(surfacedata, struct)
     end
+
+    local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = event.zone_index})
+    if zone.core_seam_resources == nil then return end -- 50x50 worlds?
+
+    for _, resource_set in pairs(zone.core_seam_resources) do
+      local resource = resource_set.resource
+
+      for _, render_object in ipairs(rendering.get_all_objects("space-exploration")) do
+        if render_object.type == "text" and render_object.target.entity == resource then
+          render_object.destroy() -- if anything it'd be confusing to show for this mod
+        end
+      end
+    end
   end)
 end
 
