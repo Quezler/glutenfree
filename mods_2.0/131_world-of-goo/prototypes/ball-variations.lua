@@ -1,16 +1,16 @@
 local variations = {}
 
 for i = 1, 16 do
-  local layers = {}
+  local scale = 0.5
+  local multiplier = 32 * scale
+  variations[i] = {
+    {icon = mod_directory .. "/graphics/balls/common-body.png", icon_size = 64, scale = scale},
 
-  table.insert(layers, {filename = mod_directory .. "/graphics/balls/common-body.png", size = 64, scale = 0.5})
-
-  table.insert(layers, {filename = mod_directory .. "/graphics/balls/generic-eye-2.png", size = 23, shift = {-0.50 * 0.5, -0.10 * 0.5}, scale = 0.5})
-  table.insert(layers, {filename = mod_directory .. "/graphics/balls/generic-pupil.png", size =  8, shift = {-0.45 * 0.5, -0.15 * 0.5}, scale = 0.5})
-  table.insert(layers, {filename = mod_directory .. "/graphics/balls/generic-eye-1.png", size = 32, shift = { 0.30 * 0.5, -0.30 * 0.5}, scale = 0.5})
-  table.insert(layers, {filename = mod_directory .. "/graphics/balls/generic-pupil.png", size =  8, shift = { 0.35 * 0.5, -0.35 * 0.5}, scale = 0.5})
-
-  table.insert(variations, {layers = layers})
+    {icon = mod_directory .. "/graphics/balls/generic-eye-2.png", icon_size = 23, shift = {-0.50 * multiplier, -0.10 * multiplier}, scale = scale, floating = true},
+    {icon = mod_directory .. "/graphics/balls/generic-pupil.png", icon_size =  8, shift = {-0.45 * multiplier, -0.15 * multiplier}, scale = scale, floating = true},
+    {icon = mod_directory .. "/graphics/balls/generic-eye-1.png", icon_size = 32, shift = { 0.30 * multiplier, -0.30 * multiplier}, scale = scale, floating = true},
+    {icon = mod_directory .. "/graphics/balls/generic-pupil.png", icon_size =  8, shift = { 0.35 * multiplier, -0.35 * multiplier}, scale = scale, floating = true},
+  }
 end
 
 return variations

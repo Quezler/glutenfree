@@ -19,6 +19,7 @@ class InstanceCommand extends Command
         $this->addArgument('name', InputArgument::OPTIONAL);
         $this->addOption('client');
         $this->addOption('master');
+        $this->addOption('generate-goo-balls');
     }
 
     public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
@@ -76,7 +77,12 @@ class InstanceCommand extends Command
         if ($input->getOption('master'))
             $factorio_binary = "/Users/quezler/Documents/Tower/github/wube/Factorio/bin/Releasearm64Clang/factorio-run";
         
-        passthru("(cd {$instance_directory} && {$factorio_binary} --config {$config_ini_pathname})");
+        $command = "cd {$instance_directory} && {$factorio_binary} --config {$config_ini_pathname}";
+
+        if ($input->getOption('generate-goo-balls'))
+            $command .= ' --dump-icon-sprites --instrument-mod world-of-goo';
+
+        passthru("({$command})");
 
         return Command::SUCCESS;
     }

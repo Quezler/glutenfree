@@ -11,6 +11,7 @@ Date: ????
     - Reorganize ball sprites
     - Try to generate goo ball belt variations
     - Try the same but with layered icons
+    - Run a generation test with instrument mode
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 07. 08
