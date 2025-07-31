@@ -4,6 +4,7 @@ require("prototypes.planet")
 require("prototypes.tiles")
 require("prototypes.entities")
 require("prototypes.ball-sprites")
+local ball_variations = require("prototypes.ball-variations")
 
 local sounds = require("__base__.prototypes.entity.sounds")
 local item_sounds = require("__base__.prototypes.item_sounds")
@@ -53,6 +54,7 @@ local item = {
   type = "item",
   name = "goo-ball",
   icon = mod_directory .. "/graphics/balls/common-body.png",
+  pictures = ball_variations,
   subgroup = "raw-resource",
   order = "i[goo-ball]",
   inventory_move_sound = item_sounds.raw_fish_inventory_move,
