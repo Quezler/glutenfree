@@ -3,99 +3,15 @@ require("namespace")
 require("prototypes.planet")
 require("prototypes.tiles")
 require("prototypes.entities")
+require("prototypes.ball-sprites")
 
 local sounds = require("__base__.prototypes.entity.sounds")
 local item_sounds = require("__base__.prototypes.item_sounds")
 
-data:extend{{
-  type = "sprite",
-  name = "goo-ball",
-  filename = mod_directory .. "/graphics/goo-ball-3.png",
-  width = 171,
-  height = 171,
-  scale = 0.25,
-}}
-
-data:extend{{
-  type = "sprite",
-  name = "common-body",
-  layers = {
-    {
-      filename = mod_directory .. "/graphics/balls/_generic/shadowCircle59.png",
-      priority = "extra-high",
-      width = 59,
-      height = 59,
-      scale = 0.4,
-    },
-    {
-      filename = mod_directory .. "/graphics/common-body.png",
-      width = 64,
-      height = 64,
-      scale = 0.25,
-    },
-  }
-}}
-
-data:extend{{
-  type = "sprite",
-  name = "drool-body",
-  layers = {
-    {
-      filename = mod_directory .. "/graphics/balls/water/shad.png",
-      priority = "extra-high",
-      width = 59,
-      height = 59,
-      scale = 0.4,
-    },
-    {
-      filename = mod_directory .. "/graphics/balls/water/body.png",
-      width = 64,
-      height = 64,
-      scale = 0.25,
-    },
-  }
-}}
-
-data:extend{{
-  type = "sprite",
-  name = "generic-eye-glass-1",
-  filename = mod_directory .. "/graphics/balls/_generic/eye_glass_1.png",
-  width = 32,
-  height = 32,
-  scale = 0.25,
-}}
-
-data:extend{{
-  type = "sprite",
-  name = "generic-eye-glass-2",
-  filename = mod_directory .. "/graphics/balls/_generic/eye_glass_2.png",
-  width = 23,
-  height = 23,
-  scale = 0.25,
-}}
-
-data:extend{{
-  type = "sprite",
-  name = "generic-eye-glass-3",
-  filename = mod_directory .. "/graphics/balls/_generic/eye_glass_3.png",
-  width = 16,
-  height = 16,
-  scale = 0.25,
-}}
-
-data:extend{{
-  type = "sprite",
-  name = "generic-pupil",
-  filename = mod_directory .. "/graphics/balls/_generic/pupil1.png",
-  width = 8,
-  height = 8,
-  scale = 0.25,
-}}
-
 local fish = {
   type = "fish",
   name = "goo-ball",
-  icon = mod_directory .. "/graphics/common-body.png",
+  icon = mod_directory .. "/graphics/balls/common-body.png",
   flags = {"placeable-neutral", "not-on-map", "placeable-off-grid"},
   minable = {mining_time = 0.25, result = "goo-ball", count = 1},
   mined_sound = sounds.mine_fish,
@@ -108,7 +24,7 @@ local fish = {
   pictures =
   {
     {
-      filename = mod_directory .. "/graphics/common-body.png",
+      filename = mod_directory .. "/graphics/balls/common-body.png",
       priority = "extra-high",
       width = 64,
       height = 64,
@@ -136,7 +52,7 @@ local fish = {
 local item = {
   type = "item",
   name = "goo-ball",
-  icon = mod_directory .. "/graphics/common-body.png",
+  icon = mod_directory .. "/graphics/balls/common-body.png",
   subgroup = "raw-resource",
   order = "i[goo-ball]",
   inventory_move_sound = item_sounds.raw_fish_inventory_move,

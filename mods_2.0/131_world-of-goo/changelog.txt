@@ -8,6 +8,7 @@ Date: ????
     - Cleanup and dependencies
     - Randomly scale goo balls between 0.8 and 1.2
     - Spawn the goo balls above the pipe or they might get stuck inside
+    - Reorganize ball sprites
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 07. 08

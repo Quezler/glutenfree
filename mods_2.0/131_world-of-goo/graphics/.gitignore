@@ -1,16 +1,2 @@
 # https://www.spriters-resource.com/pc_computer/worldofgoo/sheet/47896/
-balls/**
-
-!balls/common/
-!balls/common/body.png
-
-!balls/_generic/
-!balls/_generic/eye_glass_1.png
-!balls/_generic/eye_glass_2.png
-!balls/_generic/eye_glass_3.png
-!balls/_generic/pupil1.png
-!balls/_generic/shadowCircle59.png
-
-!balls/water/
-!balls/water/body.png
-!balls/water/shad.png
+raw_balls

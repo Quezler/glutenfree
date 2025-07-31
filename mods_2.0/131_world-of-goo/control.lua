@@ -3,7 +3,7 @@ require("namespace")
 
 local function get_random_eye_name()
   -- return "generic-eye-glass-2"
-  return "generic-eye-glass-" .. tostring(math.random(1, 3))
+  return "generic-eye-" .. tostring(math.random(1, 3))
 end
 
 local is_water = util.list_to_map({"water", "deepwater"})
@@ -13,7 +13,7 @@ local function render_goo_ball(fish)
 
   -- log(fish.surface.get_tile(fish.position).name)
   if is_water[fish.surface.get_tile(fish.position).name] then
-    body = "drool-body"
+    body = "water-body"
   end
 
   local scale = math.random(8, 12) / 10
@@ -26,7 +26,7 @@ local function render_goo_ball(fish)
     y_scale = scale,
   }
 
-  if body == "drool-body" then return end -- those have no eyes
+  if body == "water-body" then return end -- those have no eyes
 
   local use_target_orientation = false
   local orientation_target = fish.position
