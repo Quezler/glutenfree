@@ -50,11 +50,20 @@ local fish = {
   },
 }
 
+local icons = {
+  {icon = mod_directory .. "/graphics/balls/common-body.png", icon_size = 64, scale = 0.5},
+
+  {icon = mod_directory .. "/graphics/balls/generic-eye-2.png", icon_size = 23, shift = {-0.50 * 16, -0.10 * 16}, scale = 0.5},
+  {icon = mod_directory .. "/graphics/balls/generic-pupil.png", icon_size =  8, shift = {-0.45 * 16, -0.15 * 16}, scale = 0.5},
+  {icon = mod_directory .. "/graphics/balls/generic-eye-1.png", icon_size = 32, shift = { 0.30 * 16, -0.30 * 16}, scale = 0.5},
+  {icon = mod_directory .. "/graphics/balls/generic-pupil.png", icon_size =  8, shift = { 0.35 * 16, -0.35 * 16}, scale = 0.5},
+}
+
 local item = {
   type = "item",
   name = "goo-ball",
-  icon = mod_directory .. "/graphics/balls/common-body.png",
-  pictures = ball_variations,
+  icons = icons,
+  -- pictures = ball_variations,
   subgroup = "raw-resource",
   order = "i[goo-ball]",
   inventory_move_sound = item_sounds.raw_fish_inventory_move,
