@@ -16,11 +16,14 @@ local function render_goo_ball(fish)
     body = "drool-body"
   end
 
+  local scale = math.random(8, 12) / 10
   rendering.draw_sprite{
     render_layer = "resource",
     surface = fish.surface,
     target = {entity = fish},
     sprite = body,
+    x_scale = scale,
+    y_scale = scale,
   }
 
   if body == "drool-body" then return end -- those have no eyes
