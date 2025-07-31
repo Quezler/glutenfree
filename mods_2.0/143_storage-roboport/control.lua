@@ -58,20 +58,10 @@ for _, event in ipairs({
 end
 
 local function get_filters(logistic_network)
-  local map = {}
-  for _, storage_point in ipairs(logistic_network.storage_points) do
-    for _, item in ipairs(storage_point.owner.get_inventory(defines.inventory.chest).get_contents()) do
-      local key = item.quality .. " " .. item.name
-      if map[key] == nil then map[key] = {name = item.name, count = 0, quality = item.quality} end
-      map[key].count = map[key].count + item.count
-    end
-  end
-
   local filters = {}
-  local filters_count = 0
-  for _, item in pairs(map) do
-    filters_count = filters_count + 1
-    filters[filters_count] = {
+
+  for i, item in ipairs(logistic_network.get_contents("storage")) do
+    filters[i] = {
       value = {type = "item", name = item.name, quality = item.quality},
       min = item.count,
     }
