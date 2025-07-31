@@ -96,7 +96,7 @@ local fish = {
   type = "fish",
   name = "goo-ball",
   icon = mod_directory .. "/graphics/common-body.png",
-  flags = {"placeable-neutral", "not-on-map"},
+  flags = {"placeable-neutral", "not-on-map", "placeable-off-grid"},
   minable = {mining_time = 0.25, result = "goo-ball", count = 1},
   mined_sound = sounds.mine_fish,
   max_health = 25,

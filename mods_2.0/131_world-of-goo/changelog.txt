@@ -7,6 +7,7 @@ Date: ????
     - Require 2.0.61 for starmap_icon_orientation
     - Cleanup and dependencies
     - Randomly scale goo balls between 0.8 and 1.2
+    - Spawn the goo balls above the pipe or they might get stuck inside
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 07. 08

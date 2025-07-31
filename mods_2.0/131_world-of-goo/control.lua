@@ -137,7 +137,7 @@ local function generate_pool_around_pipe(pipe)
     pipe.surface.create_entity{
       name = "goo-ball",
       force = "neutral",
-      position = {pipe_position.x + math.random(-5, 5), pipe_position.y + math.random(-5, 5)}
+      position = {pipe.position.x, pipe.position.y - 1.75}
     }
   end
 end
