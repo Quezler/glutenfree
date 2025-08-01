@@ -1,5 +1,5 @@
-local mod_prefix = 'glutenfree-se-spaceship-juicebox-'
-local se_util = require('__space-exploration__.scripts.util')
+local mod_prefix = "glutenfree-se-spaceship-juicebox-"
+local se_util = require("__space-exploration__.scripts.util")
 
 --
 
@@ -12,10 +12,10 @@ Juicebox.offset = {
 }
 
 function Juicebox.on_init()
-  global.deathrattles = {}
+  storage.deathrattles = {}
 
   for _, surface in pairs(game.surfaces) do
-    for _, entity in pairs(surface.find_entities_filtered({name = 'se-spaceship-console'})) do
+    for _, entity in pairs(surface.find_entities_filtered({name = "se-spaceship-console"})) do
       Juicebox.on_created_entity({tick = game.tick, entity = entity})
     end
   end
@@ -24,25 +24,25 @@ end
 -- when the spaceship console is initially placed
 function Juicebox.on_created_entity(event)
   local entity = event.created_entity or event.entity -- or event.destination
-  -- game.print(event.tick .. ' creating a new juicebox')
+  -- game.print(event.tick .. " creating a new juicebox")
 
   local juicebox = entity.surface.create_entity({
-    name = mod_prefix .. 'storage',
+    name = mod_prefix .. "storage",
     position = {entity.position.x - Juicebox.offset.x, entity.position.y - Juicebox.offset.y},
     force = entity.force,
   })
 
-  global.deathrattles[script.register_on_entity_destroyed(entity)] = {console = entity, juicebox = juicebox}
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {console = entity, juicebox = juicebox}
 end
 
-function Juicebox.on_entity_destroyed(event)
-  local deathrattle = global.deathrattles[event.registration_number]
-  if deathrattle then global.deathrattles[event.registration_number] = nil
-    -- game.print(event.tick .. ' deathrattled')
+function Juicebox.on_object_destroyed(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    -- game.print(event.tick .. " deathrattled")
     if deathrattle.juicebox.valid then
 
       local inventory = deathrattle.juicebox.get_inventory(defines.inventory.chest)
---       game.print('is_empty = ' .. serpent.line(inventory.is_empty()))
+--       game.print("is_empty = " .. serpent.line(inventory.is_empty()))
       if not inventory.is_empty() then
         for slot = 1, #inventory do
           if inventory[slot].valid_for_read then
@@ -58,27 +58,27 @@ function Juicebox.on_entity_destroyed(event)
 end
 
 function Juicebox.on_entity_cloned(event)
-  -- game.print(event.tick .. ' ' .. event.destination.name)
+  -- game.print(event.tick .. " " .. event.destination.name)
 
   -- the juicebox has been cloned/moved, empty the old
-  if event.source.name == mod_prefix .. 'storage' then
+  if event.source.name == mod_prefix .. "storage" then
     event.source.destroy()
     return
   end
 
-  if event.source.name == 'se-spaceship-console' then
+  if event.source.name == "se-spaceship-console" then
 
     local position = {event.destination.position.x - Juicebox.offset.x, event.destination.position.y - Juicebox.offset.y}
     local juicebox = nil
-      or event.destination.surface.find_entity(mod_prefix .. 'storage', position)
-      or event.destination.surface.find_entity(mod_prefix .. 'active-provider', position)
+      or event.destination.surface.find_entity(mod_prefix .. "storage", position)
+      or event.destination.surface.find_entity(mod_prefix .. "active-provider", position)
 
-    local juicebox_mode = mod_prefix .. 'storage'
+    local juicebox_mode = mod_prefix .. "storage"
     local logistic_network = event.destination.surface.find_logistic_network_by_position(position, event.destination.force)
     if logistic_network and Juicebox.logistic_network_has_available_storages_other_than_just_juiceboxes(logistic_network) then
-      juicebox_mode = mod_prefix .. 'active-provider'
+      juicebox_mode = mod_prefix .. "active-provider"
     end
-    -- game.print('juicebox_mode = ' .. juicebox_mode)
+    -- game.print("juicebox_mode = " .. juicebox_mode)
 
     if juicebox.name ~= juicebox_mode then
       local old_juicebox = juicebox -- fast replace doesn't work, presumably because there are no collision layers
@@ -94,13 +94,13 @@ function Juicebox.on_entity_cloned(event)
       old_juicebox.destroy()
     end
 
-    global.deathrattles[script.register_on_entity_destroyed(event.destination)] = {console = event.destination, juicebox = juicebox}
+    storage.deathrattles[script.register_on_object_destroyed(event.destination)] = {console = event.destination, juicebox = juicebox}
   end
 end
 
 function Juicebox.logistic_network_has_available_storages_other_than_just_juiceboxes(logistic_network)
   for _, storage in ipairs(logistic_network.storages) do
-    if storage.name ~= mod_prefix .. 'storage' and storage.storage_filter == nil then
+    if storage.name ~= mod_prefix .. "storage" and storage.storage_filter == nil then
       return true
     end
   end
