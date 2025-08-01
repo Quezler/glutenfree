@@ -13,6 +13,7 @@ Date: ????
     - Try the same but with layered icons
     - Run a generation test with instrument mode
     - Stash item body scale experiment
+    - Generate 16 ball variants
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 2025. 07. 08
