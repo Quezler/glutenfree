@@ -3,8 +3,11 @@ local variations = {}
 for i = 1, 16 do
   local scale = 0.5
   local multiplier = 32 * scale
+
+  local body_scale = math.random(7, 10) / 10
   variations[i] = {
-    {icon = mod_directory .. "/graphics/balls/common-body.png", icon_size = 64, scale = scale},
+    {icon = "__core__/graphics/empty.png", icon_size = 64, scale = scale},
+    {icon = mod_directory .. "/graphics/balls/common-body.png", icon_size = 64, scale = scale * body_scale},
 
     {icon = mod_directory .. "/graphics/balls/generic-eye-2.png", icon_size = 23, shift = {-0.50 * multiplier, -0.10 * multiplier}, scale = scale, floating = true},
     {icon = mod_directory .. "/graphics/balls/generic-pupil.png", icon_size =  8, shift = {-0.45 * multiplier, -0.15 * multiplier}, scale = scale, floating = true},
