@@ -185,6 +185,10 @@ local function check_recipe_is_allowed(player, recipe_name)
     return false, string.format("Recipe \"%s\" has spoiling items.", recipe_name)
   end
 
+  if prototypes.mod_data[mod_prefix .. "recipe-name-blacklisted"].data[recipe_name] then
+    return false, string.format("Recipe \"%s\" has been blacklisted.", recipe_name)
+  end
+
   return true
 end
 

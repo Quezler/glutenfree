@@ -4,6 +4,7 @@ local sounds = require("__base__.prototypes.entity.sounds")
 
 require("shared")
 require("prototypes.planet")
+require("prototypes.mod-data")
 
 local function each_tile_edge_position(side_length, social_distancing)
   local positions = {}
