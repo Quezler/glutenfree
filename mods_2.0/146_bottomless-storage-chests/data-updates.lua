@@ -9,7 +9,7 @@ local function create_bottomless_version(prototype)
   entity.name = name
   entity.inventory_size = 1
   entity.inventory_type = "with_custom_stack_size"
-  entity.inventory_properties = {stack_size_min = math.pow(2, 32) - 1}
+  entity.inventory_properties = {stack_size_min = 1000000000}
   entity.minable.result = name
   entity.minable.mining_time = 1
   entity.quality_affects_inventory_size = false
