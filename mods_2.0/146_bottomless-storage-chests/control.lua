@@ -73,13 +73,34 @@ local function get_highest_from_contents(contents)
 end
 
 local function deconstruct_non_bottomless_storage_chests_with(logistic_network, item_with_quality_count, destination)
+  local inventory = game.create_inventory(1)
+  local stack = inventory[1]
+  stack.set_stack({name = "blueprint"})
+
   for _, storage in ipairs(logistic_network.storages) do
     if storage.name ~= "bottomless-storage-chest" then
       if storage.get_inventory(defines.inventory.chest).get_item_count(item_with_quality_count) > 0 then
+        stack.create_blueprint{
+          surface = storage.surface,
+          force = storage.force,
+          area = storage.bounding_box,
+        }
+        local surface = storage.surface
+        local force = storage.force
+        local position = storage.position
         storage.order_deconstruction(storage.force, destination.last_user, 1)
+        stack.build_blueprint{
+          surface = surface,
+          force = force,
+          position = position,
+          build_mode = defines.build_mode.forced,
+          raise_built = true,
+        }
       end
     end
   end
+
+  inventory.destroy()
 end
 
 mod.tick_struct = function(struct)
