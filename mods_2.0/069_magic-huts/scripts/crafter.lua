@@ -92,15 +92,6 @@ Crafter.craft = function(building)
     local sufficient_available_fluids = true
     for _, ingredient in pairs(factory.export.ingredients) do
       if ingredient.type == "fluid" then
-        -- local buffer = building.fluid_input_buffer[ingredient.name]
-        -- local top_up_with = math.ceil(ingredient.count - buffer.count)
-
-        -- local available_fluid = available_fluids[ingredient.name]
-        -- if top_up_with > 0 and available_fluid then
-        --   local removed = available_fluid.entity.remove_fluid({name = ingredient.name, amount = top_up_with})
-        --   building.fluid_statistics.on_flow(ingredient.name, -removed)
-        --   buffer.count = buffer.count + removed
-        -- end
 
         local available_fluid = available_fluids[ingredient.name]
         if available_fluid and available_fluid.amount >= ingredient.count then
@@ -108,6 +99,7 @@ Crafter.craft = function(building)
         else
           sufficient_available_fluids = false
         end
+
       end
     end
     if not sufficient_available_fluids then
@@ -115,23 +107,6 @@ Crafter.craft = function(building)
       return
     end
   end
-
-  -- for _, ingredient in pairs(factory.export.ingredients) do
-  --   if ingredient.type == "fluid" then
-  --     print(ingredient.name)
-  --     -- game.print(serpent.line(building.children.crafter_b.get_fluid_contents()))
-  --     local entity = building.children.crafter_b
-  --     local fluidbox = entity.fluidbox
-  --     for index = 1, #fluidbox do
-  --       -- log(serpent.line(fluidbox.get_connections(index)))
-  --       -- local fluids = fluidbox.get_fluid_segment_contents(index)
-  --       -- if next(fluids) and fluids[ingredient.name] then
-  --       --   log(string.format("index %d has %g %s", index, fluids[ingredient.name], ingredient.name))
-  --       -- end
-  --     end
-  --     return
-  --   end
-  -- end
 
   local ingredients_map = {}
   add_contents_to_map(factory.export.ingredients, ingredients_map)

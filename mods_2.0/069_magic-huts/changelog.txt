@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.0
-Date: ????
+Date: 2025. 08. 06
   Info:
     - Support fluid ingredients
+    - Support filtering output inserters/loaders on the main product with copy paste
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2025. 08. 04

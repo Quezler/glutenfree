@@ -263,6 +263,7 @@ for _, prototype in pairs(prototypes.get_entity_filtered{{filter = "type", type 
 end
 
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
+  -- log(serpent.line(event))
   if mod.container_names_map[get_entity_name(event.source)] and mod.container_names_map[get_entity_name(event.destination)] then
     local building_a = storage.buildings[event.source.unit_number]
     local building_b = storage.buildings[event.destination.unit_number]
@@ -305,6 +306,29 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
         end
       end
       event.destination.infinity_container_filters = infinity_container_filters
+    end
+  elseif mod.container_names_map[get_entity_name(event.source)] and get_entity_type(event.destination) == "inserter" then
+    if event.destination.pickup_target == event.source then
+
+      local building = storage.buildings[event.source.unit_number]
+      local factory = storage.factories[building.factory_index]
+      local filters = factory.export.products
+
+      event.destination.use_filters = true
+      for i = 1, event.destination.filter_slot_count do
+        event.destination.set_filter(i, filters[i])
+      end
+    end
+  elseif mod.container_names_map[get_entity_name(event.source)] and (get_entity_type(event.destination) == "loader-1x1" or get_entity_type(event.destination) == "loader") then
+    if event.destination.loader_type == "output" and event.destination.loader_container == event.source then
+
+      local building = storage.buildings[event.source.unit_number]
+      local factory = storage.factories[building.factory_index]
+      local filters = factory.export.products
+
+      for i = 1, event.destination.filter_slot_count do
+        event.destination.set_filter(i, filters[i])
+      end
     end
   end
 end)
