@@ -71,15 +71,63 @@ Crafter.craft = function(building)
     return
   end
 
+  local available_fluids = {}
+  if factory.export.ingredients_have_fluids then
+    local entity = building.children.crafter_b
+    local fluidbox = entity.fluidbox
+    for index = 1, #fluidbox do
+      local connection = fluidbox.get_connections(index)[1]
+      if connection then -- underground pipe connected
+        local fluid = connection.owner.get_fluid(1) -- get_fluid() sees the entire fluid segment
+        if fluid then
+          available_fluids[fluid.name] = {
+            entity = connection.owner,
+            amount = fluid.amount,
+            -- temperature = fluid.temperature,
+          }
+        end
+      end
+    end
+
+    local sufficient_available_fluids = true
+    for _, ingredient in pairs(factory.export.ingredients) do
+      if ingredient.type == "fluid" then
+        -- local buffer = building.fluid_input_buffer[ingredient.name]
+        -- local top_up_with = math.ceil(ingredient.count - buffer.count)
+
+        -- local available_fluid = available_fluids[ingredient.name]
+        -- if top_up_with > 0 and available_fluid then
+        --   local removed = available_fluid.entity.remove_fluid({name = ingredient.name, amount = top_up_with})
+        --   building.fluid_statistics.on_flow(ingredient.name, -removed)
+        --   buffer.count = buffer.count + removed
+        -- end
+
+        local available_fluid = available_fluids[ingredient.name]
+        if available_fluid and available_fluid.amount >= ingredient.count then
+          -- sufficient available fluid
+        else
+          sufficient_available_fluids = false
+        end
+      end
+    end
+    if not sufficient_available_fluids then
+      Buildings.set_status(building, "[img=utility/status_blue] insufficient fluids in pipelines")
+      return
+    end
+  end
+
   -- for _, ingredient in pairs(factory.export.ingredients) do
   --   if ingredient.type == "fluid" then
   --     print(ingredient.name)
-  --     local fluidbox = building.children.crafter_b.fluidbox
+  --     -- game.print(serpent.line(building.children.crafter_b.get_fluid_contents()))
+  --     local entity = building.children.crafter_b
+  --     local fluidbox = entity.fluidbox
   --     for index = 1, #fluidbox do
-  --       local fluid = fluidbox.get_fluid_segment_contents(index)
-  --       if next(fluid) and fluid[ingredient.name] then
-  --         log(string.format("index %d has %g %s", index, fluid[ingredient.name], ingredient.name))
-  --       end
+  --       -- log(serpent.line(fluidbox.get_connections(index)))
+  --       -- local fluids = fluidbox.get_fluid_segment_contents(index)
+  --       -- if next(fluids) and fluids[ingredient.name] then
+  --       --   log(string.format("index %d has %g %s", index, fluids[ingredient.name], ingredient.name))
+  --       -- end
   --     end
   --     return
   --   end
@@ -116,6 +164,15 @@ Crafter.craft = function(building)
       assert(inserted == payout, string.format("failed to insert %g × %s (%s), only %g succeeded", payout, product.name, product.quality, inserted))
       building.item_statistics.on_flow(product, payout)
       buffer.count = buffer.count - payout
+    end
+  end
+
+  for _, ingredient in pairs(factory.export.ingredients) do
+    if ingredient.type == "fluid" then
+      local available_fluid = available_fluids[ingredient.name]
+      local removed = available_fluid.entity.remove_fluid({name = ingredient.name, amount = ingredient.count})
+      assert(removed == ingredient.count, string.format("failed to remove %g × %s, only %g succeeded", ingredient.count, ingredient.name, removed))
+      building.fluid_statistics.on_flow(ingredient.name, ingredient.count)
     end
   end
 

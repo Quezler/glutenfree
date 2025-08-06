@@ -245,15 +245,15 @@ function Factoryplanner.on_gui_click(event)
     return player.create_local_flying_text{create_at_cursor = true, text = "items/m is required."}
   end
 
-  factory.products, products_have_fluids = get_item_box_contents(item_boxes, 1)
-  factory.byproducts, byproducts_have_fluids = get_item_box_contents(item_boxes, 2)
-  factory.ingredients, ingredients_have_fluids = get_item_box_contents(item_boxes, 3)
+  factory.products, factory.products_have_fluids = get_item_box_contents(item_boxes, 1)
+  factory.byproducts, factory.byproducts_have_fluids = get_item_box_contents(item_boxes, 2)
+  factory.ingredients, factory.ingredients_have_fluids = get_item_box_contents(item_boxes, 3)
   -- game.print("products: " .. serpent.line(factory.products))
   -- game.print("byproducts: " .. serpent.line(factory.byproducts))
   -- game.print("ingredients: " .. serpent.line(factory.ingredients))
 
-  if products_have_fluids or byproducts_have_fluids or ingredients_have_fluids then
-    return player.create_local_flying_text{create_at_cursor = true, text = "use barrels to input or output fluids."}
+  if factory.products_have_fluids or factory.byproducts_have_fluids then
+    return player.create_local_flying_text{create_at_cursor = true, text = "use barrels to output fluids."}
   end
 
   factory.power = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2])

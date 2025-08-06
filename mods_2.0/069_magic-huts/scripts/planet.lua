@@ -185,7 +185,7 @@ Planet.update_constant_combinator_1 = function(building)
     local section = sections.add_section()
     section.multiplier = -1
     for i, item in ipairs(factory.export[key]) do
-      if item.type == "item" then
+      if item.type == "item" then -- note: adding fluids in here would break the circuit "ingredients available" check
         section.set_slot(i, {
           value = item,
           min = math.ceil(item.count),
