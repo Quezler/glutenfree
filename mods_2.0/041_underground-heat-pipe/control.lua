@@ -217,7 +217,7 @@ function Handler.on_created_entity(event)
     entity = entity,
     position = entity.position,
     direction = entity.direction,
-    even_or_odd = get_even_or_odd_position(event.entity) == 0 and "even" or "odd",
+    even_or_odd = get_even_or_odd_position(entity) == 0 and "even" or "odd",
     mode = "single",
   })
 
