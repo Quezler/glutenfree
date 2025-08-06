@@ -150,7 +150,7 @@ for _, factory in ipairs(factories) do
     max_health = factory.max_health,
 
     inventory_size = factory.container_size,
-    inventory_type = "with_filters_and_bar",
+    inventory_type = "with_filters",
 
     flags = {"player-creation", "placeable-player"},
 
