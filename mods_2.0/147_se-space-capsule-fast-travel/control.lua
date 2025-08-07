@@ -55,8 +55,6 @@ script.on_event(defines.events.on_player_selected_area, function(event)
     text = string.format("%d [item=%s]'s left", left, price),
     position = center,
   })
-
-  player.close_map()
 end)
 
 -- local technology_name = "se-space-capsule-navigation"
