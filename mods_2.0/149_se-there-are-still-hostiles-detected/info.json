@@ -1,11 +1,13 @@
 {
     "name": "se-there-are-still-hostiles-detected",
     "title": "Space Exploration - there are still hostiles detected",
-    "description": "Yes, but now many exactly? i don't have all day.",
-    "version": "1.0.1",
+    "description": "Yes, but how many exactly? i don't have all day.",
+    "version": "2.0.0",
     "author": "Quezler",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
         "space-exploration"
     ]
 }
