@@ -20,7 +20,7 @@ script.on_nth_tick(600, function(event)
       else
         player.enable_alert(defines.alert_type.train_out_of_fuel)
         -- command response for `/alerts enable train_out_of_fuel`
-        player.print('Alert type train_out_of_fuel has been enabled.')
+        player.print("Alert type train_out_of_fuel has been enabled.")
       end
 
     end -- if
