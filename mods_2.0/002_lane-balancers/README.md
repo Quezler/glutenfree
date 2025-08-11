@@ -15,6 +15,7 @@ Since i generate the item icons based on the splitter icons you'll find sprites 
 - `extreme-, MIT, AdvancedBeltsSA`
 - `ultimate-, MIT, AdvancedBeltsSA`
 - `high-speed-, MIT, AdvancedBeltsSA`
+- `se-space-, Limited Distribution Only Licence, Space Exploration (with special written permission)`
 
 Note to self, steps to add a new tier:
 - check if the other mod's sprite matches the vanilla style

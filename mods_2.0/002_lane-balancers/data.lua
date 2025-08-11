@@ -31,10 +31,12 @@ local function create_recipe(config)
   balancer.name = config.prefix .. "lane-splitter"
   balancer.main_product = config.prefix .. "lane-splitter"
 
-  for _, ingredient in ipairs(balancer.ingredients) do
-    if ingredient.name == config.previous_prefix .. "splitter" then
-      ingredient.name = config.previous_prefix .. "lane-splitter"
-      ingredient.amount = 2
+  if config.previous_prefix then
+    for _, ingredient in ipairs(balancer.ingredients) do
+      if ingredient.name == config.previous_prefix .. "splitter" then
+        ingredient.name = config.previous_prefix .. "lane-splitter"
+        ingredient.amount = 2
+      end
     end
   end
 
@@ -111,7 +113,7 @@ local function handle(config)
 
   -- log(entity.name .. " is an upgrade for " .. entity_handled_last.name)
   entity.next_upgrade = nil -- so turbo doesn't upgrade to red
-  if entity_handled_last then
+  if entity_handled_last and config.previous_prefix then
     -- log(entity_handled_last.name .. " will upgrade to " .. entity.name)
     entity_handled_last.next_upgrade = entity.name
   end
@@ -208,5 +210,13 @@ if mods["Krastorio2"] then
     tech = "kr-logistic-5",
     previous_prefix = "kr-advanced-",
     order = "e",
+  })
+end
+
+if mods["space-exploration"] then
+  handle({
+    prefix = "se-space-",
+    tech = "se-space-belt",
+    order = "f",
   })
 end
