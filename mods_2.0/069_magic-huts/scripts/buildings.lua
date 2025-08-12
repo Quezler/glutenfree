@@ -476,7 +476,6 @@ Buildings.set_filters = function (building, filters)
     building.inventory.set_filter(slot, filter)
   end
 
-  building.inventory.set_bar()
   Buildings.yeet_squatters(building.inventory)
 end
 
