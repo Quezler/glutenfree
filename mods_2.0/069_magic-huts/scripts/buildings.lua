@@ -487,12 +487,10 @@ local function filter_rejects(filter, stack)
 end
 
 Buildings.yeet_squatters = function (inventory)
-  local bar = inventory.get_bar()
-
   for slot = 1, #inventory do
     local stack = inventory[slot]
     if stack.valid_for_read then
-      if slot >= bar or filter_rejects(inventory.get_filter(slot), stack) then
+      if filter_rejects(inventory.get_filter(slot), stack) then
         inventory.entity_owner.surface.spill_item_stack{
           stack = stack,
           position = inventory.entity_owner.position,
