@@ -262,6 +262,46 @@ for _, prototype in pairs(prototypes.get_entity_filtered{{filter = "type", type 
   end
 end
 
+Buildings.get_inserters = function(building) -- nearby inserters that have either their drop or pickup location as the factory
+  local array = {}
+
+  local bb = building.entity.bounding_box
+  local nearby = 3 -- 1 for normal, 2 for long, 3 for configurable inserter shenanigans
+  local area = {{bb.left_top.x - nearby, bb.left_top.y - nearby}, {bb.right_bottom.x + nearby, bb.right_bottom.y + nearby}}
+
+  -- note: ghost inserters (or always unpowered ones) do not have their targets set yet, would have to fallback to checking the vector collisions
+  for _, inserters in ipairs({
+    building.entity.surface.find_entities_filtered{area = area,       type = {"inserter"}},
+  --building.entity.surface.find_entities_filtered{area = area, ghost_type = {"inserter"}},
+  }) do
+    for _, inserter in ipairs(inserters) do
+      if inserter.drop_target == building.entity or inserter.pickup_target == building.entity then
+        table.insert(array, inserter)
+      end
+    end
+  end
+
+  return array
+end
+
+local function an_ingredient_matches_filter(ingredients, filter)
+  if filter == nil then return end
+
+  for i, ingredient in ipairs(ingredients) do
+    if ingredient.type == "item" and ingredient.name == filter.name and ingredient.quality == filter.quality then
+      return i, ingredient
+    end
+  end
+end
+
+local function ingredient_matches_any_item_filter(ingredient, filters)
+  for _, filter in ipairs(filters) do
+    if filter.name == ingredient.name and filter.quality == ingredient.quality then
+      return true
+    end
+  end
+end
+
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
   -- log(serpent.line(event))
   if mod.container_names_map[get_entity_name(event.source)] and mod.container_names_map[get_entity_name(event.destination)] then
@@ -273,6 +313,17 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     local building_a = storage.buildings[event.source.unit_number]
     local factory_a = storage.factories[building_a.factory_index]
 
+    -- get which filters magic hut feeding inserters use, if any.
+    local filters = {}
+    for _, inserter in ipairs(Buildings.get_inserters(building_a)) do
+      if inserter.pickup_target == event.destination then
+        for i = 1, inserter.filter_slot_count do
+          local filter = inserter.get_filter(i)
+          if filter then table.insert(filters, filter) end
+        end
+      end
+    end
+
     if factory_a then
       local sections = event.destination.get_logistic_sections() --[[@as LuaLogisticSections]]
       for i = sections.sections_count, 1, -1 do -- in reverse so the circuit controlled gets skipped (though it gets disabled)
@@ -282,7 +333,9 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
       for _, key in ipairs({"ingredients"}) do
         for _, item in ipairs(factory_a.export[key]) do
           if item.type == "item" then
-            section.set_slot(section.filters_count+1, {value = item, min = math.ceil(item.count)})
+            if #filters == 0 or ingredient_matches_any_item_filter(item, filters) then
+              section.set_slot(section.filters_count+1, {value = item, min = math.ceil(item.count)})
+            end
           end
         end
       end
@@ -308,17 +361,37 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
       event.destination.infinity_container_filters = infinity_container_filters
     end
   elseif mod.container_names_map[get_entity_name(event.source)] and get_entity_type(event.destination) == "inserter" then
+
+    local building = storage.buildings[event.source.unit_number]
+    local factory = storage.factories[building.factory_index]
+
     if event.destination.pickup_target == event.source then
-
-      local building = storage.buildings[event.source.unit_number]
-      local factory = storage.factories[building.factory_index]
       local filters = factory.export.products
-
       event.destination.use_filters = true
       for i = 1, event.destination.filter_slot_count do
         event.destination.set_filter(i, filters[i])
       end
+    elseif event.destination.drop_target == event.source then
+      local ingredients = table.deepcopy(factory.export.ingredients)
+
+      -- skip any ingredient that already has an inserter filtered for it
+      for _, inserter in ipairs(Buildings.get_inserters(building)) do
+        if inserter.drop_target == event.source then
+          for i = 1, inserter.filter_slot_count do
+            local index = an_ingredient_matches_filter(ingredients, inserter.get_filter(i))
+            if index then table.remove(ingredients, index) end
+          end
+        end
+      end
+
+      for _, ingredient in ipairs(ingredients) do
+        if ingredient.type == "item" and event.destination.filter_slot_count > 0 then
+          event.destination.use_filters = true
+          event.destination.set_filter(1, ingredient)
+        end
+      end
     end
+
   elseif mod.container_names_map[get_entity_name(event.source)] and (get_entity_type(event.destination) == "loader-1x1" or get_entity_type(event.destination) == "loader") then
     if event.destination.loader_type == "output" and event.destination.loader_container == event.source then
 

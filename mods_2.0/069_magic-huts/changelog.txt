@@ -1,9 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.1
-Date: ????
+Date: 2025. 08. 12
   Info:
     - Remove the bar from the factory inventory
     - Allow the crafter a & b in space
+    - Enhance copy pasting on inserters/requesters experience
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 2025. 08. 06
