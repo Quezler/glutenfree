@@ -3,6 +3,7 @@ Version: 1.2.1
 Date: ????
   Info:
     - Remove the bar from the factory inventory
+    - Allow the crafter a & b in space
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 2025. 08. 06

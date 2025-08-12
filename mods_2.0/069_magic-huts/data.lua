@@ -253,6 +253,7 @@ for _, factory in ipairs(factories) do
     hidden = true,
 
     flags = {"no-automated-item-insertion", "no-automated-item-removal"},
+    se_allow_in_space = true,
   }
 
   -- a crafter with a recipe set force-disables all unused fluidboxes
@@ -294,6 +295,7 @@ for _, factory in ipairs(factories) do
       shift = factory.eei_shift,
     },
     hidden = true,
+    se_allow_in_space = true,
   }
 
   data:extend{container, item, recipe, crafter_recipe, crafter_a, crafter_b, eei}
