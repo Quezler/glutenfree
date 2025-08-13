@@ -2,11 +2,13 @@
     "name": "glutenfree-se-spaceship-juicebox",
     "title": "Space Exploration - spaceship juicebox",
     "description": "A place to store your backwash (trash items) until you arrive somewhere.",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
+
+        "base >= 2.0.50",
 
         "space-exploration"
     ]

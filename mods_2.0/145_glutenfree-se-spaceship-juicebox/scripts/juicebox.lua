@@ -31,6 +31,7 @@ function Juicebox.on_created_entity(event)
     position = {entity.position.x - Juicebox.offset.x, entity.position.y - Juicebox.offset.y},
     force = entity.force,
   })
+  juicebox.set_inventory_size_override(defines.inventory.chest, 10)
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {console = entity, juicebox = juicebox}
 end
@@ -89,6 +90,7 @@ function Juicebox.on_entity_cloned(event)
         position = position,
         -- fast_replace = true
       })
+      juicebox.set_inventory_size_override(defines.inventory.chest, 10)
 
       se_util.swap_inventories(old_juicebox.get_inventory(defines.inventory.chest), juicebox.get_inventory(defines.inventory.chest))
       old_juicebox.destroy()

@@ -14,7 +14,7 @@ for _, logistic_mode in ipairs(logistic_modes) do
   entity.render_not_in_network_icon = false
 
   -- Container
-  entity.inventory_size = 10
+  entity.inventory_size = 0 -- for the time being the inventory_size_override is not checked by spaceship integrity
   entity.inventory_type = "normal"
   entity.picture = {
     filename = "__glutenfree-se-spaceship-juicebox__/graphics/entities/juicebox.png",
