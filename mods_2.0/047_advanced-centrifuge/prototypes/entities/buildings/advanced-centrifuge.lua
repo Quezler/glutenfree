@@ -11,13 +11,34 @@ end
 
 local pipe_picture = assembler3pipepictures()
 pipe_picture.south.filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-pipe-S.png"
+pipe_picture.east = {
+  filename = "__base__/graphics/entity/pipe/pipe-ending-right.png",
+  width = 128,
+  height = 128,
+  scale = 0.5,
+  shift = {-1, 0},
+}
+pipe_picture.west = {
+  filename = "__base__/graphics/entity/pipe/pipe-ending-left.png",
+  width = 128,
+  height = 128,
+  scale = 0.5,
+  shift = {1, 0},
+}
+pipe_picture.north = {
+  filename = "__base__/graphics/entity/pipe/pipe-ending-down.png",
+  width = 128,
+  height = 128,
+  scale = 0.5,
+  shift = {0, 0.5},
+}
 
 data:extend({
   {
     type = "assembling-machine",
     name = "k11-advanced-centrifuge",
     icon = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-icon.png",
-    flags = { "placeable-neutral", "placeable-player", "player-creation", "not-rotatable" },
+    flags = { "placeable-neutral", "placeable-player", "player-creation" },
     minable = { mining_time = 1, result = "k11-advanced-centrifuge" },
     max_health = 1000,
     corpse = "nuclear-reactor-remnants",
@@ -152,6 +173,11 @@ data:extend({
         pipe_connections = {
           {flow_direction = "input", direction = defines.direction.south, position = { -2, 3 }},
         },
+        secondary_draw_orders = {
+          east = -1,
+          west = -1,
+          north = -1,
+        }
       },
       {
         production_type = "output",
@@ -161,6 +187,11 @@ data:extend({
         pipe_connections = {
           {flow_direction = "output", direction = defines.direction.south, position = { 2, 3 }},
         },
+        secondary_draw_orders = {
+          east = -1,
+          west = -1,
+          north = -1,
+        }
       },
     }
   }

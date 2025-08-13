@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.7
+Date: 2025-08-13
+  Changes:
+    - Made the centrifuge rotatable again.
+  Compatibility:
+    - All 4 sides (not just the front) have graphics for fluid ports now.
+---------------------------------------------------------------------------------------------------
 Version: 2.2.6
 Date: 2025-07-21
   Compatibility:
