@@ -5,5 +5,6 @@ Factory Planner itself does not support outputting quality, and additionally rec
 and just like the 1.1 version beacons are not supported because figuring how the zone overlaps and distrubution modifiers is quite a pain.
 
 - this mod uses MIT licenced content from [Factorissimo 3](https://mods.factorio.com/mod/factorissimo-2-notnotmelon) by various authors.
+- the "space" graphic files originate from Crazy_Editor's MIT licenced `space-factorissimo-lizard` mod
 
 Release notice: 1.0.0 does not support fluids yet so barrel them, some bugs / crashes / exploits are to be expected, preview build.

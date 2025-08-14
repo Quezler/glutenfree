@@ -368,13 +368,15 @@ function Factoryplanner.on_gui_click(event)
   local struct = Factories.add(factory)
   storage.playerdata[player.index].held_factory_index = struct.index
 
-  local container_name = mod.mouse_button_to_container_name[event.button]
+  local container_tier = mod.mouse_button_to_tier[event.button]
+  if event.shift then container_tier = container_tier + 3 end -- shift to grab one of the infinite tiers (ssst do not tell daan)
+  local container_name = mod.tier_to_container_name[container_tier]
   local slots_required = #Buildings.get_filters_from_export(factory)
   local slots_available = prototypes.entity[container_name].get_inventory_size(defines.inventory.chest, "normal")
 
   player.pipette_entity(container_name, true)
   player.create_local_flying_text{
-    text = string.format("[item=%s] %d/%d", container_name, slots_required, slots_available),
+    text = string.format("[item=%s] %d/%d", container_name, slots_required, container_tier > 3 and 65535 or slots_available),
     create_at_cursor = true
   }
 end

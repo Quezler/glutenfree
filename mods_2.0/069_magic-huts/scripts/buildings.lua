@@ -187,9 +187,27 @@ Buildings.set_factory_index = function (building, factory_index)
     end
 
     local required_slots = #Buildings.get_filters_from_export(new_factory.export)
-    if required_slots > building.inventory_size then
-      building.line_4.text = string.format("export (%d) too big for building (%d)", required_slots, building.inventory_size)
-      return
+    if mod.container_name_to_tier[get_entity_name(building.entity)] >= 3 then
+      if required_slots > 65535 then
+        building.line_4.text = string.format("export (%d) too big for building (%d)", required_slots, 65535)
+        return
+      end
+      local inventory = game.create_inventory(building.is_ghost and 0 or #building.inventory)
+      building.entity.set_inventory_size_override(defines.inventory.chest, required_slots, inventory)
+      building.entity.surface.spill_inventory{
+        position = building.entity.position,
+        inventory = inventory,
+        -- enable_looted = true,
+        force = building.entity.force,
+        allow_belts = false,
+        drop_full_stack = true,
+      }
+      inventory.destroy()
+    else
+      if required_slots > building.inventory_size then
+        building.line_4.text = string.format("export (%d) too big for building (%d)", required_slots, building.inventory_size)
+        return
+      end
     end
   end
 

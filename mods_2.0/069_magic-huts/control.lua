@@ -26,41 +26,31 @@ end)
 
 mod = {}
 
-mod.container_name_to_tier = {
-  [mod_prefix .. "container-1"] = 1,
-  [mod_prefix .. "container-2"] = 2,
-  [mod_prefix .. "container-3"] = 3,
-}
+mod.container_name_to_tier = {}
+mod.tier_to_container_name = {}
+mod.container_name_to_crafter_a_name = {}
+mod.container_name_to_crafter_b_name = {}
+mod.container_name_to_eei_name = {}
+mod.container_names_list = {}
+mod.on_created_entity_filter = {}
 
-mod.container_name_to_crafter_a_name = {
-  [mod_prefix .. "container-1"] = mod_prefix .. "crafter-a-1",
-  [mod_prefix .. "container-2"] = mod_prefix .. "crafter-a-2",
-  [mod_prefix .. "container-3"] = mod_prefix .. "crafter-a-3",
-}
+for i = 1, 6 do
+  mod.container_name_to_tier[mod_prefix .. "container-" .. i] = i
+  mod.tier_to_container_name[i] = mod_prefix .. "container-" .. i
+  mod.container_name_to_crafter_a_name[mod_prefix .. "container-" .. i] = mod_prefix .. "crafter-a-" .. i
+  mod.container_name_to_crafter_b_name[mod_prefix .. "container-" .. i] = mod_prefix .. "crafter-b-" .. i
+  mod.container_name_to_eei_name[mod_prefix .. "container-" .. i] = mod_prefix .. "eei-" .. i
+  table.insert(mod.container_names_list, mod_prefix .. "container-" .. i)
+  table.insert(mod.on_created_entity_filter, {      filter = "name", name = mod_prefix .. "container-" .. i})
+  table.insert(mod.on_created_entity_filter, {filter = "ghost_name", name = mod_prefix .. "container-" .. i})
+end
 
-mod.container_name_to_crafter_b_name = {
-  [mod_prefix .. "container-1"] = mod_prefix .. "crafter-b-1",
-  [mod_prefix .. "container-2"] = mod_prefix .. "crafter-b-2",
-  [mod_prefix .. "container-3"] = mod_prefix .. "crafter-b-3",
-}
-
-mod.container_name_to_eei_name = {
-  [mod_prefix .. "container-1"] = mod_prefix .. "eei-1",
-  [mod_prefix .. "container-2"] = mod_prefix .. "eei-2",
-  [mod_prefix .. "container-3"] = mod_prefix .. "eei-3",
-}
-
-mod.container_names_list = {
-  mod_prefix .. "container-1",
-  mod_prefix .. "container-2",
-  mod_prefix .. "container-3",
-}
 mod.container_names_map = util.list_to_map(mod.container_names_list)
 
-mod.mouse_button_to_container_name = {
-  [defines.mouse_button_type.left  ] = mod_prefix .. "container-1",
-  [defines.mouse_button_type.middle] = mod_prefix .. "container-2",
-  [defines.mouse_button_type.right ] = mod_prefix .. "container-3",
+mod.mouse_button_to_tier = {
+  [defines.mouse_button_type.left  ] = 1,
+  [defines.mouse_button_type.middle] = 2,
+  [defines.mouse_button_type.right ] = 3,
 }
 
 mod.next_index_for = function(key)
@@ -69,7 +59,7 @@ mod.next_index_for = function(key)
   return id
 end
 
-script.on_init(function ()
+script.on_init(function()
   storage.invalid = game.create_inventory(0)
   storage.invalid.destroy()
 
@@ -97,6 +87,12 @@ script.on_init(function ()
   end
 end)
 
+script.on_configuration_changed(function()
+  for _, player in pairs(game.players) do
+    mod.recreate_relative_gui(player)
+  end
+end)
+
 mod.relative_frame_left_name = mod_prefix .. "frame-left"
 mod.relative_frame_right_name = mod_prefix .. "frame-right"
 
@@ -107,7 +103,14 @@ mod.on_player_created = function (event)
     held_factory_index = nil,
   }
 
-  local frame = player.gui.relative.add{
+  mod.recreate_relative_gui(player)
+end
+
+mod.recreate_relative_gui = function(player)
+  local frame = player.gui.relative[mod.relative_frame_left_name]
+  if frame then frame.destroy() end
+
+  frame = player.gui.relative.add{
     type = "frame",
     name = mod.relative_frame_left_name,
     anchor = {
@@ -153,14 +156,7 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, Buildings.on_created_entity, {
-    {filter = "name", name = mod_prefix .. "container-1"},
-    {filter = "name", name = mod_prefix .. "container-2"},
-    {filter = "name", name = mod_prefix .. "container-3"},
-    {filter = "ghost_name", name = mod_prefix .. "container-1"},
-    {filter = "ghost_name", name = mod_prefix .. "container-2"},
-    {filter = "ghost_name", name = mod_prefix .. "container-3"},
-  })
+  script.on_event(event, Buildings.on_created_entity, mod.on_created_entity_filter)
 end
 
 mod.player_holding_hut = function(player)

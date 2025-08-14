@@ -124,12 +124,79 @@ local factories = {
     eei_shift = {0, 5.5},
     side_length = 16,
   },
-}
+  {
+    i = 4,
+    order = "c-d",
+    selection_box = {{-4.0, -4.0}, {4.0, 4.0}},
+    selection_box_door = {{-1.0, 2.1}, {1.0, 4.0}},
+    collision_box = {{-3.8, -3.8}, {3.8, 3.8}},
+    max_health = 2000,
+    container_size = 0,
+    picture_properties = {
+      width = 416,
+      height = 320,
+      shift = {1.5, 0},
+    },
+    ingredients = {
+      {type = "item", name = "wooden-chest", amount = 1},
+      {type = "item", name = "wood", amount = 10},
+    },
+    per_rocket = 4,
+    eei_shift = {0, 2.1},
+    side_length = 8,
 
-local alt_graphics = "-alt"
-if mods["factorissimo-2-notnotmelon"] and settings.startup["Factorissimo2-alt-graphics"].value then
-  alt_graphics = ""
-end
+    icon_size = 32,
+    localised_name = {"entity-name.small-magic-hut"},
+  },
+  {
+    i = 5,
+    order = "c-e",
+    selection_box = {{-6.0, -6.0}, {6.0, 6.0}},
+    selection_box_door = {{-1.5, 3.8}, {1.5, 6.0}},
+    collision_box = {{-5.8, -5.8}, {5.8, 5.8}},
+    max_health = 3500,
+    container_size = 0,
+    picture_properties = {
+      width = 544,
+      height = 448,
+      shift = {1.5, 0},
+    },
+    ingredients = {
+      {type = "item", name = "iron-chest", amount = 1},
+      {type = "item", name = "iron-plate", amount = 25},
+    },
+    per_rocket = 2,
+    eei_shift = {0, 3.6},
+    side_length = 12,
+
+    icon_size = 32,
+    localised_name = {"entity-name.medium-magic-hut"},
+  },
+  {
+    i = 6,
+    order = "c-f",
+    selection_box = {{-8.0, -8.0}, {8.0, 8.0}},
+    selection_box_door = {{-1.8, 5.5}, {1.8, 8.0}},
+    collision_box = {{-7.8, -7.8}, {7.8, 7.8}},
+    max_health = 5000,
+    container_size = 0,
+    picture_properties = {
+      width = 704,
+      height = 608,
+      shift = {2, -0.09375},
+    },
+    ingredients = {
+      {type = "item", name = "steel-chest", amount = 1},
+      {type = "item", name = "steel-plate", amount = 50},
+    },
+    per_rocket = 1,
+    eei_shift = {0, 5.5},
+    side_length = 16,
+
+    icon_size = 32,
+    localised_name = {"entity-name.large-magic-hut"},
+  },
+}
 
 local recipe_category = {
   type = "recipe-category",
@@ -138,11 +205,17 @@ local recipe_category = {
 data:extend{recipe_category}
 
 for _, factory in ipairs(factories) do
+  local alt_graphics = "-alt"
+  if factory.i >= 3 or (mods["factorissimo-2-notnotmelon"] and settings.startup["Factorissimo2-alt-graphics"].value) then
+    alt_graphics = ""
+  end
+
   local container = {
     type = "container",
     name = mod_prefix .. "container-" .. factory.i,
-    localised_name = {"entity-name.magic-hut", tostring(factory.i)},
+    localised_name = factory.localised_name or {"entity-name.magic-hut", tostring(factory.i)},
     icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
+    icon_size = factory.icon_size,
     order = factory.order,
 
     selection_box = factory.selection_box,
@@ -155,7 +228,7 @@ for _, factory in ipairs(factories) do
     flags = {"player-creation", "placeable-player"},
 
     -- the factory does not benefit from any quality bonuses
-    -- quality_affects_inventory_size = false,
+    quality_affects_inventory_size = factory.i <= 3, -- only 1-3, 4-6 has no default container size anyways
 
     picture = {
       layers = {
@@ -191,6 +264,7 @@ for _, factory in ipairs(factories) do
     type = "item",
     name = container.name,
     icon = container.icon,
+    icon_size = factory.icon_size,
     subgroup = "tool",
     order = factory.order,
     inventory_move_sound = item_sounds.metal_chest_inventory_move,
@@ -210,14 +284,16 @@ for _, factory in ipairs(factories) do
     name = item.name,
     enabled = true,
     ingredients = factory.ingredients,
-    results = {{type="item", name=item.name, amount=1}}
+    results = {{type="item", name=item.name, amount=1}},
+    energy_required = 10,
   }
 
   local crafter_recipe = {
     type = "recipe",
     name = mod_prefix .. "recipe-" .. factory.i,
-    localised_name = {"entity-name.magic-hut", tostring(factory.i)},
+    localised_name = factory.localised_name or {"entity-name.magic-hut", tostring(factory.i)},
     icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
+    icon_size = factory.icon_size,
     category = recipe_category.name,
     enabled = true,
     auto_recycle = false,
@@ -231,8 +307,9 @@ for _, factory in ipairs(factories) do
   local crafter_a = {
     type = "assembling-machine",
     name = mod_prefix .. "crafter-a-" .. factory.i,
-    localised_name = {"entity-name.magic-hut", tostring(factory.i)},
+    localised_name = factory.localised_name or {"entity-name.magic-hut", tostring(factory.i)},
     icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
+    icon_size = factory.icon_size,
     order = factory.order,
 
     selection_priority = 51,
@@ -269,8 +346,9 @@ for _, factory in ipairs(factories) do
   local eei = {
     type = "electric-energy-interface",
     name = mod_prefix .. "eei-" .. factory.i,
-    localised_name = {"entity-name.magic-hut", tostring(factory.i)},
+    localised_name = factory.localised_name or {"entity-name.magic-hut", tostring(factory.i)},
     icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
+    icon_size = factory.icon_size,
 
     selection_priority = 52,
     selection_box = {{-0.4, -0.3 + factory.eei_shift[2]}, {0.4, 0.3 + factory.eei_shift[2]}},
@@ -320,11 +398,8 @@ data:extend{{
 }}
 
 if mods["FilterHelper"] and data.raw["mod-data"]["fh_add_items_drop_target_entity"] and data.raw["mod-data"]["fh_add_items_pickup_target_entity"] then
-  data.raw["mod-data"]["fh_add_items_drop_target_entity"].data[mod_prefix .. "container-" .. 1] = {"magic-huts", "fh_add_items_drop_target_entity"}
-  data.raw["mod-data"]["fh_add_items_drop_target_entity"].data[mod_prefix .. "container-" .. 2] = {"magic-huts", "fh_add_items_drop_target_entity"}
-  data.raw["mod-data"]["fh_add_items_drop_target_entity"].data[mod_prefix .. "container-" .. 3] = {"magic-huts", "fh_add_items_drop_target_entity"}
-
-  data.raw["mod-data"]["fh_add_items_pickup_target_entity"].data[mod_prefix .. "container-" .. 1] = {"magic-huts", "fh_add_items_pickup_target_entity"}
-  data.raw["mod-data"]["fh_add_items_pickup_target_entity"].data[mod_prefix .. "container-" .. 2] = {"magic-huts", "fh_add_items_pickup_target_entity"}
-  data.raw["mod-data"]["fh_add_items_pickup_target_entity"].data[mod_prefix .. "container-" .. 3] = {"magic-huts", "fh_add_items_pickup_target_entity"}
+  for i = 1, 6 do
+    data.raw["mod-data"]["fh_add_items_drop_target_entity"  ].data[mod_prefix .. "container-" .. i] = {"magic-huts", "fh_add_items_drop_target_entity"}
+    data.raw["mod-data"]["fh_add_items_pickup_target_entity"].data[mod_prefix .. "container-" .. i] = {"magic-huts", "fh_add_items_pickup_target_entity"}
+  end
 end

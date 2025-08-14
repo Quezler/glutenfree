@@ -28,8 +28,8 @@ end
 
 for _, entity_type in ipairs({"inserter", "loader", "loader-1x1"}) do
   for _, entity in pairs(data.raw[entity_type]) do
-    table.insert(data.raw["container"][mod_prefix .. "container-1"].additional_pastable_entities, entity.name)
-    table.insert(data.raw["container"][mod_prefix .. "container-2"].additional_pastable_entities, entity.name)
-    table.insert(data.raw["container"][mod_prefix .. "container-3"].additional_pastable_entities, entity.name)
+    for i = 1, 6 do
+      table.insert(data.raw["container"][mod_prefix .. "container-" .. i].additional_pastable_entities, entity.name)
+    end
   end
 end
