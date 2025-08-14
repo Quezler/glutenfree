@@ -5,7 +5,7 @@ local Handler = {}
 
 script.on_init(function()
   storage.construction_robots = {}
-  storage.total_construction_robots = {}
+  storage.total_construction_robots = 0
   storage.lock = {}
 
   storage.tasks_at_tick = {}
