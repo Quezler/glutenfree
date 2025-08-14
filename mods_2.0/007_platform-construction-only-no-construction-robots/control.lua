@@ -5,13 +5,14 @@ local Handler = {}
 
 script.on_init(function()
   storage.construction_robots = {}
+  storage.total_construction_robots = {}
   storage.lock = {}
 
   storage.tasks_at_tick = {}
 end)
 
 script.on_configuration_changed(function()
-  --
+  storage.total_construction_robots = table_size(storage.construction_robots)
 end)
 
 local function add_task(tick, task)
@@ -24,6 +25,18 @@ local function add_task(tick, task)
 end
 
 function Handler.on_tick_robots(event)
+  if storage.total_construction_robots > 1000 then
+    if (event.tick % 300) == 0 then
+      for unit_number, entity in pairs(storage.construction_robots) do
+        if not entity.valid then
+          storage.total_construction_robots = storage.total_construction_robots - 1
+          storage.construction_robots[unit_number] = nil
+        end
+      end
+    end
+    return
+  end
+
   for unit_number, entity in pairs(storage.construction_robots) do
     if entity.valid then
       local robot_order_queue = entity.robot_order_queue
@@ -35,6 +48,7 @@ function Handler.on_tick_robots(event)
         end
       end
     else
+      storage.total_construction_robots = storage.total_construction_robots - 1
       storage.construction_robots[unit_number] = nil
     end
   end
@@ -101,5 +115,6 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   local construction_robot = event.target_entity
   assert(construction_robot and construction_robot.name == "construction-robot")
 
+  storage.total_construction_robots = storage.total_construction_robots + 1
   storage.construction_robots[construction_robot.unit_number] = construction_robot
 end)
