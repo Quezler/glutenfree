@@ -1,0 +1,24 @@
+{
+    "name": "control-click-cargo-wagon-to-spill-items-on-floor",
+    "title": "Control click cargo wagon to spill items on floor",
+    "description": "Helps dealing with train gridlocks due to oversending.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "? base >= 2.0.51",
+        "? space-age"
+    ]
+}
