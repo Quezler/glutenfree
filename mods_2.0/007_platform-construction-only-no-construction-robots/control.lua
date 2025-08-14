@@ -40,6 +40,14 @@ function Handler.on_tick_robots(event)
   end
 end
 
+-- problematic when you drag the cursor back and forth whilst the scaffold is still animation (like rotating and going under rails)
+local type_skips_colission_entity = {
+  ["transport-belt"] = true,
+  ["underground-belt"] = true,
+  -- ["pipe"] = true,
+  -- ["pipe-to-ground"] = true,
+}
+
 function Handler.request_platform_animation_for(entity)
   if entity.name ~= "entity-ghost" then return end
   if blacklisted_names[entity.ghost_name] then return end
@@ -52,16 +60,18 @@ function Handler.request_platform_animation_for(entity)
   local tick = game.tick
   local surface = entity.surface
 
-  add_task(response.all_scaffolding_up_at, {
-    name = "destroy",
-    entity = surface.create_entity{
-      name = "ghost-being-constructed",
-      force = "neutral",
-      position = entity.position,
-      create_build_effect_smoke = false,
-      preserve_ghosts_and_corpses = true,
-    }
-  })
+  if not type_skips_colission_entity[entity.ghost_type] then
+    add_task(response.all_scaffolding_up_at, {
+      name = "destroy",
+      entity = surface.create_entity{
+        name = "ghost-being-constructed",
+        force = "neutral",
+        position = entity.position,
+        create_build_effect_smoke = false,
+        preserve_ghosts_and_corpses = true,
+      }
+    })
+  end
 
   add_task(response.all_scaffolding_down_at, {name = "unlock", unit_number = entity.unit_number})
 end
