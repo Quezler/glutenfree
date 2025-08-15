@@ -16,6 +16,11 @@ script.on_event(defines.events.on_console_command, function (event)
   if not player then return end
   if event.parameters ~= "all" then return end
 
-  local inventory = player.get_inventory(defines.inventory.character_main) --[[@as LuaInventory]]
+  local character = player.character
+  if not character then return end
+
+  local inventory = character.get_inventory(defines.inventory.character_main) --[[@as LuaInventory]]
+  if not inventory then return end
+
   inventory.insert({name = mod_prefix .. "beacon", count = 20})
 end)
