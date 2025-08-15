@@ -15,6 +15,10 @@ Usage:
 - grab the blueprint book with `/circuit-connector-placement-helper`
 - rotate to cycle between the 40 connectors (both through the book and once placed)
 - use the arrow keys to nudge it into place (hold shift to nudge further)
+- once placed then grab one of the lines from the textarea that appears
+- use that line to configure either the vector or single generation function as shown here:
+- https://github.com/wube/factorio-data/blob/master/core/lualib/circuit-connector-generated-definitions.lua#L517
+- instead of writing it to `circuit_connector_definitions[]` you should write it to the `circuit_connector` on your entity prototype
 
 Edit: oh sad some reasonable connectors already got placed https://codeberg.org/raiguard/Krastorio2/pulls/529 :o
 
