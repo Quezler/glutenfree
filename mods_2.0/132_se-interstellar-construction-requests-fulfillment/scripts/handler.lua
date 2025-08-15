@@ -43,6 +43,9 @@ local entity_name_bypasses_proxy_whitelist = {
   ["magic-huts--container-1"] = true,
   ["magic-huts--container-2"] = true,
   ["magic-huts--container-3"] = true,
+  ["magic-huts--container-4"] = true,
+  ["magic-huts--container-5"] = true,
+  ["magic-huts--container-6"] = true,
   ["glutenfree-equipment-train-stop-template-container"] = true,
 }
 function Handler.regenerate_item_request_proxy_whitelist()
