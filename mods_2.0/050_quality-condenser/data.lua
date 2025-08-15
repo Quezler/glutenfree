@@ -157,7 +157,7 @@ local container_entity = {
   collision_mask = {layers = {}},
   max_health = 10,
 
-  minable = {mining_time = 0.5},
+  minable = {mining_time = 0.5, result = crafter_item.name},
 
   circuit_wire_max_distance = default_circuit_wire_max_distance,
   circuit_connector = circuit_connector_definitions.create_single
