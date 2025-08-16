@@ -43,18 +43,65 @@ function Juicebox.on_object_destroyed(event)
     if deathrattle.juicebox.valid then
 
       local inventory = deathrattle.juicebox.get_inventory(defines.inventory.chest)
---       game.print("is_empty = " .. serpent.line(inventory.is_empty()))
-      if not inventory.is_empty() then
-        for slot = 1, #inventory do
-          if inventory[slot].valid_for_read then
-            deathrattle.juicebox.surface.spill_item_stack(deathrattle.juicebox.position, inventory[slot], false, deathrattle.juicebox.force, false)
-          end
-        end
-      end
+      deathrattle.juicebox.surface.spill_inventory{
+        position = deathrattle.juicebox.position,
+        inventory = inventory,
+        enable_looted = false,
+        force = deathrattle.juicebox.force,
+        allow_belts = false,
+      }
 
       deathrattle.juicebox.destroy()
     end
 
+  end
+end
+
+-- the spaceship just launched, we'll check if the roboport networks on board have enough space for bots to land.
+function Juicebox.roboport_housing(surface, juicebox)
+  local network = surface.find_closest_logistic_network_by_position(juicebox.position, juicebox.force)
+  if not network then return end
+
+  local juicebox_inventory = juicebox.get_inventory(defines.inventory.chest)
+
+  local items = {} -- assume the robot items share the same name with the entity, and that they are all normal quality.
+  for _, robot in ipairs(network.robots) do
+    items[robot.name] = (items[robot.name] or 0) + 1
+  end
+
+  local roboport_inventories = {}
+  for _, cell in ipairs(network.cells) do
+    table.insert(roboport_inventories, cell.owner.get_inventory(defines.inventory.roboport_robot))
+  end
+
+  for _, robot in ipairs(network.robots) do
+
+    -- try to fit any cargo into an onboard requester/storage/juicebox
+    local cargo_stack = robot.get_inventory(defines.inventory.robot_cargo)[1]
+    if cargo_stack.valid_for_read then
+      if network.insert(cargo_stack) == cargo_stack.count then
+        cargo_stack.clear()
+      else
+        goto next_robot -- cargo has nowhere to go, we'll leave this bot alone
+      end
+    end
+
+    -- try to fit the robot into any of the onboard roboports
+    local item = {type = "item", name = robot.name, count = 1, quality = robot.quality}
+    for _, roboport_inventory in ipairs(roboport_inventories) do
+      if roboport_inventory.insert(item) > 0 then
+        robot.destroy()
+        goto next_robot
+      end
+    end
+
+    -- otherwise put the robot in the juicebox
+    if juicebox_inventory.insert(item) > 0 then
+      robot.destroy()
+      goto next_robot
+    end
+
+    ::next_robot::
   end
 end
 
@@ -94,6 +141,11 @@ function Juicebox.on_entity_cloned(event)
 
       se_util.swap_inventories(old_juicebox.get_inventory(defines.inventory.chest), juicebox.get_inventory(defines.inventory.chest))
       old_juicebox.destroy()
+    end
+
+    local surface_name = event.destination.surface.name
+    if string.sub(surface_name, 1, #"spaceship-") == "spaceship-" then
+      Juicebox.roboport_housing(event.destination.surface, juicebox)
     end
 
     storage.deathrattles[script.register_on_object_destroyed(event.destination)] = {console = event.destination, juicebox = juicebox}
