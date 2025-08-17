@@ -21,13 +21,13 @@ end
 function EquipmentGrid.tick_rolling_stock(entry, entity)
 
   local grid = entity.grid
-  if not grid then return EquipmentGrid.flying_text(entry.train_stop, {locale_prefix .. "no-equipment-grid"}) end
+  if not grid then return EquipmentGrid.flying_text(entry.train_stop, {locale_prefix .. "no-equipment-grid-found"}) end
 
   local template_inventory = entry.template_container.get_inventory(defines.inventory.chest)
-  if template_inventory.is_empty() then return EquipmentGrid.flying_text(entry.train_stop, {locale_prefix .. "template-chest-empty"}) end
+  if template_inventory.is_empty() then return EquipmentGrid.flying_text(entry.train_stop, {locale_prefix .. "template-chest-is-empty"}) end
 
   local template = template_inventory.find_item_stack(prototypes.entity[entity.name].items_to_place_this[1].name)
-  if not template then return EquipmentGrid.flying_text(entry.train_stop, {locale_prefix .. "missing-template", {"entity-name." .. entity.name}}) end
+  if not template then return EquipmentGrid.flying_text(entry.train_stop, {locale_prefix .. "missing-template-for", entity.localised_name}) end
   if not template.grid then return EquipmentGrid.flying_text(entry.train_stop, {locale_prefix .. "template-equipment-grid-empty"}) end
 
   local contents = get_contents_with_quality_map(grid)
