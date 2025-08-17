@@ -1,6 +1,7 @@
 require("util")
 
 local locale_prefix = "glutenfree-equipment-train-stop."
+local equipment_ghost = "equipment-ghost"
 
 local EquipmentGrid = {}
 
@@ -16,6 +17,20 @@ local function get_contents_with_quality_map(equipment_grid)
   end
 
   return map
+end
+
+local function get_nearby_container(entry)
+  local nearby_containers = entry.train_stop.surface.find_entities_filtered({
+    type = {"container", "logistic-container"},
+    position = entry.train_stop.position,
+    radius = 2
+  })
+
+  for _, value in ipairs(nearby_containers) do
+    if value ~= entry.template_container then
+      return value
+    end
+  end
 end
 
 function EquipmentGrid.tick_rolling_stock(entry, entity)
@@ -48,26 +63,83 @@ function EquipmentGrid.tick_rolling_stock(entry, entity)
   if EquipmentGrid.contents_are_equal(template_contents, contents) then return end
 
   local removal_request = {}
+  local add_request = {}
+
   for _, equipment in ipairs(grid.equipment) do
-    removal_request[util.positiontostr(equipment.position)] = {
-      name = equipment.name,
-      quality = equipment.quality,
-    }
-    grid.order_removal(equipment)
+    removal_request[util.positiontostr(equipment.position)] = equipment
   end
 
-  for _, equipment in ipairs(template.grid.equipment) do
-    local to_remove = removal_request[util.positiontostr(equipment.position)]
-    if to_remove and to_remove.name == equipment.name and to_remove.quality == equipment.quality then
-      grid.cancel_removal(grid.get(equipment.position))
+  for _, expected in ipairs(template.grid.equipment) do
+    local position_str = util.positiontostr(expected.position)
+    local actual = removal_request[position_str]
+    if actual then
+      if actual.name == expected.name and actual.quality == expected.quality then
+        removal_request[position_str] = nil
+        grid.cancel_removal(actual)
+      else
+        add_request[position_str] = expected
+        if actual.name == equipment_ghost and actual.ghost_name == expected.name and actual.quality == expected.quality then
+          removal_request[position_str] = nil -- keep the ghost to prevent restarting the logistic request
+        end
+      end
     else
-      -- the new ghost can collide with equipment removal requests, but sometimes it _does_ overlap, weird right?
-      local success = grid.put{
+      add_request[position_str] = expected
+    end
+  end
+  
+  local nearby_container = get_nearby_container(entry)
+  local chest_inventory = nil;
+  if nearby_container and nearby_container.valid then
+    chest_inventory = nearby_container.get_inventory(defines.inventory.chest);
+  end
+
+  -- first remove all bad equipment from the grid, to avoid issues with overlapping elements
+  -- then add the new equipment
+  if chest_inventory and chest_inventory.valid then
+    for _, equipment in pairs(removal_request) do
+      if equipment.name ~= equipment_ghost and chest_inventory.insert({
+          name = equipment.name,
+          quality = equipment.quality,
+          count = 1,
+        }) == 1 then
+          grid.take({ equipment = equipment })
+      else
+        grid.order_removal(equipment)
+      end
+    end
+
+    for _, equipment in pairs(add_request) do
+      if chest_inventory.remove({
+          name = equipment.name,
+          quality = equipment.quality,
+          count = 1,
+        }) == 1 then
+          grid.put({
+            name = equipment.name,
+            quality = equipment.quality,
+            position = equipment.position,
+          })
+      else
+        grid.put({
+          name = equipment.name,
+          quality = equipment.quality,
+          position = equipment.position,
+          ghost = true,
+        })
+      end
+    end
+
+  else
+    for _, equipment in pairs(removal_request) do
+      grid.order_removal(equipment)
+    end
+    for _, equipment in pairs(add_request) do
+      grid.put({
         name = equipment.name,
         quality = equipment.quality,
         position = equipment.position,
         ghost = true,
-      }
+      })
     end
   end
 
