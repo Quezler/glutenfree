@@ -6,6 +6,7 @@ mod_prefix = 'glutenfree-equipment-train-stop-'
 require('prototypes.recipes')
 require('prototypes.items')
 require('prototypes.entities')
+require('prototypes.technologies')
 
 flib = nil
 mod_prefix = nil
