@@ -1,7 +1,6 @@
 require("util")
 
 local locale_prefix = "glutenfree-equipment-train-stop."
-local equipment_ghost = "equipment-ghost"
 
 local EquipmentGrid = {}
 
@@ -19,18 +18,36 @@ local function get_contents_with_quality_map(equipment_grid)
   return map
 end
 
-local function get_nearby_container(entry)
-  local nearby_containers = entry.train_stop.surface.find_entities_filtered({
+local function get_nearby_container_inventories(entry)
+  local inventories = {}
+
+  local containers = entry.train_stop.surface.find_entities_filtered({
     type = {"container", "logistic-container"},
     position = entry.train_stop.position,
     radius = 2
   })
 
-  for _, value in ipairs(nearby_containers) do
-    if value ~= entry.template_container then
-      return value
+  for _, container in ipairs(containers) do
+    if container ~= entry.template_container then
+      inventories[container.unit_number] = container.get_inventory(defines.inventory.chest)
     end
   end
+
+  return inventories
+end
+
+local function try_with_inventories(inventories, operation, equipment)
+  local item = {name = equipment.name, quality = equipment.quality, count = 1}
+  for _, inventory in pairs(inventories) do
+      if inventory[operation](item) == 1 then
+        return true
+      end
+  end
+  return false
+end
+
+local function is_ghost(equipment)
+  return equipment.name == "equipment-ghost"
 end
 
 function EquipmentGrid.tick_rolling_stock(entry, entity)
@@ -62,78 +79,57 @@ function EquipmentGrid.tick_rolling_stock(entry, entity)
   -- check if the grid has the same amount of everything as the template, regardless of position. (cheap bail check)
   if EquipmentGrid.contents_are_equal(template_contents, contents) then return end
 
-  local removal_request = {}
-  local add_request = {}
+  local removal_requests = {}
+  local add_requests = {}
 
+  -- Track existing equipment
   for _, equipment in ipairs(grid.equipment) do
-    removal_request[util.positiontostr(equipment.position)] = equipment
+    removal_requests[util.positiontostr(equipment.position)] = equipment
   end
 
+  -- Compare with expected equipment
   for _, expected in ipairs(template.grid.equipment) do
     local position_str = util.positiontostr(expected.position)
-    local actual = removal_request[position_str]
+    local actual = removal_requests[position_str]
     if actual then
       if actual.name == expected.name and actual.quality == expected.quality then
-        removal_request[position_str] = nil
+        -- Equipment matches, so keep it
+        removal_requests[position_str] = nil
         grid.cancel_removal(actual)
       else
-        add_request[position_str] = expected
-        if actual.name == equipment_ghost and actual.ghost_name == expected.name and actual.quality == expected.quality then
-          removal_request[position_str] = nil -- keep the ghost to prevent restarting the logistic request
+        -- Equipment does not match or ghost, so prepare to add the expected one
+        add_requests[position_str] = expected
+        if is_ghost(actual) and actual.ghost_name == expected.name and actual.quality == expected.quality then
+          -- keep the ghost to prevent restarting the logistic request
+          removal_requests[position_str] = nil 
         end
       end
     else
-      add_request[position_str] = expected
+      -- no equipment present, so prepare to add the expected one
+      add_requests[position_str] = expected
     end
   end
   
-  local nearby_container = get_nearby_container(entry)
-  local chest_inventory = nil;
-  if nearby_container and nearby_container.valid then
-    chest_inventory = nearby_container.get_inventory(defines.inventory.chest);
-  end
+  local nearby_inventories = get_nearby_container_inventories(entry)
 
   -- first remove all bad equipment from the grid, to avoid issues with overlapping elements
-  -- then add the new equipment
-  if chest_inventory and chest_inventory.valid then
-    for _, equipment in pairs(removal_request) do
-      if equipment.name ~= equipment_ghost and chest_inventory.insert({
-          name = equipment.name,
-          quality = equipment.quality,
-          count = 1,
-        }) == 1 then
-          grid.take({ equipment = equipment })
-      else
-        grid.order_removal(equipment)
-      end
-    end
-
-    for _, equipment in pairs(add_request) do
-      if chest_inventory.remove({
-          name = equipment.name,
-          quality = equipment.quality,
-          count = 1,
-        }) == 1 then
-          grid.put({
-            name = equipment.name,
-            quality = equipment.quality,
-            position = equipment.position,
-          })
-      else
-        grid.put({
-          name = equipment.name,
-          quality = equipment.quality,
-          position = equipment.position,
-          ghost = true,
-        })
-      end
-    end
-
-  else
-    for _, equipment in pairs(removal_request) do
+  for _, equipment in pairs(removal_requests) do
+    if not is_ghost(equipment) and try_with_inventories(nearby_inventories, "insert", equipment) then
+        grid.take({ equipment = equipment })
+    else
       grid.order_removal(equipment)
     end
-    for _, equipment in pairs(add_request) do
+  end
+
+  -- then add the new equipment
+  for _, equipment in pairs(add_requests) do
+    if try_with_inventories(nearby_inventories, "remove", equipment) then
+      grid.put({
+        name = equipment.name,
+        quality = equipment.quality,
+        position = equipment.position,
+      })
+    else
       grid.put({
         name = equipment.name,
         quality = equipment.quality,
