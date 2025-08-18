@@ -40,10 +40,10 @@ local function try_with_inventories(inventories, operation, equipment)
   local item = {name = equipment.name, quality = equipment.quality, count = 1}
   for _, inventory in pairs(inventories) do
       if inventory[operation](item) == 1 then
-        return true
+        return inventory
       end
   end
-  return false
+  return nil
 end
 
 local function is_ghost(equipment)
@@ -123,12 +123,26 @@ function EquipmentGrid.tick_rolling_stock(entry, entity)
 
   -- then add the new equipment
   for _, equipment in pairs(add_requests) do
-    if try_with_inventories(nearby_inventories, "remove", equipment) then
-      grid.put({
+    local source_inventory = try_with_inventories(nearby_inventories, "remove", equipment)
+    if source_inventory then
+      if not grid.put({
         name = equipment.name,
         quality = equipment.quality,
         position = equipment.position,
-      })
+      }) then
+        -- the space is still occupied (with an equipment marked for removal), put item back
+        source_inventory.insert({ 
+          name = equipment.name, 
+          quality = equipment.quality, 
+          count = 1 
+        })
+        grid.put({
+          name = equipment.name,
+          quality = equipment.quality,
+          position = equipment.position,
+          ghost = true,
+        })
+      end
     else
       grid.put({
         name = equipment.name,
