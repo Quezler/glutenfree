@@ -587,6 +587,7 @@ end
 Buildings.turn_eei_on = function(building)
   if building.is_ghost then return end
 
+  -- game.print("turn_eei_on")
   local factory = storage.factories[building.factory_index]
   local watts = factory.export.power * prefix_to_multiplier(factory.export.power_prefix)
   building.children.eei.electric_buffer_size = math.max(1, watts) -- buffer for 1 second
@@ -596,6 +597,7 @@ end
 Buildings.turn_eei_off = function(building)
   if building.is_ghost then return end
 
+  -- game.print("turn_eei_off")
   building.children.eei.power_usage = 0
 end
 

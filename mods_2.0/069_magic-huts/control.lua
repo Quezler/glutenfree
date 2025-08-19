@@ -175,7 +175,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
           -- game.print("working")
           Planet.arm_trigger_n(building, 2)
           Buildings.set_status(building, "[img=utility/status_working] working")
-          Buildings.turn_eei_on(building)
+          Buildings.turn_eei_on(building) -- would ask for power if you took a building out for a bit, even if the power got paid already
         elseif n == 2 then
           -- game.print("waiting for items")
           Planet.arm_trigger_n(building, 1)
