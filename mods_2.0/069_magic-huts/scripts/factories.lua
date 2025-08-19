@@ -164,14 +164,22 @@ Factories.on_gui_click = function (event)
 end
 
 Factories.allowed_on_surface = function(factory, surface)
+  -- allowed on the mod's special surface
+  if surface == storage.surface then
+    return true
+  end
+
+  -- exported when there were no different planets
   if factory.export.space_location == nil then
     return true
   end
 
+  -- district matches the planet
   if surface.planet and surface.planet.name == factory.export.space_location then
     return true
   end
 
+  -- space platforms match the space platform prototype
   if surface.platform and "space-platform" == factory.export.space_location then
     return true
   end
