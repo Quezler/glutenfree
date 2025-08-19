@@ -91,6 +91,7 @@ script.on_configuration_changed(function()
   for _, player in pairs(game.players) do
     mod.recreate_relative_gui(player)
   end
+  Factories.refresh_list()
 end)
 
 mod.relative_frame_left_name = mod_prefix .. "frame-left"
