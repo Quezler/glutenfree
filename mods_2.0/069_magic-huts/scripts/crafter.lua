@@ -58,7 +58,7 @@ Crafter.craft = function(building)
   -- but we do have to confirm everything is here, we'll start with the buildings:
   -- (we're also subtracting them from the contents to avoid using them as ingredients)
   if not map_subtract(contents_map, buildings_map) then
-    Buildings.set_status(building, "[img=utility/status_not_working] suddenly not enough buildings")
+    Buildings.set_status(building, "[img=utility/status_not_working] missing construction items")
     return
   end
 
@@ -103,7 +103,7 @@ Crafter.craft = function(building)
       end
     end
     if not sufficient_available_fluids then
-      Buildings.set_status(building, "[img=utility/status_blue] insufficient fluids in pipelines")
+      Buildings.set_status(building, "[img=utility/status_blue] missing fluid ingredients")
       return
     end
   end
@@ -111,7 +111,7 @@ Crafter.craft = function(building)
   local ingredients_map = {}
   add_contents_to_map(factory.export.ingredients, ingredients_map)
   if not map_subtract(contents_map, ingredients_map) then
-    Buildings.set_status(building, "[img=utility/status_not_working] suddenly not enough ingredients")
+    Buildings.set_status(building, "[img=utility/status_not_working] missing item ingredients")
     return
   end
 

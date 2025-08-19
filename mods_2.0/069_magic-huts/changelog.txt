@@ -5,6 +5,7 @@ Date: ????
     - Clear the filters and requests when unconfiguring
     - Allow debugging on the hidden surface
     - Output required fluids on the wire too
+    - Update the status messages
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.0
 Date: 2025. 08. 14

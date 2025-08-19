@@ -179,7 +179,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
         elseif n == 2 then
           -- game.print("waiting for items")
           Planet.arm_trigger_n(building, 1)
-          Buildings.set_status(building, "[img=utility/status_not_working] item ingredient shortage")
+          Buildings.set_status(building, "[img=utility/status_not_working] missing construction items")
           Buildings.turn_eei_off(building)
         elseif n == 3 then
           -- game.print("recipe finished")

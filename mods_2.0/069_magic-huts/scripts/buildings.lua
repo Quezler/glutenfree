@@ -234,8 +234,8 @@ Buildings.set_factory_index = function (building, factory_index)
 
   building.line_1.text = factory.export.name
   building.line_2.text = get_description(factory)
-  building.line_3.text = "[img=utility/status_not_working] item ingredient shortage"
-  building.line_4.text = "insert the construction materials and the first ingredients"
+  building.line_3.text = "[img=utility/status_not_working] missing construction items"
+  building.line_4.text = "insert all of the buildings and modules required for this factory"
 
   local filters = Buildings.get_filters(building)
   log(string.format("filtering %d slots for factory #%d (%s)", #filters, factory.index, factory.export.name))
