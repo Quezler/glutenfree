@@ -6,6 +6,7 @@ Date: ????
     - Allow debugging on the hidden surface
     - Output required fluids on the wire too
     - Update the status messages
+    - Reset crafting progress after swapping recipes
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.0
 Date: 2025. 08. 14

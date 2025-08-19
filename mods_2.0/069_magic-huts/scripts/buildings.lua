@@ -178,6 +178,10 @@ Buildings.set_factory_index = function (building, factory_index)
   if building.factory_index == factory_index and not building.factory_new then return end
   building.factory_new = false
 
+  if building.is_ghost == false then
+    building.children.crafter_a.crafting_progress = 0
+  end
+
   if factory_index then
     local new_factory = storage.factories[factory_index]
 
