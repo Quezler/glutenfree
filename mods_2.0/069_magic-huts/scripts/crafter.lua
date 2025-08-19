@@ -43,7 +43,6 @@ local function map_has(map_a, map_b)
 end
 
 Crafter.craft = function(building)
-  Buildings.turn_eei_off(building) -- crafting costs got paid (called even when crafting might succeed in one attempt)
   local factory = storage.factories[building.factory_index]
 
   local contents_map = {}
@@ -155,7 +154,17 @@ Crafter.craft = function(building)
   building.entity.surface.pollute(building.entity.position, factory.export.pollution * prefix_to_multiplier(factory.export.pollution_prefix))
 
   Buildings.set_status(building, "[img=utility/status_working] working")
-  Buildings.turn_eei_on(building) -- now that crafting has succeeded we will ask for more power
+  return true
+end
+
+Crafter.try_craft = function(building)
+  local success = Crafter.craft(building)
+  if success then
+    Buildings.turn_eei_on(building)
+  else
+    Buildings.turn_eei_off(building)
+    building.children.crafter_a.crafting_progress = 50 / 60 -- crafting failed, retry in 10 seconds
+  end
 end
 
 -- ensure the buffers exist so we do not need to check for their prescence first each time,

@@ -184,7 +184,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
         elseif n == 3 then
           -- game.print("recipe finished")
           Planet.arm_trigger_n(building, 3)
-          Crafter.craft(building)
+          Crafter.try_craft(building)
         end
       end
     elseif deathrattle.name == "building" then
