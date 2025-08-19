@@ -92,6 +92,20 @@ script.on_configuration_changed(function()
     mod.recreate_relative_gui(player)
   end
   Factories.refresh_list()
+
+  for _, building in pairs(storage.buildings) do
+    if building.children.constant_combinator_1 and not building.children.constant_combinator_2 then -- 1.4.0
+      building.children.constant_combinator_2 = storage.surface.create_entity{
+        name = "constant-combinator",
+        force = "neutral",
+        position = {-1.5 + building.x_offset, -1.5},
+        direction = defines.direction.north,
+      }
+      Planet.connect(building.children.constant_combinator_1, defines.wire_connector_id.circuit_red, building.children.constant_combinator_2, defines.wire_connector_id.circuit_red)
+      Planet.update_constant_combinator_1(building)
+      Planet.update_constant_combinator_2(building)
+    end
+  end
 end)
 
 mod.relative_frame_left_name = mod_prefix .. "frame-left"

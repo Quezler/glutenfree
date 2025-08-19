@@ -7,6 +7,7 @@ local function connect(entity_a, connector_a, entity_b, connector_b)
   local wire_connector_b = entity_b.get_wire_connector(connector_b, true)
   assert(wire_connector_a.connect_to(wire_connector_b, false, defines.wire_origin.player))
 end
+Planet.connect = connect
 
 Planet.setup_combinators = function(building)
   if building.is_ghost then return end

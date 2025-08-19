@@ -11,6 +11,7 @@ Date: ????
     - Mark py coal processing incompatible for now
     - Retry crafting after 10 seconds in case of failure
     - Fix factory list showing as empty after updating mods
+    - Migrate in the second constant combinator
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.0
 Date: 2025. 08. 14
