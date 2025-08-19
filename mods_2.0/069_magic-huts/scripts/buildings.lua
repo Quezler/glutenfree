@@ -223,6 +223,7 @@ Buildings.set_factory_index = function (building, factory_index)
     Buildings.set_status_not_configured(building)
     Buildings.set_filters_empty(building)
     Planet.update_constant_combinator_1(building)
+    Planet.update_constant_combinator_2(building)
     Factories.refresh_list()
     return
   end
@@ -241,6 +242,7 @@ Buildings.set_factory_index = function (building, factory_index)
   Buildings.set_filters(building, filters)
   Buildings.set_insert_plan(building, Buildings.get_insert_plan(building))
   Planet.update_constant_combinator_1(building)
+  Planet.update_constant_combinator_2(building)
   Crafter.inflate_buffers(building)
 end
 

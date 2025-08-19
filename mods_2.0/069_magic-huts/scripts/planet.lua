@@ -28,6 +28,16 @@ Planet.setup_combinators = function(building)
     direction = defines.direction.north,
   }
   Planet.update_constant_combinator_1(building)
+  building.children.constant_combinator_2 = storage.surface.create_entity{
+    name = "constant-combinator",
+    force = "neutral",
+    position = {-1.5 + building.x_offset, -1.5},
+    direction = defines.direction.north,
+  }
+  Planet.update_constant_combinator_2(building)
+
+  -- connect the item & fluid ingredients wire to the buildings & modules combinator of which only the green wire gets used
+  connect(building.children.constant_combinator_1, connector.circuit_red, building.children.constant_combinator_2, connector.circuit_red)
 
   building.children.decider_combinator_1 = storage.surface.create_entity{
     name = "decider-combinator",
@@ -91,6 +101,7 @@ Planet.setup_combinators = function(building)
   connect(building.children.proxy_container_1, connector.circuit_red, building.children.decider_combinator_1, connector.combinator_input_red)
   connect(building.children.constant_combinator_1, connector.circuit_green, building.children.decider_combinator_1, connector.combinator_input_green)
   connect(building.children.constant_combinator_1, connector.circuit_red, building.entity, connector.circuit_red)
+  connect(building.children.decider_combinator_1, connector.combinator_output_green, building.children.crafter_a, connector.circuit_green)
 
   building.children.trigger_1 = storage.surface.create_entity{
     name = "assembling-machine-1",
@@ -111,7 +122,6 @@ Planet.setup_combinators = function(building)
     },
   }
   connect(building.children.decider_combinator_1, connector.combinator_output_green, building.children.trigger_1, connector.circuit_green)
-  connect(building.children.decider_combinator_1, connector.combinator_output_green, building.children.crafter_a, connector.circuit_green)
 
   building.children.trigger_2 = storage.surface.create_entity{
     name = "assembling-machine-1",
@@ -131,6 +141,7 @@ Planet.setup_combinators = function(building)
       type = "virtual"
     },
   }
+  connect(building.children.decider_combinator_1, connector.combinator_output_green, building.children.trigger_2, connector.circuit_green)
 
   building.children.trigger_3 = storage.surface.create_entity{
     name = "assembling-machine-1",
@@ -150,10 +161,7 @@ Planet.setup_combinators = function(building)
       type = "virtual"
     },
   }
-
-  -- sharing the green wire because it causes no conflict, will get the check signal from the decider to the crafter_a
-  connect(building.children.trigger_1, connector.circuit_green, building.children.trigger_2, connector.circuit_green)
-  connect(building.children.trigger_2, connector.circuit_green, building.children.trigger_3, connector.circuit_green)
+  connect(building.children.decider_combinator_1, connector.combinator_output_green, building.children.trigger_3, connector.circuit_green)
 
   local crafter_a_cb = building.children.crafter_a.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
   crafter_a_cb.circuit_read_recipe_finished = true
@@ -181,16 +189,35 @@ Planet.update_constant_combinator_1 = function(building)
   local factory = storage.factories[building.factory_index]
   if not factory then return end
 
-  for _, key in ipairs({"entities", "modules", "ingredients"}) do
+  for _, key in ipairs({"entities", "modules"}) do
     local section = sections.add_section()
     section.multiplier = -1
     for i, item in ipairs(factory.export[key]) do
-      if item.type == "item" then -- note: adding fluids in here would break the circuit "ingredients available" check
-        section.set_slot(i, {
-          value = item,
-          min = math.ceil(item.count),
-        })
-      end
+      section.set_slot(i, {
+        value = item,
+        min = math.ceil(item.count),
+      })
+    end
+  end
+end
+
+Planet.update_constant_combinator_2 = function(building)
+  if building.is_ghost then return end
+
+  local sections = building.children.constant_combinator_2.get_logistic_sections()
+  while sections.remove_section(1) do end
+
+  local factory = storage.factories[building.factory_index]
+  if not factory then return end
+
+  for _, key in ipairs({"ingredients"}) do
+    local section = sections.add_section()
+    section.multiplier = -1
+    for i, item in ipairs(factory.export[key]) do
+      section.set_slot(i, {
+        value = item,
+        min = math.ceil(item.count),
+      })
     end
   end
 end
