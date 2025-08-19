@@ -221,6 +221,7 @@ Buildings.set_factory_index = function (building, factory_index)
 
   if building.factory_index == nil then
     Buildings.set_status_not_configured(building)
+    Buildings.set_filters_empty(building)
     Planet.update_constant_combinator_1(building)
     Factories.refresh_list()
     return
@@ -484,6 +485,19 @@ Buildings.get_insert_plan = function(building)
   end
 
   return insert_plan
+end
+
+Buildings.set_filters_empty = function(building)
+  if not building.inventory then return end
+
+  for slot = 1, #building.inventory do
+    local filter = {name = mod_prefix .. "empty-filter", quality = "normal"}
+    building.inventory.set_filter(slot, filter)
+  end
+
+  if building.entity.item_request_proxy then
+    building.entity.item_request_proxy.destroy()
+  end
 end
 
 Buildings.set_filters = function (building, filters)
