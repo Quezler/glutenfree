@@ -25,6 +25,8 @@
         
         "(?) factorissimo-2-notnotmelon",
         "(?) GUI_Unifyer",
-        "(?) FilterHelper >= 0.2.21"
+        "(?) FilterHelper >= 0.2.21",
+
+        "! pycoalprocessing"
     ]
 }
