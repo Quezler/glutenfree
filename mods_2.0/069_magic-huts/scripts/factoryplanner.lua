@@ -1,5 +1,7 @@
 Factoryplanner = {}
 
+local Beacon = require("scripts.beacon")
+
 local is_fp_frame_main_dialog = {
   ["fp_frame_main_dialog"] = true,
   ["factoryplanner_mainframe"] = true, -- https://mods.factorio.com/mod/GUI_Unifyer
@@ -345,7 +347,39 @@ function Factoryplanner.on_gui_click(event)
       -- beacons
       local cell_beacons = production_table_children[offset + production_table_column["fp.pu_beacon"]]
       if #cell_beacons.children >= 2 then -- 1 = supports beacons, 2+ means beacon and modules selected
-        return player.create_local_flying_text{create_at_cursor = true, text = "beacons are not allowed."}
+        local beacon_button = cell_beacons.children[1]
+        local beacon_type, beacon_name = split_class_and_name(beacon_button.sprite)
+        local beacon_count = beacon_button.number
+
+        local success, x = Beacon.get_machines_per_beacons(beacon_count, entity_name, beacon_name, beacon_button.quality.name)
+        if success == false then
+          return player.create_local_flying_text{create_at_cursor = true, text = x}
+        end
+
+        local beacon_prototype = prototypes.entity[beacon_name]
+        if not beacon_prototype.items_to_place_this then
+          return player.create_local_flying_text{create_at_cursor = true, text = entity_name .. "s cannot be placed."}
+        end
+        local item_to_place_this_beacon = beacon_prototype.items_to_place_this[1]
+
+        local x_of_this_beacon = math.ceil(x_of_this_building / x) -- x is the amount of that building that can share one beacon
+        add_to_contents(factory.entities, {
+          type = "item",
+          name = item_to_place_this_beacon.name,
+          count = item_to_place_this_beacon.count * x_of_this_beacon,
+          quality = beacon_button.quality.name,
+        })
+
+        for i = 2, #cell_beacons.children do
+          local module_button = cell_beacons.children[i]
+          local module_type, module_name = split_class_and_name(module_button.sprite)
+          add_to_contents(factory.modules, {
+            type = "item",
+            name = module_name,
+            count = module_button.number * x_of_this_beacon,
+            quality = module_button.quality.name,
+          })
+        end
       end
 
       -- recipe
