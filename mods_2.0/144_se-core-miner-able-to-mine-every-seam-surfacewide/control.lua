@@ -64,7 +64,11 @@ mod.on_created_entity = function(event)
   mod.cache_zone_on_surfacedata(zone, surfacedata)
 
   -- newly placed drills get a muliplier of 1 if there's still allication left, otherwise they just get 0
-  local multiplier = event.multiplier_override or math.min(1, surfacedata.total_seams - surfacedata.total_miners)
+  local desired_multiplier = 1
+  if event.tags and event.tags[mod_prefix .. "multiplier"] then
+    desired_multiplier = event.tags[mod_prefix .. "multiplier"]
+  end
+  local multiplier = event.multiplier_override or math.min(desired_multiplier, surfacedata.total_seams - surfacedata.total_miners)
   assert(multiplier >= 0)
 
   surfacedata.structs[entity.unit_number] = {
@@ -293,3 +297,20 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     end
   end
 end)
+
+script.on_event(defines.events.on_post_entity_died, function(event)
+  local surfacedata = storage.surfacedata[event.surface_index]
+  if not surfacedata then return end
+
+  local struct = surfacedata.structs[event.unit_number]
+  if not struct then return end
+
+  local ghost = event.ghost
+  if ghost then
+    local tags = ghost.tags or {}
+    tags[mod_prefix .. "multiplier"] = struct.multiplier
+    ghost.tags = tags
+  end
+end, {
+  {filter = "type", type = "mining-drill"},
+})
