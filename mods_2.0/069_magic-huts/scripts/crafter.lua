@@ -146,7 +146,7 @@ Crafter.craft = function(building)
     if ingredient.type == "fluid" then
       local available_fluid = available_fluids[ingredient.name]
       local removed = available_fluid.entity.remove_fluid({name = ingredient.name, amount = ingredient.count})
-      assert(removed == ingredient.count, string.format("failed to remove %g × %s, only %g succeeded", ingredient.count, ingredient.name, removed))
+      assert(almost_equal(removed, ingredient.count, 0.0000001), string.format("failed to remove %f × %s, only %f succeeded", ingredient.count, ingredient.name, removed))
       building.fluid_statistics.on_flow(ingredient.name, -ingredient.count)
     end
   end

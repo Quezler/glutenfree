@@ -5,6 +5,7 @@ Date: ????
     - Remove Filter Helper version lock
     - Fixed that fluid ingredients were counting as produced fluids
     - One crafting attempt every 60, regardless of success
+    - Fixed float compare crash
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.0
 Date: 2025. 08. 20
