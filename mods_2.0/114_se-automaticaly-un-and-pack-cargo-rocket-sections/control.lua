@@ -51,7 +51,7 @@ local function tick_logistic_network(logistic_network, surface_name)
     local inserted = logistic_network.insert({name = packed_name, count = packed_goal}, "storage")
     if inserted > 0 then
       logistic_network.remove_item({name = unpacked_name, count = inserted * 5}, "storage")
-      log(string.format("%03d unpacked cargo rocket sections, so re-packed %02d on %s", unpacked_count, inserted, surface_name))
+      -- log(string.format("%03d unpacked cargo rocket sections, so re-packed %02d on %s", unpacked_count, inserted, surface_name))
     else
       -- storage full
       -- log("storage full")
@@ -80,7 +80,7 @@ local function tick_logistic_network(logistic_network, surface_name)
     end
 
     if unpacked > 0 then
-      log(string.format("%03d unpacked cargo rocket sections, so un-packed %02d on %s", unpacked_count, unpacked, surface_name))
+      -- log(string.format("%03d unpacked cargo rocket sections, so un-packed %02d on %s", unpacked_count, unpacked, surface_name))
     end
   else
     -- unpacked_count in range 100 - 104
