@@ -397,7 +397,7 @@ data:extend{{
   hidden = true,
 }}
 
-if mods["FilterHelper"] and data.raw["mod-data"]["fh_add_items_drop_target_entity"] and data.raw["mod-data"]["fh_add_items_pickup_target_entity"] then
+if data.raw["mod-data"] and data.raw["mod-data"]["fh_add_items_drop_target_entity"] and data.raw["mod-data"]["fh_add_items_pickup_target_entity"] then
   for i = 1, 6 do
     data.raw["mod-data"]["fh_add_items_drop_target_entity"  ].data[mod_prefix .. "container-" .. i] = {"magic-huts", "fh_add_items_drop_target_entity"}
     data.raw["mod-data"]["fh_add_items_pickup_target_entity"].data[mod_prefix .. "container-" .. i] = {"magic-huts", "fh_add_items_pickup_target_entity"}
