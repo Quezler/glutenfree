@@ -391,10 +391,15 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     local factory = storage.factories[building.factory_index]
 
     if event.destination.pickup_target == event.source then
-      local filters = factory.export.products
+      local item_products = {}
+      for _, product in ipairs(factory.export.products) do
+        if product.type == "item" then
+          table.insert(item_products, product)
+        end
+      end
       event.destination.use_filters = true
       for i = 1, event.destination.filter_slot_count do
-        event.destination.set_filter(i, filters[i])
+        event.destination.set_filter(i, item_products[i])
       end
     elseif event.destination.drop_target == event.source then
       local ingredients = table.deepcopy(factory.export.ingredients)
