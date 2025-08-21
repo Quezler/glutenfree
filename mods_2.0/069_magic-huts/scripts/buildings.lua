@@ -601,4 +601,93 @@ Buildings.turn_eei_off = function(building)
   building.children.eei.power_usage = 0
 end
 
+-- get the nearby signs that display a fluid icon
+Buildings.get_nearby_sign_posts_map = function(building)
+  local map = {}
+
+  local bb = building.entity.bounding_box
+  local nearby = 1
+  local area = {{bb.left_top.x - nearby, bb.left_top.y - nearby}, {bb.right_bottom.x + nearby, bb.right_bottom.y + nearby}}
+
+  for _, entities in ipairs({
+    building.entity.surface.find_entities_filtered{area = area,       name = "sign-post"},
+    building.entity.surface.find_entities_filtered{area = area, ghost_name = "sign-post"},
+  }) do
+    for _, entity in ipairs(entities) do
+      local signal = entity.display_panel_icon
+      if signal and signal.type == "fluid" then
+        map[signal.name] = entity
+      end
+    end
+  end
+
+  return map
+end
+
+Buildings.get_underground_pipe_for_sign_post = function(building, sign_post)
+  local pipes = sign_post.surface.find_entities_filtered{
+    type = "pipe-to-ground",
+    position = sign_post.position,
+    radius = 1,
+  }
+
+  -- todo: perhaps instead of picking the first pipe, check to see if its empty or not in case a sign touches 2, but that would be bad anyways.
+  for _, pipe in ipairs(pipes) do
+    for _, fluidbox in ipairs(pipe.neighbours) do
+      for _, neighbour in ipairs(fluidbox) do
+        if neighbour == building.children.crafter_b then
+          return pipe
+        end
+      end
+    end
+  end
+end
+
+Buildings.output_all_fluids = function(building)
+  if next(building.fluid_output_buffer) == nil then
+    return true -- never any fluids inside
+  end
+
+  local epsilon = 0.0000001
+
+  local fluid_names = {}
+  for fluid_name, fluid_amount in pairs(building.fluid_output_buffer) do
+    if fluid_amount > epsilon then
+      table.insert(fluid_names, fluid_name)
+    end
+  end
+  if #fluid_names == 0 then
+    return true -- currently no fluids inside
+  end
+
+  local sign_posts = Buildings.get_nearby_sign_posts_map(building)
+  if next(sign_posts) == nil then
+    return false, "place sign posts next to underground pipes"
+  end
+
+  for _, fluid_name in pairs(fluid_names) do
+    local sign_post = sign_posts[fluid_name]
+    if sign_post then
+      local pipe = Buildings.get_underground_pipe_for_sign_post(building, sign_post)
+      if pipe then
+        local fluid_amount = building.fluid_output_buffer[fluid_name]
+        local inserted = pipe.insert_fluid({name = fluid_name, amount = fluid_amount})
+        building.fluid_output_buffer[fluid_name] = fluid_amount - inserted
+        if epsilon > building.fluid_output_buffer[fluid_name] then
+          fluid_names[fluid_name] = nil -- breaks ipairs
+        end
+      end
+    end
+  end
+
+  -- log(serpent.line(sign_posts))
+  -- log(serpent.line(fluid_names))
+
+  local line_4 = ""
+  for _, fluid_name in pairs(fluid_names) do
+    line_4 = line_4 .. string.format("[fluid=%s]", fluid_name)
+  end
+  return false, line_4
+end
+
 return Buildings

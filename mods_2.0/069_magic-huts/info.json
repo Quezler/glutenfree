@@ -22,6 +22,7 @@
         "? space-age",
 
         "factoryplanner >= 2.0.21",
+        "sign-post",
         
         "(?) factorissimo-2-notnotmelon",
         "(?) GUI_Unifyer",

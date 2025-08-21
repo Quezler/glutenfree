@@ -42,8 +42,15 @@ local function map_has(map_a, map_b)
   end
 end
 
+local function almost_equal(a, b, epsilon)
+    epsilon = epsilon or 1e-9  -- default tolerance
+    return math.abs(a - b) < epsilon
+end
+
 Crafter.craft = function(building)
   local factory = storage.factories[building.factory_index]
+
+  local fluid_output_buffer_empty, line_4 = Buildings.output_all_fluids(building)
 
   local contents_map = {}
   add_contents_to_map(building.inventory.get_contents(), contents_map)
@@ -67,8 +74,16 @@ Crafter.craft = function(building)
   add_contents_to_map(factory.export.byproducts, output_map)
 
   if map_has(contents_map, output_map) then
-    Buildings.set_status(building, "[img=utility/status_yellow] output full")
+    Buildings.set_status(building, "[img=utility/status_yellow] item output full")
     return
+  end
+
+  if fluid_output_buffer_empty == false then
+    Buildings.set_status(building, "[img=utility/status_blue] fluid output full")
+    building.line_4.text = line_4
+    return
+  else
+    building.line_4.text = ""
   end
 
   local available_fluids = {}
@@ -142,7 +157,8 @@ Crafter.craft = function(building)
     end
   end
 
-  for _, ingredient in pairs(factory.export.ingredients) do
+  -- fluid ingredients
+  for _, ingredient in ipairs(factory.export.ingredients) do
     if ingredient.type == "fluid" then
       local available_fluid = available_fluids[ingredient.name]
       local removed = available_fluid.entity.remove_fluid({name = ingredient.name, amount = ingredient.count})
@@ -150,6 +166,17 @@ Crafter.craft = function(building)
       building.fluid_statistics.on_flow(ingredient.name, -ingredient.count)
     end
   end
+
+  -- fluid products
+  for _, item_box in ipairs({"products", "byproducts"}) do
+    for _, product in ipairs(factory.export[item_box]) do
+      if product.type == "fluid" then
+        building.fluid_statistics.on_flow(product.name, product.count)
+        building.fluid_output_buffer[product.name] = building.fluid_output_buffer[product.name] + product.count
+      end
+    end
+  end
+  Buildings.output_all_fluids(building)
 
   building.entity.surface.pollute(building.entity.position, factory.export.pollution * prefix_to_multiplier(factory.export.pollution_prefix))
 
