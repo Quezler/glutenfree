@@ -163,7 +163,7 @@ Crafter.try_craft = function(building)
     Buildings.turn_eei_on(building)
   else
     Buildings.turn_eei_off(building)
-    building.children.crafter_a.crafting_progress = 50 / 60 -- crafting failed, retry in 10 seconds
+    -- building.children.crafter_a.crafting_progress = 50 / 60 -- crafting failed, retry in 10 seconds
   end
 end
 
