@@ -3,6 +3,7 @@ Version: 1.5.1
 Date: ????
   Info:
     - Remove Filter Helper version lock
+    - Fixed that fluid ingredients were counting as produced fluids
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.0
 Date: 2025. 08. 20
