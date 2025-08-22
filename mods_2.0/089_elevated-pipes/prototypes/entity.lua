@@ -142,7 +142,7 @@ local furnace = {
         animation = {
           layers = {
             {
-              filename = config.graphics .. "-pipe-connection.png",
+              filename = config.graphics .. "-pipe-connection-shadow.png",
               width = 704,
               height = 704,
               scale = 0.5,
@@ -284,7 +284,7 @@ return {
     },
   },
   animation_overlay = {
-    filename = config.graphics .. "-shadow.png",
+    filename = config.graphics .. "-remnant-shadow.png",
     line_length = 1,
     width = 704,
     height = 704,
