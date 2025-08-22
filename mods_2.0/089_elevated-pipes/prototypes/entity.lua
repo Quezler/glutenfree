@@ -142,13 +142,13 @@ local furnace = {
         animation = {
           layers = {
             {
-              filename = config.graphics .. "-pipe-connection-shadow.png",
+              filename = config.graphics .. "-pipe-connection.png",
               width = 704,
               height = 704,
               scale = 0.5,
             },
             {
-              filename = config.graphics .. "-shadow.png",
+              filename = config.graphics .. "-pipe-connection-shadow.png",
               width = 704,
               height = 704,
               scale = 0.5,
