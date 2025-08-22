@@ -146,7 +146,7 @@ function Handler.handle_construction_alert(alert_target)
         }
         local cargo = disposable_construction_robot.get_inventory(defines.inventory.robot_cargo)[1]
         cargo.set_stack({name = itemstack.name, count = count})
-        v1_struct.entity.remove_item({name = itemstack.name, count = count})
+        v1_struct.entity.remove_item({name = itemstack.name, count = cargo.count})
       end
     end
   end
