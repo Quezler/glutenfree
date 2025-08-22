@@ -24,22 +24,30 @@ end
 
 -- returns true if map a had all of map b
 local function map_subtract(map_a, map_b)
+  local missing_names = {}
   for key, item_b in pairs(map_b) do
     local item_a = map_a[key]
-    if not item_a then return end
+    if not item_a then item_a = {count = 0} end
 
     item_a.count = item_a.count - item_b.count
-    if 0 > item_a.count then return end
+    if 0 > item_a.count then
+      table.insert(missing_names, item_b.name)
+    end
   end
 
-  return true
+  return missing_names[1] == nil, missing_names
 end
 
-local function map_has(map_a, map_b)
+local function map_has_any(map_a, map_b)
+  local present_names = {}
   for key, item_b in pairs(map_b) do
     local item_a = map_a[key]
-    if item_a then return true end
+    if item_a then
+      table.insert(present_names, item_b.name)
+    end
   end
+
+  return present_names[1] ~= nil, present_names
 end
 
 local function almost_equal(a, b, epsilon)
@@ -73,9 +81,17 @@ Crafter.craft = function(building)
   add_contents_to_map(factory.export.products, output_map)
   add_contents_to_map(factory.export.byproducts, output_map)
 
-  if map_has(contents_map, output_map) then
+  local any_output_item_present, output_items_present = map_has_any(contents_map, output_map)
+  if any_output_item_present then
     Buildings.set_status(building, "[img=utility/status_yellow] item output full")
+    local present_items_line = ""
+    for _, present_item in ipairs(output_items_present) do
+      present_items_line = present_items_line .. string.format("[item=%s]", present_item)
+    end
+    building.line_4.text = present_items_line
     return
+  else
+    building.line_4.text = ""
   end
 
   if fluid_output_buffer_empty == false then
@@ -105,6 +121,7 @@ Crafter.craft = function(building)
     end
 
     local sufficient_available_fluids = true
+    local missing_fluids_line = ""
     for _, ingredient in pairs(factory.export.ingredients) do
       if ingredient.type == "fluid" then
 
@@ -113,21 +130,33 @@ Crafter.craft = function(building)
           -- sufficient available fluid
         else
           sufficient_available_fluids = false
+          missing_fluids_line = missing_fluids_line .. string.format("[fluid=%s]", ingredient.name)
         end
 
       end
     end
     if not sufficient_available_fluids then
       Buildings.set_status(building, "[img=utility/status_blue] missing fluid ingredients")
+      building.line_4.text = missing_fluids_line
       return
+    else
+      building.line_4.text = ""
     end
   end
 
   local ingredients_map = {}
   add_contents_to_map(factory.export.ingredients, ingredients_map)
-  if not map_subtract(contents_map, ingredients_map) then
+  local not_missing_items, missing_items = map_subtract(contents_map, ingredients_map)
+  if not not_missing_items then
     Buildings.set_status(building, "[img=utility/status_not_working] missing item ingredients")
+    local missing_items_line = ""
+    for _, missing_item in ipairs(missing_items) do
+      missing_items_line = missing_items_line .. string.format("[item=%s]", missing_item)
+    end
+    building.line_4.text = missing_items_line
     return
+  else
+    building.line_4.text = ""
   end
 
   -- item ingredients
