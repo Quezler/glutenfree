@@ -18,6 +18,38 @@ local function get_contents_with_quality_map(equipment_grid)
   return map
 end
 
+local function get_nearby_container_inventories(entry)
+  local inventories = {}
+
+  local containers = entry.train_stop.surface.find_entities_filtered({
+    type = {"container", "logistic-container"},
+    position = entry.train_stop.position,
+    radius = 2
+  })
+
+  for _, container in ipairs(containers) do
+    if container ~= entry.template_container then
+      inventories[container.unit_number] = container.get_inventory(defines.inventory.chest)
+    end
+  end
+
+  return inventories
+end
+
+local function try_with_inventories(inventories, operation, equipment)
+  local item = {name = equipment.name, quality = equipment.quality, count = 1}
+  for _, inventory in pairs(inventories) do
+      if inventory[operation](item) == 1 then
+        return inventory
+      end
+  end
+  return nil
+end
+
+local function is_ghost(equipment)
+  return equipment.name == "equipment-ghost"
+end
+
 function EquipmentGrid.tick_rolling_stock(entry, entity)
 
   local grid = entity.grid
@@ -51,27 +83,77 @@ function EquipmentGrid.tick_rolling_stock(entry, entity)
   -- check if the grid has the same amount of everything as the template, regardless of position. (cheap bail check)
   if EquipmentGrid.contents_are_equal(template_contents, contents) then return end
 
-  local removal_request = {}
+  local removal_requests = {}
+  local add_requests = {}
+
+  -- Track existing equipment
   for _, equipment in ipairs(grid.equipment) do
-    removal_request[util.positiontostr(equipment.position)] = {
-      name = equipment.name,
-      quality = equipment.quality,
-    }
-    grid.order_removal(equipment)
+    removal_requests[util.positiontostr(equipment.position)] = equipment
   end
 
-  for _, equipment in ipairs(template.grid.equipment) do
-    local to_remove = removal_request[util.positiontostr(equipment.position)]
-    if to_remove and to_remove.name == equipment.name and to_remove.quality == equipment.quality then
-      grid.cancel_removal(grid.get(equipment.position))
+  -- Compare with expected equipment
+  for _, expected in ipairs(template.grid.equipment) do
+    local position_str = util.positiontostr(expected.position)
+    local actual = removal_requests[position_str]
+    if actual then
+      if actual.name == expected.name and actual.quality == expected.quality then
+        -- Equipment matches, so keep it
+        removal_requests[position_str] = nil
+        grid.cancel_removal(actual)
+      else
+        -- Equipment does not match or ghost, so prepare to add the expected one
+        add_requests[position_str] = expected
+        if is_ghost(actual) and actual.ghost_name == expected.name and actual.quality == expected.quality then
+          -- keep the ghost to prevent restarting the logistic request
+          removal_requests[position_str] = nil 
+        end
+      end
     else
-      -- the new ghost can collide with equipment removal requests, but sometimes it _does_ overlap, weird right?
-      local success = grid.put{
+      -- no equipment present, so prepare to add the expected one
+      add_requests[position_str] = expected
+    end
+  end
+  
+  local nearby_inventories = get_nearby_container_inventories(entry)
+
+  -- first remove all bad equipment from the grid, to avoid issues with overlapping elements
+  for _, equipment in pairs(removal_requests) do
+    if not is_ghost(equipment) and try_with_inventories(nearby_inventories, "insert", equipment) then
+        grid.take({ equipment = equipment })
+    else
+      grid.order_removal(equipment)
+    end
+  end
+
+  -- then add the new equipment
+  for _, equipment in pairs(add_requests) do
+    local source_inventory = try_with_inventories(nearby_inventories, "remove", equipment)
+    if source_inventory then
+      if not grid.put({
+        name = equipment.name,
+        quality = equipment.quality,
+        position = equipment.position,
+      }) then
+        -- the space is still occupied (with an equipment marked for removal), put item back
+        source_inventory.insert({ 
+          name = equipment.name, 
+          quality = equipment.quality, 
+          count = 1 
+        })
+        grid.put({
+          name = equipment.name,
+          quality = equipment.quality,
+          position = equipment.position,
+          ghost = true,
+        })
+      end
+    else
+      grid.put({
         name = equipment.name,
         quality = equipment.quality,
         position = equipment.position,
         ghost = true,
-      }
+      })
     end
   end
 
