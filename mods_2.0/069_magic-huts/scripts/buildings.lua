@@ -695,4 +695,19 @@ Buildings.output_all_fluids = function(building)
   return false, line_4
 end
 
+script.on_event(defines.events.on_post_entity_died, function(event)
+  local building = storage.buildings[event.unit_number]
+  if not building then return end
+
+  local ghost = event.ghost
+  if ghost and building.factory_index then
+    local tags = ghost.tags or {}
+    tags[mod_prefix .. "factory-index"] = building.factory_index
+    ghost.tags = tags
+    script.raise_script_built{entity = ghost}
+  end
+end, {
+  {filter = "type", type = "container"},
+})
+
 return Buildings

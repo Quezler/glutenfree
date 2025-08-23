@@ -3,6 +3,7 @@ Version: 1.6.2
 Date: ????
   Info:
     - Make magic huts immune to biters & spitters
+    - Preserve configuration through death
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.1
 Date: 2025. 08. 22
