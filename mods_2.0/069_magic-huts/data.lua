@@ -253,6 +253,12 @@ for _, factory in ipairs(factories) do
     },
 
     additional_pastable_entities = {},
+
+    -- hide_resistances = false,
+    resistances = {
+      {type = "acid", percent = 100},
+      {type = "physical", percent = 100},
+    }
   }
 
   for key, value in pairs(factory.picture_properties) do
