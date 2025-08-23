@@ -1,10 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.2
-Date: ????
+Date: 2025. 08. 23
   Info:
     - Make magic huts immune to biters & spitters
     - Preserve configuration through death
     - Dead unconfigured buildings show as unconfigured ghosts
+    - Fix crash when coping a dead building's ghost
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.1
 Date: 2025. 08. 22

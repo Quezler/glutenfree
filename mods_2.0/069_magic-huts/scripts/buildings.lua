@@ -258,9 +258,11 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
   for i, blueprint_entity in ipairs(blueprint_entities) do
     if mod.container_names_map[blueprint_entity.name] then
       local entity = event.mapping.get()[i]
-      local factory_index = storage.buildings[entity.unit_number].factory_index
-      if factory_index then
-        blueprint.set_blueprint_entity_tag(i, mod_prefix .. "factory-index", factory_index)
+      if not entity then -- are you a ghost?
+        local factory_index = storage.buildings[entity.unit_number].factory_index
+        if factory_index then
+          blueprint.set_blueprint_entity_tag(i, mod_prefix .. "factory-index", factory_index)
+        end
       end
     end
   end
