@@ -35,3 +35,10 @@ local created_effect = {
 
 assert(construction_robot.created_effect == nil, serpent.block(construction_robot.created_effect))
 construction_robot.created_effect = created_effect
+
+if mods["disposable-construction-robots"] then
+  local disposable_construction_robot = data.raw["construction-robot"]["disposable-construction-robot"]
+  disposable_construction_robot.speed = 0.5
+  disposable_construction_robot.energy_per_move = nil
+  disposable_construction_robot.energy_per_tick = nil
+end

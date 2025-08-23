@@ -3,7 +3,7 @@
     "title": "Platform construction only, no construction robots",
     "description": "The construction bots instantly use scaffolds.",
 
-    "version": "1.3.3",
+    "version": "1.3.4",
     "author": "Quezler",
     "factorio_version": "2.0",
 
@@ -24,6 +24,7 @@
         "space-platform-entity-build-animation-lib",
 
         "(?) lignumis",
-        "(?) space-exploration"
+        "(?) space-exploration",
+        "(?) disposable-construction-robots"
     ]
 }
