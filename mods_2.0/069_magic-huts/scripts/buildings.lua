@@ -700,7 +700,7 @@ script.on_event(defines.events.on_post_entity_died, function(event)
   if not building then return end
 
   local ghost = event.ghost
-  if ghost and building.factory_index then
+  if ghost then
     local tags = ghost.tags or {}
     tags[mod_prefix .. "factory-index"] = building.factory_index
     ghost.tags = tags
