@@ -1,110 +1,149 @@
-local Handler = require("scripts.handler")
+local Util = require("__space-exploration-scripts__.util")
+local Meteor = require("__space-exploration-scripts__.meteor")
 
-script.on_init(Handler.on_init)
-script.on_configuration_changed(Handler.on_configuration_changed)
+local mod = {}
+
+script.on_init(function()
+  storage.old_request_proxies = {}
+  storage.old_entity_ghosts = {}
+  storage.old_tile_ghosts = {}
+
+  storage.new_request_proxies = {}
+  storage.new_entity_ghosts = {}
+  storage.new_tile_ghosts = {}
+
+  -- generally there are not a lot of diverse requests so we have an one to many relationship here
+  storage.item_to_entities_map = {}
+
+  for _, surface in pairs(game.surfaces) do
+    for _, entity in ipairs(surface.find_entities_filtered{name = "item-request-proxy"}) do
+      storage.new_request_proxies[entity.unit_number] = {entity = entity}
+    end
+    for _, entity in ipairs(surface.find_entities_filtered{name = "entity-ghost"}) do
+      storage.new_entity_ghosts[entity.unit_number] = {entity = entity}
+    end
+    for _, entity in ipairs(surface.find_entities_filtered{name = "tile-ghost"}) do
+      storage.new_tile_ghosts[entity.unit_number] = {entity = entity}
+    end
+  end
+
+  storage.structs = {}
+  storage.deathrattles = {}
+end)
+
+script.on_configuration_changed(function()
+  assert(storage.structs == nil and storage.v1_structs == nil, "not compatible with versions below 3.0.0, remove the mod from the save first.")
+end)
+
+function mod.on_created_entity(event)
+  local entity = event.entity or event.destination
+
+  local struct = {
+    index = entity.unit_number,
+    entity = entity,
+    barrel = math.random(0, 3),
+  }
+
+  storage.structs[entity.unit_number] = struct
+end
 
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
+  defines.events.on_space_platform_built_entity,
   defines.events.script_raised_built,
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, Handler.on_created_entity, {
-    {filter = "name", name = "interstellar-construction-turret--buffer-chest"},
+  script.on_event(event, mod.on_created_entity, {
+    {filter = "name", name = "interstellar-construction-turret"},
   })
 end
 
-script.on_nth_tick(600, function(event) -- no_material_for_construction expires after 10 seconds
-  local force_checked_for_missing = {}
-  local force_checked_for_repair = {}
+function mod.fire_next_barrel(struct)
+  struct.barrel = struct.barrel % 4 + 1
+  struct.entity.surface.create_entity{
+    name = Meteor.name_meteor_point_defence_beam,
+    position = Util.vectors_add(struct.entity.position, Meteor.name_meteor_point_defence_beam_offsets[struct.barrel]),
+    target = Util.vectors_add(struct.entity.position, {x = 0, y = -Meteor.meteor_swarm_altitude})
+  }
+end
 
-  for _, player in ipairs(game.connected_players) do
-
-    if not force_checked_for_missing[player.force.index] then
-      if player.is_alert_enabled(defines.alert_type.no_material_for_construction) then
-        force_checked_for_missing[player.force.index] = true
-        local alerts = player.get_alerts{
-          type = defines.alert_type.no_material_for_construction,
-        }
-
-        for surface_index, surface_alerts in pairs(alerts) do
-          for _, surface_alert in ipairs(surface_alerts[defines.alert_type.no_material_for_construction]) do
-            if surface_alert.target and surface_alert.target.valid then
-
-              local unit_number = surface_alert.target.unit_number
-              if unit_number == nil and surface_alert.target.type == "cliff" then
-                unit_number = "cliff-" .. script.register_on_object_destroyed(surface_alert.target)
-              --   storage.alert_targets[unit_number] = {
-              --     type = surface_alert.target.type,
-              --     name = surface_alert.target.name,
-              --     force = player.force,
-              --     valid = true,
-              --     get_upgrade_target = function ()
-              --       return nil
-              --     end
-              --   }
-              -- else
-              --   assert(unit_number)
-              --   storage.alert_targets[unit_number] = surface_alert.target
-              end
-
-              assert(unit_number)
-              storage.alert_targets[unit_number] = surface_alert.target
-            end
-          end
-        end
-      else
-        player.enable_alert(defines.alert_type.no_material_for_construction)
-        -- command response for `/alerts enable no_material_for_construction`
-        player.print("Alert type no_material_for_construction has been enabled.")
+script.on_nth_tick(10, function(event)
+  for _, struct in pairs(storage.structs) do
+    if struct.entity.valid then
+      if math.random() > 0.75 then
+        mod.fire_next_barrel(struct)
       end
-    end -- if
-
-    if not force_checked_for_repair[player.force.index] then
-      if player.is_alert_enabled(defines.alert_type.not_enough_repair_packs) then
-        force_checked_for_repair[player.force.index] = true
-        local alerts = player.get_alerts{
-          type = defines.alert_type.not_enough_repair_packs,
-        }
-
-        for surface_index, surface_alerts in pairs(alerts) do
-          for _, surface_alert in ipairs(surface_alerts[defines.alert_type.not_enough_repair_packs]) do
-            if surface_alert.target and surface_alert.target.valid and surface_alert.target.unit_number then
-              storage.alert_targets[surface_alert.target.unit_number] = surface_alert.target
-            end
-          end
-        end
-      else
-        player.enable_alert(defines.alert_type.not_enough_repair_packs)
-        -- command response for `/alerts enable not_enough_repair_packs`
-        player.print("Alert type not_enough_repair_packs has been enabled.")
-      end
-    end -- if
-
-  end -- for
-
-  storage.missing_items = {}
-  storage.alert_targets_emptied = false
-  storage.alert_targets_per_tick = math.ceil(table_size(storage.alert_targets) / 600)
-  -- log("storage.alert_targets_per_tick = " .. storage.alert_targets_per_tick)
-
-  -- todo: sort struct keys in order from networks with the most diverse amount of items to the lowest
+    end
+  end
 end)
 
-script.on_event(defines.events.on_tick, Handler.on_tick)
+-- item request proxies will not have any insertion/removal requests on creation,
+-- and any other mods might react to any of their events as well,
+-- so it is better to process them the next tick.
+local on_script_trigger_effect_handlers = {
+  ["item-request-proxy-created"] = function(entity) storage.new_request_proxies[entity.unit_number] = {entity = entity} end,
+  ["entity-ghost-created"] = function(entity) storage.new_entity_ghosts[entity.unit_number] = {entity = entity} end,
+  ["tile-ghost-created"] = function(entity) storage.new_tile_ghosts[entity.unit_number] = {entity = entity} end,
+}
 
-commands.add_command("se-interstellar-construction-requests-fulfillment", nil, function(command)
-  local item_request_proxy_whitelist = {}
-  for item_name, bool in pairs(storage.item_request_proxy_whitelist) do
-    table.insert(item_request_proxy_whitelist, item_name)
+script.on_event(defines.events.on_script_trigger_effect, function(event)
+  local handler = on_script_trigger_effect_handlers[event.effect_id]
+  if handler then handler(event.source_entity) end
+end)
+
+function mod.process_new()
+  for unit_number, item_proxy in pairs(storage.new_request_proxies) do
+    storage.old_request_proxies[unit_number] = item_proxy
   end
 
-  local player = game.get_player(command.player_index) --[[@as LuaPlayer]]
-  player.print(serpent.block({
-    table_size(storage.v1_structs),
-    "storage.alert_targets = " .. table_size(storage.alert_targets),
-    "storage.alert_targets_per_tick = " .. storage.alert_targets_per_tick,
-    "storage.item_request_proxy_whitelist = " .. table.concat(item_request_proxy_whitelist, ", "),
-  }))
+  for unit_number, entity_ghost in pairs(storage.new_entity_ghosts) do
+    storage.old_entity_ghosts[unit_number] = entity_ghost
+    local items_to_place_this = entity_ghost.entity.ghost_prototype.items_to_place_this
+    if items_to_place_this then
+      local item_to_place_this = items_to_place_this[1]
+      entity_ghost.wants_item = item_to_place_this.name
+      storage.item_to_entities_map[item_to_place_this.name] = storage.item_to_entities_map[item_to_place_this.name] or {}
+      storage.item_to_entities_map[item_to_place_this.name][unit_number] = entity_ghost.entity
+    end
+  end
+
+  for unit_number, tile_ghost in pairs(storage.new_tile_ghosts) do
+    storage.old_tile_ghosts[unit_number] = tile_ghost
+  end
+
+  storage.new_request_proxies = {}
+  storage.new_entity_ghosts = {}
+  storage.new_tile_ghosts = {}
+end
+
+function mod.process_deathrattles()
+  for unit_number, entity_ghost in pairs(storage.old_entity_ghosts) do
+    if not entity_ghost.entity.valid then
+      storage.old_entity_ghosts[unit_number] = nil
+      if entity_ghost.wants_item then
+        storage.item_to_entities_map[entity_ghost.wants_item][unit_number] = nil
+      end
+    end
+  end
+end
+
+function mod.clean_item_to_entities_map()
+  for item_name, structs in pairs(storage.item_to_entities_map) do
+    if next(structs) == nil then
+      storage.item_to_entities_map[item_name] = nil
+    end
+  end
+end
+
+
+script.on_event(defines.events.on_tick, function()
+  mod.process_new()
+  mod.process_deathrattles()
+  mod.clean_item_to_entities_map()
+end)
+
+script.on_nth_tick(60, function()
+  log(serpent.line(storage.item_to_entities_map))
 end)

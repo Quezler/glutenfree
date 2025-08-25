@@ -1,44 +1,44 @@
 local tint = {r=244, g=209, b=6}
 
-local buffer_chest = table.deepcopy(data.raw["logistic-container"]["buffer-chest"])
-buffer_chest.name = "interstellar-construction-turret--buffer-chest"
+local container = table.deepcopy(data.raw["logistic-container"]["active-provider-chest"])
+container.name = "interstellar-construction-turret"
 
-buffer_chest.selection_box = {{-1.50, -1.50}, { 1.50,  1.50}}
-buffer_chest.collision_box = {{-1.35, -1.35}, { 1.35,  1.35}}
-buffer_chest.drawing_box_vertical_extension = 2.85
+container.selection_box = {{-1.50, -1.50}, {1.50, 1.50}}
+container.collision_box = {{-1.35, -1.35}, {1.35, 1.35}}
+container.drawing_box_vertical_extension = 2.85
 
-buffer_chest.icon = nil
-buffer_chest.icons = table.deepcopy(data.raw["item"]["se-meteor-point-defence"].icons)
-buffer_chest.icons[2].tint = tint
+container.icon = nil
+container.icons = table.deepcopy(data.raw["item"]["se-meteor-point-defence"].icons)
+container.icons[2].tint = tint
 
-buffer_chest.animation = table.deepcopy(data.raw["ammo-turret"]["se-meteor-point-defence-container"].graphics_set.base_visualisation.animation.north)
-buffer_chest.animation.layers[2].tint = tint
+container.animation = table.deepcopy(data.raw["ammo-turret"]["se-meteor-point-defence-container"].graphics_set.base_visualisation.animation.north)
+container.animation.layers[2].tint = tint
 
-buffer_chest.inventory_size = 30
-buffer_chest.inventory_type = "normal"
+container.inventory_size = 0
+container.inventory_type = "normal"
 
-buffer_chest.circuit_connector = nil
-buffer_chest.circuit_wire_max_distance = nil
-buffer_chest.corpse = "medium-remnants"
-buffer_chest.dying_explosion = "medium-explosion"
-buffer_chest.fast_replaceable_group = nil
-buffer_chest.max_health = 2000
-buffer_chest.resistances = {
-  { type = "impact", percent = 100 },
-  { type = "fire"  , percent = 100 },
+container.circuit_connector = nil
+container.circuit_wire_max_distance = nil
+container.corpse = "medium-remnants"
+container.dying_explosion = "medium-explosion"
+container.fast_replaceable_group = nil
+container.max_health = 2000
+container.resistances = {
+  {type = "impact", percent = 100},
+  {type = "fire"  , percent = 100},
 }
 
-table.insert(buffer_chest.flags, "hide-alt-info")
-table.insert(buffer_chest.flags, "no-automated-item-removal")
-table.insert(buffer_chest.flags, "no-automated-item-insertion")
+table.insert(container.flags, "hide-alt-info")
+table.insert(container.flags, "no-automated-item-removal")
+table.insert(container.flags, "no-automated-item-insertion")
 
--- log(serpent.block(buffer_chest))
+-- log(serpent.block(container))
 
 --
 
 local item = {
   type = "item",
-  name = "se-interstellar-construction-requests-fulfillment--item",
+  name = container.name,
   order = "k-a", -- weapon delivery cannon is `j-`
   subgroup = "surface-defense",
   stack_size = 50,
@@ -48,16 +48,16 @@ local item = {
 item.icons = table.deepcopy(data.raw["item"]["se-meteor-point-defence"]).icons
 item.icons[2].tint = tint
 
-item.place_result = buffer_chest.name
-buffer_chest.minable.result = item.name
+item.place_result = container.name
+container.minable.result = item.name
 
 --
 
 local recipe = {
   type = "recipe",
-  name = "se-interstellar-construction-requests-fulfillment--recipe",
+  name = item.name,
   enabled = false,
-  energy_required = 5,
+  energy_required = 30,
   ingredients = {
     {type = "item", name = "se-meteor-point-defence", amount = 1},
     {type = "item", name = "sulfur", amount = 12},
@@ -71,7 +71,7 @@ local recipe = {
 
 local technology = {
   type = "technology",
-  name = "se-interstellar-construction-requests-fulfillment--technology",
+  name = recipe.name,
   effects = {
     { type = "unlock-recipe", recipe = recipe.name }
   },
@@ -84,11 +84,11 @@ local technology = {
   unit = {
     count = 250,
     ingredients = {
-      { "automation-science-pack", 1 },
-      { "logistic-science-pack"  , 1 },
-      { "chemical-science-pack"  , 1 },
-      { "se-rocket-science-pack" , 1 },
-      { "space-science-pack"     , 1 },
+      {"automation-science-pack", 1},
+      {"logistic-science-pack"  , 1},
+      {"chemical-science-pack"  , 1},
+      {"se-rocket-science-pack" , 1},
+      {"space-science-pack"     , 1},
     },
     time = 30
   }
@@ -99,4 +99,25 @@ technology.icons[2].tint = tint
 
 --
 
-data:extend({buffer_chest, item, recipe, technology})
+data:extend({container, item, recipe, technology})
+
+local function add_created_trigger(prototype)
+  prototype.created_effect = {
+    type = "direct",
+    action_delivery = {
+      type = "instant",
+      source_effects = {
+        {
+          type = "script",
+          effect_id = prototype.name .. "-created",
+        },
+      }
+    }
+  }
+end
+
+add_created_trigger(data.raw["item-request-proxy"]["item-request-proxy"])
+add_created_trigger(data.raw["entity-ghost"]["entity-ghost"])
+add_created_trigger(data.raw["tile-ghost"]["tile-ghost"])
+
+
