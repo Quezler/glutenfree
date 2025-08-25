@@ -13,6 +13,7 @@ for _, config in ipairs({
   {prefix = "high-speed-"},
 
   {prefix = "se-space-"}, -- doesn't look supported atm
+  {prefix = "omt-"}, -- untested
 }) do
   local balancer = data.raw["lane-splitter"][config.prefix .. "lane-splitter"]
   local splitter = data.raw[     "splitter"][config.prefix ..      "splitter"]
