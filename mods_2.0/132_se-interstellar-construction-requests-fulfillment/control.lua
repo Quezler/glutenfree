@@ -1,7 +1,6 @@
-local Util = require("__space-exploration-scripts__.util")
-local Meteor = require("__space-exploration-scripts__.meteor")
-
 local mod = {}
+
+local Turret = require("scripts.turret")(mod)
 
 script.on_init(function()
   storage.all_ghosts = {}
@@ -57,15 +56,6 @@ for _, event in ipairs({
   })
 end
 
-function mod.fire_next_barrel(struct)
-  struct.barrel = struct.barrel % 4 + 1
-  struct.entity.surface.create_entity{
-    name = Meteor.name_meteor_point_defence_beam,
-    position = Util.vectors_add(struct.entity.position, Meteor.name_meteor_point_defence_beam_offsets[struct.barrel]),
-    target = Util.vectors_add(struct.entity.position, {x = 0, y = -Meteor.meteor_swarm_altitude})
-  }
-end
-
 mod.add_new_ghost = function(entity)
   local unit_number = entity.unit_number
 
@@ -83,7 +73,7 @@ script.on_nth_tick(10, function(event)
   for _, struct in pairs(storage.structs) do
     if struct.entity.valid then
       if math.random() > 0.75 then
-        mod.fire_next_barrel(struct)
+        Turret.fire_next_barrel(struct)
       end
     end
   end
