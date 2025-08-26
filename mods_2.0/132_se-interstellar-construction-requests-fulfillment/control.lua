@@ -23,6 +23,7 @@ script.on_init(function()
 
   storage.turrets = {}
   storage.deathrattles = {}
+  storage.tasks_at_tick = {}
 end)
 
 script.on_configuration_changed(function()
@@ -113,7 +114,8 @@ function mod.clean_item_to_entities_map()
   end
 end
 
-script.on_event(defines.events.on_tick, function()
+script.on_event(defines.events.on_tick, function(event)
+  mod.do_tasks_at_tick(event)
   mod.process_new()
   mod.clean_item_to_entities_map()
 end)
@@ -141,3 +143,30 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if handler then handler(deathrattle) end
   end
 end)
+
+function mod.add_task_at_tick(tick, task)
+  local tasks_at_tick = storage.tasks_at_tick[tick]
+  if tasks_at_tick then
+    tasks_at_tick[#tasks_at_tick + 1] = task
+  else
+    storage.tasks_at_tick[tick] = {task}
+  end
+end
+
+function mod.do_tasks_at_tick(event)
+  local tick = event.tick
+  local tasks_at_tick = storage.tasks_at_tick[tick]
+  if tasks_at_tick then storage.tasks_at_tick[tick] = nil
+    for _, task in ipairs(tasks_at_tick) do
+      if task.name == "revive" then
+        local ghost = storage.all_ghosts[task.unit_number]
+        if ghost and ghost.entity.valid then
+          local spilled_items = ghost.entity.revive{raise_revive = true}
+          assert(table_size(spilled_items) == 0, serpent.line(spilled_items)) -- todo: deal with later
+        else
+          error("refund items")
+        end
+      end
+    end
+  end
+end

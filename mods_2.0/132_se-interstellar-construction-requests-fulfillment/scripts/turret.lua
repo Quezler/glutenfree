@@ -24,14 +24,15 @@ return function(mod)
         -- log(available)
         for unit_number, _ in pairs(ghosts) do
           local ghost = storage.all_ghosts[unit_number]
-          if ghost.entity.valid then
+          if ghost.entity.valid and (not ghost.lock) then
             local wants = ghost.item_name_map[item_name]
             if available >= wants then
               local removed = logistic_network.remove_item({name = item_name, count = wants, quality = "normal"})
               assert(removed == wants)
+              ghost.lock = true -- prevent other turrets/ticks from working on this ghost
               Turret.fire_next_barrel(turret)
-              local spilled_items = ghost.entity.revive{raise_revive = true}
-              assert(table_size(spilled_items) == 0, serpent.line(spilled_items)) -- todo: deal with later
+              local response = remote.call("space-platform-entity-build-animation-lib", "legacy", ghost.entity)
+              mod.add_task_at_tick(response.all_scaffolding_up_at, {name = "revive", unit_number = ghost.unit_number})
 
               available = available - removed -- todo: grab a fresh item count in case of mod compatibility issues
             end

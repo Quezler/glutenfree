@@ -12,6 +12,7 @@
 
         "space-exploration",
         "space-exploration-scripts >= 2.5.0",
+        "space-platform-entity-build-animation-lib >= 2.1.0",
 
         "! quality"
     ]

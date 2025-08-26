@@ -7,6 +7,7 @@ Date: ????
     - Give turrets their own lua file
     - Detect which turrets are able to fulfill a ghost
     - Construct the ghost by reviving
+    - Request scaffold animation and revive once it is all up
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
 Date: 2025. 08. 22
