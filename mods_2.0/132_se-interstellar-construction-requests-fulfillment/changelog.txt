@@ -5,6 +5,7 @@ Date: ????
     - Commence total rewrite away from alerts
     - Merge and simplify entity & tile ghost handling
     - Give turrets their own lua file
+    - Detect which turrets are able to fulfill a ghost
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
 Date: 2025. 08. 22

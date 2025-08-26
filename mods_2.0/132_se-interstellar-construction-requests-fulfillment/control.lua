@@ -21,7 +21,7 @@ script.on_init(function()
     end
   end
 
-  storage.structs = {}
+  storage.turrets = {}
   storage.deathrattles = {}
 end)
 
@@ -34,13 +34,14 @@ end)
 function mod.on_created_entity(event)
   local entity = event.entity or event.destination
 
-  local struct = {
-    index = entity.unit_number,
+  local turret = {
     entity = entity,
+    unit_number = entity.unit_number,
+
     barrel = math.random(0, 3),
   }
 
-  storage.structs[entity.unit_number] = struct
+  storage.turrets[entity.unit_number] = turret
 end
 
 for _, event in ipairs({
@@ -70,10 +71,10 @@ mod.add_new_ghost = function(entity)
 end
 
 script.on_nth_tick(10, function(event)
-  for _, struct in pairs(storage.structs) do
-    if struct.entity.valid then
+  for _, turret in pairs(storage.turrets) do
+    if turret.entity.valid then
       if math.random() > 0.75 then
-        Turret.fire_next_barrel(struct)
+        Turret.fire_next_barrel(turret)
       end
     end
   end
@@ -127,6 +128,7 @@ end)
 
 script.on_nth_tick(60, function()
   log(serpent.line(storage.item_to_entities_map))
+  Turret.on_nth_tick()
 end)
 
 local deathrattles = {

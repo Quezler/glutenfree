@@ -13,5 +13,17 @@ return function(mod)
     }
   end
 
+  Turret.on_nth_tick = function()
+    for _, turret in pairs(storage.turrets) do
+      local logistic_network = turret.entity.logistic_network
+      if logistic_network then
+        for item_name, ghosts in pairs(storage.item_to_entities_map) do
+          local available = logistic_network.get_item_count({name = item_name, quality = "normal"})
+          log(available)
+        end
+      end
+    end
+  end
+
   return Turret
 end
