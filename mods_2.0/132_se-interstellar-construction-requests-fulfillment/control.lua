@@ -70,16 +70,6 @@ mod.add_new_ghost = function(entity)
   }
 end
 
-script.on_nth_tick(10, function(event)
-  for _, turret in pairs(storage.turrets) do
-    if turret.entity.valid then
-      if math.random() > 0.75 then
-        Turret.fire_next_barrel(turret)
-      end
-    end
-  end
-end)
-
 -- item request proxies will not have any insertion/removal requests on creation,
 -- and any other mods might react to any of their events as well,
 -- so it is better to process them the next tick.
@@ -94,10 +84,12 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   if handler then handler(event.source_entity) end
 end)
 
-function mod.insert_into_item_to_entities_map(item_name, ghost)
-  storage.item_to_entities_map[item_name] = storage.item_to_entities_map[item_name] or {}
-  storage.item_to_entities_map[item_name][ghost.entity.unit_number] = true
-  ghost.item_name_map[item_name] = true
+function mod.insert_into_item_to_entities_map(item, ghost)
+  assert(item.name)
+  assert(item.count)
+  storage.item_to_entities_map[item.name] = storage.item_to_entities_map[item.name] or {}
+  storage.item_to_entities_map[item.name][ghost.entity.unit_number] = true
+  ghost.item_name_map[item.name] = item.count
 end
 
 function mod.process_new()
@@ -107,7 +99,7 @@ function mod.process_new()
     if ghost.entity.valid then
       local items_to_place_this = ghost.entity.ghost_prototype.items_to_place_this
       if items_to_place_this then
-        mod.insert_into_item_to_entities_map(items_to_place_this[1].name, ghost)
+        mod.insert_into_item_to_entities_map(items_to_place_this[1], ghost)
       end
     end
   end
@@ -128,7 +120,7 @@ end)
 
 script.on_nth_tick(60, function()
   log(serpent.line(storage.item_to_entities_map))
-  Turret.on_nth_tick()
+  Turret.tick_turrets()
 end)
 
 local deathrattles = {
