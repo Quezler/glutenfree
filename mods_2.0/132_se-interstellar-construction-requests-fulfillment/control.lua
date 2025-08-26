@@ -4,26 +4,21 @@ local Meteor = require("__space-exploration-scripts__.meteor")
 local mod = {}
 
 script.on_init(function()
-  storage.old_request_proxies = {}
-  storage.old_entity_ghosts = {}
-  storage.old_tile_ghosts = {}
+  storage.all_ghosts = {}
+  storage.new_ghosts = {}
 
-  storage.new_request_proxies = {}
-  storage.new_entity_ghosts = {}
-  storage.new_tile_ghosts = {}
+  storage.all_proxies = {}
+  storage.new_proxies = {}
 
   -- generally there are not a lot of diverse requests so we have an one to many relationship here
   storage.item_to_entities_map = {}
 
   for _, surface in pairs(game.surfaces) do
+    for _, entity in ipairs(surface.find_entities_filtered{name = {"entity-ghost", "tile-ghost"}}) do
+      mod.add_new_ghost(entity)
+    end
     for _, entity in ipairs(surface.find_entities_filtered{name = "item-request-proxy"}) do
-      storage.new_request_proxies[entity.unit_number] = {entity = entity}
-    end
-    for _, entity in ipairs(surface.find_entities_filtered{name = "entity-ghost"}) do
-      storage.new_entity_ghosts[entity.unit_number] = {entity = entity}
-    end
-    for _, entity in ipairs(surface.find_entities_filtered{name = "tile-ghost"}) do
-      storage.new_tile_ghosts[entity.unit_number] = {entity = entity}
+      storage.new_proxies[entity.unit_number] = {entity = entity}
     end
   end
 
@@ -33,6 +28,8 @@ end)
 
 script.on_configuration_changed(function()
   assert(storage.structs == nil and storage.v1_structs == nil, "not compatible with versions below 3.0.0, remove the mod from the save first.")
+
+  -- todo: refresh all requested items since prototype changes could have changed construction materials
 end)
 
 function mod.on_created_entity(event)
@@ -69,6 +66,19 @@ function mod.fire_next_barrel(struct)
   }
 end
 
+mod.add_new_ghost = function(entity)
+  local unit_number = entity.unit_number
+
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "ghost", unit_number = unit_number}
+  storage.new_ghosts[unit_number] = true
+  storage.all_ghosts[unit_number] = {
+    entity = entity,
+    unit_number = unit_number,
+
+    item_name_map = {},
+  }
+end
+
 script.on_nth_tick(10, function(event)
   for _, struct in pairs(storage.structs) do
     if struct.entity.valid then
@@ -84,8 +94,8 @@ end)
 -- so it is better to process them the next tick.
 local on_script_trigger_effect_handlers = {
   ["item-request-proxy-created"] = function(entity) storage.new_request_proxies[entity.unit_number] = {entity = entity} end,
-  ["entity-ghost-created"] = function(entity) storage.new_entity_ghosts[entity.unit_number] = {entity = entity} end,
-  ["tile-ghost-created"] = function(entity) storage.new_tile_ghosts[entity.unit_number] = {entity = entity} end,
+  ["entity-ghost-created"] = function(entity) mod.add_new_ghost(entity) end,
+  ["tile-ghost-created"] = function(entity) mod.add_new_ghost(entity) end,
 }
 
 script.on_event(defines.events.on_script_trigger_effect, function(event)
@@ -93,37 +103,20 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   if handler then handler(event.source_entity) end
 end)
 
-function mod.process_new()
-  for unit_number, item_proxy in pairs(storage.new_request_proxies) do
-    storage.old_request_proxies[unit_number] = item_proxy
-  end
-
-  for unit_number, entity_ghost in pairs(storage.new_entity_ghosts) do
-    storage.old_entity_ghosts[unit_number] = entity_ghost
-    local items_to_place_this = entity_ghost.entity.ghost_prototype.items_to_place_this
-    if items_to_place_this then
-      local item_to_place_this = items_to_place_this[1]
-      entity_ghost.wants_item = item_to_place_this.name
-      storage.item_to_entities_map[item_to_place_this.name] = storage.item_to_entities_map[item_to_place_this.name] or {}
-      storage.item_to_entities_map[item_to_place_this.name][unit_number] = entity_ghost.entity
-    end
-  end
-
-  for unit_number, tile_ghost in pairs(storage.new_tile_ghosts) do
-    storage.old_tile_ghosts[unit_number] = tile_ghost
-  end
-
-  storage.new_request_proxies = {}
-  storage.new_entity_ghosts = {}
-  storage.new_tile_ghosts = {}
+function mod.insert_into_item_to_entities_map(item_name, ghost)
+  storage.item_to_entities_map[item_name] = storage.item_to_entities_map[item_name] or {}
+  storage.item_to_entities_map[item_name][ghost.entity.unit_number] = true
+  ghost.item_name_map[item_name] = true
 end
 
-function mod.process_deathrattles()
-  for unit_number, entity_ghost in pairs(storage.old_entity_ghosts) do
-    if not entity_ghost.entity.valid then
-      storage.old_entity_ghosts[unit_number] = nil
-      if entity_ghost.wants_item then
-        storage.item_to_entities_map[entity_ghost.wants_item][unit_number] = nil
+function mod.process_new()
+  for unit_number, _ in pairs(storage.new_ghosts) do
+    storage.new_ghosts[unit_number] = nil
+    local ghost = storage.all_ghosts[unit_number]
+    if ghost.entity.valid then
+      local items_to_place_this = ghost.entity.ghost_prototype.items_to_place_this
+      if items_to_place_this then
+        mod.insert_into_item_to_entities_map(items_to_place_this[1].name, ghost)
       end
     end
   end
@@ -137,13 +130,30 @@ function mod.clean_item_to_entities_map()
   end
 end
 
-
 script.on_event(defines.events.on_tick, function()
   mod.process_new()
-  mod.process_deathrattles()
   mod.clean_item_to_entities_map()
 end)
 
 script.on_nth_tick(60, function()
   log(serpent.line(storage.item_to_entities_map))
+end)
+
+local deathrattles = {
+  ["ghost"] = function(deathrattle)
+    local ghost = storage.all_ghosts[deathrattle.unit_number]
+    storage.all_ghosts[ghost.unit_number] = nil
+
+    for item_name, _ in pairs(ghost.item_name_map) do
+      storage.item_to_entities_map[item_name][ghost.unit_number] = nil
+    end
+  end,
+}
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local deathrattle = storage.deathrattles[event.registration_number]
+  if deathrattle then storage.deathrattles[event.registration_number] = nil
+    local handler = deathrattles[deathrattle.name]
+    if handler then handler(deathrattle) end
+  end
 end)

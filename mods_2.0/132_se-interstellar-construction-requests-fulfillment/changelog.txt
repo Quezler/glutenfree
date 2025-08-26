@@ -3,6 +3,7 @@ Version: 3.0.0
 Date: ????
   Info:
     - Commence total rewrite away from alerts
+    - Merge and simplify entity & tile ghost handling
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
 Date: 2025. 08. 22
