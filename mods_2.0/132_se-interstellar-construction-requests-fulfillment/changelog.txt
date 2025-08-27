@@ -8,6 +8,7 @@ Date: ????
     - Detect which turrets are able to fulfill a ghost
     - Construct the ghost by reviving
     - Request scaffold animation and revive once it is all up
+    - Create a character to mine entities and tiles with
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
 Date: 2025. 08. 22

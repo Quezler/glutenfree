@@ -1,3 +1,5 @@
+local meld = require("meld")
+
 local tint = {r=244, g=209, b=6}
 
 local container = table.deepcopy(data.raw["logistic-container"]["active-provider-chest"])
@@ -31,6 +33,52 @@ container.resistances = {
 table.insert(container.flags, "hide-alt-info")
 table.insert(container.flags, "no-automated-item-removal")
 table.insert(container.flags, "no-automated-item-insertion")
+
+local character = {
+  type = "character",
+  name = "interstellar-construction-character",
+
+  selection_priority = 51,
+  selection_box = {{-0.3, -0.3}, {0.3, 0.3}},
+  collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
+  collision_mask = {layers = {}},
+
+  animations = {{
+    idle_with_gun = util.empty_animation(),
+    running_with_gun = meld(util.empty_animation(), {direction_count = 18}),
+    mining_with_tool = util.empty_animation(),
+  }},
+  mining_speed = 1,
+  running_speed = 1,
+  distance_per_frame = 1,
+  maximum_corner_sliding_distance = 1,
+  heartbeat = { filename = "__base__/sound/heartbeat.ogg" },
+  eat = { filename = "__base__/sound/eat-5.ogg", volume = 1 },
+  inventory_size = 10,
+  build_distance = 1,
+  drop_item_distance = 1,
+  reach_distance = 1,
+  reach_resource_distance = 1,
+  item_pickup_distance = 1,
+  loot_pickup_distance = 1,
+  ticks_to_keep_gun = 1,
+  ticks_to_keep_aiming_direction = 1,
+  ticks_to_stay_in_combat = 1,
+  damage_hit_tint = {1, 1, 1, 1},
+  running_sound_animation_positions = {},
+  mining_with_tool_particles_animation_positions = {},
+  moving_sound_animation_positions = {},
+
+  guns_inventory_size = 1,
+  has_belt_immunity = true,
+
+  prevent_jetpack = true,
+  hidden = true,
+}
+
+character.icons = table.deepcopy(data.raw["item"]["se-meteor-point-defence"]).icons
+character.icons[2].tint = tint
+table.insert(character.icons, {icon = data.raw["character"]["character"].icon, scale = 0.25, shift = {8, 8}})
 
 -- log(serpent.block(container))
 
@@ -99,7 +147,7 @@ technology.icons[2].tint = tint
 
 --
 
-data:extend({container, item, recipe, technology})
+data:extend{container, character, item, recipe, technology}
 
 local function add_created_trigger(prototype)
   prototype.created_effect = {

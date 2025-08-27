@@ -42,7 +42,19 @@ function mod.on_created_entity(event)
     barrel = math.random(0, 3),
   }
 
+  turret.character = entity.surface.create_entity{
+    name = "interstellar-construction-character",
+    force = entity.force,
+    position = entity.position,
+  }
+  turret.character.destructible = false
+  -- fill these character inventories with full stacks to prevent any automatic insertions
+  turret.character.get_inventory(defines.inventory.character_armor).insert({"light-armor"})
+  turret.character.get_inventory(defines.inventory.character_guns).insert("pistol")
+  turret.character.get_inventory(defines.inventory.character_ammo).insert("firearm-magazine")
+
   storage.turrets[entity.unit_number] = turret
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "turret", unit_number = entity.unit_number}
 end
 
 for _, event in ipairs({
@@ -128,12 +140,18 @@ end)
 local deathrattles = {
   ["ghost"] = function(deathrattle)
     local ghost = storage.all_ghosts[deathrattle.unit_number]
-    storage.all_ghosts[ghost.unit_number] = nil
+    storage.all_ghosts[deathrattle.unit_number] = nil
 
     for item_name, _ in pairs(ghost.item_name_map) do
       storage.item_to_entities_map[item_name][ghost.unit_number] = nil
     end
   end,
+  ["turret"] = function(deathrattle)
+    local turret = storage.turrets[deathrattle.unit_number]
+    storage.all_ghosts[deathrattle.unit_number] = nil
+
+    turret.character.destroy()
+  end
 }
 
 script.on_event(defines.events.on_object_destroyed, function(event)
