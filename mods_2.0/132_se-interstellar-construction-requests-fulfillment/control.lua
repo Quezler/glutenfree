@@ -12,18 +12,18 @@ script.on_init(function()
   -- generally there are not a lot of diverse requests so we have an one to many relationship here
   storage.item_to_entities_map = {}
 
+  storage.turrets = {}
+  storage.deathrattles = {}
+  storage.tasks_at_tick = {}
+
   for _, surface in pairs(game.surfaces) do
     for _, entity in ipairs(surface.find_entities_filtered{name = {"entity-ghost", "tile-ghost"}}) do
       mod.add_new_ghost(entity)
     end
     for _, entity in ipairs(surface.find_entities_filtered{name = "item-request-proxy"}) do
-      storage.new_proxies[entity.unit_number] = {entity = entity}
+      mod.add_new_proxy(entity)
     end
   end
-
-  storage.turrets = {}
-  storage.deathrattles = {}
-  storage.tasks_at_tick = {}
 end)
 
 script.on_configuration_changed(function()
@@ -83,11 +83,25 @@ mod.add_new_ghost = function(entity)
   }
 end
 
+mod.add_new_proxy = function(entity)
+  local unit_number = entity.unit_number
+
+  storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "proxy", unit_number = unit_number}
+  storage.new_proxies[unit_number] = true
+  storage.all_proxies[unit_number] = {
+    entity = entity,
+    unit_number = unit_number,
+
+    item_name_map = {},
+  }
+end
+
+
 -- item request proxies will not have any insertion/removal requests on creation,
 -- and any other mods might react to any of their events as well,
 -- so it is better to process them the next tick.
 local on_script_trigger_effect_handlers = {
-  ["item-request-proxy-created"] = function(entity) storage.new_request_proxies[entity.unit_number] = {entity = entity} end,
+  ["item-request-proxy-created"] = function(entity) mod.add_new_proxy(entity) end,
   ["entity-ghost-created"] = function(entity) mod.add_new_ghost(entity) end,
   ["tile-ghost-created"] = function(entity) mod.add_new_ghost(entity) end,
 }
@@ -116,6 +130,30 @@ function mod.process_new()
       end
     end
   end
+
+  for unit_number, _ in pairs(storage.new_proxies) do
+    storage.new_proxies[unit_number] = nil
+    local ghost = storage.all_ghosts[unit_number]
+  end
+end
+
+function mod.process_proxies()
+  for unit_number, proxy in pairs(storage.all_proxies) do
+    if proxy.entity.valid then
+      local old_item_name_map = proxy.item_name_map
+      proxy.item_name_map = {}
+      for _, blueprint_insert_plan in ipairs(proxy.entity.insert_plan) do
+        local item_name = blueprint_insert_plan.id.name -- why not name.name?
+        assert(type(item_name) == "string")
+        old_item_name_map[item_name] = nil
+        mod.insert_into_item_to_entities_map({name = item_name, count = -1}, proxy)
+      end
+
+      for item_name,_ in pairs(old_item_name_map) do
+        storage.item_to_entities_map[item_name][proxy.unit_number] = nil
+      end
+    end
+  end
 end
 
 function mod.clean_item_to_entities_map()
@@ -129,6 +167,7 @@ end
 script.on_event(defines.events.on_tick, function(event)
   mod.do_tasks_at_tick(event)
   mod.process_new()
+  mod.process_proxies()
   mod.clean_item_to_entities_map()
 end)
 
@@ -144,6 +183,14 @@ local deathrattles = {
 
     for item_name, _ in pairs(ghost.item_name_map) do
       storage.item_to_entities_map[item_name][ghost.unit_number] = nil
+    end
+  end,
+  ["proxy"] = function(deathrattle)
+    local proxy = storage.all_proxies[deathrattle.unit_number]
+    storage.all_proxies[deathrattle.unit_number] = nil
+
+    for item_name, _ in pairs(proxy.item_name_map) do
+      storage.item_to_entities_map[item_name][proxy.unit_number] = nil
     end
   end,
   ["turret"] = function(deathrattle)

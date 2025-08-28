@@ -48,5 +48,8 @@ return function(mod)
     end
   end
 
+  Turret.revive_ghost = function(ghost)
+  end
+
   return Turret
 end
