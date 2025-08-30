@@ -111,12 +111,17 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   if handler then handler(event.source_entity) end
 end)
 
-function mod.insert_into_item_to_entities_map(item, ghost)
-  assert(item.name)
-  assert(item.count)
-  storage.item_to_entities_map[item.name] = storage.item_to_entities_map[item.name] or {}
-  storage.item_to_entities_map[item.name][ghost.entity.unit_number] = true
-  ghost.item_name_map[item.name] = item.count
+function mod.insert_into_item_to_entities_map(item_name, struct)
+  assert(type(item_name) == "string")
+  storage.item_to_entities_map[item_name] = storage.item_to_entities_map[item_name] or {}
+  storage.item_to_entities_map[item_name][struct.unit_number] = true
+  struct.item_name_map[item_name] = true
+end
+
+function mod.remove_from_item_to_entities_map(item_name, struct)
+  assert(type(item_name) == "string")
+  storage.item_to_entities_map[item_name][struct.unit_number] = nil
+  struct.item_name_map[item_name] = nil
 end
 
 function mod.process_new()
@@ -126,7 +131,7 @@ function mod.process_new()
     if ghost.entity.valid then
       local items_to_place_this = ghost.entity.ghost_prototype.items_to_place_this
       if items_to_place_this then
-        mod.insert_into_item_to_entities_map(items_to_place_this[1], ghost)
+        mod.insert_into_item_to_entities_map(items_to_place_this[1].name, ghost)
       end
     end
   end
@@ -144,13 +149,14 @@ function mod.process_proxies()
       proxy.item_name_map = {}
       for _, blueprint_insert_plan in ipairs(proxy.entity.insert_plan) do
         local item_name = blueprint_insert_plan.id.name -- why not name.name?
-        assert(type(item_name) == "string")
+
         old_item_name_map[item_name] = nil
-        mod.insert_into_item_to_entities_map({name = item_name, count = -1}, proxy)
+        mod.insert_into_item_to_entities_map(item_name, proxy)
       end
 
+      -- remove the stale insertion requests
       for item_name,_ in pairs(old_item_name_map) do
-        storage.item_to_entities_map[item_name][proxy.unit_number] = nil
+        mod.remove_from_item_to_entities_map(item_name, proxy)
       end
     end
   end

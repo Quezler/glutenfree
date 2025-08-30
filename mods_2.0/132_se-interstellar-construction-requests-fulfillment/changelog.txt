@@ -10,6 +10,7 @@ Date: ????
     - Request scaffold animation and revive once it is all up
     - Create a character to mine entities and tiles with
     - Add initial proxy tracking
+    - Stash only caring about the item name and never the count
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
 Date: 2025. 08. 22
