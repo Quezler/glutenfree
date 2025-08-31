@@ -11,10 +11,10 @@ script.on_init(function()
 
   -- generally there are not a lot of diverse requests so we have an one to many relationship here
   storage.item_to_entities_map = {}
+  storage.item_to_entities_map_dirty = false
 
   storage.turrets = {}
   storage.deathrattles = {}
-  storage.tasks_at_tick = {}
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in ipairs(surface.find_entities_filtered{name = {"entity-ghost", "tile-ghost"}}) do
@@ -40,6 +40,8 @@ function mod.on_created_entity(event)
     unit_number = entity.unit_number,
 
     barrel = math.random(0, 3),
+    logistic_point = entity.get_logistic_point(defines.logistic_member_index.logistic_container),
+    inventory = entity.get_inventory(defines.inventory.chest),
   }
 
   turret.character = entity.surface.create_entity{
@@ -49,12 +51,14 @@ function mod.on_created_entity(event)
   }
   turret.character.destructible = false
   -- fill these character inventories with full stacks to prevent any automatic insertions
-  turret.character.get_inventory(defines.inventory.character_armor).insert({"light-armor"})
+  turret.character.get_inventory(defines.inventory.character_armor).insert("light-armor")
   turret.character.get_inventory(defines.inventory.character_guns).insert("pistol")
   turret.character.get_inventory(defines.inventory.character_ammo).insert("firearm-magazine")
 
   storage.turrets[entity.unit_number] = turret
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {name = "turret", unit_number = entity.unit_number}
+
+  Turret.reset_gui(turret)
 end
 
 for _, event in ipairs({
@@ -113,7 +117,11 @@ end)
 
 function mod.insert_into_item_to_entities_map(item_name, struct)
   assert(type(item_name) == "string")
-  storage.item_to_entities_map[item_name] = storage.item_to_entities_map[item_name] or {}
+  local item_to_entities_map = storage.item_to_entities_map[item_name]
+  if not item_to_entities_map then
+    storage.item_to_entities_map_dirty = true
+  end
+  storage.item_to_entities_map[item_name] = item_to_entities_map or {}
   storage.item_to_entities_map[item_name][struct.unit_number] = true
   struct.item_name_map[item_name] = true
 end
@@ -166,19 +174,47 @@ function mod.clean_item_to_entities_map()
   for item_name, structs in pairs(storage.item_to_entities_map) do
     if next(structs) == nil then
       storage.item_to_entities_map[item_name] = nil
+      storage.item_to_entities_map_dirty = true
     end
   end
 end
 
+function mod.update_logistic_section()
+  if not storage.item_to_entities_map_dirty then return end
+  storage.item_to_entities_map_dirty = false
+
+  local force = game.forces["player"] -- todo: support pvp?
+
+  local logistic_group = force.get_logistic_group(Turret.logistic_section_name, defines.logistic_group_type.with_trash)
+  if not logistic_group then
+    force.create_logistic_group(Turret.logistic_section_name, defines.logistic_group_type.with_trash)
+    logistic_group = force.get_logistic_group(Turret.logistic_section_name, defines.logistic_group_type.with_trash)
+    assert(logistic_group)
+  end
+
+  local section = logistic_group.members[1]
+  if section then
+    local filters = {}
+    for item_name, _ in pairs(storage.item_to_entities_map) do
+      table.insert(filters, {
+        value = {type = "item", name = item_name, quality = "normal"},
+        min = 1,
+      })
+    end
+    section.filters = filters
+  end
+end
+
 script.on_event(defines.events.on_tick, function(event)
-  mod.do_tasks_at_tick(event)
   mod.process_new()
   mod.process_proxies()
   mod.clean_item_to_entities_map()
+  mod.update_logistic_section()
 end)
 
 script.on_nth_tick(60, function()
-  log(serpent.line(storage.item_to_entities_map))
+  -- log(serpent.line(storage.item_to_entities_map))
+  Turret.reset_guis()
   Turret.tick_turrets()
 end)
 
@@ -214,30 +250,3 @@ script.on_event(defines.events.on_object_destroyed, function(event)
     if handler then handler(deathrattle) end
   end
 end)
-
-function mod.add_task_at_tick(tick, task)
-  local tasks_at_tick = storage.tasks_at_tick[tick]
-  if tasks_at_tick then
-    tasks_at_tick[#tasks_at_tick + 1] = task
-  else
-    storage.tasks_at_tick[tick] = {task}
-  end
-end
-
-function mod.do_tasks_at_tick(event)
-  local tick = event.tick
-  local tasks_at_tick = storage.tasks_at_tick[tick]
-  if tasks_at_tick then storage.tasks_at_tick[tick] = nil
-    for _, task in ipairs(tasks_at_tick) do
-      if task.name == "revive" then
-        local ghost = storage.all_ghosts[task.unit_number]
-        if ghost and ghost.entity.valid then
-          local spilled_items = ghost.entity.revive{raise_revive = true}
-          assert(table_size(spilled_items) == 0, serpent.line(spilled_items)) -- todo: deal with later
-        else
-          error("refund items")
-        end
-      end
-    end
-  end
-end

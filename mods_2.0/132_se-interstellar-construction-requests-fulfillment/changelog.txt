@@ -11,6 +11,7 @@ Date: ????
     - Create a character to mine entities and tiles with
     - Add initial proxy tracking
     - Stash only caring about the item name and never the count
+    - Begin converting back to item delivery instead of construction
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
 Date: 2025. 08. 22

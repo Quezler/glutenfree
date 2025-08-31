@@ -2,7 +2,7 @@ local meld = require("meld")
 
 local tint = {r=244, g=209, b=6}
 
-local container = table.deepcopy(data.raw["logistic-container"]["active-provider-chest"])
+local container = table.deepcopy(data.raw["logistic-container"]["requester-chest"])
 container.name = "interstellar-construction-turret"
 
 container.selection_box = {{-1.50, -1.50}, {1.50, 1.50}}
@@ -16,8 +16,10 @@ container.icons[2].tint = tint
 container.animation = table.deepcopy(data.raw["ammo-turret"]["se-meteor-point-defence-container"].graphics_set.base_visualisation.animation.north)
 container.animation.layers[2].tint = tint
 
-container.inventory_size = 0
+container.inventory_size = 40
+container.quality_affects_inventory_size = false
 container.inventory_type = "normal"
+container.use_exact_mode = true
 
 container.circuit_connector = nil
 container.circuit_wire_max_distance = nil
@@ -107,12 +109,11 @@ local recipe = {
   enabled = false,
   energy_required = 30,
   ingredients = {
+    {type = "item", name = "sulfur", amount = 50},
     {type = "item", name = "se-meteor-point-defence", amount = 1},
-    {type = "item", name = "sulfur", amount = 12},
   },
   results = {{type = "item", name = item.name, amount = 1}},
   requester_paste_multiplier = 1,
-  always_show_made_in = false,
 }
 
 --
