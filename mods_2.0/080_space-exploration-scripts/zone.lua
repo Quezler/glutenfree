@@ -47,9 +47,10 @@ function Zone._get_rich_text_name(zone)
   return rich_text .. " " .. zone.name
 end
 
--- function Zone.from_surface_index(surface_index)
---   return remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface_index})
--- end
+--- @since 2.7.2
+function Zone.from_surface_index(surface_index)
+  return remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface_index})
+end
 
 --- @since 2.0.0
 return Zone
