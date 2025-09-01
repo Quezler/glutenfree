@@ -9,6 +9,6 @@
         "? newsletter-for-mods-made-by-quezler",
 
         "space-exploration",
-        "space-exploration-scripts >= 2.0.0"
+        "space-exploration-scripts >= 2.7.2"
     ]
 }
