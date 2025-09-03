@@ -79,9 +79,7 @@ function update_captions_for_surface(surface_index, override)
   for i = #array, 1, -1 do
     local chunk_cell = array[i]
     if chunk_cell.valid then
-      log(serpent.block(chunk_cell.visible))
-      log(serpent.block(chunk_cell.caption))
-      chunk_cell.caption = override and override or (tonumber(chunk_cell.caption) + 1)
+      chunk_cell.caption = override and override or ((tonumber(chunk_cell.caption) or 0) + 1)
     else
       table.remove(array, i)
     end
