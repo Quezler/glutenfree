@@ -1,4 +1,4 @@
-Doubleclick on the laser preview window to ride it. (no you cannot actually steer it)
+Click on the laser preview window to ride it. (no you cannot actually steer it)
 
 You'll also need to zoom in a bit by yourself in order to trigger the chunk to chart.
 
