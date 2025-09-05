@@ -19,6 +19,7 @@
         "? newsletter-for-mods-made-by-quezler",
 
         "base >= 2.0.46",
-        "space-age"
+        "? space-age",
+        "? cargo-bay"
     ]
 }
