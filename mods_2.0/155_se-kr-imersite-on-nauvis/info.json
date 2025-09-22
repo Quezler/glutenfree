@@ -1,0 +1,26 @@
+{
+    "name": "se-kr-imersite-on-nauvis",
+    "title": "Space Exploration - imersite on nauvis",
+    "description": "Krastorio 2's imersite generates on nauvis for new saves.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "? base",
+
+        "space-exploration >= 0.7.24",
+        "Krastorio2"
+    ]
+}
