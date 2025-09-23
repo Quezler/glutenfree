@@ -8,7 +8,7 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "aai-signal-transmission",
+        "aai-signal-transmission >= 0.5.2",
         "! aai-zignal-transmission-luarendered-channel-label"
     ]
 }
