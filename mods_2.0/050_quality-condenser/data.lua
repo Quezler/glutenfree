@@ -79,13 +79,6 @@ local crafter_entity = {
   quality_indicator_shift = {-1, 1},
 
   flags = {"player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
-  circuit_wire_max_distance = default_circuit_wire_max_distance,
-  circuit_connector = circuit_connector_definitions.create_vector(universal_connector_template, {
-    { variation = 19, main_offset = util.by_pixel(-93.75,  22.375), shadow_offset = util.by_pixel(-93.75,  22.375), show_shadow = true },
-    { variation = 19, main_offset = util.by_pixel(-93.75,  22.375), shadow_offset = util.by_pixel(-93.75,  22.375), show_shadow = true },
-    { variation = 19, main_offset = util.by_pixel(-93.75,  22.375), shadow_offset = util.by_pixel(-93.75,  22.375), show_shadow = true },
-    { variation = 19, main_offset = util.by_pixel(-93.75,  22.375), shadow_offset = util.by_pixel(-93.75,  22.375), show_shadow = true },
-  }),
 }
 
 local crafter_item = {
@@ -116,7 +109,7 @@ local crafter_recipe = {
     {type = "item", name = "advanced-circuit", amount = 50},
   },
   results = {{type="item", name=crafter_item.name, amount=1}},
-  energy_required = 10,
+  energy_required = 20,
   enabled = false,
 }
 

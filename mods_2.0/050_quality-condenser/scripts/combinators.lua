@@ -66,7 +66,7 @@ function Combinators.create_for_struct(struct)
     operation = "-",
     output_signal = {
       type = "virtual",
-      name = "signal-up-down-arrow"
+      name = "signal-each"
     },
     first_signal_networks = {
       red = true,
@@ -111,7 +111,7 @@ function Combinators.create_for_struct(struct)
   inserter_1_cb.circuit_condition = {
     first_signal = {
       type = "virtual",
-      name = "signal-up-down-arrow"
+      name = "signal-anything"
     },
     constant = 0,
     comparator = "≠",
@@ -121,6 +121,35 @@ function Combinators.create_for_struct(struct)
   do
     local red_out = struct.arithmetic_2.get_wire_connector(defines.wire_connector_id.combinator_output_red, false) --[[@as LuaWireConnector]]
     local red_in = struct.inserter_1.get_wire_connector(defines.wire_connector_id.circuit_red, false) --[[@as LuaWireConnector]]
+    assert(red_out.connect_to(red_in, false, defines.wire_origin.player))
+  end
+
+  local entity_cb = struct.entity.get_or_create_control_behavior() --[[@as LuaAssemblingMachineControlBehavior]]
+  entity_cb.circuit_read_recipe_finished = true
+  entity_cb.circuit_recipe_finished_signal = {type = "virtual", name = "signal-F"}
+
+  struct.inserter_2 = storage.surface.create_entity{
+    name = "inserter",
+    force = "neutral",
+    position = {0.5 + struct.index, -9.5},
+    direction = defines.direction.south,
+  }
+  assert(struct.inserter_2)
+  inserter_2_cb = struct.inserter_2.get_or_create_control_behavior() --[[@as LuaInserterControlBehavior]]
+  inserter_2_cb.circuit_enable_disable = true
+  inserter_2_cb.circuit_condition = {
+    first_signal = {
+      type = "virtual",
+      name = "signal-F"
+    },
+    constant = 0,
+    comparator = ">",
+    fulfilled = false
+  }
+
+  do
+    local red_out = struct.entity.get_wire_connector(defines.wire_connector_id.circuit_red, false) --[[@as LuaWireConnector]]
+    local red_in = struct.inserter_2.get_wire_connector(defines.wire_connector_id.circuit_red, false) --[[@as LuaWireConnector]]
     assert(red_out.connect_to(red_in, false, defines.wire_origin.player))
   end
 end
