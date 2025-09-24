@@ -1,6 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
-Date: ????
+Date: 2025. 09. 24
+  Changes:
+    - Now activates as soon as you insert items, no longer a 2+ second delay.
+    - Increased the inventory size to 100, so unstackables can be used at 1% quality.
+    - Increased the crafting times to compensate for the increased convenience you now get.
   Info:
     - Overhaul part 1
     - Overhaul part 2
