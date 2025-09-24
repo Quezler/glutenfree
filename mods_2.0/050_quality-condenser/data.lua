@@ -51,7 +51,7 @@ local crafter_entity = {
   -- icon_draw_specification = {shift = {1 - 0.05, -1 + 0.05}, scale = 4},
   icon_draw_specification = {scale = 0},
   icons_positioning = {
-    {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 1.25}, scale = module_slot_scale[module_slots] or 1},
+    {inventory_index = defines.inventory.crafter_modules, shift = {0, 1.25}, scale = module_slot_scale[module_slots] or 1},
   },
 
   graphics_set = skin.graphics_set,
@@ -79,7 +79,13 @@ local crafter_entity = {
   quality_indicator_shift = {-1, 1},
 
   flags = {"player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
-  -- circuit_wire_max_distance = 1,
+  circuit_wire_max_distance = default_circuit_wire_max_distance,
+  circuit_connector = circuit_connector_definitions.create_vector(universal_connector_template, {
+    { variation = 19, main_offset = util.by_pixel(-93.75,  22.375), shadow_offset = util.by_pixel(-93.75,  22.375), show_shadow = true },
+    { variation = 19, main_offset = util.by_pixel(-93.75,  22.375), shadow_offset = util.by_pixel(-93.75,  22.375), show_shadow = true },
+    { variation = 19, main_offset = util.by_pixel(-93.75,  22.375), shadow_offset = util.by_pixel(-93.75,  22.375), show_shadow = true },
+    { variation = 19, main_offset = util.by_pixel(-93.75,  22.375), shadow_offset = util.by_pixel(-93.75,  22.375), show_shadow = true },
+  }),
 }
 
 local crafter_item = {
@@ -145,8 +151,9 @@ local container_entity = {
   name = mod_prefix .. "container",
   icon = skin.icon,
 
-  inventory_size = 20,
+  inventory_size = 100, -- can upgrade 100 unstackable items at 1%
   inventory_type = "normal",
+  quality_affects_inventory_size = false,
   flags = {"player-creation", "not-on-map", "not-deconstructable"},
 
   open_sound = sounds.metallic_chest_open,
@@ -158,12 +165,11 @@ local container_entity = {
   max_health = 10,
 
   minable = {mining_time = 0.5, result = crafter_item.name},
-
   circuit_wire_max_distance = default_circuit_wire_max_distance,
   circuit_connector = circuit_connector_definitions.create_single
   (
     universal_connector_template,
-    {variation = 22, main_offset = util.by_pixel(-85, 127), shadow_offset = util.by_pixel(-90, 127)}
+    { variation = 19, main_offset = util.by_pixel(-93.75,  22.375), shadow_offset = util.by_pixel(-93.75,  22.375), show_shadow = true }
   ),
 
   icon_draw_specification = {scale = 0, scale_for_many = 0},

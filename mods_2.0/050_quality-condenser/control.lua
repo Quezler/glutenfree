@@ -10,17 +10,17 @@ local function new_struct(table, struct)
   return struct
 end
 
-local function reset_offering_done(struct)
+local function reset_offering_1(struct)
   if struct.inserter_1_offering.valid then return end
   -- game.print(string.format("resetting offering done for #%d @ %d", struct.id, game.tick))
   struct.inserter_1.held_stack.clear()
   struct.inserter_1_offering = storage.surface.create_entity{
     name = "item-on-ground",
     force = "neutral",
-    position = {0.5 + struct.index, -8.5},
+    position = {0.5 + struct.index, -6.5},
     stack = {name = "wood"},
   }
-  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_1_offering)] = {"offering-done", struct.id}
+  storage.deathrattles[script.register_on_object_destroyed(struct.inserter_1_offering)] = {"offering-1", struct.id}
 end
 
 local function spill_entity_inventory(entity, defines_inventory)
@@ -138,8 +138,6 @@ script.on_event(defines.events.on_player_created, function(event)
 end)
 
 script.on_init(function()
-  storage.version = 2
-
   storage.surface = game.planets["quality-condenser"].create_surface()
   storage.surface.generate_with_lab_tiles = true
 
@@ -150,12 +148,7 @@ script.on_init(function()
     position = {-1, -1},
   }
 
-  -- {valid = false, destroy = function () end}
-  storage.invalid = storage.surface.create_entity{
-    name = "small-electric-pole",
-    force = "neutral",
-    position = {-2.5, -0.5},
-  }
+  storage.invalid = game.create_inventory(0)
   storage.invalid.destroy()
 
   storage.index = 0
@@ -178,28 +171,6 @@ end
 script.on_configuration_changed(function(data)
   for _, struct in pairs(storage.structs) do
     update_beacon_interface(struct)
-  end
-
-  if 2 > (storage.version or 0) then
-    storage.version = 2
-    for _, entity in ipairs(storage.surface.find_entities_filtered{}) do
-      if entity.name ~= "quality-condenser" then -- not a condenser placed on the hidden surface itself during testing
-        entity.destroy()
-      end
-    end
-    storage.surface.create_entity{
-      name = "electric-energy-interface",
-      force = "neutral",
-      position = {-1, -1},
-    }
-    local structs = {}
-    for struct_id, struct in pairs(storage.structs) do
-      structs[struct_id] = struct
-    end
-    for _, struct in pairs(structs) do
-      struct.entity.clone{position = struct.entity.position}
-      struct.entity.destroy()
-    end
   end
 
   Handler.refresh_gui_for_players()
@@ -232,11 +203,9 @@ function Handler.on_created_entity(event)
     container_inventory = nil,
     proxy_container_a = nil,
     proxy_container_b = nil,
-    arithmetic_1 = nil, -- each + 0 = S
-    arithmetic_2 = nil, -- each + 0 = each
-    decider_1 = nil, -- red T != green T | R 1
-    decider_2 = nil, -- R == 0 | T = T + 1
-    inserter_1 = nil, -- F > 0
+    arithmetic_1 = nil,
+    arithmetic_2 = nil,
+    inserter_1 = nil,
     inserter_1_offering = storage.invalid,
   })
   storage.index = storage.index + 1
@@ -268,6 +237,15 @@ function Handler.on_created_entity(event)
   struct.container.destructible = false
   struct.container_inventory = struct.container.get_inventory(defines.inventory.chest)
 
+  -- do
+  --   local red_out = struct.entity.get_wire_connector(defines.wire_connector_id.circuit_red, true) --[[@as LuaWireConnector]]
+  --   local red_in = struct.container.get_wire_connector(defines.wire_connector_id.circuit_red, true) --[[@as LuaWireConnector]]
+  --   assert(red_out.connect_to(red_in, false, defines.wire_origin.script))
+  --   local green_out = struct.entity.get_wire_connector(defines.wire_connector_id.circuit_green, true) --[[@as LuaWireConnector]]
+  --   local green_in = struct.container.get_wire_connector(defines.wire_connector_id.circuit_green, true) --[[@as LuaWireConnector]]
+  --   assert(green_out.connect_to(green_in, false, defines.wire_origin.script))
+  -- end
+
   if other_quality_container then
     local other_quality_container_inventory = other_quality_container.get_inventory(defines.inventory.chest)
     for slot = 1, #other_quality_container_inventory do
@@ -282,7 +260,7 @@ function Handler.on_created_entity(event)
   storage.deathrattles[script.register_on_object_destroyed(struct.container)] = {"container", struct.id}
 
   Combinators.create_for_struct(struct)
-  reset_offering_done(struct)
+  reset_offering_1(struct)
 end
 
 for _, event in ipairs({
@@ -303,13 +281,11 @@ end
 local Condense = require("scripts.condense")
 
 local deathrattles = {
-  ["offering-idle"] = function (deathrattle)
-  end,
-  ["offering-done"] = function (deathrattle)
+  ["offering-1"] = function (deathrattle)
     local struct = storage.structs[deathrattle[2]]
     if struct and struct.entity.valid then
       Condense.trigger(struct)
-      reset_offering_done(struct)
+      reset_offering_1(struct)
     end
   end,
   ["crafter"] = function (deathrattle)
@@ -322,10 +298,8 @@ local deathrattles = {
       -- struct.entity.destroy()
       struct.beacon_interface.destroy()
       struct.container.destroy()
-      if struct.proxy_container_a then struct.proxy_container_a.destroy() end
-      if struct.proxy_container_b then struct.proxy_container_b.destroy() end
-      struct.arithmetic_1.destroy()
-      struct.arithmetic_2.destroy()
+      struct.proxy_container_a.destroy()
+      struct.proxy_container_b.destroy()
       struct.decider_1.destroy()
       struct.decider_2.destroy()
       struct.inserter_1.destroy()
@@ -337,17 +311,15 @@ local deathrattles = {
     if struct then
       storage.structs[struct.id] = nil
       if struct.entity.valid then
-        spill_entity_inventory(struct.entity, defines.inventory.assembling_machine_modules)
+        spill_entity_inventory(struct.entity, defines.inventory.crafter_modules)
       end
       struct.entity.destroy()
       struct.beacon_interface.destroy()
       -- struct.container.destroy()
-      if struct.proxy_container_a then struct.proxy_container_a.destroy() end
-      if struct.proxy_container_b then struct.proxy_container_b.destroy() end
+      struct.proxy_container_a.destroy()
+      struct.proxy_container_b.destroy()
       struct.arithmetic_1.destroy()
       struct.arithmetic_2.destroy()
-      struct.decider_1.destroy()
-      struct.decider_2.destroy()
       struct.inserter_1.destroy()
       struct.inserter_1_offering.destroy()
     end

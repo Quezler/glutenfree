@@ -95,13 +95,13 @@ function Condense.trigger(struct)
   end
 
   if condensed_anything then
-    local new_item_count = struct.container_inventory.get_item_count()
-    if old_item_count == new_item_count then -- great, someone using 100% quality, what fun :|
-      local arithmetic_1_cb = struct.arithmetic_1.get_control_behavior()
-      local parameters = arithmetic_1_cb.parameters
-      parameters.second_constant = parameters.second_constant + 1
-      arithmetic_1_cb.parameters = parameters
-    end
+    -- local new_item_count = struct.container_inventory.get_item_count()
+    -- if old_item_count == new_item_count then -- great, someone using 100% quality, what fun :|
+    --   local arithmetic_1_cb = struct.arithmetic_1.get_control_behavior()
+    --   local parameters = arithmetic_1_cb.parameters
+    --   parameters.second_constant = parameters.second_constant + 1
+    --   arithmetic_1_cb.parameters = parameters
+    -- end
   else
     condensed_nothing(struct)
   end
