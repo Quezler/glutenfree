@@ -210,7 +210,7 @@ end
 
 script.on_event(defines.events.on_entity_died, function(event)
   if event.entity.name == "cargo-bay" then
-    local proxy = event.entity.surface.find_entity(platform_cargo_bay_proxy_name, event.entity.position)
+    local proxy = event.entity.surface.find_entity(event.entity.surface.platform and platform_cargo_bay_proxy_name or planet_cargo_bay_proxy_name, event.entity.position)
     if proxy then
       proxy.destroy()
     end
