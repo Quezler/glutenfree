@@ -17,7 +17,7 @@ local furnace = {
   name = config.name,
   icon = config.icon,
 
-  heating_energy = settings.startup["elevated-pipes--freezes"].value and "200kW" or nil, -- underground pipe + 50
+  heating_energy = feature_flags["freezing"] and settings.startup["elevated-pipes--freezes"].value and "200kW" or nil, -- underground pipe + 50
   energy_usage = "1kW",
   energy_source = {type = "void"},
   crafting_speed = 1,
