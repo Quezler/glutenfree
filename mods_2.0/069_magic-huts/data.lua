@@ -205,10 +205,7 @@ local recipe_category = {
 data:extend{recipe_category}
 
 for _, factory in ipairs(factories) do
-  local alt_graphics = "-alt"
-  if factory.i >= 3 or (mods["factorissimo-2-notnotmelon"] and settings.startup["Factorissimo2-alt-graphics"].value) then
-    alt_graphics = ""
-  end
+  local alt_graphics = factory.i >= 3 and "-alt" or ""
 
   local container = {
     type = "container",
