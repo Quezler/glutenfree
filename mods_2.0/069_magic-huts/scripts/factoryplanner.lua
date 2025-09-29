@@ -109,9 +109,23 @@ local function all_products_satisfied(item_boxes)
 end
 
 local entity_type_blacklisted = util.list_to_map({
+  -- sensible
   "rocket-silo",
   "mining-drill",
   "offshore-pump",
+})
+
+local entity_name_blacklisted = util.list_to_map({
+  -- these need to radiate heat
+  "se-space-radiator",
+  "se-space-radiator-2",
+
+  -- these need to look into space
+  "se-space-telescope",
+  "se-space-telescope-gammaray",
+  "se-space-telescope-microwave",
+  "se-space-telescope-radio",
+  "se-space-telescope-xray",
 })
 
 local item_spoils = {}
@@ -312,7 +326,11 @@ function Factoryplanner.on_gui_click(event)
       factory.recipes[recipe_name] = true
 
       if entity_type_blacklisted[entity_type] then
-        return player.create_local_flying_text{create_at_cursor = true, text = entity_type .. "'s are blacklisted."}
+        return player.create_local_flying_text{create_at_cursor = true, text = string.format("entity type \"%s\" is blacklisted.", entity_type)}
+      end
+
+      if entity_name_blacklisted[entity_name] then
+        return player.create_local_flying_text{create_at_cursor = true, text = string.format("entity name \"%s\" is blacklisted.", entity_name)}
       end
 
       if not entity_prototype.items_to_place_this then
