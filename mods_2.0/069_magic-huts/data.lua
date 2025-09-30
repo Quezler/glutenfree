@@ -205,7 +205,7 @@ local recipe_category = {
 data:extend{recipe_category}
 
 for _, factory in ipairs(factories) do
-  local alt_graphics = factory.i >= 3 and "-alt" or ""
+  local alt_graphics = factory.i >= 3 and "" or "-alt"
 
   local container = {
     type = "container",

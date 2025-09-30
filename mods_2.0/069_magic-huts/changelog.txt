@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.6.4
+Date: 2025. 09. 30
+  Info:
+    - Fix inverted if
+---------------------------------------------------------------------------------------------------
 Version: 1.6.3
-Date: 2025. 29. 09
+Date: 2025. 09. 29
   Info:
     - Fix crash with newer factorissimo versions
     - Blacklist SE radiators and telescopes
