@@ -53,6 +53,5 @@ data:extend{{
 sign_post.circuit_connector = nil
 sign_post.circuit_wire_max_distance = 0
 
-sign_post.fast_replaceable_group = "display-panel"
-assert(display_panel.fast_replaceable_group == nil) -- hi fellow modder, do reach out if this is inconvenient for you!
-display_panel.fast_replaceable_group = "display-panel"
+display_panel.fast_replaceable_group = display_panel.fast_replaceable_group or "display-panel"
+sign_post.fast_replaceable_group = display_panel.fast_replaceable_group
