@@ -344,10 +344,10 @@ function Factoryplanner.on_gui_click(event)
         quality = cell_machine.children[1].quality.name,
       })
 
-      -- modules
-      for i = 2, #cell_machine.children do
-        local module_button = cell_machine.children[i]
-        if module_button.sprite ~= "utility/add" then
+      -- machine modules
+      local machine_module_buttons = cell_machine.children[2]
+      if machine_module_buttons then
+        for _, module_button in ipairs(machine_module_buttons.children) do
           local module_type, module_name = split_class_and_name(module_button.sprite)
           add_to_contents(factory.modules, {
             type = "item",
@@ -384,15 +384,18 @@ function Factoryplanner.on_gui_click(event)
           quality = beacon_button.quality.name,
         })
 
-        for i = 2, #cell_beacons.children do
-          local module_button = cell_beacons.children[i]
-          local module_type, module_name = split_class_and_name(module_button.sprite)
-          add_to_contents(factory.modules, {
-            type = "item",
-            name = module_name,
-            count = module_button.number * x_of_this_beacon,
-            quality = module_button.quality.name,
-          })
+        -- beacon modules
+        local beacon_module_buttons = cell_beacons.children[2]
+        if beacon_module_buttons then
+          for _, module_button in ipairs(beacon_module_buttons.children) do
+            local module_type, module_name = split_class_and_name(module_button.sprite)
+            add_to_contents(factory.modules, {
+              type = "item",
+              name = module_name,
+              count = module_button.number * x_of_this_beacon,
+              quality = module_button.quality.name,
+            })
+          end
         end
       end
 
