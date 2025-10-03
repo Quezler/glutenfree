@@ -2,12 +2,12 @@ require("shared")
 
 local proxy_tint = {0.8, 0.1, 0.3}
 
-local platform_cargo_bay = {
+local planet_cargo_bay = {
   type = "proxy-container",
-  name = mod_prefix .. "platform-cargo-bay-proxy",
+  name = mod_prefix .. "planet-cargo-bay-proxy",
 
   icons = {
-    {icon = "__space-age__/graphics/icons/space-platform-hub.png", tint = proxy_tint}
+    {icon = "__base__/graphics/icons/cargo-landing-pad.png", tint = proxy_tint}
   },
 
   -- matches the boxes of the cargo bay
@@ -22,9 +22,12 @@ local platform_cargo_bay = {
   selection_priority = 49,
   hidden = true,
 }
+data:extend{planet_cargo_bay}
 
-local planet_cargo_bay = table.deepcopy(platform_cargo_bay)
-planet_cargo_bay.name = mod_prefix .. "planet-cargo-bay-proxy"
-planet_cargo_bay.icons[1].icon = "__base__/graphics/icons/cargo-landing-pad.png"
+if mods["space-age"] then
+  local platform_cargo_bay = table.deepcopy(planet_cargo_bay)
+  platform_cargo_bay.name = mod_prefix .. "platform-cargo-bay-proxy"
+  platform_cargo_bay.icons[1].icon = "__space-age__/graphics/icons/space-platform-hub.png"
 
-data:extend{platform_cargo_bay, planet_cargo_bay}
+  data:extend{platform_cargo_bay}
+end
