@@ -126,6 +126,9 @@ local entity_name_blacklisted = util.list_to_map({
   "se-space-telescope-microwave",
   "se-space-telescope-radio",
   "se-space-telescope-xray",
+
+  -- these need fresh air
+  "kr-atmospheric-condenser",
 })
 
 local item_spoils = {}
