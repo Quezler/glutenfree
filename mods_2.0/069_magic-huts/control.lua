@@ -218,7 +218,9 @@ script.on_event(defines.events.on_object_destroyed, function(event)
   end
 end)
 
-local function fh_add_items_drop_target_entity(target, items)
+local function fh_add_items_drop_target_entity(target)
+  local items = {}
+
   local building = storage.buildings[target.unit_number]
   local factory = storage.factories[building.factory_index]
 
@@ -235,7 +237,9 @@ local function fh_add_items_drop_target_entity(target, items)
   return items
 end
 
-local function fh_add_items_pickup_target_entity(target, items)
+local function fh_add_items_pickup_target_entity(target)
+  local items = {}
+
   local building = storage.buildings[target.unit_number]
   local factory = storage.factories[building.factory_index]
 
