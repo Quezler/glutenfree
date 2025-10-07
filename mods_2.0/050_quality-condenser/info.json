@@ -3,7 +3,7 @@
     "title": "Quality condenser",
     "description": "A recycler that returns the items themselves but a quality higher, success depends on quality modules.",
 
-    "version": "2.0.0",
+    "version": "2.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
 

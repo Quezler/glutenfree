@@ -79,6 +79,7 @@ local crafter_entity = {
   quality_indicator_shift = {-1, 1},
 
   flags = {"player-creation", "no-automated-item-insertion", "no-automated-item-removal"},
+  se_allow_in_space = true,
 }
 
 local crafter_item = {
