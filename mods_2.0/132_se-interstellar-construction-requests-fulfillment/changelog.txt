@@ -12,6 +12,7 @@ Date: ????
     - Add initial proxy tracking
     - Stash only caring about the item name and never the count
     - Begin converting back to item delivery instead of construction
+    - Pondering
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
 Date: 2025. 08. 22

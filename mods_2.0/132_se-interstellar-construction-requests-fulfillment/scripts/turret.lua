@@ -56,12 +56,13 @@ return function(mod)
       -- or checking each of the requested items one by one, we know that the network has some available.
       for _, item in pairs(turret.inventory.get_contents()) do
         local available = logistic_network.get_item_count({name = item.name, quality = item.quality})
-        local ghosts = storage.item_to_entities_map[item.name] or {}
+        local item_name_comma_quality_name = item.name .. "," .. item.quality
+        local ghosts = storage.item_to_entities_map[item_name_comma_quality_name] or {}
 
         for unit_number, _ in pairs(ghosts) do
           local ghost = storage.all_ghosts[unit_number]
           if ghost and ghost.entity.valid then
-            local wants = ghost.item_name_map[item.name]
+            local wants = ghost.item_name_map[item_name_comma_quality_name]
             wants = 1 -- todo: reintroduce number?
             if available >= wants then
               local removed = logistic_network.remove_item({name = item.name, count = wants, quality = item.quality})

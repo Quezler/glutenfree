@@ -54,8 +54,6 @@ local character = {
   running_speed = 1,
   distance_per_frame = 1,
   maximum_corner_sliding_distance = 1,
-  heartbeat = { filename = "__base__/sound/heartbeat.ogg" },
-  eat = { filename = "__base__/sound/eat-5.ogg", volume = 1 },
   inventory_size = 10,
   build_distance = 1,
   drop_item_distance = 1,

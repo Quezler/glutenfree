@@ -8,11 +8,9 @@
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "base >= 2.0.61",
+        "base >= 2.0.66",
 
         "space-exploration",
-        "space-exploration-scripts >= 2.5.0",
-
-        "! quality"
+        "space-exploration-scripts >= 2.5.0"
     ]
 }

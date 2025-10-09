@@ -139,7 +139,8 @@ function mod.process_new()
     if ghost.entity.valid then
       local items_to_place_this = ghost.entity.ghost_prototype.items_to_place_this
       if items_to_place_this then
-        mod.insert_into_item_to_entities_map(items_to_place_this[1].name, ghost)
+        local item_name = items_to_place_this[1].name .. "," .. ghost.entity.quality.name
+        mod.insert_into_item_to_entities_map(item_name, ghost)
       end
     end
   end
@@ -156,7 +157,7 @@ function mod.process_proxies()
       local old_item_name_map = proxy.item_name_map
       proxy.item_name_map = {}
       for _, blueprint_insert_plan in ipairs(proxy.entity.insert_plan) do
-        local item_name = blueprint_insert_plan.id.name -- why not name.name?
+        local item_name = blueprint_insert_plan.id.name .. "," .. (blueprint_insert_plan.id.quality or "normal") -- why not name.name?
 
         old_item_name_map[item_name] = nil
         mod.insert_into_item_to_entities_map(item_name, proxy)
@@ -195,9 +196,10 @@ function mod.update_logistic_section()
   local section = logistic_group.members[1]
   if section then
     local filters = {}
-    for item_name, _ in pairs(storage.item_to_entities_map) do
+    for item_name_comma_quality_name, _ in pairs(storage.item_to_entities_map) do
+      local item_name, quality_name = string.match(item_name_comma_quality_name, "([^,]+),([^,]+)")
       table.insert(filters, {
-        value = {type = "item", name = item_name, quality = "normal"},
+        value = {type = "item", name = item_name, quality = quality_name},
         min = 1,
       })
     end
@@ -213,7 +215,7 @@ script.on_event(defines.events.on_tick, function(event)
 end)
 
 script.on_nth_tick(60, function()
-  -- log(serpent.line(storage.item_to_entities_map))
+  log(serpent.line(storage.item_to_entities_map))
   Turret.reset_guis()
   Turret.tick_turrets()
 end)
