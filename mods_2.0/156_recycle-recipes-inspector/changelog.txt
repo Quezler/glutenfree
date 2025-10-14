@@ -1,11 +1,12 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
-Date: ????
+Date: 2025. 10. 14
   Info:
     - Fix product probability not being considered
     - Clicking the buttons opens factoriopedia
     - Hidden items are grey
     - Stash the eldritch lua reflection abomination
+    - Add thumbnail
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 10. 14
