@@ -65,7 +65,8 @@ local function open_gui(player)
           type = "sprite-button",
           sprite = "item/" .. product.name,
           tooltip = string.format("%s (%s)", product.name, product.type),
-          number = product.amount + (product.extra_count_fraction or 0)
+          number = (product.amount + (product.extra_count_fraction or 0)) * product.probability,
+          show_percent_for_small_numbers = true,
         }
       end
     end
