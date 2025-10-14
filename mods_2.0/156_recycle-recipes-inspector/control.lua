@@ -1,5 +1,15 @@
 require("shared")
 
+local mod_data = prototypes.mod_data[mod_prefix .. "recycling-recipe-name-to-original-recipe-name"].data
+
+local function recipe_has_item_ingredient(recipe, ingredient_name)
+  for _, ingredient in ipairs(recipe.ingredients) do
+    if ingredient.type == "item" and ingredient.name == ingredient_name then
+      return ingredient
+    end
+  end
+end
+
 local gui_frame_name = mod_prefix .. "frame"
 
 local function open_gui(player)
@@ -43,7 +53,7 @@ local function open_gui(player)
       type = "sprite-button",
       sprite = "item/" .. item.name,
       tooltip = string.format("%s (%s)", item.name, item.type),
-      tags = {action = mod_prefix .. "open-factoriopedia", type = item.type, name = item.name},
+      tags = {action = mod_prefix .. "open-factoriopedia", type = "item", name = item.name},
     }
 
     if item.hidden or item.parameter then
@@ -65,21 +75,48 @@ local function open_gui(player)
         tags = {action = mod_prefix .. "open-factoriopedia", type = recycling.type, name = recycling.name},
       }
       ingredient.number = recycling.energy
+      local source_recipe = mod_data[recycling.name] and prototypes.recipe[mod_data[recycling.name]] -- was it based on another recipe? (not self recycling)
+      local seen_products = {}
       for _, product in ipairs(recycling.products) do
+        seen_products[product.name] = true
         local product_button = flow.add{
           type = "sprite-button",
           sprite = "item/" .. product.name,
           tooltip = string.format("%s (%s)", product.name, product.type),
           number = (product.amount + (product.extra_count_fraction or 0)) * product.probability,
           show_percent_for_small_numbers = true,
-          tags = {action = mod_prefix .. "open-factoriopedia", type = product.type, name = product.name},
+          tags = {action = mod_prefix .. "open-factoriopedia", type = "item", name = product.name},
         }
 
-        local product_prototype = prototypes.item[product.name]
-        if product_prototype.hidden or product_prototype.parameter then
-          product_button.style = "flib_slot_button_grey"
+        if source_recipe then
+          local ingredient_in_source_recipe = recipe_has_item_ingredient(source_recipe, product.name)
+          if ingredient_in_source_recipe then
+            -- if ingredient_in_source_recipe.amount / 4 ~= product_button.number then
+            --   product_button.style = "flib_slot_button_yellow"
+            -- else
+            --   product_button.style = "flib_slot_button_green"
+            -- end
+            product_button.style = "flib_slot_button_green"
+          else
+            product_button.style = "flib_slot_button_red"
+          end
         end
       end
+
+      if source_recipe then
+        for _, ingredient in ipairs(source_recipe.ingredients) do
+          if seen_products[ingredient.name] == nil and ingredient.type == "item" then
+            flow.add{
+              type = "sprite-button",
+              sprite = "item/" .. ingredient.name,
+              tooltip = string.format("%s (%s)", ingredient.name, ingredient.type),
+              tags = {action = mod_prefix .. "open-factoriopedia", type = "recipe", name = source_recipe.name},
+              style = "flib_slot_button_orange",
+            }
+          end
+        end
+      end
+
     end
   end
 
