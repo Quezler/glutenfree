@@ -44,11 +44,7 @@ local function open_gui(player)
       sprite = "item/" .. item.name,
       tooltip = string.format("%s (%s)", item.name, item.type),
       enabled = not (item.hidden or item.parameter),
-    }
-    flow.add{
-      type = "sprite-button",
-      sprite = "virtual-signal/right-arrow",
-      tooltip = "recycles into",
+      tags = {action = mod_prefix .. "open-factoriopedia", type = item.type, name = item.name},
     }
 
     local recycling = prototypes.recipe[item.name .. "-recycling"]
@@ -59,6 +55,12 @@ local function open_gui(player)
         tooltip = "cannot be recycled",
       }
     else
+      local arrow_button = flow.add{
+        type = "sprite-button",
+        sprite = "virtual-signal/right-arrow",
+        tooltip = "recycles into",
+        tags = {action = mod_prefix .. "open-factoriopedia", type = recycling.type, name = recycling.name},
+      }
       ingredient.number = recycling.energy
       for _, product in ipairs(recycling.products) do
         flow.add{
@@ -67,6 +69,7 @@ local function open_gui(player)
           tooltip = string.format("%s (%s)", product.name, product.type),
           number = (product.amount + (product.extra_count_fraction or 0)) * product.probability,
           show_percent_for_small_numbers = true,
+          tags = {action = mod_prefix .. "open-factoriopedia", type = product.type, name = product.name},
         }
       end
     end
@@ -84,5 +87,13 @@ end)
 script.on_event(defines.events.on_gui_closed, function(event)
   if event.element and event.element.name == gui_frame_name then
     event.element.destroy()
+  end
+end)
+
+script.on_event(defines.events.on_gui_click, function(event)
+  local tags = event.element.tags
+  if tags and tags["action"] == mod_prefix .. "open-factoriopedia" then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    player.open_factoriopedia_gui(prototypes[tags.type][tags.name])
   end
 end)

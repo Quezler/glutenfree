@@ -3,6 +3,7 @@ Version: 1.0.1
 Date: ????
   Info:
     - Fix product probability not being considered
+    - Clicking the buttons opens factoriopedia
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 10. 14
