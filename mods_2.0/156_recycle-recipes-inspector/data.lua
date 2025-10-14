@@ -69,9 +69,9 @@ do
 
       setmetatable(recipe_prototype, {
         __index = function(t, k)
-          if k == "subgroup" then
+          if k == "result" then
             recipe_being_recycled = recipe_name -- allegedly
-            -- log("accessed subgroup for " .. recipe_name)
+            -- log("accessed result for " .. recipe_name)
           end
           return rawget(t, k)
         end,
