@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Fix product probability not being considered
     - Clicking the buttons opens factoriopedia
+    - Hidden items are grey
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2025. 10. 14

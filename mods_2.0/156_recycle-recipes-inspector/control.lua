@@ -43,9 +43,12 @@ local function open_gui(player)
       type = "sprite-button",
       sprite = "item/" .. item.name,
       tooltip = string.format("%s (%s)", item.name, item.type),
-      enabled = not (item.hidden or item.parameter),
       tags = {action = mod_prefix .. "open-factoriopedia", type = item.type, name = item.name},
     }
+
+    if item.hidden or item.parameter then
+      ingredient.style = "flib_slot_button_grey"
+    end
 
     local recycling = prototypes.recipe[item.name .. "-recycling"]
     if not recycling then
@@ -63,7 +66,7 @@ local function open_gui(player)
       }
       ingredient.number = recycling.energy
       for _, product in ipairs(recycling.products) do
-        flow.add{
+        local product_button = flow.add{
           type = "sprite-button",
           sprite = "item/" .. product.name,
           tooltip = string.format("%s (%s)", product.name, product.type),
@@ -71,6 +74,11 @@ local function open_gui(player)
           show_percent_for_small_numbers = true,
           tags = {action = mod_prefix .. "open-factoriopedia", type = product.type, name = product.name},
         }
+
+        local product_prototype = prototypes.item[product.name]
+        if product_prototype.hidden or product_prototype.parameter then
+          product_button.style = "flib_slot_button_grey"
+        end
       end
     end
   end
