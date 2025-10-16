@@ -21,6 +21,7 @@
         "base >= 2.0.29",
         "space-age >= 2.0.29",
 
-        "(?) platforms-do-not-request-full-stacks-of-buildings"
+        "(?) platforms-do-not-request-full-stacks-of-buildings",
+        "(?) Planet-Hopper"
     ]
 }

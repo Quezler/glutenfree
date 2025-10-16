@@ -54,8 +54,8 @@ end)
 script.on_event(defines.events.on_script_trigger_effect, function(event)
   if event.effect_id ~= "cargo-pod-created" then return end
   local entity = event.target_entity --[[@as LuaEntity]]
-  assert(entity.name == "cargo-pod")
-  assert(entity.type == "cargo-pod")
+  assert(entity.name == "cargo-pod", entity.name)
+  assert(entity.type == "cargo-pod", entity.type)
 
   if storage.uninstalled then return end
 
