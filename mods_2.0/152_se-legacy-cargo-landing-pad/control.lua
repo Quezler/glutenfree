@@ -93,15 +93,17 @@ script.on_event(defines.events.on_gui_opened, function(event)
       local root = player.gui.relative["se-rocket-landing-pad-gui-proxy"]
       root.name = "se-rocket-landing-pad-gui"
     else
+      if not player.can_reach_entity(struct.cargo_landing_pad) then
+        player.play_sound({path = "utility/cannot_build"})
+        player.create_local_flying_text{position = struct.entity.position, text = "Cannot reach (move 1 tile closer)"}
+        player.opened = nil
+        return
+      end
       player.opened = struct.cargo_landing_pad
       local root = player.gui.relative["se-rocket-landing-pad-gui"]
-      if root then
-        root.name = "se-rocket-landing-pad-gui-proxy"
-        root.anchor = {gui=defines.relative_gui_type.proxy_container_gui, position=defines.relative_gui_position.left}
-        player.opened = entity
-      else
-        player.opened = nil -- the real landing pad is inside this entity and is smaller, it is just out of reach, move closer.
-      end
+      root.name = "se-rocket-landing-pad-gui-proxy"
+      root.anchor = {gui=defines.relative_gui_type.proxy_container_gui, position=defines.relative_gui_position.left}
+      player.opened = entity
     end
 
   end
