@@ -31,6 +31,10 @@ if mods["space-exploration"] then
   entity.se_allow_productivity_in_space = true
 end
 
+if mods["Voidcraft"] then
+  entity.vc_ignore = true
+end
+
 local item = table.deepcopy(data.raw["item"]["beacon"])
 item.name = mod_prefix .. "beacon"
 item.icon = nil
