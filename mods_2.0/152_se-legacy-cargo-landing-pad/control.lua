@@ -95,9 +95,13 @@ script.on_event(defines.events.on_gui_opened, function(event)
     else
       player.opened = struct.cargo_landing_pad
       local root = player.gui.relative["se-rocket-landing-pad-gui"]
-      root.name = "se-rocket-landing-pad-gui-proxy"
-      root.anchor = {gui=defines.relative_gui_type.proxy_container_gui, position=defines.relative_gui_position.left}
-      player.opened = entity
+      if root then
+        root.name = "se-rocket-landing-pad-gui-proxy"
+        root.anchor = {gui=defines.relative_gui_type.proxy_container_gui, position=defines.relative_gui_position.left}
+        player.opened = entity
+      else
+        player.opened = nil -- the real landing pad is inside this entity and is smaller, it is just out of reach, move closer.
+      end
     end
 
   end
