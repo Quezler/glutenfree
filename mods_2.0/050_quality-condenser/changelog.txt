@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2025. 10. 17
+  Info:
+    - Disable logging (until i migrate to script-output)
+  Compatibility:
+    - Fixed it not working on Space Exploration 0.7.25's space surfaces
+---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2025. 10. 07
   Info:

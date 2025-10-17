@@ -67,7 +67,7 @@ function Condense.trigger(struct)
           integer = integer + 1
         end
 
-        log(string.format("%d x %s (%s) x %d%% = %d (%d + %f)", item.count, item.name, item.quality, quality_points / 10, integer, number, decimal))
+        -- log(string.format("%d x %s (%s) x %d%% = %d (%d + %f)", item.count, item.name, item.quality, quality_points / 10, integer, number, decimal))
 
         local to_insert = {name = item.name, count = integer, quality = next_quality_name}
         if item_can_spoil[item.name] then
