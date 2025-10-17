@@ -9,13 +9,17 @@ script.on_init(function()
 
   storage.deathrattles = {}
 
-  for _, surface in pairs(game.surfaces) do
-    for _, core_miner in ipairs(surface.find_entities_filtered{name = "se-core-miner-drill"}) do
-      mod.on_created_entity({entity = core_miner, multiplier_override = 1})
-    end
-  end
-
   mod.register_events()
+
+  -- in on_init the beacon-interface mod is not listening for build events yet.
+  script.on_event(defines.events.on_tick, function(event)
+    for _, surface in pairs(game.surfaces) do
+      for _, core_miner in ipairs(surface.find_entities_filtered{name = "se-core-miner-drill"}) do
+        mod.on_created_entity({entity = core_miner, multiplier_override = 1})
+      end
+    end
+    script.on_event(defines.events.on_tick, nil)
+  end)
 end)
 
 script.on_configuration_changed(function()
