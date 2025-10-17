@@ -28,6 +28,7 @@ entity.hidden = true
 
 if mods["space-exploration"] then
   entity.se_allow_in_space = true
+  entity.se_allow_productivity_in_space = true
 end
 
 local item = table.deepcopy(data.raw["item"]["beacon"])
