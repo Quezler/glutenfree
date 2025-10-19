@@ -45,7 +45,8 @@ local proxy_container = {
         }
     }
   },
-  circuit_wire_max_distance = 12.5
+  circuit_wire_max_distance = 12.5,
+  icon_draw_specification = {shift = {0, -1.2}, scale = 2, scale_for_many = 2},
 }
 
 landing_pad_entity.collision_mask = {layers = {}}
