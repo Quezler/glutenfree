@@ -85,7 +85,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
       if struct.cargo_landing_pad.valid then
         struct.cargo_landing_pad.surface.spill_inventory{
           position = struct.cargo_landing_pad.position,
-          inventory = struct.cargo_landing_pad.get_inventory(defines.inventory.cargo_landing_pad_trash),
+          inventory = struct.cargo_landing_pad.get_inventory(defines.inventory.cargo_landing_pad_main),
           force = struct.cargo_landing_pad.force,
           allow_belts = false,
           drop_full_stack = true,

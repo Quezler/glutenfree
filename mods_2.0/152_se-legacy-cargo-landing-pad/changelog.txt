@@ -1,9 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
-Date: ????
+Date: 2025. 10. 19
   Info:
     - Show contents in alt-mode
     - Add se-rocket-landing-pad-label compatibility
+    - Fix trying to spill the wrong inventory when mined
   Compatibility:
     - Capsules from Space Exploration 0.7.35 land in the center of the pad.
 ---------------------------------------------------------------------------------------------------
