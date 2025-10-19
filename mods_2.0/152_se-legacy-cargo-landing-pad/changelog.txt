@@ -3,6 +3,7 @@ Version: 1.0.2
 Date: ????
   Info:
     - Show contents in alt-mode
+    - Add se-rocket-landing-pad-label compatibility
   Compatibility:
     - Capsules from Space Exploration 0.7.35 land in the center of the pad.
 ---------------------------------------------------------------------------------------------------

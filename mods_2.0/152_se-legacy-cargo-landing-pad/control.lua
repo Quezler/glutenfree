@@ -46,6 +46,20 @@ mod.on_created_entity = function(event)
   end
   struct.cargo_landing_pad.destructible = false
 
+  if script.active_mods["se-rocket-landing-pad-label"] then
+    for _, text in ipairs(rendering.get_all_objects("se-rocket-landing-pad-label")) do
+      if text.target.entity == struct.cargo_landing_pad then
+        text.target = {
+          entity = struct.cargo_landing_pad,
+          offset = {
+            x = entity.position.x - struct.cargo_landing_pad.position.x,
+            y = entity.position.y - struct.cargo_landing_pad.position.y + 1.35,
+          }
+        }
+      end
+    end
+  end
+
   entity.proxy_target_entity = struct.cargo_landing_pad
   entity.proxy_target_inventory = defines.inventory.chest
 
