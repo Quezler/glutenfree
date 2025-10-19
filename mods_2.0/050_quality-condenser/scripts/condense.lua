@@ -76,9 +76,13 @@ function Condense.trigger(struct)
 
         assert(struct.container_inventory.remove(item) == item.count) -- all items are consumed, this way there is always space.
 
-        struct.container_inventory.sort_and_merge()
         local inserted = struct.container_inventory.insert(to_insert)
-        assert(inserted == to_insert.count, string.format("inserted only %d of %d %s (%s)", inserted, to_insert.count, item.name, item.quality))
+        if inserted ~= to_insert.count then
+          struct.container_inventory.sort_and_merge()
+          to_insert.count = to_insert.count - inserted
+          inserted = struct.container_inventory.insert(to_insert)
+          assert(inserted == to_insert.count, string.format("inserted only %d of %d %s (%s)", inserted, to_insert.count, item.name, item.quality))
+        end
 
         condensed_anything = true
       end
@@ -88,6 +92,8 @@ function Condense.trigger(struct)
 
   if not condensed_anything then
     condensed_nothing(struct)
+  else
+    struct.container_inventory.sort_and_merge()
   end
 end
 
