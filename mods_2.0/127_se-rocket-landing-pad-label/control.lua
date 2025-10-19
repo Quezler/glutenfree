@@ -12,13 +12,27 @@ function try_open_gui_with_someone(entity)
   end
 end
 
-script.on_init(function ()
+script.on_init(function()
   storage.structs = {}
   storage.deathrattles = {}
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered({name = "cargo-landing-pad"})) do
       mod.on_created_entity({entity = entity})
+    end
+  end
+end)
+
+script.on_configuration_changed(function(event)
+  -- uninstall handler for said mod to adjust the offsets back
+  if event.mod_changes["se-legacy-cargo-landing-pad"] and event.mod_changes["se-legacy-cargo-landing-pad"].new_version == nil then
+    for _, struct in pairs(storage.structs) do
+      if struct.text.valid then
+        struct.text.target = {
+          entity = struct.text.target.entity,
+          offset = {0, 2.25},
+        }
+      end
     end
   end
 end)
