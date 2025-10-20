@@ -2,13 +2,13 @@
     "name": "se-module-icons-have-their-tier-number-the-corner",
     "title": "Space Exploration - module icons have their tier number the corner",
     "description": "It can be hard to distinguish every non-3rd module from their neighbour.",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "space-exploration >= 0.7.33",
+        "space-exploration",
         "space-exploration-graphics"
     ]
 }
