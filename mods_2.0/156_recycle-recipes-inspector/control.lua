@@ -42,12 +42,16 @@ local function open_gui(player)
   scroll_pane.style.maximal_width = frame.style.minimal_width - (8 * 3) - 12
   scroll_pane.style.minimal_height = frame.style.maximal_height - 80
 
+  local lines = {}
+
   for _, item in pairs(prototypes.item) do
     local flow = scroll_pane.add{
       type = "flow",
       name = item.name,
       style = "horizontal_flow",
     }
+
+    local line = {}
 
     local ingredient = flow.add{
       type = "sprite-button",
@@ -67,6 +71,7 @@ local function open_gui(player)
         sprite = "virtual-signal/signal-no-entry",
         tooltip = "cannot be recycled",
       }
+      table.insert(line, "!")
     else
       local arrow_button = flow.add{
         type = "sprite-button",
@@ -79,11 +84,13 @@ local function open_gui(player)
       local seen_products = {}
       for _, product in ipairs(recycling.products) do
         seen_products[product.name] = true
+        local number = (product.amount + (product.extra_count_fraction or 0)) * product.probability
+        table.insert(line, string.format("%g × %s", number, product.name))
         local product_button = flow.add{
           type = "sprite-button",
           sprite = "item/" .. product.name,
           tooltip = string.format("%s (%s)", product.name, product.type),
-          number = (product.amount + (product.extra_count_fraction or 0)) * product.probability,
+          number = number,
           show_percent_for_small_numbers = true,
           tags = {action = mod_prefix .. "open-factoriopedia", type = "item", name = product.name},
         }
@@ -118,7 +125,11 @@ local function open_gui(player)
       end
 
     end
+
+    table.insert(lines, item.name .. " -> " .. table.concat(line, ", "))
   end
+
+  helpers.write_file("recycle-recipes-inspector.txt", table.concat(lines, "\n"), false, player.index)
 
   player.opened = frame
   frame.force_auto_center()
