@@ -108,7 +108,7 @@ local function open_gui(player)
           type = "sprite-button",
           sprite = "entity/" .. entity.name,
           tooltip = string.format("%s (%s)", entity.name, entity.type),
-          tags = {action = mod_prefix .. "open-factoriopedia", type = entity.type, name = entity.name},
+          tags = {action = mod_prefix .. "open-factoriopedia", type = "entity", name = entity.name},
         }
 
         if entity.hidden then
