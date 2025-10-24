@@ -1,0 +1,26 @@
+{
+    "name": "quality-recipes-inspector",
+    "title": "Quality recipes inspector",
+    "description": "Adds a scrollable gui with all recipes and machines that can craft them.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "? base",
+        "? quality",
+
+        "flib"
+    ]
+}
