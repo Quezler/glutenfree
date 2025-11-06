@@ -34,7 +34,9 @@ mod.register_events = function()
   script.on_event(remote.call("se-core-miner-efficiency-updated-event", "on_efficiency_updated"), function(event)
     local surfacedata = storage.surfacedata[event.surface_index]
     for _, struct in pairs(surfacedata.structs) do
-      mod.update_amount(surfacedata, struct)
+      if struct.entity.valid then
+        mod.update_amount(surfacedata, struct)
+      end
     end
 
     local zone = remote.call("space-exploration", "get_zone_from_zone_index", {zone_index = event.zone_index})
