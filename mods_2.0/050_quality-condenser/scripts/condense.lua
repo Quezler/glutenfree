@@ -45,6 +45,8 @@ local function condensed_nothing(struct)
   reset_offering_1(struct)
 end
 
+helpers.write_file("quality-condenser.log", "", false, nil)
+
 function Condense.trigger(struct)
   local quality_effect = (struct.entity.effects["quality"] or 0) * 1000
   if 0 >= quality_effect then return condensed_nothing(struct) end
@@ -67,7 +69,7 @@ function Condense.trigger(struct)
           integer = integer + 1
         end
 
-        -- log(string.format("%d x %s (%s) x %d%% = %d (%d + %f)", item.count, item.name, item.quality, quality_points / 10, integer, number, decimal))
+        helpers.write_file("quality-condenser.log", string.format("%d x %s (%s) x %d%% = %d (%d + %f)\n", item.count, item.name, item.quality, quality_points / 10, integer, number, decimal), true, nil)
 
         local to_insert = {name = item.name, count = integer, quality = next_quality_name}
         if item_can_spoil[item.name] then
