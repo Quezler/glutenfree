@@ -1,0 +1,18 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025. 11. 21
+  Info:
+    - Ported to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+  Info:
+    - Place and remove a laptop when either gets built
+    - Reuse same registration function for both entities
+    - Connect red & green circuit wires
+    - Replace any laptops with newer laptops during init
+    - Anchor each of the copper cables to another surface
+    - Give the laptop visible to the naked eye a name
+    - Cleanup of commented out code
+    - Update readme
+    - Correct readme spelling
+    - Renamed the mod
