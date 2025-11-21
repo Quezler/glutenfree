@@ -31,5 +31,6 @@ laptop.maximum_wire_distance = 0
 
 laptop.selection_priority = 51
 laptop.auto_connect_up_to_n_wires = 0
+laptop.hidden = true
 
 data:extend({laptop})
