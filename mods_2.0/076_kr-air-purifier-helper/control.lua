@@ -64,8 +64,8 @@ function mod.on_created_entity(event)
     proxy_container = nil,
     assembling_machine = nil,
 
-    furnace_source_stack = entity.get_inventory(defines.inventory.furnace_source)[1],
-    furnace_result_stack = entity.get_inventory(defines.inventory.furnace_result)[1],
+    furnace_source_stack = entity.get_inventory(defines.inventory.crafter_input)[1],
+    furnace_result_stack = entity.get_inventory(defines.inventory.crafter_output)[1],
 
     assembling_machine_input_stack  = nil,
     assembling_machine_output_stack = nil,
@@ -81,7 +81,7 @@ function mod.on_created_entity(event)
     position = {1.5 + struct.x_offset, -0.5},
   }
   struct.proxy_container.proxy_target_entity = struct.entity
-  struct.proxy_container.proxy_target_inventory = defines.inventory.furnace_source
+  struct.proxy_container.proxy_target_inventory = defines.inventory.crafter_input
 
   struct.assembling_machine = storage.surface.create_entity{
     name = "assembling-machine-1",
@@ -89,8 +89,8 @@ function mod.on_created_entity(event)
     position = {1.5 + struct.x_offset, -2.5},
   }
   struct.assembling_machine.set_recipe("wooden-chest")
-  struct.assembling_machine_input_stack  = struct.assembling_machine.get_inventory(defines.inventory.assembling_machine_input)[1]
-  struct.assembling_machine_output_stack = struct.assembling_machine.get_inventory(defines.inventory.assembling_machine_output)[1]
+  struct.assembling_machine_input_stack  = struct.assembling_machine.get_inventory(defines.inventory.crafter_input)[1]
+  struct.assembling_machine_output_stack = struct.assembling_machine.get_inventory(defines.inventory.crafter_output)[1]
 
   local red_out  =  struct.proxy_container.get_wire_connector(defines.wire_connector_id.circuit_red, true)
   local red_in = struct.assembling_machine.get_wire_connector(defines.wire_connector_id.circuit_red, true)
@@ -115,7 +115,7 @@ local function new_insert_plan()
   return {
     id = {name = pollution_filter_item},
     items = {in_inventory = {
-      {inventory = defines.inventory.furnace_source, stack = 0, count = 1},
+      {inventory = defines.inventory.crafter_input, stack = 0, count = 1},
     }}
   }
 end
@@ -186,7 +186,7 @@ function mod.try_to_take_out_used_filters(struct)
   else
     local removal_plan = {
       {id = {name = "kr-used-pollution-filter"}, items = {in_inventory = {
-        {inventory = defines.inventory.furnace_result, stack = 0, count = struct.furnace_result_stack.count}
+        {inventory = defines.inventory.crafter_output, stack = 0, count = struct.furnace_result_stack.count}
       }}}
     }
     local proxy = entity.item_request_proxy

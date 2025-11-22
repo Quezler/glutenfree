@@ -17,5 +17,5 @@ assert(data.raw["item"]["pollution-filter"] or data.raw["item"]["kr-pollution-fi
 -- data.raw["furnace"]["kr-air-purifier"].crafting_speed = 100
 data.raw["furnace"]["kr-air-purifier"].icons_positioning =
 {
-  {inventory_index = defines.inventory.furnace_source, scale = 0.75, shift = {0, -1.5}},
+  {inventory_index = defines.inventory.crafter_input, scale = 0.75, shift = {0, -1.5}},
 }
