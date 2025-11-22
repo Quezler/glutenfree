@@ -4,9 +4,4 @@ equipment_train_stop.ingredients = {
   {type = "item", name = "steel-chest", amount = 1},
 }
 
-table.insert(data.raw["technology"]["automated-rail-transportation"].effects, {
-  type = "unlock-recipe",
-  recipe = "glutenfree-equipment-train-stop-station",
-})
-
 data:extend({equipment_train_stop})
