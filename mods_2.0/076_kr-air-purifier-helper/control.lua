@@ -9,8 +9,11 @@ assert( prototypes.recipe["wooden-chest"].ingredients[1].name == "wood")
 assert( prototypes.recipe["wooden-chest"].ingredients[1].amount == 2)
 
 local pollution_filter_item = "kr-pollution-filter"
-if not prototypes.item["kr-pollution-filter"] then
+local used_pollution_filter_item = "kr-used-pollution-filter"
+
+if not prototypes.item["kr-pollution-filter"] then -- forked mod (still) does not use the right prefix
   pollution_filter_item = "pollution-filter"
+  used_pollution_filter_item = "used-pollution-filter"
 end
 
 function new_struct(table, struct)
@@ -185,7 +188,7 @@ function mod.try_to_take_out_used_filters(struct)
     struct.furnace_result_stack.swap_stack(cargo[1])
   else
     local removal_plan = {
-      {id = {name = "kr-used-pollution-filter"}, items = {in_inventory = {
+      {id = {name = used_pollution_filter_item}, items = {in_inventory = {
         {inventory = defines.inventory.crafter_output, stack = 0, count = struct.furnace_result_stack.count}
       }}}
     }
