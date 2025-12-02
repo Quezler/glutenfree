@@ -5,7 +5,7 @@ script.on_init(function()
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered({name = {"aai-signal-sender", "aai-signal-receiver"}})) do
-      on_created_entity({entity = entity})
+      mod.on_created_entity({entity = entity})
     end
   end
 end)

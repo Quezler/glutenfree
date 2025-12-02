@@ -2,7 +2,7 @@
     "name": "aai-signal-transmission-luarendered-channel-label",
     "title": "AAI Signal Transmission - luarendered channel label",
     "description": "Draws the channel text over them, does not add any buildings.",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "author": "Quezler",
     "factorio_version": "2.0",
     "dependencies": [
