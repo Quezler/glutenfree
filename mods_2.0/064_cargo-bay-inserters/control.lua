@@ -19,6 +19,14 @@ end)
 script.on_configuration_changed(function()
   mod.refresh_surfacedata()
   mod.update_proxies_for_surfaces()
+
+  -- disconnects inserters that are no longer allowed to interact with it
+  for surface_index, surfacedata in pairs(storage.surfacedata) do
+    for unit_number, cargo_bay in pairs(surfacedata.cargo_bays) do
+      cargo_bay.proxy.teleport({0, 0}) -- resets the drop target
+      cargo_bay.proxy.teleport(cargo_bay.entity.position) -- resets the pickup target (not the drop target!)
+    end
+  end
 end)
 
 script.on_load(function()

@@ -28,3 +28,18 @@ planet_cargo_bay.name = mod_prefix .. "planet-cargo-bay-proxy"
 planet_cargo_bay.icons[1].icon = "__base__/graphics/icons/cargo-landing-pad.png"
 
 data:extend{platform_cargo_bay, planet_cargo_bay}
+
+local function inject_mode_flags(prototype)
+  local setting_value = settings.startup[prototype.name .. "-mode"].value
+
+  if setting_value == "input" or setting_value == "none" then
+    table.insert(prototype.flags, "no-automated-item-removal")
+  end
+
+  if setting_value == "output" or setting_value == "none" then
+    table.insert(prototype.flags, "no-automated-item-insertion")
+  end
+end
+
+inject_mode_flags(platform_cargo_bay)
+inject_mode_flags(planet_cargo_bay)

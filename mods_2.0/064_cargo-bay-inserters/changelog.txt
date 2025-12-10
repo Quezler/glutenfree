@@ -3,6 +3,7 @@ Version: 1.1.0
 Date: ????
   Info:
     - Match inserter allow/deny flags with main entity automatically
+    - The input/output/none modes are now controlled with startup settings
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: 2025. 04. 29
