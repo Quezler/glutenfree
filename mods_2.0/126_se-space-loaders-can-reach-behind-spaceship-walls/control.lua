@@ -1,4 +1,5 @@
 local util = require("util")
+local mod_data = prototypes.mod_data["se-space-loaders-can-reach-behind-spaceship-walls"].data
 
 local Handler = {}
 
@@ -9,7 +10,7 @@ function Handler.on_init()
   for _, surface in pairs(game.surfaces) do
     Handler.on_surface_created({surface_index = surface.index})
 
-    for _, entity in pairs(surface.find_entities_filtered{name = {"kr-se-loader", "kr-se-loader-spaceship"}}) do
+    for _, entity in pairs(surface.find_entities_filtered{name = mod_data.for_find_entities_filtered}) do
       Handler.on_created_entity({entity = entity})
     end
   end
@@ -73,7 +74,7 @@ function Handler.on_created_entity(event)
 
   local wall_position = Handler.get_wall_position(entity)
 
-  if entity.name == "kr-se-loader-spaceship" then
+  if mod_data.spaceship_loader_to_loader[entity.name] then
     local wall_entity = surface.find_entity("se-spaceship-wall", wall_position)
     if wall_entity then
       storage.deathrattles[script.register_on_object_destroyed(wall_entity)] = {
@@ -85,13 +86,13 @@ function Handler.on_created_entity(event)
 
       Handler.point_loader_at(surfacedata, entity, wall_position)
     else
-      local loader_entity = Handler.fast_replace_loader(entity, "kr-se-loader")
+      local loader_entity = Handler.fast_replace_loader(entity, mod_data.spaceship_loader_to_loader[entity.name])
       Handler.point_loader_at(surfacedata, loader_entity, wall_position)
     end
-  elseif entity.name == "kr-se-loader" then
+  elseif mod_data.loader_to_spaceship_loader[entity.name] then
     local wall_entity = surface.find_entity("se-spaceship-wall", wall_position)
     if wall_entity then
-      local loader_entity = Handler.fast_replace_loader(entity, "kr-se-loader-spaceship")
+      local loader_entity = Handler.fast_replace_loader(entity, mod_data.loader_to_spaceship_loader[entity.name])
       Handler.point_loader_at(surfacedata, loader_entity, wall_position)
 
       storage.deathrattles[script.register_on_object_destroyed(wall_entity)] = {
@@ -106,6 +107,13 @@ function Handler.on_created_entity(event)
   end
 end
 
+local on_created_entity_filters = {
+  {filter = "name", name = "se-spaceship-wall"},
+}
+for _, entity_name in pairs(mod_data.for_find_entities_filtered) do
+  table.insert(on_created_entity_filters, {filter = "name", name = entity_name})
+end
+
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
@@ -114,11 +122,7 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, Handler.on_created_entity, {
-    {filter = "name", name = "kr-se-loader"},
-    {filter = "name", name = "kr-se-loader-spaceship"},
-    {filter = "name", name = "se-spaceship-wall"},
-  })
+  script.on_event(event, Handler.on_created_entity, on_created_entity_filters)
 end
 
 function Handler.on_entity_destroyed(event)
@@ -174,8 +178,8 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
   if entities == nil then return end
 
   for _, entity in ipairs(entities) do
-    if entity.name == "kr-se-loader-spaceship" then
-      entity.name = "kr-se-loader"
+    if mod_data.loader_to_spaceship_loader[entity.name] then
+      entity.name = mod_data.loader_to_spaceship_loader[entity.name]
     end
   end
 
