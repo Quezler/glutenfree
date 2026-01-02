@@ -1,0 +1,28 @@
+{
+    "name": "elevated-steel-pipes",
+    "title": "Elevated steel pipes",
+    "description": "Elevated pipes addon mod for Krastorio 2.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.0",
+
+    "quality_required": false,
+    "rail_bridges_required": false,
+    "space_travel_required": false,
+    "spoiling_required": false,
+    "freezing_required": false,
+    "segmented_units_required": false,
+    "expansion_shaders_required": false,
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler",
+
+        "? base",
+        "? space-age",
+
+        "elevated-pipes >= 1.4.0",
+        "? Krastorio2",
+        "? Krastorio2-spaced-out"
+    ]
+}
