@@ -2,6 +2,9 @@ require("shared")
 
 local mod = {}
 
+local mod_data = prototypes.mod_data[mod_name].data
+local surface_name_blacklist = mod_data.surface_name_blacklist
+
 script.on_init(function()
   storage.deathrattles = {}
 
@@ -184,7 +187,7 @@ function mod.update_proxies_for_surface(surface)
     if cargo_bay.entity.valid then
       cargo_bay.proxy.destructible = false -- 1.0.3 - 1.0.4
       local target = map[cargo_bay.entity.unit_number]
-      if target then
+      if target and surface_name_blacklist[surface.name] ~= true then
         cargo_bay.proxy.proxy_target_entity = target.entity
       else
         cargo_bay.proxy.proxy_target_entity = nil

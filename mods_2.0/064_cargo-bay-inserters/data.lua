@@ -43,3 +43,13 @@ end
 
 inject_mode_flags(platform_cargo_bay)
 inject_mode_flags(planet_cargo_bay)
+
+data:extend{{
+  type = "mod-data",
+  name = mod_name,
+  data = {
+    surface_name_blacklist = {
+      ["rubia"] = true,
+    }
+  }
+}}
