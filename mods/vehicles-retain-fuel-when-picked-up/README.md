@@ -1,2 +1,0 @@
-- i'm looking at you nuclear fuel 👀
-- only works when a vehicle is both picked up and placed down again by a player, but cars aint blueprintable or deconstrucable anyways
