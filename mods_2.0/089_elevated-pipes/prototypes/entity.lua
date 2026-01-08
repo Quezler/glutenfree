@@ -219,7 +219,7 @@ local furnace = {
     data.raw["mod-data"]["maraxsis-constants"].data["DOME_EXCLUDED_FROM_DISABLE"][config.name] = true
   end
 
-  if mods["actual-underground-pipes"] then
+  if mods["the-one-mod-with-underground-bits"] then -- actual-underground-pipes
     furnace.ignore_by_tomwub = true
   end
 
