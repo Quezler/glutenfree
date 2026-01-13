@@ -10,6 +10,7 @@ end)
 
 script.on_event(defines.events.on_player_mined_entity, function(event)
   if not is_supported_type[event.entity.type] then return end
+  if event.entity.burner == nil then return end
   if event.entity.burner.currently_burning == nil then return end
 
   local itemstack = event.buffer[1]
