@@ -28,6 +28,18 @@ for i = 0, 39 do
   table.insert(mod.on_created_entity_filters, {filter = "ghost_name", name = this_name})
 end
 
+local colors = { -- copied from data.raw["lamp"]["small-lamp"].signal_to_color_mapping (smuggling via mod-data would be more effort)
+  {type = "virtual", name = "signal-red",    color = {1, 0, 0}},
+  {type = "virtual", name = "signal-green",  color = {0, 1, 0}},
+  {type = "virtual", name = "signal-blue",   color = {0, 0, 1}},
+  {type = "virtual", name = "signal-yellow", color = {1, 1, 0}},
+  {type = "virtual", name = "signal-pink",   color = {1, 0, 1}},
+  {type = "virtual", name = "signal-cyan",   color = {0, 1, 1}},
+  {type = "virtual", name = "signal-white",  color = {1, 1, 1}},
+  {type = "virtual", name = "signal-grey",   color = {0.5, 0.5, 0.5}},
+  {type = "virtual", name = "signal-black",  color = {0, 0, 0}}
+}
+
 script.on_init(function()
   storage.deathrattles = {}
 end)
@@ -188,8 +200,21 @@ function bounding_box(position, range)
   }
 end
 
+-- find an unique color for each duplicate entity name (last color when overflowing)
+function get_next_color(cache, entity_name)
+  -- local signal_color_mapping = colors[math.random(1, #colors)]
+
+  cache[entity_name] = cache[entity_name] or 1
+  local signal_color_mapping = colors[cache[entity_name]]
+  cache[entity_name] = math.min(#colors, cache[entity_name] + 1)
+
+  return string.sub(signal_color_mapping.name, #"signal-" + 1), signal_color_mapping.name
+end
+
 function mod.open_gui(player, entity)
-  local text = {}
+  local text_definitions = {}
+  local text_names = {}
+  local color_cache = {}
 
   local entities = entity.surface.find_entities_filtered{
     area = bounding_box(entity.position, settings.global[mod_prefix .. "search-radius"].value),
@@ -209,11 +234,21 @@ function mod.open_gui(player, entity)
       if y_diff > 0 then by_pixel = by_pixel .. " " end
       by_pixel = by_pixel .. y_diff
 
-      table.insert(text, string.format("{ variation = %s, main_offset = util.by_pixel(%s), shadow_offset = util.by_pixel(%s), show_shadow = true }, # " .. other_entity.name, variation, by_pixel, by_pixel))
+      local color_name, signal_name = get_next_color(color_cache, other_entity.name)
+
+      table.insert(text_definitions, string.format("{ variation = %s, main_offset = util.by_pixel(%s), shadow_offset = util.by_pixel(%s), show_shadow = true },", variation, by_pixel, by_pixel))
+      table.insert(text_names, string.format("[virtual-signal=%s] %s", signal_name, other_entity.name))
+
+      player.create_local_flying_text{
+        text = string.format("[virtual-signal=%s]", signal_name),
+        position = other_entity.position,
+        speed = 0,
+        time_to_live = 300,
+      }
     end
   end
 
-  if #text == 0 then
+  if #text_definitions == 0 then
     player.opened = nil
     return
   end
@@ -222,16 +257,20 @@ function mod.open_gui(player, entity)
     type = "frame",
     name = mod_prefix .. "frame",
     style = "invisible_frame",
-    direction = "vertical",
+    direction = "horizontal",
   }
 
-  local textfield = frame.add{
+  local textfield_definitions = frame.add{
     type = "text-box",
-    name = mod_prefix .. "frame",
   }
-  textfield.style.minimal_width = 1000
+  textfield_definitions.style.minimal_width = 800
+  textfield_definitions.text = table.concat(text_definitions, "\n")
 
-  textfield.text = table.concat(text, "\n")
+  local textfield_names = frame.add{
+    type = "text-box",
+  }
+  textfield_names.style.minimal_width = 400
+  textfield_names.text = table.concat(text_names, "\n")
 
   frame.force_auto_center()
   player.opened = frame

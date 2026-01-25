@@ -1,10 +1,11 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.1.1
-Date: ????
+Version: 1.2.0
+Date: 2026. 01. 25
   Info:
     - Add a poor explanation on how to use export once you have it
     - Add compatibility with Space Exploration
     - Make the search radius configurable
+    - Differentiate entities with some color puke
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2025. 05. 28
