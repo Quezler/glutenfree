@@ -25,7 +25,7 @@ Date: 2025. 04. 30
     - Mod portal release
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date:  2025. 04. 30
+Date: 2025. 04. 30
   Info:
     - Setup the furnace prototype
     - Generate icons for each variation
