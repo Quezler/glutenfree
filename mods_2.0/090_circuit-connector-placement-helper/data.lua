@@ -67,6 +67,7 @@ for i = 0, 39 do
     }},
 
     hidden = true,
+    se_allow_in_space = true,
   }
 
   if settings.startup[mod_prefix .. "hide-yellow-base"].value then
@@ -146,4 +147,5 @@ data:extend{{
   placeable_by = {item = "green-wire", count = 1},
 
   hidden = true,
+  se_allow_in_space = true,
 }}
