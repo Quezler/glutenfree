@@ -192,7 +192,7 @@ function mod.open_gui(player, entity)
   local text = {}
 
   local entities = entity.surface.find_entities_filtered{
-    area = bounding_box(entity.position, 3),
+    area = bounding_box(entity.position, settings.global[mod_prefix .. "search-radius"].value),
   }
 
   local variation = circuit_connector_to_variation[entity.name]
@@ -208,7 +208,6 @@ function mod.open_gui(player, entity)
       by_pixel = by_pixel .. x_diff .. ", "
       if y_diff > 0 then by_pixel = by_pixel .. " " end
       by_pixel = by_pixel .. y_diff
-
 
       table.insert(text, string.format("{ variation = %s, main_offset = util.by_pixel(%s), shadow_offset = util.by_pixel(%s), show_shadow = true }, # " .. other_entity.name, variation, by_pixel, by_pixel))
     end
