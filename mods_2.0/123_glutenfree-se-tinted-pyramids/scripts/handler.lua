@@ -66,9 +66,11 @@ function Handler.on_tick(event)
     if #game.connected_players > 0 then
       local player = Handler.find_a_player_that_can_enter_pyramids()
       if player then
-        -- game.print("yoink")
+        local remote_view = player.controller_type == defines.controllers.remote
         local old_surface = player.surface
         local old_position = player.position
+        local old_physical_surface = player.physical_surface
+        local old_physical_position = player.physical_position
 
         for _, pyramid in ipairs(storage.pyramids_to_visit) do
           if pyramid.valid then
@@ -79,7 +81,14 @@ function Handler.on_tick(event)
           end
         end
 
-        player.teleport(old_position, old_surface)
+        player.teleport(old_physical_position, old_physical_surface)
+        if remote_view then
+          player.set_controller{
+            type = defines.controllers.remote,
+            surface = old_surface,
+            position = old_position,
+          }
+        end
         storage.pyramids_to_visit = {}
       else
         log("no player can enter a pyramid at tick ".. event.tick ..".")
