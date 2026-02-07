@@ -147,7 +147,7 @@ function Handler.on_created_entity(event)
     force = "neutral",
     position = {0.5 + storage.x_offset, -0.5},
   }
-  struct.proxy_container_a.proxy_target_entity = struct.holmium_chemical_plant
+  -- struct.proxy_container_a.proxy_target_entity = struct.holmium_chemical_plant
   struct.proxy_container_a.proxy_target_inventory = defines.inventory.crafter_output
 
   struct.inserter_1 = game.surfaces[mod_surface_name].create_entity{
@@ -343,6 +343,7 @@ for _, event in ipairs({
 end
 
 function Handler.on_holmium_chemical_plant_changed_quality(struct)
+  struct.proxy_container_a.proxy_target_entity = struct.holmium_chemical_plant
   struct.holmium_chemical_plant.fluidbox.add_linked_connection(3, struct.assembler, 1)
   struct.holmium_chemical_plant.fluidbox.add_linked_connection(4, struct.assembler, 2)
 end
