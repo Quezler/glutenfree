@@ -51,11 +51,11 @@ data:extend{{
     surface_name_blacklist = {
       ["rubia"] = true,
     },
-    planetary_cargo_proxies = {
-      --["my_proxy"] = true,
+    planetary_cargo_bay_proxies = {
+      [planet_cargo_bay.name] = true,
     },
-    platform_cargo_proxies = {
-      --["my_proxy"] = true,
+    platform_cargo_bay_proxies = {
+      [platform_cargo_bay.name] = true,
     },
   }
 }}
