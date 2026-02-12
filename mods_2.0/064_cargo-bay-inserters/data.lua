@@ -50,6 +50,12 @@ data:extend{{
   data = {
     surface_name_blacklist = {
       ["rubia"] = true,
-    }
+    },
+    planetary_cargo_proxies = {
+      --["my_proxy"] = true,
+    },
+    platform_cargo_proxies = {
+      --["my_proxy"] = true,
+    },
   }
 }}
