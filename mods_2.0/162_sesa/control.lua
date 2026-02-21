@@ -8,24 +8,28 @@ MapView = require("__space-exploration__/scripts/map-view")
 local SESA = {}
 
 script.on_init(function()
-  SESA.hide_starmap_surfaces()
+  SESA.try_hide_surfaces()
 end)
 
 script.on_configuration_changed(function()
-  SESA.hide_starmap_surfaces()
+  SESA.try_hide_surfaces()
 end)
 
-SESA.hide_starmap_surfaces = function()
-  for _, surface in pairs(game.surfaces) do
-    if MapView.is_surface_starmap(surface) then
-      game.forces.player.set_surface_hidden(surface, true)
-    end
+script.on_event(defines.events.on_surface_created, function(event)
+  SESA.try_hide_surface(game.get_surface(event.surface_index))
+end)
+
+SESA.try_hide_surface = function(surface)
+  if surface.name == "nauvis" then return end
+
+  local surface_type = remote.call("space-exploration", "get_surface_type", {surface_index = surface.index})
+  if surface_type or MapView.is_surface_starmap(surface) then
+    game.forces.player.set_surface_hidden(surface, true)
   end
 end
 
-script.on_event(defines.events.on_surface_created, function(event)
-  local surface = game.get_surface(event.surface_index) --[[@as LuaSurface]]
-  if MapView.is_surface_starmap(surface) then
-    game.forces.player.set_surface_hidden(surface, true)
+SESA.try_hide_surfaces = function()
+  for _, surface in pairs(game.surfaces) do
+    SESA.try_hide_surface(surface)
   end
-end)
+end
