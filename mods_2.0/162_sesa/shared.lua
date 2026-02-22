@@ -9,9 +9,4 @@ Shared.resources = {
   {name = "fluorine-vent", product = "fluorine"},
 }
 
-Shared.resources_name_list = {}
-for _, resource in ipairs(Shared.resources) do
-  table.insert(Shared.resources_name_list, resource.name)
-end
-
 return Shared

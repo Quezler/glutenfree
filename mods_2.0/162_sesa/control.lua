@@ -21,7 +21,7 @@ script.on_configuration_changed(function(event)
   if upgrading_from_before("1.0.2") then
     for _, surface in pairs(game.surfaces) do
       if surface.planet and surface.name ~= "nauvis" then
-        surface.regenerate_entity(Shared.resources_name_list)
+        surface.regenerate_entity()
       end
     end
   end

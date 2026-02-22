@@ -1,10 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
-Date: ????
+Date: 2026. 02. 22
   Info:
     - Hide SE surfaces from the SA starmap
     - Fix ores not generating on new planets
     - Fix ores not generating on old planets
+    - Allow resources on every tile as a scream test
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2026. 02. 19
