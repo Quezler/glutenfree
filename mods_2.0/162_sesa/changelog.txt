@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Hide SE surfaces from the SA starmap
     - Fix ores not generating on new planets
+    - Fix ores not generating on old planets
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2026. 02. 19

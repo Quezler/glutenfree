@@ -11,8 +11,20 @@ script.on_init(function()
   SESA.try_hide_surfaces()
 end)
 
-script.on_configuration_changed(function()
+script.on_configuration_changed(function(event)
   SESA.try_hide_surfaces()
+
+  local function upgrading_from_before(version)
+    return event.mod_changes["sesa"] and event.mod_changes["sesa"].old_version and helpers.compare_versions(event.mod_changes["sesa"].old_version, version) == -1
+  end
+
+  if upgrading_from_before("1.0.2") then
+    for _, surface in pairs(game.surfaces) do
+      if surface.planet and surface.name ~= "nauvis" then
+        surface.regenerate_entity(Shared.resources_name_list)
+      end
+    end
+  end
 end)
 
 script.on_event(defines.events.on_surface_created, function(event)
