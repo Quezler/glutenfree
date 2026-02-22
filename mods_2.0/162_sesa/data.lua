@@ -1,13 +1,6 @@
-local resources = {
-  {name = "calcite"},
-  {name = "sulfuric-acid-geyser", product = "sulfuric-acid"},
-  {name = "tungsten-ore"},
-  {name = "scrap"},
-  {name = "lithium-brine"},
-  {name = "fluorine-vent", product = "fluorine"},
-}
+local Shared = require("shared")
 
-for _, resource in ipairs(resources) do
+for _, resource in ipairs(Shared.resources) do
   resource.product = resource.product or resource.name
 
   -- prevent zones from having space age ores as their primary resource or as ore
