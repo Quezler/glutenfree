@@ -19,3 +19,12 @@ for _, resource in ipairs(Shared.resources) do
     omni_multiplier = 0, -- do not output this resource when crushing omni fragments
   }
 end
+
+-- todo: remove when space exploration 0.7.45 drops
+if mods["quality"] and settings.startup["se-quality-mod-support"].value == false then
+  local data_util = require("__space-exploration__/data_util")
+  data_util.tech_remove_effects("quality-module", {{type = "unlock-quality", quality = "uncommon"}})
+  data_util.tech_remove_effects("quality-module", {{type = "unlock-quality", quality = "rare"}})
+  data_util.tech_remove_effects("epic-quality", {{type = "unlock-quality", quality = "epic"}})
+  data_util.tech_remove_effects("legendary-quality", {{type = "unlock-quality", quality = "legendary"}})
+end
