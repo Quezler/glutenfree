@@ -11,3 +11,8 @@ for _, resource in pairs(data.raw["resource"]) do
     resource.autoplace.tile_restriction = nil
   end
 end
+
+-- SESA rockets are apparently around 4 times more expensive than SA rockets according to:
+-- https://discord.com/channels/419526714721566720/1473279418142298164/1475269441691586561
+data.raw["rocket-silo"]["rocket-silo"].rocket_parts_required = 25
+data.raw["rocket-silo"]["sa-rocket-silo"].rocket_parts_required = 25
