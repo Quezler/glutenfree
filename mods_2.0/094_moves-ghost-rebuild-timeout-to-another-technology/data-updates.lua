@@ -14,4 +14,5 @@ local to_technology = data.raw["technology"][settings.startup["move-ghost-rebuil
 if to_technology == nil then to_technology = data.raw["technology"]["military"] end
 if to_technology == nil then error('Fallback technology "military" not found.') end
 
+to_technology.effects = to_technology.effects or {}
 table.insert(to_technology.effects, 1, ghost_rebuild)
