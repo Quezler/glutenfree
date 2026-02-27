@@ -22,6 +22,14 @@ script.on_configuration_changed(function(event)
       end
     end
   end
+
+  if upgrading_from_before("1.0.7") then
+    for _, surface in pairs(game.surfaces) do
+      if surface.planet and surface.name == "fulgora" then
+        surface.regenerate_entity("scrap")
+      end
+    end
+  end
 end)
 
 script.on_load(function()

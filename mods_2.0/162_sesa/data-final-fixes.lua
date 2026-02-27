@@ -16,3 +16,6 @@ end
 -- https://discord.com/channels/419526714721566720/1473279418142298164/1475269441691586561
 data.raw["rocket-silo"]["rocket-silo"].rocket_parts_required = 25
 data.raw["rocket-silo"]["sa-rocket-silo"].rocket_parts_required = 25
+
+-- restore after mods/space-exploration/prototypes/phase-3/resources.lua touched it
+data.raw["resource"]["scrap"].autoplace = sesa_scrap_autoplace
