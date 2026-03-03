@@ -6,6 +6,7 @@ Date: ????
     - Fix several recipes being removed from space refinery & manufactory
     - Add module recipes to the electromagnetic plant
     - Restore heating tower efficiency of 250%
+    - Remove space manufactory recipe injections again
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.7
 Date: 2026. 02. 27

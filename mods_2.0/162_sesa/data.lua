@@ -39,7 +39,3 @@ se_delivery_cannon_recipes["agricultural-science-pack"] = {name = "agricultural-
 
 table.insert(data.raw["assembling-machine"]["se-space-biochemical-laboratory"].crafting_categories, "organic-or-chemistry") -- oil cracking
 table.insert(data.raw["assembling-machine"]["se-space-biochemical-laboratory"].crafting_categories, "chemistry-or-cryogenics") -- typical chemical plant recipes
-table.insert(data.raw["assembling-machine"]["se-space-manufactory"].crafting_categories, "pressing") -- logistics
-table.insert(data.raw["assembling-machine"]["se-space-manufactory"].crafting_categories, "crafting-with-fluid-or-metallurgy") -- blue belts
-table.insert(data.raw["assembling-machine"]["se-space-manufactory"].crafting_categories, "electronics") -- poles, solar, accumulator, beacon & chips
-table.insert(data.raw["assembling-machine"]["se-space-manufactory"].crafting_categories, "electronics-with-fluid") -- blue chips
