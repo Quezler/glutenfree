@@ -36,6 +36,3 @@ cargo_station_parameters.hatch_definitions = hatch_definitions
 
 -- generally all/only resources are allowed in the delivery cannon, but this curated list relieves some pain.
 se_delivery_cannon_recipes["agricultural-science-pack"] = {name = "agricultural-science-pack", type = "tool"}
-
-table.insert(data.raw["assembling-machine"]["se-space-biochemical-laboratory"].crafting_categories, "organic-or-chemistry") -- oil cracking
-table.insert(data.raw["assembling-machine"]["se-space-biochemical-laboratory"].crafting_categories, "chemistry-or-cryogenics") -- typical chemical plant recipes
