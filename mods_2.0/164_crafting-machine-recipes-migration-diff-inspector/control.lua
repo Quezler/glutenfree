@@ -120,7 +120,8 @@ mod.open_gui = function(player)
         }
 
         recipe_button.tooltip = recipe_button.tooltip .. "\n"
-        for _, recipe_category in ipairs(mod.get_recipe_categories(prototypes.recipe[recipe_name])) do
+        local recipe_prototype = prototypes.recipe[recipe_name]
+        for _, recipe_category in ipairs(recipe_prototype and mod.get_recipe_categories(recipe_prototype) or {}) do
           recipe_button.tooltip = recipe_button.tooltip .. "\n" .. recipe_category
         end
       end
@@ -136,6 +137,12 @@ mod.open_gui = function(player)
           style = "flib_slot_button_green",
           tags = {action = mod.prefix .. "open-factoriopedia", type = "recipe", name = recipe_name},
         }
+
+        recipe_button.tooltip = recipe_button.tooltip .. "\n"
+        local recipe_prototype = prototypes.recipe[recipe_name]
+        for _, recipe_category in ipairs(recipe_prototype and mod.get_recipe_categories(recipe_prototype) or {}) do
+          recipe_button.tooltip = recipe_button.tooltip .. "\n" .. recipe_category
+        end
       end
     end
 

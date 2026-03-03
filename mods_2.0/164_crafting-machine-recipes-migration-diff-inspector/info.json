@@ -3,7 +3,7 @@
     "title": "Crafting machine recipes migration diff inspector",
     "description": "Allows you to compare the recipes a machine can craft to before the configuration changed.",
 
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Quezler",
     "factorio_version": "2.0",
 
