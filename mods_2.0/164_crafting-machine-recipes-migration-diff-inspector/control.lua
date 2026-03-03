@@ -15,35 +15,33 @@ script.on_configuration_changed(function()
   storage.new_data = mod.get_data()
 end)
 
+mod.can_craft = function(entity_prototype, recipe_prototype)
+  local recipe_categories = recipe_prototype.additional_categories
+  table.insert(recipe_categories, 1, recipe_prototype.category)
+
+  for _, recipe_category in ipairs(recipe_categories) do
+    if entity_prototype.crafting_categories[recipe_category] then
+      return true
+    end
+  end
+end
+
 mod.get_data = function()
   local data = {
     version = 1,
     crafting_machines = {},
-    recipe_categories = {},
   }
 
   for _, crafting_machine in pairs(prototypes.get_entity_filtered({{filter="crafting-machine"}})) do
     data.crafting_machines[crafting_machine.name] = {
       name = crafting_machine.name,
-      crafting_categories = crafting_machine.crafting_categories
+      recipes = {},
     }
-  end
 
-  for _, recipe_category in pairs(prototypes.recipe_category) do
-    data.recipe_categories[recipe_category.name] = {
-      name = recipe_category.name,
-      recipes = {}
-    }
-  end
-
-  for _, recipe in pairs(prototypes.recipe) do
-    local recipe_categories = recipe.additional_categories
-    table.insert(recipe_categories, 1, recipe.category)
-
-    for _, recipe_category in ipairs(recipe_categories) do
-      data.recipe_categories[recipe_category].recipes[recipe.name] = {
-        name = recipe.name,
-      }
+    for _, recipe in pairs(prototypes.recipe) do
+      if mod.can_craft(crafting_machine, recipe) then
+        data.crafting_machines[crafting_machine.name].recipes[recipe.name] = true
+      end
     end
   end
 
@@ -89,19 +87,43 @@ mod.open_gui = function(player)
       style = "horizontal_flow",
     }
 
+    local entity_prototype = prototypes.entity[crafting_machine.name]
     local entity_button = flow.add{
       type = "sprite-button",
       sprite = "entity/" .. crafting_machine.name,
       tooltip = crafting_machine.name,
-      -- tags = {action = mod_prefix .. "open-factoriopedia", type = "recipe", name = recipe.name},
+      tags = {action = mod.prefix .. "open-factoriopedia", type = "entity", name = crafting_machine.name},
     }
 
-    if prototypes.entity[crafting_machine.name].hidden then
+    if entity_prototype.hidden then
       entity_button.style = "flib_slot_button_grey"
+      entity_button.tooltip = entity_button.tooltip .. " (hidden)"
     end
 
-    for _, recipe_category in pairs(crafting_machine.crafting_categories) do
-      -- bound to be messy
+    -- can now no longer craft these
+    for recipe_name, _ in pairs(storage.old_data.crafting_machines[crafting_machine.name].recipes) do
+      if not storage.new_data.crafting_machines[crafting_machine.name].recipes[recipe_name] then
+        local recipe_button = flow.add{
+          type = "sprite-button",
+          sprite = helpers.is_valid_sprite_path("recipe/" .. recipe_name) and "recipe/" .. recipe_name or "recipe/recipe-unknown",
+          tooltip = recipe_name,
+          style = "flib_slot_button_red",
+          tags = {action = mod.prefix .. "open-factoriopedia", type = "recipe", name = recipe_name},
+        }
+      end
+    end
+
+    -- can now craft these
+    for recipe_name, _ in pairs(storage.new_data.crafting_machines[crafting_machine.name].recipes) do
+      if not storage.old_data.crafting_machines[crafting_machine.name].recipes[recipe_name] then
+        local recipe_button = flow.add{
+          type = "sprite-button",
+          sprite = helpers.is_valid_sprite_path("recipe/" .. recipe_name) and "recipe/" .. recipe_name or "recipe/recipe-unknown",
+          tooltip = recipe_name,
+          style = "flib_slot_button_green",
+          tags = {action = mod.prefix .. "open-factoriopedia", type = "recipe", name = recipe_name},
+        }
+      end
     end
 
     ::continue::
@@ -125,5 +147,13 @@ end)
 script.on_event(defines.events.on_gui_closed, function(event)
   if event.element and event.element.name == mod.frame_name then
     event.element.destroy()
+  end
+end)
+
+script.on_event(defines.events.on_gui_click, function(event)
+  local tags = event.element.tags
+  if tags and tags["action"] == mod.prefix .. "open-factoriopedia" then
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    player.open_factoriopedia_gui(prototypes[tags.type][tags.name])
   end
 end)
