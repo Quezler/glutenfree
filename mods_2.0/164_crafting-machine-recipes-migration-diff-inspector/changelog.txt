@@ -3,6 +3,7 @@ Version: 1.0.1
 Date: ????
   Info:
     - Add categories to the tooltip of removed recipes
+    - List the crafting categories in the crafting machine tooltip
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026. 03. 03

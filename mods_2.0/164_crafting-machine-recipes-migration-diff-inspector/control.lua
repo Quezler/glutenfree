@@ -103,6 +103,11 @@ mod.open_gui = function(player)
       entity_button.tooltip = entity_button.tooltip .. " (hidden)"
     end
 
+    entity_button.tooltip = entity_button.tooltip .. "\n"
+    for crafting_category, _ in pairs(entity_prototype.crafting_categories) do
+      entity_button.tooltip = entity_button.tooltip .. "\n" .. crafting_category
+    end
+
     -- can now no longer craft these
     for recipe_name, _ in pairs(storage.old_data.crafting_machines[crafting_machine.name].recipes) do
       if not storage.new_data.crafting_machines[crafting_machine.name].recipes[recipe_name] then
