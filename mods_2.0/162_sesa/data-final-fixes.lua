@@ -19,3 +19,6 @@ data.raw["rocket-silo"]["sa-rocket-silo"].rocket_parts_required = 25
 
 -- restore after mods/space-exploration/prototypes/phase-3/resources.lua touched it
 data.raw["resource"]["scrap"].autoplace = sesa_scrap_autoplace
+
+-- undo space exploration (postprocess?) capping all burners at 100%
+data.raw["reactor"]["heating-tower"].energy_source.effectivity = 2.5
