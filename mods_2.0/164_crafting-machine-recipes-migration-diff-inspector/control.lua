@@ -15,11 +15,14 @@ script.on_configuration_changed(function()
   storage.new_data = mod.get_data()
 end)
 
-mod.can_craft = function(entity_prototype, recipe_prototype)
+mod.get_recipe_categories = function(recipe_prototype)
   local recipe_categories = recipe_prototype.additional_categories
   table.insert(recipe_categories, 1, recipe_prototype.category)
+  return recipe_categories
+end
 
-  for _, recipe_category in ipairs(recipe_categories) do
+mod.can_craft = function(entity_prototype, recipe_prototype)
+  for _, recipe_category in ipairs(mod.get_recipe_categories(recipe_prototype)) do
     if entity_prototype.crafting_categories[recipe_category] then
       return true
     end
@@ -110,6 +113,11 @@ mod.open_gui = function(player)
           style = "flib_slot_button_red",
           tags = {action = mod.prefix .. "open-factoriopedia", type = "recipe", name = recipe_name},
         }
+
+        recipe_button.tooltip = recipe_button.tooltip .. "\n"
+        for _, recipe_category in ipairs(mod.get_recipe_categories(prototypes.recipe[recipe_name])) do
+          recipe_button.tooltip = recipe_button.tooltip .. "\n" .. recipe_category
+        end
       end
     end
 
