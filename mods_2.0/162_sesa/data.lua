@@ -33,3 +33,6 @@ for i = 1, 10 do
   end
 end
 cargo_station_parameters.hatch_definitions = hatch_definitions
+
+-- generally all/only resources are allowed in the delivery cannon, but this curated list relieves some pain.
+se_delivery_cannon_recipes["agricultural-science-pack"] = {name = "agricultural-science-pack", type = "tool"}
