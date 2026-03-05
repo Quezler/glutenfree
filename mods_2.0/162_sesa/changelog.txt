@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
-Date: ????
+Date: 2026. 03. 05
   Info:
     - Remove calcite from the delivery cannon again
     - Fix several recipes being removed from space refinery & manufactory
