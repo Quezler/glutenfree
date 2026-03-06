@@ -36,3 +36,10 @@ cargo_station_parameters.hatch_definitions = hatch_definitions
 
 -- generally all/only resources are allowed in the delivery cannon, but this curated list relieves some pain.
 se_delivery_cannon_recipes["agricultural-science-pack"] = {name = "agricultural-science-pack", type = "tool"}
+
+local function add_recipe_category(recipe, category)
+  recipe.additional_categories = recipe.additional_categories or {}
+  table.insert(recipe.additional_categories, category)
+end
+
+add_recipe_category(data.raw.recipe["rocket-control-unit"], "electromagnetics")
