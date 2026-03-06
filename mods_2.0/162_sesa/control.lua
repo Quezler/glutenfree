@@ -3,13 +3,13 @@ local SESA = {}
 script.on_init(function()
   storage.new_surfaces = {}
 
-  SESA.try_hide_surfaces()
+  SESA.try_hide_SE_surfaces()
 end)
 
 script.on_configuration_changed(function(event)
   storage.new_surfaces = storage.new_surfaces or {}
 
-  SESA.try_hide_surfaces()
+  SESA.try_hide_SE_surfaces()
 
   local function upgrading_from_before(version)
     return event.mod_changes["sesa"] and event.mod_changes["sesa"].old_version and helpers.compare_versions(event.mod_changes["sesa"].old_version, version) == -1
@@ -45,13 +45,13 @@ end)
 
 SESA.on_tick = function()
   for surface_index, _ in pairs(storage.new_surfaces) do
-    SESA.try_hide_surface(game.get_surface(surface_index))
+    SESA.try_hide_SE_surface(game.get_surface(surface_index))
   end
   storage.new_surfaces = {}
   script.on_event(defines.events.on_tick, nil)
 end
 
-SESA.try_hide_surface = function(surface)
+SESA.try_hide_SE_surface = function(surface)
   if surface.name == "nauvis" then return end
 
   if remote.call("space-exploration", "get_surface_type", {surface_index = surface.index}) then
@@ -59,8 +59,8 @@ SESA.try_hide_surface = function(surface)
   end
 end
 
-SESA.try_hide_surfaces = function()
+SESA.try_hide_SE_surfaces = function()
   for _, surface in pairs(game.surfaces) do
-    SESA.try_hide_surface(surface)
+    SESA.try_hide_SE_surface(surface)
   end
 end
