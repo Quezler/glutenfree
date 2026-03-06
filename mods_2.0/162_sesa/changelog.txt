@@ -1,10 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.9
-Date: ????
+Date: 2026. 03. 06
   Info:
     - Add the rocket control unit to the electromagnetic plant
     - Hide the biolab
     - Rename surface hiding function
+    - Fix solar on planets & platforms being halved
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2026. 03. 05

@@ -30,6 +30,14 @@ script.on_configuration_changed(function(event)
       end
     end
   end
+
+  if upgrading_from_before("1.0.9") then
+    for _, surface in pairs(game.surfaces) do
+      if surface.planet or surface.platform then
+        surface.solar_power_multiplier = 1
+      end
+    end
+  end
 end)
 
 script.on_load(function()
@@ -39,6 +47,10 @@ script.on_load(function()
 end)
 
 script.on_event(defines.events.on_surface_created, function(event)
+  local surface = game.get_surface(event.surface_index)
+  if surface.planet or surface.platform then
+    surface.solar_power_multiplier = 1 -- for some reason space exploration sets all new surfaces to 0.5
+  end
   storage.new_surfaces[event.surface_index] = true
   script.on_event(defines.events.on_tick, SESA.on_tick)
 end)
