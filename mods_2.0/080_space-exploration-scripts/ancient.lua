@@ -1,7 +1,7 @@
 -- step 1
 mod_prefix = "se-"
 core_util = require("__core__/lualib/util.lua")
-Event = {addListener = function() end}
+Event = require("event-interface")
 
 -- step 2
 local Ancient = require("__space-exploration__.scripts.ancient")

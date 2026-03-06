@@ -1,7 +1,7 @@
 -- step 1
 local old_mod_prefix = mod_prefix
 mod_prefix = "se-"
-Event = {addListener = function() end}
+Event = require("event-interface")
 
 -- step 2
 local CoreMiner = require("__space-exploration__.scripts.core-miner")

@@ -49,3 +49,16 @@ script.on_event(defines.events.on_gui_opened, function(event)
   table.insert(storage.next_tick_events, event)
   script.on_event(defines.events.on_tick, on_tick)
 end)
+
+-- to test all require calls
+if false then
+  require("ancient")
+  require("core-miner")
+  require("gui-common")
+  require("jetpack")
+  require("lifesupport")
+  require("meteor")
+  require("util")
+  require("zone")
+  require("zonelist")
+end
