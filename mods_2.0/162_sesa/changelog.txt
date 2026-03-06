@@ -3,6 +3,7 @@ Version: 1.0.9
 Date: ????
   Info:
     - Add the rocket control unit to the electromagnetic plant
+    - Hide the biolab
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2026. 03. 05

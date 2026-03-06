@@ -43,3 +43,9 @@ local function add_recipe_category(recipe, category)
 end
 
 add_recipe_category(data.raw.recipe["rocket-control-unit"], "electromagnetics")
+
+-- in a really akward spot with vanilla only science packs and inability to be placed in space
+data.raw["lab"]["biolab"].hidden = true
+data.raw["item"]["biolab"].hidden = true
+data.raw["recipe"]["biolab"].hidden = true
+data.raw["technology"]["biolab"].hidden = true
