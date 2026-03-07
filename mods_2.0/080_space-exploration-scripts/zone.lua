@@ -1,16 +1,6 @@
--- step 1
-local old_mod_prefix = mod_prefix
-mod_prefix = "se-"
-Event = require("event-interface")
+require("misc")
 
--- step 2
-local Zone = require("__space-exploration__.scripts.zone")
-
--- step 3
-Event = nil
-mod_prefix = old_mod_prefix
-
--- step 4
+local Zone = require_SE("__space-exploration__.scripts.zone")
 
 --- @since 2.0.0
 function Zone.parent(zone)
