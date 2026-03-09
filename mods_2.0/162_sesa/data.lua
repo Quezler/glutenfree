@@ -49,3 +49,6 @@ data.raw["lab"]["biolab"].hidden = true
 data.raw["item"]["biolab"].hidden = true
 data.raw["recipe"]["biolab"].hidden = true
 data.raw["technology"]["biolab"].hidden = true
+
+-- allow the big mining drill to mine iridium and naquium (area mining drill can't do tungsten)
+table.insert(data.raw["mining-drill"]["big-mining-drill"].resource_categories, "hard-resource")
