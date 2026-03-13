@@ -60,14 +60,33 @@ end
 script.on_event(defines.events.on_surface_created, mod.refresh_surfacedata)
 script.on_event(defines.events.on_surface_deleted, mod.refresh_surfacedata)
 
+
 local platform_cargo_bay_proxy_name = mod_prefix .. "platform-cargo-bay-proxy"
 local planet_cargo_bay_proxy_name = mod_prefix .. "planet-cargo-bay-proxy"
+local platform_proxy_names = prototypes.mod_data["cargo-bay-inserters"].data.platform_cargo_bay_proxies
+local planetary_proxy_names = prototypes.mod_data["cargo-bay-inserters"].data.planetary_cargo_bay_proxies
+local all_proxy_names = {}
+for name in pairs(platform_proxy_names) do all_proxy_names[name] = true end
+for name in pairs(planetary_proxy_names) do all_proxy_names[name] = true end
+
+local function link_cargo_bay_to_proxy(cargo_bay, proxy_container, surfacedata)
+    if not (cargo_bay and cargo_bay.valid) then return end
+    if not (proxy_container and proxy_container.valid) then return end
+
+    proxy_container.destructible = false
+    proxy_container.proxy_target_inventory = cargo_bay.surface.platform and defines.inventory.hub_main or defines.inventory.cargo_landing_pad_main
+
+    surfacedata.cargo_bays[cargo_bay.unit_number] = {entity = cargo_bay, proxy = proxy_container}
+    --game.print("linked " .. proxy_container.name)
+    storage.deathrattles[script.register_on_object_destroyed(cargo_bay)] = {
+      name = "cargo-bay",
+      surface_index = cargo_bay.surface_index,
+      unit_number = cargo_bay.unit_number,
+    }
+end
 
 function mod.on_created_entity(event)
   local entity = event.entity or event.destination
-
-  if entity.name == platform_cargo_bay_proxy_name then return entity.destroy() end
-  if entity.name == planet_cargo_bay_proxy_name then return entity.destroy() end
 
   local surfacedata = storage.surfacedata[entity.surface.index]
 
@@ -76,16 +95,16 @@ function mod.on_created_entity(event)
       name = entity.surface.platform and platform_cargo_bay_proxy_name or planet_cargo_bay_proxy_name,
       force = entity.force,
       position = entity.position,
+      raise_built = true,
     }
-    proxy_container.destructible = false
-    proxy_container.proxy_target_inventory = entity.surface.platform and defines.inventory.hub_main or defines.inventory.cargo_landing_pad_main
+    link_cargo_bay_to_proxy(entity, proxy_container, surfacedata)
 
-    surfacedata.cargo_bays[entity.unit_number] = {entity = entity, proxy = proxy_container}
-    storage.deathrattles[script.register_on_object_destroyed(entity)] = {
-      name = "cargo-bay",
-      surface_index = entity.surface_index,
-      unit_number = entity.unit_number,
-    }
+  elseif all_proxy_names[entity.name] then
+    local possible_cargo_bays = event.entity.surface.find_entities_filtered{type = "cargo-bay", position = event.entity.position}
+    if #possible_cargo_bays > 0 then
+      link_cargo_bay_to_proxy(possible_cargo_bays[1], entity, surfacedata)
+    end
+
   elseif entity.type == "space-platform-hub" then
     surfacedata.space_platform_hubs[entity.unit_number] = {entity = entity}
     storage.deathrattles[script.register_on_object_destroyed(entity)] = {
@@ -105,6 +124,16 @@ function mod.on_created_entity(event)
   mod.mark_surface_dirty(entity.surface)
 end
 
+
+local search_filters = {
+  {filter = "type", type = "cargo-bay"},
+  {filter = "type", type = "space-platform-hub"},
+  {filter = "type", type = "cargo-landing-pad"},
+}
+for name in pairs(all_proxy_names) do
+  table.insert(search_filters, {filter = "name", name = name})
+end
+
 for _, event in ipairs({
   defines.events.on_built_entity,
   defines.events.on_robot_built_entity,
@@ -113,13 +142,7 @@ for _, event in ipairs({
   defines.events.script_raised_revive,
   defines.events.on_entity_cloned,
 }) do
-  script.on_event(event, mod.on_created_entity, {
-    {filter = "type", type = "cargo-bay"},
-    {filter = "type", type = "space-platform-hub"},
-    {filter = "type", type = "cargo-landing-pad"},
-    {filter = "name", name = platform_cargo_bay_proxy_name},
-    {filter = "name", name = planet_cargo_bay_proxy_name},
-  })
+  script.on_event(event, mod.on_created_entity, search_filters)
 end
 
 local deathrattles = {
@@ -184,7 +207,7 @@ function mod.update_proxies_for_surface(surface)
   -- game.print(serpent.line(map))
 
   for _, cargo_bay in pairs(surfacedata.cargo_bays) do
-    if cargo_bay.entity.valid then
+    if cargo_bay.entity.valid and cargo_bay.proxy.valid then
       cargo_bay.proxy.destructible = false -- 1.0.3 - 1.0.4
       local target = map[cargo_bay.entity.unit_number]
       if target and surface_name_blacklist[surface.name] ~= true then
