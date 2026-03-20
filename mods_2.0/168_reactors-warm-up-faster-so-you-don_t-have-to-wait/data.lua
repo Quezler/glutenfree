@@ -1,0 +1,1 @@
+-- data.raw["reactor"]["nuclear-reactor"].scale_energy_usage = true -- debug
