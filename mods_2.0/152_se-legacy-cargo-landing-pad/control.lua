@@ -90,7 +90,7 @@ script.on_event(defines.events.on_object_destroyed, function(event)
           allow_belts = false,
           drop_full_stack = true,
         }
-        struct.cargo_landing_pad.destroy()
+        struct.cargo_landing_pad.destroy{raise_destroy=true}
       end
     end
   end
