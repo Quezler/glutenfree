@@ -90,4 +90,5 @@ if mods["space-exploration"] then
   data.raw["technology"][config.name].unit.ingredients = table.deepcopy(data.raw["technology"]["se-space-pipe"].unit.ingredients)
 
   data.raw["furnace"][config.name].se_allow_in_space = true
+  data.raw["storage-tank"][config.name .. "-alt-mode"].se_allow_in_space = true
 end
