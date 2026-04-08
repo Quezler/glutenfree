@@ -3,15 +3,15 @@
     "title": "SESA",
     "description": "Space Exploration + Space Age = Seesaw",
 
-    "version": "1.0.10",
+    "version": "1.1.0",
     "author": "Quezler",
     "factorio_version": "2.0",
 
     "dependencies": [
         "? newsletter-for-mods-made-by-quezler",
 
-        "space-exploration-postprocess",
-        "space-exploration",
+        "space-exploration-postprocess >= 0.7.5",
+        "space-exploration >= 0.7.54",
         "space-age"
     ]
 }
