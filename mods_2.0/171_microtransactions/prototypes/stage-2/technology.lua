@@ -1,0 +1,6 @@
+-- for _, offer in pairs(microtransactions.mod_data.offers) do
+--   for _, technology_name in pairs(offer.technologies or {}) do
+--     data.raw["technology"][technology_name].visible_when_disabled = true
+--     microtransactions.mod_data.visible_when_disabled[technology_name] = true
+--   end
+-- end
