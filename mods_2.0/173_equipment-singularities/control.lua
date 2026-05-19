@@ -7,9 +7,11 @@ local ingredient_amount = settings.startup[mod_prefix .. "amount"].value --[[@as
 
 local equipment_name_to_item_name = {}
 local item_name_to_equipment_name = {}
+local stack_size = {}
 for item_name, _ in pairs(mod_data.items) do
   equipment_name_to_item_name[mod_prefix .. item_name] = item_name
   item_name_to_equipment_name[item_name] = mod_prefix .. item_name
+  stack_size[item_name] = prototypes.item[item_name].stack_size
 end
 
 script.on_init(function()
@@ -75,25 +77,27 @@ script.on_nth_tick(600, function()
 end)
 
 script.on_event(defines.events.on_equipment_inserted, function(event)
-  if equipment_name_to_item_name[event.equipment.name] then
+  local item_name = equipment_name_to_item_name[event.equipment.name]
+  if item_name then
     local equipment_grid = storage.equipment_grids[event.grid.unique_id] or new_struct(storage.equipment_grids, {
       index = event.grid.unique_id,
       grid = event.grid,
-      singularities = {}, -- table<string, number>
+      singularities = {}, -- table<item name, number>
     })
 
-    equipment_grid.singularities[event.equipment.name] = (equipment_grid.singularities[event.equipment.name] or 0) + 1
+    equipment_grid.singularities[item_name] = (equipment_grid.singularities[item_name] or 0) + 1
   end
 end)
 
 script.on_event(defines.events.on_equipment_removed, function(event)
-  if equipment_name_to_item_name[event.equipment] then
+  local item_name = equipment_name_to_item_name[event.equipment]
+  if item_name then
     local equipment_grid = storage.equipment_grids[event.grid.unique_id]
 
-    equipment_grid.singularities[event.equipment] = equipment_grid.singularities[event.equipment] - 1
+    equipment_grid.singularities[item_name] = equipment_grid.singularities[item_name] - 1
 
-    if equipment_grid.singularities[event.equipment] == 0 then
-      equipment_grid.singularities[event.equipment] = nil
+    if equipment_grid.singularities[item_name] == 0 then
+      equipment_grid.singularities[item_name] = nil
     end
 
     if not next(equipment_grid.singularities) then
@@ -105,7 +109,22 @@ end)
 script.on_nth_tick(60, function()
   for _, equipment_grid in pairs(storage.equipment_grids) do
     if equipment_grid.grid.valid then
-      --
+      for singularity_name, singularity_count in pairs(equipment_grid.singularities) do
+        local entity_owner = equipment_grid.grid.entity_owner
+        if entity_owner then
+          local inventory = entity_owner.get_main_inventory() -- currently does not trigger in vehicles, and does trigger for players when not worn
+          if inventory then
+            local desired_amount = stack_size[singularity_name] * singularity_count
+            local current_amount = inventory.get_item_count(singularity_name)
+
+            if desired_amount > current_amount then
+              inventory.insert({name = singularity_name, count = desired_amount - current_amount})
+            elseif current_amount > desired_amount then
+              inventory.remove({name = singularity_name, count = current_amount - desired_amount})
+            end
+          end
+        end
+      end
     else
       storage.equipment_grids[equipment_grid.index] = nil
     end
