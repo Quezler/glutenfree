@@ -5,9 +5,13 @@ local mod_data = data.raw["mod-data"][mod_name].data
 
 local item_prototypes = shared.get_item_prototypes()
 
+local chest_overrides = data.raw["container"][mod_prefix .. "chest"].inventory_properties.stack_size_override
+
 local function for_item(item_name)
   local item_prototype = item_prototypes[item_name]
   if not item_prototype then return end
+
+  chest_overrides[item_name] = settings.startup[mod_prefix .. "amount"].value --[[@as number]]
 
   local icons = {
     {icon = item_prototype.icon, scale = 0.50},
