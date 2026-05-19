@@ -45,7 +45,7 @@ mod.on_created_entity = function(event)
   struct.inventory = entity.get_inventory(defines.inventory.chest)
   struct.stack = struct.inventory[1]
 
-  storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct_id = struct.id}
+  -- storage.deathrattles[script.register_on_object_destroyed(entity)] = {struct_id = struct.id}
 end
 
 for _, event in ipairs({
