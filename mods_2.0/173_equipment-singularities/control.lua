@@ -17,7 +17,7 @@ end
 script.on_init(function()
   storage.structs = {}
   storage.equipment_grids = {}
-  storage.deathrattles = {}
+  -- storage.deathrattles = {}
 end)
 
 script.on_configuration_changed(function()
@@ -131,13 +131,12 @@ script.on_nth_tick(60, function()
   end
 end)
 
-
-script.on_event(defines.events.on_object_destroyed, function(event)
-  local deathrattle = storage.deathrattles[event.registration_number]
-  if deathrattle then storage.deathrattles[event.registration_number] = nil
-    local struct = storage.structs[deathrattle.struct_id]
-    if struct then storage.structs[deathrattle.struct_id] = nil
-      --
-    end
-  end
-end)
+-- script.on_event(defines.events.on_object_destroyed, function(event)
+--   local deathrattle = storage.deathrattles[event.registration_number]
+--   if deathrattle then storage.deathrattles[event.registration_number] = nil
+--     local struct = storage.structs[deathrattle.struct_id]
+--     if struct then storage.structs[deathrattle.struct_id] = nil
+--       --
+--     end
+--   end
+-- end)
