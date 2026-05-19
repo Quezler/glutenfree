@@ -5,8 +5,16 @@ local mod_data = prototypes.mod_data[mod_name].data --[[@as EquipmentSingulariti
 
 local ingredient_amount = settings.startup[mod_prefix .. "amount"].value --[[@as number]]
 
+local equipment_name_to_item_name = {}
+local item_name_to_equipment_name = {}
+for item_name, _ in pairs(mod_data.items) do
+  equipment_name_to_item_name[mod_prefix .. item_name] = item_name
+  item_name_to_equipment_name[item_name] = mod_prefix .. item_name
+end
+
 script.on_init(function()
   storage.structs = {}
+  storage.equipment_grids = {}
   storage.deathrattles = {}
 end)
 
@@ -49,7 +57,7 @@ for _, event in ipairs({
   script.on_event(event, mod.on_created_entity, mod.on_created_entity_filters)
 end
 
-script.on_nth_tick(60, function()
+script.on_nth_tick(600, function()
   for _, struct in pairs(storage.structs) do
     if struct.entity.valid then
       if struct.stack.valid_for_read then
@@ -65,6 +73,45 @@ script.on_nth_tick(60, function()
     end
   end
 end)
+
+script.on_event(defines.events.on_equipment_inserted, function(event)
+  if equipment_name_to_item_name[event.equipment.name] then
+    local equipment_grid = storage.equipment_grids[event.grid.unique_id] or new_struct(storage.equipment_grids, {
+      index = event.grid.unique_id,
+      grid = event.grid,
+      singularities = {}, -- table<string, number>
+    })
+
+    equipment_grid.singularities[event.equipment.name] = (equipment_grid.singularities[event.equipment.name] or 0) + 1
+  end
+end)
+
+script.on_event(defines.events.on_equipment_removed, function(event)
+  if equipment_name_to_item_name[event.equipment] then
+    local equipment_grid = storage.equipment_grids[event.grid.unique_id]
+
+    equipment_grid.singularities[event.equipment] = equipment_grid.singularities[event.equipment] - 1
+
+    if equipment_grid.singularities[event.equipment] == 0 then
+      equipment_grid.singularities[event.equipment] = nil
+    end
+
+    if not next(equipment_grid.singularities) then
+      storage.equipment_grids[equipment_grid.index] = nil
+    end
+  end
+end)
+
+script.on_nth_tick(60, function()
+  for _, equipment_grid in pairs(storage.equipment_grids) do
+    if equipment_grid.grid.valid then
+      --
+    else
+      storage.equipment_grids[equipment_grid.index] = nil
+    end
+  end
+end)
+
 
 script.on_event(defines.events.on_object_destroyed, function(event)
   local deathrattle = storage.deathrattles[event.registration_number]

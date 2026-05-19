@@ -4,6 +4,7 @@ Date: ????
   Info:
     - Setup the singularity chest prototype
     - Track the singularity chests and do the exchange
+    - Track equipment grids that have singularities
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 2026. 05. 19
