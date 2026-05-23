@@ -3,6 +3,7 @@ Version: 1.0.3
 Date: ????
   Info:
     - Typo remove -> remote
+    - Support quality scaling module inventories
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2024. 11. 15
