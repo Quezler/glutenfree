@@ -1,10 +1,10 @@
 local module_inventory_for_type = {
-  ["furnace"           ] = defines.inventory.furnace_modules,            -- 4
-  ["assembling-machine"] = defines.inventory.assembling_machine_modules, -- 4
-  ["lab"               ] = defines.inventory.lab_modules,                -- 3
-  ["mining-drill"      ] = defines.inventory.mining_drill_modules,       -- 2
-  ["rocket-silo"       ] = defines.inventory.rocket_silo_modules,        -- 4
-  ["beacon"            ] = defines.inventory.beacon_modules,             -- 1
+  ["furnace"           ] = defines.inventory.crafter_modules,      -- 4
+  ["assembling-machine"] = defines.inventory.crafter_modules,      -- 4
+  ["lab"               ] = defines.inventory.lab_modules,          -- 3
+  ["mining-drill"      ] = defines.inventory.mining_drill_modules, -- 2
+  ["rocket-silo"       ] = defines.inventory.crafter_modules,      -- 4
+  ["beacon"            ] = defines.inventory.beacon_modules,       -- 1
 }
 
 local is_module = {}
