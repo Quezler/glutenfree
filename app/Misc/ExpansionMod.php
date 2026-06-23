@@ -121,7 +121,7 @@ class ExpansionMod
     public function getReadmePrefix()
     {
         $directory = urlencode(str_replace('_', '__', str_replace('-', '--', "mods_2.0/$this->directory")));
-        $notice_for_all_2_0_mods = file_get_contents(__GLUTENFREE__ . '/mods/readme_prefix.txt');
+        $notice_for_all_2_0_mods = file_get_contents(__GLUTENFREE__ . '/mods_2.0/readme_prefix.txt');
         return "[![shield](https://img.shields.io/badge/{$directory}-white?logo=github&label=github)](https://github.com/Quezler/glutenfree/tree/main/mods_2.0/{$this->directory})\n{$notice_for_all_2_0_mods}";
     }
 
