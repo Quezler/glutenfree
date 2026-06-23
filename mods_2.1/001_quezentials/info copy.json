@@ -1,0 +1,60 @@
+{
+    "name": "quezentials",
+    "title": "Quezentials",
+    "description": "Recommended mods that are essential for my mental health.",
+
+    "version": "1.0.0",
+    "author": "Quezler",
+    "factorio_version": "2.1",
+
+    "dependencies": [
+        "? newsletter-for-mods-made-by-quezler"
+
+        , "? base"
+        , "? space-age"
+
+        , "+ RateCalculator"
+        , "+ factoryplanner"
+        , "+ FilterHelper"
+        , "+ FactorySearch"
+        , "+ recipe-tweaker"
+
+        , "+ extents-begone"
+        , "+ advanced-centrifuge"
+        , "+ elevated-pipes"
+
+        , "+ sign-post"
+        , "+ Water-Friendly-Walls"
+        , "+ pipette-fluid-port-w-assembler-for-auto-barreling"
+        , "+ rocks-heal-over-time-just-like-trees"
+        , "+ valves"
+        , "+ upgrade-planner-toggle-entity-with-pipette"
+        , "+ deconstruction-planner-toggle-entity-with-pipette"
+        , "+ FluidWagonColorMask"
+        , "+ moves-ghost-rebuild-timeout-to-another-technology"
+        , "+ freshly-handcrafted-equipment-straight-into-armor"
+        , "+ far-reach"
+        , "+ assembling-machine-request-chest-paste-multiplier"
+        , "+ remote-view-search-request-from-buffer-chests"
+        , "+ ctrl-click-modules-into-ghost-as-character"
+        , "+ no--inventory-is-full--corpse-pickup-troubles"
+        , "+ quick-panel-gui-optional-players-gui-button-count"
+        , "+ reactors-warm-up-faster-so-you-don_t-have-to-wait"
+        , "+ configurable-probability-product-count-tint"
+        , "+ observed-trains-out-of-fuel-slowly-keep-roling-on"
+        , "+ change-recipe-quality-without-re-selecting-recipe"
+        , "+ turrets-keep-their-placement-rotation"
+        , "+ ammo-turrets-have-at-least-two-ammo-slots"
+        , "+ chronological-platform-order"
+        , "+ quality-upgrade-planner"
+        , "+ lane-balancers"
+        , "+ disposable-construction-robots"
+        , "+ configurable-minimum-resource-patch-search-radius"
+        , "+ flushable-fluid-wagons"
+
+        , "! lamps-are-white-by-default"
+        , "! EnableWhen"
+        , "! lab-control-behavior"
+        , "! fluid-wagon-alignment-helper"
+    ]
+}
