@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2026. 06. 26
+  Info:
+    - Fixed compatibility with update 2.1
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2024. 12. 30
+  Info:
+    - Add compatibility with spoiling-plant
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2024. 11. 15
+  Info:
+    - Suggest the presence of newsletter-for-mods-made-by-quezler
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2024. 11. 14
+  Info:
+    - Require the presence of newsletter-for-mods-made-by-quezler
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2024. 10. 30
+  Info:
+    - Make it configurable what space age items spoil or not
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024. 10. 21
+  Info:
+    - Fix no spoilage mod crashing without disposable construction robots
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 10. 15
+  Info:
+    - Mod portal release
