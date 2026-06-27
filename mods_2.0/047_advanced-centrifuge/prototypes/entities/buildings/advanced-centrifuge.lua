@@ -161,7 +161,7 @@ data:extend({
     icon_draw_specification = {shift = {0, -1.25}, scale = 2},
     module_slots = 3,
     icons_positioning = {
-      {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 1.7}, scale = 1}
+      {inventory_index = defines.inventory.crafter_modules, shift = {0, 1.7}, scale = 1}
     },
     allowed_effects = { "consumption", "speed", "productivity", "pollution", "quality" },
     open_sound = sounds.machine_open,
