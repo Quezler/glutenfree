@@ -9,8 +9,14 @@ if mods["space-exploration"] then
   light_tint = {r = 1.0, g = 1.0, b = 1.0}
 end
 
-local pipe_picture = assembler3pipepictures()
-pipe_picture.south.filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-pipe-S.png"
+local pipe_picture = require("__base__.prototypes.entity.assembler-pictures").assembler3pipepictures
+pipe_picture.south = {
+  filename = "__advanced-centrifuge__/graphics/advanced-centrifuge/advanced-centrifuge-pipe-S.png",
+  width = 88,
+  height = 61,
+  scale = 0.5,
+  shift = {-1, 0},
+}
 pipe_picture.east = {
   filename = "__base__/graphics/entity/pipe/pipe-ending-right.png",
   width = 128,
@@ -155,7 +161,7 @@ data:extend({
     icon_draw_specification = {shift = {0, -1.25}, scale = 2},
     module_slots = 3,
     icons_positioning = {
-      {inventory_index = defines.inventory.assembling_machine_modules, shift = {0, 1.7}, scale = 1}
+      {inventory_index = defines.inventory.crafter_modules, shift = {0, 1.7}, scale = 1}
     },
     allowed_effects = { "consumption", "speed", "productivity", "pollution", "quality" },
     open_sound = sounds.machine_open,
