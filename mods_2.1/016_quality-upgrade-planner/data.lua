@@ -19,7 +19,7 @@ local selection_tool = {
   select =
   {
     border_color = {71, 255, 73},
-    mode = {"upgrade"},
+    mode = {"upgrade", "any-entity"},
     cursor_box_type = "not-allowed",
     started_sound = { filename = "__core__/sound/upgrade-select-start.ogg" },
     ended_sound = { filename = "__core__/sound/upgrade-select-end.ogg" }
