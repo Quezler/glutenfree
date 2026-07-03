@@ -20,13 +20,15 @@ class UpdateDetailsCommand extends Command
     {
         if ($input->getOption('all') !== true) throw new \LogicException("Currently its all or nothing");
 
-        foreach (ExpansionMods::list() as $expansionMod) {
-            if ($expansionMod->info()["author"] != "Quezler") continue;
-            if ($expansionMod->getVersion()->major == 0) continue;
+        foreach (['mods_2.1', 'mods_2.0'] as $folder) {
+            foreach (ExpansionMods::list($folder) as $expansionMod) {
+                if ($expansionMod->info()["author"] != "Quezler") continue;
+                if ($expansionMod->getVersion()->major == 0) continue;
 
-            $output->writeln($expansionMod->name);
-            $response = $expansionMod->editDetails();
-            $output->writeln($response->getBody()->getContents());
+                $output->writeln($expansionMod->name);
+                $response = $expansionMod->editDetails();
+                $output->writeln($response->getBody()->getContents());
+            }
         }
 
         return Command::SUCCESS;

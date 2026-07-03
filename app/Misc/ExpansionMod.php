@@ -120,11 +120,16 @@ class ExpansionMod
         return $response->getBody()->getContents();
     }
 
-    public function getReadmePrefix()
+    public function getReadmePrefix(): string
     {
-        $directory = urlencode(str_replace('_', '__', str_replace('-', '--', "mods_2.0/$this->directory")));
-        $notice_for_all_2_0_mods = file_get_contents(__GLUTENFREE__ . '/mods_2.0/readme_prefix.txt');
-        return "[![shield](https://img.shields.io/badge/{$directory}-white?logo=github&label=github)](https://github.com/Quezler/glutenfree/tree/main/mods_2.0/{$this->directory})\n{$notice_for_all_2_0_mods}";
+        $directory = urlencode(str_replace('_', '__', str_replace('-', '--', "{$this->folder}/$this->directory")));
+        $prefix = "[![shield](https://img.shields.io/badge/{$directory}-white?logo=github&label=github)](https://github.com/Quezler/glutenfree/tree/main/{$this->folder}/{$this->directory})\n";
+
+        if ($this->folder == 'mods_2.0') {
+            $prefix .= file_get_contents(__GLUTENFREE__ . '/mods_2.0/readme_prefix.txt');
+        }
+
+        return $prefix;
     }
 
     public function editDetails(): ResponseInterface
