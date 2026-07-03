@@ -13,6 +13,10 @@ local function get_entity_type(entity)
   return entity.type == "entity-ghost" and entity.ghost_type or entity.type
 end
 
+local function get_entity_prototype(entity)
+  return entity.type == "entity-ghost" and entity.ghost_prototype or entity.prototype
+end
+
 local function mode_entities(event, playerdata)
   local inventory = game.create_inventory(1)
   inventory[1].set_stack({name = "upgrade-planner"})
@@ -99,12 +103,12 @@ end
 local function mode_storage(event, playerdata)
   for _, entity in ipairs(event.entities) do
     if get_entity_type(entity) == "logistic-container" and entity.filter_slot_count == 1 then
-      assert(entity.prototype.logistic_mode == "storage")
+      assert(get_entity_prototype(entity).logistic_mode == "storage")
       local filter = entity.get_filter(1)
-        if filter and is_signal_quality_allowed(filter) then
-          filter.quality = event.quality
-          entity.set_filter(1, filter)
-        end
+      if filter and is_signal_quality_allowed(filter) then
+        filter.quality = event.quality
+        entity.set_filter(1, filter)
+      end
     end
   end
 end
