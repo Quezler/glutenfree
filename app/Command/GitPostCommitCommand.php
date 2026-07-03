@@ -28,7 +28,7 @@ class GitPostCommitCommand extends Command
         $output->writeln("<comment>$commit_message</comment>");
         if ($commit_message == "Bump version") return Command::SUCCESS;
 
-        foreach (ExpansionMods::list() as $expansionMod) {
+        foreach (ExpansionMods::list('mods_2.0') as $expansionMod) {
             if (array_key_exists($expansionMod->directory, $touched_mods)) {
                 $touched_mod_files = $touched_mods[$expansionMod->directory];
                 if (! in_array('changelog.txt', $touched_mod_files)) $expansionMod->addInfoToChangelog($commit_message);
