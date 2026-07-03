@@ -27,7 +27,7 @@ class MakeModCommand extends Command
         $mod_name = $input->getArgument('name');
         if (strlen($mod_name) > 49) throw new \LogicException();
 
-        $mod_directory = __GLUTENFREE__ . '/mods_2.0/' . $prefix . $mod_name;
+        $mod_directory = __GLUTENFREE__ . '/mods_2.1/' . $prefix . $mod_name;
         mkdir($mod_directory);
 
         file_put_contents("{$mod_directory}/changelog.txt", implode(PHP_EOL, [
@@ -48,21 +48,13 @@ class MakeModCommand extends Command
 
     "version": "0.0.1",
     "author": "Quezler",
-    "factorio_version": "2.0",
-
-    "quality_required": false,
-    "rail_bridges_required": false,
-    "space_travel_required": false,
-    "spoiling_required": false,
-    "freezing_required": false,
-    "segmented_units_required": false,
-    "expansion_shaders_required": false,
+    "factorio_version": "2.1",
 
     "dependencies": [
-        "? newsletter-for-mods-made-by-quezler",
+        "! gluten"
 
-        "? base",
-        "? space-age"
+        , "? base"
+        , "? space-age"
     ]
 }
 EOF;
