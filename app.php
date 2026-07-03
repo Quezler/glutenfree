@@ -34,6 +34,9 @@ $application->add(new \App\Command\PortModCommand());
 $application->add(new \App\Command\LeaderboardModsCommand());
 $application->add(new \App\Command\OnceNewsletterCommand());
 
+// 2.1
+$application->add(new \App\Command\v2_1_PortCommand());
+
 // all
 $application->add(new \App\Command\DiscussionNoticeCommand());
 $application->add(new \App\Command\SendNewsletterCommand());
