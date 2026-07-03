@@ -54,7 +54,7 @@ class v2_1_PortCommand extends Command
             '',
         ]) . file_get_contents($changelog_txt_pathname));
 
-        $command = $this->getApplication()->find('test:mod');
+        $command = $this->getApplication()->find('2.1:test');
         $command->run(new ArrayInput(['name' => $expansionMod->name]), $output);
 
         return Command::SUCCESS;
