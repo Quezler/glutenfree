@@ -37,13 +37,9 @@ data:extend({construction_robot})
 
 data:extend({
   {
-    type = "recipe-category",
-    name = "handcrafting",
-  },
-  {
     type = "recipe",
     name = "disposable-construction-robot",
-    category = "handcrafting",
+    categories = {"hand-crafting"},
     energy_required = 2.5,
     ingredients =
     {
@@ -54,8 +50,6 @@ data:extend({
     enabled = true,
   },
 })
-
-table.insert(data.raw["character"]["character"].crafting_categories, "handcrafting")
 
 data:extend({
   {
