@@ -12,6 +12,6 @@ return {
     {type = "capsule", name = "yumako-mash"              , default = true},
     {type = "capsule", name = "jelly"                    , default = true},
     {type = "capsule", name = "bioflux"                  , default = true},
-    {type = "tool"   , name = "agricultural-science-pack", default = true},
+    {type = "item"   , name = "agricultural-science-pack", default = true},
   }
 }
