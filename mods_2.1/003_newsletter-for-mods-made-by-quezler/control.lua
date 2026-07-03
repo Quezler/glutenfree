@@ -216,7 +216,8 @@ local function open_for_player(player)
 
     local version_color = "red"
     version_color = mod.latest_release.info_json.factorio_version == "1.1" and "orange" or version_color
-    version_color = mod.latest_release.info_json.factorio_version == "2.0" and "green" or version_color
+    version_color = mod.latest_release.info_json.factorio_version == "2.0" and "yellow" or version_color
+    version_color = mod.latest_release.info_json.factorio_version == "2.1" and "green" or version_color
     local version_string = string.format("[font=default-tiny-bold][color=%s]%s[/color][/font]", version_color, mod.latest_release.info_json.factorio_version)
 
     local line_3_flow = row.add{
