@@ -8,11 +8,12 @@
     "factorio_version": "2.1",
 
     "dependencies": [
-        "? newsletter-for-mods-made-by-quezler"
+        "! gluten"
 
         , "? base"
         , "? space-age"
 
         , "+ factoryplanner"
+        , "+ sign-post"
     ]
 }
