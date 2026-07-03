@@ -2,12 +2,10 @@
     "name": "moves-ghost-rebuild-timeout-to-another-technology",
     "title": "Moves ghost rebuild timeout to another technology",
     "description": "By default its on construction robots, this moves it to military (configurable).",
-    "version": "2.0.2",
+    "version": "2.1.0",
     "author": "Quezler",
-    "factorio_version": "2.0",
+    "factorio_version": "2.1",
     "dependencies": [
-        "? newsletter-for-mods-made-by-quezler",
-
         "base",
         "? space-age"
     ]
