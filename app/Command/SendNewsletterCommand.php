@@ -26,7 +26,7 @@ class SendNewsletterCommand extends Command
         $this->strip_undesired_information_from_mods($results);
         dump($results);
 
-        $database_prefix = __GLUTENFREE__ . '/mods_2.0/032_newsletter-for-mods-made-by-quezler/scripts/database';
+        $database_prefix = __GLUTENFREE__ . '/mods_2.1/003_newsletter-for-mods-made-by-quezler/scripts/database';
         $json1 = json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents("$database_prefix.json", $json1);
 
@@ -35,7 +35,7 @@ class SendNewsletterCommand extends Command
         $json2 = str_replace("'", "\'", $json2);
         file_put_contents("$database_prefix.lua", "return helpers.json_to_table('". $json2 ."')");
 
-        $mod = ExpansionMods::findOrFail("newsletter-for-mods-made-by-quezler");
+        $mod = ExpansionMods::findOrFail('mods_2.1',"newsletter-for-mods-made-by-quezler");
 
         $checksum = md5_file("{$mod->get_pathname()}/control.lua") . '.' . md5_file("$database_prefix.lua");
         $changelog = json_decode(file_get_contents('https://mods.factorio.com/api/mods/newsletter-for-mods-made-by-quezler/full'), true)['changelog'];
