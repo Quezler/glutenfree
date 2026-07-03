@@ -64,9 +64,6 @@ class PortModCommand extends Command
         ], explode(PHP_EOL, file_get_contents($changelog_pathname)));
         file_put_contents($changelog_pathname, implode(PHP_EOL, $lines));
 
-        $command = $this->getApplication()->find('test:mod');
-        $command->run(new ArrayInput(['name' => $expansionMod->name]), $output);
-
         return Command::SUCCESS;
     }
 }

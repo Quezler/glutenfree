@@ -15,7 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class BuildModCommand extends Command
 {
-    protected static $defaultName = 'build:mod';
+    protected static $defaultName = '2.1:build';
 
     protected function configure(): void
     {

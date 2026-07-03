@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TestModCommand extends Command
 {
-    protected static $defaultName = 'test:mod';
+    protected static $defaultName = '2.1:test';
 
     protected function configure(): void
     {

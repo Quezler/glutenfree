@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Misc\ExpansionMod;
 use App\Misc\ExpansionMods;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -52,6 +53,9 @@ class v2_1_PortCommand extends Command
             '    - Ported to 2.1',
             '',
         ]) . file_get_contents($changelog_txt_pathname));
+
+        $command = $this->getApplication()->find('test:mod');
+        $command->run(new ArrayInput(['name' => $expansionMod->name]), $output);
 
         return Command::SUCCESS;
     }
