@@ -61,7 +61,7 @@ class SendNewsletterCommand extends Command
         file_put_contents($mod->get_changelog_txt_pathname(), implode(PHP_EOL, $changelog_lines));
 
         if ($input->getOption('ci')) {
-            $command = $this->getApplication()->find('build:mod');
+            $command = $this->getApplication()->find('2.1:build');
             $command->run(new ArrayInput(['name' => $mod->name, '--update' => true]), $output);
         }
 
