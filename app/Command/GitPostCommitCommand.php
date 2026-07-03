@@ -27,6 +27,7 @@ class GitPostCommitCommand extends Command
         $commit_message = $commit_message[0];
         $output->writeln("<comment>$commit_message</comment>");
         if ($commit_message == "Bump version") return Command::SUCCESS;
+        if (str_starts_with($commit_message, 'Port')) return Command::SUCCESS;
 
         foreach (['mods_2.1', 'mods_2.0'] as $folder) {
             foreach (ExpansionMods::list($folder) as $expansionMod) {

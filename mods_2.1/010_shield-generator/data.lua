@@ -119,7 +119,7 @@ local shield = {
   energy_required = 1,
   ingredients = {},
   results = {},
-  category = crafting_category.name,
+  categories = {crafting_category.name},
   hidden = true
 }
 

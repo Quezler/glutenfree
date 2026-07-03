@@ -1,0 +1,14 @@
+{
+    "name": "shield-generator",
+    "title": "Shield generator",
+    "description": "Place this on a space platform and it will not take asteroid damage.",
+
+    "version": "1.1.0",
+    "author": "Quezler",
+    "factorio_version": "2.1",
+
+    "dependencies": [
+        "base",
+        "space-age"
+    ]
+}
