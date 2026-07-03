@@ -9,6 +9,19 @@ data:extend{
 
     distance = 0,
     orientation = 0,
+
+    map_gen_settings = {
+      autoplace_settings =
+      {
+        ["tile"] =
+        {
+          settings =
+          {
+            ["se-space"] = {},
+          }
+        },
+      }
+    }
   }
 }
 
