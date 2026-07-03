@@ -1,14 +1,14 @@
 {
     "require": {
-        "symfony/console": "^5.4",
+        "symfony/console": "^6.0",
         "guzzlehttp/guzzle": "^7.5",
-        "symfony/dotenv": "^5.4",
-        "symfony/var-dumper": "^5.4",
-        "symfony/finder": "^5.4",
+        "symfony/dotenv": "^6.0",
+        "symfony/var-dumper": "^6.0",
+        "symfony/finder": "^6.0",
         "nesbot/carbon": "^2.72",
-        "symfony/dom-crawler": "^5.4",
-        "symfony/css-selector": "^5.4",
-        "symfony/filesystem": "^5.4"
+        "symfony/dom-crawler": "^6.0",
+        "symfony/css-selector": "^6.0",
+        "symfony/filesystem": "^6.0"
     },
     "autoload": {
         "psr-4": {
