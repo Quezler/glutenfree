@@ -20,7 +20,7 @@ class TestModCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $mod = ExpansionMods::findOrFail($input->getArgument('name'));
+        $mod = ExpansionMods::findOrFail('mods_2.1', $input->getArgument('name'));
 
         do {
             $mod->test();

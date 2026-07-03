@@ -56,7 +56,7 @@ class ExpansionMod
     // creates an unversioned folder
     public function test(): void
     {
-        $source = __GLUTENFREE__ . '/mods_2.0/' . $this->directory;
+        $source = __GLUTENFREE__ . '/' . $this->folder . '/' . $this->directory;
         $dest = '/Users/quezler/Library/Application\ Support/factorio/mods/' . $this->name; // public
         // $dest = '/Users/quezler/Documents/Tower/github/wube/Factorio/mods/' . $this->name; // private
         // $dest = '/Users/quezler/Documents/Tower/github/Quezler/glutenfree/instances/magic-huts/mods/' . $this->name; // instance

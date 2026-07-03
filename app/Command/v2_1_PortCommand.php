@@ -31,6 +31,9 @@ class v2_1_PortCommand extends Command
 
         passthru(sprintf("rsync -avr --delete %s/ %s", $from, $to));
 
+        @mkdir($trash = __GLUTENFREE__ . '/trash');
+        rename($from, "{$trash}/{$mod->directory}");
+
         $expansionMod = new ExpansionMod('mods_2.1', $prefix . $mod_name, $mod_name);
         $version = $expansionMod->getVersion();
         $version->minor++;
