@@ -5,10 +5,50 @@ mod.prefix = mod.name .. "--"
 
 mod.frame_name = mod.prefix .. "frame"
 
+require("util")
 script.on_init(function()
   storage.old_data = nil
   storage.new_data = mod.get_data()
+
+  local hmm = util.list_to_map({
+    -- "metallurgy-or-assembling",
+    -- "organic-or-hand-crafting",
+    -- "organic-or-assembling",
+    -- "electronics-or-assembling",
+    -- "cryogenics-or-assembling",
+    -- "crafting-with-fluid-or-metallurgy",
+    -- "space-manufacturing",
+    "pressure-washing",
+  })
+  for _, recipe in pairs(prototypes.recipe) do
+    local recipe_categories = mod.get_recipe_categories(recipe)
+    for _, recipe_category in ipairs(recipe_categories) do
+      if hmm[recipe_category] then
+        log(string.format("%s: %s", recipe_category, recipe.name))
+      end
+    end
+  end
+  -- error("wot")
 end)
+
+-- crafting-with-fluid-or-metallurgy: express-transport-belt
+-- crafting-with-fluid-or-metallurgy: express-underground-belt
+-- crafting-with-fluid-or-metallurgy: express-splitter
+-- crafting-with-fluid-or-metallurgy: aai-express-loader
+-- crafting-with-fluid-or-metallurgy: aai-turbo-loader
+-- metallurgy-or-assembling: foundry
+-- organic-or-assembling: biochamber
+-- electronics-or-assembling: electromagnetic-plant
+-- cryogenics-or-assembling: cryogenic-plant
+-- crafting-with-fluid-or-metallurgy: holmium-plate
+-- organic-or-hand-crafting: yumako-processing
+-- organic-or-hand-crafting: jellynut-processing
+-- organic-or-hand-crafting: iron-bacteria
+-- organic-or-hand-crafting: copper-bacteria
+-- organic-or-assembling: nutrients-from-spoilage
+-- organic-or-assembling: wood-processing
+-- organic-or-assembling: nutrients-from-fish
+-- organic-or-assembling: nutrients-from-biter-egg
 
 script.on_configuration_changed(function()
   storage.old_data = storage.new_data
