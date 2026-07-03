@@ -6,6 +6,7 @@ use App\Command\GitPostCommitCommand;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Finder\Finder;
 
 class ExpansionMod
 {
@@ -48,6 +49,12 @@ class ExpansionMod
         $dest = __GLUTENFREE__ . '/build/' . $zip_name_without_extension;
 
         passthru(sprintf("rsync -avr --delete %s/ %s", $source, $dest));
+
+        $finder = new Finder();
+        foreach ($finder->files()->in($dest)->name('*.sh') as $file) {
+            rename($file->getPathname(), $file->getPathname() . '.txt');
+        }
+
         passthru(sprintf("(cd %s && zip -FSr %s %s)", __GLUTENFREE__ . '/build/', $pathname = "{$dest}.zip", $zip_name_without_extension));
 
         return $pathname;
