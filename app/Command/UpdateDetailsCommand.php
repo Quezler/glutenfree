@@ -22,7 +22,7 @@ class UpdateDetailsCommand extends Command
 
         foreach (ExpansionMods::list() as $expansionMod) {
             if ($expansionMod->info()["author"] != "Quezler") continue;
-            if ($expansionMod->majorVersionIsZero()) continue;
+            if ($expansionMod->getVersion()->major == 0) continue;
 
             $output->writeln($expansionMod->name);
             $response = $expansionMod->editDetails();

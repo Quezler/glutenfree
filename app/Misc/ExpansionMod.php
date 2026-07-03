@@ -9,18 +9,20 @@ use Psr\Http\Message\ResponseInterface;
 
 class ExpansionMod
 {
+    public string $folder;
     public string $directory;
     public string $name;
 
-    public function __construct(string $directory, string $name)
+    public function __construct(string $folder, string $directory, string $name)
     {
+        $this->folder = $folder;
         $this->directory = $directory;
         $this->name = $name;
     }
 
     public function get_pathname(): string
     {
-        return __GLUTENFREE__ . '/mods_2.0/' . $this->directory;
+        return __GLUTENFREE__ . '/' . $this->folder . '/' . $this->directory;
     }
 
     public function get_info_json_pathname(): string
@@ -41,7 +43,7 @@ class ExpansionMod
     // creates a versioned folder and a zip
     public function build(): string
     {
-        $source = __GLUTENFREE__ . '/mods_2.0/' . $this->directory;
+        $source = __GLUTENFREE__ . '/' . $this->folder . '/' . $this->directory;
         $zip_name_without_extension = $this->name . '_' . $this->info()['version'];
         $dest = __GLUTENFREE__ . '/build/' . $zip_name_without_extension;
 
@@ -219,16 +221,9 @@ class ExpansionMod
         throw new \LogicException();
     }
 
-    public function majorVersionIsZero(): bool
+    public function getVersion(): Semver
     {
-        $version = explode('.', $this->info()['version']);
-        return $version[0] == "0";
-    }
-
-    public function getNextMajorVersion(): int
-    {
-        list($major, $minor, $patch) = explode('.', $this->info()['version']);
-        return intval($major) + 1;
+        return new Semver($this->info()['version']);
     }
 
     public function setInfoJsonVersion(string $version): void
@@ -268,8 +263,40 @@ class ExpansionMod
 
     public function addNewsletterDependency(): void
     {
-        $info_json_text = file_get_contents($info_json_path = "{$this->get_pathname()}/info.json");
+        $info_json_pathname = $this->get_info_json_pathname();
+        $info_json_text = file_get_contents($info_json_pathname);
         $info_json_text = str_replace('"dependencies": [', implode(PHP_EOL, ['"dependencies": [', '        "? newsletter-for-mods-made-by-quezler",', '']), $info_json_text);
-        file_put_contents($info_json_path, $info_json_text);
+        file_put_contents($info_json_pathname, $info_json_text);
+    }
+
+    public function removeNewsletterDependency(): void
+    {
+        $info_json_pathname = $this->get_info_json_pathname();
+        $info_json_text = file_get_contents($info_json_pathname);
+
+        $newsletter_dependency = implode(PHP_EOL, ['"dependencies": [', '        "? newsletter-for-mods-made-by-quezler",', '']);
+        if (!str_contains($info_json_text, $newsletter_dependency)) return;
+
+        $info_json_text = str_replace($newsletter_dependency, '"dependencies": [', $info_json_text);
+        file_put_contents($info_json_pathname, $info_json_text);
+    }
+
+    public function removeUnusedFeatureFlags(): void
+    {
+        $info_json_pathname = $this->get_info_json_pathname();
+        $info_json_text = file_get_contents($info_json_pathname);
+
+        $info_json_text = str_replace(implode("\n", [
+            '',
+            '    "quality_required": false,',
+            '    "rail_bridges_required": false,',
+            '    "space_travel_required": false,',
+            '    "spoiling_required": false,',
+            '    "freezing_required": false,',
+            '    "segmented_units_required": false,',
+            '    "expansion_shaders_required": false,',
+            '',
+        ]), '', $info_json_text);
+        file_put_contents($info_json_pathname, $info_json_text);
     }
 }

@@ -8,20 +8,20 @@ use Symfony\Component\Finder\Finder;
 
 class ExpansionMods
 {
-    public static function list(): \Generator
+    public static function list(string $folder): \Generator
     {
-        $directories = Finder::create()->in(__GLUTENFREE__ . '/mods_2.0')->directories();
+        $directories = Finder::create()->in(__GLUTENFREE__ . '/' . $folder)->directories();
         foreach ($directories as $directory) {
             preg_match('/\d{3}_(.*)/', $directory->getFilename(), $matches);
             if (count($matches) > 0) {
-                yield new ExpansionMod($matches[0], $matches[1]);
+                yield new ExpansionMod($folder, $matches[0], $matches[1]);
             }
         }
     }
 
-    public static function findOrFail(string $mod_name): ExpansionMod
+    public static function findOrFail(string $folder, string $mod_name): ExpansionMod
     {
-        foreach (self::list() as $mod)
+        foreach (self::list($folder) as $mod)
             if ($mod->name == $mod_name)
                 return $mod;
 
@@ -32,7 +32,7 @@ class ExpansionMods
     {
         $prefix = '001_';
 
-        $directories = Finder::create()->in(__GLUTENFREE__ . '/mods_2.0')->depth(0)->directories()->sortByName();
+        $directories = Finder::create()->in(__GLUTENFREE__ . '/mods_2.1')->depth(0)->directories()->sortByName();
         foreach ($directories as $directory) {
             preg_match('/(\d{3})_/', $directory->getFilename(), $matches);
             if (count($matches) > 0) {
