@@ -1,0 +1,14 @@
+{
+    "name": "sign-post",
+    "title": "Sign post",
+    "description": "Adds an early game display panel craftable from wood, has no circuit connections.",
+
+    "version": "2.1.0",
+    "author": "Quezler",
+    "factorio_version": "2.1",
+
+    "dependencies": [
+        "base >= 2.0.23",
+        "? space-age >= 2.0.23"
+    ]
+}

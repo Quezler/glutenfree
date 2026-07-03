@@ -34,10 +34,21 @@ class v2_1_PortCommand extends Command
         $expansionMod = new ExpansionMod('mods_2.1', $prefix . $mod_name, $mod_name);
         $version = $expansionMod->getVersion();
         $version->minor++;
+        $version->patch = 0;
         $expansionMod->setInfoJsonVersion($version);
         $expansionMod->setInfoJsonFactorioVersion("2.1");
         $expansionMod->removeNewsletterDependency();
         $expansionMod->removeUnusedFeatureFlags();
+
+        $changelog_txt_pathname = $expansionMod->get_changelog_txt_pathname();
+        file_put_contents($changelog_txt_pathname, implode("\n", [
+            '---------------------------------------------------------------------------------------------------',
+            "Version: {$version}",
+            'Date: ' . date('Y. m. d'),
+            '  Info:',
+            '    - Ported to 2.1',
+            '',
+        ]) . file_get_contents($changelog_txt_pathname));
 
         return Command::SUCCESS;
     }

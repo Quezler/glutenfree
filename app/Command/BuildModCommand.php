@@ -25,7 +25,7 @@ class BuildModCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $mod = ExpansionMods::findOrFail($input->getArgument('name'));
+        $mod = ExpansionMods::findOrFail('mods_2.1', $input->getArgument('name'));
 
         $this->clear_build_directory();
         $zip_pathname = $mod->build();
