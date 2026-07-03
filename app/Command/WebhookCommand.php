@@ -35,14 +35,16 @@ class WebhookCommand extends Command
             } else {
                 dump('1 ' . $link_to_post);
             }
-            
-            $guzzle->post($_ENV['DISCORD_WEBHOOK'], [
-                'form_params' => [
-                    'content' => $link_to_post,
-                ],
-            ]);
 
-            sleep(5); // to please the discord api rate limit
+            if (true) {
+                $guzzle->post($_ENV['DISCORD_WEBHOOK'], [
+                    'form_params' => [
+                        'content' => $link_to_post,
+                    ],
+                ]);
+
+                sleep(5); // to please the discord api rate limit
+            }
 
             file_get_contents('https://proxmox.nydus.app/glutenfree/webhook.php?password=' . $_ENV['LOCK_PASSWORD'] . '&add=' . urlencode($link_to_post));
         }
