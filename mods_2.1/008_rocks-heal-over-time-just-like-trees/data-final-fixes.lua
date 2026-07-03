@@ -51,7 +51,7 @@ local blacklisted_names = {}
 for _, prototype in pairs(data.raw["simple-entity"]) do
   if should_whitelist(prototype) then
     whitelisted_names[prototype.name] = true
-    prototype.healing_per_tick = 0.01
+    prototype.healing_per_tick = 1/60 -- https://lua-api.factorio.com/latest/prototypes/TreePrototype.html#healing_per_tick
   else
     blacklisted_names[prototype.name] = true
   end
