@@ -1,6 +1,6 @@
 local tiny = "tiny-"
 local count_multiplier = 5
-local scale_multiplier = 0.5
+local scale_multiplier = 5
 local radius_multiplier = (1/3) * 0.2 -- 1.5 -> 0.1
 local energy_multiplier = 0.5
 
@@ -25,14 +25,40 @@ projectile.name = tiny .. projectile.name
 projectile.shadow.scale = projectile.shadow.scale * scale_multiplier
 projectile.animation.scale = projectile.animation.scale * scale_multiplier
 
-for _, target_effect in ipairs(projectile.action[1].action_delivery.target_effects) do
+local target_effects = projectile.action[1].action_delivery.target_effects or {}
+for _, target_effect in ipairs(target_effects) do
   if target_effect.radius then
     target_effect.radius = target_effect.radius * radius_multiplier
   end
 end
+table.insert(target_effects, {
+            type = "destroy-cliffs",
+            radius = 50,
+            explosion_at_trigger = "explosion"
+          })
+table.insert(target_effects, {
+            type = "create-entity",
+            entity_name = "nuke-explosion"
+          })
+table.insert(target_effects,           {
+            type = "camera-effect",
+            duration = 60,
+            ease_in_duration = 5,
+            ease_out_duration = 60,
+            delay = 0,
+            strength = 6,
+            full_strength_max_distance = 200,
+            max_distance = 800
+          })
+table.insert(target_effects, {
+            type = "create-entity",
+            entity_name = "huge-scorchmark",
+            offsets = {{ 0, -0.5 }},
+            check_buildability = true
+          })
 item.capsule_action.radius = item.capsule_action.radius * radius_multiplier
 item.capsule_action.attack_parameters.ammo_type.action.action_delivery.projectile = projectile.name
-item.capsule_action.attack_parameters.ammo_type.action.action_delivery.starting_speed = 0.1 -- was 0.3
+item.capsule_action.attack_parameters.ammo_type.action.action_delivery.starting_speed = 0.01 -- was 0.3
 
 local effects = data.raw["technology"]["cliff-explosives"].effects or {}
 for i, effect in ipairs(effects) do
