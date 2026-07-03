@@ -1,0 +1,14 @@
+{
+    "name": "freshly-handcrafted-equipment-straight-into-armor",
+    "title": "Freshly handcrafted equipment straight into armor",
+    "description": "When handcrafting equipment it'll try to fulfill ghosts in your personal armor.",
+
+    "version": "1.1.0",
+    "author": "Quezler",
+    "factorio_version": "2.1",
+
+    "dependencies": [
+        "? base",
+        "? space-age"
+    ]
+}
