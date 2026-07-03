@@ -1,0 +1,14 @@
+{
+    "name": "quick-panel-gui-optional-players-gui-button-count",
+    "title": "Quick panel gui optional players gui button count",
+    "description": "Good luck guessing what this does based on the title, just gaze at the thumbnail.",
+
+    "version": "1.1.0",
+    "author": "Quezler",
+    "factorio_version": "2.1",
+
+    "dependencies": [
+        "? base",
+        "? space-age"
+    ]
+}

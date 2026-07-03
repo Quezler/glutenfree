@@ -6,7 +6,6 @@ script.on_init(function()
   for _, player in pairs(game.players) do
     mod.on_player_created({player_index = player.index})
   end
-  log("foo")
 end)
 
 local button_size = 40
