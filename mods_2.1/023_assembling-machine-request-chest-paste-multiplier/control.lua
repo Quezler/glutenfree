@@ -21,7 +21,8 @@ local function get_entity_name(entity)
 end
 
 local function compatible(event)
-  return get_entity_type(event.source) == "assembling-machine" and requester_chest_names[get_entity_name(event.destination)]
+  local entity_type = get_entity_type(event.source)
+  return (entity_type == "assembling-machine" or entity_type == "rocket-silo") and requester_chest_names[get_entity_name(event.destination)]
 end
 
 local function serialize_requests(requester_chest)
