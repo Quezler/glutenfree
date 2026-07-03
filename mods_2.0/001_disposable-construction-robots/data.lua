@@ -20,7 +20,7 @@ data:extend({
 
 local construction_robot = table.deepcopy(data.raw["construction-robot"]["construction-robot"])
 construction_robot.name = "disposable-construction-robot"
-construction_robot.minable.result = nil
+construction_robot.minable.result = "disposable-construction-robot"
 construction_robot.created_effect = {
   type = "direct",
   action_delivery = {
