@@ -3,12 +3,12 @@
     "title": "Elevated pipes",
     "description": "Adds pipes on pillars that can go over anything and make those tight corners.",
 
-    "version": "1.4.7",
+    "version": "1.4.8",
     "author": "Quezler & Redotix99",
-    "factorio_version": "2.0",
+    "factorio_version": "2.1",
 
     "dependencies": [
-        "base >= 2.0.59",
+        "base >= 2.1.0",
         "? space-age",
 
         "(?) Bottleneck",
