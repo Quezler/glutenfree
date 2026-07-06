@@ -1,0 +1,14 @@
+{
+    "name": "circuit-connector-placement-helper",
+    "title": "Circuit connector placement helper",
+    "description": "Allows you to place a circuit connector ingame and export it to data stage.",
+
+    "version": "1.3.0",
+    "author": "Quezler",
+    "factorio_version": "2.1",
+
+    "dependencies": [
+        "? base",
+        "? space-age"
+    ]
+}
