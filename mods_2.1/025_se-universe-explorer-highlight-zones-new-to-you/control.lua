@@ -5,19 +5,19 @@ script.on_init(function(event)
 
   storage.player_index_to_selected_zones_map = {}
 
-  mod.register_events()
+  mod.load_control_stage_constants()
 end)
 
-local util = require("__space-exploration-scripts__.util")
-local Zonelist = require("__space-exploration-scripts__.zonelist")
+local Zonelist
 
 local function on_zonelist_opened(event)
-  local player = game.get_player(event.player_index)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
-  local root = Zonelist.get(player)
+  local root = player.gui.screen[Zonelist.name_root]
   if not root then return end
 
-  local scroll_pane = util.get_gui_element(root, Zonelist.path_list_rows_scroll_pane)
+  local scroll_pane = root
+  for _, path in ipairs(Zonelist.path_list_rows_scroll_pane) do scroll_pane = scroll_pane[path] end
   if not scroll_pane then return end
 
   for _, row in pairs(scroll_pane.children) do
@@ -32,14 +32,15 @@ local function on_zonelist_opened(event)
       }
     end
   end
-
 end
 
-function mod.register_events(event)
-  script.on_event(remote.call("space-exploration-scripts", "on_zonelist_opened"), on_zonelist_opened)
+script.on_event(defines.events.se_on_zonelist_gui_opened, on_zonelist_opened)
+
+function mod.load_control_stage_constants(event)
+  Zonelist = remote.call("space-exploration", "get_control_stage_constants", "Zonelist")
 end
 
-script.on_load(mod.register_events)
+script.on_load(mod.load_control_stage_constants)
 
 local function mark_as_seen(player_index, tags)
   storage.player_index_to_selected_zones_map[player_index]                                  = storage.player_index_to_selected_zones_map[player_index] or {}
