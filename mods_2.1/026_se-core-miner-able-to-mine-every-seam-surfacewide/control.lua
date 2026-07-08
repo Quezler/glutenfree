@@ -31,7 +31,7 @@ script.on_load(function()
 end)
 
 mod.register_events = function()
-  script.on_event(remote.call("se-core-miner-efficiency-updated-event", "on_efficiency_updated"), function(event)
+  script.on_event(defines.events.se_on_core_miners_equalized, function(event)
     local surfacedata = storage.surfacedata[event.surface_index]
     for _, struct in pairs(surfacedata.structs) do
       if struct.entity.valid then
