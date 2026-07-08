@@ -1,3 +1,4 @@
+package.loaded["__beacon-interface__/shared.lua"] = nil
 local shared = require("shared")
 
 local module_category = {
