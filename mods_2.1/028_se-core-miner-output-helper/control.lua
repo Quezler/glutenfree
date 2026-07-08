@@ -1,3 +1,5 @@
+local Util = require("__space-exploration__/scripts/util")
+
 function get_core_miners_on_this_surface(zone)
   if zone.surface_index and script.active_mods["se-core-miner-able-to-mine-every-seam-surfacewide"] then
     return remote.call("se-core-miner-able-to-mine-every-seam-surfacewide", "get_total_miners_from_surface_index", zone.surface_index)
@@ -40,9 +42,6 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
 end)
 
 --
-
-local Util = require("__space-exploration-scripts__.util")
-local Zonelist = require("__space-exploration-scripts__.zonelist")
 
 function Zone_get_fragment_name(zone)
   if not (zone.type == "planet" or zone.type == "moon") then return end -- Zone.is_solid(zone)
@@ -200,9 +199,9 @@ script.on_event(defines.events.on_gui_click, function(event)
     return
   end
 
-  local player = game.get_player(event.player_index)
+  local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
-  local root = Zonelist.get(player)
+  local root = player.gui.screen[Zonelist.name_root]
   if not root then return end
 
   local parent = Util.get_gui_element(root, Zonelist.path_zone_data_flow)
@@ -213,3 +212,10 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   update_content_for_player(content, player, nil)
 end)
+
+local function on_load()
+  Zonelist = remote.call("space-exploration", "get_control_stage_constants", "Zonelist")
+end
+
+script.on_init(on_load)
+script.on_load(on_load)
