@@ -102,7 +102,7 @@ function mod.on_created_entity(event)
   }
 
   struct.alt_mode.destructible = false
-  struct.alt_mode.fluidbox.add_linked_connection(0, entity, 0)
+  struct.alt_mode.add_fluid_box_linked_connection(0, entity, 0)
 
   storage.deathrattles[script.register_on_object_destroyed(entity)] = {
     name = "elevated-pipe",
@@ -238,8 +238,8 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
       goto next_struct
     end
     local position = struct.entity.position
-    for _, neighbour in ipairs(struct.entity.fluidbox.get_connections(1)) do
-      neighbour = neighbour.owner -- remnant from using neighbours instead of fluidbox
+    for _, neighbour in ipairs(struct.entity.get_fluid_box_neighbours(1)) do
+      neighbour = neighbour.entity -- remnant from using neighbours instead of fluidbox
       if is_elevated_pipe[neighbour.name] then
 
         local connection = struct.connections[neighbour.unit_number]
