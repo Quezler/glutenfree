@@ -3,6 +3,7 @@ Version: 1.0.1
 Date: ????
   Info:
     - Recommend the sign-post mod
+    - Stash dependency draft from early july
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026. 06. 23

@@ -13,7 +13,21 @@
         , "? base"
         , "? space-age"
 
+        , "+ assembling-machine-request-chest-paste-multiplier"
+        , "+ change-recipe-quality-without-re-selecting-recipe"
+        , "+ configurable-probability-product-count-tint"
+        , "+ deconstruction-planner-toggle-entity-with-pipette"
+        , "+ disposable-construction-robots"
         , "+ factoryplanner"
+        , "+ far-reach"
+        , "+ FluidWagonColorMask"
+        , "+ freshly-handcrafted-equipment-straight-into-armor"
+        , "+ moves-ghost-rebuild-timeout-to-another-technology"
+        , "+ notice-me-senpai"
+        , "+ quick-panel-gui-optional-players-gui-button-count"
+        , "+ rocks-heal-over-time-just-like-trees"
+        , "+ space-age-mod-dependency-is-just-called-expansion"
         , "+ sign-post"
+        , "+ upgrade-planner-toggle-entity-with-pipette"
     ]
 }
