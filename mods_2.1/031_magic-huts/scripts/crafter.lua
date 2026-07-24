@@ -207,7 +207,7 @@ Crafter.craft = function(building)
   end
   Buildings.output_all_fluids(building)
 
-  building.entity.surface.pollute(building.entity.position, factory.export.pollution * prefix_to_multiplier(factory.export.pollution_prefix))
+  building.entity.surface.pollute(building.entity.position, factory.export.pollution)
 
   Buildings.set_status(building, "[img=utility/status_working] working")
   return true

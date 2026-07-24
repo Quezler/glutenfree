@@ -52,6 +52,7 @@ local function get_fluidboxes(side_length)
           direction = position.direction,
           connection_type = "underground",
           max_underground_distance = 1,
+          hide_connection_info = true,
         },
       },
     })
@@ -297,7 +298,7 @@ for _, factory in ipairs(factories) do
     localised_name = factory.localised_name or {"entity-name.magic-hut", tostring(factory.i)},
     icon = string.format(mod_directory .. "/graphics/icons/factory-%d.png", factory.i),
     icon_size = factory.icon_size,
-    category = recipe_category.name,
+    categories = {recipe_category.name},
     enabled = true,
     auto_recycle = false,
     energy_required = 60,

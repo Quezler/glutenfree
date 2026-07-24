@@ -54,12 +54,8 @@ local function get_selected_factory(root)
         space_location = nil, -- nil means universal
         space_location_icon = "fp_universal_planet",
 
-        -- multiply with prefix and prefix_to_multiplier before use
         power = 0,
-        power_prefix = "",
-
         pollution = 0,
-        pollution_prefix = "",
 
         entities = {},
         modules = {},
@@ -83,7 +79,12 @@ local function get_item_box_contents(item_boxes, item_box_index)
 
   local contents = {}
   for _, sprite_button in ipairs(sprite_buttons) do
-    if sprite_button.sprite ~= "utility/add" then
+    if sprite_button.sprite == "fp_electric_power" then
+      table.insert(contents, {type = "special", name = "power", count = sprite_button.number})
+    elseif sprite_button.sprite == "fp_emissions" then
+      table.insert(contents, {type = "special", name = "pollution", count = sprite_button.number})
+    elseif sprite_button.sprite ~= "utility/add" then
+      log(sprite_button.sprite)
       local class, name = split_class_and_name(sprite_button.sprite)
       table.insert(contents, {type = class, name = name, count = sprite_button.number, quality = "normal"})
       if class == "fluid" then
@@ -99,7 +100,7 @@ local function all_products_satisfied(item_boxes)
 
   for _, sprite_button in ipairs(sprite_buttons) do
     if sprite_button.sprite ~= "utility/add" then
-      if sprite_button.style.name ~= "flib_slot_button_green" then
+      if sprite_button.style.name ~= "fflib_slot_button_green" then
         return false
       end
     end
@@ -169,22 +170,6 @@ local function add_to_contents(contents, type_name_count_quality)
   table.insert(contents, type_name_count_quality)
 end
 
-function prefix_to_multiplier(locale_key)
-  local multiplier = 1
-  local prefixes = {"kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta"}
-
-  if locale_key == "" then
-    return multiplier
-  end
-
-  for _, prefix in ipairs(prefixes) do
-    multiplier = multiplier * 1000
-    if "fp.prefix_" .. prefix == locale_key then
-      return multiplier
-    end
-  end
-end
-
 local function check_recipe_is_allowed(player, recipe_name)
   local recipe = player.force.recipes[recipe_name]
 
@@ -224,6 +209,14 @@ end
 function Factoryplanner.on_gui_click(event)
   local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
   local root = get_root(event.element)
+
+  local preferences_table = remote.call("fp-interface", "export_preferences", event.player_index)
+  if not preferences_table.calculate_emissions then
+    preferences_table.calculate_emissions = true
+    local root_name = root.name
+    remote.call("fp-interface", "import_preferences", event.player_index, preferences_table)
+    root = player.gui.screen[root_name]
+  end
 
   local factory = get_selected_factory(root)
   if not factory then
@@ -271,20 +264,19 @@ function Factoryplanner.on_gui_click(event)
   -- game.print("byproducts: " .. serpent.line(factory.byproducts))
   -- game.print("ingredients: " .. serpent.line(factory.ingredients))
 
-  factory.power = tonumber(root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][2])
-  factory.power_prefix  =  root.children[2].children[2].children[1].children[2].children[2].children[1].tooltip[4][3][1] or ""
-
-  local pollution_tooltip = assert(root.children[2].children[2].children[1].children[2].children[2].children[3].tooltip)
-  if pollution_tooltip[1] == "fp.emissions_none" then
-    factory.pollution = 0
-    factory.pollution_prefix = ""
-  else
-    factory.pollution = tonumber(pollution_tooltip[3][2])
-    factory.pollution_prefix  =  pollution_tooltip[3][3][1] or ""
+  for i, item_box in pairs(factory.byproducts) do
+    if item_box.type == "special" and item_box.name == "pollution" then
+      factory.pollution = item_box.count
+      table.remove(factory.byproducts, i) -- code elsewhere assumes it is a fluid when the type is not item
+    end
   end
 
-  -- log(string.format("%.3f %s (%d)", factory.power, factory.power_prefix, factory.power * prefix_to_multiplier(factory.power_prefix)))
-  -- log(string.format("%.3f %s (%d)", factory.pollution, factory.pollution_prefix, factory.pollution * prefix_to_multiplier(factory.pollution_prefix)))
+  for i, item_box in pairs(factory.ingredients) do
+    if item_box.type == "special" and item_box.name == "power" then
+      factory.power = item_box.count
+      table.remove(factory.ingredients, i) -- code elsewhere assumes it is a fluid when the type is not item
+    end
+  end
 
   local production_table = root.children[2].children[2].children[4].children[2].children[1]
   local production_table_column = {}
@@ -309,7 +301,7 @@ function Factoryplanner.on_gui_click(event)
     local cell_machine = production_table_children[offset + production_table_column["fp.pu_machine"]]
 
     local machine_style_name = cell_machine.children[1].style.name
-    if machine_style_name == "flib_slot_button_pink_small" or machine_style_name == "flib_slot_button_purple_small" then
+    if machine_style_name == "fflib_slot_button_pink_small" or machine_style_name == "fflib_slot_button_purple_small" then
       return player.create_local_flying_text{create_at_cursor = true, text = "machines must not be limited."}
     end
 
@@ -428,7 +420,7 @@ function Factoryplanner.on_gui_click(event)
   local slots_required = #Buildings.get_filters_from_export(factory)
   local slots_available = prototypes.entity[container_name].get_inventory_size(defines.inventory.chest, "normal")
 
-  player.pipette_entity(container_name, true)
+  player.pipette(prototypes.entity[container_name], "normal", true)
   player.create_local_flying_text{
     text = string.format("[item=%s] %d/%d", container_name, slots_required, container_tier > 3 and 65535 or slots_available),
     create_at_cursor = true

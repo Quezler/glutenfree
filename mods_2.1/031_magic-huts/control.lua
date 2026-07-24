@@ -17,6 +17,7 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   if event.element.name == mod_prefix .. "summon-magic-hut" then
     Factoryplanner.on_gui_click(event)
+    return -- element can get invalidated
   end
 
   if event.element.tags.action then

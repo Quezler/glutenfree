@@ -596,7 +596,7 @@ Buildings.turn_eei_on = function(building)
 
   -- game.print("turn_eei_on")
   local factory = storage.factories[building.factory_index]
-  local watts = factory.export.power * prefix_to_multiplier(factory.export.power_prefix)
+  local watts = factory.export.power
   building.children.eei.electric_buffer_size = math.max(1, watts) -- buffer for 1 second
   building.children.eei.power_usage = watts / 60
 end
