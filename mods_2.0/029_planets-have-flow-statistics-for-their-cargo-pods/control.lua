@@ -74,9 +74,9 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
   if inventory.is_empty() then
     for _, player in pairs(game.players) do
       -- the cargo pods on both surfaces share the same unit number as it transitions
-      game.print("cargo pod:")
-      game.print(entity.unit_number)
-      game.print(player.cargo_pod)
+      -- game.print("cargo pod:")
+      -- game.print(entity.unit_number)
+      -- game.print(player.cargo_pod)
       if player.cargo_pod then game.print(player.cargo_pod.unit_number) end
       if player.cargo_pod and player.cargo_pod.unit_number == entity.unit_number then
         statistics.on_flow({name = "planet-flow-statistics-character"}, 1 * multiplier)
