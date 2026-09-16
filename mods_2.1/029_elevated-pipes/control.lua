@@ -47,6 +47,21 @@ function mod.foreach_struct(callback)
   if script.active_mods["Bottleneck"] then mod.check_all_stoplights() end
 end
 
+local function update_player_sprites(player_index,opacity)
+  mod.foreach_struct(function(struct)
+      for _, connection in pairs(struct.connections) do
+        local player_sprites = connection.player_sprites[player_index]
+        if player_sprites then
+          for _, sprite in ipairs(player_sprites) do
+            sprite.color = {opacity, opacity, opacity, opacity}
+            sprite.tall = true
+          end
+        end
+      end
+    end)
+
+end
+
 script.on_configuration_changed(function()
   mod.refresh_surfacedata()
 
@@ -65,6 +80,11 @@ script.on_configuration_changed(function()
     mod.mark_surface_dirty(surface)
   end
 
+  for player_index,player in pairs(game.players) do
+    local opacity = settings.get_player_settings(player_index)[mod_prefix .. "opacity"].value
+    update_player_sprites(player_index,opacity)
+  end
+  
   if script.active_mods["Bottleneck"] then mod.check_all_stoplights() end
 end)
 
@@ -272,6 +292,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
                   offset = {-x_offset, 0},
                 },
                 render_layer = tostring(render_layer + 0),
+                tall = true
               })
             end
           else
@@ -285,6 +306,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
                   offset = {0, -y_offset},
                 },
                 render_layer = tostring(render_layer + 0),
+                tall = true
               })
             end
           end
@@ -357,17 +379,8 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     assert(event.setting_type == "runtime-per-user")
 
     local opacity = settings.get_player_settings(event.player_index)[mod_prefix .. "opacity"].value
-
-    mod.foreach_struct(function(struct)
-      for _, connection in pairs(struct.connections) do
-        local player_sprites = connection.player_sprites[event.player_index]
-        if player_sprites then
-          for _, sprite in ipairs(player_sprites) do
-            sprite.color = {opacity, opacity, opacity, opacity}
-          end
-        end
-      end
-    end)
+    update_player_sprites(event.player_index,opacity)
+    
   end
 end)
 
@@ -413,3 +426,5 @@ if script.active_mods["Bottleneck"] then
     end
   end)
 end
+
+if script.active_mods["gvv"] then require("__gvv__.gvv")() end

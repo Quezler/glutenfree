@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 2026. 09. 16
+  Info:
+    - Raised required Factorio version to 2.1.19.
+    - Elevated pipes are now considered tall entities. By MeteorSwarm.
+---------------------------------------------------------------------------------------------------
 Version: 1.5.0
 Date: 2026. 07. 13
   Info:

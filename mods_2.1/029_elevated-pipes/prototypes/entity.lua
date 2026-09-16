@@ -27,6 +27,7 @@ local furnace = {
   result_inventory_size = 0,
 
   flags = {"placeable-player", "player-creation"},
+  tall = true,
   minable = {mining_time = 0.25, result = config.name},
   max_health = 250,
   corpse = config.name .. "-remnants",
@@ -236,7 +237,6 @@ return {
   name = config.name .. "-alt-mode",
   localised_name = {"entity-name." .. config.name},
   icon = config.icon,
-
   collision_mask = {layers = {}},
   collision_box = collision_box,
   selection_box = selection_box,
