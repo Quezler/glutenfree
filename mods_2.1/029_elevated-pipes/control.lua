@@ -174,7 +174,7 @@ local deathrattles = {
     if surfacedata then
       local struct = surfacedata.structs[deathrattle.unit_number]
       if struct then surfacedata.structs[deathrattle.unit_number] = nil
-        struct.alt_mode.destroy()
+        if struct.alt_mode and struct.alt_mode.valid then struct.alt_mode.destroy() end
         for _, connection in pairs(struct.connections) do
           for player_index, sprites in pairs(connection.player_sprites) do
             for _, sprite in ipairs(sprites) do
@@ -240,7 +240,7 @@ function mod.update_elevated_pipes_for_surface(surfacedata)
     local position = struct.entity.position
     for _, neighbour in ipairs(struct.entity.get_fluid_box_neighbours(1)) do
       neighbour = neighbour.entity -- remnant from using neighbours instead of fluidbox
-      if is_elevated_pipe[neighbour.name] then
+      if neighbour and neighbour.valid and is_elevated_pipe[neighbour.name] then
 
         local connection = struct.connections[neighbour.unit_number]
         if connection then -- mark as up-to-date, then continue on
