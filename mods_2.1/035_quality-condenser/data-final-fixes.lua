@@ -1,3 +1,4 @@
+package.loaded["__quality-condenser__/shared.lua"] = nil
 require("shared")
 
 local function string_split(s, delimiter)

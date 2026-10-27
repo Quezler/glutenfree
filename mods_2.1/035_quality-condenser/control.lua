@@ -82,7 +82,7 @@ local function get_bonus_quality(force)
     end
   end
 
-  return sum * 10 -- technology_changes_quality is in 0-100 decimal format, we need it in 0-1000 format
+  return sum -- technology_changes_quality is in 0-100 decimal format, which matches beacon-interface since 2.1
 end
 
 local Handler = {}

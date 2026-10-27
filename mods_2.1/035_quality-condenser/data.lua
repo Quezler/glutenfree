@@ -160,11 +160,11 @@ local container_entity = {
 
   minable = {mining_time = 0.5, result = crafter_item.name},
   circuit_wire_max_distance = default_circuit_wire_max_distance,
-  circuit_connector = circuit_connector_definitions.create_single
+  circuit_connector = {circuit_connector_definitions.create_single
   (
     universal_connector_template,
     { variation = 19, main_offset = util.by_pixel(-93.75,  22.375), shadow_offset = util.by_pixel(-93.75,  22.375), show_shadow = true }
-  ),
+  )},
 
   icon_draw_specification = {scale = 0, scale_for_many = 0},
   quality_indicator_scale = 0,
