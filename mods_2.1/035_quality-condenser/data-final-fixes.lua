@@ -1,4 +1,18 @@
+package.loaded["__quality-condenser__/shared.lua"] = nil
 require("shared")
+
+-- mods like module-category-defaults restrict the module categories, which also blocks the beacon interface modules
+local crafter_entity = data.raw["assembling-machine"][mod_name]
+if crafter_entity.allowed_module_categories then
+  local beacon_interface_category = "beacon-interface--module-category"
+  local found = false
+  for _, category in ipairs(crafter_entity.allowed_module_categories) do
+    if category == beacon_interface_category then found = true end
+  end
+  if not found then
+    table.insert(crafter_entity.allowed_module_categories, beacon_interface_category)
+  end
+end
 
 local function string_split(s, delimiter)
   if s == "" then return {} end
